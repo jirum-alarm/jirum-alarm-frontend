@@ -4,6 +4,9 @@ name: mobile-ota
 #
 # - mobile-validation(테스트·타입·린트·네이티브 지문)이 main push 로 **성공**했을 때만 돈다.
 #   지문이 기준과 다르면 validation 이 실패하므로, 여기까지 왔다 = 지금 스토어 바이너리에 보내도 안전.
+# - 발행 전에 boot-check 가 그 커밋의 JS 를 Release 앱에 끼워 시뮬레이터에서 실제로 켜 본다(scripts/boot-check.sh).
+#   2026-10-01 CI 가 전부 초록인 OTA 가 실행 즉시 종료된 사고 — 테스트는 "켜지나" 를 안 본다.
+#   수동 실행(workflow_dispatch)은 boot-check 만 돌고 발행하지 않는다.
 # - 켜고 끄기: 저장소 변수 MOBILE_AUTO_OTA=true 일 때만 발행한다(끄면 즉시 멈춤 — 사고 때 첫 조치).
 # - 되돌리기: apps/mobile 에서 `pnpm ota:rollback`(직전 업데이트를 다시 내보낸다).
 # - 필요: secrets.EXPO_TOKEN (expo.dev → Access tokens).
@@ -13,6 +16,7 @@ on:
     workflows: [mobile-validation]
     types: [completed]
     branches: [main]
+  workflow_dispatch:
 
 concurrency:
   group: mobile-ota
@@ -26,7 +30,76 @@ env:
   PNPM_VERSION: 10.30.3
 
 jobs:
+  boot-check:
+    if: >-
+      github.event_name == 'workflow_dispatch' || (
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      vars.MOBILE_AUTO_OTA == 'true')
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      # 네이티브는 지문이 같으면 같다 — Release 앱은 지문(+러너 Xcode)이 바뀔 때만 다시 빌드한다(~20분 → 캐시 적중 시 0).
+      - name: Xcode version
+        id: xcode
+        run: echo "version=$(xcodebuild -version | head -1 | tr ' ' '-')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Release simulator app
+        id: app-cache
+        uses: actions/cache@v4
+        with:
+          path: apps/mobile/ios/build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app
+          key: ios-release-sim-${{ steps.xcode.outputs.version }}-${{ hashFiles('apps/mobile/native-fingerprint.json') }}
+
+      - name: Set up Ruby
+        if: steps.app-cache.outputs.cache-hit != 'true'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: false
+
+      - name: Build Release simulator app
+        if: steps.app-cache.outputs.cache-hit != 'true'
+        working-directory: apps/mobile
+        env:
+          MOBILE_IOS_GOOGLE_SERVICE_INFO_PLIST_B64: ${{ secrets.MOBILE_IOS_GOOGLE_SERVICE_INFO_PLIST_B64 }}
+        run: |
+          set -euo pipefail
+          umask 077
+          node -e "const fs=require('fs');fs.writeFileSync('ios/GoogleService-Info.plist',Buffer.from(process.env.MOBILE_IOS_GOOGLE_SERVICE_INFO_PLIST_B64,'base64'))"
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
+          bundle exec pod install --project-directory=ios
+          # JS 는 boot-check 가 이 커밋 것으로 갈아 끼우므로 번들 단계는 건너뛴다.
+          xcodebuild -workspace ios/jirumAlarmMobile.xcworkspace -scheme jirumAlarmMobile -configuration Release \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath ios/build \
+            CODE_SIGNING_ALLOWED=NO SKIP_BUNDLING=1 IPHONEOS_DEPLOYMENT_TARGET=15.1 build -quiet
+          rm -f ios/GoogleService-Info.plist
+
+      - name: Boot check (cold start ×3)
+        run: bash apps/mobile/scripts/boot-check.sh apps/mobile/ios/build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app
+
   publish:
+    needs: boot-check
     if: >-
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'push' &&

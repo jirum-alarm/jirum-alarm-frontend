@@ -166,6 +166,8 @@ pnpm build            # Production build
   1. **발행 범위부터 본다.** `eas update:list --branch production --limit 1` 의 마지막 발행 이후
      `git log <그 커밋>..HEAD -- apps/mobile`. 내 커밋이 아닌 미발행 커밋이 섞였으면 작성자(다른 세션)에게 알리고 같이 확인한다.
   2. **발행할 커밋 그대로 iOS 시뮬레이터 Release 빌드 → 콜드 스타트 2회 + 홈·바뀐 화면 진입.**
+     "켜지나" 판정은 `bash apps/mobile/scripts/boot-check.sh <Release .app>` 한 줄로 된다(이 커밋 JS 를 끼워 콜드 스타트 3회·생존 판정,
+     자동 OTA 의 CI 관문과 같은 스크립트). 바뀐 화면 진입은 여전히 손으로 본다.
      `cd apps/mobile/ios && rm -f Pods/.last_build_configuration && pod install && rm -f Pods/.last_build_configuration &&
      xcodebuild -workspace jirumAlarmMobile.xcworkspace -scheme jirumAlarmMobile -configuration Release -sdk iphonesimulator
      -destination 'generic/platform=iOS Simulator' -derivedDataPath build CODE_SIGNING_ALLOWED=NO build`
@@ -190,8 +192,11 @@ pnpm build            # Production build
   4. 이상하면 즉시 되돌린다. `pnpm ota:rollback` 은 대화형이라 에이전트가 못 쓴다 →
      `eas update:list --branch production --json` 에서 직전 정상 group 을 찾아
      `eas update:republish --group <id> --non-interactive --message "ROLLBACK: …"`(같은 브랜치로 재발행 — `--group` 과 `--branch` 는 함께 못 쓴다).
-  - **자동 OTA(`mobile-ota`, `MOBILE_AUTO_OTA`)는 위 2번(기동 확인)이 CI 에 들어가기 전까지 켜지 않는다.** 켜면 main push 마다
-    1번·2번을 건너뛰고 나간다.
+  - **자동 OTA(`mobile-ota`, `MOBILE_AUTO_OTA=true`, 2026-10-09 켬)**: main push → mobile-validation 성공 →
+    `boot-check` 잡(macOS, `scripts/boot-check.sh` — Release 앱은 네이티브 지문으로 캐시) 통과 → production 발행 → Mattermost `alert-deploy`.
+    그래서 JS 는 **main 에 푸시하면 나간다** — 위 1~3번을 손으로 할 일은 없고, 푸시 뒤 `gh run watch` 로 mobile-ota 결과를 확인한다.
+    기동 확인은 "실행 즉시 종료" 만 잡는다 — 바뀐 화면이 큰 변경이면 푸시 전에 로컬에서 띄워 본다.
+    사고 때 첫 조치: 저장소 변수 `MOBILE_AUTO_OTA` 를 끄고(`gh variable set MOBILE_AUTO_OTA -b false`) 4번으로 롤백.
 - **네이티브 변경 = 버전 올림 + 스토어 빌드.** `ios/`·`android/`·네이티브 패키지(예: expo-image)·`app.json`
   플러그인이 바뀌면 **같은 커밋에서** 버전·runtimeVersion 을 올리고(app.json·Expo.plist·strings.xml 등 —
   `ota-updates-config` 테스트가 정렬을 본다) `pnpm --filter mobile native:write` 로 지문 기준을 새로 찍는다.
@@ -207,7 +212,7 @@ pnpm build            # Production build
 - **업데이트 안내 = `apps/web/public/app-release.json`**(웹 운영 배포로 발효, 플랫폼별 값).
   - `latestVersion`(권유): 새 스토어 버전이 **출시된 뒤** 그 플랫폼만 올린다 → 버전당 한 번 "새 버전이 나왔어요" 시트.
   - `minSupportedVersion`(강제): **옛 버전이 실제로 깨질 때만**(API 변경·보안). 평소엔 올리지 않는다 — 막는 화면은 나쁜 경험.
-- 완료 보고는 길을 나눠 적는다: JS 는 「OTA 발행됨(기동 확인: 시뮬레이터 Release 콜드 스타트 2회)/대기」, 네이티브는 「다음 스토어 빌드(1.x.y)에 포함」.
+- 완료 보고는 길을 나눠 적는다: JS 는 「OTA 발행됨(mobile-ota run 링크 — boot-check 통과)/대기」, 네이티브는 「다음 스토어 빌드(1.x.y)에 포함」.
 - "배포됐나"는 스토어 실물 버전으로 판정한다(`app-store-lag` 워크플로) — EAS submit 성공 ≠ 출시.
 - **다크모드 = OS 설정을 따른다(2026-10-01). 내정보 > 화면 모드에서 라이트/다크 고정 가능(`color-scheme-preference.ts` → `Appearance.setColorScheme`).** 색 정본은 `packages/design-system/tokens.js` 한 곳(web 과 같은 값) — tailwind 토큰이 `:root` 변수라
   `bg-white`·`text-gray-900` 은 **다크에서 값만 뒤집힌다**(`dark:` 를 붙일 일이 거의 없다. `white`=바탕, gray 50↔900).
