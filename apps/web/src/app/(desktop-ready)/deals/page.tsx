@@ -6,6 +6,7 @@ import { CATEGORIES } from '@/shared/config/categories';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
 import { convertToWebp } from '@/shared/lib/utils/image';
+import Badge from '@/shared/ui/common/Badge';
 import ImageComponent from '@/shared/ui/ImageComponent';
 
 import { buildModelDisplayName } from '@/features/deals/lib/model-page-insights';
@@ -272,11 +273,9 @@ function DealCard({ item: p }: { item: DealItem }) {
         {isActive ? (
           <div className="mt-auto">
             {verdict && (
-              <span
-                className={`text-11 mb-1 inline-block rounded-full px-1.5 py-0.5 font-semibold ${verdict.className}`}
-              >
+              <Badge pill tone={verdict.tone} className="mb-1">
                 {verdict.text}
-              </span>
+              </Badge>
             )}
             <p className="text-lg font-semibold text-gray-900">
               {p.activePrice!.toLocaleString()}원
@@ -326,23 +325,23 @@ function NoImage() {
  * 판정 배지. 색은 상세 페이지의 타이밍 배지와 같다(좋음=emerald·비쌈=amber·평소=gray).
  * 단위 축이면 "%"가 용량당 비교라 단위를 붙인다 — 총액은 팩 크기가 달라 더 비싸 보일 수 있다.
  */
-function verdictBadge(p: DealItem): { text: string; className: string } | null {
+function verdictBadge(p: DealItem): { text: string; tone: 'success' | 'warning' | 'gray' } | null {
   const unit = p.buyLineUnitLabel ? `${p.buyLineUnitLabel} ` : '';
   switch (p.priceTone) {
     case 'lowest':
       return {
         text: `역대 최저 · ${unit}${p.savePct}%↓`,
-        className: 'bg-success-50 text-success-700',
+        tone: 'success',
       };
     case 'cheap':
       return {
         text: `평소보다 ${unit}${p.savePct}%↓`,
-        className: 'bg-success-50 text-success-700',
+        tone: 'success',
       };
     case 'fair':
-      return { text: '평소 수준', className: 'bg-gray-100 text-gray-600' };
+      return { text: '평소 수준', tone: 'gray' };
     case 'high':
-      return { text: '평소보다 비싸요', className: 'bg-warning-50 text-warning-800' };
+      return { text: '평소보다 비싸요', tone: 'warning' };
     default:
       return null;
   }

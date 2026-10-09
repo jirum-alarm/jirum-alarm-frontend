@@ -10,6 +10,7 @@ import NoticeAuthor from './NoticeAuthor';
 import PostStats from './PostStats';
 import {gaps} from './community-styles';
 import {useColors} from '@/shared/theme/useColors';
+import Badge from '@/shared/components/ui/Badge';
 
 /**
  * 공지 탭 전용 한 줄. web `features/community/ui/NoticePostCard` 대응 —
@@ -44,9 +45,9 @@ export default function NoticePostCard({
           {displayTime(post.createdAt)}
         </Text>
         {isNew ? (
-          <View className="bg-secondary-600 rounded px-1.5 py-0.5">
-            <Text className="text-xs font-semibold text-fixed-white">NEW</Text>
-          </View>
+          <Badge size="md" variant="solid" tone="secondary">
+            NEW
+          </Badge>
         ) : null}
       </View>
 

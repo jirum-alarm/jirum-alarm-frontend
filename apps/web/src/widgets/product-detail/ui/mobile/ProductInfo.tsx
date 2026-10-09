@@ -6,6 +6,7 @@ import { Suspense, useEffect } from 'react';
 import { UploaderType } from '@/shared/api/gql/graphql';
 import { cn } from '@/shared/lib/cn';
 import { pushRecentViewedProduct } from '@/shared/lib/recentViewedProducts';
+import Badge from '@/shared/ui/common/Badge';
 import Jirume from '@/shared/ui/common/icons/Jirume';
 import DisplayPrice from '@/shared/ui/DisplayPrice';
 import DisplayTime from '@/shared/ui/DisplayTime';
@@ -72,13 +73,9 @@ export default function ProductInfo({
         {/* 게시 시각은 배지 줄 오른쪽에 — 가격 위에 줄을 하나 더 두면 375×667 첫 화면에서 가격이 밀려난다. */}
         <div className="flex items-center gap-3 pb-2">
           {product.isEnd && (
-            <div
-              className={cn('border border-gray-400 bg-white px-2 text-gray-700', {
-                'flex h-[22px] items-center rounded-lg text-xs leading-5': true,
-              })}
-            >
+            <Badge size="tag" variant="outline" tone="gray">
               판매종료
-            </div>
+            </Badge>
           )}
           {!product.isEnd && product.hotDealType && (
             <div className="flex items-center gap-[8px]">

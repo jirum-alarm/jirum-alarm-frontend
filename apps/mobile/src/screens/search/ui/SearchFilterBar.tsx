@@ -13,6 +13,7 @@ import {
 import type {SearchFiltersController} from '@/features/search/model/useSearchFilters';
 import {cn} from '@/shared/lib/styling';
 import {tick} from '@/shared/lib/feedback';
+import BaseChip from '@/shared/components/ui/Chip';
 
 /**
  * 검색 필터 바. web: widgets/search/ui/SearchFilterBar.tsx
@@ -200,30 +201,9 @@ function Chip({
   label: string;
   onPress: () => void;
 }) {
+  // 검색 필터 칩 = 공용 Chip 의 sm(누르면 햅틱은 Chip 이 낸다).
   return (
-    <Pressable
-      onPress={() => {
-        tick();
-        onPress();
-      }}
-      accessibilityRole="button"
-      accessibilityState={{selected: active}}
-      accessibilityLabel={label}
-      className={cn(
-        'rounded-full border px-3 py-1.5',
-        active
-          ? 'border-secondary-500 bg-secondary-50'
-          : 'border-gray-300 bg-white',
-      )}
-      style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-      <Text
-        className={cn(
-          'text-sm',
-          active ? 'text-secondary-800 font-semibold' : 'text-gray-700',
-        )}>
-        {label}
-      </Text>
-    </Pressable>
+    <BaseChip size="sm" selected={active} label={label} onPress={onPress} />
   );
 }
 

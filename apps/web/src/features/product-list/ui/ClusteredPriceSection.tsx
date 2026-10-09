@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
+import Badge from '@/shared/ui/common/Badge';
 import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 
 import { ProductQueries } from '@/entities/product';
@@ -109,9 +110,9 @@ export default function ClusteredPriceSection({ productId, title = '판매처별
                 </div>
                 <div className="flex shrink-0 flex-col items-end gap-0.5">
                   {isLowest && (
-                    <span className="bg-error-50 text-error-600 text-10 rounded px-1.5 py-0.5 font-semibold">
+                    <Badge size="xs" tone="error">
                       최저가
-                    </span>
+                    </Badge>
                   )}
                   <span
                     className={`text-sm font-semibold ${isLowest ? 'text-error-500' : 'text-gray-700'}`}

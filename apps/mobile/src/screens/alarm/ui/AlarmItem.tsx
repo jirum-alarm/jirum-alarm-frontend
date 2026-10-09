@@ -15,6 +15,7 @@ import Thumbnail from '@/shared/components/product/Thumbnail';
 
 import AlarmItemNoImage from './AlarmItemNoImage';
 import {useColors} from '@/shared/theme/useColors';
+import Badge from '@/shared/components/ui/Badge';
 
 /** 키워드와 일치하는 부분만 굵게. 분할 규칙은 `lib/highlight` 가 정본이다. */
 function HighlightedMessage({
@@ -163,17 +164,13 @@ const AlarmItem = React.memo(function AlarmItem({
             <HighlightedMessage message={message} keyword={highlightKeyword} />
             <View className="flex-row items-center gap-x-3 pt-2">
               {isEnd ? (
-                <View className="h-[22px] justify-center rounded-lg border border-gray-400 bg-white px-2">
-                  <Text className="text-xs font-semibold text-gray-500">
-                    판매종료
-                  </Text>
-                </View>
+                <Badge size="tag" variant="outline" tone="gray">
+                  판매종료
+                </Badge>
               ) : isHot ? (
-                <View className="bg-error-500 h-[22px] justify-center rounded-lg px-3">
-                  <Text className="text-xs font-semibold text-fixed-white">
-                    핫딜
-                  </Text>
-                </View>
+                <Badge size="tag" variant="solid" tone="error">
+                  핫딜
+                </Badge>
               ) : null}
               {price ? (
                 <>

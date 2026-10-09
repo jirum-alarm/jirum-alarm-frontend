@@ -15,6 +15,7 @@ import { type ProductCardType } from '@/entities/product-list/model/types';
 import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
 import DisplayProductSource from '@/entities/product-list/ui/card/DisplayProductSource';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
+import { ProductCardStatus } from '@/entities/product-list/ui/ProductCardStatus';
 
 export default function ListProductCard({
   product,
@@ -44,16 +45,7 @@ export default function ListProductCard({
               sizes="120px"
               priority={priority}
             />
-            {product.isEnd && (
-              <div className="absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg bg-white px-2 text-xs text-gray-700">
-                판매종료
-              </div>
-            )}
-            {product.earliestExpiryDate && !product.isEnd && (
-              <div className="bg-fixed-700/80 text-fixed-white absolute inset-x-0 bottom-0 flex h-[22px] items-center justify-center rounded-b-lg px-2 text-xs">
-                유통기한 {formatDateToMMD(product.earliestExpiryDate)}
-              </div>
-            )}
+            <ProductCardStatus product={product} showHotdealBadge={false} />
           </div>
           <div className="flex h-full flex-col justify-between gap-1">
             <span className="line-clamp-2 text-sm break-all text-gray-700">{product.title}</span>

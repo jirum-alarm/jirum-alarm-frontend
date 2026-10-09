@@ -6,7 +6,6 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 import PressableScale from '@/shared/components/PressableScale';
 
 import {HotDealType} from '@/shared/api/gql/graphql';
-import HotdealBadge from '@/shared/components/product/HotdealBadge';
 import DisplayProductSource from '@/shared/components/product/DisplayProductSource';
 import Thumbnail from '@/shared/components/product/Thumbnail';
 import {
@@ -14,6 +13,7 @@ import {
   type ProductCardSource,
 } from '@/shared/lib/analytics/card-tracking';
 import {displayTime, parsePrice} from '@/shared/lib/format/price';
+import ProductCardStatus from '@/shared/components/product/ProductCardStatus';
 
 export type ProductCardItem = {
   id: string | number;
@@ -28,15 +28,6 @@ export type ProductCardItem = {
   earliestExpiryDate?: string | null;
   provider?: {nameKr?: string | null} | null;
 };
-
-/** web formatDateToMMD 와 같은 표기(MM.DD). dayjs 없이 처리한다. */
-function formatMMD(date: string): string {
-  const d = new Date(date);
-  if (Number.isNaN(d.getTime())) return '';
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
-  return `${mm}.${dd}`;
-}
 
 const CARD_WIDTH = 120;
 
@@ -85,27 +76,7 @@ const ProductCard = React.memo(function ProductCard({
             type="hotDeal"
           />
 
-          {product.isEnd ? (
-            <View className="absolute bottom-0 left-0 h-[22px] items-center justify-center rounded-tr-lg rounded-bl-lg bg-white px-2">
-              <Text className="text-xs text-gray-700">판매종료</Text>
-            </View>
-          ) : product.hotDealType && !product.earliestExpiryDate ? (
-            // 유통기한 띠가 같은 자리를 덮는다(HomeCardPrimitives CardThumbnail 과 같은 이유).
-            <View className="absolute bottom-0 left-0">
-              <HotdealBadge
-                hotdealType={product.hotDealType}
-                badgeVariant="card"
-              />
-            </View>
-          ) : null}
-
-          {product.earliestExpiryDate && !product.isEnd ? (
-            <View className="absolute inset-x-0 bottom-0 h-[22px] items-center justify-center bg-fixed-700/80 px-2">
-              <Text className="text-xs font-semibold text-fixed-white">
-                유통기한 {formatMMD(product.earliestExpiryDate)}
-              </Text>
-            </View>
-          ) : null}
+          <ProductCardStatus product={product} />
         </View>
 
         {/* 제목은 2줄 고정 — 높이를 안 잡으면 아래 가격 줄이 카드마다 어긋난다. */}

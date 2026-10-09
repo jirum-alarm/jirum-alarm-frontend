@@ -1,8 +1,6 @@
 'use client';
 
-import { m } from 'motion/react';
-
-import { cn } from '@/shared/lib/cn';
+import Chip from '@/shared/ui/common/Chip';
 
 import { PromotionTab } from '@/entities/promotion/model/types';
 
@@ -14,7 +12,7 @@ interface PromotionTabsProps {
 
 const PromotionTabs = ({ tabs, activeTabId, onTabClick }: PromotionTabsProps) => {
   const handleTabClick = (tab: PromotionTab) => {
-    return (e: React.MouseEvent<HTMLLIElement>) => {
+    return (e: React.MouseEvent<HTMLButtonElement>) => {
       e.currentTarget.scrollIntoView({
         behavior: 'smooth',
         block: 'nearest',
@@ -27,22 +25,10 @@ const PromotionTabs = ({ tabs, activeTabId, onTabClick }: PromotionTabsProps) =>
   return (
     <ul className="scrollbar-hide pc:pt-3 pc: flex w-fit max-w-full space-x-2 overflow-x-auto px-5 pb-2">
       {tabs.map((tab) => (
-        <li
-          key={tab.id}
-          onClick={handleTabClick(tab)}
-          className={cn(`shrink-0 cursor-pointer rounded-full border transition-all`, {
-            'border-secondary-500 bg-secondary-50 text-secondary-800 font-semibold':
-              activeTabId === tab.id,
-            'border-gray-300 bg-white text-gray-700': activeTabId !== tab.id,
-          })}
-        >
-          <m.button
-            className="px-[16px] py-[6px]"
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.1 }}
-          >
+        <li key={tab.id} className="shrink-0">
+          <Chip selected={activeTabId === tab.id} onClick={handleTabClick(tab)}>
             {tab.label}
-          </m.button>
+          </Chip>
         </li>
       ))}
     </ul>

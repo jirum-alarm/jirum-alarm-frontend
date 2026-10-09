@@ -6,9 +6,10 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 import PressableScale from '@/shared/components/PressableScale';
 import NoImage from '@/shared/components/product/NoImage';
 import {DARK_IMAGE_STYLE} from '@/shared/components/product/Thumbnail';
-import {cn} from '@/shared/lib/styling';
 
 import type {TossDeal} from '../../lib/toss';
+import Badge from '@/shared/components/ui/Badge';
+import {CardCornerLabel} from '@/shared/components/product/ProductCardStatus';
 
 /**
  * 토스 전용 카드. web TossDealCard.
@@ -57,11 +58,7 @@ export default function TossDealCard({
           </View>
         ) : null}
         {deal.bestSeller ? (
-          <View className="absolute bottom-0 left-0 z-10 h-[22px] justify-center rounded-tr-lg rounded-bl-lg bg-fixed-900/80 px-2">
-            <Text className="text-xs font-medium text-fixed-white">
-              베스트판매자
-            </Text>
-          </View>
+          <CardCornerLabel tone="dark">베스트판매자</CardCornerLabel>
         ) : null}
       </View>
 
@@ -76,15 +73,9 @@ export default function TossDealCard({
         {deal.arrivalGuaranteed || deal.specialProduct ? (
           <View className="flex-row flex-wrap gap-1 pt-1">
             {deal.arrivalGuaranteed ? (
-              <Badge className="bg-success-50" textClassName="text-success-700">
-                도착보장
-              </Badge>
+              <Badge tone="success">도착보장</Badge>
             ) : null}
-            {deal.specialProduct ? (
-              <Badge className="bg-error-50" textClassName="text-error-600">
-                토스특가
-              </Badge>
-            ) : null}
+            {deal.specialProduct ? <Badge tone="error">토스특가</Badge> : null}
           </View>
         ) : null}
 
@@ -105,26 +96,5 @@ export default function TossDealCard({
         </View>
       </View>
     </PressableScale>
-  );
-}
-
-function Badge({
-  children,
-  className,
-  textClassName,
-}: {
-  children: string;
-  className: string;
-  textClassName: string;
-}) {
-  return (
-    <View className={cn('rounded px-1.5 py-0.5', className)}>
-      {/* web `whitespace-nowrap` — 3열 좁은 카드에서 "최저가 보상"이 쪼개지지 않게. */}
-      <Text
-        className={cn('text-11 font-medium', textClassName)}
-        numberOfLines={1}>
-        {children}
-      </Text>
-    </View>
   );
 }

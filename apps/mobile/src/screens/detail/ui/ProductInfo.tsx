@@ -25,6 +25,7 @@ import {
 import type {PriceVerdict} from '../lib/price-signals';
 import {dealFreshnessAt, isSeenBasedFreshness} from '../lib/price-signals';
 import {stripPriceFromTitle} from '@/entities/home/lib/toss';
+import Badge from '@/shared/components/ui/Badge';
 
 /** 라벨/값 한 줄. 색은 web ProductInfo 와 동일하게 맞춘다(사용자 결정 2026-08-12). */
 function MetaRow({
@@ -73,11 +74,9 @@ export default function ProductInfo({
     <View className="px-5 pb-9">
       <View className="flex-row items-center gap-3 pb-2">
         {product.isEnd ? (
-          <View className="h-[22px] items-center justify-center rounded-lg border border-gray-400 bg-white px-2">
-            <Text className="text-xs font-semibold text-gray-700">
-              판매종료
-            </Text>
-          </View>
+          <Badge size="tag" variant="outline" tone="gray">
+            판매종료
+          </Badge>
         ) : product.hotDealType ? (
           <PressableScale
             onPress={() => setGuideOpen(true)}

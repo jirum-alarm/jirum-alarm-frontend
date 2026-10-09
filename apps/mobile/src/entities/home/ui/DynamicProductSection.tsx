@@ -5,11 +5,11 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 
 import PressableScale from '@/shared/components/PressableScale';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
-import {cn} from '@/shared/lib/styling';
 
 import {HomeQueries} from '../api/home.queries';
 import type {ContentPromotionSection, PromotionTab} from '../model/types';
 import DynamicProductList from './DynamicProductList';
+import Chip from '@/shared/components/ui/Chip';
 
 /**
  * 섹션 하나(제목 + 더보기 + 목록). web: widgets/home/ui/DynamicProductSection.tsx
@@ -212,8 +212,10 @@ function PromotionTabs({
       {tabs.map(tab => {
         const isActive = tab.id === activeTabId;
         return (
-          <PressableScale
+          <Chip
             key={tab.id}
+            label={tab.label}
+            selected={isActive}
             onLayout={e => {
               const {x, width} = e.nativeEvent.layout;
               layouts.current[tab.id] = {x, width};
@@ -222,23 +224,7 @@ function PromotionTabs({
               centerTab(tab.id);
               onTabPress(tab);
             }}
-            accessibilityRole="button"
-            accessibilityState={{selected: isActive}}
-            accessibilityLabel={tab.label}
-            className={cn(
-              'rounded-full border px-4 py-1.5',
-              isActive
-                ? 'border-secondary-500 bg-secondary-50'
-                : 'border-gray-300 bg-white',
-            )}>
-            <Text
-              className={cn(
-                'text-sm',
-                isActive ? 'text-secondary-800 font-semibold' : 'text-gray-700',
-              )}>
-              {tab.label}
-            </Text>
-          </PressableScale>
+          />
         );
       })}
     </ScrollView>

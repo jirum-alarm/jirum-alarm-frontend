@@ -1,3 +1,5 @@
+import Badge, { type BadgeProps } from '@/shared/ui/common/Badge';
+
 import { type TossProductData } from '../model/toss-data';
 
 // 토스 딜 신뢰 배지 — 목록 카드와 상세페이지에서 공용. 희소할수록 앞에.
@@ -10,30 +12,21 @@ export default function TossBadges({
   /** 토스 특가 코너 유입 — 최저가 보상·30일 최저가는 가격 신호라 숨긴다. */
   hidePriceSignals?: boolean;
 }) {
-  const badges: { key: string; label: string; className: string }[] = [];
+  const badges: { key: string; label: string; tone: BadgeProps['tone'] }[] = [];
   if (!hidePriceSignals && toss.lowestPriceCompensation)
-    badges.push({
-      key: 'lpc',
-      label: '최저가 보상',
-      className: 'bg-secondary-50 text-secondary-600',
-    });
-  if (toss.arrivalGuaranteed)
-    badges.push({ key: 'ag', label: '도착보장', className: 'bg-success-50 text-success-700' });
-  if (toss.specialProduct)
-    badges.push({ key: 'sp', label: '토스특가', className: 'bg-error-50 text-error-600' });
+    badges.push({ key: 'lpc', label: '최저가 보상', tone: 'secondary' });
+  if (toss.arrivalGuaranteed) badges.push({ key: 'ag', label: '도착보장', tone: 'success' });
+  if (toss.specialProduct) badges.push({ key: 'sp', label: '토스특가', tone: 'error' });
   if (!hidePriceSignals && toss.lowestIn30Days)
-    badges.push({ key: 'l30', label: '30일 최저가', className: 'bg-error-50 text-error-600' });
+    badges.push({ key: 'l30', label: '30일 최저가', tone: 'error' });
 
   if (badges.length === 0) return null;
   return (
     <div className="flex flex-wrap gap-1.5 pt-2">
       {badges.map((b) => (
-        <span
-          key={b.key}
-          className={`rounded px-2 py-0.5 text-xs font-medium whitespace-nowrap ${b.className}`}
-        >
+        <Badge key={b.key} size="md" tone={b.tone}>
           {b.label}
-        </span>
+        </Badge>
       ))}
     </div>
   );

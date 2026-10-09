@@ -8,6 +8,7 @@ import { ProductService } from '@/shared/api/product';
 import { cn } from '@/shared/lib/cn';
 import { getEntry } from '@/shared/lib/entry';
 import { pushRecentViewedProduct } from '@/shared/lib/recentViewedProducts';
+import Badge from '@/shared/ui/common/Badge';
 import Button from '@/shared/ui/common/Button';
 import Jirume from '@/shared/ui/common/icons/Jirume';
 import DisplayPrice from '@/shared/ui/DisplayPrice';
@@ -91,13 +92,9 @@ export default function ProductInfo({
           {(product.isEnd || (!product.isEnd && product.hotDealType)) && (
             <div className="flex gap-x-2">
               {product.isEnd && (
-                <div
-                  className={cn('border border-gray-400 bg-white px-2 text-gray-700', {
-                    'flex h-[22px] items-center rounded-lg text-xs leading-5': true,
-                  })}
-                >
+                <Badge size="tag" variant="outline" tone="gray">
                   판매종료
-                </div>
+                </Badge>
               )}
               {!product.isEnd && product.hotDealType && (
                 <div className="flex items-center gap-[8px]">

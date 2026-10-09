@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { cn } from '@/shared/lib/cn';
+import BaseChip from '@/shared/ui/common/Chip';
 
 import { CategoryQueries } from '@/entities/category';
 import { ProviderQueries } from '@/entities/provider';
@@ -41,23 +42,18 @@ function Chip({
 }: {
   active: boolean;
   onClick: () => void;
-  children: React.ReactNode;
+  children: string;
 }) {
   return (
-    <button
-      type="button"
-      aria-pressed={active}
+    <BaseChip
+      size="sm"
+      selected={active}
       onClick={onClick}
       // ponytail: after 유사요소로 세로 히트영역만 확장(~42px) — 가로 확장은 이웃 칩과 겹쳐 오터치 유발
-      className={cn(
-        'relative shrink-0 cursor-pointer rounded-full border px-3 py-1.5 text-sm transition-all after:absolute after:-inset-y-1 after:right-0 after:left-0 after:content-[""]',
-        active
-          ? 'border-secondary-500 bg-secondary-50 text-secondary-800 font-semibold'
-          : 'border-gray-300 bg-white text-gray-700',
-      )}
+      className='relative after:absolute after:-inset-y-1 after:right-0 after:left-0 after:content-[""]'
     >
       {children}
-    </button>
+    </BaseChip>
   );
 }
 

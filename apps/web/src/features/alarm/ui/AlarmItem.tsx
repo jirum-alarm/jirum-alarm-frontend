@@ -6,6 +6,7 @@ import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
 import { trackAlarmLink } from '@/shared/lib/trackAlarmLink';
 import { convertToWebp } from '@/shared/lib/utils/image';
+import Badge from '@/shared/ui/common/Badge';
 import { XSmall } from '@/shared/ui/common/icons';
 import DisplayTime from '@/shared/ui/DisplayTime';
 import ImageComponent from '@/shared/ui/ImageComponent';
@@ -115,16 +116,15 @@ const AlarmItem = ({
             <HighlightText message={message} keyword={keyword?.split(' ')[0] ?? ''} />
           </p>
           <div className="flex items-center gap-x-3 pt-2">
-            {(isHot || isEnd) && (
-              <div
-                className={cn('flex h-[22px] items-center rounded-lg text-xs leading-normal', {
-                  'border border-gray-400 bg-white px-2 text-gray-500': isEnd,
-                  'bg-error-500 text-fixed-white px-3': !isEnd && isHot,
-                })}
-              >
-                {isEnd ? '판매종료' : isHot ? '핫딜' : ''}
-              </div>
-            )}
+            {isEnd ? (
+              <Badge size="tag" variant="outline" tone="gray">
+                판매종료
+              </Badge>
+            ) : isHot ? (
+              <Badge size="tag" variant="solid" tone="error">
+                핫딜
+              </Badge>
+            ) : null}
             {price && (
               <>
                 <span className="line-clamp-1 max-w-56 font-semibold text-gray-900">{price}</span>

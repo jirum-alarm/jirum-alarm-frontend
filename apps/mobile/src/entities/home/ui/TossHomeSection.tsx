@@ -4,11 +4,11 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 import {useQuery} from '@tanstack/react-query';
 
 import PressableScale from '@/shared/components/PressableScale';
-import {cn} from '@/shared/lib/styling';
 
 import {HomeQueries} from '../api/home.queries';
 import {toTossDeal, TOSS_HOME_SECTION_IDS} from '../lib/toss';
 import TossDealCard from './cards/TossDealCard';
+import Chip from '@/shared/components/ui/Chip';
 
 /**
  * 홈의 토스 특가 섹션. web: widgets/home/ui/TossHomeSection.tsx
@@ -171,27 +171,13 @@ export function ChipRow({
       {items.map(item => {
         const isActive = item.id === activeId;
         return (
-          <PressableScale
+          <Chip
             key={item.id}
+            label={item.label}
+            selected={isActive}
+            size={variant === 'sub' ? 'xs' : 'md'}
             onPress={() => onSelect(item.id)}
-            accessibilityRole="button"
-            accessibilityState={{selected: isActive}}
-            accessibilityLabel={item.label}
-            className={cn(
-              'rounded-full border',
-              variant === 'sub' ? 'px-3 py-1' : 'px-4 py-1.5',
-              isActive
-                ? 'border-secondary-500 bg-secondary-50'
-                : 'border-gray-300 bg-white',
-            )}>
-            <Text
-              className={cn(
-                variant === 'sub' ? 'text-xs' : 'text-sm',
-                isActive ? 'text-secondary-800 font-semibold' : 'text-gray-700',
-              )}>
-              {item.label}
-            </Text>
-          </PressableScale>
+          />
         );
       })}
     </ScrollView>

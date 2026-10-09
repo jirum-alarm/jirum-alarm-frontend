@@ -5,14 +5,8 @@ export {};
  * (컴포넌트를 import 하면 RN·NativeWind 의존이 줄줄이 딸려온다)
  */
 
-/** ProductCard 의 formatMMD 와 같은 구현. */
-function formatMMD(date: string): string {
-  const d = new Date(date);
-  if (Number.isNaN(d.getTime())) return '';
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
-  return `${mm}.${dd}`;
-}
+// 실제 함수 — 카드 상태 오버레이(ProductCardStatus)·홈 카드가 같이 쓴다(RN 의존 없는 순수 함수라 import 해도 된다).
+import {formatMMD} from '../src/shared/lib/format/date';
 
 /** DisplayProductSource 의 판매처/제보처 정리 규칙. */
 function resolveSource(mallName?: string | null, providerName?: string | null) {

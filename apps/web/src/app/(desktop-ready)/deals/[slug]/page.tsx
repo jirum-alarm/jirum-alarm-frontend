@@ -6,6 +6,7 @@ import { ModelPageService } from '@/shared/api/model-page';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
 import { convertToWebp } from '@/shared/lib/utils/image';
+import Badge from '@/shared/ui/common/Badge';
 import ImageComponent from '@/shared/ui/ImageComponent';
 
 import {
@@ -248,12 +249,9 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   const rankedReps = rankRepresentatives(representatives);
   const bestRep = rankedReps.find((r) => r.isBestUnit);
 
-  const timingToneClass =
-    timing.tone === 'good'
-      ? 'bg-success-50 text-success-700'
-      : timing.tone === 'high'
-        ? 'bg-warning-50 text-warning-800'
-        : 'bg-gray-100 text-gray-600';
+  // 판정 색 — 좋음=success·비쌈=warning·평소=gray(/deals 목록 판정 배지와 같다).
+  const timingTone =
+    timing.tone === 'good' ? 'success' : timing.tone === 'high' ? 'warning' : 'gray';
 
   const listTitleSuffix =
     histBasis === 'unit' && histUnitLabel ? `${histUnitLabel} 싼 순` : '싼 순';
@@ -330,11 +328,9 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                 <div className="mt-3 rounded-xl border border-gray-200 bg-gray-50 p-3">
                   <div className="flex flex-wrap items-center gap-2">
                     {timing.tone !== 'unknown' && (
-                      <span
-                        className={`text-11 rounded-full px-2 py-0.5 font-semibold ${timingToneClass}`}
-                      >
+                      <Badge pill tone={timingTone}>
                         {timing.label}
-                      </span>
+                      </Badge>
                     )}
                     {timing.activeDealCount > 0 && (
                       <span className="text-11 text-gray-400">
@@ -447,19 +443,19 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                         <span className="text-sm font-medium">{rep.label}</span>
                         <div className="flex shrink-0 flex-wrap justify-end gap-1">
                           {rep.isBestUnit && (
-                            <span className="bg-success-100 text-10 text-success-700 rounded px-1.5 py-0.5 font-semibold">
+                            <Badge size="xs" tone="success">
                               단위가 최저
-                            </span>
+                            </Badge>
                           )}
                           {(rep.activeDeals > 0 || rep.dealMinPrice != null) && (
-                            <span className="bg-secondary-50 text-10 text-secondary-700 rounded px-1.5 py-0.5 font-semibold">
+                            <Badge size="xs" tone="secondary">
                               핫딜
-                            </span>
+                            </Badge>
                           )}
                           {rep.priceRank && (
-                            <span className="bg-warning-100 text-10 text-warning-700 rounded px-1.5 py-0.5 font-semibold">
+                            <Badge size="xs" tone="warning">
                               다나와 {rep.priceRank}
-                            </span>
+                            </Badge>
                           )}
                         </div>
                       </div>

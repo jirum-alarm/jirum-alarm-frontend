@@ -7,6 +7,7 @@ import { CommunityPostsQuery } from '@/shared/api/community/community.service';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
 import { displayTime } from '@/shared/lib/utils/displayTime';
+import Badge from '@/shared/ui/common/Badge';
 import { BubbleChat, Eye, ThumbsupFill } from '@/shared/ui/common/icons';
 
 import { CommunityTab } from '@/entities/community';
@@ -39,9 +40,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
             <NoticeAuthor />
           ) : (
             <>
-              <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-500">
-                {isProductComment ? '댓글' : '게시글'}
-              </span>
+              <Badge size="md">{isProductComment ? '댓글' : '게시글'}</Badge>
               <span className="text-sm font-medium text-gray-700">
                 {post.author?.nickname ?? '알 수 없음'}
               </span>
@@ -49,9 +48,9 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
           )}
           <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>
           {post.isNotice && (
-            <span className="bg-secondary-500 text-fixed-white rounded px-1.5 py-0.5 text-xs font-semibold">
+            <Badge size="md" variant="solid" tone="secondary">
               NEW
-            </span>
+            </Badge>
           )}
         </div>
 
@@ -98,9 +97,14 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
               <>
                 <Image src={previewImage} alt="" fill className="object-cover" sizes="80px" />
                 {images.length > 1 && (
-                  <span className="text-fixed-white text-10 absolute right-1 bottom-1 rounded bg-black/60 px-1.5 py-0.5 font-medium">
+                  <Badge
+                    size="xs"
+                    variant="solid"
+                    tone="gray"
+                    className="absolute right-1 bottom-1"
+                  >
                     +{images.length - 1}
-                  </span>
+                  </Badge>
                 )}
               </>
             )}

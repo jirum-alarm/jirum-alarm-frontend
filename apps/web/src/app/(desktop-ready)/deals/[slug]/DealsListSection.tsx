@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
 import { convertToWebp } from '@/shared/lib/utils/image';
+import Badge from '@/shared/ui/common/Badge';
 import ImageComponent from '@/shared/ui/ImageComponent';
 
 import {
@@ -124,25 +125,21 @@ export default function DealsListSection({
                   </div>
                 </div>
                 <div className="flex shrink-0 flex-col items-end gap-0.5">
-                  {deal.isEnd && (
-                    <span className="text-10 rounded bg-gray-100 px-1.5 py-0.5 font-semibold text-gray-500">
-                      종료
-                    </span>
-                  )}
+                  {deal.isEnd && <Badge size="xs">종료</Badge>}
                   {isBundle && (
-                    <span className="bg-warning-50 text-10 text-warning-700 rounded px-1.5 py-0.5 font-semibold">
+                    <Badge size="xs" tone="warning">
                       증정·번들
-                    </span>
+                    </Badge>
                   )}
                   {isActivePick && (
-                    <span className="bg-success-50 text-10 text-success-700 rounded px-1.5 py-0.5 font-semibold">
+                    <Badge size="xs" tone="success">
                       지금 추천
-                    </span>
+                    </Badge>
                   )}
                   {isAllTimeLow && (
-                    <span className="bg-error-50 text-error-600 text-10 rounded px-1.5 py-0.5 font-semibold">
+                    <Badge size="xs" tone="error">
                       역대 최저
-                    </span>
+                    </Badge>
                   )}
                   <span
                     className={`text-sm font-medium ${deal.isEnd ? 'text-gray-400 line-through' : 'text-gray-700'}`}

@@ -12,6 +12,7 @@ import NoticeAuthor from './NoticeAuthor';
 import PostStats from './PostStats';
 import {gaps} from './community-styles';
 import {useColors} from '@/shared/theme/useColors';
+import Badge from '@/shared/components/ui/Badge';
 
 const THUMBNAIL_SIZE = 80; // web h-20 w-20
 
@@ -49,11 +50,7 @@ export default function CommunityPostCard({
             <NoticeAuthor />
           ) : (
             <>
-              <View className="rounded bg-gray-100 px-1.5 py-0.5">
-                <Text className="text-xs font-medium text-gray-500">
-                  {view.badgeLabel}
-                </Text>
-              </View>
+              <Badge size="md">{view.badgeLabel}</Badge>
               <Text
                 className="shrink text-sm font-medium text-gray-700"
                 numberOfLines={1}>
@@ -65,11 +62,9 @@ export default function CommunityPostCard({
             {displayTime(post.createdAt)}
           </Text>
           {post.isNotice ? (
-            <View className="bg-secondary-600 rounded px-1.5 py-0.5">
-              <Text className="text-xs font-semibold text-fixed-white">
-                NEW
-              </Text>
-            </View>
+            <Badge size="md" variant="solid" tone="secondary">
+              NEW
+            </Badge>
           ) : null}
         </View>
 
@@ -108,11 +103,13 @@ export default function CommunityPostCard({
                 webp 먼저, 실패하면 원본, 그래도 안 되면 대체 그림. */}
             <Thumbnail uri={view.previewImage} />
             {view.extraImageCount > 0 ? (
-              <View className="absolute bottom-1 right-1 rounded bg-black/60 px-1.5 py-0.5">
-                <Text className="text-10 font-medium text-fixed-white">
-                  +{view.extraImageCount}
-                </Text>
-              </View>
+              <Badge
+                size="xs"
+                variant="solid"
+                tone="gray"
+                className="absolute bottom-1 right-1">
+                +{view.extraImageCount}
+              </Badge>
             ) : null}
           </View>
           {view.showProductTitle ? (

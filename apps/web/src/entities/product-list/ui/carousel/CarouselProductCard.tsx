@@ -3,9 +3,7 @@
 import { m } from 'motion/react';
 
 import { PAGE } from '@/shared/config/page';
-import { formatDateToMMD } from '@/shared/lib/utils/date';
 import DisplayTime from '@/shared/ui/DisplayTime';
-import HotdealBadge from '@/shared/ui/HotdealBadge';
 import Link from '@/shared/ui/Link';
 
 import {
@@ -16,6 +14,7 @@ import { type ProductCardType } from '@/entities/product-list/model/types';
 import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
 import DisplayProductSource from '@/entities/product-list/ui/card/DisplayProductSource';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
+import { ProductCardStatus } from '@/entities/product-list/ui/ProductCardStatus';
 
 export default function CarouselProductCard({
   product,
@@ -46,22 +45,7 @@ export default function CarouselProductCard({
             sizes="(max-width: 768px) 120px, 192px"
             priority={priority}
           />
-          {product.isEnd ? (
-            <div className="absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg bg-white px-2 text-xs text-gray-700">
-              판매종료
-            </div>
-          ) : (
-            product.hotDealType && (
-              <div className="absolute bottom-0 left-0 z-10">
-                <HotdealBadge badgeVariant="card" hotdealType={product.hotDealType} />
-              </div>
-            )
-          )}
-          {product.earliestExpiryDate && !product.isEnd && (
-            <div className="bg-fixed-700/80 text-fixed-white absolute inset-x-0 bottom-0 flex h-[22px] items-center justify-center rounded-b-lg px-2 text-xs">
-              유통기한 {formatDateToMMD(product.earliestExpiryDate)}
-            </div>
-          )}
+          <ProductCardStatus product={product} />
         </div>
         <div className="flex flex-col">
           <span className="line-clamp-2 h-12 w-full pt-2 text-sm break-words text-gray-700">

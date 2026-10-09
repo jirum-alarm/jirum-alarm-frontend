@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { CommunityPostsQuery } from '@/shared/api/community/community.service';
 import { PAGE } from '@/shared/config/page';
 import { displayTime } from '@/shared/lib/utils/displayTime';
+import Badge from '@/shared/ui/common/Badge';
 import { BubbleChat, Eye, ThumbsupFill } from '@/shared/ui/common/icons';
 
 import { CommunityTab } from '@/entities/community';
@@ -35,9 +36,9 @@ export default function NoticePostCard({
         <NoticeAuthor />
         <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>
         {isNew && (
-          <span className="bg-secondary-500 text-fixed-white rounded px-1.5 py-0.5 text-xs font-semibold">
+          <Badge size="md" variant="solid" tone="secondary">
             NEW
-          </span>
+          </Badge>
         )}
       </div>
 

@@ -3,10 +3,12 @@
 import { m } from 'motion/react';
 
 import { cn } from '@/shared/lib/cn';
+import Badge from '@/shared/ui/common/Badge';
 import Link from '@/shared/ui/Link';
 
 import { tossDetailHref } from '@/entities/product/lib/from-toss';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
+import { CardCornerLabel } from '@/entities/product-list/ui/ProductCardStatus';
 
 import { type TossDeal } from './mock';
 
@@ -50,11 +52,7 @@ export default function TossDealCard({
             {label}
           </div>
         )}
-        {deal.bestSeller && (
-          <div className="bg-fixed-900/80 text-fixed-white absolute bottom-0 left-0 z-10 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg px-2 text-xs font-medium">
-            베스트판매자
-          </div>
-        )}
+        {deal.bestSeller && <CardCornerLabel tone="dark">베스트판매자</CardCornerLabel>}
       </div>
 
       <div className="flex flex-col">
@@ -65,16 +63,8 @@ export default function TossDealCard({
         {/* 신뢰 배지: 가격 신호(최저가 보상)는 빼고 배송·토스특가만. */}
         {(deal.arrivalGuaranteed || deal.specialProduct) && (
           <div className="flex flex-wrap gap-1 pt-1">
-            {deal.arrivalGuaranteed && (
-              <span className="bg-success-50 text-11 text-success-700 rounded px-1.5 py-0.5 font-medium whitespace-nowrap">
-                도착보장
-              </span>
-            )}
-            {deal.specialProduct && (
-              <span className="bg-error-50 text-error-600 text-11 rounded px-1.5 py-0.5 font-medium whitespace-nowrap">
-                토스특가
-              </span>
-            )}
+            {deal.arrivalGuaranteed && <Badge tone="success">도착보장</Badge>}
+            {deal.specialProduct && <Badge tone="error">토스특가</Badge>}
           </div>
         )}
 
