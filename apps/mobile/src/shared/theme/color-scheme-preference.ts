@@ -21,10 +21,12 @@ const isPreference = (v: unknown): v is ColorSchemePreference =>
 
 /**
  * 앱 전체 모드를 바꾼다 — className 토큰·useColors·키보드·알럿·네이티브 탭바가 모두 이 값을 따른다.
- * null 이면 OS 설정으로 돌아간다.
+ * 'unspecified' 면 OS 설정으로 돌아간다(RN 0.86 부터 null 대신 이 값 — 타입이 null 을 막는다).
  */
 function apply(preference: ColorSchemePreference) {
-  Appearance.setColorScheme(preference === 'system' ? null : preference);
+  Appearance.setColorScheme(
+    preference === 'system' ? 'unspecified' : preference,
+  );
 }
 
 /**

@@ -1,5 +1,5 @@
 import Firebase
-import Expo
+internal import Expo
 import UIKit
 import React
 import ReactAppDependencyProvider
@@ -23,7 +23,8 @@ extension WKWebView {
   }()
 }
 
-// ★Expo SDK 54 표준 AppDelegate(ExpoAppDelegate + ExpoReactNativeFactory).
+// ★Expo 표준 AppDelegate(ExpoAppDelegate + ExpoReactNativeFactory). SDK 57 부터 bindReactNativeFactory 가
+// 없어졌다 — ExpoReactNativeFactory 가 만들어질 때 react delegate handler(expo-updates 등)에 스스로 묶인다.
 //
 // 예전엔 RCTAppDelegate 를 상속해서 Expo 의 react delegate handler·AppDelegate subscriber 가
 // 하나도 돌지 않았다. 그 결과 expo-updates 는 initializeWithoutStarting() 만 되고 start() 가
@@ -55,7 +56,6 @@ class AppDelegate: ExpoAppDelegate {
 
     reactNativeDelegate = delegate
     reactNativeFactory = factory
-    bindReactNativeFactory(factory)
     self.launchOptions = launchOptions
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
@@ -94,7 +94,9 @@ class AppDelegate: ExpoAppDelegate {
 // ★UIScene 생명주기 — iOS 27 SDK(Xcode 27)부터 필수다. 씬을 안 쓰면
 // "UIScene life cycle is required for apps built with this SDK" 로 실행 즉시 종료된다
 // (Xcode 27 Release 빌드를 iOS 27 시뮬레이터에서 실측, 2026-09-27). Expo SDK 54 의
-// ExpoAppDelegate 엔 씬 지원이 없어 직접 둔다(Info.plist UIApplicationSceneManifest 가 이 클래스를 가리킨다).
+// ExpoAppDelegate 엔 씬 지원이 없어 직접 뒀다(Info.plist UIApplicationSceneManifest 가 이 클래스를 가리킨다).
+// SDK 57 엔 ExpoAppSceneDelegate 가 생겼지만 SDK 57 템플릿도 씬을 쓰지 않고, 아래 분기(카카오·네이버 콜백)는
+// 테스트(ios-native-config)로 묶여 있어 그대로 둔다. 앱 생명주기를 듣는 Expo subscriber 는 57 에서도 0개(2026-10-09 확인).
 //
 // 씬 방식에선 두 가지가 AppDelegate 가 아니라 여기로 온다 — 둘 다 AppDelegate 의 기존 분기로 넘긴다:
 //  1) URL(카카오·네이버 OAuth 콜백, jirumalarm:// 딥링크)과 유니버설 링크

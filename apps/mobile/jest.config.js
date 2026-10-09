@@ -1,5 +1,5 @@
 module.exports = {
-  preset: 'react-native',
+  preset: '@react-native/jest-preset',
   // RNGH·Reanimated 공식 목(PressableScale 이 둘로 눌림 애니메이션을 돌린다).
   setupFiles: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {

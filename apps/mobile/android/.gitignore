@@ -1,1 +1,4 @@
 **/*.jks
+
+# generated inline modules (Expo SDK 57 template)
+app/src/main/java/inline/

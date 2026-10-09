@@ -6,7 +6,14 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, min_ios_version_supported
+# Expo SDK 57 은 iOS 16.4 부터다(RN 0.86 의 min_ios_version_supported 는 아직 15.1 이라 Expo 모듈 podspec 과 어긋난다).
+platform :ios, '16.4'
+
+# RN 0.86 은 기본으로 미리 빌드된 RN 코어(React-Core-prebuilt)를 쓰는데, 이 레포는 Firebase 때문에
+# use_frameworks! :static 이라 그 조합에서 RNFBApp 이 "non-modular header inside framework module" 로
+# 컴파일되지 않는다(2026-10-09 실측). SDK 54 때처럼 RN 을 소스로 빌드한다.
+ENV['RCT_USE_RN_DEP'] ||= '0'
+ENV['RCT_USE_PREBUILT_RNCORE'] ||= '0'
 prepare_react_native_project!
 
 linkage = ENV['USE_FRAMEWORKS']
@@ -29,7 +36,8 @@ target 'jirumAlarmMobile' do
       'node',
       '--no-warnings',
       '--eval',
-      'require(require.resolve(\'expo-modules-autolinking\', { paths: [require.resolve(\'expo/package.json\')] }))(process.argv.slice(1))',
+      'require(\'expo/bin/autolinking\')',
+      'expo-modules-autolinking',
       'react-native-config',
       '--json',
       '--platform',

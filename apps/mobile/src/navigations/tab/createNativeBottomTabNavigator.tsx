@@ -13,8 +13,19 @@ import {
 } from '@react-navigation/native';
 import {Lazy, SafeAreaProviderCompat} from '@react-navigation/elements';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {BottomTabs, BottomTabsScreen} from 'react-native-screens';
-import type {ColorValue, ImageSourcePropType} from 'react-native';
+import {
+  Tabs,
+  type PlatformIconAndroid,
+  type PlatformIconIOS,
+  type TabSelectedEvent,
+  type TabSelectionRejectedEvent,
+  type TabsScreenAppearanceIOS,
+} from 'react-native-screens';
+import type {
+  ColorValue,
+  ImageSourcePropType,
+  NativeSyntheticEvent,
+} from 'react-native';
 
 import {getTabBarClipPx} from './tab-bar-metrics';
 import {useChromeColors} from './native-headers';
@@ -67,23 +78,6 @@ type NativeTabNavigatorProps = DefaultNavigatorOptions<
 > &
   TabRouterOptions;
 
-type NativeScreenIcon = NonNullable<
-  React.ComponentProps<typeof BottomTabsScreen>['icon']
->;
-
-function toScreensIcon(
-  icon: NativeTabIcon | undefined,
-): NativeScreenIcon | undefined {
-  if (!icon) return undefined;
-  if (icon.type === 'sfSymbol') {
-    return {sfSymbolName: icon.name};
-  }
-  // tinted:false 는 원본 색(연두 채움)을 유지한다. 템플릿으로 넣으면 회색이 된다.
-  return icon.tinted === false
-    ? {imageSource: icon.source}
-    : {templateSource: icon.source};
-}
-
 function resolveNativeIcon(
   tabBarIcon:
     | NativeTabIcon
@@ -95,34 +89,31 @@ function resolveNativeIcon(
   return typeof tabBarIcon === 'function' ? tabBarIcon({focused}) : tabBarIcon;
 }
 
-function resolveIcon(
-  tabBarIcon:
-    | NativeTabIcon
-    | ((props: {focused: boolean}) => NativeTabIcon)
-    | undefined,
-  focused: boolean,
-): NativeScreenIcon | undefined {
-  return toScreensIcon(resolveNativeIcon(tabBarIcon, focused));
+function iosIcon(icon: NativeTabIcon | undefined): PlatformIconIOS | undefined {
+  if (!icon) return undefined;
+  if (icon.type === 'sfSymbol') {
+    return {type: 'sfSymbol', name: icon.name};
+  }
+  // tinted:false 는 원본 색(연두 채움)을 유지한다. 템플릿으로 넣으면 회색이 된다.
+  return icon.tinted === false
+    ? {type: 'imageSource', imageSource: icon.source}
+    : {type: 'templateSource', templateSource: icon.source};
 }
 
-function androidIconResource(
-  tabBarIcon:
-    | NativeTabIcon
-    | ((props: {focused: boolean}) => NativeTabIcon)
-    | undefined,
-  focused: boolean,
-): ImageSourcePropType | undefined {
-  const icon = resolveNativeIcon(tabBarIcon, focused);
-  return icon?.type === 'image' ? icon.source : undefined;
+/** Android 는 SF Symbol 이 없다 — 이미지 아이콘만 넘긴다. */
+function androidIcon(
+  icon: NativeTabIcon | undefined,
+): PlatformIconAndroid | undefined {
+  return icon?.type === 'image'
+    ? {type: 'imageSource', imageSource: icon.source}
+    : undefined;
 }
 
 function titleAppearance(
   backgroundColor: ColorValue,
   titleColor: ColorValue,
   titleColorActive: ColorValue,
-): NonNullable<
-  React.ComponentProps<typeof BottomTabsScreen>['standardAppearance']
-> {
+): TabsScreenAppearanceIOS {
   return {
     tabBarBackgroundColor: backgroundColor,
     stacked: {
@@ -132,9 +123,18 @@ function titleAppearance(
   };
 }
 
+/** 네이티브가 마지막으로 확인해 준 탭 상태(어느 탭·몇 번째 상태인지). */
+type ConfirmedNavState = {routeKey: string; provenance: number};
+
 /**
- * Expo 54 의 react-native-screens 4.16 은 Tabs.Host 가 없다.
- * 같은 네이티브 UITabBar 를 BottomTabs / BottomTabsScreen 으로 붙인다.
+ * react-native-screens 4.26(Expo 57)의 Tabs.Host / Tabs.Screen 위에 얹은 탭 내비게이터.
+ *
+ * ★상태 모델: **선택된 탭의 정본은 네이티브**다. JS 는 "이 탭으로 바꿔 달라"를 navStateRequest 로
+ * 보내면서, 그 요청이 기반한 상태 번호(baseProvenance = 네이티브가 마지막으로 확인해 준 provenance)를
+ * 같이 싣는다. 사용자가 그 사이 다른 탭을 눌렀으면 네이티브가 낡은 요청을 거절하고
+ * (rejectStaleNavStateUpdates) onTabSelectionRejected 로 진짜 상태를 알려 준다 → JS 가 그쪽으로 맞춘다.
+ * baseProvenance 를 상수(0)로 두면 경합에서 JS 와 네이티브가 다른 탭을 보는 채로 조용히 굳는다.
+ * 패턴은 @react-navigation/bottom-tabs 7.20 의 unstable NativeBottomTabView 와 같다.
  */
 function NativeBottomTabNavigator({
   id,
@@ -166,7 +166,55 @@ function NativeBottomTabNavigator({
       UNSTABLE_router,
     });
 
-  const focused = descriptors[state.routes[state.index].key];
+  const focusedRouteKey = state.routes[state.index].key;
+  const [confirmed, setConfirmed] = React.useState<ConfirmedNavState>({
+    routeKey: focusedRouteKey,
+    provenance: 0,
+  });
+  const confirm = (next: ConfirmedNavState) =>
+    setConfirmed(prev =>
+      prev.routeKey === next.routeKey && prev.provenance === next.provenance
+        ? prev
+        : next,
+    );
+
+  /** 네이티브가 알려 준 탭으로 JS 상태를 맞춘다(이미 그 탭이면 확인만 갱신). */
+  const followNative = (next: ConfirmedNavState) => {
+    confirm(next);
+    if (next.routeKey === focusedRouteKey) return;
+    const route = state.routes.find(item => item.key === next.routeKey);
+    if (!route) return;
+    navigation.dispatch({
+      ...CommonActions.navigate(route.name, route.params),
+      target: state.key,
+    });
+  };
+
+  const onTabSelected = (event: NativeSyntheticEvent<TabSelectedEvent>) => {
+    const {selectedScreenKey, provenance, actionOrigin} = event.nativeEvent;
+    const route = state.routes.find(item => item.key === selectedScreenKey);
+    if (!route) return;
+
+    // 사용자가 누른 것만 tabPress — 같은 탭 재탭(맨 위로·스택 비우기) 리스너가 이걸 듣는다.
+    if (actionOrigin === 'user') {
+      navigation.emit({type: 'tabPress', target: route.key});
+    }
+    // JS 가 보낸 요청의 결과면 확인만 받는다(JS 상태는 이미 그 탭이다).
+    if (actionOrigin === 'programmatic-js') {
+      confirm({routeKey: selectedScreenKey, provenance});
+      return;
+    }
+    followNative({routeKey: selectedScreenKey, provenance});
+  };
+
+  const onTabSelectionRejected = (
+    event: NativeSyntheticEvent<TabSelectionRejectedEvent>,
+  ) => {
+    const {selectedScreenKey, provenance} = event.nativeEvent;
+    followNative({routeKey: selectedScreenKey, provenance});
+  };
+
+  const focused = descriptors[focusedRouteKey];
   const options = focused?.options;
   const insets = useSafeAreaInsets();
   const hidden = options?.tabBarStyle?.display === 'none';
@@ -193,34 +241,15 @@ function NativeBottomTabNavigator({
       <SafeAreaProviderCompat>
         <View style={styles.clip}>
           <View style={[styles.fill, hidden ? {marginBottom: -clipPx} : null]}>
-            <BottomTabs
-              tabBarItemTitleFontColor={titleColor}
-              tabBarItemTitleFontColorActive={titleColorActive}
-              tabBarItemLabelVisibilityMode={options?.tabBarLabelVisibilityMode}
-              tabBarMinimizeBehavior={minimize}
-              tabBarBackgroundColor={tabBarBackground}
-              experimentalControlNavigationStateInJS
-              onNativeFocusChange={event => {
-                const route = state.routes.find(
-                  item => item.key === event.nativeEvent.tabKey,
-                );
-                if (!route) return;
-
-                navigation.emit({
-                  type: 'tabPress',
-                  target: route.key,
-                });
-
-                const isFocused =
-                  state.index ===
-                  state.routes.findIndex(item => item.key === route.key);
-                if (!isFocused) {
-                  navigation.dispatch({
-                    ...CommonActions.navigate(route.name, route.params),
-                    target: state.key,
-                  });
-                }
-              }}>
+            <Tabs.Host
+              navStateRequest={{
+                selectedScreenKey: focusedRouteKey,
+                baseProvenance: confirmed.provenance,
+              }}
+              rejectStaleNavStateUpdates
+              onTabSelected={onTabSelected}
+              onTabSelectionRejected={onTabSelectionRejected}
+              ios={{tabBarMinimizeBehavior: minimize}}>
               {state.routes.map((route, index) => {
                 const descriptor = descriptors[route.key];
                 const screen = descriptor.options;
@@ -229,51 +258,58 @@ function NativeBottomTabNavigator({
                   route.key,
                 );
                 const lazy = screen.lazy !== false;
-                const icon = resolveIcon(screen.tabBarIcon, false);
-                const selectedIcon = resolveIcon(screen.tabBarIcon, true);
+                const icon = resolveNativeIcon(screen.tabBarIcon, false);
+                const selectedIcon = resolveNativeIcon(screen.tabBarIcon, true);
 
                 return (
-                  <BottomTabsScreen
+                  <Tabs.Screen
                     key={route.key}
-                    tabKey={route.key}
-                    isFocused={isFocused}
+                    screenKey={route.key}
                     title={screen.tabBarLabel ?? screen.title ?? route.name}
-                    icon={icon}
-                    selectedIcon={selectedIcon}
-                    iconResource={androidIconResource(
-                      screen.tabBarIcon,
-                      isFocused,
-                    )}
-                    standardAppearance={titleAppearance(
-                      tabBarBackground,
-                      titleColor,
-                      titleColorActive,
-                    )}
-                    // iOS 는 콘텐츠가 끝까지 스크롤된 상태에서 scrollEdgeAppearance 를
-                    // 쓴다. 비워 두면 시스템 기본값이 적용돼 **다크모드에서 탭바만
-                    // 검게** 뜬다(홈처럼 스크롤 화면에서 재현). 같은 값을 준다.
-                    scrollEdgeAppearance={titleAppearance(
-                      tabBarBackground,
-                      titleColor,
-                      titleColorActive,
-                    )}
                     badgeValue={screen.tabBarBadge?.toString()}
-                    overrideScrollViewContentInsetAdjustmentBehavior={
-                      screen.overrideScrollViewContentInsetAdjustmentBehavior
-                    }
                     specialEffects={{
                       repeatedTabSelection: {
                         popToRoot: true,
                         scrollToTop: true,
                       },
+                    }}
+                    ios={{
+                      icon: iosIcon(icon),
+                      selectedIcon: iosIcon(selectedIcon),
+                      standardAppearance: titleAppearance(
+                        tabBarBackground,
+                        titleColor,
+                        titleColorActive,
+                      ),
+                      // iOS 는 콘텐츠가 끝까지 스크롤된 상태에서 scrollEdgeAppearance 를
+                      // 쓴다. 비워 두면 시스템 기본값이 적용돼 **다크모드에서 탭바만
+                      // 검게** 뜬다(홈처럼 스크롤 화면에서 재현). 같은 값을 준다.
+                      scrollEdgeAppearance: titleAppearance(
+                        tabBarBackground,
+                        titleColor,
+                        titleColorActive,
+                      ),
+                      overrideScrollViewContentInsetAdjustmentBehavior:
+                        screen.overrideScrollViewContentInsetAdjustmentBehavior,
+                    }}
+                    android={{
+                      icon: androidIcon(icon),
+                      selectedIcon: androidIcon(selectedIcon),
+                      standardAppearance: {
+                        tabBarBackgroundColor: tabBarBackground,
+                        tabBarItemLabelVisibilityMode:
+                          options?.tabBarLabelVisibilityMode,
+                        normal: {tabBarItemTitleFontColor: titleColor},
+                        selected: {tabBarItemTitleFontColor: titleColorActive},
+                      },
                     }}>
                     <Lazy enabled={lazy} visible={isFocused || isPreloaded}>
                       {descriptor.render()}
                     </Lazy>
-                  </BottomTabsScreen>
+                  </Tabs.Screen>
                 );
               })}
-            </BottomTabs>
+            </Tabs.Host>
           </View>
         </View>
       </SafeAreaProviderCompat>

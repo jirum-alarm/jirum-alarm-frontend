@@ -31,3 +31,12 @@ allprojects {
         maven { url("https://devrepo.kakao.com/nexus/content/groups/public/") }
     }
 }
+
+// ★Gradle 9(Expo SDK 57)는 jcenter() 를 지웠다. @react-native-cookies/cookies 6.2.1(마지막 버전, 더는 관리 안 됨)의
+// android/build.gradle 이 아직 jcenter() 를 불러 프로젝트 평가에서 죽는다. node_modules 를 패치할 수 없는
+// 구조(hoisted)라 그 호출을 mavenCentral() 로 돌려 준다. 라이브러리를 바꾸면(@preeternal/react-native-cookie-manager 등) 지울 것.
+subprojects { p ->
+    if (p.name == "react-native-cookies_cookies") {
+        p.repositories.metaClass.jcenter = { -> p.repositories.mavenCentral() }
+    }
+}

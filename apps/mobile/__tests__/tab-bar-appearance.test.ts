@@ -32,14 +32,15 @@ const headers = read(HEADERS);
 describe('네이티브 탭바 appearance', () => {
   it('standardAppearance 와 scrollEdgeAppearance 를 모두 넘긴다', () => {
     // 둘 중 하나만 주면 나머지 상태에서 시스템 기본색(다크)이 나온다.
-    expect(nav).toContain('standardAppearance=');
-    expect(nav).toContain('scrollEdgeAppearance=');
+    expect(nav).toContain('standardAppearance:');
+    expect(nav).toContain('scrollEdgeAppearance:');
   });
 
   it('두 appearance 가 같은 함수로 만들어진다 — 색이 갈리지 않게', () => {
-    const calls = nav.match(/(standard|scrollEdge)Appearance=\{(\w+)\(/g) ?? [];
+    // Tabs.Screen(react-native-screens 4.26)은 ios={{standardAppearance: f(...), ...}} 객체로 받는다.
+    const calls = nav.match(/(standard|scrollEdge)Appearance: (\w+)\(/g) ?? [];
     expect(calls.length).toBe(2);
-    const fns = calls.map(c => c.match(/[=]\{(\w+)\(/)?.[1]);
+    const fns = calls.map(c => c.match(/: (\w+)\(/)?.[1]);
     expect(new Set(fns).size).toBe(1);
   });
 
