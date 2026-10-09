@@ -47,7 +47,9 @@ launch() {
   sleep "$WAIT"
   if ! adb shell pidof "$PKG" >/dev/null; then
     echo "✗ $1: ${WAIT}초 안에 종료됨"
-    adb logcat -d -b crash,main | grep -E -A5 'FATAL EXCEPTION|JavascriptException' | head -15
+    # 자바 크래시가 아니면(네이티브 tombstone·ANR·메모리 부족 kill) FATAL EXCEPTION 이 안 찍힌다 — 왜 죽었는지 남긴다.
+    adb logcat -d -b crash | tail -25
+    adb logcat -d | grep -iE "ActivityManager|lowmemorykiller|libc|DEBUG|$PKG" | grep -iE "died|kill|anr|crash|fatal|signal|exit|start proc" | tail -20
     exit 1
   fi
   if adb logcat -d | grep -E "FATAL EXCEPTION|JavascriptException|Unhandled JS Exception" >"$WORK/fatal.txt"; then
