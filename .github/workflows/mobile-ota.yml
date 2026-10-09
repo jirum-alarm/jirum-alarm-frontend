@@ -7,6 +7,8 @@ name: mobile-ota
 # - 발행 전에 boot-check 가 그 커밋의 JS 를 Release 앱에 끼워 시뮬레이터에서 실제로 켜 본다(scripts/boot-check.sh).
 #   2026-10-01 CI 가 전부 초록인 OTA 가 실행 즉시 종료된 사고 — 테스트는 "켜지나" 를 안 본다.
 #   수동 실행(workflow_dispatch)은 boot-check 만 돌고 발행하지 않는다.
+# - 마지막 production OTA 커밋 이후 앱 번들 입력이 안 바뀌었으면 건너뛴다(changes) — validation 은 web 소스
+#   변경에도 돌아서, 없으면 web 푸시마다 같은 내용 OTA 가 연달아 나간다(10/1 사고 때 유력했던 상황).
 # - 켜고 끄기: 저장소 변수 MOBILE_AUTO_OTA=true 일 때만 발행한다(끄면 즉시 멈춤 — 사고 때 첫 조치).
 # - 되돌리기: apps/mobile 에서 `pnpm ota:rollback`(직전 업데이트를 다시 내보낸다).
 # - 필요: secrets.EXPO_TOKEN (expo.dev → Access tokens).
@@ -30,12 +32,61 @@ env:
   PNPM_VERSION: 10.30.3
 
 jobs:
-  boot-check:
+  changes:
     if: >-
       github.event_name == 'workflow_dispatch' || (
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'push' &&
       vars.MOBILE_AUTO_OTA == 'true')
+    runs-on: ubuntu-latest
+    outputs:
+      app: ${{ steps.diff.outputs.app }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      # ponytail: 경로 대조라 "번들이 실제로 바뀌었나" 의 근사 — 테스트·스크립트·네이티브만 바뀐 커밋은 건너뛰고,
+      # packages 의 web 전용 변경도 OTA 로 나간다(드묾, 내용이 같아 무해). 마지막 커밋을 못 찾으면 발행 쪽으로 기운다.
+      - name: App bundle inputs changed since last production OTA?
+        id: diff
+        working-directory: apps/mobile
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          set -euo pipefail
+          group=$(npx eas update:list --branch production --limit 1 --json --non-interactive | jq -r '.currentPage[0].group // empty')
+          last=""
+          [ -n "$group" ] && last=$(npx eas update:view "$group" --json | jq -r '.[0].gitCommitHash // empty')
+          app=true
+          if [ -n "$last" ] && git cat-file -e "$last^{commit}" 2>/dev/null && git diff --quiet "$last" HEAD -- \
+              ../mobile ../../packages ../../package.json ../../pnpm-lock.yaml \
+              ':(exclude)../mobile/__tests__' ':(exclude)../mobile/scripts' ':(exclude)../mobile/ios' ':(exclude)../mobile/android' \
+              ':(exclude)*.md'; then
+            app=false
+          fi
+          echo "app=$app" >> "$GITHUB_OUTPUT"
+          echo "마지막 production OTA 커밋 ${last:-없음} → 앱 번들 입력 변경: $app" | tee -a "$GITHUB_STEP_SUMMARY"
+
+  boot-check:
+    needs: changes
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.app == 'true'
     runs-on: macos-latest
     timeout-minutes: 60
     steps:
