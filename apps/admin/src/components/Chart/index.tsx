@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 
 import { compact } from '@/lib/format';
 
-import type { ApexOptions } from 'apexcharts';
+import type { ApexAxisChartSeries, ApexNonAxisChartSeries, ApexOptions } from 'apexcharts';
 
 const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 

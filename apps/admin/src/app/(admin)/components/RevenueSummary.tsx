@@ -189,8 +189,8 @@ const RevenueSummary = () => {
                     xaxis: { type: 'category' },
                     tooltip: {
                       y: {
-                        formatter: (v: number, { dataPointIndex }: { dataPointIndex: number }) =>
-                          view.partialFrom >= 0 && dataPointIndex >= view.partialFrom
+                        formatter: (v: number, opts?: { dataPointIndex: number }) =>
+                          view.partialFrom >= 0 && (opts?.dataPointIndex ?? -1) >= view.partialFrom
                             ? `${won(v)} (집계 중)`
                             : won(v),
                       },
