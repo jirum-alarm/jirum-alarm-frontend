@@ -187,6 +187,33 @@ describe('FCMHandler', () => {
     });
   });
 
+  // 안드로이드는 한 번 탭에 RNFB·expo 두 경로가 다 부른다(2026-10-09 에뮬레이터 실측) — 한 번만 열고 한 번만 센다.
+  it('같은 알림이 두 경로로 와도 한 번만 연다', async () => {
+    const renderer = await renderHandler();
+    const openedAppHandler = mockOnNotificationOpenedApp.mock.calls[0][0];
+    const foregroundEventHandler =
+      mockAddNotificationResponseReceivedListener.mock.calls[0][0];
+    const data = {link: '/products/9', target_id: '9'};
+
+    ReactTestRenderer.act(() => {
+      foregroundEventHandler({notification: {request: {content: {data}}}});
+      openedAppHandler({data});
+    });
+
+    expect(mockInjectJavaScript).toHaveBeenCalledTimes(1);
+
+    // 시간이 지나 같은 딜 알림을 다시 누르면 다시 연다.
+    jest.advanceTimersByTime(6000);
+    ReactTestRenderer.act(() => {
+      openedAppHandler({data});
+    });
+    expect(mockInjectJavaScript).toHaveBeenCalledTimes(2);
+
+    await ReactTestRenderer.act(async () => {
+      renderer.unmount();
+    });
+  });
+
   it('ignores notification payloads that do not include a link and cleans up listeners', async () => {
     mockGetInitialNotification.mockResolvedValue({
       data: {},

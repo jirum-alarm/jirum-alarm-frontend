@@ -16,6 +16,31 @@ interface FcmHandlerProps {
 
 const goProductDetail = (url: string) => `window.location.href = "${url}";`;
 
+/**
+ * 같은 탭이 두 경로로 들어온다 — 안드로이드는 알림 한 번 탭에 RNFB(onNotificationOpenedApp·getInitialNotification)와
+ * expo-notifications(응답 리스너)가 **둘 다** 부른다(2026-10-09 에뮬레이터 실측: notification_clicked 가
+ * foreground·background 로 2번, 상세는 StackActions.push 라 두 겹 → 뒤로가기 두 번).
+ * 같은 알림(link+target_id)이 짧게 두 번 오면 처음 것만 처리한다.
+ * ponytail: 5초 안에 같은 딜 알림 두 개를 연달아 누르면 두 번째는 무시된다 — 같은 화면이라 손해 없다.
+ */
+const DUPLICATE_OPEN_WINDOW_MS = 5000;
+let lastOpened: {key: string; at: number} | null = null;
+const isDuplicateOpen = (
+  data: {link?: unknown; target_id?: unknown} | undefined,
+) => {
+  const key = `${String(data?.link)}|${String(data?.target_id ?? '')}`;
+  const now = Date.now();
+  if (
+    lastOpened &&
+    lastOpened.key === key &&
+    now - lastOpened.at < DUPLICATE_OPEN_WINDOW_MS
+  ) {
+    return true;
+  }
+  lastOpened = {key, at: now};
+  return false;
+};
+
 // 알림 클릭 추적 — 서버 notification_sent(발송)와 target/target_id/url 로 연결.
 // state: killed(종료) | background | foreground. push_history/GA4 발송과 퍼널.
 const trackNotificationClick = (
@@ -98,6 +123,7 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
     if (initialNotification) {
       const url = initialNotification.data?.link;
       if (!!url && typeof url === 'string') {
+        if (isDuplicateOpen(initialNotification.data)) return;
         trackNotificationClick(initialNotification.data, 'killed');
         pendingUrlRef.current = url;
         tryInjectPendingUrl();
@@ -127,6 +153,7 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
     const data = response.notification.request.content.data;
     const url = data?.link as string | undefined;
     if (url) {
+      if (isDuplicateOpen(data)) return;
       trackNotificationClick(data, 'foreground');
       openNotificationUrl(url);
     }
@@ -136,6 +163,7 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
   const handleNotificationOpenedApp = (remoteMessage: any) => {
     const url = remoteMessage.data?.link;
     if (url) {
+      if (isDuplicateOpen(remoteMessage.data)) return;
       trackNotificationClick(remoteMessage.data, 'background');
       openNotificationUrl(url);
     }
