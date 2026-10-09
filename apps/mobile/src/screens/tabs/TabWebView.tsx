@@ -48,7 +48,7 @@ import {DEVICE_ID_SYNC_SCRIPT} from '@/shared/lib/device/device-id';
 import {INTERCEPT_DETAIL_LINK_SCRIPT} from '@/shared/lib/webview/intercept-detail-link';
 import {subscribeOpenDetail} from '@/shared/lib/webview/event';
 // ponytail: 죽은 코드(다섯 탭 전부 네이티브, TabStackNavigator 주석) — 다크 대응 안 함. 지울 때 같이 사라진다.
-import {fixed} from '@/shared/theme/palette';
+import {fixed} from '@jirum/design-system';
 const SCREEN_BACKGROUND_COLOR = fixed.white;
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];

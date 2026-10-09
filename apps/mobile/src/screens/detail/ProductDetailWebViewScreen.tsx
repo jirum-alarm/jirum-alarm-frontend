@@ -31,7 +31,7 @@ import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import type {ProductFlowParamList} from '@/navigations/tab/types';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useChromeColors} from '@/navigations/tab/native-headers';
-import {fixed} from '@/shared/theme/palette';
+import {fixed} from '@jirum/design-system';
 
 type StackNav = Pick<
   NativeStackNavigationProp<ProductFlowParamList>,

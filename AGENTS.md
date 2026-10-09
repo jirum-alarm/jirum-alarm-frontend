@@ -10,7 +10,7 @@ This is a **Turborepo monorepo** that manages multiple applications and shared p
 
 ### Key Features
 - **Multi-app Architecture**: Separate apps for web, admin, and landing pages
-- **Shared UI Components**: Reusable component library
+- **Design System**: 색·글자·모서리·그림자 토큰 한 곳(`packages/design-system`) — 웹·앱·소개·AI 가 같은 값을 읽고, 린트가 우회를 막는다
 - **Hot Deal Aggregation**: Real-time deal collection from various Korean communities
 - **Category-based Organization**: Deals organized by categories
 - **Custom Notifications**: Alert system for desired products
@@ -29,7 +29,7 @@ jirum-alarm-frontend/
 │   ├── eslint/            # ESLint configuration
 │   ├── prettier/          # Prettier configuration  
 │   ├── typescript/        # TypeScript configuration
-│   └── ui/                # Shared UI components (via workspace links)
+│   └── design-system/     # 디자인 토큰 원본·린트 규칙·문서(README 필독)
 ├── configs/               # Build and deployment configs
 ├── turbo.json            # Turborepo configuration
 ├── pnpm-workspace.yaml   # PNPM workspace configuration
@@ -204,7 +204,7 @@ pnpm build            # Production build
   - `minSupportedVersion`(강제): **옛 버전이 실제로 깨질 때만**(API 변경·보안). 평소엔 올리지 않는다 — 막는 화면은 나쁜 경험.
 - 완료 보고는 길을 나눠 적는다: JS 는 「OTA 발행됨(기동 확인: 시뮬레이터 Release 콜드 스타트 2회)/대기」, 네이티브는 「다음 스토어 빌드(1.x.y)에 포함」.
 - "배포됐나"는 스토어 실물 버전으로 판정한다(`app-store-lag` 워크플로) — EAS submit 성공 ≠ 출시.
-- **다크모드 = OS 설정을 따른다(2026-10-01). 내정보 > 화면 모드에서 라이트/다크 고정 가능(`color-scheme-preference.ts` → `Appearance.setColorScheme`).** 색 정본은 `src/shared/theme/palette.js` 한 곳 — tailwind 토큰이 `:root` 변수라
+- **다크모드 = OS 설정을 따른다(2026-10-01). 내정보 > 화면 모드에서 라이트/다크 고정 가능(`color-scheme-preference.ts` → `Appearance.setColorScheme`).** 색 정본은 `packages/design-system/tokens.js` 한 곳(web 과 같은 값) — tailwind 토큰이 `:root` 변수라
   `bg-white`·`text-gray-900` 은 **다크에서 값만 뒤집힌다**(`dark:` 를 붙일 일이 거의 없다. `white`=바탕, gray 50↔900).
   - 테마와 무관해야 하는 자리(홈 상단 어두운 띠·사진 위 배지·색 배지 위 흰 글자·라임 버튼 위 짙은 글자)는 `fixed-*`(`text-fixed-white`, `bg-fixed-900`).
   - className 이 안 닿는 색(아이콘 color·placeholderTextColor·RefreshControl·StyleSheet)은 hex 대신 `useColors()`, 헤더·탭바는 `useChromeColors()`.
@@ -241,15 +241,13 @@ Code formatting standards:
 - Tailwind CSS class sorting
 - JSON and markdown formatting
 
-### 4. **UI Components** (`packages/ui/`)
-**Shared Component Library**
+### 4. **Design System** (`packages/design-system/`)
+**`@jirum/design-system`** — 쓰는 법·색의 의미·예외는 [README](packages/design-system/README.md)
 
-Reusable UI components accessed via workspace links:
-- Design system components
-- Form elements and inputs
-- Layout components
-- Theme and styling utilities
-- Icons and visual assets
+- `tokens.js` 가 색(라이트·다크·fixed·브랜드)·사이 글자 크기·모서리·그림자의 **유일한 원본**. web·landing·ai 는 생성된 `theme.css` 를 `@import`, 앱은 `tailwind.config.js` 가 require.
+- 토큰을 고치면 `pnpm --filter @jirum/design-system build` 로 theme.css 를 다시 만들어 같이 커밋(커밋 훅이 확인).
+- `eslint.js` 가 네 앱에서 hex·Tailwind 기본 팔레트·임의 글자 크기·모서리·그림자·효과 없는 클래스(`text-semibold`)를 막는다.
+- 컴포넌트는 플랫폼별(web DOM / 앱 RN)이라 공유하지 않는다 — 같은 토큰·같은 이름으로 짝을 맞춘다. 어드민은 범위 밖(TailAdmin).
 
 ## 🛠️ Development Guidelines for AI Agents
 
@@ -257,7 +255,7 @@ Reusable UI components accessed via workspace links:
 1. **TypeScript**: All code must be fully typed
 2. **ESLint**: Follow `@jirum/eslint-config-jirum` rules
 3. **Prettier**: Use `@jirum/prettier` for consistent formatting
-4. **Components**: Use shared components from `packages/ui` when possible
+4. **Design System**: 색·글자 크기·모서리·그림자는 토큰만 쓴다(`bg-[#…]`·`text-[13px]`·`text-emerald-700` 금지 — 린트가 막는다). 의미별 색은 `packages/design-system/README.md`
 
 ### Architecture Principles
 1. **Monorepo Awareness**: Changes may affect multiple applications

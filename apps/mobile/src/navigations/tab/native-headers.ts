@@ -5,7 +5,7 @@ import {useColors} from '@/shared/theme/useColors';
 /**
  * className 이 안 먹는 크롬(헤더 tint·탭바·스택 contentStyle)의 색. **여기 한 곳이 정본이다** —
  * 화면별로 흩어 두면 다크모드에서 한 곳만 흰색으로 남는다.
- * 값은 palette 에서 오고 OS 다크모드를 따라 바뀐다(그래서 상수가 아니라 훅).
+ * 값은 디자인 토큰(@jirum/design-system)에서 오고 OS 다크모드를 따라 바뀐다(그래서 상수가 아니라 훅).
  */
 export function useChromeColors() {
   const c = useColors();

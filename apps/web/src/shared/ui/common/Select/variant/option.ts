@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-export const optionVaraint = cva(['w-full', 'cursor-pointer'], {
+export const optionVariant = cva(['w-full', 'cursor-pointer'], {
   variants: {
     size: {
       md: ['py-3', 'px-5', 'text-base', 'h-full'],

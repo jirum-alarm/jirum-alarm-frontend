@@ -1,0 +1,17 @@
+{
+  "name": "@jirum/design-system",
+  "version": "0.0.0",
+  "private": true,
+  "description": "지름알림 디자인 시스템 — 색·글자·모서리·그림자 토큰의 원본과 사용 규칙",
+  "main": "tokens.js",
+  "exports": {
+    ".": "./tokens.js",
+    "./theme.css": "./theme.css",
+    "./eslint": "./eslint.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test"
+  }
+}

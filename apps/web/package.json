@@ -22,6 +22,7 @@
   "dependencies": {
     "@apollo/client": "^3.13.6",
     "@apollo/experimental-nextjs-app-support": "^0.11.11",
+    "@jirum/design-system": "workspace:*",
     "@microsoft/clarity": "^1.0.2",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/core": "2.2.0",

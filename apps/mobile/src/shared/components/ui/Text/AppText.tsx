@@ -8,7 +8,7 @@ import {
   type TextStyle,
 } from 'react-native';
 
-import {dark} from '@/shared/theme/palette';
+import {brand, dark} from '@jirum/design-system';
 
 /**
  * 앱의 모든 Text·TextInput 은 이걸 쓴다(react-native 에서 직접 import 하지 않는다).
@@ -80,9 +80,13 @@ export function resolveFontFamily(
   return FAMILY_BY_WEIGHT[weight ?? '400'] ?? FAMILY_BY_WEIGHT['400'];
 }
 
-// 색 유틸리티 클래스(text-gray-900·text-green-600·text-white·text-[#ffb200] …). text-sm·text-[13px]·text-2xl·text-center 는 아니다.
-const COLOR_CLASS_RE =
-  /(?:^|\s)text-(?:white|black|kakao|link|fixed-white|\[#|[a-z]+-\d)/;
+// 색 유틸리티 클래스(text-gray-900·text-success-700·text-white·text-kakao·text-[#ffb200] …).
+// text-sm·text-13·text-13·text-2xl·text-center 는 아니다. 단계 없는 브랜드색(kakao·naver …)은 토큰에서 읽는다.
+const COLOR_CLASS_RE = new RegExp(
+  `(?:^|\\s)text-(?:white|fixed-white|${Object.keys(brand).join(
+    '|',
+  )}|\\[#|[a-z]+-\\d)`,
+);
 
 /** 이 Text 가 다른 Text 안에 있나 — 안에 있으면 부모 색을 물려받게 둔다. */
 const NestedText = createContext(false);

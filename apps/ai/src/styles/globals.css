@@ -1,43 +1,7 @@
 @import 'tailwindcss';
 
-@theme color {
-  --color-gray-50: #f9fafb;
-  --color-gray-100: #f2f4f7;
-  --color-gray-200: #e4e7ec;
-  --color-gray-300: #d0d5dd;
-  --color-gray-400: #98a2b3;
-  --color-gray-500: #667085;
-  --color-gray-600: #475467;
-  --color-gray-700: #344054;
-  --color-gray-800: #1d2939;
-  --color-gray-900: #101828;
-
-  --color-error-50: #ffe1e5;
-  --color-error-100: #fbccd2;
-  --color-error-200: #f799a4;
-  --color-error-300: #f36677;
-  --color-error-400: #ef334a;
-  --color-error-500: #eb001c;
-  --color-error-600: #bc0017;
-  --color-error-700: #8d0011;
-  --color-error-800: #5e000b;
-  --color-error-900: #2f0006;
-
-  --color-primary-500: #9ef22e;
-  --color-primary-700: #039100;
-
-  --color-secondary-50: #f3f7ff;
-  --color-secondary-100: #dae5fe;
-  --color-secondary-200: #b5cbfd;
-  --color-secondary-300: #91b1fb;
-  --color-secondary-400: #6593fd;
-  --color-secondary-500: #467dfb;
-  --color-secondary-600: #3964c7;
-  --color-secondary-700: #2b4b95;
-
-  --color-warning-50: #fef6e7;
-  --color-warning-600: #b45309;
-}
+/* 색·글자·모서리·그림자 토큰(디자인 시스템). 값을 바꾸려면 packages/design-system/tokens.js */
+@import '@jirum/design-system/theme.css';
 
 @theme {
   --breakpoint-md: 768px;
@@ -66,7 +30,7 @@ body {
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
-  background: #fff;
+  background: var(--color-white);
 }
 
 /*
@@ -87,7 +51,7 @@ body {
   height: 440px;
   top: -200px;
   margin-left: -360px;
-  background: radial-gradient(circle, #f799a4 0%, #dae5fe 55%, transparent 72%);
+  background: radial-gradient(circle, var(--color-error-200) 0%, var(--color-secondary-100) 55%, transparent 72%);
   opacity: 0.45;
 }
 
@@ -96,7 +60,7 @@ body {
   height: 360px;
   top: -120px;
   margin-left: 60px;
-  background: radial-gradient(circle, #b5cbfd 0%, #d8faab 60%, transparent 75%);
+  background: radial-gradient(circle, var(--color-secondary-200) 0%, var(--color-primary-200) 60%, transparent 75%);
   opacity: 0.38;
 }
 

@@ -4,14 +4,14 @@ import { useEffect, useRef } from 'react';
 import { cn } from '@/shared/lib/cn';
 
 import { useSelectContext } from './context/SelectContext';
-import { optionVaraint } from './variant/option';
+import { optionVariant } from './variant/option';
 
 export interface OptionProps
   extends Omit<
       React.SelectHTMLAttributes<HTMLSelectElement>,
       'size' | 'color' | 'onChange' | 'value'
     >,
-    VariantProps<typeof optionVaraint> {
+    VariantProps<typeof optionVariant> {
   children: React.ReactNode;
   index?: number;
   value?: string | null;
@@ -44,7 +44,7 @@ export const Option = ({ size, color, children, index = -1, value, className }: 
       ref={listRef}
       role="option"
       aria-selected={index === selectedIndex}
-      className={cn(optionVaraint({ size, color, active: index === selectedIndex }), className)}
+      className={cn(optionVariant({ size, color, active: index === selectedIndex }), className)}
       onClick={handleOptionClick}
     >
       {children}

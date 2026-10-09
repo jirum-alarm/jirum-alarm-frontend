@@ -18,14 +18,14 @@ import { cn } from '@/shared/lib/cn';
 import { ArrowDown } from '../icons';
 
 import { SelectContext } from './context/SelectContext';
-import { selectButtonVaraint, selectListContainerVariant } from './variant/select';
+import { selectButtonVariant, selectListContainerVariant } from './variant/select';
 
 export interface SelectProps
   extends Omit<
       SelectHTMLAttributes<HTMLSelectElement>,
       'size' | 'color' | 'onChange' | 'value' | 'defaultValue'
     >,
-    VariantProps<typeof selectButtonVaraint> {
+    VariantProps<typeof selectButtonVariant> {
   children: ReactNode;
   placeholder: string;
   defaultValue?: string | null;
@@ -122,7 +122,7 @@ export const Select = ({
           aria-controls={selectId}
           aria-expanded={isExpanded}
           aria-haspopup="listbox"
-          className={cn(selectButtonVaraint({ size, color }), className)}
+          className={cn(selectButtonVariant({ size, color }), className)}
           onClick={toggleOptionList}
         >
           <span>{buttonTextRenderer()}</span>

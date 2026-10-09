@@ -1,10 +1,10 @@
 import {cva} from 'class-variance-authority';
 
-export const buttonVaraint = cva('w-full items-center justify-center', {
+export const buttonVariant = cva('w-full items-center justify-center', {
   variants: {
     size: {
-      lg: ['h-[48px] px-3 rounded-[8px]'],
-      md: ['rounded-[8px]'],
+      lg: ['h-[48px] px-3 rounded-lg'],
+      md: ['rounded-lg'],
     },
     variant: {
       outlined: ['border'],
@@ -63,7 +63,7 @@ export const buttonVaraint = cva('w-full items-center justify-center', {
   },
 });
 
-export const textVariant = cva('text-[16px] font-pretendard', {
+export const textVariant = cva('text-base font-pretendard', {
   variants: {
     variant: {
       outlined: '',

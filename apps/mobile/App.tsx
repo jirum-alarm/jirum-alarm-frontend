@@ -39,9 +39,9 @@ restoreColorSchemePreference();
 
 // 다크모드는 기본으로 OS 설정을 따르고(app.json·Info.plist userInterfaceStyle=automatic),
 // 내정보 > 화면 모드에서 라이트/다크로 고정할 수 있다(color-scheme-preference).
-// 색은 src/shared/theme/palette.js 한 곳 — className 토큰이 다크에서 값만 바뀐다.
+// 색은 디자인 시스템 한 곳(packages/design-system/tokens.js) — className 토큰이 다크에서 값만 바뀐다.
 
-/** react-navigation 기본 바탕(전환 중 보이는 면·카드)도 같은 palette 로. */
+/** react-navigation 기본 바탕(전환 중 보이는 면·카드)도 같은 토큰으로. */
 function useNavigationTheme(): Theme {
   const isDark = useColorScheme() === 'dark';
   const c = useColors();

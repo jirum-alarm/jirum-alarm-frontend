@@ -7,10 +7,11 @@ on:
       - .npmrc
       - .nvmrc
       - apps/mobile/**
+      - packages/design-system/**
       # 앱 테스트 다수가 web 소스를 읽어 대조한다(mypage-port-parity 등) — web 만 바뀐 커밋도 여기서 잡는다.
       - apps/web/src/**
       - apps/web/src/app/actions/agent.ts
-      - apps/web/src/shared/model/device.ts
+      - apps/web/src/shared/hooks/useDevice.ts
       - apps/web/src/shared/hooks/useAppDownloadLink.tsx
       - apps/landing/src/app/components/key-visual/AppDownload.tsx
       - package.json
@@ -23,10 +24,11 @@ on:
       - .npmrc
       - .nvmrc
       - apps/mobile/**
+      - packages/design-system/**
       # 앱 테스트 다수가 web 소스를 읽어 대조한다(mypage-port-parity 등) — web 만 바뀐 커밋도 여기서 잡는다.
       - apps/web/src/**
       - apps/web/src/app/actions/agent.ts
-      - apps/web/src/shared/model/device.ts
+      - apps/web/src/shared/hooks/useDevice.ts
       - apps/web/src/shared/hooks/useAppDownloadLink.tsx
       - apps/landing/src/app/components/key-visual/AppDownload.tsx
       - package.json

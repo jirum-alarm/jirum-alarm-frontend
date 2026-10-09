@@ -1,8 +1,8 @@
 /**
- * 다크모드 = 토큰 값 바꿔치기(palette.js). className 은 그대로 두고 :root 변수만 라이트/다크로 갈린다.
+ * 다크모드 = 토큰 값 바꿔치기(packages/design-system/tokens.js). className 은 그대로 두고 :root 변수만 라이트/다크로 갈린다.
  * 깨지면 "다크에서 한 색만 안 바뀐다"(키 누락) 또는 "라이트까지 바뀐다"(변수 누락)로 조용히 드러난다.
  */
-import {dark, fixed, light} from '../src/shared/theme/palette';
+import {dark, fixed, light} from '@jirum/design-system';
 import {hasTextColor} from '../src/shared/components/ui/Text/AppText';
 
 const keysOf = (theme: Record<string, unknown>) =>
@@ -55,8 +55,11 @@ describe('AppText 다크 기본 글자색 — 색을 정한 글자는 건드리�
     ['text-[#ffb200]', true],
     ['text-primary-500 font-bold', true],
     ['text-green-600', true],
+    ['text-success-700', true],
+    ['text-naver', true],
     ['text-2xl font-bold', false],
     ['text-[13px] font-bold', false],
+    ['text-13 font-bold', false],
     ['text-center text-sm', false],
     [undefined, false],
   ])('%s → %s', (className, expected) => {

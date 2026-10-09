@@ -1,4 +1,13 @@
-const {light, dark, fixed} = require('./src/shared/theme/palette');
+// 색·글자·모서리·그림자 토큰은 디자인 시스템 한 곳(packages/design-system/tokens.js) — web 과 같은 값이다.
+const {
+  light,
+  dark,
+  fixed,
+  brand,
+  fontSize,
+  radius,
+  shadow,
+} = require('@jirum/design-system');
 
 /** '#RRGGBB' → 'R G B' (rgb(var(--x) / <alpha-value>) 형태라 bg-white/20 같은 투명도가 계속 먹는다) */
 const rgb = hex =>
@@ -46,11 +55,11 @@ module.exports = {
       colors: {
         ...themed,
         fixed,
-        black: '#000000',
-        // 카카오 브랜드 노랑(공식). 로그인·공유·오픈채팅이 세 값으로 갈려 있었다.
-        kakao: '#FEE500',
-        link: '#587DFF',
+        ...brand,
       },
+      fontSize,
+      borderRadius: radius,
+      boxShadow: shadow,
     },
   },
   plugins: [

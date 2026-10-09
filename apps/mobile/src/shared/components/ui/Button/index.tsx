@@ -4,15 +4,15 @@ import {ActivityIndicator, Pressable, type PressableProps} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {cn} from '@/shared/lib/styling';
 import {
-  buttonVaraint,
+  buttonVariant,
   textVariant,
 } from '@/shared/components/ui/Button/variant/button.ts';
 import {useColors} from '@/shared/theme/useColors';
-import {fixed} from '@/shared/theme/palette';
+import {fixed} from '@jirum/design-system';
 
 interface ButtonProps
   extends PressableProps,
-    VariantProps<typeof buttonVaraint> {
+    VariantProps<typeof buttonVariant> {
   children?: React.ReactNode;
   loading?: boolean;
 }
@@ -40,7 +40,7 @@ const Button = ({
     <Pressable
       // 로딩 중 재탭 = 이중 제출(탈퇴·신고)이라 막는다.
       disabled={disabled || loading}
-      className={cn(buttonVaraint({size, variant, color}), className)}
+      className={cn(buttonVariant({size, variant, color}), className)}
       // 로딩 중엔 글자가 스피너로 바뀌어 읽을 게 사라지므로 문자열 children 을 라벨로 둔다.
       // 호출부가 넘긴 값이 우선하도록 rest 를 뒤에 편다.
       accessibilityRole="button"

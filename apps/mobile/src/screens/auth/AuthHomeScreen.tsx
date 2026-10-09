@@ -7,7 +7,7 @@ import {
   useColorScheme,
 } from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
-import {fixed} from '@/shared/theme/palette';
+import {fixed} from '@jirum/design-system';
 import {useColors} from '@/shared/theme/useColors';
 import {
   AppleIcon,

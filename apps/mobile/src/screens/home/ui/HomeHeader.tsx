@@ -15,7 +15,7 @@ import {navigateToNativeRoute} from '@/navigations/navigation-ref';
 import {useHasNewAlarm} from '@/shared/hooks/useHasNewAlarm';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {useColors} from '@/shared/theme/useColors';
-import {fixed} from '@/shared/theme/palette';
+import {fixed} from '@jirum/design-system';
 import {useColorSchemePreference} from '@/shared/theme/color-scheme-preference';
 
 /** 로고 아래 붙는 서비스 한 줄 설명. web LOGO_SUBTITLE 과 같은 문구. */
@@ -117,9 +117,7 @@ function HeaderRow({
           </Text>
           <Text
             className={
-              inverted
-                ? 'text-[11px] text-fixed-white/70'
-                : 'text-[11px] text-gray-500'
+              inverted ? 'text-11 text-fixed-white/70' : 'text-11 text-gray-500'
             }
             numberOfLines={1}>
             {LOGO_SUBTITLE}

@@ -1,4 +1,4 @@
-"""탭 아이콘 PNG 의 다크 변형 — 회색 선을 palette.dark 값으로, 흰 속채움은 투명으로.
+"""탭 아이콘 PNG 의 다크 변형 — 회색 선을 디자인 토큰(packages/design-system/tokens.js) dark 값으로, 흰 속채움은 투명으로.
 가장자리 안티앨리어싱(두 색 사이의 섞인 픽셀)은 두 원색 사이의 비율 t 를 구해 새 색 쌍에 같은 비율로 섞는다."""
 import glob, itertools
 from PIL import Image

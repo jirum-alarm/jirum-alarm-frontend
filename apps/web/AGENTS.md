@@ -27,7 +27,7 @@ This app is the primary web application used by end-users to access Jirum-Alarm'
 ### Development Tools
 - **`codegen.ts`**: GraphQL code generation configuration
 - **`.storybook/`**: Storybook configuration and stories for component development
-- **`tailwind.config.js`**: Tailwind CSS configuration with custom utilities
+- **`src/shared/style/globals.css`**: Tailwind v4 설정(브레이크포인트·애니메이션·`pc:`/`dark:` 변형). 색·글자·모서리·그림자 토큰은 `@jirum/design-system/theme.css` 를 `@import` 한다 — 값은 `packages/design-system/tokens.js`
 - **`postcss.config.mjs`**: PostCSS configuration for Tailwind CSS processing
 
 ### Build and Optimization
