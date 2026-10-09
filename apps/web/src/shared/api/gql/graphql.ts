@@ -2852,6 +2852,7 @@ export type QueryNotificationsQuery = {
     readAt?: any | null;
     createdAt: any;
     message: string;
+    title?: string | null;
     url?: string | null;
     keyword?: string | null;
     product?: {
@@ -4006,6 +4007,7 @@ export const QueryNotificationsDocument = new TypedDocumentString(`
     readAt
     createdAt
     message
+    title
     url
     keyword
     product {

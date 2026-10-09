@@ -58,6 +58,8 @@ export default function AlarmList() {
             <button
               type="button"
               onClick={() => {
+                // 되돌릴 수 없어 한 번 묻는다(앱과 같은 문구).
+                if (!window.confirm('알림을 모두 삭제할까요?')) return;
                 onRemoveAll();
                 setEditMode(false);
               }}

@@ -21,6 +21,7 @@ const FCMConfig = () => {
           push_title: event.data.push_title,
           push_body: event.data.push_body,
         });
+        if (event.data.link) window.location.href = event.data.link;
       }
     };
     navigator.serviceWorker.addEventListener('message', handleSwMessage);
@@ -49,7 +50,21 @@ const FCMConfig = () => {
         }
 
         unsubscribe = onMessage(messaging, (payload) => {
-          console.log('Foreground : ', payload);
+          // 페이지를 보고 있을 때 온 푸시는 브라우저가 아무것도 띄우지 않는다 → 직접 띄운다.
+          // 서비스워커 등록으로 띄워야 모바일 크롬에서도 뜨고, 클릭은 서비스워커가 받아 위 handleSwMessage 로 넘긴다.
+          const { title, body } = payload.notification ?? {};
+          if (title) {
+            navigator.serviceWorker
+              .getRegistration('/firebase-cloud-messaging-push-scope')
+              .then((registration) =>
+                registration?.showNotification(title, {
+                  body,
+                  icon: '/icon.png',
+                  data: { title, body, link: payload.fcmOptions?.link ?? payload.data?.link },
+                }),
+              )
+              .catch((e) => console.log('foreground notification error: ', e));
+          }
           (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
             event: 'push_notification_received',
             push_title: payload.notification?.title,

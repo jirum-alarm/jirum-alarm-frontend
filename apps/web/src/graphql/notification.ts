@@ -7,6 +7,7 @@ export const QueryNotifications = gql`
       readAt
       createdAt
       message
+      title
       url
       keyword
       product {

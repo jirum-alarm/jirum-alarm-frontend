@@ -28,7 +28,7 @@ const AlarmItem = ({
   /** 어디서 온 알림인가(`notificationSource`). 있으면 줄 위에 그 알림의 설정 링크로 보여준다. */
   source?: { label: string; href: string; kind: 'keyword' | 'theme' | 'good_deal' };
 }) => {
-  const { id, message, createdAt, product, keyword, readAt } = notification;
+  const { id, message, createdAt, product, keyword, readAt, url, title } = notification;
   const { thumbnail, price, isHot, isEnd, id: productId } = product ?? {};
   const isEditMode = useAtomValue(alarmEditModeAtom);
   // 연결된 상품이 삭제/비공개면 서버가 product=null 을 준다(notification.resolver product 리졸버).
@@ -95,6 +95,7 @@ const AlarmItem = ({
         compactTop={!!source}
         hasProduct={hasProduct}
         productId={productId}
+        url={url}
         isEditMode={isEditMode}
         onActivate={handleClick}
       >
@@ -106,6 +107,10 @@ const AlarmItem = ({
           />
         </div>
         <div className="flex-1 pl-3">
+          {/* 상품 없는 알림(댓글 답글·좋아요 등)은 본문만으론 무슨 알림인지 모른다 — 제목을 같이 보여준다. */}
+          {!hasProduct && title && (
+            <p className="line-clamp-1 text-sm font-semibold text-gray-900">{title}</p>
+          )}
           <p className="line-clamp-2 w-full text-sm text-gray-900">
             <HighlightText message={message} keyword={keyword?.split(' ')[0] ?? ''} />
           </p>
@@ -146,6 +151,7 @@ function ItemBody({
   compactTop,
   hasProduct,
   productId,
+  url,
   isEditMode,
   onActivate,
   children,
@@ -154,13 +160,17 @@ function ItemBody({
   compactTop: boolean;
   hasProduct: boolean;
   productId?: string | null;
+  /** 상품이 없을 때 갈 곳(댓글 알림 → 상품 댓글 화면). 우리 도메인 링크만 경로로 바꿔 쓴다. */
+  url?: string | null;
   isEditMode: boolean;
   onActivate: () => void;
   children: ReactNode;
 }) {
   const className = cn('flex w-full p-5 pr-14', compactTop && 'pt-1');
 
-  if (!hasProduct) {
+  const fallbackPath = !hasProduct ? internalPath(url) : null;
+
+  if (!hasProduct && !fallbackPath) {
     // 상세 링크 없음: 읽음 처리만 (편집모드면 그것도 막음)
     return (
       <div
@@ -177,7 +187,7 @@ function ItemBody({
 
   return (
     <Link
-      href={PAGE.DETAIL + '/' + Number(productId)}
+      href={fallbackPath ?? PAGE.DETAIL + '/' + Number(productId)}
       className={className}
       onClick={(e) => {
         if (isEditMode) {
@@ -190,6 +200,17 @@ function ItemBody({
       {children}
     </Link>
   );
+}
+
+/** `https://jirum-alarm.com/products/1/comment` → `/products/1/comment`. 다른 도메인·깨진 값은 null. */
+function internalPath(url?: string | null): string | null {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    return parsed.hostname.endsWith('jirum-alarm.com') ? parsed.pathname + parsed.search : null;
+  } catch {
+    return null;
+  }
 }
 
 function HighlightText({ message, keyword }: { message: string; keyword: string }) {

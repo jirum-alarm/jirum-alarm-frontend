@@ -13,22 +13,11 @@ firebase.initializeApp({
 // Retrieve firebase messaging
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(function (payload) {
-  console.log('Received background message ', payload);
+// 백그라운드 알림은 SDK 가 직접 띄운다(서버 메시지에 notification 블록이 있으므로). 누르면 서버가 넣은
+// webpush.fcm_options.link(딜 상세)를 SDK 가 연다. 예전처럼 onBackgroundMessage 에서 또 showNotification 하면
+// 같은 알림이 두 번 떴고, 우리 것은 눌러도 홈(/)만 열렸다.
 
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: '/icon.png',
-    data: {
-      title: notificationTitle,
-      body: payload.notification.body,
-    },
-  };
-
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});
-
+// 아래 클릭 처리는 페이지가 열려 있을 때 FCMConfig 가 직접 띄운 알림용이다(SDK 알림 클릭은 SDK 가 먼저 가져간다).
 self.addEventListener('notificationclick', function (event) {
   event.notification.close();
   const data = event.notification.data || {};
@@ -43,10 +32,11 @@ self.addEventListener('notificationclick', function (event) {
           type: 'push_notification_clicked',
           push_title: data.title,
           push_body: data.body,
+          link: data.link,
         });
         return target.focus();
       }
-      return self.clients.openWindow('/');
+      return self.clients.openWindow(data.link || '/');
     }),
   );
 });

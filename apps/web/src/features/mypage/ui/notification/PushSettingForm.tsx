@@ -8,7 +8,8 @@ const ROWS: { key: PushSettingKey; title: string; description: string }[] = [
   {
     key: 'keywordAlert',
     title: '키워드 알림',
-    description: '등록한 키워드가 들어간 딜이 올라오면 알려드려요',
+    description:
+      '등록한 키워드가 들어간 딜이 올라오면 알려드려요. 관심사 알림은 각 관심사 화면에서 끌 수 있어요',
   },
   {
     key: 'hotDealAlert',

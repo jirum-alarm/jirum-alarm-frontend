@@ -43,7 +43,7 @@ type Documents = {
   '\n  mutation MutationRemoveNotificationKeyword($id: Float!) {\n    removeNotificationKeyword(id: $id)\n  }\n': typeof types.MutationRemoveNotificationKeywordDocument;
   '\n  query QueryMypageKeyword($limit: Int!, $searchAfter: [String!]) {\n    notificationKeywordsByMe(limit: $limit, searchAfter: $searchAfter) {\n      id\n      keyword\n    }\n  }\n': typeof types.QueryMypageKeywordDocument;
   '\n  mutation AddUserLikeOrDislike($target: UserLikeTarget!, $targetId: Int!, $isLike: Boolean) {\n    addUserLikeOrDislike(target: $target, targetId: $targetId, isLike: $isLike)\n  }\n': typeof types.AddUserLikeOrDislikeDocument;
-  '\n  query QueryNotifications($offset: Int!, $limit: Int!) {\n    notifications(offset: $offset, limit: $limit) {\n      id\n      readAt\n      createdAt\n      message\n      url\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n        categoryId\n      }\n    }\n  }\n': typeof types.QueryNotificationsDocument;
+  '\n  query QueryNotifications($offset: Int!, $limit: Int!) {\n    notifications(offset: $offset, limit: $limit) {\n      id\n      readAt\n      createdAt\n      message\n      title\n      url\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n        categoryId\n      }\n    }\n  }\n': typeof types.QueryNotificationsDocument;
   '\n  query QueryUnreadNotificationsCount {\n    unreadNotificationsCount\n  }\n': typeof types.QueryUnreadNotificationsCountDocument;
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n': typeof types.MutationAddPushTokenDocument;
   '\n  mutation MutationReadNotification($id: Int!) {\n    readNotification(id: $id)\n  }\n': typeof types.MutationReadNotificationDocument;
@@ -138,7 +138,7 @@ const documents: Documents = {
     types.QueryMypageKeywordDocument,
   '\n  mutation AddUserLikeOrDislike($target: UserLikeTarget!, $targetId: Int!, $isLike: Boolean) {\n    addUserLikeOrDislike(target: $target, targetId: $targetId, isLike: $isLike)\n  }\n':
     types.AddUserLikeOrDislikeDocument,
-  '\n  query QueryNotifications($offset: Int!, $limit: Int!) {\n    notifications(offset: $offset, limit: $limit) {\n      id\n      readAt\n      createdAt\n      message\n      url\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n        categoryId\n      }\n    }\n  }\n':
+  '\n  query QueryNotifications($offset: Int!, $limit: Int!) {\n    notifications(offset: $offset, limit: $limit) {\n      id\n      readAt\n      createdAt\n      message\n      title\n      url\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n        categoryId\n      }\n    }\n  }\n':
     types.QueryNotificationsDocument,
   '\n  query QueryUnreadNotificationsCount {\n    unreadNotificationsCount\n  }\n':
     types.QueryUnreadNotificationsCountDocument,
@@ -393,7 +393,7 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query QueryNotifications($offset: Int!, $limit: Int!) {\n    notifications(offset: $offset, limit: $limit) {\n      id\n      readAt\n      createdAt\n      message\n      url\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n        categoryId\n      }\n    }\n  }\n',
+  source: '\n  query QueryNotifications($offset: Int!, $limit: Int!) {\n    notifications(offset: $offset, limit: $limit) {\n      id\n      readAt\n      createdAt\n      message\n      title\n      url\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n        categoryId\n      }\n    }\n  }\n',
 ): typeof import('./graphql').QueryNotificationsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.

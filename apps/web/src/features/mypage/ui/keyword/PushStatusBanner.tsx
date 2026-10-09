@@ -28,7 +28,8 @@ const PushStatusBanner = () => {
 
   return (
     <div className="mb-6 rounded-lg bg-gray-50 p-4 text-sm text-gray-700">
-      <p className="font-medium text-gray-900">지금은 키워드 알림이 휴대폰으로 오지 않아요</p>
+      {/* 알림 설정 화면에서도 쓴다 — 스위치가 다 켜져 있어도 이 상태면 아무것도 안 온다. PC 도 있어 "휴대폰" 이라 하지 않는다. */}
+      <p className="font-medium text-gray-900">지금은 이 기기로 알림이 오지 않아요</p>
       {status === 'default' && (
         <>
           <p className="mt-1 text-xs text-gray-500">브라우저 알림을 켜면 바로 받아볼 수 있어요.</p>
