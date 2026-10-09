@@ -84,12 +84,16 @@ const AuthHomeScreen = () => {
               style={[
                 styles.button,
                 styles.appleButton,
-                // 다크 바탕(#0C111D)과 붙어 버튼 윤곽이 흐리다 → 한 단 밝게.
-                isDark && {backgroundColor: fixed[700]},
+                // 다크 바탕엔 흰 버튼(검은 로고·글자) — Apple HIG 의 어두운 바탕용 스타일. 예전 fixed-700
+                // 회청색은 바탕과 붙어 흐리고 HIG 색(검정·흰색·흰 테두리)에서도 벗어났다(10/10 다크 점검).
+                isDark && {backgroundColor: fixed.white},
               ]}
               onPress={() => signInWithApple()}>
-              <AppleIcon />
-              <Text style={styles.appleButtonText}>Apple로 시작하기</Text>
+              <AppleIcon color={isDark ? fixed[900] : undefined} />
+              <Text
+                style={[styles.appleButtonText, isDark && {color: fixed[900]}]}>
+                Apple로 시작하기
+              </Text>
             </TouchableOpacity>
           )}
           <TouchableOpacity
@@ -193,7 +197,7 @@ const styles = StyleSheet.create({
   naverButton: {
     backgroundColor: '#02C75A',
   },
-  // 흰 Apple 로고가 박힌 아이콘이라 테마와 무관하게 어두운 버튼.
+  // 라이트는 어두운 버튼에 흰 로고. 다크는 위에서 흰 버튼에 검은 로고로 뒤집는다.
   appleButton: {
     backgroundColor: fixed[800],
   },
