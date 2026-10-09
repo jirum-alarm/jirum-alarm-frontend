@@ -168,6 +168,9 @@ const recipePairs = () => [
     ['selected', 'idle'].map((state) => [`tab ${v}/${state}`, recipes.tab[v][state]]),
   ),
   ...Object.entries(recipes.sectionTitle).map(([k, text]) => [`sectionTitle ${k}`, {box: '', text}]),
+  ['toast text', {box: recipes.toast.box, text: recipes.toast.text}],
+  ['toast action', {box: recipes.toast.box, text: recipes.toast.action}],
+  ['emptyText', {box: '', text: recipes.emptyText}],
   ...Object.entries(recipes.cardLabel.tone).map(([tone, r]) => [`cardLabel ${tone}`, r]),
   ['cardLabel strip', recipes.cardLabel.strip],
 ];

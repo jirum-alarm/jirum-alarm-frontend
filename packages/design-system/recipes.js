@@ -127,6 +127,23 @@ const sheet = {
  */
 const skeleton = 'bg-gray-200';
 
+/**
+ * 잠깐 떴다 사라지는 알림(토스트) — 짙은 판(테마 무관)에 왼쪽 정렬 글자, 오른쪽에 라임 동작 버튼.
+ * 앱 AppToast 의 모양이 기준. web 은 가운데 정렬 gray-600 상자(280px)라 같은 알림이 두 모양이었다.
+ */
+const toast = {
+  box: 'rounded-xl bg-fixed-800 px-4 py-[13px]',
+  text: 'text-sm text-fixed-white',
+  action: 'text-sm font-semibold text-primary-500',
+};
+
+/**
+ * 목록이 비었을 때 한 줄 안내. 정렬·여백은 자리마다(가운데 정렬 빈 목록·카드 안 왼쪽 정렬).
+ * web 은 gray-400(AA 미달)·text-base 가 섞여 있었다 — 앱과 같은 text-sm gray-500.
+ * 그림·큰 제목이 있는 빈 화면(검색 결과 없음·알림 없음)은 화면별이다.
+ */
+const emptyText = 'text-sm text-gray-500';
+
 /** 상품 카드 사진 위 라벨 — 왼쪽 아래 모서리(판매종료·베스트판매자)와 아래 띠(유통기한). */
 const cardLabel = {
   corner: {box: 'h-[22px] rounded-tr-lg rounded-bl-lg px-2', text: 'text-xs'},
@@ -137,4 +154,4 @@ const cardLabel = {
   strip: {box: 'h-[22px] rounded-b-lg bg-fixed-700/80 px-2', text: 'text-xs text-fixed-white'},
 };
 
-module.exports = {badge, chip, tab, toggle, sectionTitle, cardThumb, infoBox, sheet, skeleton, cardLabel};
+module.exports = {badge, chip, tab, toggle, sectionTitle, cardThumb, infoBox, sheet, skeleton, toast, emptyText, cardLabel};

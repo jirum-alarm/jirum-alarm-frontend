@@ -15,7 +15,13 @@ export const Toast = forwardRef<HTMLDivElement, ToastProps>(
   ({ variant = 'default', show, className, children, ...rest }, ref) => {
     return (
       show && (
-        <div {...rest} ref={ref} className={cn(toastVariant({ variant }), className)}>
+        <div
+          role="status"
+          aria-live="polite"
+          {...rest}
+          ref={ref}
+          className={cn(toastVariant({ variant }), className)}
+        >
           {children}
         </div>
       )

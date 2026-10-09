@@ -3,6 +3,8 @@ import {Pressable, View} from 'react-native';
 import Svg, {Circle, Path} from 'react-native-svg';
 import Toast, {type ToastConfig} from 'react-native-toast-message';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {toast} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling';
 import type {ToastAction} from '@/shared/lib/feedback/toast';
 
 const SuccessIcon = () => (
@@ -43,12 +45,10 @@ function ToastBody({
 }) {
   return (
     <View
-      className="mx-5 flex-row items-center gap-x-2 rounded-xl bg-fixed-800 py-[13px] pl-4 pr-4"
+      className={cn('mx-5 flex-row items-center gap-x-2', toast.box)}
       accessibilityLiveRegion="polite">
       {icon}
-      <Text className="flex-1 text-sm font-pretendard text-fixed-white">
-        {text}
-      </Text>
+      <Text className={cn('flex-1', toast.text)}>{text}</Text>
       {action && (
         <Pressable
           onPress={() => {
@@ -58,9 +58,7 @@ function ToastBody({
           hitSlop={8}
           accessibilityRole="button"
           className="active:opacity-60">
-          <Text className="text-sm font-semibold text-primary-500">
-            {action.label}
-          </Text>
+          <Text className={toast.action}>{action.label}</Text>
         </Pressable>
       )}
     </View>
