@@ -66,6 +66,7 @@ export default function AdvertiseSlotBanner({
   const creative = creativeProp ?? ads[0];
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- 페이지뷰 ID 는 같은 화면의 슬롯들이 마운트 수를 세어 공유하는 모듈 밖 상태다(정리 함수가 짝). 마운트·경로 변경 때만 예약한다.
     setPageViewId(reservePageViewId(pathname));
     return releasePageViewId;
   }, [pathname]);

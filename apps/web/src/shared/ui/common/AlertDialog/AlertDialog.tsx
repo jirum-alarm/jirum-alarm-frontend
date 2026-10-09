@@ -95,6 +95,7 @@ const Trigger = forwardRef<
   if (!asChild)
     return (
       <button
+        // eslint-disable-next-line react-hooks/refs -- ref 를 합친 콜백을 만들 뿐 렌더 중에 .current 를 읽지 않는다(노드가 붙을 때 React 가 호출).
         ref={composeRef(triggerRef, forwardRef)}
         {...others}
         data-state={getState(open)}
@@ -118,6 +119,7 @@ const Trigger = forwardRef<
     ...childProps,
     type: 'button',
     'data-state': getState(open),
+    // eslint-disable-next-line react-hooks/refs -- asChild — 자식에 ref 콜백을 넘겨 복제할 뿐 렌더 중에 .current 를 읽지 않는다.
     ref: composeRef(triggerRef, forwardRef),
     onClick: composeEventHandlers(handler(childProps?.onClick), onOpenToggle),
   } as React.HTMLAttributes<HTMLButtonElement>);
@@ -259,6 +261,7 @@ const Close = forwardRef<
   }
 
   const childProps = children.props as Record<string, any>;
+  // eslint-disable-next-line react-hooks/refs -- asChild — 자식에 전달받은 ref 를 넘겨 복제할 뿐 렌더 중에 .current 를 읽지 않는다.
   const Compo = cloneElement(children, {
     ...others,
     ...childProps,

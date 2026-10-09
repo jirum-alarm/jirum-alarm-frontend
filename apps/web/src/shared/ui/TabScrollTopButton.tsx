@@ -33,6 +33,7 @@ export default function TabScrollTopButton() {
 
   useEffect(() => {
     if (!isScrollTopTabPath(pathName)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- 스크롤 위치(외부 상태) 구독 effect 다. 탭 밖으로 나가면 구독을 끊으며 표시 상태도 접는다.
       setIsVisible(false);
       return;
     }

@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { AuthQueries } from '@/entities/auth';
 
@@ -13,16 +13,17 @@ const useInput = () => {
     data: { me },
   } = useSuspenseQuery(AuthQueries.me());
   const [nickname, setNickname] = useState(() => ({
-    value: '',
+    value: me ? me.nickname : '',
     error: false,
   }));
   const { mutate } = useUpdateNickname();
 
-  useEffect(() => {
-    if (me) {
-      setNickname((prev) => ({ ...prev, value: me.nickname }));
-    }
-  }, [me]);
+  // 서버의 내 정보가 새로 오면 입력값을 그 닉네임으로 맞춘다 — effect 대신 렌더 중 비교로.
+  const [syncedMe, setSyncedMe] = useState(me);
+  if (me !== syncedMe) {
+    setSyncedMe(me);
+    if (me) setNickname((prev) => ({ ...prev, value: me.nickname }));
+  }
 
   const isValidNickname = (value: string) => {
     const valueLength = [...new Intl.Segmenter().segment(value)].length;

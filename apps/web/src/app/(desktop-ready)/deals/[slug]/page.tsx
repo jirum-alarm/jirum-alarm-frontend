@@ -213,11 +213,11 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   // 예전엔 항상 InStock + `오늘+7일` 이라 3년째 딜이 없는 모델도 "지금 살 수 있다"고 말했다.
   const hasActiveDeal = timing.activeDealCount > 0;
   const lastDealMs = page.lastDealAt ? Date.parse(page.lastDealAt) : NaN;
-  const priceValidFrom = hasActiveDeal
-    ? Date.now()
-    : Number.isFinite(lastDealMs)
+  const priceValidFrom =
+    !hasActiveDeal && Number.isFinite(lastDealMs)
       ? lastDealMs
-      : Date.now();
+      : // eslint-disable-next-line react-hooks/purity -- 서버 컴포넌트라 요청마다 한 번 렌더된다. 구조화 데이터의 "지금" 시각이 필요하다.
+        Date.now();
   const productLd =
     offerPrice != null
       ? {

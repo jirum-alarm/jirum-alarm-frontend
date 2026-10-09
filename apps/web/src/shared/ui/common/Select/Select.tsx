@@ -49,6 +49,10 @@ export const Select = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const ulRef = useRef<HTMLUListElement>(null);
 
+  const onCloseOptionList = () => {
+    setIsExpanded(false);
+  };
+
   useOutsideClick(containerRef, () => {
     onCloseOptionList();
   });
@@ -63,10 +67,6 @@ export const Select = ({
 
   const onSetSelectedOffsetTop = (top: number) => {
     setSelectedOffsetTop(top);
-  };
-
-  const onCloseOptionList = () => {
-    setIsExpanded(false);
   };
 
   const selectcontextValue = useMemo(

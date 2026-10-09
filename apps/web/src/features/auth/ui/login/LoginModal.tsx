@@ -1,7 +1,7 @@
 'use client';
 
 import { useAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { WindowLocation } from '@/shared/lib/window-location';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
@@ -35,16 +35,14 @@ const RECENT_METHOD_LABEL: Record<LoginMethod, string> = {
  */
 export default function LoginModal() {
   const [message, setMessage] = useAtom(loginModalMessageAtom);
-  const [recentMethod, setRecentMethod] = useState<LoginMethod | null>(null);
   const [loadingMethod, setLoadingMethod] = useState<LoginMethod | null>(null);
   const { executeKakaoLogin } = useKakaoLogin();
   const { executeNaverLogin } = useNaverLogin();
 
-  useEffect(() => {
-    if (message !== null) setRecentMethod(getRecentLoginMethod());
-  }, [message]);
-
   if (message === null) return null;
+
+  // 모달은 사용자 동작(클라이언트)으로만 열리므로 열려 있는 동안 렌더 중에 읽어도 서버 HTML 과 어긋나지 않는다.
+  const recentMethod = getRecentLoginMethod();
 
   const rtnUrl = WindowLocation.getCurrentUrl();
 

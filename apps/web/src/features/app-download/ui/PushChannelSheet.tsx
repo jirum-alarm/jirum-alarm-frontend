@@ -49,6 +49,7 @@ export default function PushChannelSheet() {
   useEffect(() => {
     if (!sheet) return;
     const current = readPushStatus();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- 시트가 열릴 때마다 브라우저 알림 권한(외부 상태)을 다시 읽는다 — 권한은 React 밖에서 바뀐다.
     setStatus(current);
     pushEvent('push_channel_sheet_view', { platform, push_status: current });
   }, [sheet, platform]);

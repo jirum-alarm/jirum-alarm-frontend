@@ -83,11 +83,14 @@ export default function RecommendedKeywordSection() {
   // 목록을 따라가게 두면 누른 칩이 사라지고 뒤 키워드가 앞으로 밀려온다 — 뭘 눌렀는지도,
   // 성공했는지도 알 수 없다. 등록한 칩은 자리에 남겨 체크로만 바꾸고(justAdded),
   // 새 추천은 다음 방문(새로고침)에 받는다.
-  const pinned = useRef<string[] | null>(null);
-  if (pinned.current === null && keywords.length > 0) {
-    pinned.current = keywords.slice(0, MAX_CHIPS);
+  // 렌더에 쓰는 값이라 ref 가 아니라 state 로 둔다(처음 도착한 렌더에서 한 번만 고정).
+  const [pinned, setPinned] = useState<string[] | null>(() =>
+    keywords.length > 0 ? keywords.slice(0, MAX_CHIPS) : null,
+  );
+  if (pinned === null && keywords.length > 0) {
+    setPinned(keywords.slice(0, MAX_CHIPS));
   }
-  const chips = pinned.current ?? [];
+  const chips = pinned ?? [];
 
   // 실제 등록. 칩 클릭과 "로그인 후 이어하기" 양쪽이 이걸 쓴다.
   const runAdd = (keyword: string) => {

@@ -30,19 +30,22 @@ export default function ProductTagModal({
   const [inputValue, setInputValue] = useState('');
   const [recentProducts, setRecentProducts] = useState<TaggedProduct[]>([]);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const recent = getRecentViewedProducts()
-      .slice(0, DEFAULT_RECENT_LIMIT)
-      .map((p) => ({
-        id: p.id,
-        title: p.title,
-        thumbnail: p.thumbnail ?? undefined,
-        price: p.price ?? undefined,
-      }));
-    setRecentProducts(recent);
-  }, [isOpen]);
+  // 열 때마다 최근 본 상품(localStorage)을 다시 읽는다 — 열기 이벤트에서 읽어 effect 를 거치지 않는다.
+  const handleOpenChange = (open: boolean) => {
+    if (open) {
+      setRecentProducts(
+        getRecentViewedProducts()
+          .slice(0, DEFAULT_RECENT_LIMIT)
+          .map((p) => ({
+            id: p.id,
+            title: p.title,
+            thumbnail: p.thumbnail ?? undefined,
+            price: p.price ?? undefined,
+          })),
+      );
+    }
+    setIsOpen(open);
+  };
 
   const { data, isFetching } = useQuery({
     queryKey: ['product-tag-search', keyword],
@@ -112,7 +115,7 @@ export default function ProductTagModal({
       ) : (
         <button
           type="button"
-          onClick={() => setIsOpen(true)}
+          onClick={() => handleOpenChange(true)}
           className="flex items-center gap-x-2 text-sm text-gray-500 transition-transform active:scale-95"
         >
           <span className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 text-gray-400">
@@ -131,7 +134,7 @@ export default function ProductTagModal({
         </button>
       )}
 
-      <Drawer.Root open={isOpen} onOpenChange={setIsOpen}>
+      <Drawer.Root open={isOpen} onOpenChange={handleOpenChange}>
         <BottomSheetContent srTitle="상품 태그" className="flex h-[88dvh] flex-col">
           {/* 모달 헤더 */}
           <div className="flex items-center justify-between px-5 py-4">

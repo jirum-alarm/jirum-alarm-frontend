@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect } from 'react';
 
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import BackButton from '@/shared/ui/layout/BackButton';
@@ -19,10 +19,9 @@ type Steps = (typeof STEPS)[number];
 const Password = () => {
   const router = useMyRouter();
   const searchParams = useSearchParams();
-  const urlSteps = searchParams.get(QUERY_PARAM_PREFIX) as Steps;
-  const [currentStep, setCurrentStep] = useState<Steps>(INITIAL_STEP);
+  // 단계의 정본은 URL 이다(뒤로 가기·앞으로 가기가 단계를 오간다). 첫 진입엔 아래 replace 전까지 step 이 없어 첫 단계를 보인다.
+  const currentStep = (searchParams.get(QUERY_PARAM_PREFIX) as Steps | null) ?? INITIAL_STEP;
   const nextStep = (steps: Steps) => {
-    setCurrentStep(steps);
     router.push(`/mypage/account/password?${QUERY_PARAM_PREFIX}=${steps}`);
   };
 
@@ -30,24 +29,11 @@ const Password = () => {
     router.replace(`/mypage/account/password?${QUERY_PARAM_PREFIX}=${INITIAL_STEP}`);
   }, [router]);
 
-  useEffect(() => {
-    if (currentStep !== urlSteps) {
-      setCurrentStep(urlSteps);
-    }
-  }, [currentStep, urlSteps]);
-
-  const handleBackButton = () => {
-    const currentStepIndex = STEPS.findIndex((step) => step === currentStep);
-    setCurrentStep(STEPS[currentStepIndex - 1]);
-  };
-
   return (
     <BasicLayout
       // title="비밀번호 변경"
       fullScreen={true}
-      header={
-        <PageHeader leading={<BackButton onClick={handleBackButton} />} title="비밀번호 변경" />
-      }
+      header={<PageHeader leading={<BackButton />} title="비밀번호 변경" />}
     >
       {currentStep === 'current' && <CurrentPassword nextStep={() => nextStep('change')} />}
       {currentStep === 'change' && <ChangePassword />}

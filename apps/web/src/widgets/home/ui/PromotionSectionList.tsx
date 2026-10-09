@@ -30,8 +30,6 @@ const PromotionSectionList = ({
   isMobile,
   tossInitialDeals,
 }: PromotionSectionListProps) => {
-  let isFirst = true;
-
   const renderKeywordSlot = (sectionId: string) =>
     sectionId === KEYWORD_AFTER_SECTION_ID ? <RecommendedKeywordSection /> : null;
 
@@ -42,9 +40,10 @@ const PromotionSectionList = ({
 
   return (
     <div className="flex flex-col gap-y-8">
-      {sections.map((section) => {
+      {sections.map((section, index) => {
+        // 맨 첫 섹션만 이미지 우선 로드(토스가 첫 자리면 아무도 안 받는다).
+        const priority = index === 0 ? 4 : 0;
         if (section.type === 'TOSS') {
-          isFirst = false;
           return (
             <Fragment key={section.id}>
               <TossHomeSection initialDeals={tossInitialDeals} />
@@ -52,8 +51,6 @@ const PromotionSectionList = ({
           );
         }
         if (section.type === 'GROUP') {
-          const priority = isFirst ? 4 : 0;
-          isFirst = false;
           return (
             <Fragment key={section.id}>
               <div className="pc:grid pc:grid-cols-2 pc:gap-x-5 flex flex-col gap-y-8">
@@ -70,8 +67,6 @@ const PromotionSectionList = ({
             </Fragment>
           );
         }
-        const priority = isFirst ? 4 : 0;
-        isFirst = false;
         return (
           <Fragment key={section.id}>
             <DynamicProductSection section={section} isMobile={isMobile} priorityCount={priority} />

@@ -20,6 +20,7 @@ export default function SoftKakaoOpenChatPrompt({ className }: { className?: str
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- utm·localStorage 는 브라우저에만 있다. 서버 HTML(숨김)과 맞추려 하이드레이션 뒤에 판정한다.
     setVisible(shouldShowOkachatSoftPrompt());
   }, []);
 

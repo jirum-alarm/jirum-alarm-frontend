@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useEffectEvent, useRef } from 'react';
 
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 
@@ -18,9 +18,8 @@ import { takePendingAction } from './pendingAction';
  */
 export function usePendingAction<T = unknown>(type: string, run: (payload: T) => void) {
   const { isLoggedIn, isLoading } = useIsLoggedIn();
-  // run 이 매 렌더 새 함수여도 effect 가 다시 돌지 않도록 최신 참조만 들고 있는다.
-  const runRef = useRef(run);
-  runRef.current = run;
+  // run 이 매 렌더 새 함수여도 effect 가 다시 돌지 않도록 Effect Event 로 최신 run 을 부른다.
+  const runLatest = useEffectEvent((payload: T) => run(payload));
   const consumed = useRef(false);
 
   useEffect(() => {
@@ -32,6 +31,6 @@ export function usePendingAction<T = unknown>(type: string, run: (payload: T) =>
     if (!action) return;
 
     consumed.current = true;
-    runRef.current(action.payload as T);
+    runLatest(action.payload as T);
   }, [isLoggedIn, isLoading, type]);
 }

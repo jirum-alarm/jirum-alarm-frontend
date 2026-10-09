@@ -478,12 +478,17 @@ export default function PriceHistorySection({
   const [daysOverride, setDaysOverride] = useState<number | null>(null);
   const gradId = useId().replace(/:/g, '');
   // 선택 기간 X축은 항상 '오늘'이 오른쪽 끝
+  // eslint-disable-next-line react-hooks/purity -- "오늘" 기준 시각을 상품·마운트 시점에 한 번 고정한다(useMemo 로 렌더마다 바뀌지 않음). 마운트 전 값은 쓰지 않는다(조회가 마운트 뒤).
   const nowMs = useMemo(() => Date.now(), [productId, mounted]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- 서버 렌더·하이드레이션 땐 차트를 그리지 않고(시각 기준이 서버/브라우저로 갈린다) 마운트 뒤에 조회를 켠다.
   useEffect(() => setMounted(true), []);
-  useEffect(() => {
+  // 상품이 바뀌면 기간 선택을 데이터 기준 기본값으로 되돌린다 — effect 대신 렌더 중 비교로.
+  const [periodResetProductId, setPeriodResetProductId] = useState(productId);
+  if (productId !== periodResetProductId) {
+    setPeriodResetProductId(productId);
     setDaysOverride(null);
-  }, [productId]);
+  }
 
   const { data, isLoading, isError, error } = useQuery({
     ...ProductQueries.priceHistory({ id: productId, days: MAX_DAYS }),

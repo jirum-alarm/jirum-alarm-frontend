@@ -18,6 +18,7 @@ export default function RecentKeywords() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- 최근 검색어는 localStorage(외부 저장소)에 있다. 서버 HTML 과 맞추려 마운트 뒤·검색어가 바뀔 때 다시 읽는다.
     setKeywords(JSON.parse(localStorage.getItem('gr-recent-keywords') ?? '[]'));
     setLoading(false);
   }, [searchParams]);

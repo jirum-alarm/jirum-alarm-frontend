@@ -16,6 +16,12 @@ const SearchInput = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [isComposing, setIsComposing] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
+  // 키워드가 사용자 입력으로 바뀌면 활성 인덱스 초기화 — effect 대신 렌더 중 비교로.
+  const [activeIndexKeyword, setActiveIndexKeyword] = useState(keyword);
+  if (keyword !== activeIndexKeyword) {
+    setActiveIndexKeyword(keyword);
+    setActiveIndex(-1);
+  }
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -42,11 +48,6 @@ const SearchInput = () => {
   useEffect(() => {
     if (isEmpty) inputRef.current?.focus();
   }, [isEmpty]);
-
-  // 키워드가 사용자 입력으로 바뀌면 활성 인덱스 초기화
-  useEffect(() => {
-    setActiveIndex(-1);
-  }, [keyword]);
 
   // 바깥 클릭/탭 시 닫기
   useEffect(() => {

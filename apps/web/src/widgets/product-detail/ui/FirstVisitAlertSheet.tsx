@@ -96,6 +96,7 @@ export default function FirstVisitAlertSheet({
     if (!(canPush && hasKeyword) && shouldShowOkachatSoftPrompt()) {
       if (pickFirstVisitVariant() === 'okachat') {
         localStorage.setItem(FIRST_VISIT_SEEN_KEY, '1');
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage·알림 권한·UA 는 브라우저에만 있다. 첫 방문 판정은 하이드레이션 뒤에 한 번 한다.
         setMode('okachat');
         pushOkachatEvent('okachat_prompt_view', 'first_visit');
         return;

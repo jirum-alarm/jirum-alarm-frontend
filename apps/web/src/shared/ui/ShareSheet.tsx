@@ -48,6 +48,7 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
   const { md: isDesktop } = useScreen();
   // SSR 엔 window 가 없어 마운트 후 판정해야 hydration mismatch 가 안 난다(ShareButton 관용구).
   const [canNativeShare, setCanNativeShare] = useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- 위 주석대로 navigator 는 브라우저에만 있어 하이드레이션 뒤에 판정한다.
   useEffect(() => setCanNativeShare(isInApp() || !!navigator.share), []);
 
   const copyLink = async (url: string) => {

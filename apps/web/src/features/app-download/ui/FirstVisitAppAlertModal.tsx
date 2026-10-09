@@ -50,6 +50,7 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
     if (!platform) return;
     if (localStorage.getItem(SEEN_KEY)) return; // 이미 봄
     localStorage.setItem(SEEN_KEY, '1');
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage(외부 저장소)를 마운트 뒤에 읽어 처음 온 사람에게만 연다. 서버 렌더엔 localStorage 가 없다.
     setShow(true);
     pushEvent('app_alert_hook_view', { platform });
   }, [platform]);

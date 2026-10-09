@@ -36,7 +36,7 @@ function pushEvent(event: string, props: Record<string, unknown>) {
 export default function SignupKeyword({ productId }: { productId: number | null }) {
   const { toast } = useToast();
   const promptPushChannel = usePushChannelPrompt();
-  const [value, setValue] = useState('');
+  const [input, setInput] = useState('');
   const [touched, setTouched] = useState(false);
   const [done, setDone] = useState<string | null>(null);
 
@@ -47,9 +47,7 @@ export default function SignupKeyword({ productId }: { productId: number | null 
   const suggested = product ? deriveKeyword(product.title) : '';
 
   // 사용자가 손대기 전까지만 추천으로 채운다 — 지운 걸 다시 채우면 입력이 싸운다.
-  useEffect(() => {
-    if (!touched && suggested) setValue(suggested);
-  }, [suggested, touched]);
+  const value = touched ? input : suggested;
 
   useEffect(() => {
     pushEvent('signup_keyword_view', { has_suggestion: productId !== null });
@@ -77,7 +75,7 @@ export default function SignupKeyword({ productId }: { productId: number | null 
   usePendingAction<string>(PendingActionType.NOTIFICATION_KEYWORD_ADD, (pending) => {
     if (!pending) return;
     setTouched(true);
-    setValue(pending);
+    setInput(pending);
     mutate({ keyword: pending });
   });
 
@@ -119,7 +117,7 @@ export default function SignupKeyword({ productId }: { productId: number | null 
         value={value}
         onChange={(e) => {
           setTouched(true);
-          setValue(e.currentTarget.value);
+          setInput(e.currentTarget.value);
         }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && e.nativeEvent.isComposing) e.preventDefault();

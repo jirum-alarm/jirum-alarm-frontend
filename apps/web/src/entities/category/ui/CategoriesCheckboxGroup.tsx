@@ -48,6 +48,7 @@ const CategoriesCheckboxGroup = ({
 
 function CategoryIcon({ value }: { value: number }) {
   const Icon = ICON_BY_VALUE.get(value);
+  // eslint-disable-next-line react-hooks/static-components -- 모듈 상수 Map 에서 꺼낸 컴포넌트라 렌더마다 새로 만들어지지 않는다(정체성 고정).
   return Icon ? <Icon width={32} height={32} /> : null;
 }
 

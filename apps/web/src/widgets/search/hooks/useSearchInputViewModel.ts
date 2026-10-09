@@ -16,6 +16,12 @@ export const useSearchInputViewModel = () => {
   const keywordParam = searchParams.get('keyword');
 
   const [keyword, setKeyword] = useState(keywordParam);
+  // URL 의 검색어가 바뀌면(뒤로 가기·칩 클릭) 입력창을 그 값으로 맞춘다 — effect 대신 렌더 중 비교로.
+  const [syncedKeywordParam, setSyncedKeywordParam] = useState(keywordParam);
+  if (keywordParam !== syncedKeywordParam) {
+    setSyncedKeywordParam(keywordParam);
+    setKeyword(keywordParam);
+  }
 
   const {
     device: { isJirumAlarmApp },
@@ -61,8 +67,8 @@ export const useSearchInputViewModel = () => {
     router.replace(`/`);
   };
 
+  // 최근 검색어 저장은 localStorage(외부) 쓰기라 effect 에 남긴다.
   useEffect(() => {
-    setKeyword(keywordParam);
     setRecentKeyord(keywordParam ? keywordParam : '');
   }, [keywordParam]);
 

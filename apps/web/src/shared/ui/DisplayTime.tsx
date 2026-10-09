@@ -16,6 +16,7 @@ export default function DisplayTime({ time }: { time: string | Date }) {
   const [mountedTime, setMountedTime] = useState<string | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- 상대 시각은 "지금"에 달려 서버 렌더 시점과 다르다. 하이드레이션 뒤 브라우저 시각으로 다시 계산한다.
     setMountedTime(displayTime(time));
   }, [time]);
 

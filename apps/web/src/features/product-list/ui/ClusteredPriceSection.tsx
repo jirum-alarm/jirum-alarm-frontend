@@ -35,6 +35,7 @@ export default function ClusteredPriceSection({ productId, title = '판매처별
   // 중에는 쿼리를 막고(브라우저 마운트 후에만 enabled) 실행 → 로그인된 client 에서만 조회.
   // 하단 보조 블록이라 SSR/SEO 불필요.
   const [mounted, setMounted] = useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- 위 주석대로 SSR·하이드레이션 중엔 조회를 막는 마운트 게이트다.
   useEffect(() => setMounted(true), []);
 
   const { data: clusteredData, isLoading: clusteredLoading } = useQuery({

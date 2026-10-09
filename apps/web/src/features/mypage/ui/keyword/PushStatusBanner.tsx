@@ -17,6 +17,7 @@ const PushStatusBanner = () => {
   const [status, setStatus] = useState<PushStatus | 'unknown'>('unknown');
   const { requestPermission } = useFcmPermission();
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- 알림 권한·지원 여부는 브라우저에만 있다. 서버 HTML(unknown=숨김)과 맞추려 마운트 뒤에 읽는다.
   useEffect(() => setStatus(readStatus()), []);
 
   if (status === 'unknown' || status === 'ok') return null;

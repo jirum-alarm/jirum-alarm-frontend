@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Gender } from '@/shared/api/gql/graphql';
 import { BIRTH_YEAR } from '@/shared/config/birthYear';
@@ -15,28 +15,40 @@ const _BIRTH_YEAR = BIRTH_YEAR.map((year) => ({
 }));
 const birthYearOptions = [{ text: '선택 안 함', value: null }, ..._BIRTH_YEAR];
 
-const usePersonalInfoFormViewModel = () => {
-  const [birthYear, setBirthYear] = useState<string | null>();
-  const [gender, setGender] = useState<Gender | null>();
-  const [originalInfo, setOriginalInfo] = useState<{
-    birthYear?: string | null;
-    gender?: Gender | null;
-  }>();
+type PersonalInfo = { birthYear?: string | null; gender?: Gender | null };
 
+const toPersonalInfo = (me: { birthYear?: number | null; gender?: Gender | null }) => ({
+  birthYear: me.birthYear ? String(me.birthYear) : null,
+  gender: me.gender,
+});
+
+const usePersonalInfoFormViewModel = () => {
   const {
     data: { me },
   } = useSuspenseQuery(AuthQueries.me());
   const { mutate: updateProfile } = useUpdatePersonal();
 
-  useEffect(() => {
+  const [birthYear, setBirthYear] = useState<string | null | undefined>(() =>
+    me ? toPersonalInfo(me).birthYear : undefined,
+  );
+  const [gender, setGender] = useState<Gender | null | undefined>(() =>
+    me ? toPersonalInfo(me).gender : undefined,
+  );
+  const [originalInfo, setOriginalInfo] = useState<PersonalInfo | undefined>(() =>
+    me ? toPersonalInfo(me) : undefined,
+  );
+
+  // 서버의 내 정보가 새로 오면 폼을 그 값으로 맞춘다 — effect 대신 렌더 중 비교로.
+  const [syncedMe, setSyncedMe] = useState(me);
+  if (me !== syncedMe) {
+    setSyncedMe(me);
     if (me) {
-      const _birthYear = me.birthYear ? String(me.birthYear) : null;
-      const _gender = me.gender;
-      setBirthYear(_birthYear);
-      setGender(_gender);
-      setOriginalInfo({ birthYear: _birthYear, gender: _gender });
+      const next = toPersonalInfo(me);
+      setBirthYear(next.birthYear);
+      setGender(next.gender);
+      setOriginalInfo(next);
     }
-  }, [me]);
+  }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

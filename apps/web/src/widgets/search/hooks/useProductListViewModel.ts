@@ -33,6 +33,7 @@ export const useProductListViewModel = ({
   // period가 바뀔 때만 재계산 — 렌더마다 new Date()를 만들면 queryKey가 매번 달라져 무한 refetch.
   const startDate = useMemo(() => {
     if (filters.period === 'all') return undefined;
+    // eslint-disable-next-line react-hooks/purity -- 위 주석대로 기간이 바뀔 때만 "지금" 기준 시작 시각을 다시 잡는다(useMemo 로 렌더마다 바뀌지 않음).
     return new Date(Date.now() - PERIOD_HOURS[filters.period] * 60 * 60 * 1000).toISOString();
   }, [filters.period]);
 

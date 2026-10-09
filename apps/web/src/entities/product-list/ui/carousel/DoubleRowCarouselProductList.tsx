@@ -64,12 +64,14 @@ const DoubleRowCarouselProductList = ({
 
   const handleTouchStart = useCallback(() => {
     if (nested && parentSwiper) {
+      // eslint-disable-next-line react-hooks/immutability -- 부모 Swiper 인스턴스는 React 밖의 외부 객체다. 중첩 스와이프 중 부모 드래그를 잠그는 명령형 API.
       parentSwiper.allowTouchMove = false;
     }
   }, [nested, parentSwiper]);
 
   const handleTouchEnd = useCallback(() => {
     if (nested && parentSwiper) {
+      // eslint-disable-next-line react-hooks/immutability -- 부모 Swiper 인스턴스는 React 밖의 외부 객체다. 터치가 끝나면 부모 드래그를 다시 연다.
       parentSwiper.allowTouchMove = true;
     }
   }, [nested, parentSwiper]);

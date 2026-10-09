@@ -1,7 +1,7 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { CATEGORIES, MAX_SELECTION_COUNT } from '@/shared/config/categories';
 import { shallowArrayEqual } from '@/shared/lib/utils/object';
@@ -16,6 +16,14 @@ const FAVORITE_CATEGORIES = CATEGORIES.map((category) => ({
   isChecked: false,
 }));
 
+const toCategoryForm = (favoriteCategories: readonly (number | string)[]): ICategoryForm[] =>
+  FAVORITE_CATEGORIES.map((category) => ({
+    ...category,
+    isChecked: favoriteCategories.some(
+      (categoryNumber) => Number(categoryNumber) === category.value,
+    ),
+  }));
+
 export const useCategoriesFormViewModel = () => {
   const {
     data: { me },
@@ -23,22 +31,23 @@ export const useCategoriesFormViewModel = () => {
 
   const { mutate: updateProfile } = useUpdateCategory();
 
-  const [categories, setCategories] = useState<ICategoryForm[]>(FAVORITE_CATEGORIES);
-  const [originalCategory, setOriginalCategory] = useState<ICategoryForm[]>(FAVORITE_CATEGORIES);
-
-  useEffect(() => {
-    const favoriteCategories = me?.favoriteCategories;
-    if (!favoriteCategories) return;
-
-    const _FAVORITE_CATEGORIES = FAVORITE_CATEGORIES.map((category) => ({
-      ...category,
-      isChecked:
-        !!favoriteCategories &&
-        favoriteCategories.some((categoryNumber) => Number(categoryNumber) === category.value),
-    }));
-    setCategories(_FAVORITE_CATEGORIES);
-    setOriginalCategory(_FAVORITE_CATEGORIES);
-  }, [me?.favoriteCategories]);
+  // 서버 값(me.favoriteCategories)이 바뀌면 폼을 그 값으로 다시 맞춘다 — effect 대신 렌더 중 비교로.
+  const favoriteCategories = me?.favoriteCategories;
+  const [syncedFavorites, setSyncedFavorites] = useState(favoriteCategories);
+  const [categories, setCategories] = useState<ICategoryForm[]>(() =>
+    favoriteCategories ? toCategoryForm(favoriteCategories) : FAVORITE_CATEGORIES,
+  );
+  const [originalCategory, setOriginalCategory] = useState<ICategoryForm[]>(() =>
+    favoriteCategories ? toCategoryForm(favoriteCategories) : FAVORITE_CATEGORIES,
+  );
+  if (favoriteCategories !== syncedFavorites) {
+    setSyncedFavorites(favoriteCategories);
+    if (favoriteCategories) {
+      const next = toCategoryForm(favoriteCategories);
+      setCategories(next);
+      setOriginalCategory(next);
+    }
+  }
 
   const SELECTION_COUNT = categories.filter((category) => category.isChecked).length;
 

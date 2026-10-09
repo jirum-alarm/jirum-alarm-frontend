@@ -9,20 +9,32 @@ import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 
 import { CANCEL_EVENT, TComment, TEditStatus } from '../ui/CommentLayout';
 
+type EditingComment = {
+  comment: TComment;
+  status: TEditStatus;
+} | null;
+
+const initialCommentFor = (editingComment: EditingComment) =>
+  editingComment?.status === 'update' ? editingComment.comment.content : '';
+
 export const useCommentInput = ({
   productId,
   editingComment,
 }: {
   productId: number;
-  editingComment: {
-    comment: TComment;
-    status: TEditStatus;
-  } | null;
+  editingComment: EditingComment;
 }) => {
   const queryClient = useQueryClient();
 
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState(() => initialCommentFor(editingComment));
   const ref = useRef<HTMLTextAreaElement>(null);
+
+  // 수정/답글 대상이 바뀌면 입력값을 그에 맞게 다시 채운다 — effect 대신 렌더 중 비교로.
+  const [syncedEditingComment, setSyncedEditingComment] = useState(editingComment);
+  if (editingComment !== syncedEditingComment) {
+    setSyncedEditingComment(editingComment);
+    setComment(initialCommentFor(editingComment));
+  }
 
   const { mutate: addComment } = useMutation({
     mutationFn: CommentService.addComment,
@@ -54,23 +66,15 @@ export const useCommentInput = ({
     },
   });
 
+  // 포커스는 DOM(외부) 조작이라 effect 에 남긴다.
   useEffect(() => {
-    if (!editingComment) {
-      setComment('');
-    } else {
-      const isUpdate = editingComment.status === 'update';
-
-      const nextComment = isUpdate ? editingComment.comment.content : '';
-
-      setComment(nextComment);
-
-      setTimeout(
-        () => {
-          ref.current?.focus();
-        },
-        isUpdate ? 1000 : 0,
-      );
-    }
+    if (!editingComment) return;
+    setTimeout(
+      () => {
+        ref.current?.focus();
+      },
+      editingComment.status === 'update' ? 1000 : 0,
+    );
   }, [editingComment]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

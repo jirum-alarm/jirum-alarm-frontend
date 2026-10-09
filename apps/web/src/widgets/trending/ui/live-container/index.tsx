@@ -58,6 +58,15 @@ export const LiveContainer = ({ initialTab }: Props) => {
   });
 
   const [fetchedTabIds, setFetchedTabIds] = useState<Set<number>>(new Set([initialTab]));
+  // 한 번이라도 연 탭은 계속 그린다(다시 와도 재조회 없이) — effect 대신 렌더 중에 기록한다.
+  if (!fetchedTabIds.has(tabId)) {
+    setFetchedTabIds((prev) => {
+      if (prev.has(tabId)) return prev;
+      const next = new Set(prev);
+      next.add(tabId);
+      return next;
+    });
+  }
 
   const handleInitSwiper = (swiper: SwiperClass) => {
     swiperRef.current = swiper;
@@ -100,12 +109,6 @@ export const LiveContainer = ({ initialTab }: Props) => {
     if (swiper && targetIndex >= 0 && targetIndex !== swiper.activeIndex) {
       swiper.slideTo(targetIndex);
     }
-    setFetchedTabIds((prev) => {
-      if (prev.has(tabId)) return prev;
-      const next = new Set(prev);
-      next.add(tabId);
-      return next;
-    });
   }, [tabId, categoryIds]);
 
   // ponytail: indexOf가 -1이면 어떤 탭도 active로 안 걸려 탭바가 통째로 회색이 되고,

@@ -61,6 +61,12 @@ export default function PostPurchaseKeywordPrompt({
   const { ensureAlertSession, canUseAlerts } = useAlertSession();
   const promptPushChannel = usePushChannelPrompt();
   const [done, setDone] = useState(false);
+  // 상품이 바뀌면 이전 상품의 완료 상태가 남지 않도록 초기화 — effect 대신 렌더 중 비교로.
+  const [doneResetTitle, setDoneResetTitle] = useState(title);
+  if (title !== doneResetTitle) {
+    setDoneResetTitle(title);
+    setDone(false);
+  }
 
   const { mutate: addNotificationKeyword, isPending } = useUpdateKeyword({
     source: 'post_purchase',
@@ -117,11 +123,6 @@ export default function PostPurchaseKeywordPrompt({
       { onSuccess: () => toast(`'${pending}' 알림을 등록했어요.`) },
     );
   });
-
-  // 상품이 바뀌면 이전 상품의 완료 상태가 남지 않도록 초기화.
-  useEffect(() => {
-    setDone(false);
-  }, [title]);
 
   // 클릭만 재면 "안 눌렸다"가 배너 탓인지 노출이 적어서인지 못 가른다. 노출도 같이 보낸다.
   // done 은 제외 — 등록 완료 문구는 새로운 권유 노출이 아니라 같은 배너의 결과 상태라

@@ -37,6 +37,7 @@ export default function RecommendationKeywords() {
   const [keywords, setKeywords] = useState<string[]>([]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- 무작위 추천은 서버와 브라우저 결과가 달라 하이드레이션 뒤에 한 번 뽑는다.
     setKeywords(KEYWORDS.sort(() => 0.5 - Math.random()).slice(0, 5));
   }, []);
   return (

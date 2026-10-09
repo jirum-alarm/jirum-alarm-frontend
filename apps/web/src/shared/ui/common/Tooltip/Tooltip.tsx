@@ -52,9 +52,11 @@ const Tooltip = ({ content, children, align = 'left', polygonOffset = 28 }: Prop
   };
 
   const triggerButton = isValidElement(children)
-    ? cloneElement(children, {
+    ? // eslint-disable-next-line react-hooks/refs -- 트리거 자식에 ref 를 넘겨 복제할 뿐 렌더 중에 .current 를 읽지 않는다.
+      cloneElement(children, {
         ...children.props,
         ref: triggerRef,
+        // eslint-disable-next-line react-hooks/refs -- 위치 계산(ref 읽기)은 클릭 핸들러 안에서만 일어난다 — 렌더 중이 아니다.
         onClick: composeEventHandlers(children.props.onClick, handleShowToolTipClick),
       })
     : null;

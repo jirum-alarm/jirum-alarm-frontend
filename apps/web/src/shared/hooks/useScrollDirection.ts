@@ -2,7 +2,7 @@
 
 import { atom, useAtom } from 'jotai';
 import { usePathname } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useEffectEvent, useRef } from 'react';
 
 type ScrollDirection = 'up' | 'down' | null;
 
@@ -11,12 +11,12 @@ const scrollDirectionAtom = atom<ScrollDirection>(null);
 export function useScrollDirection() {
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
-  const scrollDirectionRef = useRef<ScrollDirection>(null);
 
   const [scrollDirection, setScrollDirection] = useAtom(scrollDirectionAtom);
   const pathname = usePathname();
 
-  scrollDirectionRef.current = scrollDirection;
+  // 스크롤 리스너가 다시 붙지 않게, 리스너 안에서는 최신 방향을 Effect Event 로 읽는다.
+  const readScrollDirection = useEffectEvent(() => scrollDirection);
 
   useEffect(() => {
     setScrollDirection('up');
@@ -44,7 +44,7 @@ export function useScrollDirection() {
         setScrollDirection('up');
       } else {
         const direction = scrollY > lastScrollY.current ? 'down' : 'up';
-        if (direction !== scrollDirectionRef.current) {
+        if (direction !== readScrollDirection()) {
           setScrollDirection(direction);
         }
       }
