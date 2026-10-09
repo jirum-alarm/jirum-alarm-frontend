@@ -11,7 +11,7 @@ import {test} from 'node:test';
 import {render} from './build.mjs';
 
 const require = createRequire(import.meta.url);
-const {light, dark, fixed, brand} = require('./tokens.js');
+const {light, dark, fixed, brand, twMergeConfig} = require('./tokens.js');
 const {patterns} = require('./eslint.js');
 
 const keys = (palette) =>
@@ -118,4 +118,17 @@ test('린트 정규식은 우회한 클래스만 잡는다', () => {
     'font-semibold text-black bg-black/50',
   ])
     assert.ok(!flagged(good), `잡히면 안 됨: ${good}`);
+});
+
+test('cn() 설정: tailwind-merge 가 사용자 정의 값을 색으로 오인해 지우지 않는다', () => {
+  // 2026-10-09 회귀 — text-11 이 "글자 색"으로 읽혀 같은 cn() 의 text-gray-500 과 합쳐지며 사라졌다.
+  const {extendTailwindMerge} = require('tailwind-merge');
+  const tw = extendTailwindMerge(twMergeConfig);
+  assert.equal(tw('text-11 font-medium text-success-700'), 'text-11 font-medium text-success-700');
+  assert.equal(tw('pc:text-28 text-gray-900'), 'pc:text-28 text-gray-900');
+  assert.equal(tw('shadow-highlight shadow-primary-500'), 'shadow-highlight shadow-primary-500');
+  assert.equal(tw('rounded-lg rounded-t-sheet'), 'rounded-lg rounded-t-sheet');
+  // 같은 종류끼리는 그대로 뒤의 것이 이긴다
+  assert.equal(tw('text-sm text-13'), 'text-13');
+  assert.equal(tw('shadow-card shadow-lg'), 'shadow-lg');
 });

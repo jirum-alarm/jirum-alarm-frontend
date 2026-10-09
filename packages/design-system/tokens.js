@@ -230,4 +230,19 @@ const shadow = {
   highlight: 'inset 0 -12px 0',
 };
 
-module.exports = {light, dark, fixed, brand, fontSize, radius, shadow};
+/**
+ * tailwind-merge(cn()) 에 사용자 정의 값을 알려 주는 설정 — 각 앱 cn() 이 `extendTailwindMerge(twMergeConfig)` 로 쓴다.
+ * ★모르면 `text-13` 을 글자 "색"으로 보고 같은 cn() 의 `text-gray-500` 과 합치며 **크기를 지운다**
+ * (shadow-highlight 도 shadow-primary-500 과 합치며 지운다). 2026-10-09 실제로 났다 — 예전 `text-[11px]` 은 길이라 무사했다.
+ */
+const twMergeConfig = {
+  extend: {
+    theme: {
+      text: Object.keys(fontSize),
+      radius: Object.keys(radius),
+      shadow: Object.keys(shadow),
+    },
+  },
+};
+
+module.exports = {light, dark, fixed, brand, fontSize, radius, shadow, twMergeConfig};

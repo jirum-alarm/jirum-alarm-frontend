@@ -56,7 +56,7 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
 
   const title = (
     <>
-      <span className="shadow-primary-500 inline-block font-extrabold shadow-highlight">
+      <span className="shadow-primary-500 shadow-highlight inline-block font-extrabold">
         지름알림
       </span>{' '}
       앱 다운받고
