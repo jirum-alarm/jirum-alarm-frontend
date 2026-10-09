@@ -29,6 +29,7 @@ import {Sentry, initSentry, wrapApp} from '@/shared/lib/monitoring/sentry.ts';
 import useOtaUpdateOnResume from '@/shared/hooks/useOtaUpdateOnResume.ts';
 import {useColors} from '@/shared/theme/useColors';
 import {restoreColorSchemePreference} from '@/shared/theme/color-scheme-preference';
+import {useWebViewColorSchemeCookie} from '@/shared/theme/webview-color-scheme-cookie';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {focusedScreenName} from '@/shared/lib/analytics/screen-tracking';
 
@@ -65,6 +66,8 @@ function App(): React.JSX.Element {
   const webViewRefManager = useWebViewRefManager();
   const navigationTheme = useNavigationTheme();
   useOtaUpdateOnResume();
+  // 웹뷰(글쓰기·약관·고객센터)도 앱과 같은 라이트/다크로 — web 이 읽는 쿠키를 맞춰 둔다.
+  useWebViewColorSchemeCookie();
 
   // 화면 전환마다 GA4 screen_view. 같은 화면 안 params 변화(탭 재선택 등)는 한 번만.
   const lastScreen = useRef<string | undefined>(undefined);

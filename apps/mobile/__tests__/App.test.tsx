@@ -36,6 +36,10 @@ jest.mock('../src/provider/ReactQueryProvider.tsx', () => ({
   __esModule: true,
   default: ({children}: {children: React.ReactNode}) => children,
 }));
+// 웹뷰 다크 쿠키(App 루트에서 건다) — 쿠키 모듈은 jest 가 못 읽는 ESM 이라 흉내만.
+jest.mock('../src/shared/theme/webview-color-scheme-cookie', () => ({
+  useWebViewColorSchemeCookie: () => {},
+}));
 jest.mock('../src/components/FCMHandler.tsx', () => ({
   __esModule: true,
   default: ({children}: {children: React.ReactNode}) => children,

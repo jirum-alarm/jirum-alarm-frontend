@@ -196,8 +196,8 @@ describe('★탭 스택 웹뷰의 하단 safe area', () => {
   it('clip 만큼 하단을 비운다(insets 만 쓰면 잘린다)', () => {
     expect(webviewScreen).toContain('useHiddenTabBarClipPadding');
     // 스페이서 높이가 계산값을 쓴다 — 날 insets.bottom 이 아니다
-    expect(webviewScreen).not.toMatch(/height: insets\.bottom\}\]/);
-    expect(webviewScreen).toMatch(/height: bottomInset\}\]/);
+    expect(webviewScreen).not.toMatch(/height: insets\.bottom\b/);
+    expect(webviewScreen).toMatch(/height: bottomInset\b/);
   });
 
   /**
@@ -214,7 +214,7 @@ describe('★탭 스택 웹뷰의 하단 safe area', () => {
   });
 
   it('Android·iOS 두 화면 모두 적용됐다(쌍)', () => {
-    const uses = webviewScreen.match(/height: bottomInset\}\]/g) ?? [];
+    const uses = webviewScreen.match(/height: bottomInset\b/g) ?? [];
     expect(uses).toHaveLength(2);
     const calls = webviewScreen.match(/[=] useWebViewBottomInset\(\)/g) ?? [];
     expect(calls).toHaveLength(2);

@@ -9,6 +9,7 @@ import {
   ScrollView,
   RefreshControl,
   ActivityIndicator,
+  useColorScheme,
 } from 'react-native';
 import React, {useState, useCallback} from 'react';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
@@ -17,6 +18,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SERVICE_URL} from '@/constants/env';
 
 import {SystemBars} from 'react-native-edge-to-edge';
+import {useColors} from '@/shared/theme/useColors';
 import {useCommonWebViewLogic} from './hooks/useCommonWebViewLogic';
 import WebViewErrorView from '@/shared/components/WebViewErrorView';
 import {MainParamList} from '@/navigations/stack/MainNavigator';
@@ -97,6 +99,9 @@ const JirumAlarmWebViewAndroid = ({
     handleError,
     retry,
   } = useCommonWebViewLogic();
+  // 다크에선 web 본문도 다크(쿠키)라 틀도 바탕 토큰으로 — 흰 끝·흰 아래 띠가 남았다(10/10).
+  const c = useColors();
+  const isDark = useColorScheme() === 'dark';
 
   const {refreshing, enableRefresh, setEnableRefresh, onRefresh} =
     useAndroidRefreshLogic(webviewRef);
@@ -105,7 +110,7 @@ const JirumAlarmWebViewAndroid = ({
   return (
     <View style={styles.container}>
       <SystemBars
-        style={shouldDarkStatusBar ? 'light' : 'dark'}
+        style={shouldDarkStatusBar || isDark ? 'light' : 'dark'}
         hidden={false}
       />
       <Animated.View
@@ -114,7 +119,7 @@ const JirumAlarmWebViewAndroid = ({
           height: insets.top,
           backgroundColor: bgAnimation.interpolate({
             inputRange: [0, 1],
-            outputRange: ['#101828', '#ffffff'],
+            outputRange: ['#101828', c.white],
           }),
         }}
       />
@@ -178,12 +183,14 @@ const JirumAlarmWebViewAndroid = ({
         />
       </ScrollView>
       {isLoading && (
-        <View style={styles.loadingContainer} pointerEvents="none">
-          <ActivityIndicator size="large" color="#101828" />
+        <View
+          style={[styles.loadingContainer, {backgroundColor: `${c.white}E6`}]}
+          pointerEvents="none">
+          <ActivityIndicator size="large" color={c.gray[900]} />
         </View>
       )}
       {hasError && <WebViewErrorView onRetry={retry} />}
-      <SafeAreaView style={[styles.safeAreaBottom, {height: bottomInset}]} />
+      <SafeAreaView style={{height: bottomInset, backgroundColor: c.white}} />
     </View>
   );
 };
@@ -211,12 +218,15 @@ const JirumAlarmWebViewIOS = ({route}: JirumAlarmWebViewScreenRouteProp) => {
     handleError,
     retry,
   } = useCommonWebViewLogic();
+  // 다크에선 web 본문도 다크(쿠키)라 틀도 바탕 토큰으로 — 흰 끝·흰 아래 띠가 남았다(10/10).
+  const c = useColors();
+  const isDark = useColorScheme() === 'dark';
   const bottomInset = useWebViewBottomInset();
 
   return (
     <View style={styles.container}>
       <SystemBars
-        style={shouldDarkStatusBar ? 'light' : 'dark'}
+        style={shouldDarkStatusBar || isDark ? 'light' : 'dark'}
         hidden={false}
       />
       <Animated.View
@@ -225,7 +235,7 @@ const JirumAlarmWebViewIOS = ({route}: JirumAlarmWebViewScreenRouteProp) => {
           height: insets.top,
           backgroundColor: bgAnimation.interpolate({
             inputRange: [0, 1],
-            outputRange: ['#101828', '#ffffff'],
+            outputRange: ['#101828', c.white],
           }),
         }}
       />
@@ -271,12 +281,14 @@ const JirumAlarmWebViewIOS = ({route}: JirumAlarmWebViewScreenRouteProp) => {
         }}
       />
       {isLoading && (
-        <View style={styles.loadingContainer} pointerEvents="none">
-          <ActivityIndicator size="large" color="#101828" />
+        <View
+          style={[styles.loadingContainer, {backgroundColor: `${c.white}E6`}]}
+          pointerEvents="none">
+          <ActivityIndicator size="large" color={c.gray[900]} />
         </View>
       )}
       {hasError && <WebViewErrorView onRetry={retry} />}
-      <SafeAreaView style={[styles.safeAreaBottom, {height: bottomInset}]} />
+      <SafeAreaView style={{height: bottomInset, backgroundColor: c.white}} />
     </View>
   );
 };
@@ -297,9 +309,6 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     flex: 1,
   },
-  safeAreaBottom: {
-    backgroundColor: '#ffffff',
-  },
   loadingContainer: {
     position: 'absolute',
     top: 0,
@@ -308,6 +317,5 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
   },
 });
