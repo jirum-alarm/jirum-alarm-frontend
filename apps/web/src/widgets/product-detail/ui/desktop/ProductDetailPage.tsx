@@ -11,7 +11,6 @@ import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
 import TossDetailImages from '@/entities/product/ui/TossDetailImages';
 
 import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
-import FirstVisitAppAlertModal from '@/features/app-download/ui/FirstVisitAppAlertModal';
 import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';
@@ -25,6 +24,7 @@ import SoftKakaoOpenChatPrompt from '@/features/product-detail/ui/SoftKakaoOpenC
 import { CategoryPopularByProductSection, TogetherViewedSection } from '@/features/product-list/ui';
 
 import CommunityReaction from '../CommunityReaction';
+import FirstVisitAlertSheet from '../FirstVisitAlertSheet';
 
 import ProductInfo from './ProductInfo';
 
@@ -56,7 +56,7 @@ export default async function DesktopProductDetailPage({
 
   return (
     <>
-      {device && <FirstVisitAppAlertModal device={device} />}
+      {device && <FirstVisitAlertSheet device={device} title={initialProduct?.title} />}
       {/* google-anno-skip: 애드센스 '광고 인텐트'가 UI 글자("가격 추이"의 "가격" 등)를 광고 링크로 바꾸고
           부제 사이에 검색어 칩("제조 공장 견적받기")을 끼웠다. 구글 문서의 제외 클래스 — 하단 앵커 광고는 그대로다. */}
       <div className="max-w-layout-max google-anno-skip mx-auto grid grid-cols-12 gap-x-6">

@@ -10,7 +10,6 @@ import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
 import TossDetailImages from '@/entities/product/ui/TossDetailImages';
 
 import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
-import FirstVisitAppAlertModal from '@/features/app-download/ui/FirstVisitAppAlertModal';
 import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';
@@ -25,6 +24,7 @@ import SoftKakaoOpenChatPrompt from '@/features/product-detail/ui/SoftKakaoOpenC
 import { CategoryPopularByProductSection, TogetherViewedSection } from '@/features/product-list/ui';
 
 import CommunityReaction from '../CommunityReaction';
+import FirstVisitAlertSheet from '../FirstVisitAlertSheet';
 
 import BottomCTA from './BottomCTA';
 import ProductInfo from './ProductInfo';
@@ -57,7 +57,7 @@ function ProductDetailPage({
 
   return (
     <>
-      {device && <FirstVisitAppAlertModal device={device} />}
+      {device && <FirstVisitAlertSheet device={device} title={initialProduct?.title} />}
       <ViewerCount productId={productId} />
 
       {/* google-anno-skip: desktop ProductDetailPage 와 같은 이유 — UI 글자에 광고 인텐트 링크·칩이 끼지 않게. */}

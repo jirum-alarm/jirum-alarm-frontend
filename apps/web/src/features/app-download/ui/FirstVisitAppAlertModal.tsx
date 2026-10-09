@@ -16,7 +16,8 @@ import { resolveAppDownloadPlatform } from '../model/resolvePlatform';
 import AppDownloadQr from './AppDownloadQr';
 
 // ponytail: 전역 1회 노출. 상품별로 반복 노출하면 이탈만 키움. 재노출 원하면 이 키 삭제 or 만료 추가.
-const SEEN_KEY = 'jirum:app-alert-hook-seen';
+export const FIRST_VISIT_SEEN_KEY = 'jirum:app-alert-hook-seen';
+const SEEN_KEY = FIRST_VISIT_SEEN_KEY;
 // AlarmContainer 의 AppDownloadGuide 와 동일 에셋.
 const APP_GUIDE_IMAGE = 'https://cdn.jirum-alarm.com/assets/app_download_guide.webp';
 
