@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Drawer } from 'vaul';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
