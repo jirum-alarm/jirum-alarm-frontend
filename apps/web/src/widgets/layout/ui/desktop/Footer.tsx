@@ -49,7 +49,9 @@ const Footer = () => {
                 핫딜 최저가 모음
               </Link>
             </div>
-            <p className="text-sm text-gray-600">Copyright 2025. 지름알림. All rights reserved.</p>
+            <p className="text-sm text-gray-600">
+              Copyright {new Date().getFullYear()}. 지름알림. All rights reserved.
+            </p>
           </div>
         </footer>
       </div>
