@@ -61,6 +61,11 @@ export class AuthService {
     return execute(MutationUpdateUserProfile, variables).then((res) => res.data);
   }
 
+  /** 게스트 세션 — 로그인 없이 키워드 알림을 받는 기기 계정(X-Device-Id 로 식별, execute 가 붙인다). */
+  static async guestLogin() {
+    return execute(MutationGuestLogin).then((res) => res.data);
+  }
+
   static async loginUser(variables: MutationLoginMutationVariables) {
     return execute(MutationLogin, variables).then((res) => res.data);
   }
@@ -105,6 +110,18 @@ export class AuthService {
     return execute(QuerySocialAccessToken, variables).then((res) => res.data);
   }
 }
+
+// 수기 — web codegen 이 막혀 있다(dev 스키마 사망). 백엔드 crawling-server 7d6cbd71.
+const MutationGuestLogin = new TypedDocumentString<
+  { guestLogin: { accessToken: string } },
+  Record<string, never>
+>(`
+  mutation MutationGuestLogin {
+    guestLogin {
+      accessToken
+    }
+  }
+`);
 
 const QueryMe = graphql(`
   query QueryMe {

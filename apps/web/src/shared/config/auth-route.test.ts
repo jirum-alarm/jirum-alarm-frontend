@@ -59,4 +59,37 @@ describe('decideAuthAction', () => {
       assert.equal(decideAuthAction({ pathname, ...noTokens }), 'pass', `${pathname} 가 차단됨`);
     }
   });
+
+  describe('게스트(로그인 없이 키워드 알림만 받는 기기 계정)', () => {
+    const guest = { hasAccessToken: false, hasRefreshToken: false, isGuest: true };
+
+    it('자기 키워드 관리 화면은 들어가고, 토큰이 만료됐으면 다시 받는다', () => {
+      assert.equal(
+        decideAuthAction({ pathname: '/mypage/keyword', ...guest, hasGuestAccessToken: true }),
+        'pass',
+      );
+      assert.equal(decideAuthAction({ pathname: '/mypage/keyword', ...guest }), 'guest-refresh');
+    });
+
+    it('나머지 마이페이지·찜은 여전히 로그인으로 보낸다', () => {
+      for (const pathname of ['/mypage', '/mypage/account', '/like']) {
+        assert.equal(
+          decideAuthAction({ pathname, ...guest, hasGuestAccessToken: true }),
+          'redirect',
+          `${pathname} 에 게스트가 들어감`,
+        );
+      }
+    });
+
+    it('공개 경로에서도 만료된 게스트 토큰을 갱신한다(상세의 내 키워드 조회 등)', () => {
+      assert.equal(decideAuthAction({ pathname: '/products/1', ...guest }), 'guest-refresh');
+    });
+
+    it('실제 로그인 토큰이 있으면 게스트 표시는 무시한다', () => {
+      assert.equal(
+        decideAuthAction({ pathname: '/mypage', ...guest, hasAccessToken: true }),
+        'pass',
+      );
+    });
+  });
 });

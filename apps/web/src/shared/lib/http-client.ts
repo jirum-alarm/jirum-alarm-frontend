@@ -90,7 +90,9 @@ export async function execute<TResult, TVariables>(
   if (isServer && !opts?.public) {
     const { cookies } = await import('next/headers');
     const cookieStore = await cookies();
-    const token = cookieStore.get('ACCESS_TOKEN')?.value;
+    // 로그인 토큰이 우선, 없으면 게스트(로그인 없이 알림만 받는 기기 계정) 토큰.
+    const token =
+      cookieStore.get('ACCESS_TOKEN')?.value ?? cookieStore.get('GUEST_ACCESS_TOKEN')?.value;
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);
     }

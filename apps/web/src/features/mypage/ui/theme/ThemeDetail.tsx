@@ -6,7 +6,7 @@ import { useInView } from 'react-intersection-observer';
 
 import { HotDealType } from '@/shared/api/gql/graphql';
 import type { ThemeLiveDeal, ThemeWithKeywords } from '@/shared/api/notification/theme.service';
-import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
+import useAlertSession from '@/shared/hooks/useAlertSession';
 import { cn } from '@/shared/lib/cn';
 import Button from '@/shared/ui/common/Button';
 import { LoadingSpinner } from '@/shared/ui/common/icons';
@@ -165,7 +165,7 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
   const { data: themes } = useSuspenseQuery(ThemeQueries.themes());
   const { data: subscribedIds = [] } = useQuery(ThemeQueries.mySubscribedIds());
   const { subscribe, unsubscribe, isPending } = useThemeSubscription();
-  const { checkAndRedirect } = useRedirectIfNotLoggedIn();
+  const { ensureAlertSession } = useAlertSession();
 
   const theme = themes.find((t) => Number(t.id) === themeId);
   if (!theme) return null;
@@ -192,9 +192,9 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
           color={isSubscribed ? 'secondary' : 'primary'}
           disabled={isPending}
           className={cn('mt-4', !isMobile && 'w-60')}
-          onClick={() => {
-            // 비로그인은 알림을 켤 수 없다(서버 403) → 로그인으로 유도.
-            if (checkAndRedirect()) return;
+          onClick={async () => {
+            // 비로그인은 게스트 계정으로 바로 구독한다(앱 웹뷰는 로그인으로).
+            if (!(await ensureAlertSession())) return;
             if (isSubscribed) unsubscribe(themeId);
             else subscribe(themeId);
           }}

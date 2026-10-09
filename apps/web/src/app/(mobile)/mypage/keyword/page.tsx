@@ -4,6 +4,7 @@ import { checkDevice } from '@/app/actions/agent';
 
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
+import GuestKeywordNotice from '@/features/mypage/ui/keyword/GuestKeywordNotice';
 import KeywordInput from '@/features/mypage/ui/keyword/KeywordInput';
 import KeywordList from '@/features/mypage/ui/keyword/KeywordList';
 import PushStatusBanner from '@/features/mypage/ui/keyword/PushStatusBanner';
@@ -15,6 +16,7 @@ const KeywordPage = async ({ searchParams }: { searchParams: Promise<{ focus?: s
   return (
     <BasicLayout hasBackButton title="키워드 알림">
       <div className="pc:pt-0 relative h-full px-5 py-6">
+        <GuestKeywordNotice />
         <PushStatusBanner />
         {/* 폰에선 들어오자마자 키보드가 올라와 아래 목록·등록 버튼을 가리므로 PC 만 자동 포커스.
             특정 키워드를 고치러 왔을 때도 키보드가 그 카드를 가리지 않게 끈다. */}

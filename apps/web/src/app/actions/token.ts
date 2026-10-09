@@ -5,6 +5,9 @@ import { cookies, headers } from 'next/headers';
 import {
   accessTokenExpiresAt,
   AUTH_COOKIE_DOMAIN,
+  GUEST_ACCESS_TOKEN,
+  guestMarkerExpiresAt,
+  IS_GUEST,
   refreshTokenExpiresAt,
 } from '@/shared/config/token';
 
@@ -18,7 +21,25 @@ const cookieOptions = (ms: number) => ({
 });
 
 async function setAccessToken(token: string) {
-  (await cookies()).set('ACCESS_TOKEN', token, cookieOptions(accessTokenExpiresAt));
+  const store = await cookies();
+  store.set('ACCESS_TOKEN', token, cookieOptions(accessTokenExpiresAt));
+  // 실제 로그인하면 게스트는 끝이다. 게스트의 키워드는 백엔드가 로그인 때 기기 기준으로 이 계정에 합친다.
+  store.delete({ name: GUEST_ACCESS_TOKEN, domain: AUTH_COOKIE_DOMAIN });
+  store.delete({ name: IS_GUEST, domain: AUTH_COOKIE_DOMAIN });
+}
+
+/**
+ * 게스트 세션 시작(guestLogin 응답). IS_GUEST 값은 게스트를 만든 기기 id — 미들웨어가 토큰 만료 때
+ * 이 id 로 guestLogin 을 다시 불러 같은 게스트를 받는다(기기 id 쿠키와 localStorage 가 어긋나도 안전).
+ */
+async function setGuestSession(accessToken: string, deviceId: string) {
+  const store = await cookies();
+  store.set(GUEST_ACCESS_TOKEN, accessToken, cookieOptions(accessTokenExpiresAt));
+  store.set(IS_GUEST, deviceId, cookieOptions(guestMarkerExpiresAt));
+}
+
+async function getIsGuest() {
+  return Boolean((await cookies()).get(IS_GUEST)?.value);
 }
 
 async function setRefreshToken(token: string) {
@@ -67,11 +88,13 @@ export {
   getDistinctId,
   getFcmToken,
   getHeaderAuth,
+  getIsGuest,
   getRefreshToken,
   removeAccessToken,
   removeRefreshToken,
   setAccessToken,
   setDistinctId,
   setFcmToken,
+  setGuestSession,
   setRefreshToken,
 };

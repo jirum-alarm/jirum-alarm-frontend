@@ -2,6 +2,16 @@ export const accessTokenExpiresAt = 1 * 60 * 60 * 1000; // 1hour
 export const refreshTokenExpiresAt = 7 * 24 * 60 * 60 * 1000; // 7day
 
 /**
+ * 게스트(로그인 없이 키워드 알림만 받는 기기 계정) 쿠키.
+ * 리프레시 토큰은 두지 않는다 — 백엔드 guestLogin 이 같은 기기에 늘 같은 게스트를 돌려주므로
+ * 액세스 토큰이 만료되면 guestLogin 을 다시 부르면 된다(proxy.ts). IS_GUEST 는 "이 브라우저는 게스트"
+ * 표시라 길게 둔다.
+ */
+export const GUEST_ACCESS_TOKEN = 'GUEST_ACCESS_TOKEN';
+export const IS_GUEST = 'IS_GUEST';
+export const guestMarkerExpiresAt = 365 * 24 * 60 * 60 * 1000; // 1year
+
+/**
  * 인증 쿠키를 붙일 도메인.
  *
  * 왜 있는가: ai 앱이 **다른 서브도메인**(ai.jirum-alarm.com)이라, Domain 없는

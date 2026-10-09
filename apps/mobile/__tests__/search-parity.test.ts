@@ -349,8 +349,9 @@ describe('안 옮긴 것 — 도달 불가/불필요를 못박는다', () => {
   });
 
   it('비로그인 게이트·keyword_intent 는 앱에서 도달 불가다', () => {
-    // RootNavigator 가 앱 전체를 로그인 뒤에 둔다 → 옮기면 0건짜리 죽은 코드.
-    expect(webNotFound).toContain('useRedirectIfNotLoggedIn');
+    // RootNavigator 가 앱 전체를 로그인(또는 게스트) 뒤에 둔다 → 옮기면 0건짜리 죽은 코드.
+    // web 은 2026-10-09 부터 로그인 벽 대신 게스트 계정으로 바로 등록한다(useAlertSession).
+    expect(webNotFound).toContain('useAlertSession');
     expect(webNotFound).toContain('keyword_intent');
     for (const source of appCode) {
       expect(source).not.toContain('useRedirectIfNotLoggedIn');

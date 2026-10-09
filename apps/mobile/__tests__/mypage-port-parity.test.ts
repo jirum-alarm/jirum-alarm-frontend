@@ -330,12 +330,13 @@ describe('옮기면 안 되는 web 분기 — 옮기면 영원히 안 뜨는 죽
    * 뒤에 둔다. 그래서 비로그인 유도(`useRedirectIfNotLoggedIn` → ROUTE_CHANGED)는
    * 이 화면들에 도달할 수 없다.
    */
-  it('web 묶음 화면엔 비로그인 유도가 있다(전제 확인)', () => {
+  it('web 묶음 화면엔 비로그인 분기가 있다(전제 확인)', () => {
+    // 2026-10-09: 로그인 유도 → 게스트 계정으로 바로 구독(useAlertSession). 앱은 RootNavigator 가 가른다.
     expect(readWeb('features/mypage/ui/theme/ThemeList.tsx')).toContain(
-      'useRedirectIfNotLoggedIn',
+      'useAlertSession',
     );
     expect(readWeb('features/mypage/ui/theme/ThemeDetail.tsx')).toContain(
-      'useRedirectIfNotLoggedIn',
+      'useAlertSession',
     );
   });
 

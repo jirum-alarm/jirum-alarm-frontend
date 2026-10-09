@@ -39,9 +39,10 @@ interface Props {
   /** 서버(root layout)가 UA·쿠키로 판정한 값. 클라이언트 atom 초깃값이 된다. */
   device: CheckDeviceResult;
   isLoggedIn: boolean;
+  isGuest: boolean;
 }
 
-export const AppProvider = ({ children, device, isLoggedIn }: Props) => {
+export const AppProvider = ({ children, device, isLoggedIn, isGuest }: Props) => {
   return (
     <>
       {/* GTM 은 load 이후. @next/third-parties 의 afterInteractive 는 App Router 에서 preload 를 만들어
@@ -59,7 +60,7 @@ export const AppProvider = ({ children, device, isLoggedIn }: Props) => {
       )}
       <LazyMotion features={loadMotionFeatures}>
         <JotaiProvider>
-          <ServerStateProvider device={device} isLoggedIn={isLoggedIn}>
+          <ServerStateProvider device={device} isLoggedIn={isLoggedIn} isGuest={isGuest}>
             <ReactQueryProviders>
               {IS_PRD ? <DeviceId /> : null}
               <ClarityProvider />

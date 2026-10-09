@@ -3,7 +3,7 @@
 import { useHydrateAtoms } from 'jotai/utils';
 
 import { deviceAtom, isDeviceResolvedAtom } from '@/shared/hooks/useDevice';
-import { isAuthResolvedAtom, isLoggedInAtom } from '@/shared/hooks/useIsLoggedIn';
+import { isAuthResolvedAtom, isGuestAtom, isLoggedInAtom } from '@/shared/hooks/useIsLoggedIn';
 
 import type { CheckDeviceResult } from '@/app/actions/agent.types';
 
@@ -21,16 +21,19 @@ import type { CheckDeviceResult } from '@/app/actions/agent.types';
 export default function ServerStateProvider({
   device,
   isLoggedIn,
+  isGuest,
   children,
 }: {
   device: CheckDeviceResult;
   isLoggedIn: boolean;
+  isGuest: boolean;
   children: React.ReactNode;
 }) {
   useHydrateAtoms([
     [deviceAtom, device],
     [isDeviceResolvedAtom, true],
     [isLoggedInAtom, isLoggedIn],
+    [isGuestAtom, isGuest],
     [isAuthResolvedAtom, true],
   ] as const);
 

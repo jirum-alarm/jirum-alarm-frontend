@@ -3,8 +3,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
+import useAlertSession from '@/shared/hooks/useAlertSession';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
-import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import { cn } from '@/shared/lib/cn';
 import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
@@ -58,7 +58,7 @@ export default function PostPurchaseKeywordPrompt({
 }) {
   const { toast } = useToast();
   const { isLoggedIn } = useIsLoggedIn();
-  const { checkAndRedirect } = useRedirectIfNotLoggedIn();
+  const { ensureAlertSession, canUseAlerts } = useAlertSession();
   const promptPushChannel = usePushChannelPrompt();
   const [done, setDone] = useState(false);
 
@@ -96,7 +96,7 @@ export default function PostPurchaseKeywordPrompt({
   // 등록 뮤테이션이 이 키를 invalidate 하므로 따로 갱신할 필요도 없다.
   const { data: keywordData } = useQuery({
     ...AuthQueries.myKeywords({ limit: 20 }),
-    enabled: show && isLoggedIn && hasKeyword,
+    enabled: show && canUseAlerts && hasKeyword,
   });
 
   const alreadyRegistered = (keywordData?.notificationKeywordsByMe ?? []).some(
@@ -136,27 +136,27 @@ export default function PostPurchaseKeywordPrompt({
 
   if (!visible) return null;
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (typeof window !== 'undefined') {
       (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
         event: 'keyword_prompt_click',
         keyword,
-        // 게스트는 로그인으로 튕기고 등록까지 못 간다. 등록률과 의향을 갈라 보려고 남긴다.
+        // 비로그인은 게스트 계정으로 바로 등록된다(2026-10-09). 회원·비회원 등록률을 갈라 보려고 남긴다.
         logged_in: isLoggedIn,
       });
     }
 
-    // 게스트가 트래픽의 97%다. 웹은 로그인 모달, 앱(WebView)은 네이티브 라우팅 —
-    // 둘 다 checkAndRedirect 가 처리한다.
+    // 비로그인이 트래픽의 97%다. 웹은 게스트 계정으로 바로 진행, 앱(WebView)은 네이티브 로그인 —
+    // ensureAlertSession 이 가른다.
     if (
-      checkAndRedirect(
+      !(await ensureAlertSession(
         {
           title: '키워드 알림은 로그인이 필요해요',
           description: `로그인하고 '${keyword}' 알림을 받아보세요`,
         },
         // 로그인 왕복에 의도가 사라지지 않게 — 돌아오면 위 usePendingAction 이 등록한다.
         { type: PendingActionType.NOTIFICATION_KEYWORD_ADD, payload: keyword },
-      )
+      ))
     )
       return;
 

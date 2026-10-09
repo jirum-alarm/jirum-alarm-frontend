@@ -4,6 +4,7 @@ import { GRAPHQL_ENDPOINT } from '@/shared/config/graphql';
 import {
   accessTokenExpiresAt,
   AUTH_COOKIE_DOMAIN,
+  GUEST_ACCESS_TOKEN,
   refreshTokenExpiresAt,
 } from '@/shared/config/token';
 import { customFetch } from '@/shared/lib/http-client-node';
@@ -22,7 +23,9 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
 
-  const accessToken = req.cookies.get('ACCESS_TOKEN')?.value;
+  // 로그인 토큰이 우선, 없으면 게스트 토큰(만료되면 미들웨어가 다음 페이지 요청 때 guestLogin 으로 다시 받는다).
+  const accessToken =
+    req.cookies.get('ACCESS_TOKEN')?.value ?? req.cookies.get(GUEST_ACCESS_TOKEN)?.value;
   const incomingAuth = req.headers.get('Authorization');
   const deviceId = req.headers.get('x-device-id') || req.headers.get('X-Device-Id');
   const userAgent = req.headers.get('user-agent') || req.headers.get('User-Agent');

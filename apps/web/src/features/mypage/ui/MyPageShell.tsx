@@ -1,4 +1,5 @@
 import { checkDevice } from '@/app/actions/agent';
+import { getAccessToken, getIsGuest } from '@/app/actions/token';
 
 import MyPageSidebar from './MyPageSidebar';
 
@@ -10,8 +11,13 @@ import MyPageSidebar from './MyPageSidebar';
  * 여기서 왼쪽 정렬·pt-0 으로 덮는다. BasicLayout 의 pc: 클래스(.pc 하위 선택자)를 이기려고 important.
  */
 export default async function MyPageShell({ children }: { children: React.ReactNode }) {
-  const { isMobile } = await checkDevice();
-  if (isMobile) return children;
+  const [{ isMobile }, accessToken, isGuest] = await Promise.all([
+    checkDevice(),
+    getAccessToken(),
+    getIsGuest(),
+  ]);
+  // 게스트는 키워드 화면만 들어온다(proxy) — 회원 프로필·메뉴 사이드바를 그리지 않는다.
+  if (isMobile || (!accessToken && isGuest)) return children;
 
   return (
     <div className="max-w-layout-max mx-auto flex gap-12 px-5 pt-14">

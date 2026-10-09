@@ -4,7 +4,7 @@ import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 
 import { themePath } from '@/shared/api/notification/theme.service';
-import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
+import useAlertSession from '@/shared/hooks/useAlertSession';
 import Button from '@/shared/ui/common/Button';
 
 import { ThemeQueries } from '@/entities/notification';
@@ -17,7 +17,7 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
   // → useQuery + initialData:[] 로 클라이언트에서만 fetch
   const { data: subscribedIds = [] } = useQuery(ThemeQueries.mySubscribedIds());
   const { subscribe, unsubscribe, isPendingFor } = useThemeSubscription();
-  const { checkAndRedirect } = useRedirectIfNotLoggedIn();
+  const { ensureAlertSession } = useAlertSession();
 
   const subscribed = new Set(subscribedIds);
 
@@ -54,9 +54,9 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
                 color={isSubscribed ? 'secondary' : 'primary'}
                 disabled={isPendingFor(themeId)}
                 className="w-auto shrink-0 self-start px-3 py-1 text-sm disabled:opacity-50"
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.preventDefault(); // 카드 링크 이동 막고 구독만
-                  if (checkAndRedirect()) return; // 비로그인은 로그인으로 유도
+                  if (!(await ensureAlertSession())) return; // 비로그인은 게스트로 바로 구독
                   if (isSubscribed) unsubscribe(themeId);
                   else subscribe(themeId);
                 }}

@@ -1,10 +1,11 @@
 'use client';
 
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 
 import { ANDROID_STORE_LINK, IOS_STORE_LINK } from '@/shared/config/appStore';
 import { useDevice } from '@/shared/hooks/useDevice';
+import { isGuestAtom } from '@/shared/hooks/useIsLoggedIn';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import {
   pushChannelSheetAtom,
@@ -38,6 +39,10 @@ export default function PushChannelSheet() {
   const { device } = useDevice();
   const { requestPermission } = useFcmPermission();
   const [status, setStatus] = useState<PushStatus>('default');
+  // 게스트(로그인 없이 등록)의 키워드는 이 기기에만 있다 — 앱으로 가면 로그인 전엔 안 보인다.
+  // 그래서 게스트에겐 지금 바로 받는 이 브라우저 알림을 앞에 둔다.
+  const isGuest = useAtomValue(isGuestAtom);
+  const browserFirst = isGuest && status === 'default';
 
   const platform = resolveAppDownloadPlatform(device);
 
@@ -78,6 +83,15 @@ export default function PushChannelSheet() {
         </AlertDialog.Header>
 
         <div className="mt-5 flex flex-col gap-y-2">
+          {browserFirst && (
+            <button
+              type="button"
+              onClick={handleBrowser}
+              className="bg-primary-500 text-fixed-900 mb-3 h-12 w-full rounded-lg font-semibold"
+            >
+              {platform === 'non-mobile' ? '이 PC로 바로 받기' : '이 브라우저로 바로 받기'}
+            </button>
+          )}
           {platform === 'non-mobile' ? (
             <AppDownloadQr compact />
           ) : (
@@ -91,12 +105,22 @@ export default function PushChannelSheet() {
             </AlertDialog.Action>
           )}
           <p className="text-center text-xs text-gray-500">
-            앱에서 카카오·네이버로 로그인하면
-            <br />
-            등록한 키워드가 그대로 있어요
+            {isGuest ? (
+              <>
+                여기서 로그인한 뒤 앱에서 같은 계정으로 들어가면
+                <br />
+                등록한 키워드가 그대로 있어요
+              </>
+            ) : (
+              <>
+                앱에서 카카오·네이버로 로그인하면
+                <br />
+                등록한 키워드가 그대로 있어요
+              </>
+            )}
           </p>
 
-          {status === 'default' && (
+          {status === 'default' && !browserFirst && (
             <button
               type="button"
               onClick={handleBrowser}

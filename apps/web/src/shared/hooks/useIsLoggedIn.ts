@@ -15,6 +15,12 @@ import { getAccessToken } from '@/app/actions/token';
  */
 export const isLoggedInAtom = atom(false);
 
+/**
+ * 게스트 — 로그인 없이 키워드 알림만 받는 기기 계정(IS_GUEST 쿠키). isLoggedIn 은 false 그대로라
+ * 회원 UI(프로필·댓글·찜·로그아웃)는 비회원으로 그린다. 키워드·관심사 쪽만 이 값을 함께 본다.
+ */
+export const isGuestAtom = atom(false);
+
 /** 서버값이 심겼는지. 심겼으면 Server Action 왕복을 건너뛴다. */
 export const isAuthResolvedAtom = atom(false);
 

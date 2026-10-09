@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { m } from 'motion/react';
 import { useRef, useState } from 'react';
 
+import useAlertSession from '@/shared/hooks/useAlertSession';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
-import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import { useToast } from '@/shared/ui/common/Toast';
@@ -43,7 +43,7 @@ function getErrorMessage(error: unknown): string {
 
 export default function RecommendedKeywordSection() {
   const { toast } = useToast();
-  const { checkAndRedirect } = useRedirectIfNotLoggedIn();
+  const { ensureAlertSession } = useAlertSession();
   const promptPushChannel = usePushChannelPrompt();
 
   // 이미 등록한 키워드 제외는 서버가 한다(recommendedNotificationKeywords 가 로그인
@@ -107,18 +107,18 @@ export default function RecommendedKeywordSection() {
   // 스켈레톤이 오히려 노이즈다 (TossHomeSection 과 같은 판단).
   if (chips.length === 0) return null;
 
-  const handleSelect = (keyword: string) => {
+  const handleSelect = async (keyword: string) => {
     if (isPending || justAdded.includes(keyword)) return;
-    // 게스트면 로그인으로 보낸다. checkAndRedirect 가 true 를 반환하면 이동한 것.
+    // 비로그인이면 게스트 계정으로 바로 진행한다(앱 웹뷰는 로그인으로 — 그땐 false).
     // 두 번째 인자로 의도를 남겨 두면 로그인 복귀 후 위 usePendingAction 이 이어서 실행한다.
     if (
-      checkAndRedirect(
+      !(await ensureAlertSession(
         {
           title: '키워드 알림은 로그인이 필요해요',
           description: `로그인하고 '${keyword}' 알림을 받아보세요`,
         },
         { type: PendingActionType.NOTIFICATION_KEYWORD_ADD, payload: keyword },
-      )
+      ))
     )
       return;
     runAdd(keyword);

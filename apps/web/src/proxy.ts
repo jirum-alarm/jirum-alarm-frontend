@@ -9,6 +9,8 @@ import { PAGE } from '@/shared/config/page';
 import {
   accessTokenExpiresAt,
   AUTH_COOKIE_DOMAIN,
+  GUEST_ACCESS_TOKEN,
+  IS_GUEST,
   refreshTokenExpiresAt,
 } from '@/shared/config/token';
 
@@ -87,10 +89,19 @@ const routeGuard = async (req: NextRequest, res: NextResponse) => {
     pathname: req.nextUrl.pathname,
     hasAccessToken: Boolean(req.cookies.get('ACCESS_TOKEN')?.value),
     hasRefreshToken: Boolean(req.cookies.get('REFRESH_TOKEN')?.value),
+    isGuest: Boolean(req.cookies.get(IS_GUEST)?.value),
+    hasGuestAccessToken: Boolean(req.cookies.get(GUEST_ACCESS_TOKEN)?.value),
   });
 
   if (action === 'redirect') {
     return redirectToLogin(req);
+  }
+
+  if (action === 'guest-refresh') {
+    const ok = await refreshGuestToken(req, res);
+    if (!ok && isProtectedPath(req.nextUrl.pathname)) {
+      return redirectToLogin(req);
+    }
   }
 
   if (action === 'refresh') {
@@ -162,6 +173,39 @@ const refreshToken = async (
   applySetCookie(req, res);
   return { status: 'valid' };
 };
+
+/**
+ * 게스트 액세스 토큰 재발급. 리프레시 토큰 대신 게스트를 만든 기기 id(IS_GUEST 값)로 guestLogin 을
+ * 다시 부른다 — 백엔드가 같은 기기에 늘 같은 게스트를 돌려준다. 실패하면 쿠키를 건드리지 않는다.
+ */
+const refreshGuestToken = async (req: NextRequest, res: NextResponse): Promise<boolean> => {
+  const deviceId = req.cookies.get(IS_GUEST)?.value;
+  if (!deviceId) return false;
+
+  const result = await fetch(GRAPHQL_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Device-Id': deviceId },
+    body: JSON.stringify({ query: MutationGuestLogin }),
+  })
+    .then((r) => r.json())
+    .catch(() => null);
+  const accessToken = result?.data?.guestLogin?.accessToken;
+  if (!accessToken) return false;
+
+  res.cookies.set({
+    name: GUEST_ACCESS_TOKEN,
+    expires: new Date(Date.now() + accessTokenExpiresAt),
+    httpOnly: true,
+    sameSite: 'lax' as const,
+    secure: IS_PRD,
+    domain: AUTH_COOKIE_DOMAIN,
+    value: accessToken,
+  });
+  applySetCookie(req, res);
+  return true;
+};
+
+const MutationGuestLogin = `mutation MutationGuestLogin { guestLogin { accessToken } }`;
 
 /**
  * Copy cookies from the Set-Cookie header of the response to the Cookie header of the request,

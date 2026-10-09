@@ -6,7 +6,13 @@ const protectedPaths = ['/mypage', '/like'];
 export const isProtectedPath = (pathname: string): boolean =>
   protectedPaths.some((path) => pathname.startsWith(path));
 
-export type AuthAction = 'pass' | 'refresh' | 'redirect';
+// 게스트(로그인 없이 키워드 알림만 받는 기기 계정)가 들어갈 수 있는 보호 경로 — 자기 키워드 관리.
+const guestPaths = ['/mypage/keyword'];
+
+export const isGuestPath = (pathname: string): boolean =>
+  guestPaths.some((path) => pathname.startsWith(path));
+
+export type AuthAction = 'pass' | 'refresh' | 'guest-refresh' | 'redirect';
 
 /**
  * 쿠키 상태만 보고 무엇을 할지 결정한다.
@@ -22,10 +28,15 @@ export const decideAuthAction = ({
   pathname,
   hasAccessToken,
   hasRefreshToken,
+  isGuest = false,
+  hasGuestAccessToken = false,
 }: {
   pathname: string;
   hasAccessToken: boolean;
   hasRefreshToken: boolean;
+  /** IS_GUEST 쿠키 — 이 브라우저는 게스트 계정을 갖고 있다. */
+  isGuest?: boolean;
+  hasGuestAccessToken?: boolean;
 }): AuthAction => {
   if (hasAccessToken) {
     return 'pass';
@@ -33,5 +44,12 @@ export const decideAuthAction = ({
   if (hasRefreshToken) {
     return 'refresh';
   }
-  return isProtectedPath(pathname) ? 'redirect' : 'pass';
+  if (isProtectedPath(pathname) && !(isGuest && isGuestPath(pathname))) {
+    return 'redirect';
+  }
+  // 게스트 토큰은 1시간짜리라 만료되면 guestLogin 으로 다시 받는다(같은 기기 = 같은 게스트).
+  if (isGuest && !hasGuestAccessToken) {
+    return 'guest-refresh';
+  }
+  return 'pass';
 };

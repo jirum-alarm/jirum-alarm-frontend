@@ -16,7 +16,7 @@ import { pretendard } from '@/shared/lib/fonts';
 import { PATHNAME_HEADER } from '../proxy';
 
 import { checkDevice } from './actions/agent';
-import { getAccessToken } from './actions/token';
+import { getAccessToken, getIsGuest } from './actions/token';
 
 import type { Metadata, Viewport } from 'next';
 
@@ -41,9 +41,10 @@ export async function generateViewport(): Promise<Viewport> {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [device, accessToken, headersList, isDark] = await Promise.all([
+  const [device, accessToken, isGuest, headersList, isDark] = await Promise.all([
     checkDevice(),
     getAccessToken(),
+    getIsGuest(),
     headers(),
     isDarkScheme(),
   ]);
@@ -102,7 +103,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <meta name="author" content="지름알림" />
       </head>
       <body>
-        <AppProvider device={device} isLoggedIn={!!accessToken}>
+        <AppProvider device={device} isLoggedIn={!!accessToken} isGuest={!accessToken && isGuest}>
           {children}
         </AppProvider>
       </body>
