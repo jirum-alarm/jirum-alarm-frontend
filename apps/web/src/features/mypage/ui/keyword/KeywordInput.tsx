@@ -17,6 +17,7 @@ const KeywordInput = ({ autoFocus = true }: { autoFocus?: boolean }) => {
 
   return (
     // PC: 입력칸 옆에 버튼 — 예전엔 폭 700px 짜리 회색 비활성 막대가 입력칸 밑에 깔려 있었다.
+    // 폰: 하단 고정. 이 화면엔 바텀내비가 없어 --bottom-nav-padding 이 0 이라, 홈 인디케이터는 --bottom-chrome-padding 이 맡는다.
     <form onSubmit={handleSubmit} className="pc:flex pc:items-start pc:gap-2">
       <div className="pc:flex-1">
         <Input
@@ -37,7 +38,7 @@ const KeywordInput = ({ autoFocus = true }: { autoFocus?: boolean }) => {
           }
         />
       </div>
-      <div className="pc:static pc:m-0 pc:max-w-none pc:w-28 pc:shrink-0 pc:p-0 fixed right-0 bottom-[var(--bottom-nav-padding)] left-0 m-auto max-w-[600px] bg-white px-5 py-6">
+      <div className="pc:static pc:m-0 pc:max-w-none pc:w-28 pc:shrink-0 pc:p-0 fixed right-0 bottom-[var(--bottom-nav-padding)] left-0 m-auto max-w-[600px] bg-white px-5 pt-6 pb-[max(1.5rem,var(--bottom-chrome-padding))]">
         <Button type="submit" className="pc:h-11 w-full" disabled={!canSubmit}>
           등록
         </Button>

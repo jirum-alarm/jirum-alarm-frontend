@@ -45,7 +45,7 @@ const EmailInput = ({
       <Input
         type="email"
         id="email"
-        autoComplete="off"
+        autoComplete="username"
         placeholder="이메일을 입력해주세요."
         required
         value={email.value}
@@ -91,7 +91,7 @@ const PasswordInput = ({
       <Input
         type={masking ? 'password' : 'text'}
         id="password"
-        autoComplete="new-password"
+        autoComplete="current-password"
         placeholder="비밀번호를 입력해주세요."
         required
         value={password.value}

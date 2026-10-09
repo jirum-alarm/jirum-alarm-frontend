@@ -145,6 +145,8 @@ const SearchInput = () => {
           spellCheck={false}
           placeholder="핫딜 상품을 검색해주세요"
           inputMode="search"
+          // <form> 이 없어 iOS 키보드가 「return」을 띄웠다 — Enter 는 handleKeyDown 이 검색으로 처리한다.
+          enterKeyHint="search"
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"

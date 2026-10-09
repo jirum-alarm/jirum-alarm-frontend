@@ -2,8 +2,7 @@
 
 import { useAtom, useAtomValue } from 'jotai';
 
-import { PAGE } from '@/shared/config/page';
-import useMyRouter from '@/shared/hooks/useMyRouter';
+import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import Button from '@/shared/ui/common/Button';
 import { Close } from '@/shared/ui/common/icons';
 
@@ -18,7 +17,7 @@ interface BottomInputProps {
 }
 
 export default function CommentInput({ productId, isUserLogin }: BottomInputProps) {
-  const router = useMyRouter();
+  const { checkAndRedirect } = useRedirectIfNotLoggedIn();
   const editingComment = useAtomValue(editingCommentAtom);
 
   const { handleInputChange, comment, handleSubmit, canSubmit, ref } = useCommentInput({
@@ -29,7 +28,8 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
   const handlePointerDown = (e: React.PointerEvent<HTMLFormElement>) => {
     if (!isUserLogin) {
       e.preventDefault();
-      router.push(PAGE.LOGIN);
+      // 로그인 페이지로 보내면 네이버 검색으로 한 번 들어온 사람이 보던 상세를 잃는다 — 그 자리에서 로그인 모달.
+      checkAndRedirect({ title: '로그인이 필요해요', description: '로그인하고 댓글을 남겨보세요' });
     }
   };
 
@@ -42,7 +42,7 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
   return (
     <form
       onSubmit={handleSubmit}
-      className="pc:min-h-[80px] flex min-h-[64px] w-full items-end gap-x-3 border-t border-gray-300 bg-white px-5 py-3"
+      className="pc:min-h-[80px] flex min-h-[64px] w-full items-end gap-x-3 border-t border-gray-300 bg-white px-5 pt-3 pb-[var(--bottom-chrome-padding)]"
       onPointerDown={handlePointerDown}
     >
       <div className="flex grow flex-col items-center overflow-hidden rounded-lg border border-transparent bg-gray-50 focus-within:border-gray-500">

@@ -13,6 +13,8 @@ interface PasswordInputProps {
   labelText: string;
   placeholder: string;
   id?: string;
+  /** 현재 비밀번호 칸은 'current-password' — 'new-password' 면 iOS 가 저장된 값을 채우는 대신 새 비밀번호를 만들어 준다. */
+  autoComplete?: 'current-password' | 'new-password';
 }
 
 const PasswordInput = ({
@@ -23,6 +25,7 @@ const PasswordInput = ({
   labelText,
   placeholder,
   id = 'password',
+  autoComplete = 'new-password',
 }: PasswordInputProps) => {
   const [masking, setMasking] = useState(true);
 
@@ -37,7 +40,7 @@ const PasswordInput = ({
         type={masking ? 'password' : 'text'}
         id={id}
         autoFocus={autoFocus}
-        autoComplete="new-password"
+        autoComplete={autoComplete}
         placeholder={placeholder}
         required
         value={value}

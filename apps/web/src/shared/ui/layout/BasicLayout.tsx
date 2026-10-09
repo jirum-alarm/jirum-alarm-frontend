@@ -57,7 +57,9 @@ const BasicLayout = ({
           // PC 분기에서 BasicLayout 을 쓰는 곳은 (mobile) 그룹뿐이다.
           'pc:max-w-2xl pc:content-start pc:pt-14 pc:before:hidden pc:after:hidden',
           PC_PAGE_HEADER,
-          fullScreen && 'min-h-screen',
+          // svh(툴바가 다 보일 때 높이): 100vh 는 iOS 사파리에서 하단 툴바 뒤까지 잡혀, 폼 맨 아래 저장·로그인
+          // 버튼이 첫 화면에서 툴바에 가렸다. dvh 는 스크롤로 툴바가 접힐 때마다 높이가 바뀌어 버튼이 출렁인다.
+          fullScreen && 'min-h-svh',
         )}
       >
         {/* 제목도 뒤로가기도 없으면 헤더를 안 그린다 — 빈 흰 바가 fixed 라 내용 위 56px 을 덮었다(가입 완료·로그인 콜백). */}
