@@ -40,6 +40,9 @@ const daysBetween = (from: string, to: string) => {
   return days;
 };
 
+// 어제·오늘은 아직 덜 찬 값 — 쿠팡·네이버는 하루 뒤 오후, 애드센스는 이틀 뒤에 들어온다
+const PARTIAL_COLOR = '#C7CEF7';
+
 const PERIODS = [
   { key: 'month', label: '이번 달' },
   { key: 'last30', label: '최근 30일' },
@@ -89,9 +92,14 @@ const RevenueSummary = () => {
       top: Math.max(0, ...sources.map((s) => s.revenue)),
       sources,
       days,
-      daily: days.map((d) => Math.round(byDay.get(d) ?? 0)),
+      daily: days.map((d) => ({
+        x: md(d),
+        y: Math.round(byDay.get(d) ?? 0),
+        fillColor: d >= yesterday ? PARTIAL_COLOR : '#3C50E0',
+      })),
+      partialFrom: days.findIndex((d) => d >= yesterday),
     };
-  }, [rows, periodStart, today]);
+  }, [rows, periodStart, today, yesterday]);
 
   if (!canProfit) return null;
 
@@ -103,9 +111,9 @@ const RevenueSummary = () => {
     ?.filter((r) => r.date.slice(0, 10) === today && r.revenue !== 0)
     .sort((a, b) => b.revenue - a.revenue);
   const stats = [
-    { label: '오늘', value: sum(today) },
-    { label: '어제', value: sum(yesterday, yesterday) },
-    { label: '최근 7일', value: sum(weekStart) },
+    { label: '오늘', value: sum(today), partial: true },
+    { label: '어제', value: sum(yesterday, yesterday), partial: true },
+    { label: '최근 7일', value: sum(weekStart), partial: false },
   ];
 
   return (
@@ -121,7 +129,10 @@ const RevenueSummary = () => {
         <div className="grid grid-cols-3 divide-x divide-stroke text-center">
           {stats.map((s) => (
             <div key={s.label} className="px-1">
-              <p className="text-xs text-body">{s.label}</p>
+              <p className="text-xs text-body">
+                {s.label}
+                {s.partial && <span className="ml-1 text-[10px] text-bodydark2">집계 중</span>}
+              </p>
               <p className="mt-1 text-base font-bold text-black sm:text-xl">
                 {s.value === undefined ? '…' : shortWon(s.value)}
               </p>
@@ -201,10 +212,9 @@ const RevenueSummary = () => {
                   height={180}
                   options={{
                     chart: { toolbar: { show: false }, zoom: { enabled: false } },
-                    colors: ['#3C50E0'],
                     plotOptions: { bar: { columnWidth: '60%', borderRadius: 2 } },
                     xaxis: {
-                      categories: view.days.map(md),
+                      type: 'category',
                       tickAmount: 6,
                       tickPlacement: 'on',
                       labels: { rotate: 0, style: { fontSize: '10px' } },
@@ -218,7 +228,14 @@ const RevenueSummary = () => {
                       },
                     },
                     grid: { strokeDashArray: 4, padding: { left: 0, right: 4 } },
-                    tooltip: { y: { formatter: (v: number) => won(v) } },
+                    tooltip: {
+                      y: {
+                        formatter: (v: number, { dataPointIndex }: { dataPointIndex: number }) =>
+                          view.partialFrom >= 0 && dataPointIndex >= view.partialFrom
+                            ? `${won(v)} (집계 중)`
+                            : won(v),
+                      },
+                    },
                     dataLabels: { enabled: false },
                     legend: { show: false },
                   }}
@@ -230,8 +247,12 @@ const RevenueSummary = () => {
         )}
 
         <p className="mt-3 text-[11px] leading-relaxed text-bodydark2">
-          결제일 기준·취소 제외. 최근 1~2일은 덜 찬 값(쿠팡·네이버·애드센스가 하루 이틀 늦게
-          들어온다)
+          <span
+            className="mr-1 inline-block h-2 w-2 rounded-sm align-middle"
+            style={{ background: PARTIAL_COLOR }}
+          />
+          연한 막대(어제·오늘)는 집계 중 — 쿠팡·네이버는 하루 뒤 오후, 애드센스는 이틀 뒤에 들어와
+          더 오른다. 결제일 기준·취소 제외.
         </p>
       </Panel>
     </section>
