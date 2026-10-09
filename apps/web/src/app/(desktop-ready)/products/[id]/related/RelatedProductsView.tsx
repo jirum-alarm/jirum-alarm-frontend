@@ -1,7 +1,7 @@
 'use client';
 
 import { emptyText } from '@jirum/design-system/recipes';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQueries } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
@@ -12,28 +12,27 @@ import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
 
 interface RelatedProductsViewProps {
   productId: number;
-  keyword: string;
   isMobile: boolean;
 }
 
-export default function RelatedProductsView({
-  productId,
-  keyword,
-  isMobile,
-}: RelatedProductsViewProps) {
+// 종료 딜 블록의 '더보기' — 블록과 같은 출처(동일상품 그룹 → 이 글보다 새 같은 상품·같은 라인 진행 딜).
+// 예전 제목 키워드 검색(50개, 오래된 글 포함)은 무관 상품이 섞였다.
+export default function RelatedProductsView({ productId, isMobile }: RelatedProductsViewProps) {
   const INITIAL_ITEMS = isMobile ? 6 : 10;
   const ITEMS_PER_PAGE = isMobile ? 6 : 10;
 
-  const { data } = useSuspenseQuery(
-    ProductQueries.products({
-      keyword,
-      limit: 50,
-    }),
-  );
+  const [{ data: sameData }, { data: latestData }] = useSuspenseQueries({
+    queries: [
+      ProductQueries.sameProductDeals({ id: productId }),
+      ProductQueries.latestSimilarDeals({ id: productId, limit: 20 }),
+    ],
+  });
 
   const allProducts = Array.from(
     new Map(
-      (data?.products ?? []).filter((p) => Number(p.id) !== productId).map((p) => [p.id, p]),
+      [...(sameData.sameProductDeals ?? []), ...(latestData.latestSimilarDeals ?? [])]
+        .filter((p) => Number(p.id) !== productId)
+        .map((p) => [p.id, p]),
     ).values(),
   );
 

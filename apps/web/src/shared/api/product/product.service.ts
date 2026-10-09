@@ -199,6 +199,15 @@ export class ProductService {
       .catch(() => empty);
   }
 
+  // 종료됐을 수 있는 딜의 '최신 핫딜' — 이 글보다 새 진행 중 딜 중 같은 상품 먼저, 같은 라인 뒤(서버가 무관 상품을 거른다).
+  // 부가 블록이라 실패는 빈 목록.
+  static async getLatestSimilarDeals(variables: { id: number; limit?: number }) {
+    const empty = { latestSimilarDeals: [] as ProductListResult['products'] };
+    return execute(QueryLatestSimilarDeals, variables)
+      .then((res) => res.data ?? empty)
+      .catch(() => empty);
+  }
+
   // Meili 유사검색(상품명 기반 + 브랜드 충돌 필터). Track B 클러스터가 없을 때 폴백.
   static async getSimilarProducts(variables: { id: number }) {
     return execute(QuerySimilarProducts, variables).then((res) => res.data);
@@ -588,6 +597,35 @@ const QuerySameProductDeals = new TypedDocumentString<
 >(`
   query QuerySameProductDeals($id: Int!) {
     sameProductDeals(id: $id) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      mallName
+      hotDealType
+      provider {
+        nameKr
+      }
+      searchAfter
+      estimatedTotal
+      postedAt
+    }
+  }
+`);
+
+const QueryLatestSimilarDeals = new TypedDocumentString<
+  { latestSimilarDeals: ProductListResult['products'] },
+  { id: number; limit?: number }
+>(`
+  query QueryLatestSimilarDeals($id: Int!, $limit: Int) {
+    latestSimilarDeals(id: $id, limit: $limit) {
       id
       title
       mallId

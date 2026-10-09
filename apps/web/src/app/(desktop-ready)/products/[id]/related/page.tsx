@@ -18,8 +18,7 @@ export default async function RelatedProductsPage({ params }: { params: Promise<
 
   const { isMobile } = await checkDevice();
 
-  // Prefetch product to get title/keyword for client component
-  // We can just pass the necessary data to the client component
+  // 없는 상품이면 404 — 목록은 클라이언트가 상품 id 로 받는다.
   const product = await getProductInfoCached(productId);
 
   // soft 404(200 + 안내문)는 서치어드바이저에서 "동일 title 다수"를 만든다. 상세 페이지와
@@ -28,15 +27,9 @@ export default async function RelatedProductsPage({ params }: { params: Promise<
     notFound();
   }
 
-  const keyword =
-    product.title
-      .replace(/^\[.*?\]\s*/, '')
-      .split('(')[0]
-      .trim() || product.title;
-
   return (
     <Suspense fallback={<div className="flex h-40 items-center justify-center">로딩중...</div>}>
-      <RelatedProductsView productId={productId} keyword={keyword} isMobile={isMobile} />
+      <RelatedProductsView productId={productId} isMobile={isMobile} />
     </Suspense>
   );
 }

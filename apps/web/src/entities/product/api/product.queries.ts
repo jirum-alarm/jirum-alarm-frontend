@@ -172,6 +172,12 @@ export const ProductQueries = {
       queryFn: () => ProductService.getSameProductDeals(variables),
     }),
 
+  latestSimilarDeals: (variables: { id: number; limit?: number }) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'latest-similar', variables.limit],
+      queryFn: () => ProductService.getLatestSimilarDeals(variables),
+    }),
+
   similarProducts: (variables: { id: number }) =>
     queryOptions({
       queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'similar'],

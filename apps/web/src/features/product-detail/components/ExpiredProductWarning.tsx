@@ -4,7 +4,7 @@ import { useSuspenseQueries } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { Suspense } from 'react';
 
-import { OrderOptionType, ProductInfoFragment, ProductOrderType } from '@/shared/api/gql/graphql';
+import { ProductInfoFragment } from '@/shared/api/gql/graphql';
 import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
 
@@ -38,36 +38,26 @@ function ExpiredProductRecommendations({
   product: ProductInfoFragment;
   isMobile: boolean;
 }) {
-  const keyword =
-    product.title
-      .replace(/^\[.*?\]\s*/, '')
-      .split('(')[0]
-      .trim() || product.title;
-
   // Mobile: Fetch 10, Show 9. If 10 received -> Show More.
   // PC: Fetch 9, Show 8. If 9 received -> Show More.
   const fetchLimit = isMobile ? 10 : 9;
   const displayLimit = isMobile ? 9 : 8;
 
   const currentProductId = Number(product.id);
-  const [{ data: sameData }, { data }] = useSuspenseQueries({
+  const [{ data: sameData }, { data: latestData }] = useSuspenseQueries({
     queries: [
       ProductQueries.sameProductDeals({ id: currentProductId }),
-      ProductQueries.products({
-        keyword,
-        limit: fetchLimit,
-        orderBy: ProductOrderType.Id,
-        orderOption: OrderOptionType.Desc,
-      }),
+      ProductQueries.latestSimilarDeals({ id: currentProductId, limit: fetchLimit }),
     ],
   });
 
-  // 동일상품 그룹(어느 멤버 상세든 같은 목록) 먼저, 모자라면 제목 키워드의 더 최신 글로 채운다.
+  // 동일상품 그룹(어느 멤버 상세든 같은 목록) 먼저, 모자라면 이 글보다 새 진행 중 딜 중 같은 상품·같은 라인으로 채운다.
+  // 예전 제목 키워드 최신순 검색은 채운 몫의 43%가 무관 상품이었다(2026-10-09, 서버 latestSimilarDeals 주석).
   const similarProducts = Array.from(
     new Map(
       [
         ...(sameData.sameProductDeals ?? []).filter((p) => Number(p.id) !== currentProductId),
-        ...(data.products ?? []).filter((p) => Number(p.id) > currentProductId),
+        ...(latestData.latestSimilarDeals ?? []),
       ].map((p) => [p.id, p]),
     ).values(),
   );
