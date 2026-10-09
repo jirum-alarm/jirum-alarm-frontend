@@ -75,10 +75,12 @@ jobs:
           last=""
           [ -n "$group" ] && last=$(npx eas update:view "$group" --json | jq -r '.[0].gitCommitHash // empty')
           app=true
+          # 테스트·린트 설정·문서는 어느 경로든 번들에 안 들어간다(design-system 의 eslint.js·*.test.mjs 등 — hind 세션 지적 10/10).
           if [ -n "$last" ] && git cat-file -e "$last^{commit}" 2>/dev/null && git diff --quiet "$last" HEAD -- \
-              ../mobile ../../packages ../../package.json ../../pnpm-lock.yaml \
-              ':(exclude)../mobile/__tests__' ':(exclude)../mobile/scripts' ':(exclude)../mobile/ios' ':(exclude)../mobile/android' \
-              ':(exclude)*.md'; then
+              ':(top)apps/mobile' ':(top)packages' ':(top)package.json' ':(top)pnpm-lock.yaml' \
+              ':(top,exclude)apps/mobile/scripts' ':(top,exclude)apps/mobile/ios' ':(top,exclude)apps/mobile/android' \
+              ':(top,glob,exclude)**/__tests__/**' ':(top,glob,exclude)**/*.test.*' ':(top,glob,exclude)**/*.md' \
+              ':(top,glob,exclude)**/eslint.js' ':(top,glob,exclude)**/.eslintrc*'; then
             app=false
           fi
           echo "app=$app" >> "$GITHUB_OUTPUT"
