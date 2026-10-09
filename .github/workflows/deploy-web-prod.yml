@@ -21,9 +21,7 @@ permissions:
 jobs:
   build-and-push:
     name: Build and Push Docker Image
-    # 러너 전환은 커밋 없이: 레포 변수 WEB_RUNNER_LABEL(homelab = 셀프호스티드). 비우면 호스티드로 폴백.
-    # 셀프호스티드는 로컬 도커에 레이어·.next/cache 가 남아 이미지 빌드 228초 → 97초(실측, 소스 변경 재빌드).
-    runs-on: ${{ vars.WEB_RUNNER_LABEL || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     environment:
       name: production
@@ -40,21 +38,12 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Docker Buildx
-        if: runner.environment != 'self-hosted'
         uses: docker/setup-buildx-action@v3
         with:
           version: latest
           buildkitd-config-inline: |
             [worker.oci]
               max-parallelism = 4
-
-      # 셀프호스티드는 호스트 도커 데몬의 빌더(docker 드라이버)를 그대로 쓴다 — 캐시 마운트·레이어가 런 사이에 유지된다.
-      # (기본 docker-container 드라이버는 매 런 새 빌더라 캐시가 사라짐. 데몬이 containerd 이미지 저장소라 provenance·sbom 도 그대로)
-      - name: Set up Docker Buildx (self-hosted)
-        if: runner.environment == 'self-hosted'
-        uses: docker/setup-buildx-action@v3
-        with:
-          driver: docker
 
       - name: Log in to Docker Registry
         uses: docker/login-action@v3
@@ -98,8 +87,8 @@ jobs:
             NODE_ENV=${{ vars.NODE_ENV }}
           provenance: true
           sbom: true
-          cache-from: ${{ runner.environment != 'self-hosted' && 'type=gha' || '' }}
-          cache-to: ${{ runner.environment != 'self-hosted' && 'type=gha,mode=max' || '' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   # 스캔은 결과를 Security 탭에 올리기만 하고 배포를 막지 않는다(exit-code 0) — 그래서 배포와 병렬로 돈다.
   # (빌드 잡 안에 있을 땐 배포가 스캔 ~50초를 기다렸다)
