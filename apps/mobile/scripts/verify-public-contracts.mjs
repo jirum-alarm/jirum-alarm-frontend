@@ -130,7 +130,7 @@ function main() {
   const webEnvPath = 'apps/web/src/shared/config/env.ts';
   const webDockerfilePath = 'apps/web/deploy/production/Dockerfile';
   const webAgentPath = 'apps/web/src/app/actions/agent.ts';
-  const webDevicePath = 'apps/web/src/shared/model/device.ts';
+  const webDevicePath = 'apps/web/src/shared/hooks/useDevice.ts';
   // 스토어 링크 정본은 config/appStore.ts 다. useAppDownloadLink 는 이걸 import 해 쓰므로
   // 링크 문자열이 없다(2026-08-06 QR 작업에서 상수 추출). 정본 파일을 직접 본다.
   const webDownloadPath = 'apps/web/src/shared/config/appStore.ts';
