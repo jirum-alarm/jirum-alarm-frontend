@@ -12,7 +12,8 @@ import {
   QueryCategorizedReactionKeywords,
   QueryProductAdditionalInfo,
   QueryCategoryProducts,
-  QueryKeywordProducts,
+  QueryLatestSimilarDeals,
+  QuerySameProductDeals,
   QueryMyNotificationKeywords,
   QueryProductPriceHistory,
   QueryProductPriceVerdict,
@@ -37,7 +38,8 @@ import type {
   CategorizedReactionKeywordsQueryVariables,
   ProductAdditionalInfoQueryVariables,
   CategoryProductsQueryVariables,
-  KeywordProductsQueryVariables,
+  LatestSimilarDealsQueryVariables,
+  SameProductDealsQueryVariables,
   ProductPriceHistoryQueryVariables,
   ProductPriceVerdictQueryVariables,
   TogetherViewedProductsQueryVariables,
@@ -205,12 +207,22 @@ export class ProductService {
     return res.data?.products ?? [];
   }
 
-  static async getKeywordProducts(variables: KeywordProductsQueryVariables) {
+  static async getSameProductDeals(variables: SameProductDealsQueryVariables) {
     const res = await HttpClient.withAccessToken().execute(
-      QueryKeywordProducts,
+      QuerySameProductDeals,
       variables,
     );
-    return res.data?.products ?? [];
+    return res.data?.sameProductDeals ?? [];
+  }
+
+  static async getLatestSimilarDeals(
+    variables: LatestSimilarDealsQueryVariables,
+  ) {
+    const res = await HttpClient.withAccessToken().execute(
+      QueryLatestSimilarDeals,
+      variables,
+    );
+    return res.data?.latestSimilarDeals ?? [];
   }
 
   static async addNotificationKeyword(

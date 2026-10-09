@@ -8,7 +8,8 @@ import type {
   CategorizedReactionKeywordsQueryVariables,
   ProductAdditionalInfoQueryVariables,
   CategoryProductsQueryVariables,
-  KeywordProductsQueryVariables,
+  LatestSimilarDealsQueryVariables,
+  SameProductDealsQueryVariables,
   MyNotificationKeywordsQueryVariables,
   ProductPriceHistoryQueryVariables,
   ProductPriceVerdictQueryVariables,
@@ -39,8 +40,10 @@ export class ProductQueries {
       [...this.keys.detail(id), 'reactionKeywords'] as const,
     myKeywords: () => ['user', 'notificationKeywords'] as const,
     // ★한도도 키에 — 만료 딜 블록(10개)과 관련 상품 화면(50개)이 같은 키면 10개 캐시가 화면을 채운다.
-    keywordProducts: (keyword: string, limit?: number | null) =>
-      [...this.keys.all, 'keyword', keyword, limit ?? null] as const,
+    sameProductDeals: (id: number) =>
+      [...this.keys.detail(id), 'sameProductDeals'] as const,
+    latestSimilarDeals: (id: number, limit: number) =>
+      [...this.keys.detail(id), 'latestSimilarDeals', limit] as const,
     categoryPopular: (categoryId: number) =>
       [...this.keys.all, 'categoryPopular', categoryId] as const,
     togetherViewed: (id: number) =>
@@ -112,13 +115,20 @@ export class ProductQueries {
     });
   }
 
-  static keywordProducts(variables: KeywordProductsQueryVariables) {
+  /** 만료 경고 ① — 동일상품 그룹의 진행 중 딜. */
+  static sameProductDeals(variables: SameProductDealsQueryVariables) {
     return queryOptions({
-      queryKey: this.keys.keywordProducts(
-        variables.keyword ?? '',
-        variables.limit,
-      ),
-      queryFn: () => ProductService.getKeywordProducts(variables),
+      queryKey: this.keys.sameProductDeals(variables.id),
+      queryFn: () => ProductService.getSameProductDeals(variables),
+      retry: RETRY,
+    });
+  }
+
+  /** 만료 경고 ② — 이 글보다 새 진행 중 딜 중 같은 상품·같은 라인. */
+  static latestSimilarDeals(variables: LatestSimilarDealsQueryVariables) {
+    return queryOptions({
+      queryKey: this.keys.latestSimilarDeals(variables.id, variables.limit),
+      queryFn: () => ProductService.getLatestSimilarDeals(variables),
       retry: RETRY,
     });
   }

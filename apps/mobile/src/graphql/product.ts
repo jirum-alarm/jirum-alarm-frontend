@@ -281,20 +281,32 @@ export const MutationCollectPriceContextClick = graphql(`
   }
 `);
 
-/** 만료 경고용 유사 상품(제목 키워드 검색). */
-export const QueryKeywordProducts = graphql(`
-  query KeywordProducts(
-    $keyword: String
-    $limit: Int!
-    $orderBy: ProductOrderType
-    $orderOption: OrderOptionType
-  ) {
-    products(
-      keyword: $keyword
-      limit: $limit
-      orderBy: $orderBy
-      orderOption: $orderOption
-    ) {
+/** 만료 경고 ① — 동일상품 그룹의 진행 중 딜(web 과 같은 쿼리). */
+export const QuerySameProductDeals = graphql(`
+  query SameProductDeals($id: Int!) {
+    sameProductDeals(id: $id) {
+      id
+      title
+      price
+      thumbnail
+      isEnd
+      hotDealType
+      categoryId
+      mallName
+      postedAt
+      earliestExpiryDate
+      provider {
+        id
+        nameKr
+      }
+    }
+  }
+`);
+
+/** 만료 경고 ② — 이 글보다 새 진행 중 딜 중 같은 상품·같은 라인(서버가 무관 상품을 거른다). */
+export const QueryLatestSimilarDeals = graphql(`
+  query LatestSimilarDeals($id: Int!, $limit: Int!) {
+    latestSimilarDeals(id: $id, limit: $limit) {
       id
       title
       price

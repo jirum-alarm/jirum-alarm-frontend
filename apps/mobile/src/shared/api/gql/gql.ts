@@ -84,7 +84,8 @@ type Documents = {
   '\n  mutation CollectPurchaseClick(\n    $productId: Int!\n    $source: String\n    $entry: String\n  ) {\n    collectPurchaseClick(productId: $productId, source: $source, entry: $entry)\n  }\n': typeof types.CollectPurchaseClickDocument;
   '\n  mutation CollectPriceContextImpression(\n    $productId: Int!\n    $source: String\n    $detail: String!\n  ) {\n    collectPriceContextImpression(\n      productId: $productId\n      source: $source\n      detail: $detail\n    )\n  }\n': typeof types.CollectPriceContextImpressionDocument;
   '\n  mutation CollectPriceContextClick(\n    $productId: Int!\n    $source: String\n    $detail: String!\n  ) {\n    collectPriceContextClick(\n      productId: $productId\n      source: $source\n      detail: $detail\n    )\n  }\n': typeof types.CollectPriceContextClickDocument;
-  '\n  query KeywordProducts(\n    $keyword: String\n    $limit: Int!\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n  ) {\n    products(\n      keyword: $keyword\n      limit: $limit\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n': typeof types.KeywordProductsDocument;
+  '\n  query SameProductDeals($id: Int!) {\n    sameProductDeals(id: $id) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n': typeof types.SameProductDealsDocument;
+  '\n  query LatestSimilarDeals($id: Int!, $limit: Int!) {\n    latestSimilarDeals(id: $id, limit: $limit) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n': typeof types.LatestSimilarDealsDocument;
   '\n  query CategoryProducts(\n    $categoryIds: [Int!]\n    $limit: Int!\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n  ) {\n    products(\n      categoryIds: $categoryIds\n      limit: $limit\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n': typeof types.CategoryProductsDocument;
   '\n  mutation AddWishlist($productId: Int!) {\n    addWishlist(productId: $productId)\n  }\n': typeof types.AddWishlistDocument;
   '\n  mutation RemoveWishlist($productId: Int!) {\n    removeWishlist(productId: $productId)\n  }\n': typeof types.RemoveWishlistDocument;
@@ -239,8 +240,10 @@ const documents: Documents = {
     types.CollectPriceContextImpressionDocument,
   '\n  mutation CollectPriceContextClick(\n    $productId: Int!\n    $source: String\n    $detail: String!\n  ) {\n    collectPriceContextClick(\n      productId: $productId\n      source: $source\n      detail: $detail\n    )\n  }\n':
     types.CollectPriceContextClickDocument,
-  '\n  query KeywordProducts(\n    $keyword: String\n    $limit: Int!\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n  ) {\n    products(\n      keyword: $keyword\n      limit: $limit\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n':
-    types.KeywordProductsDocument,
+  '\n  query SameProductDeals($id: Int!) {\n    sameProductDeals(id: $id) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n':
+    types.SameProductDealsDocument,
+  '\n  query LatestSimilarDeals($id: Int!, $limit: Int!) {\n    latestSimilarDeals(id: $id, limit: $limit) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n':
+    types.LatestSimilarDealsDocument,
   '\n  query CategoryProducts(\n    $categoryIds: [Int!]\n    $limit: Int!\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n  ) {\n    products(\n      categoryIds: $categoryIds\n      limit: $limit\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n':
     types.CategoryProductsDocument,
   '\n  mutation AddWishlist($productId: Int!) {\n    addWishlist(productId: $productId)\n  }\n':
@@ -693,8 +696,14 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query KeywordProducts(\n    $keyword: String\n    $limit: Int!\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n  ) {\n    products(\n      keyword: $keyword\n      limit: $limit\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n',
-): typeof import('./graphql').KeywordProductsDocument;
+  source: '\n  query SameProductDeals($id: Int!) {\n    sameProductDeals(id: $id) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n',
+): typeof import('./graphql').SameProductDealsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query LatestSimilarDeals($id: Int!, $limit: Int!) {\n    latestSimilarDeals(id: $id, limit: $limit) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n',
+): typeof import('./graphql').LatestSimilarDealsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

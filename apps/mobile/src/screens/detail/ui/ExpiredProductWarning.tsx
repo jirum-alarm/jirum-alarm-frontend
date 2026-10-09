@@ -1,9 +1,8 @@
 import React from 'react';
 import {ActivityIndicator, Pressable, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
-import {useQuery} from '@tanstack/react-query';
+import {useQueries} from '@tanstack/react-query';
 
-import {OrderOptionType, ProductOrderType} from '@/shared/api/gql/graphql';
 import {ProductQueries} from '@/entities/product/product.queries';
 import ProductCard from '@/shared/components/product/ProductCard';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
@@ -16,19 +15,11 @@ const EXPIRE_DAYS = 7;
 const FETCH_LIMIT = 10;
 const DISPLAY_LIMIT = 9;
 
-/** web ExpiredProductRecommendations 와 같은 키워드 추출. */
-export function deriveSearchKeyword(title: string): string {
-  return (
-    title
-      .replace(/^\[.*?\]\s*/, '')
-      .split('(')[0]
-      .trim() || title
-  );
-}
-
 /**
  * 오래된 상품에 최신 핫딜을 권하는 블록.
- * web 모바일과 같이 3열 그리드, 최대 9개.
+ * web 모바일과 같이 3열 그리드, 최대 9개. 출처도 web 과 같다 — 동일상품 그룹 먼저, 모자라면 이 글보다 새
+ * 진행 중 딜 중 같은 상품·같은 라인(서버 latestSimilarDeals). 예전 제목 키워드 최신순 검색은 채운 몫의 43%가
+ * 무관 상품이었다(2026-10-09).
  */
 export default function ExpiredProductWarning({
   product,
@@ -48,25 +39,24 @@ export default function ExpiredProductWarning({
     : 0;
   const isExpired = days >= EXPIRE_DAYS;
 
-  const keyword = deriveSearchKeyword(product.title);
-
-  const {data, isPending, isError, refetch} = useQuery({
-    ...ProductQueries.keywordProducts({
-      keyword,
-      limit: FETCH_LIMIT,
-      orderBy: ProductOrderType.Id,
-      orderOption: OrderOptionType.Desc,
-    }),
-    enabled: isExpired && keyword.length > 0,
+  const currentId = Number(product.id);
+  const [same, latest] = useQueries({
+    queries: [
+      {...ProductQueries.sameProductDeals({id: currentId}), enabled: isExpired},
+      {
+        ...ProductQueries.latestSimilarDeals({
+          id: currentId,
+          limit: FETCH_LIMIT,
+        }),
+        enabled: isExpired,
+      },
+    ],
   });
 
   if (!isExpired) return null;
 
-  // 자기 자신보다 나중에 올라온 것만 = 더 최신 딜(web 과 같은 규칙).
-  const currentId = Number(product.id);
-  const seen = new Set<string>();
-  const similar = (data ?? [])
-    .filter(p => Number(p.id) > currentId)
+  const seen = new Set<string>([String(currentId)]);
+  const similar = [...(same.data ?? []), ...(latest.data ?? [])]
     .filter(p => {
       const k = String(p.id);
       if (seen.has(k)) return false;
@@ -76,6 +66,13 @@ export default function ExpiredProductWarning({
     .slice(0, DISPLAY_LIMIT + 1);
   // web 과 같은 판정: 거른 뒤에도 조회 한도만큼 남아야 "더 있다"고 본다.
   const hasMore = similar.length >= FETCH_LIMIT;
+  const isPending = same.isPending || latest.isPending;
+  // 한쪽만 실패하면 받은 쪽만 보인다 — 둘 다 비었을 때만 오류 줄.
+  const isError = (same.isError || latest.isError) && similar.length === 0;
+  const refetch = () => {
+    same.refetch();
+    latest.refetch();
+  };
 
   if (!isPending && !isError && similar.length === 0) return null;
 

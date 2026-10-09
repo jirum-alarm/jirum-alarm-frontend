@@ -322,6 +322,18 @@ export type ExistsUserOutput = {
   social: Scalars['Boolean']['output'];
 };
 
+export type FiringAlertOutput = {
+  __typename?: 'FiringAlertOutput';
+  /** Prometheus 알람 이름 (예: JirumCronJobLastRunFailed) */
+  name: Scalars['String']['output'];
+  /** critical | warning */
+  severity: Scalars['String']['output'];
+  since?: Maybe<Scalars['DateTime']['output']>;
+  summary?: Maybe<Scalars['String']['output']>;
+  /** 대상 — cronjob·deployment·namespace 등 라벨 중 하나 */
+  target?: Maybe<Scalars['String']['output']>;
+};
+
 export type GatedMappingRematchOutput = {
   __typename?: 'GatedMappingRematchOutput';
   productId?: Maybe<Scalars['Int']['output']>;
@@ -555,6 +567,20 @@ export type MallGroup = {
   site?: Maybe<Scalars['String']['output']>;
   sort?: Maybe<Scalars['Float']['output']>;
   title: Scalars['String']['output'];
+};
+
+export type MappingCoverageOutput = {
+  __typename?: 'MappingCoverageOutput';
+  /** 그중 매핑이 하나라도 생긴 딜 */
+  mapped: Scalars['Int']['output'];
+  /** 판정 창(수집 48~72h 전)·게이트 카테고리의 딜 수 */
+  products: Scalars['Int']['output'];
+  /** ok | low(60% 미만 — 파이프라인 정지 의심) | too_few(50건 미만, 판정 생략). 감시 배치와 같은 판정 */
+  verdict: Scalars['String']['output'];
+  /** 그중 사용자에게 보이는(verified) 매핑이 있는 딜 */
+  verified: Scalars['Int']['output'];
+  windowFromHours: Scalars['Int']['output'];
+  windowToHours: Scalars['Int']['output'];
 };
 
 export type MatchRun = {
@@ -2018,6 +2044,8 @@ export type Query = {
   keywordMapGroupByAdmin?: Maybe<KeywordMapGroupOutput>;
   /** 어드민) 키워드 맵 그룹 목록 조회 */
   keywordMapGroupsByAdmin: Array<KeywordMapGroupOutput>;
+  /** 종료됐을 수 있는 딜 상세의 '최신 핫딜' — 이 글보다 새 진행 중 딜(같은 상품 먼저, 같은 라인 뒤, 최대 20) */
+  latestSimilarDeals: Array<ProductOutput>;
   mallGroups: Array<MallGroup>;
   /** 어드민) 매칭 실행 상세 조회 (스텝 포함) */
   matchRunByAdmin?: Maybe<MatchRun>;
@@ -2099,6 +2127,8 @@ export type Query = {
   sameProductDeals: Array<ProductOutput>;
   /** 자동완성용 추천 검색어 목록. prefix로 시작하는 인기 검색어 + 상품 title prefix 매칭. */
   searchSuggestions: Array<Scalars['String']['output']>;
+  /** 어드민) 서비스 점검 신호 — 매칭 커버리지·LLM 워커 생존·푸시 마지막 발송 */
+  serviceHealthSignals: ServiceHealthSignalsOutput;
   /** 유사 상품 목록 조회 */
   similarProducts: Array<ProductOutput>;
   /** 제목으로 유사 상품 목록 조회 */
@@ -2347,6 +2377,11 @@ export type QueryKeywordMapGroupsByAdminArgs = {
   orderBy: KeywordMapGroupOrderType;
   orderOption: OrderOptionType;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type QueryLatestSimilarDealsArgs = {
+  id: Scalars['Int']['input'];
+  limit?: Scalars['Int']['input'];
 };
 
 export type QueryMatchRunByAdminArgs = {
@@ -2663,6 +2698,22 @@ export enum SectionDisplayType {
   PaginatedGrid = 'PAGINATED_GRID',
   Toss = 'TOSS',
 }
+
+export type ServiceHealthSignalsOutput = {
+  __typename?: 'ServiceHealthSignalsOutput';
+  /** 지금 울리는 Prometheus 알람(critical·warning, 상시 신호 제외). null = Prometheus 응답 없음 */
+  alerts?: Maybe<Array<FiringAlertOutput>>;
+  /** 최근 24시간 실패한 LLM 작업 수 */
+  llmFailed24h: Scalars['Int']['output'];
+  /** LLM 작업이 마지막으로 끝난 지 몇 분. 일괄 작업으로 대기열이 수만 건 쌓이는 건 정상이라 생존은 이걸로 본다 */
+  llmMinutesSinceLastDone?: Maybe<Scalars['Int']['output']>;
+  /** 지금 처리 가능한 LLM 대기 작업 수 */
+  llmReadyPending: Scalars['Int']['output'];
+  /** matching-api 커버리지. null = matching-api 응답 없음(그 자체가 장애 신호) */
+  mappingCoverage?: Maybe<MappingCoverageOutput>;
+  /** 마지막 푸시 발송 후 몇 분. 야간(21~08시)엔 발송이 없어 아침까지 ~11시간 공백이 정상 */
+  pushMinutesSinceLast?: Maybe<Scalars['Int']['output']>;
+};
 
 export type SignupOutput = {
   __typename?: 'SignupOutput';
@@ -4062,16 +4113,36 @@ export type CollectPriceContextClickMutation = {
   collectPriceContextClick: boolean;
 };
 
-export type KeywordProductsQueryVariables = Exact<{
-  keyword?: InputMaybe<Scalars['String']['input']>;
-  limit: Scalars['Int']['input'];
-  orderBy?: InputMaybe<ProductOrderType>;
-  orderOption?: InputMaybe<OrderOptionType>;
+export type SameProductDealsQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
 }>;
 
-export type KeywordProductsQuery = {
+export type SameProductDealsQuery = {
   __typename?: 'Query';
-  products: Array<{
+  sameProductDeals: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    price?: string | null;
+    thumbnail?: string | null;
+    isEnd?: boolean | null;
+    hotDealType?: HotDealType | null;
+    categoryId: number;
+    mallName?: string | null;
+    postedAt: any;
+    earliestExpiryDate?: any | null;
+    provider: {__typename?: 'Provider'; id: string; nameKr: string};
+  }>;
+};
+
+export type LatestSimilarDealsQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+}>;
+
+export type LatestSimilarDealsQuery = {
+  __typename?: 'Query';
+  latestSimilarDeals: Array<{
     __typename?: 'ProductOutput';
     id: string;
     title: string;
@@ -5368,14 +5439,9 @@ export const CollectPriceContextClickDocument = new TypedDocumentString(`
   CollectPriceContextClickMutation,
   CollectPriceContextClickMutationVariables
 >;
-export const KeywordProductsDocument = new TypedDocumentString(`
-    query KeywordProducts($keyword: String, $limit: Int!, $orderBy: ProductOrderType, $orderOption: OrderOptionType) {
-  products(
-    keyword: $keyword
-    limit: $limit
-    orderBy: $orderBy
-    orderOption: $orderOption
-  ) {
+export const SameProductDealsDocument = new TypedDocumentString(`
+    query SameProductDeals($id: Int!) {
+  sameProductDeals(id: $id) {
     id
     title
     price
@@ -5393,8 +5459,31 @@ export const KeywordProductsDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<
-  KeywordProductsQuery,
-  KeywordProductsQueryVariables
+  SameProductDealsQuery,
+  SameProductDealsQueryVariables
+>;
+export const LatestSimilarDealsDocument = new TypedDocumentString(`
+    query LatestSimilarDeals($id: Int!, $limit: Int!) {
+  latestSimilarDeals(id: $id, limit: $limit) {
+    id
+    title
+    price
+    thumbnail
+    isEnd
+    hotDealType
+    categoryId
+    mallName
+    postedAt
+    earliestExpiryDate
+    provider {
+      id
+      nameKr
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  LatestSimilarDealsQuery,
+  LatestSimilarDealsQueryVariables
 >;
 export const CategoryProductsDocument = new TypedDocumentString(`
     query CategoryProducts($categoryIds: [Int!], $limit: Int!, $orderBy: ProductOrderType, $orderOption: OrderOptionType) {
