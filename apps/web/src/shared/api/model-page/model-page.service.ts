@@ -1,7 +1,10 @@
+import * as Sentry from '@sentry/nextjs';
+
+import { partialGraphqlData } from '@/shared/lib/graphql-partial';
 import { execute } from '@/shared/lib/http-client';
 
 import { graphql } from '../gql';
-import { ModelPageQueryVariables } from '../gql/graphql';
+import { ModelPageQueryVariables, PublishedModelPagesQuery } from '../gql/graphql';
 
 /**
  * 에버그린 모델 페이지(/deals/{slug}) 데이터. 백엔드가 배치 precompute 한 model_page 를
@@ -16,11 +19,21 @@ export class ModelPageService {
     return execute(ModelPageDocument, variables, PUBLIC_ISR).then((res) => res.data.modelPage);
   }
 
-  /** /deals 인덱스 — 퍼블리시된 모델 페이지 목록(딜 많은 순). 카드 필드 + '지금 살까' 판정(active*·priceTone·buyLine). */
+  /**
+   * /deals 인덱스 — 퍼블리시된 모델 페이지 목록(딜 많은 순). 카드 필드 + '지금 살까' 판정(active*·priceTone·buyLine).
+   * 한 행의 필드 오류로 목록 전체가 죽지 않게, 부분 응답이 있으면 그것으로 그리고(그 필드만 비어 있다) 오류는 Sentry 로 남긴다 —
+   * 조용히 삼키면 다음 데이터 문제를 못 본다(2026-10-09 직구 $219.76 → /deals 500).
+   */
   static async getPublishedModelPages() {
-    return execute(PublishedModelPagesDocument, undefined, PUBLIC_ISR).then(
-      (res) => res.data.publishedModelPages,
-    );
+    try {
+      const res = await execute(PublishedModelPagesDocument, undefined, PUBLIC_ISR);
+      return res.data.publishedModelPages;
+    } catch (error) {
+      const pages = partialGraphqlData<PublishedModelPagesQuery>(error)?.publishedModelPages;
+      if (!pages) throw error;
+      Sentry.captureException(error, { tags: { query: 'publishedModelPages', partial: 'true' } });
+      return pages;
+    }
   }
 }
 
