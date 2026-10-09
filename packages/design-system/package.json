@@ -16,6 +16,6 @@
     "test": "node --test"
   },
   "devDependencies": {
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.7.0"
   }
 }

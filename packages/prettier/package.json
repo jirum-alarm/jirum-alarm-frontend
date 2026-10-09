@@ -6,6 +6,6 @@
   "types": "prettier.d.ts",
   "private": true,
   "devDependencies": {
-    "prettier": "^3.5.3"
+    "prettier": "^3.9.9"
   }
 }
