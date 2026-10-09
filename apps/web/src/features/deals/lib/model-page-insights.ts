@@ -180,8 +180,8 @@ export function buildTimingInsight(input: {
   const saveVsAvg = avg != null ? avg - current : null;
   const savePct = avg != null && avg > 0 ? Math.round(((avg - current) / avg) * 100) : null;
 
-  let tone: TimingTone = 'fair';
-  let label = '평소 수준';
+  let tone: TimingTone;
+  let label: string;
   if (!best) {
     // 지난 가격으로 "사기 좋은 구간"이라 하면 /deals 목록("핫딜을 기다리는 상품")과 모순된다.
     tone = 'unknown';

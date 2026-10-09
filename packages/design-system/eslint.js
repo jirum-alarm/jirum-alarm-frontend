@@ -1,7 +1,7 @@
 /**
  * 토큰을 우회하는 className 을 막는다 — 새 화면이 다시 hex·기본 팔레트·임의 크기로 흩어지지 않게.
  *
- * ESLint 기본 규칙(no-restricted-syntax)만 쓴다 → 플러그인 없이 ESLint 8(앱)·9(web·ai·landing) 둘 다 된다.
+ * ESLint 기본 규칙(no-restricted-syntax)만 쓴다 → 플러그인 없이 ESLint 8(앱)·10(web·ai·landing) 둘 다 된다.
  * 문자열 리터럴(className="…", cn('…'), cva 설정)과 템플릿 문자열을 본다. 주석·JSX 텍스트는 안 본다.
  *
  *   web/ai/landing (flat):  { files: ['src/**\/*.{ts,tsx}'], rules: require('@jirum/design-system/eslint').rules }

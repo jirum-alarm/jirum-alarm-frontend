@@ -65,7 +65,7 @@ export function buildDealStatusSummary(statusItems: ReactionKeywordItem[]) {
   const hasPrice = statusItems.some((i) => isPriceStatus(i.name));
   const totalMentions = statusItems.reduce((sum, i) => sum + i.count, 0);
 
-  let message = '';
+  let message: string;
   if (hasAvailability && hasPrice) {
     message = '댓글에서 품절·종료·가격변동 언급이 있어요';
   } else if (hasAvailability) {

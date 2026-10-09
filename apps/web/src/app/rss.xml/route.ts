@@ -35,8 +35,7 @@ function escapeXml(unsafe: string) {
 export async function GET() {
   const base = METADATA_SERVICE_URL;
 
-  let products: NonNullable<Awaited<ReturnType<typeof ProductService.getProducts>>>['products'] =
-    [];
+  let products: NonNullable<Awaited<ReturnType<typeof ProductService.getProducts>>>['products'];
   try {
     const data = await ProductService.getProducts({
       limit: FEED_SIZE,
