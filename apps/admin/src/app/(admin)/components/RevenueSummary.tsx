@@ -34,7 +34,13 @@ const RevenueSummary = () => {
       ?.filter((r) => r.date.slice(0, 10) >= from && r.date.slice(0, 10) <= to)
       .reduce((acc, r) => acc + r.revenue, 0);
 
+  // 오늘은 출처마다 들어오는 시점이 달라 합계만으론 어디가 비었는지 안 보인다
+  const todayBySource = rows
+    ?.filter((r) => r.date.slice(0, 10) === today && r.revenue !== 0)
+    .sort((a, b) => b.revenue - a.revenue);
+
   const tiles = [
+    { label: '오늘', value: sum(today) },
     { label: '어제', value: sum(yesterday, yesterday) },
     { label: '최근 7일', value: sum(weekStart) },
     { label: '이번 달', value: sum(monthStart) },
@@ -48,7 +54,7 @@ const RevenueSummary = () => {
           수익 더 보기 ›
         </Link>
       </div>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {tiles.map((t) => (
           <div
             key={t.label}
@@ -61,6 +67,16 @@ const RevenueSummary = () => {
           </div>
         ))}
       </div>
+      {todayBySource && todayBySource.length > 0 && (
+        <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-body">
+          <span className="font-medium">오늘 출처별</span>
+          {todayBySource.map((r) => (
+            <span key={r.source}>
+              {r.source} {Math.round(r.revenue).toLocaleString()}원
+            </span>
+          ))}
+        </p>
+      )}
       <p className="mt-1 text-[11px] text-bodydark2">
         최근 1~2일은 덜 찬 값(쿠팡·네이버·애드센스가 늦게 들어온다)
       </p>
