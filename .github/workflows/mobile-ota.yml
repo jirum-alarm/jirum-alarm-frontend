@@ -92,7 +92,7 @@ jobs:
           # JS 는 boot-check 가 이 커밋 것으로 갈아 끼우므로 번들 단계는 건너뛴다.
           xcodebuild -workspace ios/jirumAlarmMobile.xcworkspace -scheme jirumAlarmMobile -configuration Release \
             -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath ios/build \
-            CODE_SIGNING_ALLOWED=NO SKIP_BUNDLING=1 IPHONEOS_DEPLOYMENT_TARGET=15.1 build -quiet
+            CODE_SIGNING_ALLOWED=NO SKIP_BUNDLING=1 build -quiet
           rm -f ios/GoogleService-Info.plist
 
       - name: Boot check (cold start ×3)
