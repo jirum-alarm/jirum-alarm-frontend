@@ -30,7 +30,6 @@
     "@opentelemetry/sdk-trace-base": "2.12.0",
     "@sentry/nextjs": "^10.76.2",
     "@sentry/opentelemetry": "10.76.2",
-    "@sentry/utils": "^8.55.2",
     "@tanstack/react-query": "^5.104.1",
     "@tanstack/react-query-next-experimental": "^5.104.1",
     "class-variance-authority": "^0.7.1",
