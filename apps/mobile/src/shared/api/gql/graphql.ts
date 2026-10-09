@@ -47,12 +47,37 @@ export type AdReportRow = {
   slotLocation: Scalars['String']['output'];
 };
 
+export type AdminAccessOutput = {
+  __typename?: 'AdminAccessOutput';
+  /** admin(시스템) 역할 — 모든 섹션 + 권한 관리 */
+  isAdmin: Scalars['Boolean']['output'];
+  /** 역할 없으면 null = 아무 섹션도 못 봄 */
+  roleName?: Maybe<Scalars['String']['output']>;
+  sections: Array<Scalars['String']['output']>;
+};
+
+export type AdminRoleOutput = {
+  __typename?: 'AdminRoleOutput';
+  id: Scalars['Int']['output'];
+  isSystem: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  sections: Array<Scalars['String']['output']>;
+};
+
 export type AdminUser = {
   __typename?: 'AdminUser';
   createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+};
+
+export type AdminUserRoleOutput = {
+  __typename?: 'AdminUserRoleOutput';
+  email: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  roleId?: Maybe<Scalars['Int']['output']>;
 };
 
 export type AdvertiseCreative = {
@@ -577,7 +602,12 @@ export type ModelPageAdminItemOutput = {
 
 export type ModelPageListItemOutput = {
   __typename?: 'ModelPageListItemOutput';
+  activeDealCount: Scalars['Int']['output'];
+  activePostedAt?: Maybe<Scalars['DateTime']['output']>;
+  activePrice?: Maybe<Scalars['Int']['output']>;
   brand?: Maybe<Scalars['String']['output']>;
+  buyLine?: Maybe<Scalars['Int']['output']>;
+  buyLineUnitLabel?: Maybe<Scalars['String']['output']>;
   categoryId?: Maybe<Scalars['Int']['output']>;
   categoryName?: Maybe<Scalars['String']['output']>;
   dealCount: Scalars['Int']['output'];
@@ -585,6 +615,8 @@ export type ModelPageListItemOutput = {
   heroMinPrice?: Maybe<Scalars['Int']['output']>;
   lastDealAt?: Maybe<Scalars['DateTime']['output']>;
   modelName: Scalars['String']['output'];
+  priceTone?: Maybe<Scalars['String']['output']>;
+  savePct?: Maybe<Scalars['Int']['output']>;
   slug: Scalars['String']['output'];
   unitLabel?: Maybe<Scalars['String']['output']>;
   unitPrice?: Maybe<Scalars['Int']['output']>;
@@ -639,6 +671,8 @@ export type Mutation = {
   adminLogin: TokenOutput;
   /** 어드민) 리액션 키워드 후보 승인 (synonym 으로 등록) */
   approveHotDealKeywordCandidateByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 계정에 역할 지정(null = 해제) */
+  assignAdminRole: Scalars['Boolean']['output'];
   /** 여러 매핑을 한 번에 검증 수행 */
   batchVerifyProductMapping: Scalars['Int']['output'];
   /** 검증 취소 (검증 완료/거부된 항목을 다시 대기 상태로 되돌림) */
@@ -657,10 +691,16 @@ export type Mutation = {
   createAd: Scalars['Int']['output'];
   /** 어드민) 광고 에셋 업로드 presigned URL */
   createAdAssetUploadUrl: AdAssetUploadUrlOutput;
+  /** 어드민) 역할 생성 */
+  createAdminRole: AdminRoleOutput;
   /** 유저 등록 상품 썸네일 업로드용 presigned URL 발급 */
   createProductImageUploadUrl: ProductImageUploadUrlOutput;
   /** 유저가 직접 핫딜 상품 등록 (등록된 productId 반환) */
   createUserProduct: Scalars['Int']['output'];
+  /** 어드민) 역할 삭제 — 소속 계정은 역할 없음이 된다 */
+  deleteAdminRole: Scalars['Boolean']['output'];
+  /** 게스트 로그인 — 로그인 없이 키워드 알림을 받는 기기 계정(x-device-id 필수). 실제 로그인하면 그 계정으로 합쳐진다 */
+  guestLogin: TokenOutput;
   /** 어드민) 상품 hard delete */
   hardDeleteProductByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 카카오쇼핑 상품 URL을 추천리워드 링크(clink.kakao.com/sp/…)로 발급. product 에는 쓰지 않고 링크만 반환. */
@@ -741,6 +781,8 @@ export type Mutation = {
   unsubscribeNotificationTheme: Scalars['Boolean']['output'];
   /** 어드민) 광고 수정 */
   updateAd: Scalars['Boolean']['output'];
+  /** 어드민) 역할 이름·섹션 수정 */
+  updateAdminRole: AdminRoleOutput;
   updateComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 키워드 수정 */
   updateHotDealKeywordByAdmin: Scalars['Boolean']['output'];
@@ -878,6 +920,11 @@ export type MutationApproveHotDealKeywordCandidateByAdminArgs = {
   id: Scalars['Int']['input'];
 };
 
+export type MutationAssignAdminRoleArgs = {
+  adminUserId: Scalars['Int']['input'];
+  roleId?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type MutationBatchVerifyProductMappingArgs = {
   feedback?: InputMaybe<Scalars['String']['input']>;
   productMappingIds: Array<Scalars['Int']['input']>;
@@ -902,6 +949,7 @@ export type MutationCollectPriceContextImpressionArgs = {
 };
 
 export type MutationCollectProductArgs = {
+  entry?: InputMaybe<Scalars['String']['input']>;
   position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
   source?: InputMaybe<Scalars['String']['input']>;
@@ -915,6 +963,7 @@ export type MutationCollectPurchaseClickArgs = {
 };
 
 export type MutationCollectThumbnailArgs = {
+  entry?: InputMaybe<Scalars['String']['input']>;
   position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
   source?: InputMaybe<Scalars['String']['input']>;
@@ -928,6 +977,11 @@ export type MutationCreateAdAssetUploadUrlArgs = {
   contentType: Scalars['String']['input'];
 };
 
+export type MutationCreateAdminRoleArgs = {
+  name: Scalars['String']['input'];
+  sections: Array<Scalars['String']['input']>;
+};
+
 export type MutationCreateProductImageUploadUrlArgs = {
   contentType: Scalars['String']['input'];
 };
@@ -939,6 +993,10 @@ export type MutationCreateUserProductArgs = {
   thumbnail?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
   url: Scalars['String']['input'];
+};
+
+export type MutationDeleteAdminRoleArgs = {
+  id: Scalars['Int']['input'];
 };
 
 export type MutationHardDeleteProductByAdminArgs = {
@@ -1114,6 +1172,12 @@ export type MutationUnsubscribeNotificationThemeArgs = {
 export type MutationUpdateAdArgs = {
   id: Scalars['Int']['input'];
   input: UpdateAdvertiseInput;
+};
+
+export type MutationUpdateAdminRoleArgs = {
+  id: Scalars['Int']['input'];
+  name: Scalars['String']['input'];
+  sections: Array<Scalars['String']['input']>;
 };
 
 export type MutationUpdateCommentArgs = {
@@ -1636,7 +1700,7 @@ export type ProductOutput = {
   /** 왜 핫딜인지 가격 컨텍스트 (게이트 통과 시에만, 상세 전용) */
   priceContext?: Maybe<PriceContext>;
   priceCurrency?: Maybe<Scalars['String']['output']>;
-  /** 일별 핫딜가 추이. brand_item/매핑∪클러스터(HIGH) 우선, 점 부족 시 유사 폴백(LOW). 2점 미만이면 null */
+  /** 일별 핫딜가 추이 — 같은 상품 근거가 있는 딜만(brand_item 같은 변형·verified 매핑·동일상품 그룹·같은 글). 2점 미만이면 null */
   priceHistory?: Maybe<ProductPriceHistory>;
   /** 상세 히어로 가격 판정(지금 사도 되나). 30일 MAPPING HIGH만 READY. 프론트는 READY+STRONG만 렌더. 실패해도 객체를 내려 nullReason 계측. */
   priceVerdict?: Maybe<ProductPriceVerdict>;
@@ -1706,24 +1770,35 @@ export type ProductPriceVerdict = {
   __typename?: 'ProductPriceVerdict';
   /** MAPPING | CLUSTER */
   basis?: Maybe<Scalars['String']['output']>;
+  /** 비교 딜 가격(오름차순) — 분포 막대용 */
+  comparePrices?: Maybe<Array<Scalars['Float']['output']>>;
   /** HIGH only in v1 READY */
   confidence?: Maybe<Scalars['String']['output']>;
   /** KRW | USD */
   currency?: Maybe<Scalars['String']['output']>;
+  /** 비교한 지난 핫딜 수(딜 단위, 이상치 제외) */
+  dealCount?: Maybe<Scalars['Int']['output']>;
   /** seedPrice - windowMinPrice. 음수 = 지금이 더 쌈 */
   deltaWon?: Maybe<Scalars['Float']['output']>;
+  /** 보통가 대비 할인율(%). 음수 = 더 비쌈 */
+  discountPercent?: Maybe<Scalars['Float']['output']>;
   displayTier: PriceVerdictDisplayTier;
   headline?: Maybe<Scalars['String']['output']>;
+  /** v2: dealCount 와 같음(호환용) */
   historyPointCount?: Maybe<Scalars['Int']['output']>;
   labelKey?: Maybe<PriceVerdictLabelKey>;
   nullReason?: Maybe<PriceVerdictNullReason>;
   percentile?: Maybe<Scalars['Float']['output']>;
   rangeDays?: Maybe<Scalars['Int']['output']>;
+  /** 좋은 딜에 필요한 할인율(%) — 비교 딜이 적을수록 커진다 */
+  requiredDiscountPercent?: Maybe<Scalars['Float']['output']>;
   /** max(0, -deltaWon) */
   savingsWon?: Maybe<Scalars['Float']['output']>;
   seedPrice?: Maybe<Scalars['Float']['output']>;
   status: PriceVerdictStatus;
   subline?: Maybe<Scalars['String']['output']>;
+  /** 보통가 = 비교 딜 중앙값 */
+  typicalPrice?: Maybe<Scalars['Float']['output']>;
   /** KST YYYY-MM-DD */
   windowMinDate?: Maybe<Scalars['String']['output']>;
   windowMinPrice?: Maybe<Scalars['Float']['output']>;
@@ -1856,6 +1931,12 @@ export type Query = {
   /** 어드민) 광고 노출/클릭 정산 리포트 */
   adReport: Array<AdReportRow>;
   adminMe: AdminUser;
+  /** 어드민) 역할 목록 */
+  adminRoles: Array<AdminRoleOutput>;
+  /** 어드민) 역할에 넣을 수 있는 섹션 키 전체 */
+  adminSections: Array<Scalars['String']['output']>;
+  /** 어드민) 어드민 계정별 역할 */
+  adminUsersWithRole: Array<AdminUserRoleOutput>;
   /** 어드민) 광고 목록 */
   adsByAdmin: Array<AdvertiseCreative>;
   /** 어드민) provider별 일간 판매 추이 (건수 + localCommission 합, 추세 감시용) */
@@ -1949,6 +2030,8 @@ export type Query = {
   modelPagePreviewByAdmin?: Maybe<ModelPageOutput>;
   /** 어드민) 모델 페이지 검수 목록 */
   modelPagesByAdmin: Array<ModelPageAdminItemOutput>;
+  /** 어드민) 내 역할·접근 가능 섹션 */
+  myAdminAccess: AdminAccessOutput;
   /** 내가 구독한 묶음(테마) id 목록 */
   mySubscribedThemeIds: Array<Scalars['Int']['output']>;
   /** 유저 알림 키워드 목록 조회 */
@@ -2010,6 +2093,8 @@ export type Query = {
   recommendedNotificationKeywords: Array<Scalars['String']['output']>;
   /** 신고한 사용자 목록 조회 (마스킹) */
   reportUserNames: Array<Scalars['String']['output']>;
+  /** 어드민) 일별 세후 수익 — 제휴(netCommission, 취소 제외) + 애드센스(GA4 추정치) */
+  revenueTrend: Array<RevenueDailyOutput>;
   /** 같은 상품(동일상품 그룹)의 진행 중 딜 조회 (최신순, 최대 20) */
   sameProductDeals: Array<ProductOutput>;
   /** 자동완성용 추천 검색어 목록. prefix로 시작하는 인기 검색어 + 상품 title prefix 매칭. */
@@ -2445,6 +2530,11 @@ export type QueryReportUserNamesArgs = {
   productId: Scalars['Int']['input'];
 };
 
+export type QueryRevenueTrendArgs = {
+  endDate: Scalars['DateTime']['input'];
+  startDate: Scalars['DateTime']['input'];
+};
+
 export type QuerySameProductDealsArgs = {
   id: Scalars['Int']['input'];
 };
@@ -2549,8 +2639,18 @@ export type RecommendedProductOutput = {
   recommendationScore?: Maybe<Scalars['Float']['output']>;
 };
 
+export type RevenueDailyOutput = {
+  __typename?: 'RevenueDailyOutput';
+  date: Scalars['String']['output'];
+  /** 세후 KRW. 제휴=netCommission(취소 제외·결제일 기준), adsense=GA4 추정치 */
+  revenue: Scalars['Float']['output'];
+  /** affiliate_sales.provider 또는 'adsense' */
+  source: Scalars['String']['output'];
+};
+
 export enum Role {
   Admin = 'ADMIN',
+  Guest = 'GUEST',
   User = 'USER',
 }
 
@@ -2697,6 +2797,7 @@ export type User = {
   favoriteCategories?: Maybe<Array<Scalars['Int']['output']>>;
   gender?: Maybe<Gender>;
   id: Scalars['ID']['output'];
+  isGuest: Scalars['Boolean']['output'];
   lastReadNoticeAt?: Maybe<Scalars['DateTime']['output']>;
   linkedSocialProviders?: Maybe<Array<OauthProvider>>;
   nickname: Scalars['String']['output'];
@@ -2832,6 +2933,17 @@ export type MutationLoginMutationVariables = Exact<{
 export type MutationLoginMutation = {
   __typename?: 'Mutation';
   login: {
+    __typename?: 'TokenOutput';
+    accessToken: string;
+    refreshToken?: string | null;
+  };
+};
+
+export type MutationGuestLoginMutationVariables = Exact<{[key: string]: never}>;
+
+export type MutationGuestLoginMutation = {
+  __typename?: 'Mutation';
+  guestLogin: {
     __typename?: 'TokenOutput';
     accessToken: string;
     refreshToken?: string | null;
@@ -4118,7 +4230,7 @@ export type QueryMeQueryVariables = Exact<{[key: string]: never}>;
 
 export type QueryMeQuery = {
   __typename?: 'Query';
-  me?: {__typename?: 'User'; id: string} | null;
+  me?: {__typename?: 'User'; id: string; isGuest: boolean} | null;
 };
 
 export class TypedDocumentString<TResult, TVariables>
@@ -4186,6 +4298,17 @@ export const MutationLoginDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   MutationLoginMutation,
   MutationLoginMutationVariables
+>;
+export const MutationGuestLoginDocument = new TypedDocumentString(`
+    mutation MutationGuestLogin {
+  guestLogin {
+    accessToken
+    refreshToken
+  }
+}
+    `) as unknown as TypedDocumentString<
+  MutationGuestLoginMutation,
+  MutationGuestLoginMutationVariables
 >;
 export const MutationLoginByRefreshTokenDocument = new TypedDocumentString(`
     mutation MutationLoginByRefreshToken {
@@ -5405,6 +5528,7 @@ export const QueryMeDocument = new TypedDocumentString(`
     query QueryMe {
   me {
     id
+    isGuest
   }
 }
     `) as unknown as TypedDocumentString<QueryMeQuery, QueryMeQueryVariables>;

@@ -4,6 +4,7 @@ import type {
 } from '@/shared/api/gql/graphql.ts';
 import {HttpClient} from '@/shared/lib/client';
 import {
+  MutationGuestLogin,
   MutationLogin,
   MutationLoginByRefreshToken,
   MutationSocialLogin,
@@ -13,6 +14,11 @@ export class AuthService {
   static async loginUser(variables: MutationLoginMutationVariables) {
     return HttpClient.withNoAuth()
       .execute(MutationLogin, variables)
+      .then(res => res.data);
+  }
+  static async guestLogin() {
+    return HttpClient.withNoAuth()
+      .execute(MutationGuestLogin)
       .then(res => res.data);
   }
   static async loginByRefreshToken() {

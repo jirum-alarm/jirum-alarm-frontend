@@ -150,7 +150,7 @@ function NativeDetail({
   });
 
   const {data: myUserId} = useQuery(UserQueries.me());
-  const {isLogin} = useAuth();
+  const {isMember: isLogin} = useAuth();
 
   const {
     data: togetherViewed,

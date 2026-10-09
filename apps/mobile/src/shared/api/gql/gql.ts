@@ -17,6 +17,7 @@ type Documents = {
   '\n  mutation RecordAdImpressions($events: [AdvertiseImpressionInput!]!) {\n    recordAdImpressions(events: $events)\n  }\n': typeof types.RecordAdImpressionsDocument;
   '\n  mutation RecordAdClick(\n    $creativeId: Int!\n    $slotLocation: AdvertiseSlotLocation!\n  ) {\n    recordAdClick(creativeId: $creativeId, slotLocation: $slotLocation)\n  }\n': typeof types.RecordAdClickDocument;
   '\n    mutation MutationLogin($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        accessToken\n        refreshToken\n      }\n    }\n  ': typeof types.MutationLoginDocument;
+  '\n  mutation MutationGuestLogin {\n    guestLogin {\n      accessToken\n      refreshToken\n    }\n  }\n': typeof types.MutationGuestLoginDocument;
   '\n  mutation MutationLoginByRefreshToken {\n    loginByRefreshToken {\n      accessToken\n      refreshToken\n    }\n  }\n': typeof types.MutationLoginByRefreshTokenDocument;
   '\n  mutation MutationSocialLogin(\n    $oauthProvider: OauthProvider!\n    $socialAccessToken: String!\n    $email: String\n    $nickname: String\n    $birthYear: Float\n    $gender: Gender\n    $favoriteCategories: [Int!]\n  ) {\n    socialLogin(\n      oauthProvider: $oauthProvider\n      socialAccessToken: $socialAccessToken\n      email: $email\n      nickname: $nickname\n      birthYear: $birthYear\n      gender: $gender\n      favoriteCategories: $favoriteCategories\n    ) {\n      accessToken\n      refreshToken\n      type\n    }\n  }\n': typeof types.MutationSocialLoginDocument;
   '\n  query Categories {\n    categories {\n      id\n      name\n    }\n  }\n': typeof types.CategoriesDocument;
@@ -93,7 +94,7 @@ type Documents = {
   '\n  mutation RecordProductImpressions(\n    $source: String!\n    $impressions: [ProductImpressionInput!]!\n  ) {\n    recordProductImpressions(source: $source, impressions: $impressions)\n  }\n': typeof types.RecordProductImpressionsDocument;
   '\n  query SearchProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $startDate: DateTime\n    $orderBy: ProductOrderType\n    $categoryIds: [Int!]\n    $keyword: String\n    $isEnd: Boolean\n    $providerIds: [Int!]\n  ) {\n    products(\n      limit: $limit\n      searchAfter: $searchAfter\n      startDate: $startDate\n      orderBy: $orderBy\n      categoryIds: $categoryIds\n      keyword: $keyword\n      isEnd: $isEnd\n      providerIds: $providerIds\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      mallName\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      estimatedTotal\n      postedAt\n    }\n  }\n': typeof types.SearchProductsDocument;
   '\n  query SearchSuggestions($prefix: String!, $limit: Int) {\n    searchSuggestions(prefix: $prefix, limit: $limit)\n  }\n': typeof types.SearchSuggestionsDocument;
-  '\n  query QueryMe {\n    me {\n      id\n    }\n  }\n': typeof types.QueryMeDocument;
+  '\n  query QueryMe {\n    me {\n      id\n      isGuest\n    }\n  }\n': typeof types.QueryMeDocument;
 };
 const documents: Documents = {
   '\n  query ActiveAds($slotLocation: AdvertiseSlotLocation!) {\n    activeAds(slotLocation: $slotLocation) {\n      id\n      internalId\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayTitle\n      targetUrl\n      isActive\n    }\n  }\n':
@@ -104,6 +105,8 @@ const documents: Documents = {
     types.RecordAdClickDocument,
   '\n    mutation MutationLogin($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        accessToken\n        refreshToken\n      }\n    }\n  ':
     types.MutationLoginDocument,
+  '\n  mutation MutationGuestLogin {\n    guestLogin {\n      accessToken\n      refreshToken\n    }\n  }\n':
+    types.MutationGuestLoginDocument,
   '\n  mutation MutationLoginByRefreshToken {\n    loginByRefreshToken {\n      accessToken\n      refreshToken\n    }\n  }\n':
     types.MutationLoginByRefreshTokenDocument,
   '\n  mutation MutationSocialLogin(\n    $oauthProvider: OauthProvider!\n    $socialAccessToken: String!\n    $email: String\n    $nickname: String\n    $birthYear: Float\n    $gender: Gender\n    $favoriteCategories: [Int!]\n  ) {\n    socialLogin(\n      oauthProvider: $oauthProvider\n      socialAccessToken: $socialAccessToken\n      email: $email\n      nickname: $nickname\n      birthYear: $birthYear\n      gender: $gender\n      favoriteCategories: $favoriteCategories\n    ) {\n      accessToken\n      refreshToken\n      type\n    }\n  }\n':
@@ -256,7 +259,7 @@ const documents: Documents = {
     types.SearchProductsDocument,
   '\n  query SearchSuggestions($prefix: String!, $limit: Int) {\n    searchSuggestions(prefix: $prefix, limit: $limit)\n  }\n':
     types.SearchSuggestionsDocument,
-  '\n  query QueryMe {\n    me {\n      id\n    }\n  }\n':
+  '\n  query QueryMe {\n    me {\n      id\n      isGuest\n    }\n  }\n':
     types.QueryMeDocument,
 };
 
@@ -284,6 +287,12 @@ export function graphql(
 export function graphql(
   source: '\n    mutation MutationLogin($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        accessToken\n        refreshToken\n      }\n    }\n  ',
 ): typeof import('./graphql').MutationLoginDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationGuestLogin {\n    guestLogin {\n      accessToken\n      refreshToken\n    }\n  }\n',
+): typeof import('./graphql').MutationGuestLoginDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -744,7 +753,7 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query QueryMe {\n    me {\n      id\n    }\n  }\n',
+  source: '\n  query QueryMe {\n    me {\n      id\n      isGuest\n    }\n  }\n',
 ): typeof import('./graphql').QueryMeDocument;
 
 export function graphql(source: string) {

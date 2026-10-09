@@ -66,7 +66,7 @@ export class HttpClient {
         ...options.headers,
         Authorization: token ? `Bearer ${token}` : '',
         // 조회 수집(collectProduct)의 사용자 식별. web 도 같은 헤더를 쓴다.
-        // 없으면 안 보낸다 — 틀린 id 를 만들어 보내면 집계가 쪼개진다.
+        // getDeviceId 가 없으면 만든다(게스트 계정·푸시 토큰 회수가 이걸로 기기를 가른다).
         ...(deviceId ? {'X-Device-Id': deviceId} : {}),
         // 토큰 갱신은 백그라운드에서도 돈다 — 서버가 그건 방문(lastLoggedInAt)으로 안 센다.
         ...(this.tokenType === 'refresh'

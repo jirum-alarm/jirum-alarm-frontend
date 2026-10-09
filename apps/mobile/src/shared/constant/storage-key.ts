@@ -2,8 +2,10 @@ export const StorageKey = {
   ACCESS_TOKEN: 'accessToken',
   REFRESH_TOKEN: 'refreshToken',
   FCM_DEVICE_TOKEN: 'fcmDeviceToken',
-  /** 조회 수집용 사용자 식별자. web localStorage 의 jirum-alarm-device-id 와 같은 값. */
+  /** 기기 식별자(X-Device-Id). 게스트 계정·푸시 토큰 회수·조회 수집이 이걸로 기기를 가른다. */
   DEVICE_ID: 'deviceId',
+  /** 게스트(로그인 없이 알림만 받는 기기 계정)로 들어와 있는지. 실제 로그인·로그아웃 때 지운다. */
+  IS_GUEST: 'isGuest',
   /** 최근 본 상품(웹뷰 홈이 읽던 것을 네이티브가 대신 쌓는다). */
   RECENT_VIEWED_PRODUCTS: 'recentViewedProducts',
   /** 로그인 전에 하려던 동작. 로그인 복귀 후 한 번만 실행한다. */

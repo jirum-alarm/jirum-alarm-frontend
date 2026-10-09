@@ -18,6 +18,7 @@ import {
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {authNavigations} from '@/shared/constant/navigations.ts';
 import {useSocialLogin} from './useSocialLogin';
+import {useGuestLogin} from './useGuestLogin';
 import {AuthParamList} from '@/navigations/stack/AuthNavigator';
 
 const AuthHomeScreen = () => {
@@ -28,6 +29,8 @@ const AuthHomeScreen = () => {
     isAppleLoginAvailable,
     isSocialLoginPending,
   } = useSocialLogin();
+
+  const {startGuest, isGuestPending} = useGuestLogin();
 
   const navigation = useNavigation<NavigationProp<AuthParamList>>();
   const c = useColors();
@@ -114,6 +117,17 @@ const AuthHomeScreen = () => {
           웹에서 쓰던 카카오·네이버 계정으로 로그인하면{'\n'}등록한 키워드
           알림이 그대로 이어져요
         </Text>
+        {/* 로그인 벽 대신 선택지 — 게스트도 키워드 알림을 받고, 나중에 로그인하면 계정으로 합쳐진다. */}
+        <TouchableOpacity
+          accessibilityRole="button"
+          disabled={isSocialLoginPending || isGuestPending}
+          hitSlop={12}
+          style={styles.guestButton}
+          onPress={startGuest}>
+          <Text style={[styles.guestButtonText, {color: c.gray[600]}]}>
+            로그인 없이 둘러보기
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -123,6 +137,12 @@ export default AuthHomeScreen;
 
 const styles = StyleSheet.create({
   pending: {opacity: 0.5},
+  guestButton: {alignSelf: 'center', marginTop: 20, paddingVertical: 8},
+  guestButtonText: {
+    fontSize: 14,
+    fontFamily: 'Pretendard-Medium',
+    textDecorationLine: 'underline',
+  },
   hint: {marginTop: 20, fontSize: 13, lineHeight: 19, textAlign: 'center'},
   container: {
     flex: 1,

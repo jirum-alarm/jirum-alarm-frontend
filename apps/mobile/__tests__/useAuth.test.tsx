@@ -112,7 +112,7 @@ describe('useAuth', () => {
       name: 'REFRESH_TOKEN',
       value: 'refresh-token',
     });
-    expect(latestAuthState).toEqual({
+    expect(latestAuthState).toMatchObject({
       isLoading: false,
       isLogin: true,
     });
@@ -141,7 +141,7 @@ describe('useAuth', () => {
 
     const renderer = await renderUseAuth();
 
-    expect(latestAuthState).toEqual({
+    expect(latestAuthState).toMatchObject({
       isLoading: false,
       isLogin: true,
     });
@@ -177,7 +177,7 @@ describe('useAuth', () => {
       name: 'REFRESH_TOKEN',
       value: expect.anything(),
     });
-    expect(latestAuthState).toEqual({
+    expect(latestAuthState).toMatchObject({
       isLoading: false,
       isLogin: true,
     });
@@ -217,7 +217,7 @@ describe('useAuth', () => {
       StorageKey.REFRESH_TOKEN,
     );
     expect(mockCookieSet).not.toHaveBeenCalled();
-    expect(latestAuthState).toEqual({
+    expect(latestAuthState).toMatchObject({
       isLoading: false,
       isLogin: false,
     });
@@ -338,7 +338,7 @@ describe('useAuth', () => {
 
     const renderer = await renderUseAuth();
 
-    expect(latestAuthState).toEqual({isLoading: false, isLogin: true});
+    expect(latestAuthState).toMatchObject({isLoading: false, isLogin: true});
 
     await ReactTestRenderer.act(async () => {
       renderer.unmount();
@@ -358,7 +358,7 @@ describe('useAuth', () => {
 
     const renderer = await renderUseAuth();
 
-    expect(latestAuthState).toEqual({isLoading: false, isLogin: true});
+    expect(latestAuthState).toMatchObject({isLoading: false, isLogin: true});
     expect(mockRemoveAsyncStorage).not.toHaveBeenCalled();
 
     await ReactTestRenderer.act(async () => {
@@ -377,7 +377,7 @@ describe('useAuth', () => {
 
     const renderer = await renderUseAuth();
 
-    expect(latestAuthState).toEqual({isLoading: true, isLogin: false});
+    expect(latestAuthState).toMatchObject({isLoading: true, isLogin: false});
 
     await ReactTestRenderer.act(async () => {
       renderer.unmount();

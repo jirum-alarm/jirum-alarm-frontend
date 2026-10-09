@@ -63,7 +63,7 @@ export default function ProductCommentsScreen({route, navigation}: Props) {
 
   // 로그인 여부는 토큰으로 본다 — me() 로 보면 조회 중·실패 때 로그인 사용자에게도
   // "로그인 후 이용해주세요" 가 떴다.
-  const {isLogin} = useAuth();
+  const {isMember: isLogin} = useAuth();
 
   const {
     data,

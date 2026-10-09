@@ -14,6 +14,7 @@ import {removeAsyncStorage} from '@/shared/lib/persistence';
 import {setUnreadCount} from '@/shared/hooks/useUnreadNotifications';
 import {unbindFcmTokenFromUser} from '@/shared/lib/fcm/push-permission';
 import {clearQueryCache} from '@/shared/lib/persistence/query-cache';
+import {setGuest} from '@/shared/lib/auth/guest';
 
 /**
  * 로그아웃. **웹뷰가 대신 해주던 일을 이 화면이 인수한 자리다.**
@@ -50,6 +51,7 @@ export function useLogout() {
     await unbindFcmTokenFromUser();
     await removeAsyncStorage(StorageKey.ACCESS_TOKEN).catch(() => {});
     await removeAsyncStorage(StorageKey.REFRESH_TOKEN).catch(() => {});
+    await setGuest(false).catch(() => {});
 
     // ★iOS 는 쿠키 저장소가 두 벌이다(NSHTTPCookieStorage / WKWebsiteDataStore).
     // `useAuth` 는 기본(useWebKit=false)으로 심으므로 그쪽을 반드시 지우고,

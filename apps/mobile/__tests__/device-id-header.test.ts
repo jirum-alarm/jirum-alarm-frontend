@@ -26,12 +26,22 @@ describe('X-Device-Id 헤더', () => {
       return {json: async () => ({data: {}})};
     });
   });
-  it('deviceId 가 없으면 헤더를 안 보낸다', async () => {
+  // 2026-10-09: 웹뷰(TabWebView)가 더는 안 떠서 새 설치는 id 가 영영 없었다 → 없으면 만든다.
+  // id 가 없으면 게스트 계정(guestLogin)을 못 만들고 푸시 토큰 회수도 안 된다.
+  it('deviceId 가 없으면 만들어 보내고, 다음 요청도 같은 id 를 쓴다', async () => {
     await HttpClient.withNoAuth().execute(
       'query{__typename}' as any,
       {} as any,
     );
-    expect(sent.headers['X-Device-Id']).toBeUndefined();
+    const first = sent.headers['X-Device-Id'];
+    expect(first).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+    );
+    await HttpClient.withNoAuth().execute(
+      'query{__typename}' as any,
+      {} as any,
+    );
+    expect(sent.headers['X-Device-Id']).toBe(first);
   });
   it('웹뷰에서 받은 deviceId 를 헤더로 보낸다', async () => {
     await syncDeviceIdFromWeb('web-generated-id-123');

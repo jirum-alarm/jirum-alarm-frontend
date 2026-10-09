@@ -9,16 +9,13 @@ let cached: string | null = null;
 const waiters = new Set<(deviceId: string) => void>();
 
 /**
- * 조회 수집(collectProduct)의 사용자 식별자.
+ * 기기 식별자(X-Device-Id). 조회 수집·푸시 토큰 회수·게스트 계정이 이걸로 기기를 가른다.
  *
- * ⚠️ 새로 만들지 않는 게 핵심이다. 앱의 웹뷰는 이미 web 이 발급한 deviceId 를
- * localStorage 에 갖고 있는데, 네이티브가 별도 id 를 발급하면 같은 사람이 둘로
- * 쪼개져 집계가 어긋난다. web 이 예전에 요청마다 새 id 를 굽다가 운영 91.9%
- * 디바이스가 1상품/1이벤트로 쪼개진 전례가 있다.
- *
- * 그래서 순서는 (1) AsyncStorage 캐시 → (2) 웹뷰 localStorage 에서 동기화.
- * 둘 다 없으면 id 없이 보낸다 — 헤더가 없으면 서버가 알아서 처리하므로,
- * 틀린 id 를 만들어 보내는 것보다 낫다.
+ * 예전엔 새로 만들지 않고 웹뷰(TabWebView)의 web localStorage 값을 받아 썼다 — 같은 사람이
+ * 둘로 쪼개지지 않게. 그런데 다섯 탭이 네이티브가 된 뒤(2026-09) TabWebView 가 아예 마운트되지
+ * 않아, 새로 설치한 앱은 id 가 영영 없었다(2026-10-09 실측: 비로그인 iOS 토큰 55개 전부 기기 없음).
+ * id 가 없으면 게스트 계정을 못 만들고 푸시 토큰 회수도 안 된다 → 없으면 여기서 만든다.
+ * 이미 받아 둔 웹 값이 있으면 그대로 쓴다.
  */
 export async function getDeviceId(): Promise<string | null> {
   if (cached) return cached;
@@ -27,7 +24,21 @@ export async function getDeviceId(): Promise<string | null> {
     cached = stored;
     return stored;
   }
-  return null;
+  const created = generateDeviceId();
+  cached = created;
+  await setAsyncStorage(StorageKey.DEVICE_ID, created).catch(() => {});
+  return created;
+}
+
+/**
+ * UUID v4. ponytail: Math.random — 기기 구분용이지 비밀이 아니다. 앱엔 crypto.getRandomValues 가 없고
+ * expo-crypto 를 넣으면 네이티브 변경(스토어 빌드)이 된다. 추측 저항이 필요해지면 그때 바꾼다.
+ */
+function generateDeviceId(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, ch => {
+    const r = Math.floor(Math.random() * 16);
+    return (ch === 'x' ? r : 8 + (r % 4)).toString(16); // y = 8~b(variant)
+  });
 }
 
 /** 웹뷰에서 읽어온 deviceId 를 네이티브 쪽에 저장한다. */

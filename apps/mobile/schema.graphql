@@ -21,11 +21,33 @@ type AdReportRow {
   slotLocation: String!
 }
 
+type AdminAccessOutput {
+  """admin(시스템) 역할 — 모든 섹션 + 권한 관리"""
+  isAdmin: Boolean!
+  """역할 없으면 null = 아무 섹션도 못 봄"""
+  roleName: String
+  sections: [String!]!
+}
+
+type AdminRoleOutput {
+  id: Int!
+  isSystem: Boolean!
+  name: String!
+  sections: [String!]!
+}
+
 type AdminUser {
   createdAt: DateTime!
   email: String!
   id: ID!
   name: String!
+}
+
+type AdminUserRoleOutput {
+  email: String!
+  id: Int!
+  name: String!
+  roleId: Int
 }
 
 type AdvertiseCreative {
@@ -528,7 +550,12 @@ type ModelPageAdminItemOutput {
 }
 
 type ModelPageListItemOutput {
+  activeDealCount: Int!
+  activePostedAt: DateTime
+  activePrice: Int
   brand: String
+  buyLine: Int
+  buyLineUnitLabel: String
   categoryId: Int
   categoryName: String
   dealCount: Int!
@@ -536,6 +563,8 @@ type ModelPageListItemOutput {
   heroMinPrice: Int
   lastDealAt: DateTime
   modelName: String!
+  priceTone: String
+  savePct: Int
   slug: String!
   unitLabel: String
   unitPrice: Int
@@ -608,13 +637,21 @@ type Mutation {
   adminLogin(email: String!, password: String!): TokenOutput!
   """어드민) 리액션 키워드 후보 승인 (synonym 으로 등록)"""
   approveHotDealKeywordCandidateByAdmin(hotDealKeywordId: Int!, id: Int!): Boolean!
+  """어드민) 계정에 역할 지정(null = 해제)"""
+  assignAdminRole(
+    adminUserId: Int!
+    """null = 역할 해제"""
+    roleId: Int
+  ): Boolean!
   """여러 매핑을 한 번에 검증 수행"""
   batchVerifyProductMapping(feedback: String, productMappingIds: [Int!]!, result: ProductMappingVerificationStatus!): Int!
   """검증 취소 (검증 완료/거부된 항목을 다시 대기 상태로 되돌림)"""
   cancelVerification(productMappingId: Int!, reason: String): Boolean!
   """상세 가격 맥락(판정 카드·가격 추이) 클릭 기록"""
   collectPriceContextClick(
-    """종류:근거(노출, 예: price_history:MAPPING · verdict:CLUSTER) 또는 종류:요소(클릭, 예: verdict:history · price_history:period)"""
+    """
+    종류:근거(노출, 예: price_history:MAPPING · verdict:CLUSTER) 또는 종류:요소(클릭, 예: verdict:history · price_history:period)
+    """
     detail: String!
     productId: Int!
     """화면 (예: detail_mobile, app_detail)"""
@@ -622,7 +659,9 @@ type Mutation {
   ): Boolean!
   """상세 가격 맥락(판정 카드·가격 추이) 노출 기록 — 상세 진입당 종류별 1회"""
   collectPriceContextImpression(
-    """종류:근거(노출, 예: price_history:MAPPING · verdict:CLUSTER) 또는 종류:요소(클릭, 예: verdict:history · price_history:period)"""
+    """
+    종류:근거(노출, 예: price_history:MAPPING · verdict:CLUSTER) 또는 종류:요소(클릭, 예: verdict:history · price_history:period)
+    """
     detail: String!
     productId: Int!
     """화면 (예: detail_mobile, app_detail)"""
@@ -630,6 +669,8 @@ type Mutation {
   ): Boolean!
   """상품 단건 수집"""
   collectProduct(
+    """상세 진입 직전 화면 (예: path:/search)"""
+    entry: String
     """클릭 위치(랭크, 0-based)"""
     position: Int
     productId: Int!
@@ -648,6 +689,8 @@ type Mutation {
   ): Boolean!
   """썸네일 단건 수집"""
   collectThumbnail(
+    """상세 진입 직전 화면 (예: path:/search)"""
+    entry: String
     """클릭 위치(랭크, 0-based)"""
     position: Int
     productId: Int!
@@ -661,6 +704,8 @@ type Mutation {
     """image/png 등 MIME 타입"""
     contentType: String!
   ): AdAssetUploadUrlOutput!
+  """어드민) 역할 생성"""
+  createAdminRole(name: String!, sections: [String!]!): AdminRoleOutput!
   """유저 등록 상품 썸네일 업로드용 presigned URL 발급"""
   createProductImageUploadUrl(
     """이미지 MIME 타입 (image/jpeg|png|webp|gif|avif)"""
@@ -681,6 +726,12 @@ type Mutation {
     """구매 링크"""
     url: String!
   ): Int!
+  """어드민) 역할 삭제 — 소속 계정은 역할 없음이 된다"""
+  deleteAdminRole(id: Int!): Boolean!
+  """
+  게스트 로그인 — 로그인 없이 키워드 알림을 받는 기기 계정(x-device-id 필수). 실제 로그인하면 그 계정으로 합쳐진다
+  """
+  guestLogin: TokenOutput!
   """어드민) 상품 hard delete"""
   hardDeleteProductByAdmin(id: Int!): Boolean!
   """
@@ -802,6 +853,8 @@ type Mutation {
   unsubscribeNotificationTheme(themeId: Int!): Boolean!
   """어드민) 광고 수정"""
   updateAd(id: Int!, input: UpdateAdvertiseInput!): Boolean!
+  """어드민) 역할 이름·섹션 수정"""
+  updateAdminRole(id: Int!, name: String!, sections: [String!]!): AdminRoleOutput!
   updateComment(content: String, id: Int!, title: String): Boolean!
   """어드민) 핫딜 키워드 수정"""
   updateHotDealKeywordByAdmin(id: Int!, isMajor: Boolean, keyword: String, weight: Float): Boolean!
@@ -1287,7 +1340,7 @@ type ProductOutput {
   priceContext: PriceContext
   priceCurrency: String
   """
-  일별 핫딜가 추이. brand_item/매핑∪클러스터(HIGH) 우선, 점 부족 시 유사 폴백(LOW). 2점 미만이면 null
+  일별 핫딜가 추이 — 같은 상품 근거가 있는 딜만(brand_item 같은 변형·verified 매핑·동일상품 그룹·같은 글). 2점 미만이면 null
   """
   priceHistory(days: Int = 90): ProductPriceHistory
   """
@@ -1357,24 +1410,35 @@ enum ProductPriceTarget {
 type ProductPriceVerdict {
   """MAPPING | CLUSTER"""
   basis: String
+  """비교 딜 가격(오름차순) — 분포 막대용"""
+  comparePrices: [Float!]
   """HIGH only in v1 READY"""
   confidence: String
   """KRW | USD"""
   currency: String
+  """비교한 지난 핫딜 수(딜 단위, 이상치 제외)"""
+  dealCount: Int
   """seedPrice - windowMinPrice. 음수 = 지금이 더 쌈"""
   deltaWon: Float
+  """보통가 대비 할인율(%). 음수 = 더 비쌈"""
+  discountPercent: Float
   displayTier: PriceVerdictDisplayTier!
   headline: String
+  """v2: dealCount 와 같음(호환용)"""
   historyPointCount: Int
   labelKey: PriceVerdictLabelKey
   nullReason: PriceVerdictNullReason
   percentile: Float
   rangeDays: Int
+  """좋은 딜에 필요한 할인율(%) — 비교 딜이 적을수록 커진다"""
+  requiredDiscountPercent: Float
   """max(0, -deltaWon)"""
   savingsWon: Float
   seedPrice: Float
   status: PriceVerdictStatus!
   subline: String
+  """보통가 = 비교 딜 중앙값"""
+  typicalPrice: Float
   """KST YYYY-MM-DD"""
   windowMinDate: String
   windowMinPrice: Float
@@ -1501,6 +1565,12 @@ type Query {
   """어드민) 광고 노출/클릭 정산 리포트"""
   adReport(creativeId: Int, from: DateTime!, to: DateTime!): [AdReportRow!]!
   adminMe: AdminUser!
+  """어드민) 역할 목록"""
+  adminRoles: [AdminRoleOutput!]!
+  """어드민) 역할에 넣을 수 있는 섹션 키 전체"""
+  adminSections: [String!]!
+  """어드민) 어드민 계정별 역할"""
+  adminUsersWithRole: [AdminUserRoleOutput!]!
   """어드민) 광고 목록"""
   adsByAdmin(
     """미지정 시 전체"""
@@ -1683,6 +1753,8 @@ type Query {
   modelPagePreviewByAdmin(slug: String!): ModelPageOutput
   """어드민) 모델 페이지 검수 목록"""
   modelPagesByAdmin(onlyDrafts: Boolean = false): [ModelPageAdminItemOutput!]!
+  """어드민) 내 역할·접근 가능 섹션"""
+  myAdminAccess: AdminAccessOutput!
   """내가 구독한 묶음(테마) id 목록"""
   mySubscribedThemeIds: [Int!]!
   """유저 알림 키워드 목록 조회"""
@@ -1811,6 +1883,8 @@ type Query {
   recommendedNotificationKeywords: [String!]!
   """신고한 사용자 목록 조회 (마스킹)"""
   reportUserNames(productId: Int!): [String!]!
+  """어드민) 일별 세후 수익 — 제휴(netCommission, 취소 제외) + 애드센스(GA4 추정치)"""
+  revenueTrend(endDate: DateTime!, startDate: DateTime!): [RevenueDailyOutput!]!
   """같은 상품(동일상품 그룹)의 진행 중 딜 조회 (최신순, 최대 20)"""
   sameProductDeals(id: Int!): [ProductOutput!]!
   """자동완성용 추천 검색어 목록. prefix로 시작하는 인기 검색어 + 상품 title prefix 매칭."""
@@ -1873,8 +1947,17 @@ type RecommendedProductOutput {
   recommendationScore: Float
 }
 
+type RevenueDailyOutput {
+  date: String!
+  """세후 KRW. 제휴=netCommission(취소 제외·결제일 기준), adsense=GA4 추정치"""
+  revenue: Float!
+  """affiliate_sales.provider 또는 'adsense'"""
+  source: String!
+}
+
 enum Role {
   ADMIN
+  GUEST
   USER
 }
 
@@ -2009,6 +2092,7 @@ type User {
   favoriteCategories: [Int!]
   gender: Gender
   id: ID!
+  isGuest: Boolean!
   lastReadNoticeAt: DateTime
   linkedSocialProviders: [OauthProvider!]
   nickname: String!

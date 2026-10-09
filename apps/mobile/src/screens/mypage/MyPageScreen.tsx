@@ -42,6 +42,8 @@ import {
   ThemeMenuIcon,
 } from '@/features/mypage/ui/icons';
 import {useColors} from '@/shared/theme/useColors';
+import {useAuth} from '@/shared/hooks/useAuth';
+import {useLeaveGuestSession} from '@/shared/hooks/useRequireLogin';
 import {
   COLOR_SCHEME_LABEL,
   useColorSchemePreference,
@@ -64,6 +66,9 @@ export default function MyPageScreen() {
   const [colorScheme, setColorScheme] = useColorSchemePreference();
 
   const {data: me, isPending, isError, refetch} = useQuery(MyPageQueries.me());
+  // 게스트(로그인 없이 알림만 받는 기기 계정) — 프로필 자리에 로그인 권유, 계정이 있어야 되는 메뉴는 로그인으로.
+  const {isGuest} = useAuth();
+  const leaveGuest = useLeaveGuestSession();
   const {refreshing, onRefresh} = usePullRefresh(refetch);
 
   // 탭 재탭 → 맨 위로. 웹뷰 시절 injectJavaScript 를 대체한다(런북 ② 경로).
@@ -117,7 +122,27 @@ export default function MyPageScreen() {
             `border-b border-gray-300`(1px) 이라 같은 화면에 두 굵기가 섞였다.
           */}
           <View className="border-b border-gray-200 py-8">
-            {isError ? (
+            {isGuest ? (
+              <Pressable
+                onPress={leaveGuest}
+                accessibilityRole="button"
+                accessibilityLabel="로그인하고 계정에 저장"
+                android_ripple={{color: c.gray[100]}}
+                style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+                <View className="flex-row items-center justify-between">
+                  <View className="min-w-0" style={styles.grow}>
+                    <Text className="text-lg font-bold text-gray-900">
+                      로그인하고 계정에 저장
+                    </Text>
+                    <Text className="text-xs text-gray-500">
+                      키워드 알림은 지금도 받고 있어요. 로그인하면 계정으로
+                      옮겨져요
+                    </Text>
+                  </View>
+                  <ArrowRight />
+                </View>
+              </Pressable>
+            ) : isError ? (
               <SectionErrorRow label="내 정보" onRetry={refetch} />
             ) : isPending ? (
               <View className="h-14 justify-center">
@@ -159,7 +184,9 @@ export default function MyPageScreen() {
             <MenuRow
               icon={<Heart width={24} height={24} />}
               title="찜 목록"
-              onPress={() => push(tabStackNavigations.LIKE)}
+              onPress={() =>
+                isGuest ? leaveGuest() : push(tabStackNavigations.LIKE)
+              }
             />
           </MenuGroup>
           <MenuGroup label="맞춤 설정">
@@ -168,11 +195,14 @@ export default function MyPageScreen() {
               title="키워드 알림"
               onPress={() => push(tabStackNavigations.MYPAGE_KEYWORD)}
             />
-            <MenuRow
-              icon={<GridMenuIcon />}
-              title="관심 카테고리"
-              onPress={() => push(tabStackNavigations.MYPAGE_CATEGORIES)}
-            />
+            {/* 관심 카테고리는 회원 프로필(favoriteCategories)에 저장돼 게스트는 못 바꾼다. */}
+            {!isGuest && (
+              <MenuRow
+                icon={<GridMenuIcon />}
+                title="관심 카테고리"
+                onPress={() => push(tabStackNavigations.MYPAGE_CATEGORIES)}
+              />
+            )}
             <MenuRow
               icon={<FilterMenuIcon />}
               title="알림 설정"

@@ -12,6 +12,7 @@ import {AuthQueries} from '@/entities/auth';
 import {isAuthFailure} from '@/shared/lib/client';
 import {settleInitialAuth} from '@/shared/lib/client/initial-auth';
 import {clearQueryCache} from '@/shared/lib/persistence/query-cache';
+import {setGuest, useIsGuest} from '@/shared/lib/auth/guest';
 
 /**
  * 토큰·쿠키 동기화는 **앱 전체에서 토큰당 한 번**(모듈 단일 상태).
@@ -118,6 +119,7 @@ async function clearTokensOnce() {
   try {
     await removeAsyncStorage(StorageKey.ACCESS_TOKEN);
     await removeAsyncStorage(StorageKey.REFRESH_TOKEN);
+    await setGuest(false);
     // 디스크 화면 캐시(알림·키워드)도 — 다음에 로그인하는 사람이 다를 수 있다.
     await clearQueryCache();
   } finally {
@@ -160,6 +162,7 @@ export const useAuth = () => {
     getStoredRefresh,
   );
   readStoredRefreshOnce();
+  const isGuest = useIsGuest();
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -177,9 +180,15 @@ export const useAuth = () => {
     if (isRejected) void clearTokensOnce();
   }, [isRejected]);
 
+  const isLogin =
+    !isRejected && ((!!data && isCookieReady) || hasStoredRefresh === true);
   return {
-    isLogin:
-      !isRejected && ((!!data && isCookieReady) || hasStoredRefresh === true),
+    /** 세션이 있다(회원 또는 게스트) — 메인을 그릴지. */
+    isLogin,
+    /** 게스트(로그인 없이 알림만 받는 기기 계정). */
+    isGuest,
+    /** 회원 — 댓글·찜·내 정보처럼 계정이 있어야 되는 일. */
+    isMember: isLogin && !isGuest,
     // 스플래시는 저장소를 읽는 수 ms 만 기다린다. 토큰이 없을 때만 갱신 결과를 기다린다
     // (곧 거절돼 로그인 화면으로 간다 — 그 전에 메인이 비치지 않게).
     isLoading:

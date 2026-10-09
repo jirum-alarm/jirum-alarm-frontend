@@ -2,10 +2,12 @@ import {removeAsyncStorage, setAsyncStorage} from '@/shared/lib/persistence';
 import {showToast} from '@/shared/lib/feedback';
 import {StorageKey} from '@/shared/constant/storage-key';
 import {bindFcmTokenToUser} from '@/shared/lib/fcm/push-permission';
+import {setGuest} from '@/shared/lib/auth/guest';
 
 export const handleLoginSuccess = async (
   accessToken?: string,
   refreshToken?: string | null,
+  {guest = false}: {guest?: boolean} = {},
 ) => {
   if (!accessToken || !refreshToken) {
     console.error('Login success handler: Invalid token data structure');
@@ -16,9 +18,12 @@ export const handleLoginSuccess = async (
   try {
     await setAsyncStorage(StorageKey.ACCESS_TOKEN, accessToken);
     await setAsyncStorage(StorageKey.REFRESH_TOKEN, refreshToken);
+    // 실제 로그인이면 게스트는 끝난다(키워드는 백엔드가 기기 기준으로 이 계정에 합친다).
+    await setGuest(guest);
     // 기다리지 않는다 — 네트워크 한 번 때문에 로그인 전환이 늦어질 이유가 없다.
     bindFcmTokenToUser();
-    showToast.success('로그인 성공! 알림 설정하고 핫딜을 받아보세요!');
+    if (!guest)
+      showToast.success('로그인 성공! 알림 설정하고 핫딜을 받아보세요!');
   } catch (storageError) {
     console.error('Error saving tokens:', storageError);
     showToast.error('로그인 처리 중 오류가 생겼어요.');

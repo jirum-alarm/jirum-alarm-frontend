@@ -342,7 +342,9 @@ describe('옮기면 안 되는 web 분기 — 옮기면 영원히 안 뜨는 죽
 
   it('앱엔 그 분기가 없다', () => {
     expect(ALL_CODE).not.toContain('checkAndRedirect');
-    expect(ALL_CODE).not.toContain('useRequireLogin');
+    // 비회원 게이트(requireLogin)는 없다. 게스트가 내정보에 들어오므로(2026-10-09) 로그인 권유만
+    // useLeaveGuestSession 으로 있다 — 그건 게이트가 아니라 사용자가 누르는 버튼이다.
+    expect(ALL_CODE).not.toContain('requireLogin(');
   });
 
   it('PC 전용 분기(isMobile)도 안 옮긴다', () => {

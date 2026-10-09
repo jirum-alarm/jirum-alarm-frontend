@@ -13,7 +13,8 @@ import {SERVICE_URL} from '@/constants/env';
  * 남긴 것이라 네이티브에 대응 화면이 있다.
  */
 export function PendingLoginRestore() {
-  const {isLogin} = useAuth();
+  // 회원으로 로그인했을 때만 — 게스트로 다시 둘러보기 시작한 건 "로그인 복귀"가 아니다.
+  const {isMember: isLogin} = useAuth();
   const tried = useRef(false);
 
   useEffect(() => {
