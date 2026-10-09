@@ -3273,7 +3273,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNNaverLogin (4.2.4):
+  - RNNaverLogin (5.0.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -4231,7 +4231,7 @@ SPEC CHECKSUMS:
   RNFBApp: a448037d2df74af9d374a0b765be12ff1e844dc0
   RNFBMessaging: 0f0498a95c605e3afcf13ac5f349d0b201ea65f6
   RNGestureHandler: 89c0c079dc88636fed9580bb581bd7df69ef33d0
-  RNNaverLogin: 88655625a94d61dda7541107bfe360702a7bf07d
+  RNNaverLogin: d6a5e18a3aacf868e220bd012a35410b7e2ebe4c
   RNReanimated: 3c8fda9af2068890e56397f4085e714d9f761cef
   RNScreens: 7a423c912ca9e107b37f54f32292186de32bfcaf
   RNSentry: ad96b6c44a1d3610430d6e32b2c04742f8efc0c2

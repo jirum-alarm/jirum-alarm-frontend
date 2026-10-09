@@ -276,8 +276,8 @@ importers:
         specifier: 6.0.4
         version: 6.0.4(react-native@0.86.3(@babel/core@7.29.7)(@react-native-community/cli@20.1.0(typescript@6.0.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.7)(react@19.2.3))(@react-native/metro-config@0.86.3(@babel/core@7.29.7))(@types/react@19.2.18)(react@19.2.3))(react@19.2.3)
       '@react-native-seoul/naver-login':
-        specifier: 4.2.4
-        version: 4.2.4(react-native@0.86.3(@babel/core@7.29.7)(@react-native-community/cli@20.1.0(typescript@6.0.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.7)(react@19.2.3))(@react-native/metro-config@0.86.3(@babel/core@7.29.7))(@types/react@19.2.18)(react@19.2.3))(react@19.2.3)
+        specifier: 5.0.1
+        version: 5.0.1(react-native@0.86.3(@babel/core@7.29.7)(@react-native-community/cli@20.1.0(typescript@6.0.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.7)(react@19.2.3))(@react-native/metro-config@0.86.3(@babel/core@7.29.7))(@types/react@19.2.18)(react@19.2.3))(react@19.2.3)
       '@react-navigation/bottom-tabs':
         specifier: 7.20.0
         version: 7.20.0(d172d817323745edce53c0f23739d9ad)
@@ -5463,8 +5463,8 @@ packages:
       react: '*'
       react-native: '*'
 
-  '@react-native-seoul/naver-login@4.2.4':
-    resolution: {integrity: sha512-pQZL8bfsi+gRtb3XsvSCwCvTTaFMFapF5whQPl5EgICtqyg/UvXyukZXTWX1k0eqGOsVtGhoLgo1WTKvYdF2fg==}
+  '@react-native-seoul/naver-login@5.0.1':
+    resolution: {integrity: sha512-DMspVb9IjvI9l+i4DTbC+NZNB7+bLrBWKoJnffI5o3yktotdezjn88oH1PkIuWrKCK95Ns21HN/Pa2bWQr0CaQ==}
     peerDependencies:
       react: '*'
       react-native: '*'
@@ -19412,7 +19412,7 @@ snapshots:
       react: 19.2.3
       react-native: 0.86.3(@babel/core@7.29.7)(@react-native-community/cli@20.1.0(typescript@6.0.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.7)(react@19.2.3))(@react-native/metro-config@0.86.3(@babel/core@7.29.7))(@types/react@19.2.18)(react@19.2.3)
 
-  '@react-native-seoul/naver-login@4.2.4(react-native@0.86.3(@babel/core@7.29.7)(@react-native-community/cli@20.1.0(typescript@6.0.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.7)(react@19.2.3))(@react-native/metro-config@0.86.3(@babel/core@7.29.7))(@types/react@19.2.18)(react@19.2.3))(react@19.2.3)':
+  '@react-native-seoul/naver-login@5.0.1(react-native@0.86.3(@babel/core@7.29.7)(@react-native-community/cli@20.1.0(typescript@6.0.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.7)(react@19.2.3))(@react-native/metro-config@0.86.3(@babel/core@7.29.7))(@types/react@19.2.18)(react@19.2.3))(react@19.2.3)':
     dependencies:
       dooboolab-welcome: 1.3.2
       react: 19.2.3
