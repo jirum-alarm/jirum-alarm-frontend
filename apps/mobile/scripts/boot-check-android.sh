@@ -5,10 +5,11 @@
 #
 # 어떻게: APK 의 assets/index.android.bundle 만 이 커밋의 Hermes 바이트코드(OTA 와 같은 산출물)로 바꾸고 다시 서명한다.
 #   그래서 APK 는 네이티브 지문이 같은 아무 Release 빌드나 써도 된다(CI 는 지문으로 캐시). ABI 는 에뮬레이터 것이 들어 있어야 한다.
-# 판정: 앱 데이터를 비우고 콜드 스타트 2회 — BOOT_WAIT 초 뒤 ① 프로세스 생존 ② logcat 에 치명 예외 없음
+# 판정: 매번 새로 설치해 콜드 스타트 2회 — BOOT_WAIT 초 뒤 ① 프로세스 생존 ② logcat 에 치명 예외 없음
 #   ③ 화면에 앱이 그린 글자가 있다(uiautomator) — JS 가 실제로 돌아 첫 화면을 그렸다는 증거.
 # iOS 와 다른 점:
-#   - expo-updates 를 끌 수 없다(설정이 바이너리 매니페스트에 있다) → 매번 `pm clear` 로 받은 OTA 를 지워 내장 번들로 뜨게 한다.
+#   - expo-updates 를 끌 수 없다(설정이 바이너리 매니페스트에 있다) → 매번 지우고 새로 설치해 받은 OTA 를 비우고 내장 번들로 뜨게 한다.
+#     `pm clear` 를 쓰면 CI 에뮬레이터에서 GMS 가 죽고 앱이 함께 정리되는 일이 실행당 한 번꼴로 있었다(10/9, hind 세션 분석).
 #   - Release 는 run-as 가 안 돼 AsyncStorage 에 토큰을 못 넣는다 → 로그인 경로는 iOS 쪽만 본다.
 # ponytail: JS 가 그린 뒤 오류 없이 깨진 화면은 못 잡는다 — 사고로 나오면 스크린샷 비교를 더한다.
 set -euo pipefail
@@ -36,13 +37,14 @@ keytool -genkeypair -keystore "$WORK/ks" -storepass android -keypass android -al
 "$BT/apksigner" sign --ks "$WORK/ks" --ks-pass pass:android "$WORK/app.apk"
 
 adb wait-for-device
-adb uninstall "$PKG" >/dev/null 2>&1 || true
+adb uninstall "$PKG" >/dev/null 2>&1 || true # 실행마다 새 키로 서명하니 덮어쓰기(-r)는 서명 불일치로 거부된다
 adb install "$WORK/app.apk" >/dev/null
 ACTIVITY=$(adb shell cmd package resolve-activity --brief "$PKG" | tail -1 | tr -d '\r')
 
 # 한 번 켜 본다. 0=통과 1=실패 2=크래시 기록 없이 사라짐(재시도 대상).
 attempt() {
-  adb shell pm clear "$PKG" >/dev/null
+  adb uninstall "$PKG" >/dev/null 2>&1 || true
+  adb install "$WORK/app.apk" >/dev/null
   adb logcat -c
   adb shell am start -n "$ACTIVITY" >/dev/null
   sleep "$WAIT"
@@ -51,6 +53,7 @@ attempt() {
     # 자바 크래시가 아니면(네이티브 tombstone·ANR·메모리 부족 kill) FATAL EXCEPTION 이 안 찍힌다 — 왜 죽었는지 남긴다.
     adb logcat -d -b crash | tail -25
     adb logcat -d | grep -iE "ActivityManager|lowmemorykiller|libc|DEBUG|$PKG" | grep -iE "died|kill|anr|crash|fatal|signal|exit|start proc" | tail -20
+    adb logcat -d | grep -E "Killing [0-9]+:$PKG" | cut -c1-300 # 누가 왜 죽였나(예: depends on provider … in dying proc)
     adb logcat -d -b main,crash | grep -qE "FATAL EXCEPTION|JavascriptException|Fatal signal" && return 1
     return 2
   fi
