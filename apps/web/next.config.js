@@ -86,7 +86,7 @@ module.exports = withBundleAnalyzer(nextConfig);
 
 // Injected content via Sentry wizard below
 
-const { withSentryConfig } = require('@sentry/nextjs');
+const { withSentryConfig } = require('@sentry/nextjs/config');
 
 module.exports = withSentryConfig(module.exports, {
   // For all available options, see:
@@ -111,7 +111,7 @@ module.exports = withSentryConfig(module.exports, {
   tunnelRoute: '/monitoring',
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
-  disableLogger: true,
+  webpack: { treeshake: { removeDebugLogging: true } },
 
   // Replay 를 안 쓴다(instrumentation-client). rrweb 의 iframe·shadowDOM·worker 코드까지 빌드 타임에 잘라낸다.
   bundleSizeOptimizations: {

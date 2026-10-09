@@ -8,6 +8,8 @@
 //  1) Sentry 는 resource service.name 을 'node' 로 고정한다 → Tempo 로 보낼 때만 env(OTEL_SERVICE_NAME·OTEL_RESOURCE_ATTRIBUTES)로 바꿔 끼운다.
 //  2) Sentry 전파기는 sentry-trace·baggage 만 보내고 W3C traceparent 를 안 보낸다(node SDK 10.25, propagateTraceparent 는
 //     브라우저 전용) → 백엔드(W3C) 트레이스가 끊긴다. traceparent 를 같이 싣는 합성 전파기로 바꾼다.
+//     ※ 10.76 부터 Node fetch 계측은 OTel 전파기를 안 거치고 Sentry.init 의 propagateTraceparent 만 본다 →
+//       sentry.server.config 에서 그 옵션을 켠다(fetch 가 아닌 OTel 계측 경로용으로 합성 전파기는 그대로 둔다).
 //
 // OTEL_EXPORTER_OTLP_ENDPOINT 가 없으면(로컬·Vercel 등) 아무것도 안 한다 — Sentry 동작은 그대로.
 import { propagation } from '@opentelemetry/api';

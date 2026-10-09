@@ -29,6 +29,10 @@ Sentry.init({
 
   // 같은 span 을 사내 Tempo 로도(OTEL_EXPORTER_OTLP_ENDPOINT 있을 때만). 자세한 건 otel-tempo.ts.
   openTelemetrySpanProcessors: tempoSpanProcessors(),
+
+  // 서버→백엔드 fetch 에 W3C traceparent 도 싣는다 — 백엔드(Tempo) 트레이스가 web 트레이스에 이어지게.
+  // 10.7x 부터 Node fetch 계측이 OTel 전파기를 거치지 않고 이 옵션만 본다(안 켜면 sentry-trace·baggage 만 나감).
+  propagateTraceparent: true,
 });
 
 enableW3CTracePropagation();
