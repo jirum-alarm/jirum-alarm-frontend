@@ -2,8 +2,12 @@ import {
   getPushablePath,
   getTabNameFromUrl,
   isTabRootUrl,
+  resolveNativeRoute,
 } from '../src/shared/lib/navigation/tab-routing';
-import {tabNavigations} from '../src/shared/constant/navigations';
+import {
+  tabNavigations,
+  tabStackNavigations,
+} from '../src/shared/constant/navigations';
 
 describe('getPushablePath', () => {
   it('상품 상세는 push 경로를 돌려준다', () => {
@@ -141,5 +145,46 @@ describe('getTabNameFromUrl — 탭 귀속', () => {
     expect(at('/mypage/keyword')).toBe(tabNavigations.MYPAGE);
     expect(at('/like')).toBe(tabNavigations.MYPAGE);
     expect(at('/products/123')).toBe(tabNavigations.HOME);
+  });
+});
+
+describe('resolveNativeRoute — 상대 경로에 쿼리가 붙어도 네이티브로', () => {
+  // 10/10 실측: 상대 경로는 쿼리째 비교돼 `/toss?tab=category`·`/search?keyword=…` 가
+  // 정확 비교에서 빗나가 웹뷰(옛 web 페이지 — 다크에서도 흰 화면)로 떨어졌다.
+  it('토스 카테고리 탭', () => {
+    expect(resolveNativeRoute('/toss?tab=category')).toMatchObject({
+      screen: tabStackNavigations.TOSS_CURATION,
+      params: {sectionId: 'category'},
+    });
+  });
+
+  it('검색어가 딸린 검색', () => {
+    expect(
+      resolveNativeRoute('/search?keyword=%EC%95%84%EC%9D%B4%ED%8F%B0'),
+    ).toMatchObject({
+      screen: tabStackNavigations.SEARCH,
+      nested: {params: {keyword: '아이폰'}},
+    });
+  });
+
+  it('web 목록 링크 꼴(?tab=all)의 커뮤니티 글', () => {
+    expect(resolveNativeRoute('/community/80?tab=all')).toMatchObject({
+      screen: tabStackNavigations.COMMUNITY_POST,
+    });
+  });
+
+  it('고정 경로 표도 쿼리를 뗀 경로로 찾는다', () => {
+    expect(resolveNativeRoute('/alarm?utm_source=push')).toEqual({
+      tab: tabNavigations.ALARM,
+    });
+  });
+
+  it('절대 주소는 원래대로', () => {
+    expect(
+      resolveNativeRoute('https://jirum-alarm.com/toss?tab=category'),
+    ).toMatchObject({
+      screen: tabStackNavigations.TOSS_CURATION,
+      params: {sectionId: 'category'},
+    });
   });
 });

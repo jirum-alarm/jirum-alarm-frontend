@@ -390,7 +390,10 @@ function extractPath(url: string): string {
       const match = url.match(/^https?:\/\/[^/]+(\/[^?#]*)?/);
       return match?.[1] || '/';
     }
-    return url.startsWith('/') ? url : `/${url}`;
+    // 상대 경로도 쿼리·해시를 뗀다 — 안 떼면 `/toss?tab=category`·`/search?keyword=…`·`/community/80?tab=all` 이
+    // 정확 비교(`=== '/toss'`·고정 경로 표·글 id 정규식)에서 빗나가 웹뷰 폴백(옛 web 페이지)으로 떨어진다(10/10 실측).
+    const relative = url.startsWith('/') ? url : `/${url}`;
+    return relative.replace(/[?#].*$/, '') || '/';
   } catch {
     return url;
   }
