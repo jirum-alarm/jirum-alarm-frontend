@@ -170,7 +170,10 @@ pnpm build            # Production build
   2. **발행할 커밋 그대로 iOS 시뮬레이터 Release 빌드 → 콜드 스타트 2회 + 홈·바뀐 화면 진입.**
      "켜지나" 판정은 `bash apps/mobile/scripts/boot-check.sh <Release .app>` 한 줄로 된다(이 커밋 JS 를 끼워 콜드 스타트 3회 —
      생존·치명 JS 예외 없음·JS 실행 흔적(AsyncStorage deviceId)을 본다. 자동 OTA 의 CI 관문과 같은 스크립트.
-     Release 앱은 JS 치명 오류에도 안 죽고 멈추기만 해서 "살아 있나" 만으론 못 잡는다 — 10/9 뮤테이션 실측). 바뀐 화면 진입은 여전히 손으로 본다.
+     Release 앱은 JS 치명 오류에도 안 죽고 멈추기만 해서 "살아 있나" 만으론 못 잡는다 — 10/9 뮤테이션 실측)
+     안드로이드는 `bash apps/mobile/scripts/boot-check-android.sh <Release .apk>`(에뮬레이터 필요, 콜드 스타트 2회 —
+     생존·logcat 치명 예외·첫 화면 글자(uiautomator)). APK 는 `./gradlew assembleRelease -PreactNativeArchitectures=<에뮬 ABI>`
+     + `-Pandroid.injected.signing.*`(임시 키 — 로컬 keystore.properties 가 없는 업로드 키를 가리키면 그냥은 실패한다). JDK 17+.. 바뀐 화면 진입은 여전히 손으로 본다.
      `cd apps/mobile/ios && rm -f Pods/.last_build_configuration && pod install && rm -f Pods/.last_build_configuration &&
      xcodebuild -workspace jirumAlarmMobile.xcworkspace -scheme jirumAlarmMobile -configuration Release -sdk iphonesimulator
      -destination 'generic/platform=iOS Simulator' -derivedDataPath build CODE_SIGNING_ALLOWED=NO build`
@@ -196,7 +199,7 @@ pnpm build            # Production build
      `eas update:list --branch production --json` 에서 직전 정상 group 을 찾아
      `eas update:republish --group <id> --non-interactive --message "ROLLBACK: …"`(같은 브랜치로 재발행 — `--group` 과 `--branch` 는 함께 못 쓴다).
   - **자동 OTA(`mobile-ota`, `MOBILE_AUTO_OTA=true`, 2026-10-09 켬)**: main push → mobile-validation 성공 →
-    `boot-check` 잡(macOS, `scripts/boot-check.sh` — Release 앱은 네이티브 지문으로 캐시) 통과 → production 발행 → Mattermost `alert-deploy`.
+    `boot-check`(iOS, macOS)·`boot-check-android`(에뮬레이터) 잡 통과(Release 앱·APK 는 네이티브 지문으로 캐시) → production 발행 → Mattermost `alert-deploy`.
     그래서 JS 는 **main 에 푸시하면 나간다** — 위 1~3번을 손으로 할 일은 없고, 푸시 뒤 `gh run watch` 로 mobile-ota 결과를 확인한다.
     기동 확인은 "켜지다 죽거나 JS 가 못 도는 것" 만 잡는다(오류 없는 화면 깨짐은 못 봄) — 바뀐 화면이 큰 변경이면 푸시 전에 로컬에서 띄워 본다.
     사고 때 첫 조치: 저장소 변수 `MOBILE_AUTO_OTA` 를 끄고(`gh variable set MOBILE_AUTO_OTA -b false`) 4번으로 롤백.

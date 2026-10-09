@@ -149,8 +149,80 @@ jobs:
       - name: Boot check (cold start ×3)
         run: bash apps/mobile/scripts/boot-check.sh apps/mobile/ios/build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app
 
+  # 안드로이드판 — APK 의 번들만 바꿔 끼워 에뮬레이터에서 켠다(scripts/boot-check-android.sh). APK 는 지문으로 캐시.
+  boot-check-android:
+    needs: changes
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.app == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Release APK
+        id: apk-cache
+        uses: actions/cache@v4
+        with:
+          path: apps/mobile/android/boot-check.apk
+          key: android-release-x86_64-${{ hashFiles('apps/mobile/native-fingerprint.json') }}
+
+      - name: Set up JDK 17
+        if: steps.apk-cache.outputs.cache-hit != 'true'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # 서명은 아무 키나 — boot-check-android.sh 가 번들을 바꾼 뒤 다시 서명한다.
+      - name: Build Release APK (x86_64)
+        if: steps.apk-cache.outputs.cache-hit != 'true'
+        working-directory: apps/mobile/android
+        env:
+          MOBILE_ANDROID_GOOGLE_SERVICES_JSON_B64: ${{ secrets.MOBILE_ANDROID_GOOGLE_SERVICES_JSON_B64 }}
+        run: |
+          set -euo pipefail
+          umask 077
+          node -e "require('fs').writeFileSync('app/google-services.json',Buffer.from(process.env.MOBILE_ANDROID_GOOGLE_SERVICES_JSON_B64,'base64'))"
+          keytool -genkeypair -keystore "$RUNNER_TEMP/ks" -storepass android -keypass android -alias k -keyalg RSA \
+            -keysize 2048 -validity 1 -dname CN=boot-check
+          ./gradlew assembleRelease -PreactNativeArchitectures=x86_64 \
+            -Pandroid.injected.signing.store.file="$RUNNER_TEMP/ks" -Pandroid.injected.signing.store.password=android \
+            -Pandroid.injected.signing.key.alias=k -Pandroid.injected.signing.key.password=android
+          cp app/build/outputs/apk/release/app-release.apk boot-check.apk
+          rm -f app/google-services.json
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+
+      - name: Boot check (cold start ×2)
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          script: bash apps/mobile/scripts/boot-check-android.sh apps/mobile/android/boot-check.apk
+
   publish:
-    needs: boot-check
+    needs: [boot-check, boot-check-android]
     if: >-
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'push' &&
