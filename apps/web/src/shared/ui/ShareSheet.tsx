@@ -105,18 +105,19 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
   };
 
   // 브랜드 배경색 원형 + 흰 로고. X·Threads 공식 배경은 검정, 링크 복사는 브랜드가 아니라 회색.
+  // 다크에선 검은 원이 시트 바탕에 묻혀 앱 ShareSheet 처럼 회색 원(gray-100)으로 둔다.
   const channels: { c: ShareChannel; label: string; icon: React.ReactNode; badge: string }[] = [
     {
       c: 'x',
       label: 'X',
       icon: <ShareX width={20} height={20} className="text-fixed-white" />,
-      badge: 'bg-black',
+      badge: 'bg-black dark:bg-gray-100',
     },
     {
       c: 'threads',
       label: '스레드',
       icon: <ShareThreads width={22} height={22} className="text-fixed-white" />,
-      badge: 'bg-black',
+      badge: 'bg-black dark:bg-gray-100',
     },
     {
       c: 'copy',

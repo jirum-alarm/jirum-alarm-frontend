@@ -8,6 +8,7 @@ import {
   Pressable,
   StyleSheet,
   View,
+  useColorScheme,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useKeyboardState} from 'react-native-keyboard-controller';
@@ -45,7 +46,7 @@ export default function BottomSheet({
 }) {
   const insets = useSafeAreaInsets();
   const keyboardVisible = useKeyboardState(state => state.isVisible);
-  const c = useColors();
+  const panelStyle = useSheetPanelStyle();
   // 0 = 닫힘, 1 = 열림. 백드롭 투명도와 시트 위치가 같은 값을 따라간다 —
   // 예전엔 백드롭이 고정색이라 열리는 순간 40% 로 툭 켜지고 닫힐 때 툭 꺼졌다.
   const progress = useRef(new Animated.Value(0)).current;
@@ -155,7 +156,7 @@ export default function BottomSheet({
           aria-label={accessibilityLabel}
           style={[
             styles.sheet,
-            {backgroundColor: c.white},
+            panelStyle,
             {
               // 키보드가 떠 있으면 홈 인디케이터 여백은 키보드 아래로 들어간다 — 그대로 두면
               // 시트가 그만큼 더 올라가 '기타' 신고 시트 윗부분이 상태바와 겹쳤다.
@@ -173,6 +174,17 @@ export default function BottomSheet({
 
 /** 시트 위 모서리 — rounded-t-sheet 토큰(1.25rem). 판이 Animated.View 라 className 대신 숫자로 쓴다. */
 export const SHEET_RADIUS = parseFloat(radius.sheet) * 16;
+
+/**
+ * 판 바탕 — 다크에선 판(white=바탕색)과 가림막 뒤 화면의 대비가 1.06:1 이라 경계가 안 보여 위 테두리 한 줄(gray-100).
+ * web 은 recipes sheet.panel 의 dark:border-t·dark:border-gray-100. 판이 Animated.View 라 className 대신 style 로 준다.
+ */
+export const useSheetPanelStyle = () => {
+  const c = useColors();
+  return useColorScheme() === 'dark'
+    ? {backgroundColor: c.white, borderTopWidth: 1, borderColor: c.gray[100]}
+    : {backgroundColor: c.white};
+};
 
 const styles = StyleSheet.create({
   container: {

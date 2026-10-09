@@ -13,7 +13,10 @@ import {
 } from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {sheet as sheetRecipe} from '@jirum/design-system/recipes';
-import {SHEET_RADIUS} from '@/shared/components/BottomSheet';
+import {
+  SHEET_RADIUS,
+  useSheetPanelStyle,
+} from '@/shared/components/BottomSheet';
 import {cn} from '@/shared/lib/styling';
 import * as Haptics from 'expo-haptics';
 import {Image} from 'expo-image';
@@ -81,6 +84,7 @@ export default function ShareSheet({
   imageUrl,
 }: Props) {
   const c = useColors();
+  const panelStyle = useSheetPanelStyle();
   // X·스레드의 검은 원이 다크 시트 바탕에 묻힌다 → 다크에선 '더보기' 와 같은 회색 원(로고는 흰색 그대로).
   const brandDark = useColorScheme() === 'dark' ? c.gray[100] : '#000000';
   const insets = useSafeAreaInsets();
@@ -252,7 +256,7 @@ export default function ShareSheet({
           onStartShouldSetResponder={() => true}
           style={[
             styles.sheet,
-            {backgroundColor: c.white},
+            panelStyle,
             {
               paddingBottom: Math.max(insets.bottom, 16),
               transform: [

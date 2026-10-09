@@ -202,7 +202,9 @@ const infoBox = 'rounded-xl border border-gray-200 bg-gray-50';
  */
 const sheet = {
   overlay: 'bg-black/40',
-  panel: 'rounded-t-sheet bg-white',
+  // 다크에선 판(white=바탕색)과 가림막 뒤 화면의 대비가 1.06:1 이라 판 경계가 안 보인다 → 위 테두리 한 줄.
+  // 판을 gray-50 으로 띄우면 시트 안의 gray-50 면(공유 미리보기·태그 상자·입력창)이 묻혀서 테두리로 간다.
+  panel: 'rounded-t-sheet bg-white dark:border-t dark:border-gray-100',
   handle: 'mx-auto h-1 w-10 rounded-full bg-gray-300',
 };
 

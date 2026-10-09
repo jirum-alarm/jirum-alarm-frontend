@@ -183,6 +183,22 @@ describe('시트 겉 — web 은 공용 BottomSheetContent 하나, 앱 시트 �
       /borderTopLeftRadius: 16/,
     );
   });
+
+  it('다크 판 위 테두리 — web 레시피(dark:border-t)와 앱 시트 둘(useSheetPanelStyle)이 같이 간다', () => {
+    const {sheet} = require('@jirum/design-system/recipes');
+    expect(sheet.panel).toContain('dark:border-t dark:border-gray-100');
+    expect(native('shared/components/BottomSheet.tsx')).toMatch(
+      /borderTopWidth: 1, borderColor: c\.gray\[100\]/,
+    );
+    // 판 색을 손으로 다시 쓰면 다크 테두리가 빠진다 — 두 시트 모두 훅으로.
+    for (const f of [
+      'shared/components/BottomSheet.tsx',
+      'screens/detail/ui/ShareSheet.tsx',
+    ]) {
+      expect(native(f)).toContain('useSheetPanelStyle()');
+      expect(native(f)).not.toContain('{backgroundColor: c.white},');
+    }
+  });
 });
 
 describe('스켈레톤 — web Skeleton·앱 SkeletonBox 가 같은 gray-200', () => {

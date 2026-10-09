@@ -153,6 +153,7 @@ UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·
 - **카드 사진 틀**(`cardThumb`) — 상품 카드 사진 자리의 옅은 면 + 테두리. web 5종·앱 3종 카드가 같은 문자열을 읽는다.
 - **정보 상자**(`infoBox`) — 본문 안 옅은 면 + 테두리 상자(가격 판정 요약·공유 미리보기). 여백은 자리마다.
 - **바텀시트 겉**(`sheet`) — 가림막 40% 검정·판 위 모서리 `rounded-t-sheet`(20px)·손잡이 40x4 gray-300.
+  다크에선 판 위 테두리 한 줄(gray-100) — 판이 바탕색이라 가림막과의 경계가 안 보였다(앱은 `useSheetPanelStyle`).
   web 은 `shared/ui/common/BottomSheet` 의 `BottomSheetContent`(vaul `Drawer.Root` 안에, `handle`·`srTitle`), 앱은 `shared/components/BottomSheet`
   (공유 시트도 같은 값). 예전엔 web 에 가림막·판 클래스가 11벌 복사돼 있었고 앱은 모서리가 16px 로 달랐다.
 - **스켈레톤**(`skeleton`, gray-200) — web `shared/ui/common/Skeleton`, 앱 `shared/components/Skeletons`(`SkeletonBox`). 크기·모서리는 실제 요소와 맞춘다.
