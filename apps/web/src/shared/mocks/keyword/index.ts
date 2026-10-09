@@ -1,14 +1,16 @@
-import { graphql, HttpResponse } from 'msw';
+import { HttpResponse } from 'msw/http';
+
+import { api } from '../api';
 
 import { mypageKeyword } from './service';
 
-const QueryMypageKeyword = graphql.query('QueryMypageKeyword', async () => {
+const QueryMypageKeyword = api.query('QueryMypageKeyword', async () => {
   return HttpResponse.json({
     data: mypageKeyword.get(),
   });
 });
 
-const MutationRemoveNotificationKeyword = graphql.mutation(
+const MutationRemoveNotificationKeyword = api.mutation(
   'MutationRemoveNotificationKeyword',
   ({ variables }) => {
     mypageKeyword.remove(variables.id);
@@ -20,7 +22,7 @@ const MutationRemoveNotificationKeyword = graphql.mutation(
   },
 );
 
-const MutationAddNotificationKeyword = graphql.mutation(
+const MutationAddNotificationKeyword = api.mutation(
   'MutationAddNotificationKeyword',
   ({ variables }) => {
     const isSuccess = mypageKeyword.add(variables.keyword);

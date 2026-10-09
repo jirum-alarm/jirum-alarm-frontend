@@ -1,12 +1,13 @@
-import { graphql, HttpResponse } from 'msw';
+import { HttpResponse } from 'msw/http';
 
 import { INotification, Role } from '@/graphql/interface';
 
+import { api } from './api';
 import * as keyword from './keyword';
 
 const keywordHandlers = Object.values(keyword);
 
-const QueryProducts = graphql.query('QueryProducts', () => {
+const QueryProducts = api.query('QueryProducts', () => {
   const product = (productId: number) => {
     const id = productId.toString();
 
@@ -34,7 +35,7 @@ const QueryProducts = graphql.query('QueryProducts', () => {
   });
 });
 
-const QueryCategories = graphql.query('QueryCategories', () => {
+const QueryCategories = api.query('QueryCategories', () => {
   const categories = [
     {
       id: '1',
@@ -89,7 +90,7 @@ const QueryCategories = graphql.query('QueryCategories', () => {
   });
 });
 
-const QueryNotifications = graphql.query('QueryNotifications', () => {
+const QueryNotifications = api.query('QueryNotifications', () => {
   const urlParams = new URLSearchParams(window.location.search);
 
   if (urlParams.get('status') === 'no-alarm') {
@@ -149,7 +150,7 @@ const QueryNotifications = graphql.query('QueryNotifications', () => {
   });
 });
 
-const QueryUnreadNotificationsCount = graphql.query('QueryUnreadNotificationsCount', () => {
+const QueryUnreadNotificationsCount = api.query('QueryUnreadNotificationsCount', () => {
   const urlParams = new URLSearchParams(window.location.search);
 
   if (urlParams.get('alarm-status') === 'no-alarm') {
@@ -163,7 +164,7 @@ const QueryUnreadNotificationsCount = graphql.query('QueryUnreadNotificationsCou
   });
 });
 
-const QueryMe = graphql.query('QueryMe', async () => {
+const QueryMe = api.query('QueryMe', async () => {
   const urlParams = new URLSearchParams(window.location.search);
 
   if (urlParams.get('me-status') === 'no-login') {
@@ -184,7 +185,7 @@ const QueryMe = graphql.query('QueryMe', async () => {
   });
 });
 
-const MutationLogin = graphql.mutation('MutationLogin', () => {
+const MutationLogin = api.mutation('MutationLogin', () => {
   return HttpResponse.json({
     data: {
       login: {
@@ -195,7 +196,7 @@ const MutationLogin = graphql.mutation('MutationLogin', () => {
   });
 });
 
-const MutationSignup = graphql.mutation('MutationSignup', () => {
+const MutationSignup = api.mutation('MutationSignup', () => {
   return HttpResponse.json({
     data: {
       signup: {
@@ -215,7 +216,7 @@ const MutationSignup = graphql.mutation('MutationSignup', () => {
   });
 });
 
-const MutationUpdateUserProfile = graphql.mutation('MutationUpdateUserProfile', () => {
+const MutationUpdateUserProfile = api.mutation('MutationUpdateUserProfile', () => {
   return HttpResponse.json({
     data: {
       updateUserProfile: true,
@@ -223,7 +224,7 @@ const MutationUpdateUserProfile = graphql.mutation('MutationUpdateUserProfile', 
   });
 });
 
-const MutationUpdatePassword = graphql.mutation('MutationUpdatePassword', () => {
+const MutationUpdatePassword = api.mutation('MutationUpdatePassword', () => {
   return HttpResponse.json({
     data: {
       updatePassword: true,
@@ -231,7 +232,7 @@ const MutationUpdatePassword = graphql.mutation('MutationUpdatePassword', () => 
   });
 });
 
-const MutationWithdraw = graphql.mutation('MutationWithdraw', () => {
+const MutationWithdraw = api.mutation('MutationWithdraw', () => {
   return HttpResponse.json({
     data: {
       withdraw: true,
@@ -239,7 +240,7 @@ const MutationWithdraw = graphql.mutation('MutationWithdraw', () => {
   });
 });
 
-const MutationAddPushToken = graphql.mutation('MutationAddPushToken', () => {
+const MutationAddPushToken = api.mutation('MutationAddPushToken', () => {
   return HttpResponse.json({
     data: {
       addPushToken: true,
@@ -248,7 +249,7 @@ const MutationAddPushToken = graphql.mutation('MutationAddPushToken', () => {
 });
 
 // This funciton should be add handlers to last, if not can't mock apis
-const Operation = graphql.operation(({ query, variables }) => {
+const Operation = api.operation(({ query, variables }) => {
   console.warn('[MSW] unhandled api found ', query, variables);
 
   return HttpResponse.json({ errors: [{ message: 'Request failed' }] });
