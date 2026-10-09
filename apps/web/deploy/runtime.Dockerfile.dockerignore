@@ -1,0 +1,6 @@
+*
+!next.config.js
+!package.json
+!.next/standalone
+!.next/static
+!public
