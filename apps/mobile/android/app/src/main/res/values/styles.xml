@@ -4,7 +4,7 @@
         <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
     </style>
 
-    <style name="BootTheme" parent="Theme.BootSplash.EdgeToEdge">
+    <style name="BootTheme" parent="Theme.BootSplash">
         <item name="darkContentBarsStyle">true</item>
 
         <item name="bootSplashBackground">@color/bootsplash_background</item>
