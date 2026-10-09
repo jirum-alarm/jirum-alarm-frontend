@@ -20,8 +20,7 @@
     "knip": "knip"
   },
   "dependencies": {
-    "@apollo/client": "^3.14.1",
-    "@apollo/experimental-nextjs-app-support": "^0.11.11",
+    "@apollo/client": "^4.3.3",
     "@jirum/design-system": "workspace:*",
     "@microsoft/clarity": "^1.0.2",
     "@opentelemetry/api": "^1.9.1",
@@ -41,7 +40,7 @@
     "es-toolkit": "^1.52.0",
     "firebase": "^10.14.1",
     "graphql": "^16.14.2",
-    "graphql-ws": "^5.16.2",
+    "graphql-ws": "^6.3.0",
     "jotai": "^2.20.3",
     "motion": "^12.43.0",
     "next": "16.4.0",
@@ -53,6 +52,7 @@
     "react-error-boundary": "^4.1.2",
     "react-intersection-observer": "^9.16.0",
     "react-scroll": "^1.9.3",
+    "rxjs": "^7.8.2",
     "sharp": "^0.34.5",
     "swiper": "^11.2.10",
     "tailwind-merge": "^3.7.0",
