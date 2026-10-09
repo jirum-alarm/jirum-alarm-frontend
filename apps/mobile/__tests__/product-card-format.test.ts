@@ -1,4 +1,5 @@
 export {};
+declare const __dirname: string;
 
 /**
  * 카드가 쓰는 두 규칙. 화면 렌더 없이 로직만 검사한다.
@@ -51,5 +52,42 @@ describe('DisplayProductSource — 판매처와 제보 커뮤니티는 다른 �
       mall: undefined,
       community: '뽐뿌',
     });
+  });
+});
+
+describe('splitPriceNote — 외화 원문 끝의 괄호 메모는 보조 글씨로', () => {
+  const {splitPriceNote} = require('../src/shared/lib/format/price');
+
+  it('환산가 괄호를 떼어 낸다', () => {
+    expect(splitPriceNote('$259.9 (≈ 351,722 원)')).toEqual({
+      main: '$259.9',
+      note: '(≈ 351,722 원)',
+    });
+    expect(splitPriceNote('$ 2.67 (USD)')).toEqual({
+      main: '$ 2.67',
+      note: '(USD)',
+    });
+  });
+
+  it('web 과 같은 정규식이다(같은 상품이 web·앱에서 다르게 보이지 않게)', () => {
+    const fs = require('fs');
+
+    const path = require('path');
+    const read = (p: string) =>
+      fs.readFileSync(path.join(__dirname, p), 'utf8');
+    const rx = /\/\^\(\.\+\?\)[^/]*\$\/\.exec/;
+    const web = read('../../web/src/shared/lib/utils/price.ts').match(rx)?.[0];
+    const app = read('../src/shared/lib/format/price.ts').match(rx)?.[0];
+    expect(app).toBeDefined();
+    expect(web).toBe(app);
+  });
+
+  it('괄호가 없거나 괄호뿐이면 그대로', () => {
+    expect(splitPriceNote('12,900')).toEqual({main: '12,900', note: null});
+    expect(splitPriceNote('커뮤니티 확인')).toEqual({
+      main: '커뮤니티 확인',
+      note: null,
+    });
+    expect(splitPriceNote('(USD)')).toEqual({main: '(USD)', note: null});
   });
 });

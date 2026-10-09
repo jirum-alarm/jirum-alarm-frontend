@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
-import {parsePrice} from '@/shared/lib/format/price';
+import {parsePrice, splitPriceNote} from '@/shared/lib/format/price';
 import {cn} from '@/shared/lib/styling';
 
 /**
@@ -16,13 +16,13 @@ export default function DisplayPrice({
   className?: string;
 }) {
   const {hasWon, priceWithoutWon} = parsePrice(price);
+  const {main, note} = splitPriceNote(priceWithoutWon);
 
   return (
     <Text className={cn('text-lg font-bold text-gray-500', className)}>
-      <Text className="text-2xl font-semibold text-gray-900">
-        {priceWithoutWon}
-      </Text>
+      <Text className="text-2xl font-semibold text-gray-900">{main}</Text>
       {hasWon ? '원' : ''}
+      {note ? <Text className="text-sm font-medium"> {note}</Text> : null}
     </Text>
   );
 }

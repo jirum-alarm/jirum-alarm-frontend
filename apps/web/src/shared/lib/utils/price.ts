@@ -55,3 +55,13 @@ export function parsePrice(price?: PriceValue) {
   // 숫자가 아예 없으면 가격이 아니다("선택", "커뮤니티 확인").
   return { hasWon: false, priceWithoutWon: trimmed };
 }
+
+/**
+ * 가격 원문 끝의 괄호 메모를 떼어 낸다 — "$259.9 (≈ 351,722 원)" → 본 가격 "$259.9" + 메모 "(≈ 351,722 원)".
+ * 외화는 원문을 그대로 쓰는데(위 parsePrice), 괄호 속 환산가까지 본 가격 크기로 그리면 줄이 넘쳐 "원)"이 다음 줄로 갔다.
+ * 앱 shared/lib/format/price.ts 와 같은 구현.
+ */
+export function splitPriceNote(text: string): { main: string; note: string | null } {
+  const matched = /^(.+?)\s*(\([^()]*\))$/.exec(text.trim());
+  return matched ? { main: matched[1], note: matched[2] } : { main: text, note: null };
+}
