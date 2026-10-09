@@ -6,6 +6,7 @@ import {CATEGORY_ICON} from '@/shared/components/product/NoImage';
 import EtcOnIcon from '@/shared/components/icons/categories/EtcOnIcon';
 
 import {CATEGORIES} from '../lib/categories';
+import {tick} from '@/shared/lib/feedback';
 
 /**
  * 관심 카테고리 3열 체크박스. web `entities/category/ui/CategoriesCheckboxGroup`.
@@ -25,7 +26,10 @@ export default function CategoryCheckboxGroup({
         return (
           <Pressable
             key={category.value}
-            onPress={() => onToggle(category.value, !checked)}
+            onPress={() => {
+              tick();
+              onToggle(category.value, !checked);
+            }}
             accessibilityRole="checkbox"
             accessibilityState={{checked}}
             accessibilityLabel={category.text}

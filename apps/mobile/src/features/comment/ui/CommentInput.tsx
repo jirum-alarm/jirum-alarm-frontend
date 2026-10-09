@@ -14,6 +14,7 @@ import Close from '@/shared/components/icons/Close';
 import {useColors} from '@/shared/theme/useColors';
 
 const MAX_INPUT_HEIGHT = 120;
+const MAX_COMMENT_LENGTH = 300; // web textarea maxLength (커뮤니티 댓글과 같다)
 
 export default function CommentInput({
   productId,
@@ -104,26 +105,40 @@ export default function CommentInput({
       ) : null}
 
       <View className="flex-row items-end gap-x-2 px-5 py-2">
-        <TextInput
-          ref={inputRef}
-          className="flex-1 rounded-lg bg-gray-100 px-3 py-2 text-base text-gray-900"
-          multiline
-          value={value}
-          onChangeText={setValue}
-          // web 은 textarea scrollHeight 로 늘린다. RN 은 multiline 이 내용만큼 스스로 커지니 위아래만 막는다.
-          // (onContentSizeChange 로 height 를 직접 계산하던 방식은 여러 줄을 쳐도 40pt 에
-          // 갇혀 윗줄이 잘렸다(iOS 26 시뮬 실측). 패딩도 두 번 더해 빈 칸이 52~56pt 로 떴다.)
-          style={{minHeight: 40, maxHeight: MAX_INPUT_HEIGHT}}
-          placeholder={
-            isUserLogin ? '댓글을 입력해주세요' : '로그인 후 이용해주세요'
-          }
-          placeholderTextColor={c.gray[500]}
-          editable={isUserLogin}
-        />
+        {/* 비로그인은 칸을 눌러도 아무 반응이 없었다 — 눌렀을 때 왜 막혔는지 알려준다(다른 로그인 게이트와 같은 토스트). */}
+        <Pressable
+          className="flex-1"
+          disabled={isUserLogin}
+          onPress={() => showToast.info('로그인 후 이용해주세요.')}
+          accessibilityRole={isUserLogin ? undefined : 'button'}
+          accessibilityLabel={
+            isUserLogin ? undefined : '댓글 쓰기, 로그인 필요'
+          }>
+          <TextInput
+            ref={inputRef}
+            // 폭은 감싼 Pressable(flex-1)이 정한다 — 여기 flex-1 을 두면 세로 방향 flex 라 줄 수만큼 안 늘어난다.
+            className="rounded-lg bg-gray-100 px-3 py-2 text-base text-gray-900"
+            multiline
+            value={value}
+            onChangeText={setValue}
+            // web 은 textarea scrollHeight 로 늘린다. RN 은 multiline 이 내용만큼 스스로 커지니 위아래만 막는다.
+            // (onContentSizeChange 로 height 를 직접 계산하던 방식은 여러 줄을 쳐도 40pt 에
+            // 갇혀 윗줄이 잘렸다(iOS 26 시뮬 실측). 패딩도 두 번 더해 빈 칸이 52~56pt 로 떴다.)
+            style={{minHeight: 40, maxHeight: MAX_INPUT_HEIGHT}}
+            placeholder={
+              isUserLogin ? '댓글을 입력해주세요' : '로그인 후 이용해주세요'
+            }
+            placeholderTextColor={c.gray[500]}
+            editable={isUserLogin}
+            pointerEvents={isUserLogin ? 'auto' : 'none'}
+            maxLength={MAX_COMMENT_LENGTH}
+          />
+        </Pressable>
         <Pressable
           onPress={handleSubmit}
           disabled={!canSubmit}
           accessibilityRole="button"
+          accessibilityLabel="댓글 등록"
           // h-10(40px) → 44pt 권장 터치 영역.
           hitSlop={4}
           className="h-10 justify-center px-2">

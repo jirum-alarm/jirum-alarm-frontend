@@ -71,6 +71,12 @@ export const STORE_URL = {
 export const storeUrl = () =>
   STORE_URL[Platform.OS === 'ios' ? 'ios' : 'android'];
 
+/** 리뷰 쓰기 화면으로 바로. Play 는 리뷰 딥링크가 없어 상세로 간다. */
+export const reviewUrl = () =>
+  Platform.OS === 'ios'
+    ? `${STORE_URL.ios}?action=write-review`
+    : STORE_URL.android;
+
 /** 테스트용 — 실행당 1회 캐시를 비운다. */
 export function __resetReleasePolicyForTest() {
   pending = null;

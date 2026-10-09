@@ -19,6 +19,7 @@ import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
+import {tick} from '@/shared/lib/feedback';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import Button from '@/shared/components/ui/Button';
 import {useThemeSubscription} from '@/features/mypage/model/useThemeSubscription';
@@ -126,6 +127,7 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
           {/* 구독 토글 — 헤더 바로 아래 전체폭(web 모바일과 같은 위치) */}
           <Button
             onPress={() => {
+              tick();
               if (isSubscribed) unsubscribe(themeId);
               else subscribe(themeId);
             }}

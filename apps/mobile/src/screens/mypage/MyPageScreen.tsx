@@ -1,7 +1,9 @@
 import React, {useCallback, useState} from 'react';
 import {
   ActivityIndicator,
+  Linking,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   View,
@@ -10,6 +12,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 import {useNavigation} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useQuery} from '@tanstack/react-query';
+import Constants from 'expo-constants';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {MyPageQueries} from '@/entities/mypage';
@@ -18,6 +21,9 @@ import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
 import {useRegisterScrollToTop} from '@/navigations/tab/scroll-to-top-store';
 import ArrowRight from '@/shared/components/icons/ArrowRight';
 import Heart from '@/shared/components/icons/Heart';
+import Thumbsup from '@/shared/components/icons/Thumbsup';
+import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
+import {reviewUrl} from '@/shared/lib/update/release-policy';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {
   tabNavigations,
@@ -58,6 +64,7 @@ export default function MyPageScreen() {
   const [colorScheme, setColorScheme] = useColorSchemePreference();
 
   const {data: me, isPending, isError, refetch} = useQuery(MyPageQueries.me());
+  const {refreshing, onRefresh} = usePullRefresh(refetch);
 
   // 탭 재탭 → 맨 위로. 웹뷰 시절 injectJavaScript 를 대체한다(런북 ② 경로).
   const scrollRef = React.useRef<ScrollView>(null);
@@ -96,6 +103,9 @@ export default function MyPageScreen() {
 
       <ScrollView
         ref={scrollRef}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         contentContainerStyle={{
           paddingBottom: getReservedBottomPx(insets.bottom),
         }}>
@@ -186,7 +196,15 @@ export default function MyPageScreen() {
               title="고객센터"
               onPress={() => setCustomerServiceOpen(true)}
             />
+            <MenuRow
+              icon={<Thumbsup width={24} height={24} />}
+              title="앱 평가하기"
+              onPress={() => Linking.openURL(reviewUrl()).catch(() => {})}
+            />
           </MenuGroup>
+          <Text className="text-xs text-gray-500">
+            앱 버전 {Constants.expoConfig?.version}
+          </Text>
         </View>
       </ScrollView>
 

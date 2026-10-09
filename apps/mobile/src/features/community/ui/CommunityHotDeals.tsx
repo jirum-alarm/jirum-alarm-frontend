@@ -122,7 +122,7 @@ export default function CommunityHotDeals() {
           onPress={handlePressMore}
           accessibilityRole="button"
           accessibilityLabel={`${option.label} 더보기`}
-          hitSlop={8}
+          hitSlop={12}
           style={({pressed}) => (pressed ? {opacity: 0.6} : null)}>
           <Text className="text-xs text-gray-500">더보기</Text>
         </Pressable>

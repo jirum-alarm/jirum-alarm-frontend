@@ -12,6 +12,7 @@ import {
 } from '@/entities/search/model/filters';
 import type {SearchFiltersController} from '@/features/search/model/useSearchFilters';
 import {cn} from '@/shared/lib/styling';
+import {tick} from '@/shared/lib/feedback';
 
 /**
  * 검색 필터 바. web: widgets/search/ui/SearchFilterBar.tsx
@@ -50,8 +51,11 @@ export default function SearchFilterBar({
                 <View className="bg-gray-200" style={styles.divider} />
               ) : null}
               <Pressable
-                onPress={() => setFilters({sort})}
-                hitSlop={4}
+                onPress={() => {
+                  tick();
+                  setFilters({sort});
+                }}
+                hitSlop={8}
                 accessibilityRole="button"
                 accessibilityState={{selected: filters.sort === sort}}
                 accessibilityLabel={SORT_LABELS[sort]}
@@ -75,8 +79,11 @@ export default function SearchFilterBar({
         <View className="flex-row items-center gap-3">
           {hasActiveFilters ? (
             <Pressable
-              onPress={resetFilters}
-              hitSlop={4}
+              onPress={() => {
+                tick();
+                resetFilters();
+              }}
+              hitSlop={12}
               accessibilityRole="button"
               accessibilityLabel="필터 초기화"
               className="py-2">
@@ -84,8 +91,11 @@ export default function SearchFilterBar({
             </Pressable>
           ) : null}
           <Pressable
-            onPress={() => setFilters({ended: !filters.ended})}
-            hitSlop={4}
+            onPress={() => {
+              tick();
+              setFilters({ended: !filters.ended});
+            }}
+            hitSlop={8}
             accessibilityRole="checkbox"
             accessibilityState={{checked: filters.ended}}
             accessibilityLabel="품절 포함"
@@ -192,7 +202,10 @@ function Chip({
 }) {
   return (
     <Pressable
-      onPress={onPress}
+      onPress={() => {
+        tick();
+        onPress();
+      }}
       accessibilityRole="button"
       accessibilityState={{selected: active}}
       accessibilityLabel={label}

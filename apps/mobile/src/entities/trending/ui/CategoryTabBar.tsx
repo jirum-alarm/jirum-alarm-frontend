@@ -4,6 +4,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 
 import PressableScale from '@/shared/components/PressableScale';
 import {cn} from '@/shared/lib/styling';
+import {tick} from '@/shared/lib/feedback';
 
 import type {CategoryItem} from '@/entities/category/category.queries';
 
@@ -68,7 +69,10 @@ export default function CategoryTabBar({
               layoutsRef.current[category.id] = {x, width};
             }}>
             <PressableScale
-              onPress={() => onSelect(category.id)}
+              onPress={() => {
+                tick();
+                onSelect(category.id);
+              }}
               accessibilityRole="tab"
               accessibilityState={{selected: isActive}}
               accessibilityLabel={category.name}
