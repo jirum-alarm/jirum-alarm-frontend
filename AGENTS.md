@@ -116,7 +116,7 @@ src/components/         # 공통: Layouts·Sidebar(메뉴는 MENU 설정 배열)
   차트 `<Chart>`(ApexCharts 기본값 — 툴바·회전 없음, 축 「1.2만」), 순위·비중은 가로 막대 차트 대신 `<RankList>`,
   기간·보기 전환 `<SegmentedControl>`, 화면 안 탭 `<Tabs>`, 숫자 요약 `<StatTiles>`, 상태 `<StatusDot>`.
   영문 코드(provider·gender·광고 위치 등)는 `src/lib/labels.ts` 에서 한글 이름·출처 색을, 금액·날짜는 `src/lib/format.ts`.
-  표는 `table-cards` 로 폰에서 카드가 되고, 부가 열은 `hidden md:table-cell` 로 숨기고 첫 칸에 요약 한 줄을 넣는다.
+  표는 `table-cards` 로 폰에서 카드가 되고(이름 없는 칸=카드 머리, 이름 붙은 칸은 「이름 값」 조각이 한 줄로 이어 흐름), 부가 열은 `hidden md:table-cell` 로 숨기고 첫 칸에 요약 한 줄을 넣는다.
   토스트·확인 provider 는 DefaultLayout 에 한 번 달려 있다(로그인 화면은 레이아웃 밖이라 별도).
 - Apollo 클라이언트는 서버 렌더에도 만들어지지만 서버엔 토큰을 싣지 않는다(httpOnly 토큰이 HTML 에 실리지 않게) —
   서버에서 인증 쿼리가 필요한 useSuspenseQuery 화면은 브라우저가 다시 받는다.
@@ -124,7 +124,7 @@ src/components/         # 공통: Layouts·Sidebar(메뉴는 MENU 설정 배열)
   Next 예약 파일명은 라우트 폴더 밑에 두지 말 것(빌드가 라우트 레이아웃으로 읽는다).
 - 미들웨어는 쿠키 "존재"만 본다 — 서버 액션처럼 백엔드를 안 거치는 쓰기를 만들면 액션 안에서 `adminMe` 로 어드민인지 직접 확인할 것.
 - 사이드바 메뉴 추가 = `src/components/Sidebar/index.tsx` 의 `MENU` 배열에 한 줄.
-- 서비스 점검(`/health`, admin 역할 전용) = 「깨지면 볼 것·고칠 것」 점검표. 내용은 `src/app/(admin)/health/lib/checks.ts` 한 곳 —
+- 서비스 점검(`/health`, admin 역할 전용) = 지금 문제·주의인 칸만 위에(눌러서 고치는 법), 정상은 이름만 한 줄, 직접 확인 절차는 접어 둔다. 내용은 `src/app/(admin)/health/lib/checks.ts` 한 곳 —
   새 수익원·크롤러·세션을 붙이거나 사고를 겪으면 거기 한 칸 추가/갱신. 레포가 공개라 내부 IP·명령은 적지 말고 vault 런북 경로로.
 - `public/` 은 비어 있어도 지우지 말 것(`.gitkeep`) — Dockerfile 이 COPY 한다.
 

@@ -81,8 +81,8 @@ const Steps = ({ label, items }: { label: string; items: string[] }) => (
 );
 
 const CheckRow = ({ c }: { c: Check }) => (
-  // 문제인 칸은 펼친 채로 — 눌러야 절차가 보이면 급할 때 한 번 더 헤맨다
-  <details id={c.id} open={c.level === 'danger'} className="group scroll-mt-20 py-3">
+  // 접어 둔 채로 — 문제가 여럿이면 펼친 절차가 목록을 밀어내 한눈에 안 들어온다(눌러서 본다)
+  <details id={c.id} className="group scroll-mt-20 py-3">
     <summary className="flex cursor-pointer list-none items-start gap-2.5">
       <span className="mt-1.5">
         {c.level ? <StatusDot level={DOT[c.level]} /> : <StatusDot level="muted" />}
@@ -183,63 +183,56 @@ const ServiceHealth = () => {
   });
 
   const all = sections.flatMap((s) => s.checks);
-  const count = (lv: Level) => all.filter((c) => c.level === lv).length;
-  const urgent = [
-    ...all.filter((c) => c.level === 'danger'),
-    ...all.filter((c) => c.level === 'warn'),
-  ];
+  const of = (lv: Level) => all.filter((c) => c.level === lv);
+  const urgent = [...of('danger'), ...of('warn')];
+  const loading = all.some((c) => !c.level);
 
+  // 주요한 것만: 문제·주의는 절차까지 펼쳐 보이고, 정상은 이름만 한 줄로, 직접 확인은 접어 둔다.
   return (
-    <div className="flex flex-col gap-6">
-      <Panel className="p-4 sm:p-6">
-        <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-          {(['danger', 'warn', 'ok', 'manual'] as const).map((lv) => (
-            <span key={lv} className="flex items-center gap-1.5 text-black dark:text-white">
-              <StatusDot level={DOT[lv]} />
-              {LEVEL_LABEL[lv]} <b>{count(lv)}</b>
-            </span>
-          ))}
-        </p>
+    <div className="flex flex-col gap-4">
+      <Panel className="px-4 sm:px-6">
         {urgent.length > 0 ? (
-          <ul className="mt-3 space-y-1.5 border-t border-stroke pt-3 dark:border-strokedark">
+          <div className="divide-y divide-stroke dark:divide-strokedark">
             {urgent.map((c) => (
-              <li key={c.id}>
-                <a href={`#${c.id}`} className="flex items-start gap-2 text-sm">
-                  <span className="mt-1.5">
-                    <StatusDot level={DOT[c.level as Level]} />
-                  </span>
-                  <span>
-                    <span className="font-medium text-black dark:text-white">{c.title}</span>
-                    {c.now && <span className="ml-1.5 text-xs text-body">{c.now}</span>}
-                  </span>
-                </a>
-              </li>
+              <CheckRow key={c.id} c={c} />
             ))}
-          </ul>
+          </div>
         ) : (
-          all.every((c) => c.level) && (
-            <p className="mt-3 border-t border-stroke pt-3 text-sm text-success dark:border-strokedark">
-              자동으로 볼 수 있는 항목은 모두 정상. 회색은 알람이 왔을 때 펼쳐 보면 된다.
-            </p>
-          )
+          <p className="py-4 text-sm text-success">
+            {loading ? '확인 중…' : '자동으로 볼 수 있는 항목은 모두 정상.'}
+          </p>
         )}
       </Panel>
 
-      {sections.map((section, i) => (
-        <section key={section.title}>
-          <h3 className="text-base font-semibold text-black dark:text-white">
-            {i + 1}. {section.title}
-          </h3>
-          <p className="mt-0.5 mb-2 text-xs text-bodydark2">{section.why}</p>
-          <Panel className="px-4 sm:px-6">
+      {of('ok').length > 0 && (
+        <Panel className="p-4 sm:px-6">
+          <p className="mb-2 text-xs text-bodydark2">정상 {of('ok').length}</p>
+          <p className="flex flex-wrap gap-x-3 gap-y-1.5 text-sm text-black dark:text-white">
+            {of('ok').map((c) => (
+              <span key={c.id} className="flex items-center gap-1.5" title={c.now}>
+                <StatusDot level="ok" />
+                {c.title}
+              </span>
+            ))}
+          </p>
+        </Panel>
+      )}
+
+      {of('manual').length > 0 && (
+        <details className="group">
+          <summary className="cursor-pointer list-none text-sm text-bodydark2">
+            <span className="inline-block group-open:rotate-90">›</span> 알람이 왔을 때 볼 절차 (
+            {of('manual').length})
+          </summary>
+          <Panel className="mt-2 px-4 sm:px-6">
             <div className="divide-y divide-stroke dark:divide-strokedark">
-              {section.checks.map((c) => (
+              {of('manual').map((c) => (
                 <CheckRow key={c.id} c={c} />
               ))}
             </div>
           </Panel>
-        </section>
-      ))}
+        </details>
+      )}
     </div>
   );
 };
