@@ -28,6 +28,8 @@ type ReactionItem = {
   role?: string | null;
 };
 
+const MIN_REACTIONS_FOR_PERCENT = 5;
+
 // 토스(21)·네이버(101)·오늘의집(102)은 커뮤니티 글이 아니라 몰 상품이라 product.url 이 제휴 태그 없는
 // 원본 몰 링크다. "반응 보기"로 내보내면 구매 CTA(제휴 링크)를 우회해 커미션이 샌다
 // (GA4 30일: 토스 원본 115클릭 vs 제휴 2,328). 이 딜은 링크를 숨기고 CTA 로만 나가게 한다.
@@ -127,6 +129,8 @@ export default function CommunityReaction({ productId }: { productId: number }) 
   const positivePercent = allCount === 0 ? 0 : Math.round((positiveCount / allCount) * 100);
   const isPositive = positivePercent >= 50;
   const dominantPercent = isPositive ? positivePercent : 100 - positivePercent;
+  // 반응이 몇 개 없으면 %가 과장된다(2개로 "100%") — 그땐 개수를 보인다. 앱 CommunityReaction 과 같은 기준.
+  const share = allCount < MIN_REACTIONS_FOR_PERCENT ? `반응 ${allCount}개` : `${dominantPercent}%`;
 
   const commentSummary = product.commentSummary;
 
@@ -169,7 +173,7 @@ export default function CommunityReaction({ productId }: { productId: number }) 
                 <span className="text-base font-semibold text-gray-800">
                   {isPositive ? '추천해요' : '아쉬워요'}
                 </span>
-                <span className="text-sm text-gray-400 tabular-nums">· {dominantPercent}%</span>
+                <span className="text-sm text-gray-500 tabular-nums">· {share}</span>
               </div>
             ) : (
               <p className={emptyText}>아직 모은 반응이 없어요</p>

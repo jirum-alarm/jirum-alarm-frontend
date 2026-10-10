@@ -24,6 +24,8 @@ import {
   type ReactionKeywordItem,
 } from '../model/deal-status-reaction';
 
+const MIN_REACTIONS_FOR_PERCENT = 5;
+
 /** web KeywordChip 과 같은 테두리/글자색 규칙. */
 function KeywordChip({item}: {item: ReactionKeywordItem}) {
   const positive = item.type === 'POSITIVE';
@@ -175,6 +177,11 @@ export default function CommunityReaction({
     allCount === 0 ? 0 : Math.round((positiveCount / allCount) * 100);
   const isPositive = positivePercent >= 50;
   const dominantPercent = isPositive ? positivePercent : 100 - positivePercent;
+  // 반응이 몇 개 없으면 %가 과장된다(2개로 "100%") — 그땐 개수를 보인다(web 과 같은 기준).
+  const share =
+    allCount < MIN_REACTIONS_FOR_PERCENT
+      ? `반응 ${allCount}개`
+      : `${dominantPercent}%`;
   const lastUpdatedAt = data?.lastUpdatedAt
     ? `${displayTime(data.lastUpdatedAt)} 업데이트`
     : null;
@@ -203,9 +210,7 @@ export default function CommunityReaction({
               <Text className="text-base font-semibold text-gray-800">
                 {isPositive ? '추천해요' : '아쉬워요'}
               </Text>
-              <Text className="text-sm text-gray-500">
-                · {dominantPercent}%
-              </Text>
+              <Text className="text-sm text-gray-500">· {share}</Text>
             </View>
           ) : (
             <Text className={emptyText}>아직 모은 반응이 없어요</Text>
