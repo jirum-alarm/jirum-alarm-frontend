@@ -218,9 +218,11 @@ export class ProductService {
     return execute(QueryProductPriceHistory, variables).then((res) => res.data);
   }
 
-  /** 상세 히어로 가격 판정. READY+STRONG 만 렌더. */
-  static async getPriceVerdict(variables: { id: number }) {
-    return execute(QueryProductPriceVerdict, variables).then((res) => res.data);
+  /** 상세 '왜 핫딜인지' 근거 — 서버가 고른 결과를 그대로 그린다. headline 이 없으면 블록 미노출. */
+  static async getDealEvidence(variables: { id: number }) {
+    return execute(QueryProductDealEvidence, variables).then(
+      (res) => res.data?.product?.dealEvidence ?? null,
+    );
   }
 }
 
@@ -404,69 +406,53 @@ const QueryProductPriceHistory = new TypedDocumentString<
   }
 `);
 
-export interface ProductPriceVerdict {
-  status: 'READY' | 'UNAVAILABLE';
-  nullReason:
-    | 'PRIVATE_OR_MISSING_SEED'
-    | 'SEED_PRICE_MISSING'
-    | 'NO_HISTORY'
-    | 'NO_MAPPING'
-    | 'BASIS_NOT_ALLOWED'
-    | 'LOW_CONFIDENCE'
-    | 'TOO_FEW_POINTS'
-    | 'CURRENCY_MISMATCH'
-    | 'INCONSISTENT_PRICE'
-    | 'UNIT_AXIS'
-    | null;
-  displayTier: 'STRONG' | 'NEUTRAL' | 'HIDDEN';
-  basis: string | null;
-  confidence: string | null;
-  currency: string | null;
-  rangeDays: number | null;
-  seedPrice: number | null;
-  windowMinPrice: number | null;
-  windowMinDate: string | null;
-  deltaWon: number | null;
-  savingsWon: number | null;
-  percentile: number | null;
-  labelKey: 'NEAR_LOWEST' | 'BELOW_TYPICAL' | 'TYPICAL' | 'ABOVE_TYPICAL' | 'NEAR_HIGH' | null;
-  headline: string | null;
-  subline: string | null;
-  historyPointCount: number | null;
+export interface DealEvidenceItem {
+  kind: 'HISTORY' | 'MARKET' | 'COMMUNITY';
+  strength: 'STRONG' | 'MILD';
+  title: string;
+  /** title 안에서 강조할 부분 */
+  highlight: string | null;
+  detail: string | null;
 }
 
-interface QueryProductPriceVerdictResult {
+export interface ProductDealEvidence {
+  headline: DealEvidenceItem | null;
+  /** 헤드라인과 종류가 다른 근거 한 줄 */
+  support: string | null;
+  /** 근거끼리 엇갈리거나 딜 상태가 바뀌었을 때 한 줄 */
+  caveat: string | null;
+  /** 가격 조건 한 줄(카드·쿠폰·적립·배송비·행사기간) */
+  condition: string | null;
+  /** 정보 표에서 뺄 가이드 행(조건 줄로 옮겼거나 제목·쇼핑몰·가격 반복) */
+  hiddenGuideIds: string[];
+}
+
+interface QueryProductDealEvidenceResult {
   product: {
     id: number;
-    priceVerdict: ProductPriceVerdict | null;
+    dealEvidence: ProductDealEvidence | null;
   } | null;
 }
 
-const QueryProductPriceVerdict = new TypedDocumentString<
-  QueryProductPriceVerdictResult,
+const QueryProductDealEvidence = new TypedDocumentString<
+  QueryProductDealEvidenceResult,
   { id: number }
 >(`
-  query QueryProductPriceVerdict($id: Int!) {
+  query QueryProductDealEvidence($id: Int!) {
     product(id: $id) {
       id
-      priceVerdict {
-        status
-        nullReason
-        displayTier
-        basis
-        confidence
-        currency
-        rangeDays
-        seedPrice
-        windowMinPrice
-        windowMinDate
-        deltaWon
-        savingsWon
-        percentile
-        labelKey
-        headline
-        subline
-        historyPointCount
+      dealEvidence {
+        headline {
+          kind
+          strength
+          title
+          highlight
+          detail
+        }
+        support
+        caveat
+        condition
+        hiddenGuideIds
       }
     }
   }

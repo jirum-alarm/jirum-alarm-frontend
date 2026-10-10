@@ -25,7 +25,7 @@ export function prefetchProductDetail(
     require('./product.queries') as typeof import('./product.queries');
   void queryClient.prefetchQuery(ProductQueries.info({id}));
   void queryClient.prefetchQuery(ProductQueries.guides({productId: id}));
-  void queryClient.prefetchQuery(ProductQueries.priceVerdict({id}));
+  void queryClient.prefetchQuery(ProductQueries.dealEvidence({id}));
   // 상세 첫 화면을 채우는 건 정사각 대표 이미지다. Thumbnail 과 같은 webp 주소를 데운다.
   const src = convertToWebp(thumbnail) ?? thumbnail;
   // expo-image 캐시에 데운다 — 상세의 Thumbnail(expo-image)이 같은 캐시를 읽는다(RN Image.prefetch 는 다른 캐시라 헛일이었다).

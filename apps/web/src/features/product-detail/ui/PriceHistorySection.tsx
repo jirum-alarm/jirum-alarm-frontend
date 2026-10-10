@@ -59,38 +59,6 @@ function won(price: number, currency?: string | null): string {
   return `${Math.round(price).toLocaleString()}원`;
 }
 
-/** 절약 카피 최소액 — 이하면 ‘N원 절약’이 초라해져 숨김 */
-const MIN_SAVE_AMOUNT = (currency?: string | null) => (currency === 'USD' ? 1 : 1000);
-/** 가격대 상위 구간(비싼 편) — 절약 카피 숨김 */
-const EXPENSIVE_RATIO = 0.7;
-
-/**
- * 현재가 배지: 최저 대비(+)가 아니라 최고 대비 절약(−)으로 프레이밍.
- * - 기간 최저 → 「기간 최저」
- * - 비싼 구간 / 절약액 미미 → 숨김
- * - 그 외 → 「최고 대비 N원 절약」
- */
-function resolveCurrentPriceBadge(
-  currentPrice: number,
-  minPrice: number,
-  maxPrice: number,
-  currency?: string | null,
-): { text: string; tone: 'positive' } | null {
-  if (currentPrice <= minPrice) {
-    return { text: '기간 최저', tone: 'positive' };
-  }
-  if (maxPrice <= minPrice) return null;
-
-  const range = maxPrice - minPrice;
-  const ratio = (currentPrice - minPrice) / range;
-  if (ratio > EXPENSIVE_RATIO) return null;
-
-  const saveAmount = maxPrice - currentPrice;
-  if (saveAmount < MIN_SAVE_AMOUNT(currency)) return null;
-
-  return { text: `최고 대비 ${won(saveAmount, currency)} 절약`, tone: 'positive' };
-}
-
 /**
  * Y축 눈금 라벨.
  * - k 표기 여부는 축 최댓값(axisMax)으로 한 번에 결정 — 한 축에 10.6k와 9,700이 섞이지 않게.
@@ -610,7 +578,6 @@ export default function PriceHistorySection({
     typeof currentPriceProp === 'number' && currentPriceProp > 0
       ? currentPriceProp
       : (currentMarker?.price ?? orderedForMeta[orderedForMeta.length - 1]?.price);
-  const currentPriceBadge = resolveCurrentPriceBadge(currentPrice, minPrice, maxPrice, currency);
   // 축·문구: 선택한 기간만 (왼쪽=기간 시작, 오른쪽=오늘)
   const rangeFromLabel = toKstDateString(contentStartMs);
   const rangeToLabel = toKstDateString(contentEndMs);
@@ -665,13 +632,8 @@ export default function PriceHistorySection({
           <span className="text-sm font-bold text-gray-900 sm:text-base">
             {won(currentPrice, currency)}
           </span>
-          {/* 3칸 그리드의 가운데 칸(≈100px)엔 안 들어가 390px 이하에서 "절/약" 으로 깨졌다.
-              양옆 칸은 두 줄이라 이 세 번째 줄은 칸 밖으로 넘쳐도 겹칠 게 없다. */}
-          {currentPriceBadge ? (
-            <span className="text-11 text-success-600 font-medium whitespace-nowrap">
-              {currentPriceBadge.text}
-            </span>
-          ) : null}
+          {/* 「기간 최저」·「최고 대비 N원 절약」은 뺐다 — 고른 기간 기준이라 1년 보통가 기준인
+              근거 블록과 같은 상품에 다른 판정을 냈다. 판정은 가격 아래 근거 블록이 맡는다. */}
         </div>
         <div className="flex flex-col items-end gap-0.5">
           <span className="text-xs text-gray-500">최고</span>

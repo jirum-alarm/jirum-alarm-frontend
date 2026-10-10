@@ -1,18 +1,16 @@
 export {};
 
 /**
- * 상세 가격 신호(판정 카드·게시일 안내·가격 추이 요약)가 web 과 같은 규칙인지.
- * web 원본: features/product-detail/lib/price-verdict.ts · lib/product-seo.ts ·
- * ui/PriceHistorySection.tsx. 문구가 어긋나면 같은 상품이 웹/앱에서 달리 보인다.
+ * 상세 가격 신호(게시일 안내·가격 추이 요약)가 web 과 같은 규칙인지.
+ * web 원본: features/product-detail/lib/product-seo.ts · ui/PriceHistorySection.tsx.
+ * 문구가 어긋나면 같은 상품이 웹/앱에서 달리 보인다. (근거 블록은 서버 dealEvidence 가 정한다.)
  */
 const {
-  isStrongPriceVerdict,
   formatDealAgeNotice,
   dealFreshnessAt,
   isSeenBasedFreshness,
 } = require('../src/screens/detail/lib/price-signals');
 const {
-  resolveCurrentPriceBadge,
   resolveSubtitle,
   formatRangeLabel,
   pickDefaultDays,
@@ -20,22 +18,6 @@ const {
 
 const DAY = 86_400_000;
 const NOW = Date.UTC(2026, 8, 25);
-
-describe('isStrongPriceVerdict', () => {
-  const base = {
-    status: 'READY',
-    displayTier: 'STRONG',
-    headline: '최근 최저가',
-  };
-
-  it('READY+STRONG+headline 만 노출한다', () => {
-    expect(isStrongPriceVerdict(base)).toBe(true);
-    expect(isStrongPriceVerdict({...base, status: 'UNAVAILABLE'})).toBe(false);
-    expect(isStrongPriceVerdict({...base, displayTier: 'NEUTRAL'})).toBe(false);
-    expect(isStrongPriceVerdict({...base, headline: null})).toBe(false);
-    expect(isStrongPriceVerdict(null)).toBe(false);
-  });
-});
 
 describe('formatDealAgeNotice', () => {
   const ago = (days: number) => new Date(NOW - days * DAY).toISOString();
@@ -53,19 +35,6 @@ describe('formatDealAgeNotice', () => {
     expect(formatDealAgeNotice(ago(800), false, NOW)).toBe(
       '2년 전에 올라온 핫딜이에요. 가격·재고가 지금과 다를 수 있어요.',
     );
-  });
-});
-
-describe('resolveCurrentPriceBadge', () => {
-  it('기간 최저 / 최고 대비 절약 / 비싼 구간 숨김', () => {
-    expect(resolveCurrentPriceBadge(9000, 9000, 12000)).toBe('기간 최저');
-    expect(resolveCurrentPriceBadge(10000, 9000, 12000)).toBe(
-      '최고 대비 2,000원 절약',
-    );
-    // (11500-9000)/3000 = 0.83 > 0.7 → 숨김
-    expect(resolveCurrentPriceBadge(11500, 9000, 12000)).toBeNull();
-    // 절약 1000원 미만 → 숨김
-    expect(resolveCurrentPriceBadge(9300, 9000, 9900)).toBeNull();
   });
 });
 

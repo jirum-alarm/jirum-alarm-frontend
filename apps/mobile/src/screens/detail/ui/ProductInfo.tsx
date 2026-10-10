@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
@@ -8,21 +8,20 @@ import HotdealBadge from '@/shared/components/product/HotdealBadge';
 import {displayTime} from '@/shared/lib/format/price';
 
 import ProductGuideMetaRows from './ProductGuideMetaRows';
-import HotdealGuideModal from './HotdealGuideModal';
-import PressableScale from '@/shared/components/PressableScale';
 import RecommendButton from './RecommendButton';
 import TossBadges from './TossBadges';
 import TossIcon from './TossIcon';
 import NaverIcon from './NaverIcon';
-import PriceVerdictHero from './PriceVerdictHero';
-import PriceContextBadge, {type PriceContext} from './PriceContextBadge';
+import DealEvidenceBlock, {
+  type DealEvidence,
+  type EvidenceTarget,
+} from './DealEvidenceBlock';
 
 import {
   formatFreeShipping,
   type ProductDetail,
   type SourceData,
 } from '../model/types';
-import type {PriceVerdict} from '../lib/price-signals';
 import {dealFreshnessAt, isSeenBasedFreshness} from '../lib/price-signals';
 import {stripPriceFromTitle} from '@/entities/home/lib/toss';
 import Badge from '@/shared/components/ui/Badge';
@@ -49,26 +48,23 @@ export default function ProductInfo({
   productId,
   isUserLogin,
   hidePrice,
-  verdict,
-  priceContext,
-  onPressVerdictHistory,
+  evidence,
+  onPressEvidenceMore,
 }: {
   product: ProductDetail;
   source: SourceData;
   productId: number;
   isUserLogin: boolean;
   hidePrice?: boolean;
-  /** 가격 판정(web PriceVerdictHero). READY+STRONG 일 때만 그려진다. */
-  verdict?: PriceVerdict | null;
-  priceContext?: PriceContext | null;
-  onPressVerdictHistory?: () => void;
+  /** 왜 핫딜인지 — 근거 블록·가격 조건 줄·정보 표에서 뺄 행(서버 dealEvidence) */
+  evidence?: DealEvidence | null;
+  onPressEvidenceMore?: (target: EvidenceTarget) => void;
 }) {
   // 가격/할인율/평점/쿠폰은 소스 무관 공통 필드라 토스·오늘의집이 같은 블록을 쓴다.
   const display = source.toss ?? source.ohou;
   const displayTitle = hidePrice
     ? stripPriceFromTitle(product.title)
     : product.title;
-  const [guideOpen, setGuideOpen] = useState(false);
 
   return (
     <View className="px-5 pb-9">
@@ -78,17 +74,11 @@ export default function ProductInfo({
             판매종료
           </Badge>
         ) : product.hotDealType ? (
-          <PressableScale
-            onPress={() => setGuideOpen(true)}
-            accessibilityRole="button"
-            accessibilityLabel="핫딜 기준 안내"
-            // 22px 뱃지라 위아래로 넓혀 44pt 에 맞춘다.
-            hitSlop={11}>
-            <HotdealBadge
-              hotdealType={product.hotDealType as HotDealType}
-              badgeVariant="page"
-            />
-          </PressableScale>
+          // 배지가 왜 붙었는지는 가격 아래 근거 블록이 말한다(대부분 커뮤니티 인기글).
+          <HotdealBadge
+            hotdealType={product.hotDealType as HotDealType}
+            badgeVariant="page"
+          />
         ) : null}
       </View>
 
@@ -156,17 +146,19 @@ export default function ProductInfo({
         ) : null}
       </View>
 
-      {/* web 순서: 추천 버튼 줄 → 가격 판정 → 다나와 배지 → 토스 뱃지. */}
+      {/* web 순서: 추천 버튼 줄 → 가격 조건 줄 → 근거 블록 → 토스 뱃지. */}
       {!hidePrice ? (
         <>
-          <PriceVerdictHero
+          {/* 가격은 조건과 붙어 있어야 뜻이 선다 — 페이코 27.5% 할인가·배송비 2,500원 별도 */}
+          {evidence?.condition ? (
+            <Text className="pt-1 text-sm text-gray-600" numberOfLines={1}>
+              {evidence.condition}
+            </Text>
+          ) : null}
+          <DealEvidenceBlock
             productId={productId}
-            verdict={verdict}
-            onPressHistory={() => onPressVerdictHistory?.()}
-          />
-          <PriceContextBadge
-            productId={productId}
-            priceContext={priceContext}
+            evidence={evidence}
+            onPressMore={target => onPressEvidenceMore?.(target)}
           />
         </>
       ) : null}
@@ -184,7 +176,11 @@ export default function ProductInfo({
           </Text>
         </MetaRow>
 
-        <ProductGuideMetaRows productId={productId} hidePrice={hidePrice} />
+        <ProductGuideMetaRows
+          productId={productId}
+          hiddenIds={evidence?.hiddenGuideIds}
+          hidePrice={hidePrice}
+        />
 
         {product.uploaderType !== UploaderType.Crawled ? (
           <MetaRow label="업로드">
@@ -241,11 +237,6 @@ export default function ProductInfo({
           </Text>
         </View>
       ) : null}
-
-      <HotdealGuideModal
-        visible={guideOpen}
-        onClose={() => setGuideOpen(false)}
-      />
     </View>
   );
 }

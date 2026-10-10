@@ -131,7 +131,8 @@ export default function CommunityReaction({ productId }: { productId: number }) 
   const commentSummary = product.commentSummary;
 
   return (
-    <section>
+    // id = 가격 아래 근거 블록(커뮤니티 근거)의 「근거 보기」가 내려오는 곳
+    <section id="community-reaction">
       <DetailSectionHeader
         className="mb-3"
         title="커뮤니티 반응"

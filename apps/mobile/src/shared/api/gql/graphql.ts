@@ -306,6 +306,44 @@ export enum DateInterval {
   Weekly = 'WEEKLY',
 }
 
+/** 왜 핫딜인지 — 판정·다나와·커뮤니티 근거를 모아 하나를 고른 결과. 상세 가격 아래 블록 하나가 이것만 그린다. */
+export type DealEvidence = {
+  __typename?: 'DealEvidence';
+  /** 근거끼리 엇갈리거나 딜 상태가 바뀌었을 때 한 줄 */
+  caveat?: Maybe<Scalars['String']['output']>;
+  /** 가격 조건 한 줄 — 카드·쿠폰·적립·배송비·행사기간 */
+  condition?: Maybe<Scalars['String']['output']>;
+  /** 없으면 블록 자리를 안 잡는다 */
+  headline?: Maybe<DealEvidenceItem>;
+  /** 정보 표에서 뺄 가이드 행 — 조건 줄로 옮겼거나 제목·쇼핑몰·가격을 그대로 반복하는 행 */
+  hiddenGuideIds: Array<Scalars['ID']['output']>;
+  /** 헤드라인과 종류가 다른 근거 한 줄 */
+  support?: Maybe<Scalars['String']['output']>;
+};
+
+/** 근거 한 줄 */
+export type DealEvidenceItem = {
+  __typename?: 'DealEvidenceItem';
+  detail?: Maybe<Scalars['String']['output']>;
+  /** title 안에서 강조할 부분(그대로 포함돼 있다) */
+  highlight?: Maybe<Scalars['String']['output']>;
+  kind: DealEvidenceKind;
+  /** STRONG 이면 highlight 를 강조색으로 */
+  strength: DealEvidenceStrength;
+  title: Scalars['String']['output'];
+};
+
+export enum DealEvidenceKind {
+  Community = 'COMMUNITY',
+  History = 'HISTORY',
+  Market = 'MARKET',
+}
+
+export enum DealEvidenceStrength {
+  Mild = 'MILD',
+  Strong = 'STRONG',
+}
+
 export type DoubleRowSection = BaseSection & {
   __typename?: 'DoubleRowSection';
   dataSource: ApiQuery;
@@ -1685,6 +1723,8 @@ export type ProductOutput = {
   content?: Maybe<Scalars['String']['output']>;
   /** 소스별 확장 정보(toss 등) */
   data?: Maybe<Scalars['JSONObject']['output']>;
+  /** 왜 핫딜인지 — 근거 하나 + 다른 종류 한 줄 + 엇갈림 단서 + 가격 조건(상세 전용) */
+  dealEvidence?: Maybe<DealEvidence>;
   detailUrl?: Maybe<Scalars['String']['output']>;
   dislikeCount: Scalars['Int']['output'];
   distributionDate?: Maybe<Scalars['DateTime']['output']>;
@@ -3969,35 +4009,29 @@ export type ProductPriceHistoryQuery = {
   } | null;
 };
 
-export type ProductPriceVerdictQueryVariables = Exact<{
+export type ProductDealEvidenceQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
 
-export type ProductPriceVerdictQuery = {
+export type ProductDealEvidenceQuery = {
   __typename?: 'Query';
   product?: {
     __typename?: 'ProductOutput';
     id: string;
-    priceVerdict?: {
-      __typename?: 'ProductPriceVerdict';
-      status: PriceVerdictStatus;
-      nullReason?: PriceVerdictNullReason | null;
-      displayTier: PriceVerdictDisplayTier;
-      basis?: string | null;
-      rangeDays?: number | null;
-      labelKey?: PriceVerdictLabelKey | null;
-      headline?: string | null;
-      subline?: string | null;
-      historyPointCount?: number | null;
-    } | null;
-    priceContext?: {
-      __typename?: 'PriceContext';
-      dealPrice: number;
-      danawaPrice: number;
-      delta: number;
-      normalPriceMin?: number | null;
-      normalPriceMax?: number | null;
-      shippingIncluded?: boolean | null;
+    dealEvidence?: {
+      __typename?: 'DealEvidence';
+      support?: string | null;
+      caveat?: string | null;
+      condition?: string | null;
+      hiddenGuideIds: Array<string>;
+      headline?: {
+        __typename?: 'DealEvidenceItem';
+        kind: DealEvidenceKind;
+        strength: DealEvidenceStrength;
+        title: string;
+        highlight?: string | null;
+        detail?: string | null;
+      } | null;
     } | null;
   } | null;
 };
@@ -5306,34 +5340,28 @@ export const ProductPriceHistoryDocument = new TypedDocumentString(`
   ProductPriceHistoryQuery,
   ProductPriceHistoryQueryVariables
 >;
-export const ProductPriceVerdictDocument = new TypedDocumentString(`
-    query ProductPriceVerdict($id: Int!) {
+export const ProductDealEvidenceDocument = new TypedDocumentString(`
+    query ProductDealEvidence($id: Int!) {
   product(id: $id) {
     id
-    priceVerdict {
-      status
-      nullReason
-      displayTier
-      basis
-      rangeDays
-      labelKey
-      headline
-      subline
-      historyPointCount
-    }
-    priceContext {
-      dealPrice
-      danawaPrice
-      delta
-      normalPriceMin
-      normalPriceMax
-      shippingIncluded
+    dealEvidence {
+      headline {
+        kind
+        strength
+        title
+        highlight
+        detail
+      }
+      support
+      caveat
+      condition
+      hiddenGuideIds
     }
   }
 }
     `) as unknown as TypedDocumentString<
-  ProductPriceVerdictQuery,
-  ProductPriceVerdictQueryVariables
+  ProductDealEvidenceQuery,
+  ProductDealEvidenceQueryVariables
 >;
 export const ProductAdditionalInfoDocument = new TypedDocumentString(`
     query ProductAdditionalInfo($id: Int!) {

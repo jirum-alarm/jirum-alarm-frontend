@@ -3,7 +3,10 @@ import { Suspense } from 'react';
 import { CheckDeviceResult } from '@/app/actions/agent.types';
 
 import { AdvertiseSlotLocation, ProductInfoFragment, UploaderType } from '@/shared/api/gql/graphql';
-import type { ProductModelPageLink } from '@/shared/api/product/product.service';
+import type {
+  ProductDealEvidence,
+  ProductModelPageLink,
+} from '@/shared/api/product/product.service';
 import { cn } from '@/shared/lib/cn';
 
 import { type ProductData } from '@/entities/product/model/toss-data';
@@ -14,7 +17,6 @@ import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
 import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';
-import type { ProductPriceVerdict } from '@/features/product-detail/lib/price-verdict';
 import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuide';
 import NoticeProfitLink from '@/features/product-detail/ui/NoticeProfitUrl';
 import PriceHistorySection from '@/features/product-detail/ui/PriceHistorySection';
@@ -34,7 +36,7 @@ export default async function DesktopProductDetailPage({
   initialProduct,
   device,
   initialGuides,
-  initialVerdict,
+  initialEvidence,
   hidePrice,
   modelPage,
   ageNotice,
@@ -44,7 +46,7 @@ export default async function DesktopProductDetailPage({
   initialProduct?: ProductInfoFragment;
   device?: CheckDeviceResult;
   initialGuides?: ProductGuideRow[] | null;
-  initialVerdict?: ProductPriceVerdict | null;
+  initialEvidence?: ProductDealEvidence | null;
   hidePrice?: boolean;
   modelPage?: ProductModelPageLink | null;
   ageNotice?: string | null;
@@ -117,7 +119,7 @@ export default async function DesktopProductDetailPage({
                 naverbcData={naverbcData}
                 ohouData={ohouData}
                 initialGuides={initialGuides}
-                initialVerdict={initialVerdict}
+                initialEvidence={initialEvidence}
                 hidePrice={hidePrice}
               />
               {/* 서버 렌더 — 가격대·모델 페이지 링크. ProductInfo(클라이언트) 바로 아래. */}

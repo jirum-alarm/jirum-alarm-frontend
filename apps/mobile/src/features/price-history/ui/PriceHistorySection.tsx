@@ -29,7 +29,6 @@ import {
   formatPreviewDate,
   formatRangeLabel,
   pickDefaultDays,
-  resolveCurrentPriceBadge,
   resolveSubtitle,
 } from '../model/price-summary';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
@@ -199,15 +198,6 @@ export default function PriceHistorySection({
     typeof currentPrice === 'number' && currentPrice > 0
       ? currentPrice
       : currentMarker?.price ?? points[points.length - 1]?.price;
-  const currentBadge =
-    shownCurrentPrice != null
-      ? resolveCurrentPriceBadge(
-          shownCurrentPrice,
-          minPrice,
-          maxPrice,
-          currency,
-        )
-      : null;
   const visiblePeriods = periodStates.filter(p => p.enabled);
   const rangeLabel = formatRangeLabel(
     toKstDateString(content.contentStartMs),
@@ -322,13 +312,8 @@ export default function PriceHistorySection({
             </Text>
           </View>
         </View>
-        {/* 가운데 칸(≈100px)엔 "최고 대비 N원 절약"(≈103px)이 안 들어가 두 줄로 꺾였다(web 은 v1.22.16 에서 수정).
-            RN Text 는 칸 밖으로 넘칠 수 없어 카드 폭 전체에 가운데 정렬로 뺀다 — 가운데 칸도 가운데 정렬이라 위치는 같다. */}
-        {currentBadge ? (
-          <Text className="mt-0.5 text-center text-11 font-medium text-success-600">
-            {currentBadge}
-          </Text>
-        ) : null}
+        {/* 「기간 최저」·「최고 대비 N원 절약」은 뺐다(web 과 같이) — 고른 기간 기준이라 1년 보통가 기준인
+            근거 블록과 같은 상품에 다른 판정을 냈다. 판정은 가격 아래 근거 블록이 맡는다. */}
       </View>
 
       <View className="px-2 pt-2">

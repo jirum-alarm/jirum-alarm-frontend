@@ -14,9 +14,7 @@ export { default as DesktopViewerCount } from './ui/desktop/ViewerCount';
 
 // ui/mobile
 export { default as MobileViewerCount } from './ui/mobile/ViewerCount';
-export { default as HotDealGuideModal } from './ui/mobile/HotDealGuideModal';
 
 // hotdeal
 export { default as HotdealGuide } from './ui/HotdealGuide';
 export { default as PriceHistorySection } from './ui/PriceHistorySection';
-export { default as PriceVerdictHero } from './ui/PriceVerdictHero';

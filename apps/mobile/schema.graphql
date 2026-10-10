@@ -272,6 +272,42 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+"""왜 핫딜인지 — 판정·다나와·커뮤니티 근거를 모아 하나를 고른 결과. 상세 가격 아래 블록 하나가 이것만 그린다."""
+type DealEvidence {
+  """근거끼리 엇갈리거나 딜 상태가 바뀌었을 때 한 줄"""
+  caveat: String
+  """가격 조건 한 줄 — 카드·쿠폰·적립·배송비·행사기간"""
+  condition: String
+  """없으면 블록 자리를 안 잡는다"""
+  headline: DealEvidenceItem
+  """정보 표에서 뺄 가이드 행 — 조건 줄로 옮겼거나 제목·쇼핑몰·가격을 그대로 반복하는 행"""
+  hiddenGuideIds: [ID!]!
+  """헤드라인과 종류가 다른 근거 한 줄"""
+  support: String
+}
+
+"""근거 한 줄"""
+type DealEvidenceItem {
+  detail: String
+  """title 안에서 강조할 부분(그대로 포함돼 있다)"""
+  highlight: String
+  kind: DealEvidenceKind!
+  """STRONG 이면 highlight 를 강조색으로"""
+  strength: DealEvidenceStrength!
+  title: String!
+}
+
+enum DealEvidenceKind {
+  COMMUNITY
+  HISTORY
+  MARKET
+}
+
+enum DealEvidenceStrength {
+  MILD
+  STRONG
+}
+
 type DoubleRowSection implements BaseSection {
   dataSource: ApiQuery!
   displayOrder: Float
@@ -1321,6 +1357,8 @@ type ProductOutput {
   content: String
   """소스별 확장 정보(toss 등)"""
   data: JSONObject
+  """왜 핫딜인지 — 근거 하나 + 다른 종류 한 줄 + 엇갈림 단서 + 가격 조건(상세 전용)"""
+  dealEvidence: DealEvidence
   detailUrl: String
   dislikeCount: Int!
   distributionDate: DateTime

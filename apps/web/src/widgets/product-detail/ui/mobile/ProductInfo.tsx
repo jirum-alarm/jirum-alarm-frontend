@@ -4,6 +4,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense, useEffect } from 'react';
 
 import { UploaderType } from '@/shared/api/gql/graphql';
+import type { ProductDealEvidence } from '@/shared/api/product/product.service';
 import { cn } from '@/shared/lib/cn';
 import { pushRecentViewedProduct } from '@/shared/lib/recentViewedProducts';
 import Badge from '@/shared/ui/common/Badge';
@@ -21,11 +22,8 @@ import TossIcon from '@/entities/product/ui/TossIcon';
 
 import { RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
-import type { ProductPriceVerdict } from '@/features/product-detail/lib/price-verdict';
 import { dealFreshnessAt, isSeenBasedFreshness } from '@/features/product-detail/lib/product-seo';
-import HotdealGuideModal from '@/features/product-detail/ui/mobile/HotDealGuideModal';
-import PriceContextBadge from '@/features/product-detail/ui/PriceContextBadge';
-import PriceVerdictHero from '@/features/product-detail/ui/PriceVerdictHero';
+import DealEvidenceBlock from '@/features/product-detail/ui/DealEvidenceBlock';
 import ProductGuideMetaRows, {
   type GuideRow as ProductGuideRow,
 } from '@/features/product-detail/ui/ProductGuideMetaRows';
@@ -36,7 +34,7 @@ export default function ProductInfo({
   naverbcData,
   ohouData,
   initialGuides,
-  initialVerdict,
+  initialEvidence,
   hidePrice,
 }: {
   productId: number;
@@ -44,7 +42,8 @@ export default function ProductInfo({
   naverbcData?: import('@/entities/product/model/toss-data').NaverbcProductData;
   ohouData?: import('@/entities/product/model/toss-data').OhouProductData;
   initialGuides?: ProductGuideRow[] | null;
-  initialVerdict?: ProductPriceVerdict | null;
+  /** 왜 핫딜인지 — 근거 블록·가격 조건 줄·정보 표에서 뺄 행(서버 dealEvidence) */
+  initialEvidence?: ProductDealEvidence | null;
   /** 토스 특가 코너에서 들어온 경우 판매가를 숨긴다. */
   hidePrice?: boolean;
 }) {
@@ -77,16 +76,9 @@ export default function ProductInfo({
               판매종료
             </Badge>
           )}
+          {/* 배지가 왜 붙었는지는 가격 아래 근거 블록이 말한다(대부분 커뮤니티 인기글). */}
           {!product.isEnd && product.hotDealType && (
-            <div className="flex items-center gap-[8px]">
-              <HotdealGuideModal
-                trigger={
-                  <button aria-label="핫딜 기준 안내" title="핫딜 기준 안내">
-                    <HotdealBadge badgeVariant="page" hotdealType={product.hotDealType} />
-                  </button>
-                }
-              />
-            </div>
+            <HotdealBadge badgeVariant="page" hotdealType={product.hotDealType} />
           )}
           <div className="ml-auto shrink-0 text-sm text-gray-600">
             <DisplayTime time={dealFreshnessAt(product) ?? product.postedAt} />
@@ -145,14 +137,15 @@ export default function ProductInfo({
           </div>
           {!hidePrice && (
             <>
-              <PriceVerdictHero
+              {/* 가격은 조건과 붙어 있어야 뜻이 선다 — 페이코 27.5% 할인가·배송비 2,500원 별도 */}
+              {initialEvidence?.condition ? (
+                <p className="truncate text-sm text-gray-600">{initialEvidence.condition}</p>
+              ) : null}
+              <DealEvidenceBlock
                 productId={productId}
                 source="detail_mobile"
-                verdict={initialVerdict}
+                evidence={initialEvidence}
               />
-              <Suspense fallback={null}>
-                <PriceContextBadge productId={productId} source="detail_mobile" />
-              </Suspense>
             </>
           )}
           {tossData && <TossBadges toss={tossData} hidePriceSignals={hidePrice} />}
@@ -175,11 +168,17 @@ export default function ProductInfo({
               productId={productId}
               variant="mobile"
               initialGuides={initialGuides}
+              hiddenIds={initialEvidence?.hiddenGuideIds}
               hidePrice={hidePrice}
             />
           ) : (
             <Suspense fallback={null}>
-              <ProductGuideMetaRows productId={productId} variant="mobile" hidePrice={hidePrice} />
+              <ProductGuideMetaRows
+                productId={productId}
+                variant="mobile"
+                hiddenIds={initialEvidence?.hiddenGuideIds}
+                hidePrice={hidePrice}
+              />
             </Suspense>
           )}
           {product.uploaderType !== UploaderType.Crawled && (

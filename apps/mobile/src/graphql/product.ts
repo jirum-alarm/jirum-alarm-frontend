@@ -136,32 +136,26 @@ export const QueryProductPriceHistory = graphql(`
 `);
 
 /**
- * 상세 가격 아래 판정 카드(PriceVerdictHero) + 다나와 최저가 배지(PriceContextBadge).
- * 판정은 web `QueryProductPriceVerdict` 와 같은 필드. 가격 추이와 쿼리를 나눈 이유도 web 과 같다 — 판정은 서버가 따로 계산한다.
- * 배지도 가격 바로 아래라 첫 화면이 같이 기다린다(늦게 끼어들어 화면을 밀지 않게).
+ * 상세 가격 아래 근거 블록(DealEvidenceBlock) — 왜 핫딜인지. web `QueryProductDealEvidence` 와 같은 필드.
+ * 판정·다나와·커뮤니티 중 무엇을 쓸지는 서버가 고른다(앱은 그리기만). 가격 조건 줄·정보 표에서 뺄 행도 같이 온다.
+ * 가격 바로 아래라 첫 화면이 같이 기다린다(늦게 끼어들어 화면을 밀지 않게).
  */
-export const QueryProductPriceVerdict = graphql(`
-  query ProductPriceVerdict($id: Int!) {
+export const QueryProductDealEvidence = graphql(`
+  query ProductDealEvidence($id: Int!) {
     product(id: $id) {
       id
-      priceVerdict {
-        status
-        nullReason
-        displayTier
-        basis
-        rangeDays
-        labelKey
-        headline
-        subline
-        historyPointCount
-      }
-      priceContext {
-        dealPrice
-        danawaPrice
-        delta
-        normalPriceMin
-        normalPriceMax
-        shippingIncluded
+      dealEvidence {
+        headline {
+          kind
+          strength
+          title
+          highlight
+          detail
+        }
+        support
+        caveat
+        condition
+        hiddenGuideIds
       }
     }
   }

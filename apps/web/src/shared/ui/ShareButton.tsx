@@ -13,7 +13,7 @@ type Props = {
 
 // ★일반 <button> 이어야 한다. motion.button 은 Drawer.Trigger asChild 의 props/ref
 // forwarding 과 호환되지 않아 트리거 속성이 안 붙고 시트가 열리지 않는다(2026-07-29 실측).
-// 기존 정상 사례(HotdealGuideModal)도 평범한 button 을 넘긴다.
+// 다른 Drawer.Trigger 자리도 평범한 button 을 넘긴다.
 const Icon = ({ onClick, ...rest }: React.ComponentPropsWithoutRef<'button'>) => (
   <button
     type="button"

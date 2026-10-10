@@ -119,8 +119,9 @@ function NativeDetail({
   const scrollRef = useRef<ScrollView>(null);
   const lastScrollY = useRef(0);
   const [scrollFlags] = useState(createScrollFlags);
-  // 가격 추이 섹션의 스크롤 위치 — 판정 카드 "기준 보기"가 여기로 간다.
+  // 근거 블록 「근거 보기」가 내려갈 섹션 위치 — 가격 근거는 가격 추이, 사람 근거는 커뮤니티 반응.
   const priceHistoryY = useRef<number | null>(null);
+  const communityY = useRef<number | null>(null);
   // 종료 딜 '최신 핫딜' 블록 — 첫 줄이 화면에 들어오면 노출로 센다(블록이 기록). 한 번만 state 를 바꾼다.
   const expiredBlockY = useRef<number | null>(null);
   const viewportHeight = useRef(0);
@@ -158,12 +159,12 @@ function NativeDetail({
   const {isPending: isGuidesPending} = useQuery(
     ProductQueries.guides({productId}),
   );
-  // 가격 판정도 같은 이유로 먼저 건다. web 은 서버(page.tsx)가 받아 첫 HTML 에 박는다 —
-  // 늦게 오면 가격 바로 아래 카드가 "없다가 생기며" 화면을 민다. 실패는 null(서비스가 삼킴).
-  const {data: priceSignals, isPending: isVerdictPending} = useQuery({
-    ...ProductQueries.priceVerdict({id: productId}),
-    enabled: !hidePrice,
-  });
+  // 근거(왜 핫딜인지)도 같은 이유로 먼저 건다. web 은 서버(page.tsx)가 받아 첫 HTML 에 박는다 —
+  // 늦게 오면 가격 바로 아래 블록이 "없다가 생기며" 화면을 민다. 실패는 null(서비스가 삼킴).
+  // 토스 유입(hidePrice)도 받는다 — 블록은 안 그려도 정보 표에서 뺄 행(hiddenGuideIds)을 쓴다(web 과 같다).
+  const {data: evidence, isPending: isEvidencePending} = useQuery(
+    ProductQueries.dealEvidence({id: productId}),
+  );
 
   const {data: myUserId} = useQuery(UserQueries.me());
   const {isMember: isLogin} = useAuth();
@@ -266,7 +267,7 @@ function NativeDetail({
     />
   );
 
-  if (isPending || isGuidesPending || (!hidePrice && isVerdictPending)) {
+  if (isPending || isGuidesPending || isEvidencePending) {
     return (
       <>
         <ProductDetailSkeleton />
@@ -343,15 +344,16 @@ function NativeDetail({
             productId={productId}
             isUserLogin={isLogin}
             hidePrice={hidePrice}
-            verdict={priceSignals?.priceVerdict}
-            priceContext={priceSignals?.priceContext}
-            onPressVerdictHistory={() => {
-              if (priceHistoryY.current == null) return;
+            evidence={evidence}
+            onPressEvidenceMore={target => {
+              const y =
+                target === 'priceHistory'
+                  ? priceHistoryY.current
+                  : communityY.current;
+              if (y == null) return;
               // sticky 조회수 띠가 섹션 제목을 덮지 않게 그 높이만큼 덜 내린다.
               scrollRef.current?.scrollTo({
-                y:
-                  priceHistoryY.current -
-                  (showViewerCount ? VIEWER_COUNT_HEIGHT : 0),
+                y: y - (showViewerCount ? VIEWER_COUNT_HEIGHT : 0),
                 animated: true,
               });
             }}
@@ -402,7 +404,12 @@ function NativeDetail({
         ) : null}
         {/* 유저 직접 등록 상품은 크롤링 출처가 없어 커뮤니티 반응도 없다(web 과 동일). */}
         {product.uploaderType !== UploaderType.User ? (
-          <CommunityReaction productId={productId} isUserLogin={isLogin} />
+          <View
+            onLayout={e => {
+              communityY.current = e.nativeEvent.layout.y;
+            }}>
+            <CommunityReaction productId={productId} isUserLogin={isLogin} />
+          </View>
         ) : null}
         <Hr />
         <TossDetailImages images={source.toss?.images} />

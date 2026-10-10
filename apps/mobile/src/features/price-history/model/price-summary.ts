@@ -1,42 +1,13 @@
 /**
  * 가격 추이 요약 문구·기본 기간. web `features/product-detail/ui/PriceHistorySection.tsx`
- * 의 resolveCurrentPriceBadge·resolveSubtitle·formatRangeLabel·pickDefaultDays 와 같은 규칙.
+ * 의 resolveSubtitle·formatRangeLabel·pickDefaultDays 와 같은 규칙.
  * 같은 상품이 웹/앱에서 다른 문구를 내면 유저는 버그로 읽는다.
  */
 import {
   DAY_MS,
   DEFAULT_PERIOD_DAYS,
   MIN_DEFAULT_POINTS,
-  won,
 } from './chart-geometry';
-
-/** 절약 카피 최소액 — 이하면 'N원 절약'이 초라해져 숨김 */
-const minSaveAmount = (currency?: string | null) =>
-  currency === 'USD' ? 1 : 1000;
-/** 가격대 상위 구간(비싼 편) — 절약 카피 숨김 */
-const EXPENSIVE_RATIO = 0.7;
-
-/**
- * 현재가 배지: 최저 대비(+)가 아니라 최고 대비 절약(−)으로 프레이밍.
- * 기간 최저 → 「기간 최저」, 비싼 구간·절약액 미미 → 숨김, 그 외 → 「최고 대비 N원 절약」.
- */
-export function resolveCurrentPriceBadge(
-  currentPrice: number,
-  minPrice: number,
-  maxPrice: number,
-  currency?: string | null,
-): string | null {
-  if (currentPrice <= minPrice) return '기간 최저';
-  if (maxPrice <= minPrice) return null;
-
-  const ratio = (currentPrice - minPrice) / (maxPrice - minPrice);
-  if (ratio > EXPENSIVE_RATIO) return null;
-
-  const saveAmount = maxPrice - currentPrice;
-  if (saveAmount < minSaveAmount(currency)) return null;
-
-  return `최고 대비 ${won(saveAmount, currency)} 절약`;
-}
 
 export function resolveSubtitle(history: {
   basis?: string | null;

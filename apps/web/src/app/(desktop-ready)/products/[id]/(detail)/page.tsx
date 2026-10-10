@@ -50,11 +50,10 @@ const getPriceHistoryCached = cache(async (id: number) => {
     return null;
   }
 });
-/** 히어로용 — 실패해도 상세는 막지 않음. generateMetadata 는 안 기다린다. */
-const getPriceVerdictCached = cache(async (id: number) => {
+/** 근거 블록(왜 핫딜인지)용 — 실패해도 상세는 막지 않음. generateMetadata 는 안 기다린다. */
+const getDealEvidenceCached = cache(async (id: number) => {
   try {
-    const data = await ProductService.getPriceVerdict({ id });
-    return data?.product?.priceVerdict ?? null;
+    return await ProductService.getDealEvidence({ id });
   } catch {
     return null;
   }
@@ -409,7 +408,7 @@ export default async function ProductDetail({
   const renderMobile = (
     productData?: any,
     guides?: any,
-    verdict?: any,
+    evidence?: any,
     modelPage?: ProductModelPageLink | null,
     dealAgeNotice?: string | null,
   ) => {
@@ -420,7 +419,7 @@ export default async function ProductDetail({
         initialProduct={productData}
         device={device}
         initialGuides={guides}
-        initialVerdict={verdict}
+        initialEvidence={evidence}
         hidePrice={hidePrice}
         modelPage={modelPage}
         ageNotice={dealAgeNotice}
@@ -430,7 +429,7 @@ export default async function ProductDetail({
   const renderDesktop = (
     productData?: any,
     guides?: any,
-    verdict?: any,
+    evidence?: any,
     modelPage?: ProductModelPageLink | null,
     dealAgeNotice?: string | null,
   ) => {
@@ -441,7 +440,7 @@ export default async function ProductDetail({
         initialProduct={productData}
         device={device}
         initialGuides={guides}
-        initialVerdict={verdict}
+        initialEvidence={evidence}
         hidePrice={hidePrice}
         modelPage={modelPage}
         ageNotice={dealAgeNotice}
@@ -456,11 +455,11 @@ export default async function ProductDetail({
   if (!product) {
     notFound();
   }
-  const [productGuides, priceHistoryData, priceVerdict, additionalInfo] = await Promise.all([
+  const [productGuides, priceHistoryData, dealEvidence, additionalInfo] = await Promise.all([
     getProductGuidesCached(+product.id),
     getPriceHistoryCached(+product.id),
-    // AI 학습·SEO 도구 봇엔 히어로 배지(사람용)를 안 그린다 → 백엔드 최중량 호출 하나를 건너뛴다(user-agent.ts).
-    lightSsr ? null : getPriceVerdictCached(+product.id),
+    // AI 학습·SEO 도구 봇엔 근거 블록(사람용)을 안 그린다 → 판정을 포함한 최중량 호출 하나를 건너뛴다(user-agent.ts).
+    lightSsr ? null : getDealEvidenceCached(+product.id),
     getProductAdditionalInfoCached(+product.id),
   ]);
   const priceHistorySeo = priceHistoryFromProduct(
@@ -506,14 +505,14 @@ export default async function ProductDetail({
           ? renderDesktop(
               product ?? undefined,
               productGuides?.productGuides ?? undefined,
-              priceVerdict,
+              dealEvidence,
               modelPageLink,
               ageNotice,
             )
           : renderMobile(
               product ?? undefined,
               productGuides?.productGuides ?? undefined,
-              priceVerdict,
+              dealEvidence,
               modelPageLink,
               ageNotice,
             )}
