@@ -484,7 +484,7 @@
 @layer components {
     /*
      * 폰에서 표 → 카드. <table className="table-cards"> 에 각 <td data-label="열 이름"> 만 달면 된다.
-     * - 줄(tr) 하나가 카드 하나, 칸(td)은 "열 이름 ……… 값" 한 줄
+     * - 줄(tr) 하나가 카드 하나, 칸(td)은 "열 이름 값" 조각이 한 줄에 이어 흐른다(칸마다 한 줄이면 카드가 너무 길다)
      * - data-label 이 없는 칸은 이름 없이 전체 폭(제목·사진처럼 카드의 머리가 되는 칸)
      * - data-label="actions" 칸은 버튼 줄(오른쪽 정렬, 이름 없음)
      * - hidden md:table-cell 로 숨긴 칸은 그대로 숨는다
@@ -505,7 +505,9 @@
         /* 칸 순서는 표와 달라도 카드에선 머리(이름 없는 칸)가 맨 위, 버튼 줄이 맨 아래 */
         .table-cards tbody > tr {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
+            column-gap: 0.875rem;
+            row-gap: 0.125rem;
             margin-bottom: 0.75rem;
             border: 1px solid var(--color-stroke);
             border-radius: 0.5rem;
@@ -515,15 +517,14 @@
         .table-cards tbody > tr > td:not(.hidden) {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 0.75rem;
-            width: 100%;
+            gap: 0.375rem;
+            width: auto;
             min-width: 0 !important;
-            max-width: none !important;
+            max-width: 100% !important;
             border: 0 !important;
-            padding: 0.3rem 0 !important;
+            padding: 0.125rem 0 !important;
             /* 칸에 붙은 text-center 같은 유틸리티가 카드 정렬을 뒤집지 않게 */
-            text-align: right !important;
+            text-align: left !important;
             white-space: normal !important;
             word-break: break-word;
         }
@@ -531,11 +532,13 @@
             content: attr(data-label);
             flex-shrink: 0;
             text-align: left;
-            font-size: 0.75rem;
-            color: var(--color-body);
+            font-size: 0.6875rem;
+            color: var(--color-bodydark2);
         }
         .table-cards tbody > tr > td:not([data-label]):not(.hidden) {
             display: block;
+            width: 100%;
+            padding-bottom: 0.25rem !important;
             order: -1;
             text-align: left !important;
         }
@@ -552,11 +555,13 @@
             border-color: var(--color-strokedark);
             background: var(--color-boxdark);
         }
+        /* 버튼 줄은 마지막 조각 뒤 오른쪽 끝 — 자리가 모자라면 다음 줄 오른쪽으로 */
         .table-cards tbody > tr > td[data-label='actions'] {
             order: 1;
+            margin-left: auto;
             justify-content: flex-end;
             flex-wrap: wrap;
-            padding-top: 0.5rem !important;
+            padding-top: 0.25rem !important;
         }
         .table-cards tbody > tr > td[data-label='actions']::before {
             content: none;

@@ -323,7 +323,7 @@ const VerificationHistory = () => {
                       data-label="검증 정보"
                       className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark"
                     >
-                      <div className="flex flex-col items-start gap-1 text-left text-xs text-slate-600 dark:text-slate-300">
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-left text-xs text-slate-600 md:flex-col md:items-start md:gap-1 dark:text-slate-300">
                         <span className="flex items-center gap-1">
                           검증자:{' '}
                           <span
