@@ -27,6 +27,7 @@ const daysBetween = (from: string, to: string) => {
 const PARTIAL_COLOR = '#C7CEF7';
 
 const PERIODS = [
+  { value: 'today', label: '오늘' },
   { value: 'month', label: '이번 달' },
   { value: 'last30', label: '최근 30일' },
 ] as const;
@@ -55,7 +56,7 @@ const RevenueSummary = () => {
   const { data } = useRevenueTrend(range, { skip: !canProfit });
   const rows = data?.revenueTrend;
 
-  const periodStart = period === 'month' ? monthStart : last30Start;
+  const periodStart = { today, month: monthStart, last30: last30Start }[period];
   const view = useMemo(() => {
     if (!rows) return undefined;
     const bySource = new Map<string, number>();
@@ -141,7 +142,9 @@ const RevenueSummary = () => {
         <SegmentedControl options={PERIODS} value={period} onChange={setPeriod} />
 
         <p className="mt-4 text-xs text-body">
-          {md(periodStart)} ~ {md(today)} 합계
+          {period === 'today'
+            ? `오늘(${md(today)}) 합계 · 집계 중`
+            : `${md(periodStart)} ~ ${md(today)} 합계`}
         </p>
         <p className="text-3xl font-bold text-black">{view ? won(view.total) : '…'}</p>
 
@@ -179,28 +182,32 @@ const RevenueSummary = () => {
               ))}
             </ul>
 
-            <div className="mt-6 lg:mt-4">
-              <p className="text-xs font-medium text-body">일별 수익</p>
-              <div className="-mx-2">
-                <Chart
-                  type="bar"
-                  height={180}
-                  series={[{ name: '수익', data: view.daily }]}
-                  format={(v) => won(v)}
-                  options={{
-                    xaxis: { type: 'category' },
-                    tooltip: {
-                      y: {
-                        formatter: (v: number, opts?: { dataPointIndex: number }) =>
-                          view.partialFrom >= 0 && (opts?.dataPointIndex ?? -1) >= view.partialFrom
-                            ? `${won(v)} (집계 중)`
-                            : won(v),
+            {/* 오늘은 막대 하나뿐이라 그래프 생략 */}
+            {period !== 'today' && (
+              <div className="mt-6 lg:mt-4">
+                <p className="text-xs font-medium text-body">일별 수익</p>
+                <div className="-mx-2">
+                  <Chart
+                    type="bar"
+                    height={180}
+                    series={[{ name: '수익', data: view.daily }]}
+                    format={(v) => won(v)}
+                    options={{
+                      xaxis: { type: 'category' },
+                      tooltip: {
+                        y: {
+                          formatter: (v: number, opts?: { dataPointIndex: number }) =>
+                            view.partialFrom >= 0 &&
+                            (opts?.dataPointIndex ?? -1) >= view.partialFrom
+                              ? `${won(v)} (집계 중)`
+                              : won(v),
+                        },
                       },
-                    },
-                  }}
-                />
+                    }}
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         )}
 
