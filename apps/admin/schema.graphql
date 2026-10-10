@@ -318,6 +318,60 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+"""
+왜 핫딜인지 — 판정·다나와·커뮤니티 근거를 모아 하나를 고른 결과. 상세 가격 아래 블록 하나가 이것만 그린다.
+"""
+type DealEvidence {
+  """
+  근거끼리 엇갈리거나 딜 상태가 바뀌었을 때 한 줄
+  """
+  caveat: String
+  """
+  가격 조건 한 줄 — 카드·쿠폰·적립·배송비·행사기간
+  """
+  condition: String
+  """
+  없으면 블록 자리를 안 잡는다
+  """
+  headline: DealEvidenceItem
+  """
+  정보 표에서 뺄 가이드 행 — 조건 줄로 옮겼거나 제목·쇼핑몰·가격을 그대로 반복하는 행
+  """
+  hiddenGuideIds: [ID!]!
+  """
+  헤드라인과 종류가 다른 근거 한 줄
+  """
+  support: String
+}
+
+"""
+근거 한 줄
+"""
+type DealEvidenceItem {
+  detail: String
+  """
+  title 안에서 강조할 부분(그대로 포함돼 있다)
+  """
+  highlight: String
+  kind: DealEvidenceKind!
+  """
+  STRONG 이면 highlight 를 강조색으로
+  """
+  strength: DealEvidenceStrength!
+  title: String!
+}
+
+enum DealEvidenceKind {
+  COMMUNITY
+  HISTORY
+  MARKET
+}
+
+enum DealEvidenceStrength {
+  MILD
+  STRONG
+}
+
 type DoubleRowSection implements BaseSection {
   dataSource: ApiQuery!
   displayOrder: Float
@@ -325,6 +379,43 @@ type DoubleRowSection implements BaseSection {
   title: String!
   type: SectionDisplayType!
   viewMoreLink: String
+}
+
+"""
+커뮤니티 반응 신호 하나(사이트 × 좋아요·댓글·조회·인기글) — 매일 08:05 Mattermost 알림과 같은 계산(engagement-signal-health)
+"""
+type EngagementSignalOutput {
+  """
+  평소(7~30일 전 수집) 0 아닌 글 비율 0~1
+  """
+  baselineRate: Float!
+  """
+  꺼짐 — 최근 창이 평소 비율로 기대한 수의 10% 이하이고 우연일 확률 0.1% 미만
+  """
+  dead: Boolean!
+  """
+  평소 비율로 기대한 0 아닌 글 수
+  """
+  expected: Float!
+  """
+  좋아요 | 댓글 | 조회 | 인기글
+  """
+  label: String!
+  providerName: String!
+  """
+  그중 값이 0 아닌 글
+  """
+  recentNonzero: Int!
+  """
+  최근 창(수집된 지 windowToHours~windowFromHours 시간) 글 수
+  """
+  recentPosts: Int!
+  """
+  like | comment | view | hot
+  """
+  signal: String!
+  windowFromHours: Int!
+  windowToHours: Int!
 }
 
 type ExistsUserOutput {
@@ -1719,6 +1810,10 @@ type ProductOutput {
   소스별 확장 정보(toss 등)
   """
   data: JSONObject
+  """
+  왜 핫딜인지 — 근거 하나 + 다른 종류 한 줄 + 엇갈림 단서 + 가격 조건(상세 전용)
+  """
+  dealEvidence: DealEvidence
   detailUrl: String
   dislikeCount: Int!
   distributionDate: DateTime
@@ -2271,18 +2366,6 @@ type Query {
     searchAfter: [String!]
   ): [ProductMappingOutput!]!
   """
-  특정 사용자의 추천 상품 조회 (관리자용)
-  """
-  getPersonalizedProductsByUserId(
-    categoryId: Int
-    limit: Int
-    userId: Int!
-  ): [RecommendedProductOutput!]!
-  """
-  특정 상품과 유사한 상품 조회
-  """
-  getSimilarProducts(limit: Int = 10, productId: Int!): [ProductOutput!]!
-  """
   게스트 카테고리 선호 기반 추천 핫딜 (비로그인 허용, 선호 없으면 인기순 폴백)
   """
   guestRecommendedHotDeals(
@@ -2405,6 +2488,10 @@ type Query {
     orderOption: OrderOptionType!
     searchAfter: [String!]
   ): [KeywordMapGroupOutput!]!
+  """
+  종료됐을 수 있는 딜 상세의 '최신 핫딜' — 이 글보다 새 진행 중 딜(같은 상품 먼저, 같은 라인 뒤, 최대 20)
+  """
+  latestSimilarDeals(id: Int!, limit: Int! = 10): [ProductOutput!]!
   mallGroups: [MallGroup!]!
   """
   어드민) 매칭 실행 상세 조회 (스텝 포함)
@@ -2566,14 +2653,6 @@ type Query {
     target: ProductMappingTarget
     verificationStatus: [ProductMappingVerificationStatus!]
   ): Int!
-  """
-  개인화 추천 상품 조회 (로그인 필요)
-  """
-  personalizedProducts(
-    categoryId: Int
-    excludeProductIds: [Int!]
-    limit: Int = 20
-  ): [RecommendedProductOutput!]!
   """
   상품 조회
   """
@@ -2840,12 +2919,6 @@ type Query {
   ): [WishlistOutput!]!
 }
 
-type RecommendedProductOutput {
-  product: ProductOutput!
-  recommendationReason: String
-  recommendationScore: Float
-}
-
 type RevenueDailyOutput {
   date: String!
   """
@@ -2879,6 +2952,10 @@ type ServiceHealthSignalsOutput {
   지금 울리는 Prometheus 알람(critical·warning, 상시 신호 제외). null = Prometheus 응답 없음
   """
   alerts: [FiringAlertOutput!]
+  """
+  커뮤니티 반응 신호(사이트 × 신호). null = 집계 실패
+  """
+  engagementSignals: [EngagementSignalOutput!]
   """
   최근 24시간 실패한 LLM 작업 수
   """

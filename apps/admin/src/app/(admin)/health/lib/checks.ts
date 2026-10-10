@@ -1,5 +1,8 @@
 import { getHealthLevel } from '@/app/(admin)/crawling/components/ProviderHealthGrid';
-import { ProfitLinkProviderHealthQuery } from '@/generated/gql/graphql';
+import {
+  ProfitLinkProviderHealthQuery,
+  QueryServiceHealthSignalsQuery,
+} from '@/generated/gql/graphql';
 import { shortWon } from '@/lib/format';
 import { sourceName } from '@/lib/labels';
 import { ProviderHealthOutput } from '@/types/stats';
@@ -27,6 +30,9 @@ export type Check = {
 export type Section = { title: string; why: string; checks: Check[] };
 
 type ProviderRow = ProfitLinkProviderHealthQuery['profitLinkProviderHealth'][number];
+type EngagementRow = NonNullable<
+  QueryServiceHealthSignalsQuery['serviceHealthSignals']['engagementSignals']
+>[number];
 
 export type Signals = {
   toss?: boolean;
@@ -54,6 +60,8 @@ export type Signals = {
     pushMinutesSinceLast: number | null;
     /** null = Prometheus 응답 없음 */
     alerts: FiringAlert[] | null;
+    /** 사이트 × 좋아요·댓글·조회·인기글. null = 서버 집계 실패 */
+    engagement: EngagementRow[] | null;
   };
 };
 
@@ -132,6 +140,46 @@ const pushCheck = (b: Signals['backend']): Pick<Check, 'level' | 'now'> => {
   return {
     level: m == null || m >= 26 * 60 ? 'danger' : m >= 14 * 60 ? 'warn' : 'ok',
     now: m == null ? '발송 이력 없음' : `마지막 발송 ${hoursAgo(m)} 전`,
+  };
+};
+
+/** "6~48시간" · "1~4일" */
+const windowText = (r: EngagementRow) =>
+  r.windowFromHours % 24 === 0 && r.windowToHours % 24 === 0
+    ? `${r.windowToHours / 24}~${r.windowFromHours / 24}일`
+    : `${r.windowToHours}~${r.windowFromHours}시간`;
+
+/** 판정은 서버(매일 08:05 Mattermost 알림과 같은 계산) — 여기서 다시 하지 않고 꺼진 것만 고른다 */
+const engagementCheck = (b: Signals['backend']): Pick<Check, 'level' | 'now'> => {
+  if (!b) return { level: undefined };
+  const rows = b.engagement;
+  if (!rows) return { level: 'warn', now: '집계 실패 — crawling-server 로그 확인' };
+  if (rows.length === 0) return { level: 'manual', now: '집계 대상 없음' };
+  const dead = rows.filter((r) => r.dead);
+  if (dead.length > 0) {
+    return {
+      level: 'danger',
+      now: dead
+        .map(
+          (r) =>
+            `${r.providerName} ${r.label} 꺼짐 — ${windowText(r)} 된 글 ${r.recentPosts}개 중 ${r.recentNonzero}개(평소대로면 ${Math.round(r.expected)}개)`,
+        )
+        .join(' · '),
+    };
+  }
+  // 참고로 평소 대비 가장 낮은 곳 하나 — 기대 5개 미만은 흔들림이 커서 뺀다
+  const lowest = rows
+    .filter((r) => r.expected >= 5)
+    .sort((a, b) => a.recentNonzero / a.expected - b.recentNonzero / b.expected)[0];
+  return {
+    level: 'ok',
+    now: [
+      `${new Set(rows.map((r) => r.providerName)).size}곳 × ${new Set(rows.map((r) => r.signal)).size}신호 정상`,
+      lowest &&
+        `가장 낮은 곳 ${lowest.providerName} ${lowest.label} 평소의 ${Math.round((lowest.recentNonzero / lowest.expected) * 100)}%`,
+    ]
+      .filter(Boolean)
+      .join(' · '),
   };
 };
 
@@ -380,6 +428,23 @@ const baseSections = (s: Signals): Section[] => [
           '차단: VPN 경유로 바꾸거나 일시정지. 구조 변경: 크롤러 셀렉터 수정.',
           '파드가 PodInitializing 으로 며칠째면 VPN 사이드카 고착 — 걸린 Job 을 지운다.',
           '상세: jirum vault runbook/crawler-silent-failure-checkup.md · runbook/crawler-killswitch-netns-stuck-and-deadline.md',
+        ],
+        href: '/crawling',
+      },
+      {
+        id: 'engagement',
+        title: '커뮤니티 반응 신호',
+        ...engagementCheck(s.backend),
+        symptom:
+          '수집은 성공인데 좋아요·댓글·조회·인기글이 0 으로 저장된다 — 랭킹·인기글 배지·카톡 기준이 그 커뮤니티 반응을 못 보고, 위 「커뮤니티 수집」은 초록불 그대로다. 과거: 맘이베베 인기글 9/21~ 3주(카페가 인기글을 끔), 클리앙 댓글 수 8월~ 두 달(댓글 수 표시 클래스 변경).',
+        check: [
+          '원본 글 몇 개를 열어 화면의 추천·댓글이 정말 0 인지 본다 — 시티·딜바다 좋아요는 원래 0 이다(평소 비율이 0 인 신호는 판정하지 않는다).',
+          '판정: 최근 글(좋아요·댓글·조회는 수집 6~48시간, 인기글은 1~4일)에서 값이 0 아닌 글이 평소(7~30일 전) 비율로 기대한 수의 10% 이하이고, 우연일 확률이 0.1% 미만. 매일 08:05 Mattermost `log-collect-community-error` 에 같은 판정이 온다.',
+        ],
+        fix: [
+          '진짜 0 이 아니면 그 사이트 크롤러의 셀렉터·API 필드가 바뀐 것 — jirum-alarm-crawler `src/collector/community/<사이트>.ts`.',
+          '이토랜드·에펨·아카의 인기글은 사이트 딱지가 아니라 서버가 다시 읽은 반응으로 나중에 올린다 — 인기글만 꺼졌으면 그 사이트 좋아요·댓글과 재수집부터 본다.',
+          '기준은 crawling-server `src/common/lib/engagement-signal-health.ts` 한 곳.',
         ],
         href: '/crawling',
       },

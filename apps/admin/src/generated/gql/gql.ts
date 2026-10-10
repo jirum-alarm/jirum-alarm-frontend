@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as types from './graphql';
 
 /**
@@ -92,7 +93,7 @@ type Documents = {
   '\n  query QueryProviderHealthStatus($providerType: ProviderType) {\n    providerHealthStatus(providerType: $providerType) {\n      providerId\n      providerName\n      providerType\n      last1hCount\n      last24hCount\n      last7dCount\n      latestCollectedAt\n      minutesSinceLatest\n    }\n  }\n': typeof types.QueryProviderHealthStatusDocument;
   '\n  query QueryThumbnailStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {\n    thumbnailStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      typeDistribution {\n        thumbnailType\n        count\n      }\n      mallDistribution {\n        mallName\n        count\n      }\n      missingCount\n      totalCount\n    }\n  }\n': typeof types.QueryThumbnailStatsDocument;
   '\n  query QuerySearchProbe($keyword: String!) {\n    products(keyword: $keyword, limit: 1) {\n      id\n    }\n  }\n': typeof types.QuerySearchProbeDocument;
-  '\n  query QueryServiceHealthSignals {\n    serviceHealthSignals {\n      mappingCoverage {\n        products\n        mapped\n        verified\n        verdict\n      }\n      llmMinutesSinceLastDone\n      llmReadyPending\n      llmFailed24h\n      pushMinutesSinceLast\n      alerts {\n        name\n        severity\n        target\n      }\n    }\n  }\n': typeof types.QueryServiceHealthSignalsDocument;
+  '\n  query QueryServiceHealthSignals {\n    serviceHealthSignals {\n      mappingCoverage {\n        products\n        mapped\n        verified\n        verdict\n      }\n      llmMinutesSinceLastDone\n      llmReadyPending\n      llmFailed24h\n      pushMinutesSinceLast\n      alerts {\n        name\n        severity\n        target\n      }\n      engagementSignals {\n        providerName\n        signal\n        label\n        dead\n        recentPosts\n        recentNonzero\n        expected\n        windowFromHours\n        windowToHours\n      }\n    }\n  }\n': typeof types.QueryServiceHealthSignalsDocument;
   '\n  mutation MutationAddHotDealKeywordSynonymByAdmin($hotDealKeywordId: Int!, $keywords: [String!]!) {\n    addHotDealKeywordSynonymByAdmin(hotDealKeywordId: $hotDealKeywordId, keywords: $keywords)\n  }\n': typeof types.MutationAddHotDealKeywordSynonymByAdminDocument;
   '\n  mutation MutationAddHotDealExcludeKeywordByAdmin(\n    $hotDealKeywordId: Int!\n    $excludeKeywords: [String!]!\n  ) {\n    addHotDealExcludeKeywordByAdmin(\n      hotDealKeywordId: $hotDealKeywordId\n      excludeKeywords: $excludeKeywords\n    )\n  }\n': typeof types.MutationAddHotDealExcludeKeywordByAdminDocument;
   '\n  mutation MutationRemoveHotDealKeywordSynonymByAdmin($ids: [Int!]!) {\n    removeHotDealKeywordSynonymByAdmin(ids: $ids)\n  }\n': typeof types.MutationRemoveHotDealKeywordSynonymByAdminDocument;
@@ -263,7 +264,7 @@ const documents: Documents = {
     types.QueryThumbnailStatsDocument,
   '\n  query QuerySearchProbe($keyword: String!) {\n    products(keyword: $keyword, limit: 1) {\n      id\n    }\n  }\n':
     types.QuerySearchProbeDocument,
-  '\n  query QueryServiceHealthSignals {\n    serviceHealthSignals {\n      mappingCoverage {\n        products\n        mapped\n        verified\n        verdict\n      }\n      llmMinutesSinceLastDone\n      llmReadyPending\n      llmFailed24h\n      pushMinutesSinceLast\n      alerts {\n        name\n        severity\n        target\n      }\n    }\n  }\n':
+  '\n  query QueryServiceHealthSignals {\n    serviceHealthSignals {\n      mappingCoverage {\n        products\n        mapped\n        verified\n        verdict\n      }\n      llmMinutesSinceLastDone\n      llmReadyPending\n      llmFailed24h\n      pushMinutesSinceLast\n      alerts {\n        name\n        severity\n        target\n      }\n      engagementSignals {\n        providerName\n        signal\n        label\n        dead\n        recentPosts\n        recentNonzero\n        expected\n        windowFromHours\n        windowToHours\n      }\n    }\n  }\n':
     types.QueryServiceHealthSignalsDocument,
   '\n  mutation MutationAddHotDealKeywordSynonymByAdmin($hotDealKeywordId: Int!, $keywords: [String!]!) {\n    addHotDealKeywordSynonymByAdmin(hotDealKeywordId: $hotDealKeywordId, keywords: $keywords)\n  }\n':
     types.MutationAddHotDealKeywordSynonymByAdminDocument,
@@ -777,7 +778,7 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query QueryServiceHealthSignals {\n    serviceHealthSignals {\n      mappingCoverage {\n        products\n        mapped\n        verified\n        verdict\n      }\n      llmMinutesSinceLastDone\n      llmReadyPending\n      llmFailed24h\n      pushMinutesSinceLast\n      alerts {\n        name\n        severity\n        target\n      }\n    }\n  }\n',
+  source: '\n  query QueryServiceHealthSignals {\n    serviceHealthSignals {\n      mappingCoverage {\n        products\n        mapped\n        verified\n        verdict\n      }\n      llmMinutesSinceLastDone\n      llmReadyPending\n      llmFailed24h\n      pushMinutesSinceLast\n      alerts {\n        name\n        severity\n        target\n      }\n      engagementSignals {\n        providerName\n        signal\n        label\n        dead\n        recentPosts\n        recentNonzero\n        expected\n        windowFromHours\n        windowToHours\n      }\n    }\n  }\n',
 ): typeof import('./graphql').QueryServiceHealthSignalsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.

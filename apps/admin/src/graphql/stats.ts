@@ -203,7 +203,7 @@ export const QuerySearchProbe = gql`
   }
 `;
 
-// 매칭 커버리지·LLM 워커·푸시 — 다른 쿼리로는 안 보이던 서비스 점검 신호
+// 매칭 커버리지·LLM 워커·푸시·커뮤니티 반응 신호 — 다른 쿼리로는 안 보이던 서비스 점검 신호
 export const QueryServiceHealthSignals = gql`
   query QueryServiceHealthSignals {
     serviceHealthSignals {
@@ -221,6 +221,17 @@ export const QueryServiceHealthSignals = gql`
         name
         severity
         target
+      }
+      engagementSignals {
+        providerName
+        signal
+        label
+        dead
+        recentPosts
+        recentNonzero
+        expected
+        windowFromHours
+        windowToHours
       }
     }
   }

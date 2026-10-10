@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = T | null | undefined;
@@ -300,6 +301,44 @@ export enum DateInterval {
   Weekly = 'WEEKLY',
 }
 
+/** 왜 핫딜인지 — 판정·다나와·커뮤니티 근거를 모아 하나를 고른 결과. 상세 가격 아래 블록 하나가 이것만 그린다. */
+export type DealEvidence = {
+  __typename?: 'DealEvidence';
+  /** 근거끼리 엇갈리거나 딜 상태가 바뀌었을 때 한 줄 */
+  caveat?: Maybe<Scalars['String']['output']>;
+  /** 가격 조건 한 줄 — 카드·쿠폰·적립·배송비·행사기간 */
+  condition?: Maybe<Scalars['String']['output']>;
+  /** 없으면 블록 자리를 안 잡는다 */
+  headline?: Maybe<DealEvidenceItem>;
+  /** 정보 표에서 뺄 가이드 행 — 조건 줄로 옮겼거나 제목·쇼핑몰·가격을 그대로 반복하는 행 */
+  hiddenGuideIds: Array<Scalars['ID']['output']>;
+  /** 헤드라인과 종류가 다른 근거 한 줄 */
+  support?: Maybe<Scalars['String']['output']>;
+};
+
+/** 근거 한 줄 */
+export type DealEvidenceItem = {
+  __typename?: 'DealEvidenceItem';
+  detail?: Maybe<Scalars['String']['output']>;
+  /** title 안에서 강조할 부분(그대로 포함돼 있다) */
+  highlight?: Maybe<Scalars['String']['output']>;
+  kind: DealEvidenceKind;
+  /** STRONG 이면 highlight 를 강조색으로 */
+  strength: DealEvidenceStrength;
+  title: Scalars['String']['output'];
+};
+
+export enum DealEvidenceKind {
+  Community = 'COMMUNITY',
+  History = 'HISTORY',
+  Market = 'MARKET',
+}
+
+export enum DealEvidenceStrength {
+  Mild = 'MILD',
+  Strong = 'STRONG',
+}
+
 export type DoubleRowSection = BaseSection & {
   __typename?: 'DoubleRowSection';
   dataSource: ApiQuery;
@@ -308,6 +347,28 @@ export type DoubleRowSection = BaseSection & {
   title: Scalars['String']['output'];
   type: SectionDisplayType;
   viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
+
+/** 커뮤니티 반응 신호 하나(사이트 × 좋아요·댓글·조회·인기글) — 매일 08:05 Mattermost 알림과 같은 계산(engagement-signal-health) */
+export type EngagementSignalOutput = {
+  __typename?: 'EngagementSignalOutput';
+  /** 평소(7~30일 전 수집) 0 아닌 글 비율 0~1 */
+  baselineRate: Scalars['Float']['output'];
+  /** 꺼짐 — 최근 창이 평소 비율로 기대한 수의 10% 이하이고 우연일 확률 0.1% 미만 */
+  dead: Scalars['Boolean']['output'];
+  /** 평소 비율로 기대한 0 아닌 글 수 */
+  expected: Scalars['Float']['output'];
+  /** 좋아요 | 댓글 | 조회 | 인기글 */
+  label: Scalars['String']['output'];
+  providerName: Scalars['String']['output'];
+  /** 그중 값이 0 아닌 글 */
+  recentNonzero: Scalars['Int']['output'];
+  /** 최근 창(수집된 지 windowToHours~windowFromHours 시간) 글 수 */
+  recentPosts: Scalars['Int']['output'];
+  /** like | comment | view | hot */
+  signal: Scalars['String']['output'];
+  windowFromHours: Scalars['Int']['output'];
+  windowToHours: Scalars['Int']['output'];
 };
 
 export type ExistsUserOutput = {
@@ -1679,6 +1740,8 @@ export type ProductOutput = {
   content?: Maybe<Scalars['String']['output']>;
   /** 소스별 확장 정보(toss 등) */
   data?: Maybe<Scalars['JSONObject']['output']>;
+  /** 왜 핫딜인지 — 근거 하나 + 다른 종류 한 줄 + 엇갈림 단서 + 가격 조건(상세 전용) */
+  dealEvidence?: Maybe<DealEvidence>;
   detailUrl?: Maybe<Scalars['String']['output']>;
   dislikeCount: Scalars['Int']['output'];
   distributionDate?: Maybe<Scalars['DateTime']['output']>;
@@ -2000,10 +2063,6 @@ export type Query = {
   expiringSoonHotDealProducts: Array<ProductOutput>;
   /** 게이트 차단 매핑 목록 조회 (추출오염/묶음글 등, not_matchable) */
   gatedMappings: Array<ProductMappingOutput>;
-  /** 특정 사용자의 추천 상품 조회 (관리자용) */
-  getPersonalizedProductsByUserId: Array<RecommendedProductOutput>;
-  /** 특정 상품과 유사한 상품 조회 */
-  getSimilarProducts: Array<ProductOutput>;
   /** 게스트 카테고리 선호 기반 추천 핫딜 (비로그인 허용, 선호 없으면 인기순 폴백) */
   guestRecommendedHotDeals: Array<ProductOutput>;
   /** 어드민) 카카오쇼핑 추천리워드 세션 저장 여부(true면 발급 가동중) */
@@ -2038,6 +2097,8 @@ export type Query = {
   keywordMapGroupByAdmin?: Maybe<KeywordMapGroupOutput>;
   /** 어드민) 키워드 맵 그룹 목록 조회 */
   keywordMapGroupsByAdmin: Array<KeywordMapGroupOutput>;
+  /** 종료됐을 수 있는 딜 상세의 '최신 핫딜' — 이 글보다 새 진행 중 딜(같은 상품 먼저, 같은 라인 뒤, 최대 20) */
+  latestSimilarDeals: Array<ProductOutput>;
   mallGroups: Array<MallGroup>;
   /** 어드민) 매칭 실행 상세 조회 (스텝 포함) */
   matchRunByAdmin?: Maybe<MatchRun>;
@@ -2072,8 +2133,6 @@ export type Query = {
   pendingVerifications: Array<ProductMappingOutput>;
   /** 검증 대기 중인 매핑 전체 개수 조회 (필터 적용 가능) */
   pendingVerificationsTotalCount: Scalars['Int']['output'];
-  /** 개인화 추천 상품 조회 (로그인 필요) */
-  personalizedProducts: Array<RecommendedProductOutput>;
   /** 상품 조회 */
   product?: Maybe<ProductOutput>;
   /** 어드민) 카테고리별 상품 수 */
@@ -2291,17 +2350,6 @@ export type QueryGatedMappingsArgs = {
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
-export type QueryGetPersonalizedProductsByUserIdArgs = {
-  categoryId?: InputMaybe<Scalars['Int']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  userId: Scalars['Int']['input'];
-};
-
-export type QueryGetSimilarProductsArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  productId: Scalars['Int']['input'];
-};
-
 export type QueryGuestRecommendedHotDealsArgs = {
   limit: Scalars['Int']['input'];
   page: Scalars['Int']['input'];
@@ -2369,6 +2417,11 @@ export type QueryKeywordMapGroupsByAdminArgs = {
   orderBy: KeywordMapGroupOrderType;
   orderOption: OrderOptionType;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type QueryLatestSimilarDealsArgs = {
+  id: Scalars['Int']['input'];
+  limit?: Scalars['Int']['input'];
 };
 
 export type QueryMatchRunByAdminArgs = {
@@ -2455,12 +2508,6 @@ export type QueryPendingVerificationsTotalCountArgs = {
   suspiciousFirst?: InputMaybe<Scalars['Boolean']['input']>;
   target?: InputMaybe<ProductMappingTarget>;
   verificationStatus?: InputMaybe<Array<ProductMappingVerificationStatus>>;
-};
-
-export type QueryPersonalizedProductsArgs = {
-  categoryId?: InputMaybe<Scalars['Int']['input']>;
-  excludeProductIds?: InputMaybe<Array<Scalars['Int']['input']>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryProductArgs = {
@@ -2654,13 +2701,6 @@ export type QueryWishlistsArgs = {
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
-export type RecommendedProductOutput = {
-  __typename?: 'RecommendedProductOutput';
-  product: ProductOutput;
-  recommendationReason?: Maybe<Scalars['String']['output']>;
-  recommendationScore?: Maybe<Scalars['Float']['output']>;
-};
-
 export type RevenueDailyOutput = {
   __typename?: 'RevenueDailyOutput';
   date: Scalars['String']['output'];
@@ -2690,6 +2730,8 @@ export type ServiceHealthSignalsOutput = {
   __typename?: 'ServiceHealthSignalsOutput';
   /** 지금 울리는 Prometheus 알람(critical·warning, 상시 신호 제외). null = Prometheus 응답 없음 */
   alerts?: Maybe<Array<FiringAlertOutput>>;
+  /** 커뮤니티 반응 신호(사이트 × 신호). null = 집계 실패 */
+  engagementSignals?: Maybe<Array<EngagementSignalOutput>>;
   /** 최근 24시간 실패한 LLM 작업 수 */
   llmFailed24h: Scalars['Int']['output'];
   /** LLM 작업이 마지막으로 끝난 지 몇 분. 일괄 작업으로 대기열이 수만 건 쌓이는 건 정상이라 생존은 이걸로 본다 */
@@ -4080,6 +4122,18 @@ export type QueryServiceHealthSignalsQuery = {
       severity: string;
       target?: string | null;
     }> | null;
+    engagementSignals?: Array<{
+      __typename?: 'EngagementSignalOutput';
+      providerName: string;
+      signal: string;
+      label: string;
+      dead: boolean;
+      recentPosts: number;
+      recentNonzero: number;
+      expected: number;
+      windowFromHours: number;
+      windowToHours: number;
+    }> | null;
   };
 };
 
@@ -5367,6 +5421,17 @@ export const QueryServiceHealthSignalsDocument = new TypedDocumentString(`
       name
       severity
       target
+    }
+    engagementSignals {
+      providerName
+      signal
+      label
+      dead
+      recentPosts
+      recentNonzero
+      expected
+      windowFromHours
+      windowToHours
     }
   }
 }
