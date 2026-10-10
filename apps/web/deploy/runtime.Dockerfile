@@ -31,6 +31,10 @@ ENV NEXT_PUBLIC_SERVICE_URL=${NEXT_PUBLIC_SERVICE_URL} \
     NODE_ENV=${NODE_ENV} \
     PORT=3000
 
+# glibc 는 스레드마다 malloc 아레나를 만든다. sharp(libvips) 스레드가 아레나를 단편화해 RSS 가 10~15분 만에
+# 1Gi 까지 불어 OOMKill 반복(2026-10-10, 아레나 49개 703MiB 실측) → 아레나 수를 묶는다. alpine(musl)엔 없던 문제.
+ENV MALLOC_ARENA_MAX=2
+
 USER nextjs
 
 # context = apps/web (runtime.Dockerfile.dockerignore 가 빌드 산출물만 통과시킨다)
