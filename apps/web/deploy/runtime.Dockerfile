@@ -4,7 +4,10 @@
 #   alpine(musl) 이면 sharp 가 안 떠서 /_next/image 이미지 최적화가 깨진다.
 FROM node:22.18-slim
 
-RUN apt-get update && apt-get install -y --no-install-recommends dumb-init && rm -rf /var/lib/apt/lists/*
+# libjemalloc2: glibc malloc 대신 jemalloc 으로 돌린다(아래 LD_PRELOAD). 경로를 아키텍처와 무관하게 고정하려고 심볼릭 링크.
+RUN apt-get update && apt-get install -y --no-install-recommends dumb-init libjemalloc2 && rm -rf /var/lib/apt/lists/* && \
+    ln -s /usr/lib/$(uname -m)-linux-gnu/libjemalloc.so.2 /usr/local/lib/libjemalloc.so && \
+    test -e /usr/local/lib/libjemalloc.so
 
 WORKDIR /app
 RUN groupadd --system --gid 1001 nodejs && \
@@ -34,6 +37,10 @@ ENV NEXT_PUBLIC_SERVICE_URL=${NEXT_PUBLIC_SERVICE_URL} \
 # glibc 는 스레드마다 malloc 아레나를 만든다. sharp(libvips) 스레드가 아레나를 단편화해 RSS 가 10~15분 만에
 # 1Gi 까지 불어 OOMKill 반복(2026-10-10, 아레나 49개 703MiB 실측) → 아레나 수를 묶는다. alpine(musl)엔 없던 문제.
 ENV MALLOC_ARENA_MAX=2
+# 아레나를 2개로 묶어도 메인 아레나(brk 힙)가 단편화로 계속 자라 working set 이 시간당 ~30MiB 씩 올랐다
+# (2026-10-11: 15시간 만에 470→880MiB, 1Gi limit OOMKill 재발 — smaps 상 [heap] 275MiB+보조 아레나 64MiB 가 V8 157MiB 보다 큼).
+# sharp(libvips) 문서가 glibc 리눅스에 권하는 대로 jemalloc 을 쓴다. 되돌리려면 gitops values 에서 LD_PRELOAD="" 로 덮는다.
+ENV LD_PRELOAD=/usr/local/lib/libjemalloc.so
 
 USER nextjs
 
