@@ -72,7 +72,7 @@ const ExpandedProductList = ({
           }`}
         >
           <div
-            className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white ${
+            className={`flex h-4 min-w-4 shrink-0 items-center justify-center rounded-full px-1 text-[11px] font-bold text-white ${
               expandedBp.pendingVerificationCount === 0 ? 'bg-success/80' : 'bg-warning/80'
             }`}
           >

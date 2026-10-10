@@ -24,7 +24,7 @@ export function useVerificationQueries() {
   );
   const [fetchMoreBrandItems] = useGetBrandItemsOrderByTotalMatchCountLazy();
   const [fetchMoreBrandProducts] = useGetBrandProductsOrderByMatchCountLazy();
-  const [fetchPendingVerifications, { loading: pendingLoading }] = useGetPendingVerificationsLazy();
+  const [fetchPendingVerifications] = useGetPendingVerificationsLazy();
   const [batchVerifyMutation] = useBatchVerifyProductMapping();
   const [removeMappingMutation] = useRemoveProductMapping();
 
@@ -47,7 +47,6 @@ export function useVerificationQueries() {
     fetchMoreBrandItems,
     fetchMoreBrandProducts,
     fetchPendingVerifications,
-    pendingLoading,
     batchVerifyMutation,
     removeMappingMutation,
     brandItemsTotalCountData,

@@ -63,7 +63,7 @@ const BrandItemList = ({
               }`}
             >
               <div
-                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white ${
+                className={`flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full px-1 text-[11px] font-bold text-white ${
                   item.pendingVerificationCount === 0 ? 'bg-success' : 'bg-warning'
                 }`}
               >

@@ -1,6 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useApolloClient } from '@apollo/client/react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { ProductMappingTarget, ProductMappingVerificationStatus } from '@/generated/gql/graphql';
+import {
+  ProductMappingTarget,
+  ProductMappingVerificationStatus,
+  QueryPendingVerificationsQuery,
+  QueryPendingVerificationsQueryVariables,
+} from '@/generated/gql/graphql';
+import { QueryPendingVerifications } from '@/graphql/verification';
 import { BrandProduct } from '@/hooks/graphql/brandProduct';
 import { ignoreLazyRejection } from '@/hooks/graphql/options';
 
@@ -30,6 +37,52 @@ export function useVerificationList({
   const [verificationSearchAfter, setVerificationSearchAfter] = useState<string[] | null>(null);
   const [hasVerificationMore, setHasVerificationMore] = useState(true);
   const [isLoadingVerificationMore, setIsLoadingVerificationMore] = useState(false);
+  const [isLoadingFirstPage, setIsLoadingFirstPage] = useState(false);
+
+  // 첫 페이지 미리 받기 — 「확정 후 다음」을 누르면 다음 카탈로그 목록이 이미 와 있게.
+  // 한 번 쓰면 버리고, 1분 넘은 건 쓰지 않는다(그 사이 새 매칭이 붙을 수 있다).
+  const client = useApolloClient();
+  const prefetchedRef = useRef(
+    new Map<string, { at: number; promise: Promise<{ data?: QueryPendingVerificationsQuery }> }>(),
+  );
+  // 카탈로그를 빠르게 넘기면 늦게 온 이전 응답이 지금 목록을 덮지 않게
+  const requestTokenRef = useRef(0);
+
+  const statusFilter = useMemo(
+    () =>
+      includeVerified
+        ? ALL_VERIFICATION_STATUSES
+        : [ProductMappingVerificationStatus.PendingVerification],
+    [includeVerified],
+  );
+
+  const queryFirstPage = useCallback(
+    (brandProductId: number) =>
+      client.query<QueryPendingVerificationsQuery, QueryPendingVerificationsQueryVariables>({
+        query: QueryPendingVerifications,
+        fetchPolicy: 'network-only',
+        variables: {
+          limit: PAGE_LIMIT,
+          // brandProductId 는 서버에서 targetId 만 비교한다 — target 없이 보내면 같은 번호의
+          // BRAND_ITEM 매핑이 섞인다(전체 개수 쿼리처럼 target 을 같이 준다)
+          target: ProductMappingTarget.BrandProduct,
+          brandProductId,
+          verificationStatus: statusFilter,
+        },
+      }),
+    [client, statusFilter],
+  );
+
+  const prefetchVerifications = useCallback(
+    (brandProductId: number) => {
+      const key = `${brandProductId}:${includeVerified}`;
+      if (prefetchedRef.current.has(key)) return;
+      const promise = queryFirstPage(brandProductId);
+      promise.catch(() => {}); // 실패는 실제로 열 때 다시 받는다
+      prefetchedRef.current.set(key, { at: Date.now(), promise });
+    },
+    [includeVerified, queryFirstPage],
+  );
 
   const [itemSelections, setItemSelections] = useState<Record<string, boolean>>({});
 
@@ -90,26 +143,22 @@ export function useVerificationList({
 
   const loadVerificationsForBrandProduct = useCallback(
     async (brandProductId: number) => {
+      const token = ++requestTokenRef.current;
+      // 이전 카탈로그 항목을 남겨 두면 로딩 중에 확정을 눌러 엉뚱한 딜이 처리된다 — 비우고 받는다
+      setVerificationItems([]);
       setVerificationSearchAfter(null);
       setHasVerificationMore(true);
       setVerificationError(null);
+      setIsLoadingFirstPage(true);
+
+      const key = `${brandProductId}:${includeVerified}`;
+      const cached = prefetchedRef.current.get(key);
+      prefetchedRef.current.delete(key);
       try {
-        const result = await fetchPendingVerifications({
-          variables: {
-            limit: PAGE_LIMIT,
-            // brandProductId 는 서버에서 targetId 만 비교한다 — target 없이 보내면 같은 번호의
-            // BRAND_ITEM 매핑이 섞인다(전체 개수 쿼리처럼 target 을 같이 준다)
-            target: ProductMappingTarget.BrandProduct,
-            brandProductId,
-            verificationStatus: includeVerified
-              ? ALL_VERIFICATION_STATUSES
-              : [ProductMappingVerificationStatus.PendingVerification],
-          },
-        });
-        if (result.error) {
-          setVerificationError(result.error.message);
-          setVerificationItems([]);
-        }
+        const result = await (cached && Date.now() - cached.at < 60_000
+          ? cached.promise
+          : queryFirstPage(brandProductId));
+        if (token !== requestTokenRef.current) return;
         if (result.data?.pendingVerifications) {
           const items = result.data.pendingVerifications.map(mapVerificationItem);
           setVerificationItems(items);
@@ -128,12 +177,16 @@ export function useVerificationList({
           }
         }
       } catch (error) {
+        if (token !== requestTokenRef.current) return;
+        // GraphQL 에러가 "매칭 항목이 없습니다"로 위장되지 않게 사유를 띄운다
         console.error('Failed to load verifications:', error);
         setVerificationError((error as Error).message);
         setVerificationItems([]);
+      } finally {
+        if (token === requestTokenRef.current) setIsLoadingFirstPage(false);
       }
     },
-    [fetchPendingVerifications, includeVerified, mapVerificationItem],
+    [includeVerified, queryFirstPage, mapVerificationItem],
   );
 
   useEffect(() => {
@@ -144,15 +197,13 @@ export function useVerificationList({
         variables: {
           target: ProductMappingTarget.BrandProduct,
           brandProductId: parseInt(selectedBrandProduct.id),
-          verificationStatus: includeVerified
-            ? ALL_VERIFICATION_STATUSES
-            : [ProductMappingVerificationStatus.PendingVerification],
+          verificationStatus: statusFilter,
         },
       }).catch(ignoreLazyRejection);
     }
   }, [
     selectedBrandProduct,
-    includeVerified,
+    statusFilter,
     fetchPendingVerificationsTotalCountByBrandProduct,
     loadVerificationsForBrandProduct,
   ]);
@@ -177,9 +228,7 @@ export function useVerificationList({
           searchAfter: verificationSearchAfter,
           target: ProductMappingTarget.BrandProduct,
           brandProductId: parseInt(selectedBrandProduct.id),
-          verificationStatus: includeVerified
-            ? ALL_VERIFICATION_STATUSES
-            : [ProductMappingVerificationStatus.PendingVerification],
+          verificationStatus: statusFilter,
         },
       });
       if (result.data?.pendingVerifications) {
@@ -210,7 +259,7 @@ export function useVerificationList({
     hasVerificationMore,
     verificationSearchAfter,
     selectedBrandProduct,
-    includeVerified,
+    statusFilter,
     fetchPendingVerifications,
     mapVerificationItem,
   ]);
@@ -255,7 +304,9 @@ export function useVerificationList({
     selectedItems,
     deselectedItems,
     stats,
+    isLoadingFirstPage,
     loadVerificationsForBrandProduct,
+    prefetchVerifications,
     loadMoreVerifications,
     toggleItemSelection,
     selectAll,

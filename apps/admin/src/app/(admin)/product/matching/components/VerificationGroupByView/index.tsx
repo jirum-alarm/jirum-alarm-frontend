@@ -92,7 +92,6 @@ const VerificationGroupByView = () => {
     fetchMoreBrandItems,
     fetchMoreBrandProducts,
     fetchPendingVerifications,
-    pendingLoading,
     batchVerifyMutation,
     removeMappingMutation,
     brandItemsTotalCountData,
@@ -197,7 +196,9 @@ const VerificationGroupByView = () => {
     selectedItems,
     deselectedItems,
     stats,
+    isLoadingFirstPage,
     loadVerificationsForBrandProduct,
+    prefetchVerifications,
     loadMoreVerifications,
     toggleItemSelection,
     selectAll,
@@ -208,6 +209,14 @@ const VerificationGroupByView = () => {
     selectedBrandProduct,
     includeVerified,
   });
+
+  // 다음 카탈로그 목록을 미리 받아 둔다 — 「확정 후 다음」 대기를 없앤다
+  const nextBrandProduct = expandedItems[expandedSelectedIndex + 1];
+  useEffect(() => {
+    if (selectedBrandProduct && nextBrandProduct) {
+      prefetchVerifications(parseInt(nextBrandProduct.id));
+    }
+  }, [selectedBrandProduct, nextBrandProduct, prefetchVerifications]);
 
   // ── 검색 ──
   const { isSearching } = useBrandItemSearchSync({
@@ -280,7 +289,6 @@ const VerificationGroupByView = () => {
     focusedPostIndex,
     setFocusedPostIndex,
     setIsLeftPanelFocused,
-    setIncludeVerified,
     setImageModalData,
     showToast,
     batchVerifyMutation,
@@ -462,7 +470,7 @@ const VerificationGroupByView = () => {
               <VerificationList
                 rightScrollRef={rightScrollRef}
                 rightPanelRef={rightPanelRef}
-                pendingLoading={pendingLoading}
+                pendingLoading={isLoadingFirstPage}
                 verificationItems={verificationItems}
                 verificationError={verificationError}
                 itemSelections={itemSelections}

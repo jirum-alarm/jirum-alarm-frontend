@@ -39,7 +39,6 @@ type Params = {
   focusedPostIndex: number;
   setFocusedPostIndex: Dispatch<SetStateAction<number>>;
   setIsLeftPanelFocused: Dispatch<SetStateAction<boolean>>;
-  setIncludeVerified: Dispatch<SetStateAction<boolean>>;
   setImageModalData: Dispatch<SetStateAction<ImageModalState>>;
   showToast: (message: string, type?: 'success' | 'error' | 'info') => void;
   batchVerifyMutation: VerificationQueries['batchVerifyMutation'];
@@ -77,7 +76,6 @@ export function useVerificationActions({
   focusedPostIndex,
   setFocusedPostIndex,
   setIsLeftPanelFocused,
-  setIncludeVerified,
   setImageModalData,
   showToast,
   batchVerifyMutation,
@@ -175,7 +173,6 @@ export function useVerificationActions({
           ),
         );
       }
-      setIncludeVerified(true);
     } catch (error) {
       showToast('저장 중 오류가 발생했습니다.', 'error');
       console.error(error);
