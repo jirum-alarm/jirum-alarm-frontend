@@ -68,9 +68,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
-    paddingHorizontal: 4,
   },
   label: {
+    // ★여백은 바깥 View 가 아니라 글자에. View 에 두면 absoluteFill Svg 의 width 100% 가
+    // 여백을 뺀 폭(57-8=49)으로 풀려 그라디언트가 오른쪽 8pt 를 못 채운다(모서리가 잘려 보임).
+    paddingHorizontal: 4,
     color: '#ffffff',
     fontSize: 14,
     fontWeight: '600',
