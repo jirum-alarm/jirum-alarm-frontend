@@ -1,5 +1,5 @@
 import WebView from 'react-native-webview';
-import {handleWebViewMessage, NATIVE_STACK_SCRIPT} from '@/shared/lib/webview';
+import {NATIVE_STACK_SCRIPT} from '@/shared/lib/webview';
 import {
   Platform,
   SafeAreaView,
@@ -88,6 +88,7 @@ const JirumAlarmWebViewAndroid = ({
     isScroll,
     setIsScroll,
     handleShouldStartLoadWithRequest,
+    handleMessage,
     shouldDarkStatusBar,
     isLoading,
     handleLoadStart,
@@ -153,7 +154,7 @@ const JirumAlarmWebViewAndroid = ({
           onContentProcessDidTerminate={() => {
             webviewRef.current?.reload();
           }}
-          onMessage={handleWebViewMessage}
+          onMessage={handleMessage}
           onNavigationStateChange={state =>
             setNavState({url: state.url, canGoBack: state.canGoBack})
           }
@@ -198,7 +199,7 @@ const JirumAlarmWebViewIOS = ({route}: JirumAlarmWebViewScreenRouteProp) => {
     navState,
     setNavState,
     bgAnimation,
-    handleNavigationStateChange,
+    handleMessage,
     isScroll,
     setIsScroll,
     handleShouldStartLoadWithRequest,
@@ -250,10 +251,7 @@ const JirumAlarmWebViewIOS = ({route}: JirumAlarmWebViewScreenRouteProp) => {
         onContentProcessDidTerminate={() => {
           webviewRef.current?.reload();
         }}
-        onMessage={event => {
-          handleWebViewMessage(event);
-          handleNavigationStateChange(event);
-        }}
+        onMessage={handleMessage}
         onNavigationStateChange={state =>
           setNavState({url: state.url, canGoBack: state.canGoBack})
         }

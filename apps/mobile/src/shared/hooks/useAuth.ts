@@ -1,4 +1,4 @@
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {useEffect, useSyncExternalStore} from 'react';
 import {
   getAsyncStorage,
@@ -11,7 +11,10 @@ import {SERVICE_URL} from '@/constants/env.ts';
 import {AuthQueries} from '@/entities/auth';
 import {isAuthFailure} from '@/shared/lib/client';
 import {settleInitialAuth} from '@/shared/lib/client/initial-auth';
-import {clearQueryCache} from '@/shared/lib/persistence/query-cache';
+import {
+  clearQueryCache,
+  dropAccountQueries,
+} from '@/shared/lib/persistence/query-cache';
 import {setGuest, useIsGuest} from '@/shared/lib/auth/guest';
 
 /**
@@ -176,9 +179,13 @@ export const useAuth = () => {
     if (isError) settleInitialAuth();
   }, [isError]);
 
+  const queryClient = useQueryClient();
   useEffect(() => {
-    if (isRejected) void clearTokensOnce();
-  }, [isRejected]);
+    if (!isRejected) return;
+    // 서버가 세션을 거절한 로그아웃도 메모리 캐시를 비운다 — 디스크만 지우면 다음 저장 때 되살아난다.
+    dropAccountQueries(queryClient);
+    void clearTokensOnce();
+  }, [isRejected, queryClient]);
 
   const isLogin =
     !isRejected && ((!!data && isCookieReady) || hasStoredRefresh === true);

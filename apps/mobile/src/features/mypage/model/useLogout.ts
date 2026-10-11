@@ -5,15 +5,15 @@ import * as Notifications from 'expo-notifications';
 import {useQueryClient} from '@tanstack/react-query';
 
 import {AuthQueries} from '@/entities/auth';
-import {MyPageQueries} from '@/entities/mypage';
-import {ThemeQueries} from '@/entities/theme';
-import {UserQueries} from '@/entities/user/user.queries';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {StorageKey} from '@/shared/constant/storage-key';
 import {removeAsyncStorage} from '@/shared/lib/persistence';
 import {setUnreadCount} from '@/shared/hooks/useUnreadNotifications';
 import {unbindFcmTokenFromUser} from '@/shared/lib/fcm/push-permission';
-import {clearQueryCache} from '@/shared/lib/persistence/query-cache';
+import {
+  clearQueryCache,
+  dropAccountQueries,
+} from '@/shared/lib/persistence/query-cache';
 import {setGuest} from '@/shared/lib/auth/guest';
 
 /**
@@ -69,11 +69,10 @@ export function useLogout() {
     // 다음 유저에게 이전 유저 데이터가 한 프레임 보이지 않게 개인 캐시를 버린다.
     // ★`queryClient.clear()` 를 쓰지 않는다 — 아래 무효화 대상(auth)까지 지워
     // 재조회가 두 번 도는 데다, 어느 쪽이 먼저 끝나는지가 순서에 좌우된다.
+    // auth 를 뺀 전부 — 내정보·묶음·내 id(남으면 다음 유저에게 이전 user_id 가 붙는다)뿐 아니라
+    // 알림 목록·홈 추천·상품/댓글의 내 찜·좋아요 표시까지(예전엔 mypage·theme·user 만 지워 나머지가 남았다).
     clearQueryCache();
-    queryClient.removeQueries({queryKey: MyPageQueries.keys.all});
-    queryClient.removeQueries({queryKey: ThemeQueries.keys.all});
-    // 내 id 도 — 남으면 다음 로그인 유저에게 이전 user_id 를 다시 단다(댓글 소유 판정도 이걸 본다).
-    queryClient.removeQueries({queryKey: UserQueries.keys.all});
+    dropAccountQueries(queryClient);
     Analytics.reset();
 
     await queryClient

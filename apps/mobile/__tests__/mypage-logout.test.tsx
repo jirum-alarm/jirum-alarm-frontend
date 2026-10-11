@@ -132,11 +132,24 @@ describe('useLogout — 인수한 부수효과 6가지', () => {
     expect(getUnreadCount()).toBe(0);
   });
 
-  it('④ 개인 캐시(내정보·묶음)를 버린다', async () => {
+  it('④ 개인 캐시를 auth 만 남기고 전부 버린다', async () => {
     await runLogout();
-    const removed = mockRemoveQueries.mock.calls.map(call => call[0]?.queryKey);
-    expect(removed).toContainEqual(MyPageQueries.keys.all);
-    expect(removed).toContainEqual(ThemeQueries.keys.all);
+    // 한 번의 predicate 제거 — 그 판정을 키별로 돌려 본다.
+    const predicates = mockRemoveQueries.mock.calls
+      .map(call => call[0]?.predicate)
+      .filter(Boolean);
+    expect(predicates).toHaveLength(1);
+    const drops = (queryKey: readonly unknown[]) =>
+      predicates[0]({queryKey} as never);
+    expect(drops(MyPageQueries.keys.all)).toBe(true);
+    expect(drops(ThemeQueries.keys.all)).toBe(true);
+    // 예전엔 남던 것 — 이전 계정의 알림 목록·홈 추천·내 찜/좋아요 표시
+    expect(drops(['notification', 'list'])).toBe(true);
+    expect(drops(['home', 'guestRecommendedHotDeals'])).toBe(true);
+    expect(drops(['product', 'stats', 1])).toBe(true);
+    expect(drops(['user', 'me'])).toBe(true);
+    // auth 는 남긴다 — 아래 ⑤ 무효화와 겹쳐 재조회가 두 번 돌지 않게
+    expect(drops(AuthQueries.keys.loginByRefreshToken())).toBe(false);
   });
 
   /**

@@ -95,3 +95,17 @@ describe('waitForDeviceId()', () => {
     expect(await waitForDeviceId(0)).toBe('already-here');
   });
 });
+
+describe('JSON 이 아닌 응답(502 HTML 등)', () => {
+  it('SyntaxError 대신 상태 코드가 담긴 에러로 실패한다', async () => {
+    (globalThis as any).fetch = jest.fn(async () => ({
+      status: 502,
+      json: async () => {
+        throw new SyntaxError('Unexpected token <');
+      },
+    }));
+    await expect(
+      HttpClient.withNoAuth().execute('query{__typename}' as any, {} as any),
+    ).rejects.toThrow('HTTP 502');
+  });
+});
