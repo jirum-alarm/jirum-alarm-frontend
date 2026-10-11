@@ -131,3 +131,17 @@ describe('곡선·눈금 — web 과 같은 출력', () => {
     expect(niceTicks(lo, hi)).toEqual(webChart.niceTicks(lo, hi));
   });
 });
+
+// 2026-10-12 — 앱에서 누른 점 위 가격이 k 반올림(10,600원 → 「11k」)이었다. web 처럼 전체 금액.
+describe('누른 점 가격 — web 과 같은 전체 금액', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const src: string = fs.readFileSync(
+    path.join(__dirname, '../src/features/price-history/ui/PriceChart.tsx'),
+    'utf8',
+  );
+  it('selected 라벨은 won() 이고 shortWon 이 아니다', () => {
+    expect(src).toContain('{won(selected.price, currency)}');
+    expect(src).not.toMatch(/shortWon\(selected\./);
+  });
+});
