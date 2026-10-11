@@ -29,6 +29,7 @@ import DynamicProductSection from '@/entities/home/ui/DynamicProductSection';
 import HomeBannerCarousel from '@/entities/home/ui/HomeBannerCarousel';
 import JirumRankingSlider from '@/entities/home/ui/JirumRankingSlider';
 import RecommendedKeywordSection from '@/entities/home/ui/RecommendedKeywordSection';
+import ThemeHomeSection from '@/entities/home/ui/ThemeHomeSection';
 import TossHomeSection from '@/entities/home/ui/TossHomeSection';
 import {tossDetailPath} from '@/entities/home/lib/toss';
 import HomeHeader from '@/screens/home/ui/HomeHeader';
@@ -65,6 +66,8 @@ type HomeNavigationProp = NativeStackNavigationProp<TabStackParamList>;
 
 /** 인기 키워드 추천 칩을 이 섹션 뒤에 끼운다(web KEYWORD_AFTER_SECTION_ID). */
 const KEYWORD_AFTER_SECTION_ID = 'under-10000';
+/** 알림 묶음(관심사) 캐러셀을 이 섹션 뒤, 키워드 칩 아래에 끼운다(web THEME_AFTER_SECTION_ID). */
+const THEME_AFTER_SECTION_ID = 'under-10000';
 
 export default function HomeScreen() {
   const navigation = useNavigation<HomeNavigationProp>();
@@ -215,6 +218,20 @@ export default function HomeScreen() {
     [navigation, setActiveTab],
   );
 
+  const handlePressTheme = useCallback(
+    (theme: {id: string; name: string}) => {
+      navigation.push(tabStackNavigations.THEME_DETAIL, {
+        themeId: theme.id,
+        title: theme.name,
+      });
+    },
+    [navigation],
+  );
+
+  const handlePressThemes = useCallback(() => {
+    navigation.push(tabStackNavigations.THEMES);
+  }, [navigation]);
+
   /** "실시간 특가 더 보기" → 발견 탭의 실시간 화면. */
   const handlePressLiveDeals = useCallback(
     () => goDiscoverTab('live'),
@@ -355,6 +372,12 @@ export default function HomeScreen() {
                     />
                     {section.id === KEYWORD_AFTER_SECTION_ID && (
                       <RecommendedKeywordSection />
+                    )}
+                    {section.id === THEME_AFTER_SECTION_ID && (
+                      <ThemeHomeSection
+                        onPressTheme={handlePressTheme}
+                        onPressMore={handlePressThemes}
+                      />
                     )}
                   </Fragment>
                 );
