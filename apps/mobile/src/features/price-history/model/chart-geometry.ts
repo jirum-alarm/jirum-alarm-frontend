@@ -58,9 +58,16 @@ export function won(price: number, currency?: string | null): string {
 }
 
 /**
+ * 눈금 간격(step)이 1000원 미만일 때 k 뒤에 붙일 소수 자리 — 눈금이 step 의 배수라 그만큼이면 값이 정확하고,
+ * 남는 0 은 Number() 가 떼어 10.0k 대신 10k(2026-10-12). 250원 간격의 10,250 이 10.3k 로 반올림되던 것도 함께.
+ */
+const kDecimals = (step: number) =>
+  !Number.isInteger(step) || step % 100 === 0 ? 1 : step % 10 === 0 ? 2 : 3;
+
+/**
  * Y축 눈금 라벨.
  * k 표기 여부는 축 최댓값으로 한 번에 정한다 — 한 축에 10.6k 와 9,700 이 섞이지 않게.
- * step 이 1000 미만이면 k 반올림이 같은 라벨을 반복하므로(98k,98k…) 소수 한 자리.
+ * step 이 1000 미만이면 k 반올림이 같은 라벨을 반복하므로(98k,98k…) 소수를 붙인다(kDecimals).
  */
 export function shortWon(
   price: number,
@@ -73,7 +80,8 @@ export function shortWon(
   if (price === 0) return '0';
   if ((axisMax ?? price) >= 10000) {
     const k = price / 1000;
-    if (step != null && step < 1000) return `${k.toFixed(1)}k`;
+    if (step != null && step < 1000)
+      return `${Number(k.toFixed(kDecimals(step))).toLocaleString()}k`;
     return `${Math.round(k).toLocaleString()}k`;
   }
   return `${Math.round(price).toLocaleString()}`;

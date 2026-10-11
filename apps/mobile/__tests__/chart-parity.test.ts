@@ -5,6 +5,7 @@ const {
   parsePointDateMs,
   monotonePath,
   niceTicks,
+  shortWon,
 } = require('../src/features/price-history/model/chart-geometry');
 // web 원본 — 곡선·눈금은 두 앱이 같은 함수를 따로 들고 있어 출력으로 대조한다.
 const webChart = require('../../web/src/features/product-detail/lib/price-chart');
@@ -102,6 +103,18 @@ describe('곡선·눈금 — web 과 같은 출력', () => {
     ],
     [{x: 3, y: 3}],
   ];
+  it.each([
+    [10000, 500, 11000],
+    [10250, 250, 11000],
+    [98400, 500, 100000],
+    [10600, 5000, 20000],
+    [4200, 200, 4800],
+  ])('shortWon(%i, step %i, max %i)', (price, step, max) => {
+    expect(shortWon(price, null, step, max)).toBe(
+      webChart.shortWon(price, null, step, max),
+    );
+  });
+
   it.each(PTS.map((p, i) => [i, p]))(
     'monotonePath 케이스 %i',
     (_i, pts: any) => {
