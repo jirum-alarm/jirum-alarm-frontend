@@ -3,7 +3,11 @@ const {
   buildChartGeometry,
   withAxisBuffer,
   parsePointDateMs,
+  monotonePath,
+  niceTicks,
 } = require('../src/features/price-history/model/chart-geometry');
+// web 원본 — 곡선·눈금은 두 앱이 같은 함수를 따로 들고 있어 출력으로 대조한다.
+const webChart = require('../../web/src/features/product-detail/lib/price-chart');
 
 const MIN_Y = 0.15;
 function webGeo(
@@ -36,7 +40,7 @@ function webGeo(
       y: pad.top + (1 - (p.price - yMin) / (yMax - yMin)) * plotH,
     };
   });
-  return {yMin, yMax, tickStep: (yMax - yMin) / 4, coords};
+  return {yMin, yMax, tickStep: webChart.niceTicks(yMin, yMax).step, coords};
 }
 
 const PAD = {top: 40, right: 20, bottom: 28, left: 44};
@@ -75,5 +79,42 @@ describe('web 원본과 수치가 같아야 한다', () => {
       expect(c.x).toBeCloseTo(web.coords[i].x, 6);
       expect(c.y).toBeCloseTo(web.coords[i].y, 6);
     });
+  });
+});
+
+describe('곡선·눈금 — web 과 같은 출력', () => {
+  const PTS = [
+    [
+      {x: 0, y: 10},
+      {x: 10, y: 10},
+      {x: 20, y: 10},
+      {x: 30, y: 80},
+      {x: 40, y: 80},
+    ],
+    [
+      {x: 0, y: 50},
+      {x: 5, y: 20},
+      {x: 30, y: 70},
+    ],
+    [
+      {x: 0, y: 1},
+      {x: 9, y: 2},
+    ],
+    [{x: 3, y: 3}],
+  ];
+  it.each(PTS.map((p, i) => [i, p]))(
+    'monotonePath 케이스 %i',
+    (_i, pts: any) => {
+      expect(monotonePath(pts)).toBe(webChart.monotonePath(pts));
+    },
+  );
+  it.each([
+    [3600, 4900],
+    [8806.8, 10592.4],
+    [0, 39000],
+    [95000, 101000],
+    [120, 180],
+  ])('niceTicks(%d, %d)', (lo, hi) => {
+    expect(niceTicks(lo, hi)).toEqual(webChart.niceTicks(lo, hi));
   });
 });

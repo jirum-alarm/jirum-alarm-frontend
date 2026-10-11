@@ -120,3 +120,59 @@ describe('shortWon — 한 축에 표기가 섞이면 안 된다', () => {
     expect(shortWon(25, 'USD')).toBe('$25');
   });
 });
+
+describe('곡선 — 두 점 값 밖으로 넘치지 않는다(monotone)', () => {
+  // 2026-10-11 감자면 1개월: 4,750원 4일 → 4,250원. Catmull-Rom 은 마지막 4,750 뒤에서 위로 솟았다.
+  const {
+    monotonePath,
+  } = require('../src/features/price-history/model/chart-geometry');
+  const ctrlYs = (d: string) =>
+    [
+      ...d.matchAll(
+        /C ([\d.-]+) ([\d.-]+), ([\d.-]+) ([\d.-]+), ([\d.-]+) ([\d.-]+)/g,
+      ),
+    ].map(m => [Number(m[2]), Number(m[4])]);
+  it('평평하다 뚝 떨어져도 제어점이 구간 위·아래로 나가지 않는다', () => {
+    const pts = [
+      {x: 0, y: 100},
+      {x: 10, y: 100},
+      {x: 20, y: 100},
+      {x: 30, y: 100},
+      {x: 40, y: 200},
+      {x: 50, y: 200},
+    ];
+    const segs = ctrlYs(monotonePath(pts));
+    segs.forEach(([c1, c2], i) => {
+      const lo = Math.min(pts[i].y, pts[i + 1].y);
+      const hi = Math.max(pts[i].y, pts[i + 1].y);
+      for (const c of [c1, c2]) {
+        expect(c).toBeGreaterThanOrEqual(lo - 1e-9);
+        expect(c).toBeLessThanOrEqual(hi + 1e-9);
+      }
+    });
+  });
+});
+
+describe('Y축 눈금 — 떨어지는 값, 축 범위는 그대로', () => {
+  const {
+    niceTicks,
+  } = require('../src/features/price-history/model/chart-geometry');
+  it.each([
+    [3600, 4900],
+    [8806.8, 10592.4],
+    [0, 39000],
+    [95000, 101000],
+    [120, 180],
+    [4082, 4919],
+  ])('niceTicks(%d, %d) 는 3~5개, 간격의 배수, 범위 안', (lo, hi) => {
+    const {step, prices} = niceTicks(lo, hi);
+    expect(prices.length).toBeGreaterThanOrEqual(3);
+    expect(prices.length).toBeLessThanOrEqual(5);
+    for (const p of prices) {
+      expect(p).toBeGreaterThanOrEqual(lo);
+      expect(p).toBeLessThanOrEqual(hi);
+      expect(Math.abs(p / step - Math.round(p / step))).toBeLessThan(1e-6);
+    }
+    expect(prices).toEqual([...prices].sort((a, b) => b - a));
+  });
+});

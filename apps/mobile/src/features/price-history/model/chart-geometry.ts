@@ -92,6 +92,74 @@ export function resolveContentRangeMs(nowMs: number, days: number) {
   return {contentStartMs: nowMs - days * DAY_MS, contentEndMs: nowMs};
 }
 
+type XY = {x: number; y: number};
+
+/**
+ * 점들을 지나는 곡선(SVG path d). monotone 3차 보간(d3 curveMonotoneX 와 같은 방식)이라
+ * 이웃한 두 점 사이에서 **두 점 값 밖으로 나가지 않는다** — 평평하다 뚝 떨어진 구간에서 Catmull-Rom 이
+ * 4,750원 위로 솟아 "더 비쌌던 날"을 지어내던 것(2026-10-11, 감자면 1개월) 대신.
+ * 같은 함수가 apps/web features/product-detail/lib/price-chart.ts 에 있다(chart-parity 테스트가 대조).
+ */
+export function monotonePath(pts: XY[]): string {
+  const n = pts.length;
+  if (n === 0) return '';
+  if (n === 1) return `M ${pts[0].x} ${pts[0].y}`;
+  const slope = (a: XY, b: XY) =>
+    b.x - a.x > 0 ? (b.y - a.y) / (b.x - a.x) : 0;
+  const s = pts.slice(1).map((p, i) => slope(pts[i], p));
+  const t = new Array<number>(n).fill(0);
+  for (let i = 1; i < n - 1; i++) {
+    const h0 = pts[i].x - pts[i - 1].x;
+    const h1 = pts[i + 1].x - pts[i].x;
+    const s0 = s[i - 1];
+    const s1 = s[i];
+    const p = h0 + h1 > 0 ? (s0 * h1 + s1 * h0) / (h0 + h1) : 0;
+    t[i] =
+      (Math.sign(s0) + Math.sign(s1)) *
+        Math.min(Math.abs(s0), Math.abs(s1), 0.5 * Math.abs(p)) || 0;
+  }
+  t[0] = n > 2 ? (3 * s[0] - t[1]) / 2 : s[0];
+  t[n - 1] = n > 2 ? (3 * s[n - 2] - t[n - 2]) / 2 : s[n - 2];
+  let d = `M ${pts[0].x} ${pts[0].y}`;
+  for (let i = 0; i < n - 1; i++) {
+    const a = pts[i];
+    const b = pts[i + 1];
+    const dx = (b.x - a.x) / 3;
+    d += ` C ${a.x + dx} ${a.y + dx * t[i]}, ${b.x - dx} ${
+      b.y - dx * t[i + 1]
+    }, ${b.x} ${b.y}`;
+  }
+  return d;
+}
+
+/**
+ * Y축 눈금을 떨어지는 값(…100·200·250·500·1000 단위)에 긋는다 — 4,082·4,291 대신 4,200·4,400.
+ * **축 범위(yMin~yMax)는 건드리지 않는다**: 범위를 눈금에 맞춰 넓히면 선이 납작해진다(9,600~9,800 에서 40%).
+ * 범위 안에 들어가는 눈금이 3~5개가 되는 가장 촘촘한 간격을 고른다.
+ * 같은 함수가 apps/web features/product-detail/lib/price-chart.ts 에 있다(chart-parity 테스트가 대조).
+ */
+export function niceTicks(yMin: number, yMax: number) {
+  const range = Math.max(yMax - yMin, 1);
+  const k0 = Math.floor(Math.log10(range / 5));
+  const round = (v: number) => Math.round(v * 1e6) / 1e6;
+  for (let k = k0 - 1; k <= k0 + 2; k++) {
+    for (const m of [1, 2, 2.5, 5]) {
+      const step = m * 10 ** k;
+      // 2.5원·0.5원 같은 눈금은 원화에 없다.
+      if (step < 1 || !Number.isInteger(round(step))) continue;
+      const prices: number[] = [];
+      for (let v = Math.ceil(yMin / step) * step; v <= yMax + 1e-9; v += step) {
+        prices.push(round(v));
+      }
+      if (prices.length >= 3 && prices.length <= 5) {
+        return {step, prices: prices.reverse()};
+      }
+    }
+  }
+  const step = range / 4;
+  return {step, prices: [0, 1, 2, 3, 4].map(i => yMax - i * step)};
+}
+
 export function buildChartGeometry<T extends ChartPoint>(
   points: T[],
   width: number,
@@ -140,29 +208,14 @@ export function buildChartGeometry<T extends ChartPoint>(
     (a, b) => parsePointDateMs(a.date) - parsePointDateMs(b.date),
   );
 
-  // Catmull-Rom → 3차 베지어. 제어점을 직접 만든다(라이브러리 curve 아님).
-  let d = '';
-  if (ordered.length > 0) {
-    d = `M ${ordered[0].x} ${ordered[0].y}`;
-    for (let i = 0; i < ordered.length - 1; i++) {
-      const p0 = ordered[i - 1] ?? ordered[i];
-      const p1 = ordered[i];
-      const p2 = ordered[i + 1];
-      const p3 = ordered[i + 2] ?? p2;
-      const cp1x = p1.x + (p2.x - p0.x) / 6;
-      const cp1y = p1.y + (p2.y - p0.y) / 6;
-      const cp2x = p2.x - (p3.x - p1.x) / 6;
-      const cp2y = p2.y - (p3.y - p1.y) / 6;
-      d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
-    }
-  }
+  const d = monotonePath(ordered);
 
-  const yTicks = 5;
-  const tickStep = (yMax - yMin) / (yTicks - 1);
-  const ticks = Array.from({length: yTicks}, (_, i) => {
-    const t = i / (yTicks - 1);
-    return {price: yMax - t * (yMax - yMin), y: pad.top + t * plotH};
-  });
+  const nice = niceTicks(yMin, yMax);
+  const tickStep = nice.step;
+  const ticks = nice.prices.map(price => ({
+    price,
+    y: pad.top + (1 - (price - yMin) / (yMax - yMin)) * plotH,
+  }));
 
   // X축 라벨은 콘텐츠 구간 기준. 오른쪽 끝은 항상 '오늘'.
   const xLabelCount = 4;
