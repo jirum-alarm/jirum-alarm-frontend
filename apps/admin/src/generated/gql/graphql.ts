@@ -2988,6 +2988,8 @@ export type UserSignupDailyOutput = {
   count: Scalars['Int']['output'];
   /** KST 날짜 YYYY-MM-DD */
   date: Scalars['String']['output'];
+  /** 그중 지금 살아 있는 푸시 토큰이 있는 계정 = 가입해서 알림까지 닿은 수(조회 시점 기준) */
+  reachable: Scalars['Int']['output'];
 };
 
 export type VerificationStatistics = {
@@ -3994,6 +3996,7 @@ export type QueryUserOverviewQuery = {
       date: string;
       channel: string;
       count: number;
+      reachable: number;
     }>;
     dailyActivity: Array<{
       __typename?: 'UserActivityDailyOutput';
@@ -5332,6 +5335,7 @@ export const QueryUserOverviewDocument = new TypedDocumentString(`
       date
       channel
       count
+      reachable
     }
     dailyActivity {
       date

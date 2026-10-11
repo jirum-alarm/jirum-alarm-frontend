@@ -34,6 +34,9 @@ const PERIODS = [
 ] as const;
 type Period = (typeof PERIODS)[number]['value'];
 
+const rate = (part: number, whole: number) =>
+  whole > 0 ? `${Math.round((part / whole) * 100)}%` : '-';
+
 const people = (v?: number) => (v === undefined ? '…' : `${v.toLocaleString()}명`);
 
 /**
@@ -64,9 +67,13 @@ const UserSummary = () => {
     const byChannel = new Map<string, number>();
     const members = new Map<string, number>();
     const guests = new Map<string, number>();
+    let memberReach = 0;
+    let guestReach = 0;
     overview.dailySignups.forEach((r) => {
       if (r.date < periodStart) return;
       byChannel.set(r.channel, (byChannel.get(r.channel) ?? 0) + r.count);
+      if (r.channel === GUEST) guestReach += r.reachable;
+      else memberReach += r.reachable;
       const daily = r.channel === GUEST ? guests : members;
       daily.set(r.date, (daily.get(r.date) ?? 0) + r.count);
     });
@@ -78,6 +85,8 @@ const UserSummary = () => {
     return {
       members: channels.reduce((acc, c) => acc + c.count, 0),
       guests: byChannel.get(GUEST) ?? 0,
+      memberReach,
+      guestReach,
       top: Math.max(1, ...channels.map((c) => c.count)),
       channels,
       categories: days.map(md),
@@ -151,6 +160,24 @@ const UserSummary = () => {
             </span>
           )}
         </p>
+        {view && view.members + view.guests > 0 && (
+          // 북극성(알림 경유 재방문)의 입구 — 가입해도 푸시 토큰이 없으면 알림을 한 통도 못 받는다
+          <p className="mt-1 text-xs text-body">
+            그중 알림까지 닿은 회원{' '}
+            <span className="font-semibold text-black">
+              {view.memberReach.toLocaleString()}명 ({rate(view.memberReach, view.members)})
+            </span>
+            {view.guests > 0 && (
+              <>
+                {' · '}게스트{' '}
+                <span className="font-semibold text-black">
+                  {view.guestReach.toLocaleString()}/{view.guests.toLocaleString()} (
+                  {rate(view.guestReach, view.guests)})
+                </span>
+              </>
+            )}
+          </p>
+        )}
 
         {view && view.members + view.guests > 0 && (
           // 넓은 화면은 가입 경로 | 일별 그래프 좌우로 (모바일은 위아래)
@@ -237,7 +264,8 @@ const UserSummary = () => {
 
         <p className="mt-3 text-[11px] leading-relaxed text-bodydark2">
           가입 경로 = 처음 연결한 소셜 계정. 게스트 = 로그인 없이 키워드 알림만 받는 기기(10/9
-          출시). 접속은 마지막 접속 시각 기준 — 앱이 백그라운드에서 토큰만 갱신한 건 안 센다.
+          출시). 알림까지 닿음 = 지금 살아 있는 푸시 토큰이 있음(가입 당시가 아니라 지금 기준).
+          접속은 마지막 접속 시각 기준 — 앱이 백그라운드에서 토큰만 갱신한 건 안 센다.
         </p>
       </Panel>
     </section>

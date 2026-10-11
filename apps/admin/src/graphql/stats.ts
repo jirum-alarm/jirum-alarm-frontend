@@ -54,6 +54,7 @@ export const QueryUserOverview = gql`
         date
         channel
         count
+        reachable
       }
       dailyActivity {
         date
