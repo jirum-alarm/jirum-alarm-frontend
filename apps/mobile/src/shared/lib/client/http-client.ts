@@ -74,7 +74,12 @@ export class HttpClient {
           : {}),
       },
     });
-    const res = await response.json();
+    // ★502·504 처럼 프록시가 HTML 을 돌려주면 json() 이 SyntaxError 를 던져 원인(상태 코드)이 사라졌다.
+    // GraphQL 서버는 4xx 에도 JSON 본문을 주므로 본문을 먼저 읽고, 못 읽을 때만 상태로 실패시킨다.
+    // (인증 실패로 분류되지 않는다 — 서버 장애로 로그아웃되면 안 된다)
+    const res = await response.json().catch(() => {
+      throw new Error(`HTTP ${response.status} — GraphQL 응답이 JSON 이 아님`);
+    });
     await rejectIfNeeded(res);
     return res;
   }
@@ -85,10 +90,14 @@ export class FetchError extends Error {
   response: GraphQLError;
   code: null | number | string;
   constructor(response: GraphQLError) {
-    super(response.extensions.originalError.message);
+    // ★originalError 는 Nest HttpException 에만 붙는다. 검증 오류·일반 Error 엔 없어서
+    // 예전엔 생성자가 TypeError 로 죽고 서버 메시지가 사라졌다.
+    const original = response.extensions?.originalError;
+    super(original?.message ?? response.message);
 
     this.name = 'FetchError';
-    this.code = response.extensions.originalError.statusCode;
+    // 숫자 상태가 없으면 GraphQL 코드 문자열(예: 'BAD_USER_INPUT') — isAuthFailure 는 숫자만 본다.
+    this.code = original?.statusCode ?? response.extensions?.code ?? null;
     this.response = response;
   }
 }
@@ -118,9 +127,9 @@ interface GraphQLErrorResponse {
 }
 
 interface GraphQLError {
-  extensions: {
-    code: string;
-    originalError: OriginalError;
+  extensions?: {
+    code?: string;
+    originalError?: OriginalError;
   };
   message: string;
 }

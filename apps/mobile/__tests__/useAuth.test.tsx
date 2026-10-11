@@ -4,16 +4,18 @@ import * as ReactTestRenderer from 'react-test-renderer';
 import {SERVICE_URL} from '../src/constants/env';
 import {StorageKey} from '../src/shared/constant/storage-key';
 import {__resetAuthSyncForTest, useAuth} from '../src/shared/hooks/useAuth';
-import {FetchError} from '../src/shared/lib/client/http-client';
+import {FetchError, isAuthFailure} from '../src/shared/lib/client/http-client';
 import {
   getAsyncStorage,
   removeAsyncStorage,
   setAsyncStorage,
 } from '../src/shared/lib/persistence';
 
+const mockRemoveQueries = jest.fn();
 jest.mock('@tanstack/react-query', () => ({
   queryOptions: jest.fn(options => options),
   useQuery: jest.fn(),
+  useQueryClient: () => ({removeQueries: mockRemoveQueries}),
 }));
 
 jest.mock('@react-native-cookies/cookies', () => ({
@@ -217,6 +219,10 @@ describe('useAuth', () => {
       StorageKey.REFRESH_TOKEN,
     );
     expect(mockCookieSet).not.toHaveBeenCalled();
+    // 메모리 캐시도 비운다(auth 만 남김) — 디스크만 지우면 다음 백그라운드 저장이 되살린다.
+    expect(mockRemoveQueries).toHaveBeenCalledWith({
+      predicate: expect.any(Function),
+    });
     expect(latestAuthState).toMatchObject({
       isLoading: false,
       isLogin: false,
@@ -258,6 +264,7 @@ describe('useAuth', () => {
     });
 
     expect(mockRemoveAsyncStorage).not.toHaveBeenCalled();
+    expect(mockRemoveQueries).not.toHaveBeenCalled();
     expect(latestAuthState?.isLogin).toBe(true);
 
     await ReactTestRenderer.act(async () => {
@@ -382,5 +389,40 @@ describe('useAuth', () => {
     await ReactTestRenderer.act(async () => {
       renderer.unmount();
     });
+  });
+});
+
+describe('FetchError — 서버 에러 모양이 달라도 메시지를 잃지 않는다', () => {
+  it('originalError 가 없는 GraphQL 에러(검증 오류 등)도 생성된다', () => {
+    const error = new FetchError({
+      message: 'Variable "$id" got invalid value',
+      extensions: {code: 'BAD_USER_INPUT'},
+    });
+    expect(error.message).toBe('Variable "$id" got invalid value');
+    expect(error.code).toBe('BAD_USER_INPUT');
+    // 숫자 상태가 아니면 인증 실패로 보지 않는다 — 로그아웃으로 번지면 안 된다
+    expect(isAuthFailure(error)).toBe(false);
+  });
+
+  it('extensions 자체가 없어도 생성된다', () => {
+    const error = new FetchError({message: 'Internal server error'});
+    expect(error.message).toBe('Internal server error');
+    expect(error.code).toBeNull();
+  });
+
+  it('Nest HttpException(originalError) 은 예전처럼 상태 코드를 쓴다', () => {
+    const error = new FetchError({
+      message: 'Forbidden resource',
+      extensions: {
+        code: 'FORBIDDEN',
+        originalError: {
+          error: 'Forbidden',
+          message: 'Forbidden resource',
+          statusCode: 403,
+        },
+      },
+    });
+    expect(error.code).toBe(403);
+    expect(isAuthFailure(error)).toBe(true);
   });
 });

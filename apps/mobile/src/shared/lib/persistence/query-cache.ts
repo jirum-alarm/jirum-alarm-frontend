@@ -123,3 +123,15 @@ export async function restoreQueryCache(client: QueryClient): Promise<void> {
 /** 로그아웃 — 다음 사람에게 이전 계정의 알림·키워드가 한 프레임도 보이지 않게. */
 export const clearQueryCache = () =>
   AsyncStorage.removeItem(STORAGE_KEY).catch(() => {});
+
+/**
+ * 로그아웃·세션 거절 — **메모리** 캐시에서 계정 데이터를 버린다(auth 만 남긴다).
+ *
+ * 디스크(clearQueryCache)만 지우면 부족하다: 메모리에 남은 이전 계정의 알림·홈 추천·찜 표시가
+ * 다음 백그라운드 진입 때 saveQueryCache 로 **디스크에 다시 쓰이고**, 다음 사람이 로그인하면 복원된다.
+ * auth 는 남긴다 — 지우면 로그아웃 무효화와 겹쳐 갱신 재조회가 두 번 돈다(useLogout 주석).
+ * 'auth' 는 AuthQueries.keys.all 의 루트(shared → entities 역참조를 피해 글자로 둔다).
+ */
+export function dropAccountQueries(client: QueryClient): void {
+  client.removeQueries({predicate: query => query.queryKey[0] !== 'auth'});
+}

@@ -1,14 +1,15 @@
-import {useWebviewContext} from '@/provider/WebViewRefProvider';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTokenRemoveEffect} from './useTokenRemoveEffect';
 import {SERVICE_URL} from '@/constants/env';
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Animated, BackHandler, Platform, useAnimatedValue} from 'react-native';
 import {openInAppBrowser, shouldOpenExternally} from '@/shared/lib/navigation';
+import type WebView from 'react-native-webview';
 import type {WebViewMessageEvent} from 'react-native-webview';
 import {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
 import {useWebViewLoading} from './useWebViewLoading';
 import {
+  handleWebViewMessage,
   parsedWebViewMessage,
   WebViewEventPayloads,
   WebViewEventType,
@@ -30,7 +31,10 @@ import {getPushablePath} from '@/shared/lib/navigation/tab-routing';
 
 export function useCommonWebViewLogic() {
   const insets = useSafeAreaInsets();
-  const {webviewRef} = useWebviewContext();
+  // ★이 화면 자신의 WebView 를 가리키는 ref. 예전엔 WebViewRefProvider 의 webviewRef 를 꽂았는데
+  // 그건 "활성 탭 웹뷰"를 돌려주는 읽기 전용 프록시(set 은 no-op)라 여기선 늘 null 이었다 —
+  // 다시 시도·당겨서 새로고침·WebKit 종료 복구·하드웨어 뒤로가기의 웹 history 이동이 전부 무반응.
+  const webviewRef = useRef<WebView>(null);
 
   const navigation =
     useNavigation<
@@ -182,6 +186,26 @@ export function useCommonWebViewLogic() {
     }
   };
 
+  /**
+   * 이 화면의 onMessage — Android·iOS 가 같은 걸 쓴다.
+   *
+   * ★PRESS_BACKBUTTON 은 전역 브리지로 넘기지 않는다. 전역 처리가 `BackHandler.exitApp()` 이라
+   * 예전 Android(전역 브리지만 불렀다)는 웹 「뒤로 가기」를 누르면 **앱이 꺼졌다.**
+   * iOS 는 exitApp 이 아무 일도 안 해 드러나지 않았다. pop 은 위 핸들러 한 곳에서만 한다(두 번 pop 금지).
+   */
+  const handleMessage = (event: WebViewMessageEvent) => {
+    let type: WebViewEventType;
+    try {
+      type = parsedWebViewMessage(event).type;
+    } catch {
+      return; // JSON 이 아닌 메시지(서드파티 스크립트 등) — 전역 브리지도 버린다
+    }
+    if (type !== WebViewEventType.PRESS_BACKBUTTON) {
+      handleWebViewMessage(event);
+    }
+    handleNavigationStateChange(event);
+  };
+
   return {
     insets,
     webviewRef,
@@ -191,7 +215,7 @@ export function useCommonWebViewLogic() {
     isScroll,
     setIsScroll,
     handleShouldStartLoadWithRequest,
-    handleNavigationStateChange,
+    handleMessage,
     shouldDarkStatusBar,
     isLoading,
     handleLoadStart,

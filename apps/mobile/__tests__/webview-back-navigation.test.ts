@@ -120,10 +120,32 @@ describe('★★뒤로가기 pop 은 정확히 한 번만 — 실측 회귀', ()
     expect(webviewScreen).not.toContain('popGuard');
   });
 
-  it('두 웹뷰 모두 소박하게 handleWebViewMessage 를 쓴다', () => {
+  it('두 웹뷰(Android·iOS) 모두 같은 handleMessage 를 쓴다', () => {
+    // 🔴예전 Android 는 onMessage={handleWebViewMessage}(전역 브리지)만 불렀다 — 전역의
+    // PRESS_BACKBUTTON 처리가 exitApp 이라 웹 「뒤로 가기」를 누르면 **앱이 꺼졌다**.
     // Android 1 + iOS 1 = 2. 한쪽만 고치면 반쪽 수정이라 개수로 고정한다.
-    const uses = webviewScreen.match(/handleWebViewMessage\(?/g) ?? [];
-    expect(uses.length).toBeGreaterThanOrEqual(2);
+    expect(webviewScreen.match(/onMessage=\{handleMessage\}/g)).toHaveLength(2);
+    expect(webviewScreen).not.toContain('handleWebViewMessage');
+  });
+
+  it('★handleMessage 는 PRESS_BACKBUTTON 을 전역 브리지(exitApp)로 넘기지 않는다', () => {
+    const logic = read(
+      'src/screens/jirumalarmwebview/hooks/useCommonWebViewLogic.ts',
+    );
+    const body = logic.slice(logic.indexOf('const handleMessage'));
+    expect(body).toMatch(
+      /type !== WebViewEventType\.PRESS_BACKBUTTON\)[\s\S]{0,40}handleWebViewMessage\(event\)/,
+    );
+    expect(body).toContain('handleNavigationStateChange(event)');
+  });
+
+  it('★webviewRef 는 이 화면 자신의 ref 다 — 탭 웹뷰 프록시(set no-op)가 아니다', () => {
+    // 프록시를 꽂으면 늘 null 이라 다시 시도·새로고침·WebKit 종료 복구·하드웨어 뒤로가기가 무반응이었다.
+    const logic = read(
+      'src/screens/jirumalarmwebview/hooks/useCommonWebViewLogic.ts',
+    );
+    expect(logic).toContain('const webviewRef = useRef<WebView>(null)');
+    expect(logic).not.toContain('useWebviewContext');
   });
 
   /**
