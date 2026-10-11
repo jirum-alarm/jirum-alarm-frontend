@@ -2889,6 +2889,23 @@ export type User = {
   nickname: Scalars['String']['output'];
 };
 
+/** 하루 끝(23:55 KST) 스냅숏 — 접속은 KST 달력 기준(그날·7일·30일) */
+export type UserActivityDailyOutput = {
+  __typename?: 'UserActivityDailyOutput';
+  /** 그날 접속 회원(DAU) */
+  activeMembers1d: Scalars['Int']['output'];
+  /** 그날까지 7일 접속 회원 */
+  activeMembers7d: Scalars['Int']['output'];
+  /** 그날까지 30일 접속 회원 */
+  activeMembers30d: Scalars['Int']['output'];
+  /** KST 날짜 YYYY-MM-DD */
+  date: Scalars['String']['output'];
+  guests: Scalars['Int']['output'];
+  members: Scalars['Int']['output'];
+  pushGuests: Scalars['Int']['output'];
+  pushMembers: Scalars['Int']['output'];
+};
+
 export type UserByAdminOutput = {
   __typename?: 'UserByAdminOutput';
   birthYear?: Maybe<Scalars['Int']['output']>;
@@ -2920,6 +2937,8 @@ export type UserOverviewOutput = {
   activeMembers7d: Scalars['Int']['output'];
   /** 최근 30일 접속 회원 */
   activeMembers30d: Scalars['Int']['output'];
+  /** 기간 안 일별 스냅숏(2026-10-11 부터) — 지난 날짜의 접속 수는 이것만 있다 */
+  dailyActivity: Array<UserActivityDailyOutput>;
   /** 기간 안 일별·가입 경로별 신규 계정 */
   dailySignups: Array<UserSignupDailyOutput>;
   /** 게스트 계정 수(로그인 없이 알림만 받는 기기) */
@@ -3975,6 +3994,12 @@ export type QueryUserOverviewQuery = {
       date: string;
       channel: string;
       count: number;
+    }>;
+    dailyActivity: Array<{
+      __typename?: 'UserActivityDailyOutput';
+      date: string;
+      activeMembers1d: number;
+      activeMembers7d: number;
     }>;
   };
 };
@@ -5307,6 +5332,11 @@ export const QueryUserOverviewDocument = new TypedDocumentString(`
       date
       channel
       count
+    }
+    dailyActivity {
+      date
+      activeMembers1d
+      activeMembers7d
     }
   }
 }

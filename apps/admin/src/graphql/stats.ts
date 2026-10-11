@@ -39,7 +39,7 @@ export const QueryTopFavoriteCategories = gql`
   }
 `;
 
-// 홈 '사용자' 요약 — 지금 인원(스냅숏) + 기간 안 가입 경로별 일별 신규
+// 홈 '사용자' 요약 — 지금 인원(스냅숏) + 기간 안 가입 경로별 일별 신규 + 하루 끝 접속 스냅숏
 export const QueryUserOverview = gql`
   query QueryUserOverview($startDate: DateTime!, $endDate: DateTime!) {
     userOverview(startDate: $startDate, endDate: $endDate) {
@@ -54,6 +54,11 @@ export const QueryUserOverview = gql`
         date
         channel
         count
+      }
+      dailyActivity {
+        date
+        activeMembers1d
+        activeMembers7d
       }
     }
   }

@@ -3139,6 +3139,32 @@ type User {
   nickname: String!
 }
 
+"""
+하루 끝(23:55 KST) 스냅숏 — 접속은 KST 달력 기준(그날·7일·30일)
+"""
+type UserActivityDailyOutput {
+  """
+  그날 접속 회원(DAU)
+  """
+  activeMembers1d: Int!
+  """
+  그날까지 7일 접속 회원
+  """
+  activeMembers7d: Int!
+  """
+  그날까지 30일 접속 회원
+  """
+  activeMembers30d: Int!
+  """
+  KST 날짜 YYYY-MM-DD
+  """
+  date: String!
+  guests: Int!
+  members: Int!
+  pushGuests: Int!
+  pushMembers: Int!
+}
+
 type UserByAdminOutput {
   birthYear: Int
   createdAt: DateTime!
@@ -3175,6 +3201,10 @@ type UserOverviewOutput {
   최근 30일 접속 회원
   """
   activeMembers30d: Int!
+  """
+  기간 안 일별 스냅숏(2026-10-11 부터) — 지난 날짜의 접속 수는 이것만 있다
+  """
+  dailyActivity: [UserActivityDailyOutput!]!
   """
   기간 안 일별·가입 경로별 신규 계정
   """

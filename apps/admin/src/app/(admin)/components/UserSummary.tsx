@@ -24,6 +24,7 @@ const daysBetween = (from: string, to: string) => {
 };
 
 const MEMBER_COLOR = '#3C50E0';
+const WEEKLY_COLOR = '#F59E0B';
 const GUEST = 'guest';
 
 const PERIODS = [
@@ -37,8 +38,8 @@ const people = (v?: number) => (v === undefined ? '…' : `${v.toLocaleString()}
 
 /**
  * 홈 '사용자' — 수익 요약과 같은 틀. 지금 인원(회원·최근 접속·알림 닿는 회원) → 기간 신규(회원 + 게스트) →
- * 가입 경로 순위 막대 → 일별 신규 막대(회원·게스트 쌓기).
- * 접속 수는 마지막 접속 시각 스냅숏이라 지난 날짜별 DAU 는 없다.
+ * 가입 경로 순위 막대 → 일별 신규 막대(회원·게스트 쌓기) → 일별 접속 선(하루 끝 스냅숏).
+ * 접속 기록이 마지막 접속 시각 하나라, 지난 날짜 접속 수는 매일 23:55 에 찍어 둔 user_activity_daily 뿐이다(10/11 부터).
  */
 const UserSummary = () => {
   const { data: accessData } = useMyAdminAccess();
@@ -82,6 +83,8 @@ const UserSummary = () => {
       categories: days.map(md),
       memberDaily: days.map((d) => members.get(d) ?? 0),
       guestDaily: days.map((d) => guests.get(d) ?? 0),
+      // 스냅숏이 없는 날(배치 시작 전·실패)은 빈칸 — 0 으로 메우면 접속이 끊긴 것처럼 보인다
+      activity: overview.dailyActivity.filter((r) => r.date >= periodStart),
     };
   }, [overview, periodStart, today]);
 
@@ -202,6 +205,33 @@ const UserSummary = () => {
                 />
               </div>
             </div>
+          </div>
+        )}
+
+        {view && (
+          <div className="mt-6">
+            <p className="text-xs font-medium text-body">일별 접속 회원</p>
+            {view.activity.length < 2 ? (
+              <p className="mt-2 rounded-md bg-gray-2 px-3 py-2.5 text-xs leading-relaxed text-body">
+                10/11 부터 매일 23:55 에 그날 접속 수를 남긴다 — 이틀째부터 선이 그려진다.
+                {view.activity[0] &&
+                  ` ${md(view.activity[0].date)} 접속 ${view.activity[0].activeMembers1d.toLocaleString()}명.`}
+              </p>
+            ) : (
+              <div className="-mx-2">
+                <Chart
+                  type="line"
+                  height={180}
+                  categories={view.activity.map((r) => md(r.date))}
+                  colors={[MEMBER_COLOR, WEEKLY_COLOR]}
+                  series={[
+                    { name: '그날 접속', data: view.activity.map((r) => r.activeMembers1d) },
+                    { name: '7일 접속', data: view.activity.map((r) => r.activeMembers7d) },
+                  ]}
+                  format={(v) => `${v.toLocaleString()}명`}
+                />
+              </div>
+            )}
           </div>
         )}
 
