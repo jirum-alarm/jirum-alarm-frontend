@@ -18,6 +18,8 @@ import ImageComponent from '@/shared/ui/ImageComponent';
 
 import { ProductQueries } from '@/entities/product';
 
+import { monotonePath, niceTicks } from '../lib/price-chart';
+
 type Props = {
   productId: number;
   /** user_history source — detail_mobile | detail_desktop */
@@ -407,30 +409,14 @@ function buildChartGeometry(
   // 시간순 정렬된 좌표로 곡선 (points는 보통 정렬되어 있지만 방어)
   const ordered = [...coords].sort((a, b) => parsePointDateMs(a.date) - parsePointDateMs(b.date));
 
-  let d = '';
-  if (ordered.length > 0) {
-    d = `M ${ordered[0].x} ${ordered[0].y}`;
-    for (let i = 0; i < ordered.length - 1; i++) {
-      const p0 = ordered[i - 1] ?? ordered[i];
-      const p1 = ordered[i];
-      const p2 = ordered[i + 1];
-      const p3 = ordered[i + 2] ?? p2;
-      const cp1x = p1.x + (p2.x - p0.x) / 6;
-      const cp1y = p1.y + (p2.y - p0.y) / 6;
-      const cp2x = p2.x - (p3.x - p1.x) / 6;
-      const cp2y = p2.y - (p3.y - p1.y) / 6;
-      d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
-    }
-  }
+  const d = monotonePath(ordered);
 
-  const yTicks = 5;
-  const tickStep = (yMax - yMin) / (yTicks - 1);
-  const ticks = Array.from({ length: yTicks }, (_, i) => {
-    const t = i / (yTicks - 1);
-    const price = yMax - t * (yMax - yMin);
-    const y = pad.top + t * plotH;
-    return { price, y };
-  });
+  const nice = niceTicks(yMin, yMax);
+  const tickStep = nice.step;
+  const ticks = nice.prices.map((price) => ({
+    price,
+    y: pad.top + (1 - (price - yMin) / (yMax - yMin)) * plotH,
+  }));
 
   // X축 라벨은 콘텐츠 구간 기준. 오른쪽 끝은 항상 '오늘'
   const xLabelCount = 4;
@@ -816,6 +802,30 @@ function PriceLineChart({
       ? orderedPoints[resolvedSelectedIdx]
       : null;
 
+  // 최저·최고 라벨은 각각 한 점에만 — 같은 딜이 여러 날 이어지면(4,750원 4일) 라벨이 겹쳐
+  // 「4,75040원40원」처럼 읽혔다. 같은 값이면 마지막 날에 달고, 「이 상품」 라벨과 겹치는 자리는 뺀다
+  // (이 상품 라벨이 이미 가격을 보여준다).
+  const labelIdxFor = (price: number) => {
+    for (let i = orderedPoints.length - 1; i >= 0; i--) {
+      const c = orderedPoints[i];
+      if (c.price !== price) continue;
+      if (currentMarker && isSeedDeal(c.deal, currentMarker.deal.id)) continue;
+      if (seedCoord && Math.abs(c.x - seedCoord.x) < 40 && Math.abs(c.y - seedCoord.y) < 28)
+        continue;
+      return i;
+    }
+    return -1;
+  };
+  const lowLabelIdx = labelIdxFor(minPrice);
+  const highLabelIdxRaw = labelIdxFor(maxPrice);
+  // 최고·최저가 바로 옆 점이면(9,850→9,810원) 두 라벨이 겹친다 — 최저만 남긴다.
+  const low = orderedPoints[lowLabelIdx];
+  const high = orderedPoints[highLabelIdxRaw];
+  const highLabelIdx =
+    low && high && Math.abs(low.x - high.x) < 56 && Math.abs(low.y - high.y) < 16
+      ? -1
+      : highLabelIdxRaw;
+
   return (
     <div className="mt-4 w-full">
       <svg
@@ -898,8 +908,12 @@ function PriceLineChart({
           const isHigh = c.price === maxPrice && maxPrice !== minPrice;
           const isHovered = i === hoverIdx;
           const isSelected = Boolean(selectedCoord && i === resolvedSelectedIdx);
-          // 라벨은 최저/최고 + 호버/선택만 (기본 전부 숨김)
-          const showPrice = isLow || isHigh || isHovered || isSelected;
+          // 라벨은 최저/최고(각 한 번) + 호버/선택만 (기본 전부 숨김)
+          const showPrice =
+            (isLow && i === lowLabelIdx) ||
+            (isHigh && i === highLabelIdx) ||
+            isHovered ||
+            isSelected;
           const stroke = isLow ? CHART.low : CHART.line;
           const labelFill = isLow ? CHART.low : isHigh ? CHART.high : '#6B7280';
 
@@ -911,6 +925,9 @@ function PriceLineChart({
                   y={c.y - 12}
                   textAnchor="middle"
                   fontSize={10}
+                  stroke="var(--color-white)"
+                  strokeWidth={3}
+                  paintOrder="stroke"
                   fontWeight={isLow || isHigh ? 700 : 500}
                   fill={labelFill}
                 >
@@ -937,6 +954,9 @@ function PriceLineChart({
               y={Math.max(pad.top - 6, seedCoord.y - 28)}
               textAnchor="middle"
               fontSize={10}
+              stroke="var(--color-white)"
+              strokeWidth={3}
+              paintOrder="stroke"
               fontWeight={700}
               fill={CHART.current}
             >
@@ -947,6 +967,9 @@ function PriceLineChart({
               y={Math.max(pad.top + 6, seedCoord.y - 14)}
               textAnchor="middle"
               fontSize={10}
+              stroke="var(--color-white)"
+              strokeWidth={3}
+              paintOrder="stroke"
               fontWeight={600}
               fill={CHART.current}
             >
