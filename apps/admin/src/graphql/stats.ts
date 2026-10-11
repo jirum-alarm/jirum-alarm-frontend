@@ -39,6 +39,26 @@ export const QueryTopFavoriteCategories = gql`
   }
 `;
 
+// 홈 '사용자' 요약 — 지금 인원(스냅숏) + 기간 안 가입 경로별 일별 신규
+export const QueryUserOverview = gql`
+  query QueryUserOverview($startDate: DateTime!, $endDate: DateTime!) {
+    userOverview(startDate: $startDate, endDate: $endDate) {
+      members
+      guests
+      activeMembers1d
+      activeMembers7d
+      activeMembers30d
+      pushMembers
+      pushGuests
+      dailySignups {
+        date
+        channel
+        count
+      }
+    }
+  }
+`;
+
 // 2. 상품/핫딜 통계
 export const QueryProductRegistrationStats = gql`
   query QueryProductRegistrationStats(

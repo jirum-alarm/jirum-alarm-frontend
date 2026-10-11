@@ -19,6 +19,8 @@ import {
   QueryTopNotificationKeywordsQueryVariables,
   QueryUserDemographicStatsQuery,
   QueryUserDemographicStatsQueryVariables,
+  QueryUserOverviewQuery,
+  QueryUserOverviewQueryVariables,
   QueryUserRegistrationStatsQuery,
 } from '@/generated/gql/graphql';
 import {
@@ -35,6 +37,7 @@ import {
   QueryTopFavoriteCategories,
   QueryTopNotificationKeywords,
   QueryUserDemographicStats,
+  QueryUserOverview,
   QueryUserRegistrationStats,
 } from '@/graphql/stats';
 import { DateInterval, ProviderType } from '@/types/stats';
@@ -60,6 +63,16 @@ export const useUserRegistrationStats = () => {
     },
   );
 };
+
+export const useUserOverview = (
+  variables: QueryUserOverviewQueryVariables,
+  options?: QueryOptions<QueryUserOverviewQuery, QueryUserOverviewQueryVariables>,
+) =>
+  useQuery<QueryUserOverviewQuery, QueryUserOverviewQueryVariables>(QueryUserOverview, {
+    variables,
+    fetchPolicy: 'network-only',
+    ...options,
+  });
 
 export const useUserDemographicStats = (
   options?: QueryOptions<QueryUserDemographicStatsQuery, QueryUserDemographicStatsQueryVariables>,

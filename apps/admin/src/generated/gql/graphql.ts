@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = T | null | undefined;
@@ -2208,6 +2207,8 @@ export type Query = {
   userByEmail: User;
   /** 어드민) 성별/연령대 분포 */
   userDemographicStats: UserDemographicStatsOutput;
+  /** 어드민) 사용자 요약 — 회원·게스트·최근 접속·알림 닿는 사람 + 기간 안 가입 경로별 일별 신규 */
+  userOverview: UserOverviewOutput;
   /** 어드민) 일별/주별/월별 가입자 수 추이 */
   userRegistrationStats: Array<DateCountOutput>;
   /** 어드민) 사용자 목록 조회 */
@@ -2667,6 +2668,11 @@ export type QueryUserByEmailArgs = {
   email: Scalars['String']['input'];
 };
 
+export type QueryUserOverviewArgs = {
+  endDate: Scalars['DateTime']['input'];
+  startDate: Scalars['DateTime']['input'];
+};
+
 export type QueryUserRegistrationStatsArgs = {
   endDate: Scalars['DateTime']['input'];
   interval?: DateInterval;
@@ -2906,6 +2912,26 @@ export enum UserLikeTarget {
   Product = 'PRODUCT',
 }
 
+export type UserOverviewOutput = {
+  __typename?: 'UserOverviewOutput';
+  /** 최근 24시간 접속 회원(lastLoggedInAt — 백그라운드 토큰 갱신은 제외) */
+  activeMembers1d: Scalars['Int']['output'];
+  /** 최근 7일 접속 회원 */
+  activeMembers7d: Scalars['Int']['output'];
+  /** 최근 30일 접속 회원 */
+  activeMembers30d: Scalars['Int']['output'];
+  /** 기간 안 일별·가입 경로별 신규 계정 */
+  dailySignups: Array<UserSignupDailyOutput>;
+  /** 게스트 계정 수(로그인 없이 알림만 받는 기기) */
+  guests: Scalars['Int']['output'];
+  /** 회원 수(게스트 제외) */
+  members: Scalars['Int']['output'];
+  /** 살아 있는 푸시 토큰이 있는 게스트 */
+  pushGuests: Scalars['Int']['output'];
+  /** 살아 있는 푸시 토큰이 있는 회원 = 알림이 닿는 회원 */
+  pushMembers: Scalars['Int']['output'];
+};
+
 export type UserPushSetting = {
   __typename?: 'UserPushSetting';
   communityAlert: Scalars['Boolean']['output'];
@@ -2935,6 +2961,15 @@ export enum UserReportTarget {
   Comment = 'COMMENT',
   CommentReply = 'COMMENT_REPLY',
 }
+
+export type UserSignupDailyOutput = {
+  __typename?: 'UserSignupDailyOutput';
+  /** 가입 경로 — kakao·naver·apple·google(첫 소셜 연결), email(소셜 없음), guest(게스트 계정) */
+  channel: Scalars['String']['output'];
+  count: Scalars['Int']['output'];
+  /** KST 날짜 YYYY-MM-DD */
+  date: Scalars['String']['output'];
+};
 
 export type VerificationStatistics = {
   __typename?: 'VerificationStatistics';
@@ -3917,6 +3952,31 @@ export type QueryTopFavoriteCategoriesQuery = {
     categoryName: string;
     count: number;
   }>;
+};
+
+export type QueryUserOverviewQueryVariables = Exact<{
+  startDate: Scalars['DateTime']['input'];
+  endDate: Scalars['DateTime']['input'];
+}>;
+
+export type QueryUserOverviewQuery = {
+  __typename?: 'Query';
+  userOverview: {
+    __typename?: 'UserOverviewOutput';
+    members: number;
+    guests: number;
+    activeMembers1d: number;
+    activeMembers7d: number;
+    activeMembers30d: number;
+    pushMembers: number;
+    pushGuests: number;
+    dailySignups: Array<{
+      __typename?: 'UserSignupDailyOutput';
+      date: string;
+      channel: string;
+      count: number;
+    }>;
+  };
 };
 
 export type QueryProductRegistrationStatsQueryVariables = Exact<{
@@ -5233,6 +5293,24 @@ export const QueryTopFavoriteCategoriesDocument = new TypedDocumentString(`
   QueryTopFavoriteCategoriesQuery,
   QueryTopFavoriteCategoriesQueryVariables
 >;
+export const QueryUserOverviewDocument = new TypedDocumentString(`
+    query QueryUserOverview($startDate: DateTime!, $endDate: DateTime!) {
+  userOverview(startDate: $startDate, endDate: $endDate) {
+    members
+    guests
+    activeMembers1d
+    activeMembers7d
+    activeMembers30d
+    pushMembers
+    pushGuests
+    dailySignups {
+      date
+      channel
+      count
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<QueryUserOverviewQuery, QueryUserOverviewQueryVariables>;
 export const QueryProductRegistrationStatsDocument = new TypedDocumentString(`
     query QueryProductRegistrationStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {
   productRegistrationStats(

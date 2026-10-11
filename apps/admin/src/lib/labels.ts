@@ -18,6 +18,18 @@ export const SOURCES: Record<string, { name: string; color: string }> = {
 export const sourceName = (code: string) => SOURCES[code]?.name ?? code;
 export const sourceColor = (code: string) => SOURCES[code]?.color ?? '#94A3B8';
 
+// 가입 경로(userOverview.dailySignups.channel) — 첫 소셜 연결, 소셜 없으면 email, 게스트 계정은 guest
+export const SIGNUP_CHANNELS: Record<string, { name: string; color: string }> = {
+  kakao: { name: '카카오', color: '#EAB308' },
+  naver: { name: '네이버', color: '#22C55E' },
+  apple: { name: '애플', color: '#1C2434' },
+  google: { name: '구글', color: '#3182F6' },
+  email: { name: '이메일', color: '#94A3B8' },
+  guest: { name: '게스트', color: '#10B981' },
+};
+export const channelName = (code: string) => SIGNUP_CHANNELS[code]?.name ?? code;
+export const channelColor = (code: string) => SIGNUP_CHANNELS[code]?.color ?? '#94A3B8';
+
 export const GENDER_LABEL: Record<string, string> = { MALE: '남성', FEMALE: '여성' };
 
 export const labelOf = (map: Record<string, string>, code?: string | null) =>

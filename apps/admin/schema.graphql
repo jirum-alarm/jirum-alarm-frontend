@@ -2872,6 +2872,10 @@ type Query {
   """
   userDemographicStats: UserDemographicStatsOutput!
   """
+  어드민) 사용자 요약 — 회원·게스트·최근 접속·알림 닿는 사람 + 기간 안 가입 경로별 일별 신규
+  """
+  userOverview(endDate: DateTime!, startDate: DateTime!): UserOverviewOutput!
+  """
   어드민) 일별/주별/월별 가입자 수 추이
   """
   userRegistrationStats(
@@ -3158,6 +3162,41 @@ enum UserLikeTarget {
   PRODUCT
 }
 
+type UserOverviewOutput {
+  """
+  최근 24시간 접속 회원(lastLoggedInAt — 백그라운드 토큰 갱신은 제외)
+  """
+  activeMembers1d: Int!
+  """
+  최근 7일 접속 회원
+  """
+  activeMembers7d: Int!
+  """
+  최근 30일 접속 회원
+  """
+  activeMembers30d: Int!
+  """
+  기간 안 일별·가입 경로별 신규 계정
+  """
+  dailySignups: [UserSignupDailyOutput!]!
+  """
+  게스트 계정 수(로그인 없이 알림만 받는 기기)
+  """
+  guests: Int!
+  """
+  회원 수(게스트 제외)
+  """
+  members: Int!
+  """
+  살아 있는 푸시 토큰이 있는 게스트
+  """
+  pushGuests: Int!
+  """
+  살아 있는 푸시 토큰이 있는 회원 = 알림이 닿는 회원
+  """
+  pushMembers: Int!
+}
+
 type UserPushSetting {
   communityAlert: Boolean!
   createdAt: DateTime!
@@ -3189,6 +3228,18 @@ enum UserReportReason {
 enum UserReportTarget {
   COMMENT
   COMMENT_REPLY
+}
+
+type UserSignupDailyOutput {
+  """
+  가입 경로 — kakao·naver·apple·google(첫 소셜 연결), email(소셜 없음), guest(게스트 계정)
+  """
+  channel: String!
+  count: Int!
+  """
+  KST 날짜 YYYY-MM-DD
+  """
+  date: String!
 }
 
 type VerificationStatistics {

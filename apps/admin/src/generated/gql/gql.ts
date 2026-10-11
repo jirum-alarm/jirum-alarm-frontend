@@ -1,4 +1,3 @@
-/* eslint-disable */
 import * as types from './graphql';
 
 /**
@@ -81,6 +80,7 @@ type Documents = {
   '\n  query QueryUserRegistrationStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    userRegistrationStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n': typeof types.QueryUserRegistrationStatsDocument;
   '\n  query QueryUserDemographicStats {\n    userDemographicStats {\n      genderDistribution {\n        gender\n        count\n      }\n      ageDistribution {\n        ageGroup\n        count\n      }\n    }\n  }\n': typeof types.QueryUserDemographicStatsDocument;
   '\n  query QueryTopFavoriteCategories($limit: Int) {\n    topFavoriteCategories(limit: $limit) {\n      categoryId\n      categoryName\n      count\n    }\n  }\n': typeof types.QueryTopFavoriteCategoriesDocument;
+  '\n  query QueryUserOverview($startDate: DateTime!, $endDate: DateTime!) {\n    userOverview(startDate: $startDate, endDate: $endDate) {\n      members\n      guests\n      activeMembers1d\n      activeMembers7d\n      activeMembers30d\n      pushMembers\n      pushGuests\n      dailySignups {\n        date\n        channel\n        count\n      }\n    }\n  }\n': typeof types.QueryUserOverviewDocument;
   '\n  query QueryProductRegistrationStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    productRegistrationStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n': typeof types.QueryProductRegistrationStatsDocument;
   '\n  query QueryHotDealRatioStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    hotDealRatioStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      totalCount\n      hotDealCount\n      ratio\n    }\n  }\n': typeof types.QueryHotDealRatioStatsDocument;
   '\n  query QueryHotDealTypeDistribution(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    hotDealTypeDistribution(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      hotDealType\n      count\n    }\n  }\n': typeof types.QueryHotDealTypeDistributionDocument;
@@ -240,6 +240,8 @@ const documents: Documents = {
     types.QueryUserDemographicStatsDocument,
   '\n  query QueryTopFavoriteCategories($limit: Int) {\n    topFavoriteCategories(limit: $limit) {\n      categoryId\n      categoryName\n      count\n    }\n  }\n':
     types.QueryTopFavoriteCategoriesDocument,
+  '\n  query QueryUserOverview($startDate: DateTime!, $endDate: DateTime!) {\n    userOverview(startDate: $startDate, endDate: $endDate) {\n      members\n      guests\n      activeMembers1d\n      activeMembers7d\n      activeMembers30d\n      pushMembers\n      pushGuests\n      dailySignups {\n        date\n        channel\n        count\n      }\n    }\n  }\n':
+    types.QueryUserOverviewDocument,
   '\n  query QueryProductRegistrationStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    productRegistrationStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n':
     types.QueryProductRegistrationStatsDocument,
   '\n  query QueryHotDealRatioStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    hotDealRatioStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      totalCount\n      hotDealCount\n      ratio\n    }\n  }\n':
@@ -702,6 +704,12 @@ export function graphql(
 export function graphql(
   source: '\n  query QueryTopFavoriteCategories($limit: Int) {\n    topFavoriteCategories(limit: $limit) {\n      categoryId\n      categoryName\n      count\n    }\n  }\n',
 ): typeof import('./graphql').QueryTopFavoriteCategoriesDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryUserOverview($startDate: DateTime!, $endDate: DateTime!) {\n    userOverview(startDate: $startDate, endDate: $endDate) {\n      members\n      guests\n      activeMembers1d\n      activeMembers7d\n      activeMembers30d\n      pushMembers\n      pushGuests\n      dailySignups {\n        date\n        channel\n        count\n      }\n    }\n  }\n',
+): typeof import('./graphql').QueryUserOverviewDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
