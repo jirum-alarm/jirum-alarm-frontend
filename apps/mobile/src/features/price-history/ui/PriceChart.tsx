@@ -255,7 +255,8 @@ export default function PriceChart({
                 fontWeight="600"
                 fill={colors.gray[900]}
                 textAnchor="middle">
-                {shortWon(selected.price, currency, undefined, geo.yMax)}
+                {/* web 점 라벨과 같은 전체 금액 — k 반올림이면 10,600원이 「11k」로 보였다(2026-10-12). */}
+                {won(selected.price, currency)}
               </SvgText>
             </G>
           ) : null}
