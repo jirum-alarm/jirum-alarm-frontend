@@ -112,6 +112,14 @@ describe('shortWon — 한 축에 표기가 섞이면 안 된다', () => {
     expect(shortWon(98400, null, 500, 100000)).toBe('98.4k');
   });
 
+  // 2026-10-12 — 500원 간격 축이 10.0k·10.5k·11.0k 로, 250원 간격은 10,250 을 10.3k 로 그렸다.
+  it('정수 k 엔 .0 을 안 붙이고, 250원 간격은 값을 반올림하지 않는다', () => {
+    expect(shortWon(10000, null, 500, 11000)).toBe('10k');
+    expect(shortWon(10500, null, 500, 11000)).toBe('10.5k');
+    expect(shortWon(10250, null, 250, 11000)).toBe('10.25k');
+    expect(shortWon(10200, null, 200, 11000)).toBe('10.2k');
+  });
+
   it('0 은 k 를 붙이지 않는다', () => {
     expect(shortWon(0, null, 5000, 20000)).toBe('0');
   });

@@ -19,7 +19,7 @@ import ImageComponent from '@/shared/ui/ImageComponent';
 
 import { ProductQueries } from '@/entities/product';
 
-import { monotonePath, niceTicks } from '../lib/price-chart';
+import { monotonePath, niceTicks, shortWon } from '../lib/price-chart';
 
 type Props = {
   productId: number;
@@ -59,28 +59,6 @@ const PERIODS = [
 function won(price: number, currency?: string | null): string {
   if (currency === 'USD') return `$${Math.round(price).toLocaleString()}`;
   return `${Math.round(price).toLocaleString()}원`;
-}
-
-/**
- * Y축 눈금 라벨.
- * - k 표기 여부는 축 최댓값(axisMax)으로 한 번에 결정 — 한 축에 10.6k와 9,700이 섞이지 않게.
- * - step(눈금 간격)이 1000원 미만이면 k 반올림이 같은 라벨을 반복하므로(98k,98k…) 소수 한 자리.
- */
-function shortWon(
-  price: number,
-  currency?: string | null,
-  step?: number,
-  axisMax?: number,
-): string {
-  if (currency === 'USD') return `$${Math.round(price).toLocaleString()}`;
-  // 0은 'k'를 붙이지 않는다 (축 하단 클램프로 생기는 '0k' 방지)
-  if (price === 0) return '0';
-  if ((axisMax ?? price) >= 10000) {
-    const k = price / 1000;
-    if (step != null && step < 1000) return `${k.toFixed(1)}k`;
-    return `${Math.round(k).toLocaleString()}k`;
-  }
-  return `${Math.round(price).toLocaleString()}`;
 }
 
 function formatAxisDate(date: string, withYear = false): string {
