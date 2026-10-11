@@ -6,6 +6,19 @@ import {extendTailwindMerge} from 'tailwind-merge';
 const twMerge = extendTailwindMerge(twMergeConfig);
 
 /**
+ * `hover:` 클래스를 버린다. 앱엔 마우스 hover 가 없는데, NativeWind 는 `hover:` 가 붙은 **일반 View** 를
+ * 몰래 Pressable 로 바꾼다(react-native-css-interop native-interop.js — hover·active·focus 가 있으면 upgrade).
+ * 그 View 가 터치를 먼저 잡고 빈 onPress 로 삼켜, 바깥 Pressable 의 onPress 가 영영 안 불린다.
+ * 2026-10-11 사고: web 과 같이 쓰는 tab 레시피의 idle 에 `hover:` 가 있어, 안쪽 View 에 모양을 주는
+ * PressableScale(TabPill)·가격 추이 기간 버튼의 **비선택 탭이 전부 안 눌렸다**(커뮤니티·토스·랭킹 카테고리·기간).
+ */
+const dropHover = (classes: string) =>
+  classes
+    .split(/\s+/)
+    .filter(c => c && !c.startsWith('hover:'))
+    .join(' ');
+
+/**
  * Merges Tailwind CSS classes with class-variance-authority
  *
  * @param inputs - Class names to merge
@@ -15,5 +28,5 @@ const twMerge = extendTailwindMerge(twMergeConfig);
  * cn('px-2 py-1', 'px-4') // => 'py-1 px-4'
  */
 export const cn = (...inputs: CxOptions) => {
-  return twMerge(cx(inputs));
+  return twMerge(dropHover(cx(inputs)));
 };
