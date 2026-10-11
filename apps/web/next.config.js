@@ -41,6 +41,10 @@ const nextConfig = {
   productionBrowserSourceMaps: false,
   images: {
     minimumCacheTTL: 31536000,
+    // 디스크 캐시(.next/cache/images) 상한. 미설정이면 디스크 여유의 50%(운영 파드당 ~43G)라 사실상 무제한이었고,
+    // 실측 파드당 6.5h 430M·파일 2.2만 개 → 그 dentry/inode 가 커널 slab 100Mi 로 메모리 지표에도 잡혔다.
+    // 이미지 1개 ~15KB, 512MiB ≈ 7~8시간치 고유 변형이라 히트율은 거의 그대로다. 넘으면 LRU 로 지운다.
+    maximumDiskCacheSize: 512 * 1024 * 1024,
     formats: ['image/webp', 'image/avif'],
     // Product thumbnails are displayed at 120, 160, 192, 252px.
     // Adding these sizes prevents Next.js from over-serving larger variants (e.g., 384→320, 640→550).
