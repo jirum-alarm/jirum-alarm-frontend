@@ -158,7 +158,19 @@ jobs:
           key: ${{ steps.app-cache.outputs.cache-primary-key }}
 
       - name: Boot check (cold start ×3)
+        env:
+          BOOT_EVIDENCE: ${{ runner.temp }}/boot-evidence
         run: bash apps/mobile/scripts/boot-check.sh apps/mobile/ios/build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app
+
+      # 회차별 녹화·스크린샷 — 실패했을 때 "어디서 멈췄나" 를 화면으로 본다. 로컬은 /show 가 받아 폰 검수함에 올린다.
+      - name: Upload boot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boot-evidence-ios
+          path: ${{ runner.temp }}/boot-evidence
+          retention-days: 7
+          if-no-files-found: ignore
 
   # 안드로이드판 — APK 의 번들만 바꿔 끼워 에뮬레이터에서 켠다(scripts/boot-check-android.sh). APK 는 지문으로 캐시.
   boot-check-android:

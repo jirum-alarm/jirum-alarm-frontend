@@ -13,11 +13,17 @@
 #   ③: 앱 JS 는 시작하면 AsyncStorage 에 deviceId 를 쓴다 — 매번 지우고 다시 생기는지 본다.
 #      없으면 JS 가 시작도 못 한 것(네이티브 멈춤)인데 ①② 는 이걸 통과시킨다.
 # ponytail: JS 가 돈 뒤 오류 없이 멈추는 것·화면 깨짐은 못 잡는다 — 사고로 나오면 스크린샷 비교를 더한다.
+# 증거(선택): BOOT_EVIDENCE=<디렉터리> 면 회차마다 화면 녹화(NN-<회차>.mp4)와 대기 끝 스크린샷(NN-<회차>.png)을 남긴다.
+#   판정 전에 찍으므로 실패한 회차도 남는다. CI 는 아티팩트 boot-evidence-ios 로 올리고, 사람은 폰(/show 검수함)으로 본다.
+#   판정에는 쓰지 않는다 — 화면 깨짐을 자동으로 잡는 건 여전히 ponytail.
 set -euo pipefail
 
 APP_SRC=${1:?사용법: boot-check.sh <Release .app>}
 BUNDLE_ID=com.jirum-alarm.jirumalarm
 WAIT=${BOOT_WAIT:-20}
+EVIDENCE=${BOOT_EVIDENCE:-}
+N=0
+[ -n "$EVIDENCE" ] && mkdir -p "$EVIDENCE"
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 WORK=$(mktemp -d)
 DEV=""
@@ -53,15 +59,26 @@ xcrun simctl install "$DEV" "$APP"
 
 STORE=""
 launch() {
-  local pid logpid log="$WORK/launch.log"
+  local pid logpid recpid="" shot="" log="$WORK/launch.log"
+  N=$((N + 1))
   rm -f "$STORE/manifest.json"
   [ -n "${2:-}" ] && printf '%s' "$2" >"$STORE/manifest.json"
   xcrun simctl spawn "$DEV" log stream --style compact --predicate 'process == "jirumAlarmMobile"' >"$log" 2>&1 &
   logpid=$!
+  if [ -n "$EVIDENCE" ]; then
+    shot="$EVIDENCE/$(printf '%02d' "$N")-$(printf '%s' "$1" | tr ' ()/' '-__-')"
+    xcrun simctl io "$DEV" recordVideo --codec h264 --force "$shot.mp4" >/dev/null 2>&1 &
+    recpid=$!
+  fi
   sleep 2
   pid=$(xcrun simctl launch "$DEV" "$BUNDLE_ID" | awk '{print $NF}')
   sleep "$WAIT"
   kill "$logpid" 2>/dev/null || true
+  if [ -n "$recpid" ]; then
+    xcrun simctl io "$DEV" screenshot "$shot.png" >/dev/null 2>&1 || true
+    kill -INT "$recpid" 2>/dev/null || true
+    wait "$recpid" 2>/dev/null || true
+  fi
   if ! ps -p "$pid" >/dev/null; then
     echo "✗ $1: ${WAIT}초 안에 종료됨(pid $pid)"
     /bin/ls -t ~/Library/Logs/DiagnosticReports 2>/dev/null | grep -m1 jirumAlarmMobile && echo "  크래시 리포트: ~/Library/Logs/DiagnosticReports"

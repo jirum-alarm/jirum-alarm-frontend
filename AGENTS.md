@@ -202,6 +202,7 @@ pnpm build            # Production build
     `boot-check`(iOS, macOS)·`boot-check-android`(에뮬레이터) 잡 통과(Release 앱·APK 는 네이티브 지문으로 캐시) → production 발행 → Mattermost `alert-deploy`.
     그래서 JS 는 **main 에 푸시하면 나간다** — 위 1~3번을 손으로 할 일은 없고, 푸시 뒤 `gh run watch` 로 mobile-ota 결과를 확인한다.
     기동 확인은 "켜지다 죽거나 JS 가 못 도는 것" 만 잡는다(오류 없는 화면 깨짐은 못 봄) — 바뀐 화면이 큰 변경이면 푸시 전에 로컬에서 띄워 본다.
+    iOS 기동 확인은 회차마다 녹화·스크린샷을 아티팩트 `boot-evidence-ios`(7일)로 남긴다 — 실패 원인이나 첫 화면이 맞는지는 `gh run download <run> -n boot-evidence-ios` 로 화면을 본다(로컬 실행은 `BOOT_EVIDENCE=<dir>`).
     사고 때 첫 조치: 저장소 변수 `MOBILE_AUTO_OTA` 를 끄고(`gh variable set MOBILE_AUTO_OTA -b false`) 4번으로 롤백.
 - **네이티브 변경 = 버전 올림 + 스토어 빌드.** `ios/`·`android/`·네이티브 패키지(예: expo-image)·`app.json`
   플러그인이 바뀌면 **같은 커밋에서** 버전·runtimeVersion 을 올리고(app.json·Expo.plist·strings.xml 등 —
