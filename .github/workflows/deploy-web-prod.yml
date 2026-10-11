@@ -35,7 +35,8 @@ jobs:
       # 잡 전체에 두면 production 일 때 pnpm install 이 devDependencies 를 건너뛴다.
       NEXT_PUBLIC_SERVICE_URL: ${{ vars.NEXT_PUBLIC_SERVICE_URL }}
       API_URL: ${{ vars.API_URL }}
-      NEXT_PUBLIC_FIREBASE_VAPID_KEY: AIzaSyCpfnPqj8e_uVFTASlpumCYJ9w7R3d-8wQ
+      # 웹 푸시 VAPID 공개키(B…). 비우면 Firebase SDK 기본 키 — 예전 값은 API 키(AIza…)라 웹 푸시 구독이 전부 실패했다(2026-10-11)
+      NEXT_PUBLIC_FIREBASE_VAPID_KEY: ""
       NEXT_PUBLIC_ADSENSE_CLIENT_ID: ca-pub-3855723530036909
       NEXT_PUBLIC_ADSENSE_SLOT_PRODUCT_DETAIL: "9763036455"
       NEXT_PUBLIC_ADSENSE_SLOT_SEARCH_INFEED: "1939286674"

@@ -6,7 +6,7 @@ import { setFcmToken as setFcmTokenAction } from '@/app/actions/token';
 
 import { TokenType } from '@/shared/api/gql/graphql';
 import { NotificationService } from '@/shared/api/notification/notification.service';
-import { firebaseConfig } from '@/shared/config/firebase';
+import { firebaseConfig, webPushVapidKey } from '@/shared/config/firebase';
 
 const FCMConfig = () => {
   useEffect(() => {
@@ -37,7 +37,7 @@ const FCMConfig = () => {
           await Promise.all([import('firebase/app'), import('firebase/messaging')]);
         const app = getApps()[0] ?? initializeApp(firebaseConfig);
         const messaging = getMessaging(app);
-        const vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
+        const vapidKey = webPushVapidKey();
         const token = await getToken(messaging, { vapidKey });
         if (token) {
           await setFcmTokenAction(token);
