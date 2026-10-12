@@ -45,6 +45,10 @@ Android 는 앱의 intent-filter 가 정하는데, 지금 `AndroidManifest.xml` 
 
 순서: 매니페스트 필터를 AASA 와 같은 범위(`/products`·`/community`·`/trending`·`/curation`·`/toss`·`/deals`)의
 `pathPrefix` 로 바꾸는 네이티브 변경(버전·runtimeVersion 올림 → 스토어 빌드) → 그 빌드가 퍼진 뒤 위 지문 추가.
+
+**진행(2026-10-12)**: 매니페스트 범위 좁히기는 앱 **1.5.1**(31b80835)에 들어갔다. 남은 일 = 1.5.1 이 Play 에서
+100% 출시되고 사용자 대부분이 올라간 뒤 위 지문을 `public/.well-known/assetlinks.json` 에 추가 → 웹 운영 배포.
+그 전에 넣으면 아직 1.5.0 이하(전 경로 필터)를 새로 받거나 업데이트하는 기기에서 위 사고가 난다.
 검증은 설치·업데이트 때 일어나므로 지문만 먼저 넣어도 지금 바이너리를 새로 받는 사람부터 전 경로가 잡힌다.
 
 웹 「앱 열기」 버튼(`features/app-download/model/appHandoff.ts`)은 이 검증과 무관하다 — intent 에 package 를
