@@ -6,6 +6,7 @@ import PageHeader from '@/shared/ui/layout/PageHeader';
 
 import AlarmContainer from '@/features/alarm/ui/AlarmContainer';
 import AlarmHeaderActions from '@/features/alarm/ui/AlarmHeaderActions';
+import PushStatusBanner from '@/features/mypage/ui/keyword/PushStatusBanner';
 import MyPageShell from '@/features/mypage/ui/MyPageShell';
 
 const Alarm = async () => {
@@ -15,7 +16,14 @@ const Alarm = async () => {
       navType={NAV_TYPE.ALARM}
       header={<PageHeader title="알림" actions={<AlarmHeaderActions />} />}
     >
-      <AlarmContainer />
+      <AlarmContainer
+        guestNotice={
+          // 이 브라우저로 푸시가 안 오는 게스트에게만 보인다(알림 켜기·앱 설치). 받는 중이면 숨는다.
+          <div className="px-5 pt-4 empty:hidden">
+            <PushStatusBanner />
+          </div>
+        }
+      />
     </BasicLayout>
   );
   // PC 로그인 사용자는 마이페이지와 같은 사이드바 틀(모바일은 MyPageShell 이 그대로 통과).

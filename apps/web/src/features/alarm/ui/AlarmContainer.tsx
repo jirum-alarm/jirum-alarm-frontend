@@ -1,12 +1,13 @@
 'use client';
 
+import { useAtomValue } from 'jotai';
 import { m } from 'motion/react';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { type ReactNode, useEffect } from 'react';
 
 import { PAGE } from '@/shared/config/page';
 import { useDevice } from '@/shared/hooks/useDevice';
-import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
+import useIsLoggedIn, { isGuestAtom } from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import Button from '@/shared/ui/common/Button';
 import { Apple, ArrowDown, Google, LoadingSpinner } from '@/shared/ui/common/icons';
@@ -21,16 +22,32 @@ import AlarmList from './AlarmList';
 
 const SIGNUP_PATH = '/signup';
 
-const AlarmContainer = () => {
+/**
+ * @param guestNotice 게스트 알림 목록 위에 둘 안내(이 브라우저로 푸시가 안 오면 「앱 설치·알림 켜기」 —
+ *   페이지가 PushStatusBanner 를 넘긴다. 피처끼리 직접 import 하지 않으려고 슬롯으로 받는다).
+ */
+const AlarmContainer = ({ guestNotice }: { guestNotice?: ReactNode }) => {
   const { device, isHydrated } = useDevice();
 
   const { isLoggedIn, isLoading } = useIsLoggedIn();
+  const isGuest = useAtomValue(isGuestAtom);
 
   if (!isHydrated || isLoading) {
     return (
       <div className="flex h-full w-full items-center justify-center">
         <LoadingSpinner />
       </div>
+    );
+  }
+
+  // 게스트(로그인 없이 키워드를 건 브라우저)는 자기 알림을 본다. 예전엔 비회원과 같이 앱 설치 화면만 떠서
+  // 웹 푸시를 누르고 들어와도 알림 목록이 없었다(2026-10-12) — 알림 경유 재방문이 이 화면을 지난다.
+  if (!isLoggedIn && isGuest && !device.isJirumAlarmApp) {
+    return (
+      <>
+        {guestNotice}
+        <AlarmList />
+      </>
     );
   }
 
