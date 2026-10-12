@@ -57,7 +57,8 @@ const loadThumbnail = async (url: string | null | undefined): Promise<string | n
     const res = await fetch(url, { signal: AbortSignal.timeout(3000) });
     if (!res.ok) return null;
     const png = await sharp(Buffer.from(await res.arrayBuffer()))
-      .resize(THUMB, THUMB, { fit: 'cover' })
+      // 커뮤니티 썸네일은 세로로 긴 쇼핑몰 캡처가 많다 — 가운데를 자르면 상품 대신 가격표·버튼만 남아 위를 남긴다.
+      .resize(THUMB, THUMB, { fit: 'cover', position: 'top' })
       .png()
       .toBuffer();
     return `data:image/png;base64,${png.toString('base64')}`;
@@ -77,7 +78,8 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ): Promise<Response> {
-  const productId = parseProductId((await params).id);
+  // 카톡 scrap 이 확장자 있는 이미지 주소를 잘 받아서 메타는 `/api/og/product/{id}.jpg` 로 건다.
+  const productId = parseProductId((await params).id.replace(/\.jpg$/, ''));
   if (productId === null) return new Response('Not found', { status: 404 });
 
   const product = await ProductService.getProductInfo({ id: productId }).catch(() => null);
@@ -187,6 +189,7 @@ export async function GET(
             color: gray[900],
             lineClamp: 3,
             display: 'block',
+            // 낱말 중간에서 끊지 않는다(normal 은 「프라이/팬」처럼 자른다).
             wordBreak: 'keep-all',
           }}
         >
@@ -239,7 +242,18 @@ export async function GET(
     },
   );
 
-  // 카톡·X 는 받아 간 카드를 자기 쪽에 캐시한다. 우리 쪽은 같은 링크가 연달아 열릴 때만 덜 그리면 된다.
-  image.headers.set('Cache-Control', 'public, max-age=600, stale-while-revalidate=3600');
-  return image;
+  // ★스트리밍 PNG(청크 전송·Content-Length 없음, 400~500KB)는 카톡 scrap 이 받아 가지 못했다 —
+  // og:image 를 이 주소로 걸어도 카드가 상품 사진으로 떨어졌다(2026-10-12 운영 실측, 홈의 .webp 는 정상).
+  // 다 그린 뒤 JPEG(~1/5 크기)로 바꿔 길이를 알고 보낸다.
+  const jpeg = await sharp(Buffer.from(await image.arrayBuffer()))
+    .jpeg({ quality: 88 })
+    .toBuffer();
+  return new Response(new Uint8Array(jpeg), {
+    headers: {
+      'Content-Type': 'image/jpeg',
+      'Content-Length': String(jpeg.length),
+      // 카톡·X 는 받아 간 카드를 자기 쪽에 캐시한다. 우리 쪽은 같은 링크가 연달아 열릴 때만 덜 그리면 된다.
+      'Cache-Control': 'public, max-age=600, stale-while-revalidate=3600',
+    },
+  });
 }

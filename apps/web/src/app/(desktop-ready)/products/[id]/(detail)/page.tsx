@@ -299,7 +299,7 @@ export async function generateMetadata({
   // 정식 URL(검색엔진)은 상품 사진 그대로 — 크롤러가 상세를 훑을 때마다 카드를 그리지 않게.
   const shareImage = isShareRequest(utm_source)
     ? {
-        url: `${METADATA_SERVICE_URL}/api/og/product/${productId}${hidePrice ? '?hp=1' : ''}`,
+        url: `${METADATA_SERVICE_URL}/api/og/product/${productId}.jpg${hidePrice ? '?hp=1' : ''}`,
         width: 1200,
         height: 630,
         alt: product.title,
