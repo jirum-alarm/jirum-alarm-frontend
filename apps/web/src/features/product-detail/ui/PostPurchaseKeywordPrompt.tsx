@@ -8,6 +8,7 @@ import useAlertSession from '@/shared/hooks/useAlertSession';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import { cn } from '@/shared/lib/cn';
+import { getGraphqlErrorMessage } from '@/shared/lib/graphql-error';
 import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import { Alert } from '@/shared/ui/common/icons';
@@ -35,17 +36,6 @@ import { deriveKeyword } from '../lib/deriveKeyword';
 
 /** 키워드 등록 최소 길이. useKeywordInput 의 MIN_KEYWORD_LENGTH 와 맞춘다. */
 const MIN_KEYWORD_LENGTH = 2;
-
-/**
- * GraphQL 에러에서 서버가 준 메시지를 꺼낸다. graphql-request 는 응답 에러를
- * `response.errors[].message` 에 담고, 그 외 예외는 Error.message 에 담는다.
- */
-function getErrorMessage(error: unknown): string {
-  const gql = error as { response?: { errors?: { message?: string }[] } };
-  const fromResponse = gql?.response?.errors?.[0]?.message;
-  if (fromResponse) return fromResponse;
-  return error instanceof Error ? error.message : '';
-}
 
 export default function PostPurchaseKeywordPrompt({
   show,
@@ -83,7 +73,7 @@ export default function PostPurchaseKeywordPrompt({
       // '이미 등록된 키워드'는 사용자 입장에선 실패가 아니라 이미 목적이 달성된 상태다.
       // 제목에서 자동 추출한 키워드라 흔한 브랜드명이면 이미 등록돼 있을 확률이 높은데,
       // 여기서 '저장 실패' 토스트를 띄우면 멀쩡히 알림을 받고 있는데도 고장으로 읽힌다.
-      const message = getErrorMessage(error);
+      const message = getGraphqlErrorMessage(error);
       if (message.includes('이미 등록된')) {
         setDone(true);
         return;

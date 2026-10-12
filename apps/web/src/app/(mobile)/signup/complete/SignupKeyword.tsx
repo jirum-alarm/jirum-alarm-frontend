@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
+import { getGraphqlErrorMessage } from '@/shared/lib/graphql-error';
 import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import Button from '@/shared/ui/common/Button';
@@ -60,8 +61,7 @@ export default function SignupKeyword({ productId }: { productId: number | null 
       promptPushChannel(keyword);
     },
     onError: (error) => {
-      const gql = error as { response?: { errors?: { message?: string }[] } };
-      const message = gql?.response?.errors?.[0]?.message ?? '';
+      const message = getGraphqlErrorMessage(error);
       if (message.includes('이미 등록된')) {
         setDone(value.trim());
         return;

@@ -8,6 +8,7 @@ import { PAGE } from '@/shared/config/page';
 import useAlertSession from '@/shared/hooks/useAlertSession';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
+import { getGraphqlErrorMessage } from '@/shared/lib/graphql-error';
 import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import { useToast } from '@/shared/ui/common/Toast';
@@ -31,17 +32,6 @@ import { useUpdateKeyword } from '@/features/mypage/model';
  */
 
 const MAX_CHIPS = 5;
-
-/**
- * GraphQL 에러에서 서버가 준 메시지를 꺼낸다. graphql-request 는 응답 에러를
- * `response.errors[].message` 에 담고, 그 외 예외는 Error.message 에 담는다.
- */
-function getErrorMessage(error: unknown): string {
-  const gql = error as { response?: { errors?: { message?: string }[] } };
-  const fromResponse = gql?.response?.errors?.[0]?.message;
-  if (fromResponse) return fromResponse;
-  return error instanceof Error ? error.message : '';
-}
 
 export default function RecommendedKeywordSection() {
   const { toast } = useToast();
@@ -77,7 +67,7 @@ export default function RecommendedKeywordSection() {
       const failed = inFlight.current;
       if (failed) setJustAdded((prev) => prev.filter((k) => k !== failed));
       // 서버가 '이미 등록된 키워드', '최대 20개 초과' 같은 구체적 이유를 준다.
-      toast.error(getErrorMessage(error) || '키워드 저장에 실패했습니다.');
+      toast.error(getGraphqlErrorMessage(error) || '키워드 저장에 실패했습니다.');
     },
   });
 

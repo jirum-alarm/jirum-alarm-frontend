@@ -11,6 +11,7 @@ import useAlertSession from '@/shared/hooks/useAlertSession';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
+import { getGraphqlErrorMessage } from '@/shared/lib/graphql-error';
 import { browserHandoffUrl, canHandoffToBrowser } from '@/shared/lib/push-channel/browserHandoff';
 import { readPushStatus } from '@/shared/lib/push-channel/pushChannel';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
@@ -163,8 +164,7 @@ function KeywordAlertSheet({
   const { mutateAsync: addKeyword } = useUpdateKeyword({
     source: 'first_visit',
     onError: (error) => {
-      const gql = error as { response?: { errors?: { message?: string }[] } };
-      toast.error(gql?.response?.errors?.[0]?.message || '키워드 저장에 실패했습니다.');
+      toast.error(getGraphqlErrorMessage(error) || '키워드 저장에 실패했습니다.');
     },
   });
 

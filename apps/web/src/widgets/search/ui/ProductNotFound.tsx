@@ -5,6 +5,7 @@ import { PAGE } from '@/shared/config/page';
 import useAlertSession from '@/shared/hooks/useAlertSession';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
+import { getGraphqlErrorMessage } from '@/shared/lib/graphql-error';
 import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import { ErrorIllust } from '@/shared/ui/common/icons/Illust';
@@ -45,8 +46,7 @@ const ProductNotFound = () => {
       promptPushChannel(added);
     },
     onError: (error) => {
-      const gql = error as { response?: { errors?: { message?: string }[] } };
-      toast.error(gql?.response?.errors?.[0]?.message || '키워드 저장에 실패했습니다.');
+      toast.error(getGraphqlErrorMessage(error) || '키워드 저장에 실패했습니다.');
     },
   });
   const segments = [...new Intl.Segmenter().segment(keyword.trim())].length;
