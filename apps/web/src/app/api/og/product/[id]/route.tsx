@@ -11,6 +11,7 @@ import { hotdealTextMap } from '@/shared/config/hotdeal';
 
 import { parseProductId } from '@/entities/product/lib/product-id';
 
+import { toSeoImageUrl } from '@/features/product-detail/lib/product-seo';
 import { buildShareCard } from '@/features/product-detail/lib/share-card';
 
 /**
@@ -97,7 +98,9 @@ export async function GET(
     hidePrice,
   });
 
-  const [assets, thumbnail] = await Promise.all([loadAssets(), loadThumbnail(product.thumbnail)]);
+  // DB 썸네일이 .jpg/.png 로 남은 상품이 많은데 CDN 원본은 webp 변환 뒤 지워진다(403) — webp 경로로 읽는다.
+  const thumbnailUrl = toSeoImageUrl(product.thumbnail);
+  const [assets, thumbnail] = await Promise.all([loadAssets(), loadThumbnail(thumbnailUrl)]);
   const gray = light.gray;
 
   const image = new ImageResponse(
