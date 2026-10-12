@@ -9,6 +9,7 @@ import {
   DateInterval,
   ProductMappingMatchStatus,
   ProductMappingTarget,
+  QueryExperimentsQuery,
   QuerySearchProbeQuery,
   QuerySearchProbeQueryVariables,
   QueryServiceHealthSignalsQuery,
@@ -16,6 +17,7 @@ import {
   QueryThumbnailStatsQuery,
   QueryThumbnailStatsQueryVariables,
 } from '@/generated/gql/graphql';
+import { QueryExperiments } from '@/graphql/experiment';
 import { QuerySearchProbe, QueryServiceHealthSignals, QueryThumbnailStats } from '@/graphql/stats';
 import {
   useProfitLinkProviderHealth,
@@ -155,7 +157,14 @@ const ServiceHealth = () => {
     { fetchPolicy: 'network-only', ...poll },
   ).data?.serviceHealthSignals;
 
+  const experiments = useQuery<QueryExperimentsQuery>(QueryExperiments, {
+    fetchPolicy: 'network-only',
+  });
+
   const sections = buildSections({
+    experimentsOverdue: experiments.error
+      ? null
+      : experiments.data?.experiments.filter((e) => e.overdue),
     toss: toss.data?.hasTossSession,
     naverBc: naverBc.data?.hasNaverBcSession,
     ohou: ohou.data?.hasOhouSession,

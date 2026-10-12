@@ -27,6 +27,7 @@ type Documents = {
   '\n  mutation MutationAddProductMapping($productId: Int!, $brandProductId: Int!) {\n    addProductMapping(productId: $productId, brandProductId: $brandProductId)\n  }\n': typeof types.MutationAddProductMappingDocument;
   '\n  query QueryCategories {\n    categories {\n      id\n      name\n    }\n  }\n': typeof types.QueryCategoriesDocument;
   '\n  query commentsByAdmin($hotDealKeywordId: Int!, $synonyms: [String!], $excludes: [String!]) {\n    commentsByAdmin(hotDealKeywordId: $hotDealKeywordId, synonyms: $synonyms, excludes: $excludes)\n  }\n': typeof types.CommentsByAdminDocument;
+  '\n  query QueryExperiments {\n    experiments {\n      id\n      kind\n      status\n      title\n      question\n      design\n      toggle\n      primaryMetric\n      decisionRule\n      power\n      readout\n      startedAt\n      checkAt\n      endedAt\n      overdue\n      code\n      results {\n        date\n        summary\n        decision\n      }\n    }\n  }\n': typeof types.QueryExperimentsDocument;
   '\n  query QueryGatedMappings(\n    $limit: Int!\n    $searchAfter: [String!]\n    $matchingSource: [String!]\n    $productTitle: String\n    $orderBy: OrderOptionType\n  ) {\n    gatedMappings(\n      limit: $limit\n      searchAfter: $searchAfter\n      matchingSource: $matchingSource\n      productTitle: $productTitle\n      orderBy: $orderBy\n    ) {\n      id\n      productId\n      product {\n        title\n        thumbnail\n        price\n        url\n        provider {\n          name\n        }\n      }\n      matchStatus\n      verificationStatus\n      matchingSource\n      matchingReasoning\n      extractedProductInfo\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryGatedMappingsDocument;
   '\n  mutation MutationRematchGatedMapping($productMappingId: Int!) {\n    rematchGatedMapping(productMappingId: $productMappingId) {\n      status\n      productId\n    }\n  }\n': typeof types.MutationRematchGatedMappingDocument;
   '\n  query QueryHotDealKeywordsByAdmin(\n    $type: HotDealKeywordType\n    $orderBy: HotDealKeywordOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    hotDealKeywordsByAdmin(\n      type: $type\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      type\n      keyword\n      weight\n      isMajor\n      lastUpdatedAt\n      synonymCount\n      excludeKeywordCount\n      searchAfter\n    }\n  }\n': typeof types.QueryHotDealKeywordsByAdminDocument;
@@ -139,6 +140,8 @@ const documents: Documents = {
     types.QueryCategoriesDocument,
   '\n  query commentsByAdmin($hotDealKeywordId: Int!, $synonyms: [String!], $excludes: [String!]) {\n    commentsByAdmin(hotDealKeywordId: $hotDealKeywordId, synonyms: $synonyms, excludes: $excludes)\n  }\n':
     types.CommentsByAdminDocument,
+  '\n  query QueryExperiments {\n    experiments {\n      id\n      kind\n      status\n      title\n      question\n      design\n      toggle\n      primaryMetric\n      decisionRule\n      power\n      readout\n      startedAt\n      checkAt\n      endedAt\n      overdue\n      code\n      results {\n        date\n        summary\n        decision\n      }\n    }\n  }\n':
+    types.QueryExperimentsDocument,
   '\n  query QueryGatedMappings(\n    $limit: Int!\n    $searchAfter: [String!]\n    $matchingSource: [String!]\n    $productTitle: String\n    $orderBy: OrderOptionType\n  ) {\n    gatedMappings(\n      limit: $limit\n      searchAfter: $searchAfter\n      matchingSource: $matchingSource\n      productTitle: $productTitle\n      orderBy: $orderBy\n    ) {\n      id\n      productId\n      product {\n        title\n        thumbnail\n        price\n        url\n        provider {\n          name\n        }\n      }\n      matchStatus\n      verificationStatus\n      matchingSource\n      matchingReasoning\n      extractedProductInfo\n      createdAt\n      searchAfter\n    }\n  }\n':
     types.QueryGatedMappingsDocument,
   '\n  mutation MutationRematchGatedMapping($productMappingId: Int!) {\n    rematchGatedMapping(productMappingId: $productMappingId) {\n      status\n      productId\n    }\n  }\n':
@@ -386,6 +389,12 @@ export function graphql(
 export function graphql(
   source: '\n  query commentsByAdmin($hotDealKeywordId: Int!, $synonyms: [String!], $excludes: [String!]) {\n    commentsByAdmin(hotDealKeywordId: $hotDealKeywordId, synonyms: $synonyms, excludes: $excludes)\n  }\n',
 ): typeof import('./graphql').CommentsByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryExperiments {\n    experiments {\n      id\n      kind\n      status\n      title\n      question\n      design\n      toggle\n      primaryMetric\n      decisionRule\n      power\n      readout\n      startedAt\n      checkAt\n      endedAt\n      overdue\n      code\n      results {\n        date\n        summary\n        decision\n      }\n    }\n  }\n',
+): typeof import('./graphql').QueryExperimentsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

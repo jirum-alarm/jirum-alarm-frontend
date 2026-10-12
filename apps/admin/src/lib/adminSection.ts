@@ -16,6 +16,7 @@ export const SECTION_LABELS: Record<string, string> = {
   user: '사용자',
   notification: '알림',
   advertisement: '광고',
+  experiments: '실험',
 };
 
 export const sectionOfPath = (pathname: string) => pathname.split('/')[1] || 'home';

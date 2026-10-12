@@ -423,6 +423,62 @@ type ExistsUserOutput {
   social: Boolean!
 }
 
+"""
+실험·관찰 등록부 항목(src/experiment/experiment-registry.ts)
+"""
+type ExperimentOutput {
+  """
+  다음 판독일
+  """
+  checkAt: String
+  code: [String!]!
+  decisionRule: String!
+  design: String!
+  endedAt: String
+  id: String!
+  """
+  AB | OBSERVATION
+  """
+  kind: String!
+  """
+  판독일이 지났는데 그날 이후 결과가 없다
+  """
+  overdue: Boolean!
+  power: String!
+  primaryMetric: String!
+  question: String!
+  readout: String!
+  results: [ExperimentResultOutput!]!
+  startedAt: String
+  """
+  PLANNED | RUNNING | CONCLUDED | STOPPED | REJECTED
+  """
+  status: String!
+  title: String!
+  """
+  켜고 끄는 법
+  """
+  toggle: String!
+}
+
+"""
+실험 판독 기록 한 줄
+"""
+type ExperimentResultOutput {
+  """
+  KST 날짜 YYYY-MM-DD
+  """
+  date: String!
+  """
+  이 판독으로 정한 것(중간 판독이면 없음)
+  """
+  decision: String
+  """
+  숫자 그대로 — 군별 분모·분자, 비율과 95% 구간
+  """
+  summary: String!
+}
+
 type FiringAlertOutput {
   """
   Prometheus 알람 이름 (예: JirumCronJobLastRunFailed)
@@ -587,19 +643,19 @@ type HotDealRatioOutput {
 }
 
 """
-핫딜 타입
+배지 등급 — 기준은 hot-deal-criteria.ts
 """
 enum HotDealType {
   """
-  핫딜
+  핫딜: 커뮤니티에서 반응이 뜨거운 딜 — 원 커뮤니티 인기글이거나 추천·댓글이 많이 달린 글
   """
   HOT_DEAL
   """
-  대박딜
+  대박딜: 평소보다 확실히 싼 딜 — 지난 1년 같은 상품 핫딜 보통가나 다나와 최저가보다 15% 이상 쌈
   """
   SUPER_DEAL
   """
-  초대박딜
+  초대박딜: 1년 중 가장 싼 딜 — 지난 1년 같은 상품 핫딜 중 최저가이면서 보통가보다 15% 이상 쌈
   """
   ULTRA_DEAL
 }
@@ -2324,6 +2380,10 @@ type Query {
   유저 존재 여부 조회
   """
   existsUser(email: String!): ExistsUserOutput!
+  """
+  어드민) 실험·관찰 등록부 — 판독 기한 지난 것 먼저, 그다음 진행·준비·끝난 순
+  """
+  experiments: [ExperimentOutput!]!
   """
   해당 상품 신고된 횟수 조회
   """

@@ -376,6 +376,44 @@ export type ExistsUserOutput = {
   social: Scalars['Boolean']['output'];
 };
 
+/** 실험·관찰 등록부 항목(src/experiment/experiment-registry.ts) */
+export type ExperimentOutput = {
+  __typename?: 'ExperimentOutput';
+  /** 다음 판독일 */
+  checkAt?: Maybe<Scalars['String']['output']>;
+  code: Array<Scalars['String']['output']>;
+  decisionRule: Scalars['String']['output'];
+  design: Scalars['String']['output'];
+  endedAt?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  /** AB | OBSERVATION */
+  kind: Scalars['String']['output'];
+  /** 판독일이 지났는데 그날 이후 결과가 없다 */
+  overdue: Scalars['Boolean']['output'];
+  power: Scalars['String']['output'];
+  primaryMetric: Scalars['String']['output'];
+  question: Scalars['String']['output'];
+  readout: Scalars['String']['output'];
+  results: Array<ExperimentResultOutput>;
+  startedAt?: Maybe<Scalars['String']['output']>;
+  /** PLANNED | RUNNING | CONCLUDED | STOPPED | REJECTED */
+  status: Scalars['String']['output'];
+  title: Scalars['String']['output'];
+  /** 켜고 끄는 법 */
+  toggle: Scalars['String']['output'];
+};
+
+/** 실험 판독 기록 한 줄 */
+export type ExperimentResultOutput = {
+  __typename?: 'ExperimentResultOutput';
+  /** KST 날짜 YYYY-MM-DD */
+  date: Scalars['String']['output'];
+  /** 이 판독으로 정한 것(중간 판독이면 없음) */
+  decision?: Maybe<Scalars['String']['output']>;
+  /** 숫자 그대로 — 군별 분모·분자, 비율과 95% 구간 */
+  summary: Scalars['String']['output'];
+};
+
 export type FiringAlertOutput = {
   __typename?: 'FiringAlertOutput';
   /** Prometheus 알람 이름 (예: JirumCronJobLastRunFailed) */
@@ -539,13 +577,13 @@ export type HotDealRatioOutput = {
   totalCount: Scalars['Int']['output'];
 };
 
-/** 핫딜 타입 */
+/** 배지 등급 — 기준은 hot-deal-criteria.ts */
 export enum HotDealType {
-  /** 핫딜 */
+  /** 핫딜: 커뮤니티에서 반응이 뜨거운 딜 — 원 커뮤니티 인기글이거나 추천·댓글이 많이 달린 글 */
   HotDeal = 'HOT_DEAL',
-  /** 대박딜 */
+  /** 대박딜: 평소보다 확실히 싼 딜 — 지난 1년 같은 상품 핫딜 보통가나 다나와 최저가보다 15% 이상 쌈 */
   SuperDeal = 'SUPER_DEAL',
-  /** 초대박딜 */
+  /** 초대박딜: 1년 중 가장 싼 딜 — 지난 1년 같은 상품 핫딜 중 최저가이면서 보통가보다 15% 이상 쌈 */
   UltraDeal = 'ULTRA_DEAL',
 }
 
@@ -2054,6 +2092,8 @@ export type Query = {
   existsUnreadNotice: Scalars['Boolean']['output'];
   /** 유저 존재 여부 조회 */
   existsUser: ExistsUserOutput;
+  /** 어드민) 실험·관찰 등록부 — 판독 기한 지난 것 먼저, 그다음 진행·준비·끝난 순 */
+  experiments: Array<ExperimentOutput>;
   /** 해당 상품 신고된 횟수 조회 */
   expireProductReportCount: Scalars['Int']['output'];
   /** 종료된 상품 제보 내역 조회 */
@@ -3224,6 +3264,37 @@ export type CommentsByAdminQueryVariables = Exact<{
 }>;
 
 export type CommentsByAdminQuery = { __typename?: 'Query'; commentsByAdmin: Array<string> };
+
+export type QueryExperimentsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type QueryExperimentsQuery = {
+  __typename?: 'Query';
+  experiments: Array<{
+    __typename?: 'ExperimentOutput';
+    id: string;
+    kind: string;
+    status: string;
+    title: string;
+    question: string;
+    design: string;
+    toggle: string;
+    primaryMetric: string;
+    decisionRule: string;
+    power: string;
+    readout: string;
+    startedAt?: string | null;
+    checkAt?: string | null;
+    endedAt?: string | null;
+    overdue: boolean;
+    code: Array<string>;
+    results: Array<{
+      __typename?: 'ExperimentResultOutput';
+      date: string;
+      summary: string;
+      decision?: string | null;
+    }>;
+  }>;
+};
 
 export type QueryGatedMappingsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
@@ -4638,6 +4709,33 @@ export const CommentsByAdminDocument = new TypedDocumentString(`
   )
 }
     `) as unknown as TypedDocumentString<CommentsByAdminQuery, CommentsByAdminQueryVariables>;
+export const QueryExperimentsDocument = new TypedDocumentString(`
+    query QueryExperiments {
+  experiments {
+    id
+    kind
+    status
+    title
+    question
+    design
+    toggle
+    primaryMetric
+    decisionRule
+    power
+    readout
+    startedAt
+    checkAt
+    endedAt
+    overdue
+    code
+    results {
+      date
+      summary
+      decision
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<QueryExperimentsQuery, QueryExperimentsQueryVariables>;
 export const QueryGatedMappingsDocument = new TypedDocumentString(`
     query QueryGatedMappings($limit: Int!, $searchAfter: [String!], $matchingSource: [String!], $productTitle: String, $orderBy: OrderOptionType) {
   gatedMappings(

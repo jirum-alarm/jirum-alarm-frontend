@@ -50,6 +50,8 @@ export type Signals = {
   /** null = 검색 쿼리 에러 */
   searchHits?: number | null;
   pendingMatches?: number;
+  /** 판독 밀린 실험 — undefined = 불러오는 중, null = 쿼리 에러 */
+  experimentsOverdue?: OverdueExperiment[] | null;
   /** serviceHealthSignals — undefined = 불러오는 중 */
   backend?: {
     /** null = matching-api 응답 없음 */
@@ -66,6 +68,9 @@ export type Signals = {
 };
 
 export type FiringAlert = { name: string; severity: string; target?: string | null };
+
+/** 실험 등록부에서 판독일이 지났는데 결과가 없는 것. null = 쿼리 에러 */
+export type OverdueExperiment = { id: string; title: string; checkAt?: string | null };
 
 /** 발급 헬스 일일 리포트(EXPECTED_PROVIDERS)와 같은 목록 — 24시간 0건이면 사고 */
 const ISSUING_PROVIDERS = ['toss', 'adpick', 'link_price', 'naver', 'ali_express', 'coupang'];
@@ -680,6 +685,38 @@ const baseSections = (s: Signals): Section[] => [
         symptom: '백업 크론은 초록인데 산출물이 없다(4초 만에 끝나는 빈 백업 이력).',
         check: ['백업 버킷의 최신 객체 날짜·크기를 직접 본다. BackupTooFast 알람.'],
         fix: ['수동 백업 Job 실행. 상세: jirum vault runbook/disaster-recovery-restore.md'],
+      },
+    ],
+  },
+  {
+    title: '실험',
+    why: '켜 둔 실험·배포 뒤 확인할 것이 판독 없이 잊히면, 기능이 이유도 모른 채 켜져 있거나 사용자 일부가 계속 숨김군에 남는다.',
+    checks: [
+      {
+        id: 'experiment-readout',
+        title: '실험 판독',
+        level:
+          s.experimentsOverdue === undefined
+            ? undefined
+            : s.experimentsOverdue === null
+              ? 'warn'
+              : s.experimentsOverdue.length > 0
+                ? 'warn'
+                : 'ok',
+        now:
+          s.experimentsOverdue === null
+            ? '등록부를 못 읽었다'
+            : s.experimentsOverdue?.length
+              ? `판독 밀림: ${s.experimentsOverdue.map((e) => e.title).join(', ')}`
+              : undefined,
+        symptom:
+          '판독일이 지났는데 결과가 없다. 과거: 게스트 추천 부스트를 6/1 에 켠 뒤 4개월 넘게 한 번도 판독하지 않았다.',
+        check: ['실험 화면에서 그 항목의 「판독 방법」대로 숫자를 낸다.'],
+        fix: [
+          '서버 레포 src/experiment/experiment-registry.ts 의 그 항목 results 에 날짜·숫자·결정을 덧붙여 커밋한다. 다음 판독일이 있으면 checkAt 을 미룬다.',
+          '절차: 서버 레포 src/experiment/README.md',
+        ],
+        href: '/experiments',
       },
     ],
   },
