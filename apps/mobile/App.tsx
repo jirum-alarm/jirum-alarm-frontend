@@ -25,7 +25,13 @@ import AppErrorFallback from '@/shared/components/AppErrorFallback.tsx';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import WindowControlsSafeArea from '@/shared/components/WindowControlsSafeArea';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {Sentry, initSentry, wrapApp} from '@/shared/lib/monitoring/sentry.ts';
+import {
+  Sentry,
+  initSentry,
+  reportEmergencyLaunch,
+  setSentryScreen,
+  wrapApp,
+} from '@/shared/lib/monitoring/sentry.ts';
 import useOtaUpdateOnResume from '@/shared/hooks/useOtaUpdateOnResume.ts';
 import {useColors} from '@/shared/theme/useColors';
 import {restoreColorSchemePreference} from '@/shared/theme/color-scheme-preference';
@@ -34,6 +40,8 @@ import {focusedScreenName} from '@/shared/lib/analytics/screen-tracking';
 
 // init 은 컴포넌트 밖에서 — 렌더 시작 전에 나는 에러도 잡아야 한다.
 initSentry();
+// OTA 가 기기에서 깨져 내장 번들로 되돌아간 실행이면 남긴다(GA4 는 DSN 없어도).
+reportEmergencyLaunch();
 // 내정보 > 화면 모드에서 라이트/다크를 골랐으면 첫 화면 전에 다시 건다.
 restoreColorSchemePreference();
 
@@ -73,6 +81,7 @@ function App(): React.JSX.Element {
     if (!name || name === lastScreen.current) return;
     lastScreen.current = name;
     Analytics.screen(name);
+    setSentryScreen(name);
   }, []);
 
   return (

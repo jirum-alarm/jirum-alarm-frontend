@@ -9,6 +9,7 @@ import ForceUpdateScreen from '@/screens/update/ForceUpdateScreen';
 import {useQuery} from '@tanstack/react-query';
 import {UserQueries} from '@/entities/user/user.queries';
 import {Analytics} from '@/shared/lib/analytics/ga4';
+import {setSentryUser} from '@/shared/lib/monitoring/sentry';
 
 const RootNavigator = () => {
   const {isLogin, isLoading} = useAuth();
@@ -21,6 +22,10 @@ const RootNavigator = () => {
   useEffect(() => {
     if (myUserId) Analytics.identify(myUserId);
   }, [myUserId]);
+  // Sentry 에도 같은 id — 로그아웃·세션 거절(isLogin false)이면 바로 뗀다. 게스트는 me 가 null.
+  useEffect(() => {
+    setSentryUser(isLogin && myUserId ? myUserId : null);
+  }, [isLogin, myUserId]);
   const splashHidden = useRef(false);
 
   const hideSplash = useCallback(() => {

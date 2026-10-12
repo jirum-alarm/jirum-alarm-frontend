@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {AppState} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import {
+  MutationCache,
+  QueryCache,
   QueryClient,
   QueryClientProvider,
   focusManager,
@@ -14,6 +16,7 @@ import {
 import {getAsyncStorage} from '@/shared/lib/persistence';
 import {StorageKey} from '@/shared/constant/storage-key';
 import {AuthQueries} from '@/entities/auth';
+import {captureQueryError} from '@/shared/lib/monitoring/sentry';
 
 // 이 실행이 시작된 시각 — 이보다 오래된 데이터는 디스크에서 복원된 것이다.
 const BOOT_TIME = Date.now();
@@ -38,6 +41,18 @@ onlineManager.setEventListener(setOnline =>
 );
 
 export const queryClient = new QueryClient({
+  // 화면이 「다시 시도」로 삼키는 실패도 Sentry 에 남긴다(네트워크·인증·취소는 거른다).
+  queryCache: new QueryCache({
+    onError: (error, query) =>
+      captureQueryError(error, {kind: 'query', key: query.queryKey}),
+  }),
+  mutationCache: new MutationCache({
+    onError: (error, _vars, _ctx, mutation) =>
+      captureQueryError(error, {
+        kind: 'mutation',
+        key: mutation.options.mutationKey,
+      }),
+  }),
   defaultOptions: {
     queries: {
       retry: false,
