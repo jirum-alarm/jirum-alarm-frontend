@@ -1,7 +1,9 @@
 import * as Notifications from 'expo-notifications';
 import messaging from '@react-native-firebase/messaging';
 import * as ReactTestRenderer from 'react-test-renderer';
+declare const __dirname: string;
 import FCMHandler from '../src/components/FCMHandler';
+import {flushPendingRoute} from '../src/navigations/open-when-ready';
 import {useWebviewContext} from '../src/provider/WebViewRefProvider';
 import useFCMTokenManager from '../src/shared/hooks/useFCMTokenManager.ts';
 import {onForegroundMessageHandler} from '../src/shared/lib/fcm/index.ts';
@@ -220,7 +222,7 @@ describe('FCMHandler', () => {
     });
   });
 
-  it('끝내 탭이 안 뜨면(10초) 웹뷰 경로로 넘기고 기록을 남긴다', async () => {
+  it('끝내 탭이 안 뜨면(10초, 로그인 화면) 웹뷰에 버리지 않고 메인이 뜰 때 연다', async () => {
     mockGetInitialNotification.mockResolvedValue({
       data: {link: '/products/12'},
     });
@@ -228,21 +230,56 @@ describe('FCMHandler', () => {
 
     const renderer = await renderHandler();
     await ReactTestRenderer.act(async () => {
-      jest.advanceTimersByTime(9000);
+      jest.advanceTimersByTime(10500);
     });
+    // ★예전엔 여기서 없는 웹뷰에 주입해 링크가 사라졌다.
     expect(mockInjectJavaScript).not.toHaveBeenCalled();
-
-    await ReactTestRenderer.act(async () => {
-      jest.advanceTimersByTime(1500);
-    });
-    expect(mockInjectJavaScript).toHaveBeenCalledWith(
-      'window.location.href = "/products/12";',
-    );
     expect(mockTrack).toHaveBeenCalledWith(
       'route_open_timeout',
       expect.objectContaining({url: '/products/12', source: 'push'}),
     );
 
+    // 로그인 → MainNavigator 마운트 → flushPendingRoute.
+    mockAreNativeTabsMounted.mockImplementation(() => true);
+    mockNavigateToNativeRoute.mockImplementation(() => true);
+    await ReactTestRenderer.act(async () => {
+      flushPendingRoute();
+    });
+    expect(mockNavigateToNativeRoute).toHaveBeenLastCalledWith('/products/12', {
+      allowWebViewRoute: true,
+    });
+    expect(mockTrack).toHaveBeenCalledWith(
+      'route_open_after_login',
+      expect.objectContaining({url: '/products/12', source: 'push'}),
+    );
+
+    // 한 번 열면 비운다 — 다음 로그인에 또 열리지 않는다.
+    mockNavigateToNativeRoute.mockClear();
+    await ReactTestRenderer.act(async () => {
+      flushPendingRoute();
+    });
+    expect(mockNavigateToNativeRoute).not.toHaveBeenCalled();
+
+    await ReactTestRenderer.act(async () => {
+      renderer.unmount();
+    });
+  });
+
+  it('30분 넘게 지나 로그인하면 그 링크는 열지 않는다', async () => {
+    mockGetInitialNotification.mockResolvedValue({
+      data: {link: '/products/13'},
+    });
+    mockAreNativeTabsMounted.mockImplementation(() => false);
+    const renderer = await renderHandler();
+    await ReactTestRenderer.act(async () => {
+      jest.advanceTimersByTime(10500);
+    });
+    mockAreNativeTabsMounted.mockImplementation(() => true);
+    mockNavigateToNativeRoute.mockClear();
+    await ReactTestRenderer.act(async () => {
+      flushPendingRoute(Date.now() + 31 * 60 * 1000);
+    });
+    expect(mockNavigateToNativeRoute).not.toHaveBeenCalled();
     await ReactTestRenderer.act(async () => {
       renderer.unmount();
     });
@@ -351,5 +388,19 @@ describe('FCMHandler', () => {
     expect(mockUnsubscribeMessage).toHaveBeenCalled();
     expect(mockUnsubscribeOpenedApp).toHaveBeenCalled();
     expect(mockRemoveNotificationSubscription).toHaveBeenCalled();
+  });
+});
+
+describe('로그인 뒤 열기 — 배선', () => {
+  it('MainNavigator 가 마운트될 때 flushPendingRoute 를 부른다', () => {
+    const fs = require('fs');
+    const path = require('path');
+    const src: string = fs.readFileSync(
+      path.join(__dirname, '../src/navigations/stack/MainNavigator.tsx'),
+      'utf8',
+    );
+    expect(src).toMatch(
+      /useEffect\(\(\) => \{\s*flushPendingRoute\(\);\s*\}, \[\]\)/,
+    );
   });
 });
