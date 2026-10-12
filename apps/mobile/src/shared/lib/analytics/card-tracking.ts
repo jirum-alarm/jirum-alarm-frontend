@@ -3,10 +3,10 @@ import {Analytics} from './ga4';
 /**
  * 상품 카드 클릭 추적 — web `entities/product-list/model/card-tracking.ts` 와 같은 규격.
  *
- * web 은 카드 링크의 data-* 속성을 GTM 이 읽어 `product_card_click`(source,
- * product_id, rank)으로 GA4 에 보낸다. 앱은 GTM 이 없으니 카드 onPress 에서
- * 같은 이름·파라미터로 직접 보낸다 — 같은 GA4 속성이라 진입 경로별 전환율을
- * 웹·앱 합쳐서 볼 수 있다.
+ * web 은 카드 링크의 data-* 속성을 GTM 이 읽어 같은 파라미터(source, product_id, rank)로
+ * GA4 에 보낸다 — ⚠️단 web 의 GA4 이벤트 이름은 `select_item` 이다(Mixpanel 만 product_card_click).
+ * 앱은 GTM 이 없으니 카드 onPress 에서 직접 보낸다 — 같은 GA4 속성이라 진입 경로별 전환율을
+ * 웹(select_item)·앱(product_card_click) 합쳐서 볼 수 있다.
  *
  * ⚠️유니온 값은 web 과 한 글자도 다르면 안 된다(GA4 리포트에서 다른 경로로 갈린다).
  */
