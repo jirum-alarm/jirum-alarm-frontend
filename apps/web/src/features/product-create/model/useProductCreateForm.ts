@@ -11,6 +11,8 @@ import { useToast } from '@/shared/ui/common/Toast';
 
 import { ProductQueries } from '@/entities/product';
 
+import { productCreateErrorMessage } from './productCreateErrorMessage';
+
 export default function useProductCreateForm() {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -69,8 +71,8 @@ export default function useProductCreateForm() {
       toast.success('핫딜이 등록되었어요.');
       router.replace(`${PAGE.DETAIL}/${productId}`);
     },
-    onError: () => {
-      toast.error('핫딜 등록에 실패했어요.');
+    onError: (error) => {
+      toast.error(productCreateErrorMessage(error));
     },
   });
 
