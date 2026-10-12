@@ -91,6 +91,19 @@ function priceHistoryFromProduct(
 
 const DEFAULT_OG_IMAGE = `${METADATA_SERVICE_URL}/opengraph-image.webp`;
 
+/** 공유 링크의 og:url — 정식 URL 에 공유 utm(과 토스 유입 표시)만 다시 붙인다. 다른 쿼리는 버린다. */
+function buildShareOgUrl(
+  canonical: string,
+  { from, utm_medium }: { from?: string | string[]; utm_medium?: string | string[] },
+): string {
+  const share = new URL(canonical);
+  if (isFromToss(from)) share.searchParams.set('from', Array.isArray(from) ? from[0] : from!);
+  share.searchParams.set('utm_source', 'share');
+  const medium = Array.isArray(utm_medium) ? utm_medium[0] : utm_medium;
+  if (medium) share.searchParams.set('utm_medium', medium);
+  return share.toString();
+}
+
 /**
  * 서버 HTML 에 넣을 모델 페이지 링크. `basis === 'SIMILAR'` 는 이 상품의 이력이 아니라
  * 유사 상품 이력이라 모델 페이지와 대응이 약해 링크하지 않는다(기존 CTA 조건과 동일).
@@ -253,10 +266,14 @@ export async function generateMetadata({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ from?: string | string[]; utm_source?: string | string[] }>;
+  searchParams: Promise<{
+    from?: string | string[];
+    utm_source?: string | string[];
+    utm_medium?: string | string[];
+  }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const { from, utm_source } = await searchParams;
+  const { from, utm_source, utm_medium } = await searchParams;
   const hidePrice = isFromToss(from);
 
   // `/products/null` 처럼 id 가 숫자가 아니면 조회를 던져 500 이 나갔다. 404 로 내린다.
@@ -297,7 +314,8 @@ export async function generateMetadata({
   const url = `${METADATA_SERVICE_URL}/products/${productId}`;
   // 공유 링크(카톡·X·스레드·복사)로 열린 미리보기엔 가격·배지를 얹은 카드를 준다(api/og/product).
   // 정식 URL(검색엔진)은 상품 사진 그대로 — 크롤러가 상세를 훑을 때마다 카드를 그리지 않게.
-  const shareImage = isShareRequest(utm_source)
+  const isShare = isShareRequest(utm_source);
+  const shareImage = isShare
     ? {
         url: `${METADATA_SERVICE_URL}/api/og/product/${productId}.jpg${hidePrice ? '?hp=1' : ''}`,
         width: 1200,
@@ -356,7 +374,9 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      url,
+      // ★공유 링크는 og:url 도 공유 링크 그대로. 정식 URL 을 주면 카톡 scrap 이 그 주소를 다시 읽어
+      // (=카드 없는 메타) 상품 사진으로 떨어졌다(2026-10-12 운영 실측). canonical 은 아래 alternates 가 지킨다.
+      url: isShare ? buildShareOgUrl(url, { from, utm_medium }) : url,
       type: 'article',
       ...(publishedTime ? { publishedTime } : {}),
       ...(categoryName ? { section: categoryName } : {}),
