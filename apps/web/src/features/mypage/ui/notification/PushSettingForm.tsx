@@ -6,6 +6,8 @@ import Switch from '@/shared/ui/common/Switch';
 
 import { PushSettingKey, usePushSetting } from '../../model/usePushSetting';
 
+import QuietHoursRow from './QuietHoursRow';
+
 const ROWS: { key: PushSettingKey; title: string; description: string }[] = [
   {
     key: 'keywordAlert',
@@ -59,6 +61,13 @@ const PushSettingForm = () => {
           />
         </li>
       ))}
+      <QuietHoursRow
+        start={setting.quietHoursStart}
+        end={setting.quietHoursEnd}
+        nightAlerts={setting.nightAlerts}
+        disabled={isPending}
+        onChange={update}
+      />
     </ul>
   );
 };

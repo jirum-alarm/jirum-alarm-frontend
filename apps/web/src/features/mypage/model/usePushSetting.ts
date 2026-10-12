@@ -6,7 +6,9 @@ import { useToast } from '@/shared/ui/common/Toast';
 
 // 수기 TypedDocumentString — codegen 이 깨져 있어서(keyword-setting.service.ts 주석 참고).
 export type PushSettingKey = 'keywordAlert' | 'marketing' | 'nightAlerts' | 'communityAlert';
-type PushSetting = Record<PushSettingKey, boolean>;
+/** 방해금지 시간(KST 시 0~23). 둘 다 null = 꺼짐 — 서버는 둘을 함께 받는다(하나만 보내면 거부). */
+type QuietHoursSetting = { quietHoursStart: number | null; quietHoursEnd: number | null };
+type PushSetting = Record<PushSettingKey, boolean> & QuietHoursSetting;
 
 const QueryPushSetting = new TypedDocumentString<
   { pushSetting: PushSetting },
@@ -18,6 +20,8 @@ const QueryPushSetting = new TypedDocumentString<
       marketing
       nightAlerts
       communityAlert
+      quietHoursStart
+      quietHoursEnd
     }
   }
 `);
@@ -31,12 +35,16 @@ const MutationUpdatePushSetting = new TypedDocumentString<
     $marketing: Boolean
     $nightAlerts: Boolean
     $communityAlert: Boolean
+    $quietHoursStart: Int
+    $quietHoursEnd: Int
   ) {
     updatePushSetting(
       keywordAlert: $keywordAlert
       marketing: $marketing
       nightAlerts: $nightAlerts
       communityAlert: $communityAlert
+      quietHoursStart: $quietHoursStart
+      quietHoursEnd: $quietHoursEnd
     )
   }
 `);
