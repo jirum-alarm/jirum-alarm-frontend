@@ -1,5 +1,7 @@
 import messaging from '@react-native-firebase/messaging';
 import * as Notifications from 'expo-notifications';
+
+import {Analytics} from '@/shared/lib/analytics/ga4';
 import {Alert, Linking} from 'react-native';
 
 import {NotificationService} from '@/shared/api/notification';
@@ -104,6 +106,11 @@ export async function requestPushPermissionIfNeeded(): Promise<void> {
       return;
     }
     const next = await Notifications.requestPermissionsAsync();
+    // 권유 클릭 뒤 실제로 켰는지 — 클릭만 재면 받는 사람이 몇 명 늘었는지 모른다.
+    Analytics.track('push_permission_result', {
+      result: next.granted ? 'granted' : 'denied',
+      source: 'keyword',
+    });
     if (next.granted) await registerFcmToken();
   } catch (error) {
     console.log('push permission error:', error);

@@ -28,8 +28,8 @@ import {HomeQueries} from '../api/home.queries';
  * 인기 키워드 추천 칩. web: widgets/home/ui/RecommendedKeywordSection.tsx
  * `under-10000`(만원이하템) 뒤에 들어간다.
  *
- * 게스트에게도 노출하고 누르면 로그인으로 보낸다 —
- * 홈 트래픽 대부분이 비로그인이라 여기서 막으면 모수가 안 는다(web 과 같은 판단).
+ * 게스트에게도 노출하고 게스트 계정으로 바로 등록한다(web 과 같음) —
+ * 홈 트래픽 대부분이 비회원이라 로그인으로 보내면 모수가 안 는다.
  *
  * ★web 은 그라데이션 배경(bg-linear-to-b/srgb from-white to-[#eaf7d9])을 쓴다.
  * RN 은 CSS 그라데이션이 없다 — expo-linear-gradient 를 새로 넣기보다
@@ -41,7 +41,7 @@ const MAX_CHIPS = 5;
 
 export default function RecommendedKeywordSection() {
   const {data} = useQuery(HomeQueries.recommendedKeywords());
-  const {requireLogin} = useRequireLogin();
+  const {requireAlertSession} = useRequireLogin();
   const queryClient = useQueryClient();
   // 이미 등록한 키워드는 처음부터 "등록됨" — 예전엔 눌러야 "이미 등록된…" 에러 토스트가 떴다.
   const registered = useMyKeywordSet();
@@ -103,7 +103,7 @@ export default function RecommendedKeywordSection() {
     addKeyword(keyword);
   };
 
-  // 게스트가 칩을 눌러 로그인하고 돌아왔으면 그 키워드를 이어서 등록한다.
+  // 세션 없이 칩을 눌러 로그인하고 돌아왔으면 그 키워드를 이어서 등록한다.
   // ★훅이므로 아래 early return 보다 위에 있어야 한다.
   usePendingAction<string>(
     PendingActionType.NOTIFICATION_KEYWORD_ADD,
@@ -118,7 +118,9 @@ export default function RecommendedKeywordSection() {
 
   const handleSelect = (keyword: string) => {
     if (isPending || isAdded(keyword)) return;
-    if (requireLogin(PendingActionType.NOTIFICATION_KEYWORD_ADD, keyword))
+    if (
+      requireAlertSession(PendingActionType.NOTIFICATION_KEYWORD_ADD, keyword)
+    )
       return;
     runAdd(keyword);
   };

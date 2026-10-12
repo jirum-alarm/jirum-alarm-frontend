@@ -3,6 +3,8 @@ import {AppState, Linking} from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
 
+import {Analytics} from '@/shared/lib/analytics/ga4';
+
 import {registerFcmToken} from './push-permission';
 
 /**
@@ -37,6 +39,10 @@ export function usePushPermissionStatus() {
         return;
       }
       const next = await Notifications.requestPermissionsAsync();
+      Analytics.track('push_permission_result', {
+        result: next.granted ? 'granted' : 'denied',
+        source: 'settings',
+      });
       setGranted(next.granted);
       if (next.granted) await registerFcmToken();
     } catch (error) {

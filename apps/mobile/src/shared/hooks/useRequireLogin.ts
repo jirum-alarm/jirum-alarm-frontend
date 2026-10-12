@@ -41,7 +41,18 @@ export function useRequireLogin(returnPath?: string) {
     return true;
   };
 
-  return {requireLogin, isLogin: isMember};
+  /**
+   * 알림(키워드) 등록 게이트 — 게스트도 통과한다. 게스트 계정은 "로그인 없이 알림 받기" 를 위해
+   * 있는 것인데, 알림 받기에 requireLogin 을 쓰면 게스트를 로그인 화면으로 내쫓는다(2026-10-12 발견:
+   * 구매 후 권유·홈 추천 칩). 세션이 아예 없을 때만 로그인으로 보낸다.
+   */
+  const requireAlertSession = (type: string, payload?: unknown) => {
+    if (isLoading) return true;
+    if (isMember || isGuest) return false;
+    return requireLogin(type, payload);
+  };
+
+  return {requireLogin, requireAlertSession, isLogin: isMember};
 }
 
 /** 게스트가 직접 「로그인」을 누를 때(내정보) — 게스트 세션만 내려 로그인 화면으로. */

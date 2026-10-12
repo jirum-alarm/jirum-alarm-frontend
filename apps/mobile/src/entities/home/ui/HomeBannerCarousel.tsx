@@ -35,6 +35,7 @@ import {
 import {HomeQueries} from '../api/home.queries';
 import {useAdTracking} from '../lib/useAdTracking';
 import {Analytics} from '@/shared/lib/analytics/ga4';
+import {openOkachat} from '@/shared/lib/okachat';
 
 /**
  * 홈 상단 다크 헤더의 배너 캐러셀. web: widgets/home/ui/mobile/BannerSwiper.tsx
@@ -256,7 +257,6 @@ function BannerPager({slides}: {slides: BannerSlide[]}) {
 const KAKAO_IMAGE = require('@/shared/assets/kakao.png') as ImageSourcePropType;
 const LANDING_IMAGE =
   require('@/shared/assets/landing.png') as ImageSourcePropType;
-const KAKAO_OPEN_CHAT_URL = 'https://open.kakao.com/o/gJZTWAAg';
 
 function BannerSlideView({
   slide,
@@ -302,7 +302,8 @@ function BannerSlideView({
         onPress={() => {
           // 상세 오카방 카드와 같은 이벤트 — placement 로 위치를 가른다.
           Analytics.track('okachat_prompt_click', {placement: 'home_banner'});
-          openInAppBrowser(KAKAO_OPEN_CHAT_URL);
+          // 상세 카드와 같이 카톡으로 바로 열고 입장으로 기록 — 예전엔 홈에서 들어가도 상세 권유가 계속 떴다.
+          void openOkachat();
         }}
       />
     );
