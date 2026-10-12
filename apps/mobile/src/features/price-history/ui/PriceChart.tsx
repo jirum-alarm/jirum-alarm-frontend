@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Svg, {
@@ -19,7 +19,7 @@ import {
   won,
 } from '../model/chart-geometry';
 import type {CurrentProductMarker} from '../model/seed-marker';
-import {useColors} from '@/shared/theme/useColors';
+import {useColors, type Colors} from '@/shared/theme/useColors';
 
 const WIDTH = 640;
 const HEIGHT = 260;
@@ -112,6 +112,15 @@ export default function PriceChart({
   // onSelectIndex)를 부르면 `[Worklets] Tried to synchronously call a non-worklet
   // function` 으로 **앱이 통째로 죽는다**(안드로이드 에뮬레이터 실측 2026-09-25:
   // 차트를 한 번 누르자 FATAL EXCEPTION). 선택은 React state 라 JS 스레드가 맞다.
+  // 스크럽 중 onUpdate 는 손가락이 움직일 때마다(초당 60번) 온다 — 가까운 점이 바뀔 때만 올린다.
+  // 그대로 올리면 같은 값이어도 부모(PriceHistorySection)가 매번 렌더를 예약했다.
+  const lastSent = useRef<number | null>(null);
+  const select = (index: number, force = false) => {
+    if (!force && index === lastSent.current) return;
+    lastSent.current = index;
+    onSelectIndex(index);
+  };
+
   const pan = useMemo(
     () =>
       Gesture.Pan()
@@ -121,8 +130,8 @@ export default function PriceChart({
         // 탭 선택은 onBegin 이 손가락이 닿는 순간 처리하므로 그대로다.
         .activeOffsetX([-6, 6])
         .failOffsetY([-12, 12])
-        .onBegin(e => onSelectIndex(nearestIndex(e.x)))
-        .onUpdate(e => onSelectIndex(nearestIndex(e.x)))
+        .onBegin(e => select(nearestIndex(e.x), true))
+        .onUpdate(e => select(nearestIndex(e.x)))
         // onBegin 은 세로 스크롤을 시작한 터치에도 불린다. failOffsetY(12) 를 넘긴 터치만 빼면 탭·스크럽이 남는다.
         .onFinalize(e => {
           if (Math.abs(e.translationY) < 12) onInteract?.();
@@ -133,12 +142,12 @@ export default function PriceChart({
 
   const selected =
     selectedIndex != null ? geo.coords[selectedIndex] : undefined;
-
-  const areaPath = geo.d
-    ? `${geo.d} L ${geo.coords.at(-1)?.x ?? 0} ${PAD.top + geo.plotH} L ${
-        geo.coords[0]?.x ?? 0
-      } ${PAD.top + geo.plotH} Z`
-    : '';
+  // 이 상품 점은 전용 마커로만 그린다 — 골라도 큰 점을 겹쳐 그리지 않는다(예전과 같음).
+  const selectedIsSeed =
+    !!selected &&
+    !!currentMarker &&
+    selected.date === currentMarker.date &&
+    selected.price === currentMarker.price;
 
   return (
     <GestureDetector gesture={pan}>
@@ -151,92 +160,15 @@ export default function PriceChart({
           width="100%"
           height={layoutWidth ? (layoutWidth * HEIGHT) / WIDTH : 0}
           viewBox={`0 0 ${WIDTH} ${HEIGHT}`}>
-          <Defs>
-            <LinearGradient id="priceFill" x1="0" y1="0" x2="0" y2="1">
-              <Stop offset="0" stopColor={LINE} stopOpacity="0.16" />
-              <Stop offset="1" stopColor={LINE} stopOpacity="0" />
-            </LinearGradient>
-          </Defs>
+          <ChartBase
+            geo={geo}
+            currency={currency}
+            colors={colors}
+            currentMarker={currentMarker}
+            seedCoord={seedCoord}
+          />
 
-          {geo.ticks.map((t, i) => (
-            <G key={`tick-${i}`}>
-              <Line
-                x1={PAD.left}
-                y1={t.y}
-                x2={WIDTH - PAD.right}
-                y2={t.y}
-                stroke={colors.gray[200]}
-                strokeWidth={1}
-              />
-              <SvgText
-                x={PAD.left - 8}
-                y={t.y + 4}
-                fontSize={12}
-                fill={colors.gray[500]}
-                textAnchor="end">
-                {shortWon(t.price, currency, geo.tickStep, geo.yMax)}
-              </SvgText>
-            </G>
-          ))}
-
-          {areaPath ? <Path d={areaPath} fill="url(#priceFill)" /> : null}
-          {geo.d ? (
-            <Path
-              d={geo.d}
-              stroke={LINE}
-              strokeWidth={2}
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          ) : null}
-
-          {geo.coords.map((c, i) => {
-            // seed 날짜·가는 아래 전용 마커로만 그린다(이중 점 방지).
-            if (
-              currentMarker &&
-              c.date === currentMarker.date &&
-              c.price === currentMarker.price
-            ) {
-              return null;
-            }
-            return (
-              <Circle
-                key={`p-${i}`}
-                cx={c.x}
-                cy={c.y}
-                r={i === selectedIndex ? 5 : 3}
-                fill={i === selectedIndex ? LINE : colors.white}
-                stroke={LINE}
-                strokeWidth={2}
-              />
-            );
-          })}
-
-          {seedCoord ? (
-            <G>
-              <SvgText
-                x={seedCoord.x}
-                y={Math.max(PAD.top - 6, seedCoord.y - 28)}
-                fontSize={10}
-                fontWeight="700"
-                fill={SEED}
-                textAnchor="middle">
-                이 상품
-              </SvgText>
-              <SvgText
-                x={seedCoord.x}
-                y={Math.max(PAD.top + 6, seedCoord.y - 14)}
-                fontSize={10}
-                fontWeight="600"
-                fill={SEED}
-                textAnchor="middle">
-                {won(seedCoord.price, currency)}
-              </SvgText>
-              <Circle cx={seedCoord.x} cy={seedCoord.y} r={6.5} fill={SEED} />
-            </G>
-          ) : null}
-
+          {/* 고른 점만 따로 그린다 — 스크럽마다 바뀌는 건 이 몇 개뿐이다. */}
           {selected ? (
             <G>
               <Line
@@ -248,6 +180,16 @@ export default function PriceChart({
                 strokeWidth={1}
                 strokeDasharray="4 4"
               />
+              {selectedIsSeed ? null : (
+                <Circle
+                  cx={selected.x}
+                  cy={selected.y}
+                  r={5}
+                  fill={LINE}
+                  stroke={LINE}
+                  strokeWidth={2}
+                />
+              )}
               <SvgText
                 x={selected.x}
                 y={PAD.top - 12}
@@ -260,20 +202,138 @@ export default function PriceChart({
               </SvgText>
             </G>
           ) : null}
-
-          {geo.xLabels.map((l, i) => (
-            <SvgText
-              key={`x-${i}`}
-              x={l.x}
-              y={HEIGHT - 8}
-              fontSize={12}
-              fill={colors.gray[500]}
-              textAnchor="middle">
-              {l.label}
-            </SvgText>
-          ))}
         </Svg>
       </View>
     </GestureDetector>
   );
 }
+
+type Geometry = ReturnType<typeof buildChartGeometry>;
+
+/**
+ * 고른 점과 무관한 층(눈금·면·선·점·이 상품 마커·x 라벨). memo 라 스크럽 중엔 다시 그리지 않는다.
+ *
+ * ★예전엔 손가락이 점을 옮길 때마다 이 전부(1년이면 점 수백 개 + 눈금·라벨)를 SVG 로 다시 만들었다 —
+ * 고른 점 표시가 r·fill 로 점 목록 안에 섞여 있어서. 고른 점은 위 오버레이가 덮어 그린다.
+ */
+const ChartBase = React.memo(function ChartBase({
+  geo,
+  currency,
+  colors,
+  currentMarker,
+  seedCoord,
+}: {
+  geo: Geometry;
+  currency?: string | null;
+  colors: Colors;
+  currentMarker?: CurrentProductMarker | null;
+  seedCoord: (CurrentProductMarker & {x: number; y: number}) | null;
+}) {
+  const areaPath = geo.d
+    ? `${geo.d} L ${geo.coords.at(-1)?.x ?? 0} ${PAD.top + geo.plotH} L ${
+        geo.coords[0]?.x ?? 0
+      } ${PAD.top + geo.plotH} Z`
+    : '';
+
+  return (
+    <G>
+      <Defs>
+        <LinearGradient id="priceFill" x1="0" y1="0" x2="0" y2="1">
+          <Stop offset="0" stopColor={LINE} stopOpacity="0.16" />
+          <Stop offset="1" stopColor={LINE} stopOpacity="0" />
+        </LinearGradient>
+      </Defs>
+
+      {geo.ticks.map((t, i) => (
+        <G key={`tick-${i}`}>
+          <Line
+            x1={PAD.left}
+            y1={t.y}
+            x2={WIDTH - PAD.right}
+            y2={t.y}
+            stroke={colors.gray[200]}
+            strokeWidth={1}
+          />
+          <SvgText
+            x={PAD.left - 8}
+            y={t.y + 4}
+            fontSize={12}
+            fill={colors.gray[500]}
+            textAnchor="end">
+            {shortWon(t.price, currency, geo.tickStep, geo.yMax)}
+          </SvgText>
+        </G>
+      ))}
+
+      {areaPath ? <Path d={areaPath} fill="url(#priceFill)" /> : null}
+      {geo.d ? (
+        <Path
+          d={geo.d}
+          stroke={LINE}
+          strokeWidth={2}
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      ) : null}
+
+      {geo.coords.map((c, i) => {
+        // seed 날짜·가는 아래 전용 마커로만 그린다(이중 점 방지).
+        if (
+          currentMarker &&
+          c.date === currentMarker.date &&
+          c.price === currentMarker.price
+        ) {
+          return null;
+        }
+        return (
+          <Circle
+            key={`p-${i}`}
+            cx={c.x}
+            cy={c.y}
+            r={3}
+            fill={colors.white}
+            stroke={LINE}
+            strokeWidth={2}
+          />
+        );
+      })}
+
+      {seedCoord ? (
+        <G>
+          <SvgText
+            x={seedCoord.x}
+            y={Math.max(PAD.top - 6, seedCoord.y - 28)}
+            fontSize={10}
+            fontWeight="700"
+            fill={SEED}
+            textAnchor="middle">
+            이 상품
+          </SvgText>
+          <SvgText
+            x={seedCoord.x}
+            y={Math.max(PAD.top + 6, seedCoord.y - 14)}
+            fontSize={10}
+            fontWeight="600"
+            fill={SEED}
+            textAnchor="middle">
+            {won(seedCoord.price, currency)}
+          </SvgText>
+          <Circle cx={seedCoord.x} cy={seedCoord.y} r={6.5} fill={SEED} />
+        </G>
+      ) : null}
+
+      {geo.xLabels.map((l, i) => (
+        <SvgText
+          key={`x-${i}`}
+          x={l.x}
+          y={HEIGHT - 8}
+          fontSize={12}
+          fill={colors.gray[500]}
+          textAnchor="middle">
+          {l.label}
+        </SvgText>
+      ))}
+    </G>
+  );
+});
