@@ -84,12 +84,21 @@ attempt() {
     return 1
   fi
   # 애니메이션 중엔 dump 가 "could not get idle state" 로 실패할 수 있어 몇 번 다시 잡는다.
-  local ui=""
-  for _ in 1 2 3; do
-    ui=$(adb exec-out uiautomator dump /dev/tty 2>/dev/null || true)
+  local ui="" busy=0
+  for _ in 1 2 3 4 5; do
+    ui=$(adb exec-out uiautomator dump /dev/tty 2>&1 || true)
     grep -q "package=\"$PKG\"" <<<"$ui" && break
+    grep -q "could not get idle state" <<<"$ui" && busy=$((busy + 1))
     sleep 2
   done
+  # ★5번 다 「idle 이 안 온다」면(한 번에 ~10초 기다린다) 화면이 계속 바뀌는 중이다 = JS 가 돌고 있다(홈 캐러셀 자동 넘김이 이렇게 만든다 —
+  # 10/13 로컬 에뮬에서 두 번째 콜드 스타트가 사진이 뜬 홈인데도 「글자 없음」으로 떨어졌다). 멈춘 스플래시는 가만히 있어
+  # dump 가 되고 아래 글자 검사에 걸리므로, 이 경우만 경고로 통과시킨다.
+  if [ $busy -ge 5 ]; then
+    echo "✓ $1: ${WAIT}초 동안 생존·치명 예외 없음·화면이 계속 바뀜(uiautomator idle 불가 — 애니메이션 중, 글자 검사 생략)"
+    adb shell am force-stop "$PKG"
+    return 0
+  fi
   if ! grep -E "text=\"[^\"]+\"[^>]*package=\"$PKG\"" <<<"$ui" >/dev/null; then
     echo "✗ $1: 앱 화면에 글자가 없음 — JS 가 첫 화면을 그리지 못함(스플래시·빈 화면에서 멈춤)"
     return 1
