@@ -68,6 +68,26 @@ const captureAppState = () => {
   return {spy, emit};
 };
 
+/**
+ * 그린 트리·클라이언트는 테스트마다 거둔다. 안 거두면 react-query 알림 타이머가 테스트가 끝난 뒤
+ * act 밖에서 상태를 바꿔 「Cannot log after tests are done」이 나고, CI(--runInBand)에서 jest 가
+ * 전부 통과하고도 exit 1 로 끝난다(10/12 mobile-validation 실패).
+ */
+const cleanups: Array<() => void> = [];
+const track = (
+  renderer: ReactTestRenderer.ReactTestRenderer,
+  client?: QueryClient,
+) => {
+  cleanups.push(() => {
+    ReactTestRenderer.act(() => renderer.unmount());
+    client?.clear();
+  });
+  return renderer;
+};
+afterEach(() => {
+  while (cleanups.length) cleanups.pop()?.();
+});
+
 const flush = async () => {
   for (let i = 0; i < 10; i += 1) await Promise.resolve();
 };
@@ -137,10 +157,13 @@ describe('토큰 갱신 — 백그라운드에 다녀왔을 때만', () => {
       return null;
     };
     ReactTestRenderer.act(() => {
-      ReactTestRenderer.create(
-        <QueryClientProvider client={client}>
-          <Probe />
-        </QueryClientProvider>,
+      track(
+        ReactTestRenderer.create(
+          <QueryClientProvider client={client}>
+            <Probe />
+          </QueryClientProvider>,
+        ),
+        client,
       );
     });
     return {emit: app.emit, invalidate};
@@ -191,10 +214,13 @@ describe('커뮤니티 댓글 — 그 글만 다시 받고 목록 숫자는 그 
       return null;
     };
     await ReactTestRenderer.act(async () => {
-      ReactTestRenderer.create(
-        <QueryClientProvider client={client}>
-          <Lists />
-        </QueryClientProvider>,
+      track(
+        ReactTestRenderer.create(
+          <QueryClientProvider client={client}>
+            <Lists />
+          </QueryClientProvider>,
+        ),
+        client,
       );
       await flush();
     });
