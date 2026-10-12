@@ -9,8 +9,14 @@
  * 꺼내 쓴다(파일·셸에 남기지 않는다). 업로드가 실패해도 발행은 이미 끝났으니 경고만 하고 넘어간다.
  *
  * ★발행 전 기동 확인(AGENTS.md §Mobile App)은 이 스크립트가 대신하지 않는다.
+ *
+ * ★옛 runtime 백포트(origin 에 ota/runtime-<runtime> 이 있으면)는 브랜치 끝을 **먼저 push 해서 차지한 뒤** 발행한다.
+ * 2026-10-12 두 번: 발행 직전에 원격을 확인했는데도 `eas update` 가 몇 분 걸리는 사이 다른 세션이 같은 runtime 에
+ * 발행해, 늦게 끝난 내 번들이 그 수정을 빼고 덮었다(복구 = 그 group republish). push 는 fast-forward 만 받으니
+ * 먼저 push 하면 늦은 쪽이 발행 전에 거절당한다. main 의 runtime 은 브랜치가 없다(CI 자동 OTA 가 낸다) — 건너뛴다.
  */
 import {execFileSync} from 'node:child_process';
+import {readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
@@ -24,7 +30,83 @@ if (!message) {
 const run = (cmd, args) =>
   execFileSync(cmd, args, {cwd: root, stdio: 'inherit'});
 
+const git = (...args) =>
+  execFileSync('git', args, {
+    cwd: root,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  }).trim();
+
+const stop = reason => {
+  console.error(`⛔ 발행하지 않았다 — ${reason}`);
+  process.exit(1);
+};
+
+function claimBackportBranch() {
+  const {runtimeVersion} = JSON.parse(
+    readFileSync(join(root, 'app.json'), 'utf8'),
+  ).expo;
+  const branch = `ota/runtime-${runtimeVersion}`;
+  if (!git('ls-remote', '--heads', 'origin', branch)) {
+    console.log(`ℹ️ origin/${branch} 없음 — 백포트 브랜치 선점은 건너뛴다.`);
+    return;
+  }
+
+  // 발행 번들은 작업 트리에서 만든다 — 커밋 안 된 변경이 있으면 브랜치 끝과 다른 걸 내보낸다.
+  if (
+    git(
+      'status',
+      '--porcelain',
+      '--untracked-files=no',
+      '--',
+      '.',
+      '../../packages',
+    )
+  ) {
+    stop(
+      '커밋 안 된 변경이 있다(apps/mobile·packages). 커밋하거나 되돌린 뒤 다시.',
+    );
+  }
+
+  git('fetch', '-q', 'origin', branch);
+  const remote = git('rev-parse', 'FETCH_HEAD');
+  try {
+    git('merge-base', '--is-ancestor', remote, 'HEAD');
+  } catch {
+    stop(
+      `origin/${branch} 에 내 HEAD 에 없는 커밋이 있다 — 다른 세션이 먼저 냈을 수 있다. ` +
+        `git rebase FETCH_HEAD 뒤 jest·기동 확인을 다시 하고 발행.`,
+    );
+  }
+
+  if (remote === git('rev-parse', 'HEAD')) {
+    console.log(`✓ origin/${branch} 끝이 이미 HEAD 다.`);
+    return;
+  }
+
+  // `remote rejected (failure)` 는 가끔 일시적이다(10/12 2회) — 한 번만 다시. fast-forward 거절은 바로 멈춘다.
+  for (let attempt = 1; ; attempt++) {
+    try {
+      execFileSync('git', ['push', 'origin', `HEAD:refs/heads/${branch}`], {
+        cwd: root,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+      });
+      console.log(`✓ origin/${branch} 를 HEAD 로 먼저 올렸다 — 이제 발행한다.`);
+      return;
+    } catch (error) {
+      const out = `${error.stdout ?? ''}${error.stderr ?? ''}`;
+      if (attempt >= 2 || /non-fast-forward|fetch first/.test(out)) {
+        stop(
+          `origin/${branch} push 거절 — 다른 세션이 먼저 올렸다. rebase 뒤 다시.\n${out}`,
+        );
+      }
+    }
+  }
+}
+
 run('node', ['scripts/native-fingerprint.mjs', '--check']);
+claimBackportBranch();
 run('npx', [
   'eas',
   'update',
