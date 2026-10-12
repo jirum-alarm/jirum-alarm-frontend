@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react';
 
 import { ProductService } from '@/shared/api/product';
 
+import { takeCardOrigin } from '@/entities/product-list/model/card-click-origin';
+
 /**
  * 상세 진입 시 post_view 수집을 "클라이언트"에서 1회 호출한다.
  *
@@ -13,6 +15,9 @@ import { ProductService } from '@/shared/api/product';
  * 매 페이지뷰마다 새 deviceId(v4)가 발급됐다 → 운영 91.9% 디바이스가 1상품/1이벤트로
  * 쪼개지는 계측 붕괴의 원인. 클라 경로는 localStorage 기반(DeviceId provider 가 동기화한
  * 안정 id)이라 같은 사람이 같은 deviceId 로 누적된다.
+ *
+ * 목록 카드를 눌러 들어왔으면 그 목록·위치(source·position)를 싣는다 — 노출(post_impression)과
+ * 이어 목록별 CTR 을 잰다(ProductCardTracker 가 클릭 순간에 적어 둔다).
  */
 export const CollectProductOnView = ({ productId }: { productId: number }) => {
   // StrictMode 이중 마운트 + 리렌더 중복 호출 방지.
@@ -22,7 +27,7 @@ export const CollectProductOnView = ({ productId }: { productId: number }) => {
     if (collectedRef.current) return;
     collectedRef.current = true;
     // fire-and-forget. 실패해도 UX 영향 없음.
-    void ProductService.collectProduct({ productId }).catch(() => {});
+    void ProductService.collectProduct({ productId, ...takeCardOrigin(productId) }).catch(() => {});
   }, [productId]);
 
   return null;

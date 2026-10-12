@@ -17,6 +17,7 @@ import LoginModal from '@/features/auth/ui/login/LoginModal';
 import { ClarityProvider } from './clarityProvider';
 import { DeviceId } from './deviceId';
 import { EntryTracker } from './entryTracker';
+import { ProductCardTracker } from './productCardTracker';
 import { ReactQueryProviders } from './ReactQueryProviders';
 import ServerStateProvider from './ServerStateProvider';
 
@@ -66,6 +67,7 @@ export const AppProvider = ({ children, device, isLoggedIn, isGuest }: Props) =>
               {IS_PRD ? <DeviceId /> : null}
               <ClarityProvider />
               <EntryTracker />
+              <ProductCardTracker />
               <NuqsAdapter>{children}</NuqsAdapter>
               <LoginModal />
               <PushChannelSheet />
