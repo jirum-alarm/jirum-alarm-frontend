@@ -89,7 +89,8 @@ step "화면 캐시 지문 — 브랜치마다 값이 다르다"
 # 그 값을 넣고 커밋한다(값이 바뀌면 그 버전 사용자의 화면 캐시가 한 번 버려진다 — 문서가 달라졌으니 맞다).
 if [ -f __tests__/query-cache.test.ts ] && grep -q QUERY_DOCS_FINGERPRINT src/shared/lib/persistence/query-cache.ts; then
   FP_OUT=$(npx jest --runInBand __tests__/query-cache.test.ts -t '지문이 지금 문서와 맞는다' 2>&1 || true)
-  EXPECTED=$(printf '%s' "$FP_OUT" | grep -o 'Expected: "[0-9a-f]*"' | head -1 | cut -d'"' -f2)
+  # 맞으면 Expected 줄이 없다 — grep 실패를 「고칠 것 없음」으로(pipefail·set -e 가 스크립트를 조용히 끝냈다).
+  EXPECTED=$(printf '%s' "$FP_OUT" | grep -o 'Expected: "[0-9a-f]*"' | head -1 | cut -d'"' -f2 || true)
   if [ -n "$EXPECTED" ]; then
     sed -i '' "s/export const QUERY_DOCS_FINGERPRINT = '[0-9a-f]*';/export const QUERY_DOCS_FINGERPRINT = '$EXPECTED';/" \
       src/shared/lib/persistence/query-cache.ts
