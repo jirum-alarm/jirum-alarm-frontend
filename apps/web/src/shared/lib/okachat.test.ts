@@ -3,8 +3,13 @@ import { createRequire } from 'node:module';
 import { describe, it } from 'node:test';
 
 const require = createRequire(import.meta.url);
-const { buildPostPurchasePromptQueue, shouldShowOkachatSoftPrompt } =
-  require('./okachat.ts') as typeof import('./okachat');
+const {
+  buildPostPurchasePromptQueue,
+  OKACHAT_ANDROID_INTENT,
+  OKACHAT_LINK,
+  shouldOpenOkachatDirect,
+  shouldShowOkachatSoftPrompt,
+} = require('./okachat.ts') as typeof import('./okachat');
 
 describe('shouldShowOkachatSoftPrompt', () => {
   it('오카방 UTM 유입이면 숨긴다', () => {
@@ -45,5 +50,45 @@ describe('buildPostPurchasePromptQueue', () => {
       'keyword',
       'kakao',
     ]);
+  });
+});
+
+describe('shouldOpenOkachatDirect', () => {
+  const NAVER_APP =
+    'Mozilla/5.0 (Linux; Android 16; SM-S926N Build/BP2A; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/140.0.0.0 Whale/1.0.0.0 Crosswalk/28.140.0.0 Mobile Safari/537.36 NAVER(inapp; search; 2100; 12.16.2)';
+  const SAMSUNG =
+    'Mozilla/5.0 (Linux; Android 14; SM-S926N) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/26.0 Chrome/122.0.0.0 Mobile Safari/537.36';
+  const IOS_SAFARI =
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1';
+  const DESKTOP =
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36';
+
+  it('안드로이드 브라우저·네이버 앱 인앱은 카톡을 바로 연다', () => {
+    assert.equal(shouldOpenOkachatDirect(SAMSUNG), true);
+    assert.equal(shouldOpenOkachatDirect(NAVER_APP), true);
+  });
+
+  it('iOS·PC 는 기존 링크 그대로', () => {
+    assert.equal(shouldOpenOkachatDirect(IOS_SAFARI), false);
+    assert.equal(shouldOpenOkachatDirect(DESKTOP), false);
+  });
+
+  it('지름알림 앱 웹뷰는 제외', () => {
+    assert.equal(
+      shouldOpenOkachatDirect(`${SAMSUNG} Android ReactNative Webview Jirum Alarm`),
+      false,
+    );
+  });
+});
+
+describe('OKACHAT_ANDROID_INTENT', () => {
+  it('카톡이 없으면 기존 중간 페이지로 돌아간다', () => {
+    assert.ok(OKACHAT_ANDROID_INTENT.startsWith('intent://join?l=gJZTWAAg'));
+    assert.ok(OKACHAT_ANDROID_INTENT.includes('package=com.kakao.talk'));
+    assert.ok(
+      OKACHAT_ANDROID_INTENT.includes(
+        `S.browser_fallback_url=${encodeURIComponent(OKACHAT_LINK)};`,
+      ),
+    );
   });
 });

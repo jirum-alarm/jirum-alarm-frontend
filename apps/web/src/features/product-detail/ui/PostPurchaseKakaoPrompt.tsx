@@ -3,7 +3,12 @@
 import { useEffect } from 'react';
 
 import { cn } from '@/shared/lib/cn';
-import { markOkachatJoined, OKACHAT_LINK, pushOkachatEvent } from '@/shared/lib/okachat';
+import {
+  markOkachatJoined,
+  OKACHAT_LINK,
+  openOkachatDirect,
+  pushOkachatEvent,
+} from '@/shared/lib/okachat';
 import TalkLight from '@/shared/ui/common/icons/TalkLight';
 
 /**
@@ -29,7 +34,9 @@ export default function PostPurchaseKakaoPrompt({
   const handleJoin = () => {
     markOkachatJoined();
     pushOkachatEvent('okachat_prompt_click', 'after_purchase');
-    window.open(OKACHAT_LINK, '_blank', 'noopener,noreferrer');
+    if (!openOkachatDirect('after_purchase')) {
+      window.open(OKACHAT_LINK, '_blank', 'noopener,noreferrer');
+    }
     onClose();
   };
 

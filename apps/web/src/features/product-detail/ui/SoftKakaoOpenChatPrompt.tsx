@@ -6,6 +6,7 @@ import {
   markOkachatJoined,
   OKACHAT_JOINED_EVENT,
   OKACHAT_LINK,
+  openOkachatDirect,
   pushOkachatEvent,
   shouldShowOkachatSoftPrompt,
 } from '@/shared/lib/okachat';
@@ -41,9 +42,10 @@ export default function SoftKakaoOpenChatPrompt({ className }: { className?: str
     <KakaoOpenChatPrompt
       href={OKACHAT_LINK}
       className={className}
-      onNavigate={() => {
+      onNavigate={(e) => {
         markOkachatJoined();
         pushOkachatEvent('okachat_prompt_click', 'soft');
+        if (openOkachatDirect('soft')) e.preventDefault();
       }}
     />
   );

@@ -1,8 +1,15 @@
 import { cn } from '@/shared/lib/cn';
-import { markOkachatJoined, OKACHAT_LINK } from '@/shared/lib/okachat';
+import {
+  markOkachatJoined,
+  OKACHAT_LINK,
+  openOkachatDirect,
+  pushOkachatEvent,
+} from '@/shared/lib/okachat';
 
 import BannerItem from '../BannerItem';
 import kakao from '../images/kakao.png';
+
+import type { MouseEvent } from 'react';
 
 const props = {
   href: OKACHAT_LINK,
@@ -20,12 +27,10 @@ const props = {
 
 // 상세 오카방 카드와 같은 이벤트·파라미터(shared/lib/okachat.ts) — placement 로 위치를 가른다.
 // 입장으로도 기록 — 예전엔 홈에서 들어가도 상세의 오카방 권유가 계속 떴다.
-const trackClick = () => {
+const trackClick = (e: MouseEvent<HTMLAnchorElement>) => {
   markOkachatJoined();
-  (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
-    event: 'okachat_prompt_click',
-    placement: 'home_banner',
-  });
+  pushOkachatEvent('okachat_prompt_click', 'home_banner');
+  if (openOkachatDirect('home_banner')) e.preventDefault();
 };
 
 const KakaoOpenChatLink = ({

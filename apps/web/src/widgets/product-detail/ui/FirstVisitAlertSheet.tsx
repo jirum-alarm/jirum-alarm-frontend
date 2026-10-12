@@ -15,6 +15,7 @@ import { getGraphqlErrorMessage } from '@/shared/lib/graphql-error';
 import {
   markOkachatJoined,
   OKACHAT_LINK,
+  openOkachatDirect,
   pushOkachatEvent,
   shouldShowOkachatSoftPrompt,
 } from '@/shared/lib/okachat';
@@ -299,9 +300,10 @@ function OkachatSheet({ isMobile, onClose }: { isMobile: boolean; onClose: () =>
         href={OKACHAT_LINK}
         target="_blank"
         rel="noopener noreferrer"
-        onClick={() => {
+        onClick={(e) => {
           markOkachatJoined();
           pushOkachatEvent('okachat_prompt_click', 'first_visit');
+          if (openOkachatDirect('first_visit')) e.preventDefault();
           onClose();
         }}
         className="bg-primary-500 text-fixed-900 flex h-12 w-full items-center justify-center rounded-lg font-semibold"

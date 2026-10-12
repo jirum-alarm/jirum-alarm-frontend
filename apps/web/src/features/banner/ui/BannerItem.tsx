@@ -2,7 +2,7 @@
 
 import { m } from 'motion/react';
 import Image, { StaticImageData } from 'next/image';
-import { ReactNode } from 'react';
+import { MouseEvent, ReactNode } from 'react';
 
 import { cn } from '@/shared/lib/cn';
 import Link from '@/shared/ui/Link';
@@ -28,10 +28,10 @@ const BannerItem = ({
   eventName?: string;
   isAd?: boolean;
   priority?: boolean;
-  onClick?: () => void;
+  onClick?: (e: MouseEvent<HTMLAnchorElement>) => void;
 }) => {
-  const handleClick = () => {
-    onClick?.();
+  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    onClick?.(e);
     // TODO: Need GTM Migration
     // mp?.track(eventName, {
     //   page: EVENT.PAGE.HOME,

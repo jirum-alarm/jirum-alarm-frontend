@@ -2,6 +2,8 @@ import { cn } from '@/shared/lib/cn';
 import TalkLight from '@/shared/ui/common/icons/TalkLight';
 import Link from '@/shared/ui/Link';
 
+import type { MouseEvent } from 'react';
+
 /**
  * 상세페이지용 핫딜 카톡방 입장 안내.
  *
@@ -22,7 +24,7 @@ export default function KakaoOpenChatPrompt({
   href: string;
   className?: string;
   /** soft/구매후 공통 — 입장 클릭 시 joined 플래그·계측용 */
-  onNavigate?: () => void;
+  onNavigate?: (e: MouseEvent<HTMLAnchorElement>) => void;
 }) {
   return (
     <Link
