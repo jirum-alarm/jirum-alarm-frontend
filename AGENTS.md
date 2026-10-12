@@ -199,7 +199,7 @@ pnpm build            # Production build
   - 버전을 올린 뒤 OTA 는 새 runtime 바이너리에만 간다 — 옛 버전용 OTA·hotfix 브랜치는 기본으로 만들지 않는다(하위호환 안 챙김).
     **요청이 있으면 옛 runtime 에도 백포트한다**(2026-10-09 1.4.7·1.4.6 실적): main 을 그대로 보내지 말고(그 사이 네이티브가 바뀌어 죽는다)
     `eas update:view <그 runtime 의 마지막 group> --json` 의 `gitCommitHash` 에 워크트리 → 변경 cherry-pick → 그 커밋 lockfile 로
-    `pnpm install --frozen-lockfile` → tsc·`native:check`·jest → **그 커밋으로 Release 시뮬 빌드** 콜드 스타트 2회 → `pnpm ota:publish`.
+    `pnpm install --frozen-lockfile` → tsc·`native:check`·jest → **그 커밋으로 Release 시뮬 빌드** 콜드 스타트 2회 → `pnpm ota:publish`(origin 에 `ota/runtime-<runtime>` 이 있으면 브랜치를 먼저 push 해 끝을 차지하고, 거절·원격이 앞섬·미커밋 변경이면 발행하지 않는다 — 10/12 다른 세션 발행을 두 번 덮은 뒤 넣음).
     로컬 빌드 함정: Xcode 27 은 `IPHONEOS_DEPLOYMENT_TARGET=15.1` 을 넘겨야 옛 Pod 이 빌드되고, `/tmp` 아래 워크트리는 번들 단계가
     경로를 못 찾아 `SKIP_BUNDLING=1` + 위 "번들만 바꿔 끼우기"로 간다. `pod install` 이 바꾼 `Podfile.lock`·`project.pbxproj` 는
     발행 전 커밋본으로 되돌린다(안 하면 `native:check` 가 막는다). 마지막 OTA 커밋이 이미 다음 runtime 으로 올린 커밋이면 재현 불가 — 건너뛴다.
