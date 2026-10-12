@@ -110,7 +110,7 @@ jobs:
           NEW_TAG: ${{ needs.build-and-push.outputs.image-tag }}
         run: |
           set -euo pipefail
-          KUSTOMIZATION="apps/frontend-ai-dev/overlays/prod/kustomization.yaml"
+          KUSTOMIZATION="apps/frontend-ai/overlays/development/kustomization.yaml"
           IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-ai"
           export IMAGE_NAME NEW_TAG
           yq eval -i '(.images[] | select(.name == strenv(IMAGE_NAME)) | .newTag) = strenv(NEW_TAG)' "$KUSTOMIZATION"
