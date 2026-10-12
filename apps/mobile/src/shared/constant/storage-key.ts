@@ -6,6 +6,11 @@ export const StorageKey = {
   DEVICE_ID: 'deviceId',
   /** 게스트(로그인 없이 알림만 받는 기기 계정)로 들어와 있는지. 실제 로그인·로그아웃 때 지운다. */
   IS_GUEST: 'isGuest',
+  /**
+   * 이 기기에 세션(회원·게스트)이 한 번이라도 있었는지. 없으면 첫 실행이라 로그인 화면 대신
+   * 게스트로 바로 들어간다 — 로그아웃·세션 만료·게스트 나가기 뒤엔 로그인 화면이 맞으므로 이 값으로 가른다.
+   */
+  SESSION_EVER: 'sessionEver',
   /** 최근 본 상품(웹뷰 홈이 읽던 것을 네이티브가 대신 쌓는다). */
   RECENT_VIEWED_PRODUCTS: 'recentViewedProducts',
   /** 로그인 전에 하려던 동작. 로그인 복귀 후 한 번만 실행한다. */

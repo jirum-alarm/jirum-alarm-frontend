@@ -17,6 +17,7 @@ import {
   useRequireLogin,
 } from '@/shared/hooks/useRequireLogin';
 import {PendingActionType} from '@/shared/lib/pending-action';
+import {useAuth} from '@/shared/hooks/useAuth';
 
 import {deriveKeyword} from '@/features/keyword-prompt/model/deriveKeyword';
 import {invalidateMyKeywords} from '@/features/keyword-prompt/model/myKeywords';
@@ -46,7 +47,9 @@ export default function PostPurchaseKeywordPrompt({
 }) {
   const queryClient = useQueryClient();
   const [done, setDone] = useState(false);
-  const {requireLogin} = useRequireLogin(`/products/${productId}`);
+  const {requireAlertSession} = useRequireLogin(`/products/${productId}`);
+  // 게스트도 키워드를 걸 수 있다 — 등록 여부 조회·등록 모두 세션(회원·게스트) 기준.
+  const {isLogin: hasSession} = useAuth();
 
   const keyword = deriveKeyword(title);
   const hasKeyword = Array.from(keyword).length >= MIN_KEYWORD_LENGTH;
@@ -55,7 +58,7 @@ export default function PostPurchaseKeywordPrompt({
   // 지표도 "등록 가능한 경우"만 세게 되어 등록률이 정확해진다.
   const {data: myKeywords} = useQuery({
     ...ProductQueries.myKeywords({limit: 20}),
-    enabled: show && isUserLogin && hasKeyword,
+    enabled: show && hasSession && hasKeyword,
   });
 
   const alreadyRegistered = (myKeywords ?? []).some(
@@ -95,6 +98,13 @@ export default function PostPurchaseKeywordPrompt({
   });
 
   const visible = show && hasKeyword && (done || !alreadyRegistered);
+
+  // 띄울 게 없으면(키워드를 못 뽑았거나 이미 등록) 곧바로 다음 권유로 넘긴다. 예전엔 null 만
+  // 돌려 큐가 여기서 멈췄다 — [keyword, kakao] 순서인 사람은 오카방 권유를 영영 못 봤다.
+  const skip = show && !visible && (!hasKeyword || myKeywords !== undefined);
+  useEffect(() => {
+    if (skip) onClose();
+  }, [skip, onClose]);
 
   // 상품이 바뀌면 이전 상품의 완료 상태가 남지 않도록 초기화.
   useEffect(() => {
@@ -161,7 +171,9 @@ export default function PostPurchaseKeywordPrompt({
               keyword,
               logged_in: isUserLogin,
             });
-            if (requireLogin(PendingActionType.NOTIFICATION_KEYWORD_ADD)) {
+            if (
+              requireAlertSession(PendingActionType.NOTIFICATION_KEYWORD_ADD)
+            ) {
               return;
             }
             addKeyword();

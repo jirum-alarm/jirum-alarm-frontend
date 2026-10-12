@@ -119,13 +119,12 @@ export default function BottomCTA({
     // 돌아왔을 때 띄울 안내 순서는 브라우저가 떠 있는 동안 계산해도 충분하다.
     openInAppBrowser(product.detailUrl);
     const joined = await hasJoinedOkachat();
-    setPromptQueue(buildPostPurchasePromptQueue(isUserLogin, joined));
+    setPromptQueue(buildPostPurchasePromptQueue(joined));
   }, [
     product.detailUrl,
     product.id,
     product.isProfitUrl,
     product.profitLinkProvider,
-    isUserLogin,
     navigation,
   ]);
 

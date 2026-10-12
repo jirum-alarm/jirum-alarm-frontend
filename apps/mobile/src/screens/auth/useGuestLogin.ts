@@ -14,23 +14,29 @@ import {handleLoginError, handleLoginSuccess} from './useSocialLogin/lib';
  */
 export const useGuestLogin = () => {
   const queryClient = useQueryClient();
-  const {mutate, isPending} = useMutation({
-    mutationFn: AuthService.guestLogin,
-    onSuccess: async data => {
+  const {mutate, mutateAsync, isPending} = useMutation({
+    mutationFn: (_vars: {auto: boolean}) => AuthService.guestLogin(),
+    onSuccess: async (data, {auto}) => {
       await handleLoginSuccess(
         data.guestLogin.accessToken,
         data.guestLogin.refreshToken,
         {guest: true},
       );
-      Analytics.track('guest_start');
+      // auto = 첫 실행에 로그인 화면 없이 들어온 것(useAutoGuest). 버튼으로 들어온 것과 가른다.
+      Analytics.track('guest_start', {auto});
       await queryClient.refetchQueries({
         queryKey: AuthQueries.keys.loginByRefreshToken(),
       });
     },
-    onError: async () => {
-      await handleLoginError('잠시 후 다시 시도해주세요.');
+    onError: async (_error, {auto}) => {
+      // 자동 진입이 실패하면 조용히 로그인 화면으로 — 첫 화면부터 에러 토스트를 보이지 않는다.
+      await handleLoginError(auto ? null : '잠시 후 다시 시도해주세요.');
     },
   });
 
-  return {startGuest: () => mutate(), isGuestPending: isPending};
+  return {
+    startGuest: () => mutate({auto: false}),
+    startAutoGuest: () => mutateAsync({auto: true}),
+    isGuestPending: isPending,
+  };
 };

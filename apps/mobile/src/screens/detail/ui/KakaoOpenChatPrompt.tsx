@@ -4,12 +4,11 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 
 import PressableScale from '@/shared/components/PressableScale';
 import TalkLight from '@/shared/components/icons/TalkLight';
-import {openInAppBrowser} from '@/shared/lib/navigation';
 
 import {
   OKACHAT_LINK,
   hasJoinedOkachat,
-  markOkachatJoined,
+  openOkachat,
   trackOkachatEvent,
 } from '../lib/okachat';
 
@@ -43,9 +42,8 @@ export default function KakaoOpenChatPrompt({href}: {href?: string}) {
     <PressableScale
       onPress={async () => {
         trackOkachatEvent('okachat_prompt_click', 'soft');
-        await markOkachatJoined();
         setVisible(false);
-        openInAppBrowser(link);
+        await openOkachat(link);
       }}
       // ponytail: web 과 같은 문법 — 면은 그대로, 테두리+채운 알약으로만 눈에 띄게.
       className="mx-5 mb-4 flex-row items-center gap-x-3 rounded-lg border border-secondary-200 bg-secondary-50 px-4 py-3"

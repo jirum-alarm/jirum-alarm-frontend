@@ -4,13 +4,8 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 
 import PressableScale from '@/shared/components/PressableScale';
 import TalkLight from '@/shared/components/icons/TalkLight';
-import {openInAppBrowser} from '@/shared/lib/navigation';
 
-import {
-  OKACHAT_LINK,
-  markOkachatJoined,
-  trackOkachatEvent,
-} from '../lib/okachat';
+import {openOkachat, trackOkachatEvent} from '../lib/okachat';
 
 /**
  * 구매 직후 오카방 입장 권유. web PostPurchaseKakaoPrompt 와 같은 자리·어투.
@@ -47,9 +42,8 @@ export default function PostPurchaseKakaoPrompt({
       <PressableScale
         onPress={async () => {
           trackOkachatEvent('okachat_prompt_click', 'after_purchase');
-          await markOkachatJoined();
-          openInAppBrowser(OKACHAT_LINK);
           onClose();
+          await openOkachat();
         }}
         accessibilityRole="button"
         accessibilityLabel="핫딜 카톡방 입장"

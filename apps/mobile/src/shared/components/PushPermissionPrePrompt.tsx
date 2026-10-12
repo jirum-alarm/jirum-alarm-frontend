@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import * as Notifications from 'expo-notifications';
 
+import {Analytics} from '@/shared/lib/analytics/ga4';
+
 import {MyPageService} from '@/shared/api/mypage';
 import ConfirmSheet from '@/shared/components/ConfirmSheet';
 import {StorageKey} from '@/shared/constant/storage-key';
@@ -26,7 +28,15 @@ export async function shouldShowPushPrePrompt(): Promise<boolean> {
   try {
     if (await getAsyncStorage(StorageKey.PUSH_PREPROMPT_SHOWN)) return false;
     const current = await Notifications.getPermissionsAsync();
-    return !current.granted && current.canAskAgain;
+    if (current.granted || !current.canAskAgain) return false;
+    // 키워드 없는 게스트(첫 실행에 자동으로 들어온 사람 대부분)는 받을 알림이 아직 없다 — 좋은 딜
+    // 푸시는 마케팅 동의 기반이라 게스트에겐 안 간다. 여기서 묻지 않고(본 것으로도 치지 않는다)
+    // 첫 키워드를 거는 순간 requestPushPermissionIfNeeded 가 묻는다.
+    if ((await getAsyncStorage(StorageKey.IS_GUEST)) === '1') {
+      const mine = await MyPageService.getMyKeywords();
+      return mine.length > 0;
+    }
+    return true;
   } catch {
     return false;
   }
@@ -82,6 +92,10 @@ export default function PushPermissionPrePrompt() {
     close();
     try {
       const next = await Notifications.requestPermissionsAsync();
+      Analytics.track('push_permission_result', {
+        result: next.granted ? 'granted' : 'denied',
+        source: 'pre_prompt',
+      });
       if (next.granted) await registerFcmToken();
     } catch (error) {
       console.log('push pre-prompt error:', error);

@@ -1,8 +1,12 @@
-import {getAsyncStorage, setAsyncStorage} from '@/shared/lib/persistence';
-import {StorageKey} from '@/shared/constant/storage-key';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 
-export const OKACHAT_LINK = 'https://open.kakao.com/o/gJZTWAAg';
+// 입장 기록·열기는 홈 배너도 써서 shared 에 둔다.
+export {
+  OKACHAT_LINK,
+  hasJoinedOkachat,
+  markOkachatJoined,
+  openOkachat,
+} from '@/shared/lib/okachat';
 
 export type PostPurchasePromptKind = 'kakao' | 'keyword';
 
@@ -16,28 +20,14 @@ export function trackOkachatEvent(
   Analytics.track(event, {placement});
 }
 
-export async function hasJoinedOkachat(): Promise<boolean> {
-  try {
-    return (await getAsyncStorage(StorageKey.OKACHAT_JOINED)) === true;
-  } catch {
-    return false;
-  }
-}
-
-export async function markOkachatJoined(): Promise<void> {
-  try {
-    await setAsyncStorage(StorageKey.OKACHAT_JOINED, true);
-  } catch {
-    // ignore
-  }
-}
-
-/** 앱은 오카방 UTM 딥링크를 거의 안 받으므로 joined 만 본다. */
+/**
+ * 앱은 오카방 UTM 딥링크를 거의 안 받으므로 joined 만 본다.
+ * 회원·게스트 구분 없이 키워드가 먼저다 — 앱은 푸시가 이미 통로라, 이 상품을 콕 집어 알려 주는
+ * 키워드가 전체 딜이 흐르는 방보다 이 순간에 맞다(web 은 푸시 통로가 없는 비로그인이 많아 방이 먼저).
+ */
 export function buildPostPurchasePromptQueue(
-  isLoggedIn: boolean,
   joined: boolean,
 ): PostPurchasePromptKind[] {
   if (joined) return ['keyword'];
-  if (!isLoggedIn) return ['kakao', 'keyword'];
   return ['keyword', 'kakao'];
 }
