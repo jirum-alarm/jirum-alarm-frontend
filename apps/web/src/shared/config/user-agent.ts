@@ -20,6 +20,10 @@ export const isInAppBrowserUA = (ua: string) => IN_APP_BROWSER_PATTERN.test(ua);
  */
 export const isAndroidUA = (ua: string) => /Android/i.test(ua);
 
+/** 지름알림 앱 웹뷰(RN·옛 Flutter). agent.ts·useDevice 의 isJirumAlarmApp 과 같은 판정. */
+export const isJirumAlarmAppUA = (ua: string) =>
+  /(IOS|Android) (ReactNative|Flutter) Webview Jirum Alarm/i.test(ua);
+
 /**
  * 진짜 사파리. iOS 의 크롬·파이어폭스·엣지·웨일도 UA 에 Safari 가 붙지만 Chrome 은 없다(CriOS 등)
  * — 서버가 `/Safari/ && !/Chrome/` 만 봐서 이들을 사파리로 판정해 홈 앱 설치 슬라이드를 숨겼다.

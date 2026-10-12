@@ -4,7 +4,6 @@ import { m } from 'motion/react';
 import Image from 'next/image';
 import { useEffect } from 'react';
 
-import { ANDROID_STORE_LINK, IOS_STORE_LINK } from '@/shared/config/appStore';
 import { PAGE } from '@/shared/config/page';
 import { useDevice } from '@/shared/hooks/useDevice';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
@@ -16,6 +15,7 @@ import Link from '@/shared/ui/Link';
 
 import { resolveAppDownloadPlatform } from '@/features/app-download/model/resolvePlatform';
 import AppDownloadQr from '@/features/app-download/ui/AppDownloadQr';
+import OpenInAppLink from '@/features/app-download/ui/OpenInAppLink';
 
 import AlarmList from './AlarmList';
 
@@ -119,48 +119,33 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
 }
 
 function AndroidDownloadButton() {
-  const handleClick = () => {
-    // TODO: Need GTM Migration
-    // mp?.track(EVENT.APP_DOWNLOAD_LINK_CLICK.NAME, {
-    //   type: EVENT.APP_DOWNLOAD_LINK_CLICK.TYPE.ANDROID,
-    //   page: EVENT.PAGE.ALARM,
-    // });
-  };
-
   return (
-    <a href={ANDROID_STORE_LINK} onClick={handleClick} className="w-full">
-      <m.button
+    // 앱이 있으면 앱의 알림 탭이 바로 열린다(intent), 없으면 Play.
+    <OpenInAppLink platform="android" path="/alarm" source="alarm_tab" className="w-full">
+      <m.span
         className="bg-primary-500 text-fixed-900 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold"
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >
         <Google />
         Google Play
-      </m.button>
-    </a>
+      </m.span>
+    </OpenInAppLink>
   );
 }
 
 function IosDownloadButton() {
-  const handleClick = () => {
-    // TODO: Need GTM Migration
-    // mp?.track(EVENT.APP_DOWNLOAD_LINK_CLICK.NAME, {
-    //   type: EVENT.APP_DOWNLOAD_LINK_CLICK.TYPE.IOS,
-    //   page: EVENT.PAGE.ALARM,
-    // });
-  };
-
   return (
-    <a href={IOS_STORE_LINK} onClick={handleClick} className="w-full">
-      <m.button
+    <OpenInAppLink platform="apple" path="/alarm" source="alarm_tab" className="w-full">
+      <m.span
         className="bg-primary-500 text-fixed-900 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold"
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >
         <Apple />
         App Store
-      </m.button>
-    </a>
+      </m.span>
+    </OpenInAppLink>
   );
 }
 

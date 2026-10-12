@@ -4,5 +4,5 @@ export const ANDROID_STORE_LINK =
 export const IOS_STORE_LINK =
   'https://apps.apple.com/sg/app/%EC%A7%80%EB%A6%84%EC%95%8C%EB%A6%BC/id6474611420';
 
-/** PC에 노출하는 QR의 착지 경로. UA로 스토어 분기 → src/app/app/route.ts */
+/** PC에 노출하는 QR의 착지 경로. UA로 스토어 버튼을 고른다 → src/app/app/page.tsx */
 export const APP_QR_PATH = '/app';

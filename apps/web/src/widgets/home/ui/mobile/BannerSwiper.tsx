@@ -89,7 +89,7 @@ const BannerSwiper = () => {
       return <KakaoOpenChatLink isMobile={true} priority />;
     }
     if (canRenderAppDownload) {
-      return <AppDownloadBanner type={type} link={link} />;
+      return <AppDownloadBanner type={type} />;
     }
     return <KakaoOpenChatLink isMobile={true} priority />;
   };
@@ -152,7 +152,7 @@ const BannerSwiper = () => {
             {promoBannerGenerator?.(i)}
             {canRenderAppDownload && (
               <SwiperSlide key={`${i}-app-download-cta`} style={{ width: 'calc(100% - 50px)' }}>
-                <AppDownloadBanner type={type} link={link} />
+                <AppDownloadBanner type={type} />
               </SwiperSlide>
             )}
             <SwiperSlide key={`${i}-kakao-open-chat-link`} style={{ width: 'calc(100% - 50px)' }}>

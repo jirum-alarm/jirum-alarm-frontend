@@ -3,7 +3,6 @@
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 
-import { ANDROID_STORE_LINK, IOS_STORE_LINK } from '@/shared/config/appStore';
 import { useDevice } from '@/shared/hooks/useDevice';
 import { isGuestAtom } from '@/shared/hooks/useIsLoggedIn';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
@@ -17,6 +16,7 @@ import AlertDialog from '@/shared/ui/common/AlertDialog';
 import { resolveAppDownloadPlatform } from '../model/resolvePlatform';
 
 import AppDownloadQr from './AppDownloadQr';
+import OpenInAppLink from './OpenInAppLink';
 
 function pushEvent(event: string, props: Record<string, unknown>) {
   (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
@@ -67,7 +67,6 @@ export default function PushChannelSheet() {
   };
 
   const subject = sheet.label ? `‘${sheet.label}’ 알림,` : '이 알림,';
-  const storeLink = platform === 'apple' ? IOS_STORE_LINK : ANDROID_STORE_LINK;
 
   return (
     <AlertDialog defaultOpen onOpenChange={(open) => !open && close()}>
@@ -97,12 +96,14 @@ export default function PushChannelSheet() {
             <AppDownloadQr compact />
           ) : (
             <AlertDialog.Action asChild onClick={() => track('app')}>
-              <a
-                href={storeLink}
+              <OpenInAppLink
+                platform={platform}
+                path="/"
+                source="push_channel"
                 className="bg-primary-500 text-fixed-900 flex h-12 w-full items-center justify-center rounded-lg font-semibold"
               >
                 앱으로 받기
-              </a>
+              </OpenInAppLink>
             </AlertDialog.Action>
           )}
           <p className="text-center text-xs text-gray-500">

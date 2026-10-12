@@ -10,6 +10,7 @@ import { IS_PRD } from '@/shared/config/env';
 import { GTM_ID } from '@/shared/config/gtm';
 import FCMConfig from '@/shared/lib/firebase/FCMConfig';
 
+import AppHandoffLanding from '@/features/app-download/ui/AppHandoffLanding';
 import BrowserHandoffArrival from '@/features/app-download/ui/BrowserHandoffArrival';
 import PushChannelSheet from '@/features/app-download/ui/PushChannelSheet';
 import LoginModal from '@/features/auth/ui/login/LoginModal';
@@ -72,6 +73,7 @@ export const AppProvider = ({ children, device, isLoggedIn, isGuest }: Props) =>
               <LoginModal />
               <PushChannelSheet />
               <BrowserHandoffArrival />
+              <AppHandoffLanding />
             </ReactQueryProviders>
           </ServerStateProvider>
         </JotaiProvider>

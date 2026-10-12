@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ANDROID_STORE_LINK, IOS_STORE_LINK } from '@/shared/config/appStore';
 
 import AppDownloadQr from '@/features/app-download/ui/AppDownloadQr';
+import OpenInAppLink from '@/features/app-download/ui/OpenInAppLink';
 
 export const metadata: Metadata = {
   title: '지름알림 앱 설치',
@@ -29,10 +30,6 @@ export default async function AppInstallPage() {
   // PC 도 여기로 온다(키워드 화면 PushStatusBanner 「앱 설치하기」). 스토어 버튼은 데스크톱 웹 스토어를
   // 열 뿐 설치로 안 이어지니 QR 을 보여준다. 판정은 agent.ts checkDevice 의 isMobile 과 같은 정규식.
   const isDesktop = !/iPhone|iPad|iPod|Android|Mobi/i.test(ua);
-
-  const store = isIOS
-    ? { href: IOS_STORE_LINK, label: 'App Store에서 받기' }
-    : { href: ANDROID_STORE_LINK, label: 'Google Play에서 받기' };
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-[420px] flex-col justify-center px-6 py-12">
@@ -65,12 +62,15 @@ export default async function AppInstallPage() {
         </div>
       ) : (
         <>
-          <a
-            href={store.href}
+          {/* 안드로이드는 앱이 이미 있으면 앱이 열리고, 없으면 출처(app_page)를 실은 Play 로 간다. */}
+          <OpenInAppLink
+            platform={isIOS ? 'apple' : 'android'}
+            path="/"
+            source="app_page"
             className="bg-primary-500 text-fixed-900 mt-10 flex h-14 w-full items-center justify-center rounded-xl font-semibold"
           >
-            {store.label}
-          </a>
+            {isIOS ? 'App Store에서 받기' : 'Google Play에서 받기'}
+          </OpenInAppLink>
 
           {/* UA 판정이 틀렸거나 다른 기기로 옮겨 설치하는 경우를 위한 탈출구. */}
           <a

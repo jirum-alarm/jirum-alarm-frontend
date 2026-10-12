@@ -5,31 +5,21 @@ import { CheckDeviceResult } from '@/app/actions/agent.types';
 import useAppDownloadLink from '@/shared/hooks/useAppDownloadLink';
 import { AppIcon } from '@/shared/ui/common/icons/Illust';
 
-type AppDownloadBannerProps =
-  { device: CheckDeviceResult } | { type: 'apple' | 'android' | null; link?: string | null };
+import OpenInAppLink from './OpenInAppLink';
+
+type AppDownloadBannerProps = { device: CheckDeviceResult } | { type: 'apple' | 'android' | null };
 
 const AppDownloadBanner = (props: AppDownloadBannerProps) => {
   const appDownloadLink = useAppDownloadLink(
     'device' in props ? props.device : (null as unknown as CheckDeviceResult),
   );
-  const { type, link } = 'device' in props ? appDownloadLink : props;
-
-  const handleAppDownloadClick = () => {
-    if (!type) return;
-    if (typeof window !== 'undefined') {
-      (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
-        event: 'app_download_click',
-        platform: type,
-        link,
-      });
-    }
-  };
+  const { type } = 'device' in props ? appDownloadLink : props;
 
   if (type === null) return null;
 
   return (
     <>
-      {type && link && (
+      {type && (
         <div className="from-secondary-50 to-secondary-100 flex h-[92px] w-full items-center gap-3 overflow-hidden rounded-lg border border-gray-600 bg-linear-to-b px-5">
           <div className="shrink-0">
             <AppIcon />
@@ -45,13 +35,15 @@ const AppDownloadBanner = (props: AppDownloadBannerProps) => {
             </p>
           </div>
           <div className="shrink-0">
-            <a
-              href={link}
-              onClick={handleAppDownloadClick}
+            {/* 앱이 있는 안드로이드는 앱이 바로 열린다. 홈·로그인·실시간 어디에 놓여도 앱 첫 화면으로. */}
+            <OpenInAppLink
+              platform={type}
+              path="/"
+              source="banner"
               className="bg-secondary-600 text-fixed-white flex h-[32px] w-20 items-center justify-center rounded-xl text-sm font-semibold"
             >
               다운받기
-            </a>
+            </OpenInAppLink>
           </div>
         </div>
       )}

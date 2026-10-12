@@ -11,7 +11,14 @@ import Link from '@/shared/ui/Link';
 
 import ProductShareButton from './ProductShareButton';
 
-export default function ProductDetailPageHeader({ productId }: { productId: number }) {
+export default function ProductDetailPageHeader({
+  productId,
+  openInApp,
+}: {
+  productId: number;
+  /** 「앱으로 보기」 — 레이아웃이 기기를 보고 넣는다(앱 웹뷰·PC 는 없음). */
+  openInApp?: React.ReactNode;
+}) {
   const handleSearch = () => {
     // TODO: Need GTM Migration
     // mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
@@ -32,6 +39,7 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
       logo={<LogoLink />}
       actions={
         <>
+          {openInApp}
           <Link
             href={PAGE.SEARCH}
             onClick={handleSearch}

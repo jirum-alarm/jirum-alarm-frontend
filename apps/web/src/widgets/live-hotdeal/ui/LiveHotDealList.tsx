@@ -22,7 +22,7 @@ const LiveHotDealList = ({ device }: { device: CheckDeviceResult }) => {
     <>
       <ProductGridList products={products.slice(0, size)} priorityCount={size} />
       <div className="pc:hidden col-span-2 w-full pt-1 pb-3 sm:col-span-3">
-        {type && link && <AppDownloadBanner type={type} link={link} />}
+        {type && link && <AppDownloadBanner type={type} />}
       </div>
       <ProductGridList products={products.slice(size)} />
       <div className="flex min-h-10 w-full items-center justify-center" ref={loadingCallbackRef}>

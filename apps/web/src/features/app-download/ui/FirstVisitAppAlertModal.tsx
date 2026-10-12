@@ -2,12 +2,12 @@
 
 import { m } from 'motion/react';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Drawer } from 'vaul';
 
 import { CheckDeviceResult } from '@/app/actions/agent.types';
 
-import { ANDROID_STORE_LINK, IOS_STORE_LINK } from '@/shared/config/appStore';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
 import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
 import { Apple, Google } from '@/shared/ui/common/icons';
@@ -15,6 +15,7 @@ import { Apple, Google } from '@/shared/ui/common/icons';
 import { resolveAppDownloadPlatform } from '../model/resolvePlatform';
 
 import AppDownloadQr from './AppDownloadQr';
+import OpenInAppLink from './OpenInAppLink';
 
 // ponytail: 전역 1회 노출. 상품별로 반복 노출하면 이탈만 키움. 재노출 원하면 이 키 삭제 or 만료 추가.
 export const FIRST_VISIT_SEEN_KEY = 'jirum:app-alert-hook-seen';
@@ -45,6 +46,7 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
 
   // 트리거 없이 첫 진입 시 자동 오픈.
   const [show, setShow] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!platform) return;
@@ -83,9 +85,10 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
     </div>
   );
 
-  // PC 는 QR 을 보여주는 가운데 모달 그대로.
+  // PC 는 QR 을 보여주는 가운데 모달 그대로. QR 은 이 상품 주소 — 폰으로 옮겨 같은 상품에서 이어 본다.
   if (platform === 'non-mobile') {
     if (!show) return null;
+    const qrUrl = `${window.location.origin}${pathname}?utm_source=pc_qr&utm_medium=qr&utm_campaign=app_handoff`;
     return (
       <AlertDialog defaultOpen>
         <AlertDialog.Content className="max-w-[320px] gap-0">
@@ -98,7 +101,7 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
           <div className="mt-4 flex flex-col items-center">
             {/* PC는 QR 카드가 "스캔 → 알림"을 다 말하므로 리드문을 두지 않는다. */}
             <div className="flex w-full gap-x-2">
-              <AppDownloadQr compact />
+              <AppDownloadQr compact url={qrUrl} />
             </div>
             <AlertDialog.Cancel asChild>
               <button type="button" className="mt-3 h-10 text-sm text-gray-500">
@@ -136,14 +139,11 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
 }
 
 function StoreButton({ kind }: { kind: 'android' | 'apple' }) {
-  const link = kind === 'android' ? ANDROID_STORE_LINK : IOS_STORE_LINK;
+  // 보던 상품 그대로 — 앱이 있으면 이 상품이 앱에서 열리고, 없으면 출처를 실어 스토어로(OpenInAppLink).
+  const pathname = usePathname();
   return (
     <Drawer.Close asChild>
-      <a
-        href={link}
-        className="w-full"
-        onClick={() => pushEvent('app_download_click', { platform: kind, link })}
-      >
+      <OpenInAppLink platform={kind} path={pathname} source="first_visit_detail" className="w-full">
         <m.span
           className="bg-primary-500 text-fixed-900 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold"
           whileTap={{ scale: 0.95 }}
@@ -152,7 +152,7 @@ function StoreButton({ kind }: { kind: 'android' | 'apple' }) {
           {kind === 'android' ? <Google /> : <Apple />}
           {kind === 'android' ? 'Google Play' : 'App Store'}
         </m.span>
-      </a>
+      </OpenInAppLink>
     </Drawer.Close>
   );
 }
