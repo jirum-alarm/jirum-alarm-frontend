@@ -231,9 +231,11 @@ function main() {
     'web Google Play link',
     webDownloadPath,
   );
+  // web 은 스토어프런트(/sg/ 등)를 박지 않는다(41030454 — 사용자 나라 스토어로 열리게, 캠페인은 appHandoff 가 붙임).
+  // 그래서 web 은 URL 통째가 아니라 **앱 id** 를 본다. 스토어프런트는 있어도 없어도 된다.
   const webAppStoreLink = extractFirst(
     webDownload,
-    /(https:\/\/apps\.apple\.com\/[A-Za-z-]+\/app(?:\/[^\s'"`]+)?\/id\d+)/u,
+    /(https:\/\/apps\.apple\.com\/(?:[A-Za-z-]+\/)?app(?:\/[^\s'"`]+)?\/id\d+)/u,
     'web App Store link',
     webDownloadPath,
   );
@@ -252,7 +254,11 @@ function main() {
 
   assertEqual(webGooglePlayLink, CURRENT_GOOGLE_PLAY_URL, 'Web Google Play link');
   assertEqual(landingGooglePlayLink, CURRENT_GOOGLE_PLAY_URL, 'Landing Google Play link');
-  assertEqual(webAppStoreLink, CURRENT_APP_STORE_URL, 'Web App Store link');
+  assertEqual(
+    webAppStoreLink.match(/\/id(\d+)$/u)?.[1],
+    CURRENT_APP_STORE_ID,
+    'Web App Store app id',
+  );
   assertEqual(landingAppStoreLink, CURRENT_APP_STORE_URL, 'Landing App Store link');
 
   const { googlePlayIds, appStoreIds } = collectStoreIds('apps/web/src');
