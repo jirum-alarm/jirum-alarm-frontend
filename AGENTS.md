@@ -216,6 +216,9 @@ pnpm build            # Production build
     로컬 빌드 함정: Xcode 27 은 `IPHONEOS_DEPLOYMENT_TARGET=15.1` 을 넘겨야 옛 Pod 이 빌드되고, `/tmp` 아래 워크트리는 번들 단계가
     경로를 못 찾아 `SKIP_BUNDLING=1` + 위 "번들만 바꿔 끼우기"로 간다. `pod install` 이 바꾼 `Podfile.lock`·`project.pbxproj` 는
     발행 전 커밋본으로 되돌린다(안 하면 `native:check` 가 막는다). 마지막 OTA 커밋이 이미 다음 runtime 으로 올린 커밋이면 재현 불가 — 건너뛴다.
+    **`ota/runtime-<버전>` 브랜치가 이미 있으면 한 줄로**: `bash apps/mobile/scripts/ota-backport.sh --runtime <버전> --app <그 버전 Release .app> <커밋…>`
+    (브랜치 끝 워크트리 → cherry-pick → 설치·tsc·지문·jest(CI 조건) → 기동 확인 → 원격 끝 재확인 → `ota:publish` → push → 매니페스트 확인. `--dry-run` 은 발행 직전까지).
+    JS 수정은 스토어에 나가 있는 runtime **전부**(10/12 기준 1.5.0·1.4.8 — main 은 1.5.1)에 따로 낸다.
   - 네이티브 변경은 몇 주에 한 번 묶어 낸다(스토어 업데이트를 사용자가 마주치는 횟수를 줄인다).
 - **업데이트 안내 = `apps/web/public/app-release.json`**(웹 운영 배포로 발효, 플랫폼별 값).
   - `latestVersion`(권유): 새 스토어 버전이 **출시된 뒤** 그 플랫폼만 올린다 → 버전당 한 번 "새 버전이 나왔어요" 시트.
