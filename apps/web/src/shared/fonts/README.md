@@ -67,3 +67,18 @@ PY
 (`src` 배열은 `path`/`weight`/`style` 만 받고, `declarations` 는 전체 @font-face 공통).
 직접 `@font-face` 를 쓰면 preload·`adjustFontFallback` 메트릭 조정을 수동 관리해야 해서 보류했다.
 폴백이 실제로 문제가 되면 그때 검토한다.
+
+## 공유 카드용 정적 TTF (`og/`)
+
+`app/api/og/product/[id]` 의 공유 카드(카톡·X 미리보기 1200×630)는 satori 가 글자를 직접 그린다.
+satori 는 woff2·가변 폰트를 못 읽어서, **위 서브셋에서 굵기 두 개(600·800)를 정적 TTF 로 뽑아** 둔다(각 ~550KB, 서버에서만 읽음 — 브라우저로 안 나간다).
+서브셋을 다시 만들었으면 이것도 같이:
+
+```bash
+for w in 600 800; do
+  python3 -m fontTools.varLib.instancer PretendardVariable.woff2 wght=$w --static -o /tmp/p$w.ttf
+  python3 -c "from fontTools.ttLib import TTFont as F; f=F('/tmp/p$w.ttf'); f.flavor=None; f.save('og/Pretendard-$w.ttf')"
+done
+```
+
+standalone 빌드에 실리는 건 `next.config.js` 의 `outputFileTracingIncludes` 덕분이다(readFile 경로는 추적이 못 본다).

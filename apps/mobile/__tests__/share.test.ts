@@ -2,6 +2,7 @@ import {
   buildCaption,
   buildIntentUrl,
   buildKakaoLinkUrl,
+  buildProductShareDescription,
   buildProductShareUrl,
   buildShareMessage,
   buildShareUrl,
@@ -150,5 +151,44 @@ describe('kakao native schemes', () => {
       'https://jirum-alarm.com/products/1',
     );
     expect(init.headers.Authorization).toBe(`KakaoAK ${KAKAO_NATIVE_APP_KEY}`);
+  });
+});
+
+describe('buildProductShareDescription', () => {
+  it('배지 · 가격 · 쇼핑몰 순', () => {
+    expect(
+      buildProductShareDescription({
+        badge: '대박딜',
+        price: '58,170원',
+        mallName: '지마켓',
+      }),
+    ).toBe('대박딜 · 58,170원 · 지마켓');
+  });
+
+  it('종료된 딜은 배지 대신 판매종료', () => {
+    expect(
+      buildProductShareDescription({
+        badge: '초대박딜',
+        price: '5,590원',
+        mallName: '토스',
+        isEnd: true,
+      }),
+    ).toBe('판매종료 · 5,590원 · 토스');
+  });
+
+  it('토스 유입은 가격을 뺀다', () => {
+    expect(
+      buildProductShareDescription({
+        price: '13,900원',
+        mallName: '토스',
+        hidePrice: true,
+      }),
+    ).toBe('토스');
+  });
+
+  it('아무것도 없으면 undefined', () => {
+    expect(buildProductShareDescription({price: ' ', mallName: null})).toBe(
+      undefined,
+    );
   });
 });

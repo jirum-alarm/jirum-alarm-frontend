@@ -5,6 +5,7 @@ import {
   Easing,
   Linking,
   Modal,
+  Platform,
   Pressable,
   Share,
   StyleSheet,
@@ -157,7 +158,11 @@ export default function ShareSheet({
     if (pending || copied) return;
     setPending(channel);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
-    Analytics.track('share_channel_click', {share_channel: channel});
+    // product_id = GA4 맞춤 측정기준(web 공유 이벤트와 같은 키) — 어떤 딜이 퍼지는지 본다.
+    Analytics.track('share_channel_click', {
+      share_channel: channel,
+      ...(productId !== undefined ? {product_id: productId} : {}),
+    });
 
     const url =
       sharePath !== undefined
@@ -178,7 +183,13 @@ export default function ShareSheet({
         copyLink(url);
         return;
       } else {
-        await Share.share({title: shareTitle, message});
+        // iOS 는 url 을 따로 주면 공유 시트·메시지가 링크 미리보기(제목·사진)를 붙인다. message 에도
+        // 링크가 있으면 두 번 들어가므로 iOS 엔 본문만, 안드로이드는 url 을 안 받아 message 하나로.
+        await Share.share(
+          Platform.OS === 'ios'
+            ? {title: shareTitle, message: caption, url}
+            : {title: shareTitle, message},
+        );
       }
       onClose();
     } catch {

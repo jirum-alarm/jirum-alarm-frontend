@@ -14,6 +14,7 @@ import {
   DetailHeaderBackButton,
   DetailHeaderTitle,
 } from '@/screens/detail/ui/ProductDetailHeader';
+import ShareSheet from '@/screens/detail/ui/ShareSheet';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {goTabHome, openSearch} from '@/shared/lib/navigation/search-flow';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
@@ -46,7 +47,8 @@ export default function TossCurationScreen({
   const [activeCat, setActiveCat] = useState<string | undefined>(undefined);
   const isCategory = activeId === CATEGORY_SECTION_ID;
 
-  // 상세와 같은 헤더(로고+부제·검색). 공유는 목록이라 제외.
+  // 상세와 같은 헤더(로고+부제·검색·공유). 공유는 web 토스 특가 헤더와 같은 `/toss`.
+  const [shareOpen, setShareOpen] = useState(false);
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => null,
@@ -59,7 +61,10 @@ export default function TossCurationScreen({
         </View>
       ),
       headerRight: () => (
-        <DetailHeaderActions onPressSearch={() => openSearch(navigation)} />
+        <DetailHeaderActions
+          onPressSearch={() => openSearch(navigation)}
+          onPressShare={() => setShareOpen(true)}
+        />
       ),
     });
   }, [navigation]);
@@ -148,6 +153,12 @@ export default function TossCurationScreen({
             </View>
           ) : null
         }
+      />
+      <ShareSheet
+        visible={shareOpen}
+        onClose={() => setShareOpen(false)}
+        sharePath="/toss"
+        title="토스 특가"
       />
     </View>
   );

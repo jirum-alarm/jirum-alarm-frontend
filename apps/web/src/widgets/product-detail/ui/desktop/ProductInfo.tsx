@@ -6,6 +6,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { UploaderType } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
 import type { ProductDealEvidence } from '@/shared/api/product/product.service';
+import { hotdealTextMap } from '@/shared/config/hotdeal';
 import { cn } from '@/shared/lib/cn';
 import { getEntry } from '@/shared/lib/entry';
 import { pushRecentViewedProduct } from '@/shared/lib/recentViewedProducts';
@@ -30,6 +31,7 @@ import {
   type PostPurchasePromptKind,
 } from '@/features/product-detail/lib/okachat';
 import { dealFreshnessAt, isSeenBasedFreshness } from '@/features/product-detail/lib/product-seo';
+import { buildProductShareDescription } from '@/features/product-detail/lib/share-card';
 import DealEvidenceBlock from '@/features/product-detail/ui/DealEvidenceBlock';
 import ViewerCount from '@/features/product-detail/ui/desktop/ViewerCount';
 import HotdealCriteriaBadge from '@/features/product-detail/ui/HotdealCriteriaBadge';
@@ -108,11 +110,13 @@ export default function ProductInfo({
             <div className="shrink-0 self-start">
               <ShareButton
                 title={shareTitle}
-                description={
-                  [hidePrice ? undefined : product.price, product.mallName]
-                    .filter(Boolean)
-                    .join(' · ') || undefined
-                }
+                description={buildProductShareDescription({
+                  price: product.price,
+                  mallName: product.mallName,
+                  badge: product.hotDealType ? hotdealTextMap[product.hotDealType] : null,
+                  isEnd: product.isEnd,
+                  hidePrice,
+                })}
                 imageUrl={product.thumbnail ?? undefined}
               />
             </div>

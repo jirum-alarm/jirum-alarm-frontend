@@ -28,6 +28,7 @@ import {
   DetailHeaderActions,
   DetailHeaderBackButton,
 } from '@/screens/detail/ui/ProductDetailHeader';
+import ShareSheet from '@/screens/detail/ui/ShareSheet';
 import {openSearch} from '@/shared/lib/navigation/search-flow';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 
@@ -96,6 +97,8 @@ export default function CurationScreen({
    * 뒤로가기·검색은 상세와 같은 규격 아이콘을 쓴다.
    */
   const title = section?.title ?? '';
+  // 공유는 web 과 같은 `/curation/{id}` 로 — 받은 사람이 웹에서도, 앱에서도 같은 모아보기를 연다.
+  const [shareOpen, setShareOpen] = useState(false);
   useLayoutEffect(() => {
     navigation.setOptions({
       title,
@@ -103,12 +106,23 @@ export default function CurationScreen({
         canGoBack ? (
           <DetailHeaderBackButton onPress={() => navigation.goBack()} />
         ) : null,
-      // ⚠️web 헤더엔 공유 버튼이 있다 — 아직 안 옮겼다(ShareSheet 가 sharePath 를 받으므로 붙일 수 있다).
       headerRight: () => (
-        <DetailHeaderActions onPressSearch={() => openSearch(navigation)} />
+        <DetailHeaderActions
+          onPressSearch={() => openSearch(navigation)}
+          onPressShare={title ? () => setShareOpen(true) : undefined}
+        />
       ),
     });
   }, [navigation, title]);
+
+  const shareSheet = (
+    <ShareSheet
+      visible={shareOpen}
+      onClose={() => setShareOpen(false)}
+      sharePath={`/curation/${encodeURIComponent(sectionId)}`}
+      title={title}
+    />
+  );
 
   const handlePressProduct = useCallback(
     (id: number) => {
@@ -159,7 +173,14 @@ export default function CurationScreen({
     />
   );
 
-  if (!section.tabs?.length) return list;
+  if (!section.tabs?.length) {
+    return (
+      <>
+        {list}
+        {shareSheet}
+      </>
+    );
+  }
 
   return (
     <View className="flex-1 gap-2 bg-white pt-2">
@@ -170,6 +191,7 @@ export default function CurationScreen({
         variant="tab"
       />
       {list}
+      {shareSheet}
     </View>
   );
 }

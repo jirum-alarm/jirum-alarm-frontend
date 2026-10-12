@@ -31,6 +31,7 @@ import {
   summarizePriceHistoryForSeo,
   toSeoImageUrl,
 } from '@/features/product-detail/lib/product-seo';
+import { isShareRequest } from '@/features/product-detail/lib/share-card';
 import { ProductPrefetch } from '@/features/product-detail/prefetch';
 
 import DesktopProductDetailPage from '@/widgets/product-detail/ui/desktop/ProductDetailPage';
@@ -252,10 +253,10 @@ export async function generateMetadata({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ from?: string | string[] }>;
+  searchParams: Promise<{ from?: string | string[]; utm_source?: string | string[] }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const { from } = await searchParams;
+  const { from, utm_source } = await searchParams;
   const hidePrice = isFromToss(from);
 
   // `/products/null` 처럼 id 가 숫자가 아니면 조회를 던져 500 이 나갔다. 404 로 내린다.
@@ -294,6 +295,16 @@ export async function generateMetadata({
 
   const image = toSeoImageUrl(product.thumbnail) ?? DEFAULT_OG_IMAGE;
   const url = `${METADATA_SERVICE_URL}/products/${productId}`;
+  // 공유 링크(카톡·X·스레드·복사)로 열린 미리보기엔 가격·배지를 얹은 카드를 준다(api/og/product).
+  // 정식 URL(검색엔진)은 상품 사진 그대로 — 크롤러가 상세를 훑을 때마다 카드를 그리지 않게.
+  const shareImage = isShareRequest(utm_source)
+    ? {
+        url: `${METADATA_SERVICE_URL}/api/og/product/${productId}${hidePrice ? '?hp=1' : ''}`,
+        width: 1200,
+        height: 630,
+        alt: product.title,
+      }
+    : null;
 
   const defaultKeywords =
     '실시간, 핫딜, 할인, 초특가, 최저가, 알뜰, 알뜰쇼핑, 쿠폰, 이벤트, 지름알림, 핫딜알림';
@@ -351,18 +362,13 @@ export async function generateMetadata({
       ...(categoryName ? { section: categoryName } : {}),
       siteName: '지름알림',
       locale: 'ko_KR',
-      images: [
-        {
-          url: image,
-          alt: product.title,
-        },
-      ],
+      images: [shareImage ?? { url: image, alt: product.title }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: image,
+      images: shareImage?.url ?? image,
     },
     alternates: {
       canonical: url,

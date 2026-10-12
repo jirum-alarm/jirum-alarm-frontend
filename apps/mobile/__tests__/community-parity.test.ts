@@ -279,8 +279,8 @@ describe('웹이 하던 일의 인수 — 조용히 사라지는 것들', () => 
     expect(postScreen).toMatch(/sharePath=\{`\/community\/\$\{postId\}`\}/);
     expect(postScreen).not.toMatch(/Share\.share\(/);
     const sheet = read('src/screens/detail/ui/ShareSheet.tsx');
-    expect(sheet).toContain(
-      "Analytics.track('share_channel_click', {share_channel: channel})",
+    expect(sheet).toMatch(
+      /Analytics\.track\('share_channel_click', \{\s*share_channel: channel,/,
     );
   });
 });

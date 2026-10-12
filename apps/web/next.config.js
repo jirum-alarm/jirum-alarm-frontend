@@ -8,6 +8,11 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  // 공유 카드 라우트가 readFile 로 읽는 폰트 — 정적 import 가 아니라 standalone 추적이 못 본다.
+  // (아이콘은 public/ 이라 이미지에 같이 복사된다)
+  outputFileTracingIncludes: {
+    '/api/og/product/[id]': ['./src/shared/fonts/og/*.ttf'],
+  },
   httpAgentOptions: {
     keepAlive: true,
   },

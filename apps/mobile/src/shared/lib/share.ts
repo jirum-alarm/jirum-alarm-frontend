@@ -45,6 +45,29 @@ export const buildShareMessage = (
 ): string =>
   description ? `${title}\n${description}\n${url}` : `${title}\n${url}`;
 
+/**
+ * 상품 공유 문구의 둘째 줄 — "대박딜 · 58,170원 · 지마켓". web `buildProductShareDescription` 과 같은 규칙:
+ * 카드 이미지가 안 뜨는 곳(문자 등)에서도 왜 보냈는지 읽히게 배지를 앞에, 종료된 딜은 배지 대신 "판매종료".
+ * 토스 코너 유입(hidePrice)은 상세처럼 가격을 뺀다.
+ */
+export const buildProductShareDescription = ({
+  price,
+  mallName,
+  badge,
+  isEnd,
+  hidePrice,
+}: {
+  price?: string | null;
+  mallName?: string | null;
+  badge?: string | null;
+  isEnd?: boolean | null;
+  hidePrice?: boolean;
+}): string | undefined =>
+  [isEnd ? '판매종료' : badge, hidePrice ? null : price, mallName]
+    .map(part => part?.trim())
+    .filter(Boolean)
+    .join(' · ') || undefined;
+
 /** 링크를 제외한 본문(제목 + 설명). intent 의 caption 용. */
 export const buildCaption = (title: string, description?: string): string =>
   description ? `${title}\n${description}` : title;

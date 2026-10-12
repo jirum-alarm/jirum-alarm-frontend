@@ -14,6 +14,7 @@ import {useQuery, useQueryClient} from '@tanstack/react-query';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import {
+  type HotDealType,
   OrderOptionType,
   ProductOrderType,
   UploaderType,
@@ -40,6 +41,8 @@ import {
 import {useAuth} from '@/shared/hooks/useAuth';
 import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import {goTabHome, openSearch} from '@/shared/lib/navigation/search-flow';
+import {buildProductShareDescription} from '@/shared/lib/share';
+import {hotdealTextMap} from '@/shared/components/product/HotdealBadge';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
 
 import ProductDetailWebViewScreen from './ProductDetailWebViewScreen';
@@ -259,10 +262,15 @@ function NativeDetail({
       onClose={() => setShareOpen(false)}
       productId={productId}
       title={product?.title ?? '지름알림'}
-      description={
-        [product?.price, product?.mallName].filter(Boolean).join(' · ') ||
-        undefined
-      }
+      description={buildProductShareDescription({
+        price: product?.price,
+        mallName: product?.mallName,
+        badge: product?.hotDealType
+          ? hotdealTextMap[product.hotDealType as HotDealType]
+          : null,
+        isEnd: product?.isEnd,
+        hidePrice,
+      })}
       imageUrl={product?.thumbnail ?? undefined}
     />
   );
