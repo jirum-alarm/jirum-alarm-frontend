@@ -97,17 +97,39 @@ def db():
             {r["wk"]: r for r in out["guest"]})
 
 
+ROOM_SSH = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=15", "user@192.168.99.71",
+            "cat ~/jirum-kakao-room/counts.csv"]
+
+
+def room():
+    """카톡방(핫딜 온리방) 주말 인원 — 맥 스튜디오 counts.csv(scripts/kakao-room, 2026-10-12~). 못 읽으면 빈 표."""
+    try:
+        rows = subprocess.check_output(ROOM_SSH, text=True, timeout=30).splitlines()[1:]
+    except Exception:
+        return {}
+    last = {}
+    for row in rows:
+        at, name, members = (row.split(",") + ["", "", ""])[:3]
+        if name != "핫딜 온리방" or not members.isdigit():
+            continue
+        d = dt.datetime.strptime(at[:19], "%Y-%m-%dT%H:%M:%S").date()
+        iso = d.isocalendar()
+        last[f"{iso[0]}{iso[1]:02d}"] = int(members)  # 시간순 기록이라 마지막 값 = 그 주 마지막 측정
+    return last
+
+
 def pct(n, d):
     return f"{n:,} ({n / d:.0%})" if d else f"{n:,}"
 
 
 g = ga4()
 cohort, recv, guests = db()
+members = room()
 lines = [f"# 지름알림 주간 깔때기 ({start} ~ {last_sun}, 생성 {today})", "",
          "★ = 알림 경유 재방문(오카방 유입 + 푸시 열기, 중복 가능). 가입 코호트는 그 주 가입자 기준, "
-         "첫알림7일은 마지막 주가 아직 덜 찼다.", "",
-         "| 주 | 상세 조회 | 알림 권유 클릭 | 게스트 등록(토큰) | 가입 | 키워드 등록 | 토큰 있음 | 첫 알림(7일) | 푸시 수신 | 오카방 유입 | 푸시 열기 | ★ |",
-         "|---|---|---|---|---|---|---|---|---|---|---|---|"]
+         "첫알림7일은 마지막 주가 아직 덜 찼다. 카톡방 인원 = 핫딜 온리방 그 주 마지막 측정(전주 대비 순증, 입장−퇴장).", "",
+         "| 주 | 상세 조회 | 알림 권유 클릭 | 게스트 등록(토큰) | 가입 | 키워드 등록 | 토큰 있음 | 첫 알림(7일) | 푸시 수신 | 오카방 유입 | 카톡방 인원 | 푸시 열기 | ★ |",
+         "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
 star = {}
 for w in weeks:
     c = cohort.get(w, {})
@@ -116,8 +138,11 @@ for w in weeks:
     det = g["detail"].get(w, 0)
     gu = guests.get(w, {})
     gcell = f"{int(gu.get('guest') or 0)} ({int(gu.get('gtok') or 0)})"
+    i = weeks.index(w)
+    mem, before = members.get(w), members.get(weeks[i - 1]) if i else None
+    mcell = "—" if mem is None else (f"{mem:,} ({mem - before:+,})" if before is not None else f"{mem:,}")
     lines.append(f"| {w[:4]}-W{w[4:]} | {det:,} | {pct(g['prompt'].get(w, 0), det)} | {gcell} | {su} | {pct(kw, su)} | "
-                 f"{pct(tok, su)} | {pct(p7, su)} | {recv.get(w, 0):,} | {g['kakao'].get(w, 0):,} | "
+                 f"{pct(tok, su)} | {pct(p7, su)} | {recv.get(w, 0):,} | {g['kakao'].get(w, 0):,} | {mcell} | "
                  f"{g['pushopen'].get(w, 0):,} | **{star[w]:,}** |")
 report = "\n".join(lines) + "\n"
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
