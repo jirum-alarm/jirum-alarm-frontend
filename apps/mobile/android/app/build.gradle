@@ -107,7 +107,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 26
-        versionName "1.4.8"
+        versionName "1.4.7"
     }
     sourceSets {
         main {
