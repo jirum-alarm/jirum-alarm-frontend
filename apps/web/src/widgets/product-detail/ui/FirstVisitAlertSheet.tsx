@@ -13,7 +13,7 @@ import useMyRouter from '@/shared/hooks/useMyRouter';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { getGraphqlErrorMessage } from '@/shared/lib/graphql-error';
 import { browserHandoffUrl, canHandoffToBrowser } from '@/shared/lib/push-channel/browserHandoff';
-import { readPushStatus } from '@/shared/lib/push-channel/pushChannel';
+import { readPushStatus, usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
 import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
 import { useToast } from '@/shared/ui/common/Toast';
@@ -160,6 +160,7 @@ function KeywordAlertSheet({
   const router = useMyRouter();
   const { ensureAlertSession } = useAlertSession();
   const { requestPermission } = useFcmPermission();
+  const promptPushChannel = usePushChannelPrompt();
   const [pending, setPending] = useState(false);
   const { mutateAsync: addKeyword } = useUpdateKeyword({
     source: 'first_visit',
@@ -191,9 +192,11 @@ function KeywordAlertSheet({
     //   FCMConfig 재등록이 게스트에 붙인다. 바로 붙여야 하면 수락 후 addPushToken 을 한 번 더.
     const permission =
       readPushStatus() === 'default' ? requestPermission({ force: true }) : Promise.resolve(null);
+    let registered = false;
     try {
       if (!(await ensureAlertSession())) return;
       await addKeyword({ keyword });
+      registered = true;
       toast.success(`'${keyword}' 알림을 등록했어요.`, {
         action: { label: '보기', onClick: () => router.push(PAGE.MYPAGE_KEYWORD) },
       });
@@ -204,6 +207,10 @@ function KeywordAlertSheet({
       setPending(false);
       onClose();
     }
+    // 키워드는 등록됐는데 권한을 못 얻었으면(거절·창을 그냥 닫음·크롬 조용한 권한 요청) 받을 통로가 없다.
+    // 다른 등록 지점처럼 "어디로 받을까요"(앱 / 이 브라우저 다시)로 잇는다.
+    // 2026-10-12 실측: 게스트 키워드 등록의 88% 가 이 시트인데 10/12 등록 게스트 29명 중 토큰 11명, 그 시트 노출 4명.
+    if (registered) promptPushChannel(keyword);
   };
 
   const heading = (
