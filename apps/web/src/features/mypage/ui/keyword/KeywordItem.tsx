@@ -36,8 +36,8 @@ const DEAL_CHOICES = [
   },
   {
     value: true,
-    label: '평소보다 쌀 때만',
-    hint: () => '평소 가격보다 싸게 올라온 딜만 알려드려요',
+    label: '최근 딜보다 쌀 때만',
+    hint: () => '최근 올라온 딜보다 싸게 뜬 딜만 알려드려요',
   },
 ] as const;
 
