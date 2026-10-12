@@ -37,7 +37,7 @@ import {useColors} from '@/shared/theme/useColors';
 import {restoreColorSchemePreference} from '@/shared/theme/color-scheme-preference';
 import {useWebViewColorSchemeCookie} from '@/shared/theme/webview-color-scheme-cookie';
 import {Analytics} from '@/shared/lib/analytics/ga4';
-import {focusedScreenName} from '@/shared/lib/analytics/screen-tracking';
+import {createScreenTracker} from '@/shared/lib/analytics/screen-tracking';
 
 // init 은 컴포넌트 밖에서 — 렌더 시작 전에 나는 에러도 잡아야 한다.
 initSentry();
@@ -78,14 +78,17 @@ function App(): React.JSX.Element {
   useWebViewColorSchemeCookie();
 
   // 화면 전환마다 GA4 screen_view. 같은 화면 안 params 변화(탭 재선택 등)는 한 번만.
-  const lastScreen = useRef<string | undefined>(undefined);
-  const trackScreen = useCallback(() => {
-    const name = focusedScreenName(navigationRef.getRootState());
-    if (!name || name === lastScreen.current) return;
-    lastScreen.current = name;
-    Analytics.screen(name);
-    setSentryScreen(name);
-  }, []);
+  // 이름이 아니라 화면 인스턴스(key)로 가른다 — 상세 → 상세 push 도 따로 센다(screen-tracking 주석).
+  const tracker = useRef(
+    createScreenTracker(name => {
+      Analytics.screen(name);
+      setSentryScreen(name);
+    }),
+  ).current;
+  const trackScreen = useCallback(
+    () => tracker(navigationRef.getRootState()),
+    [tracker],
+  );
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
