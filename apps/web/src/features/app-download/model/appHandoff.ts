@@ -16,6 +16,9 @@
  *   (AppHandoffLanding). AASA 범위 밖 경로(홈 등)는 유니버설 링크가 안 되니 스토어로 바로 보낸다.
  *
  * 표시는 `handoff=<source>` — 안드로이드는 쿼리(#은 intent 문법이 쓴다), iOS 는 해시(서버·웹 통계에 안 남게).
+ * 웹 게스트면 `gd=<게스트를 만든 기기 id>` 를 같은 자리에 붙인다 — 앱이 같은 게스트로 이어받아 웹에서 건 키워드가
+ * 앱으로 온다(apps/mobile useAdoptWebGuest, 2026-10-12). Play referrer 에도 jirum_gd 로 실어 둔다(설치 직후 첫 실행
+ * 이어받기는 Install Referrer 를 앱에 붙일 때).
  * 앱은 둘 다 경로를 볼 때 떼고 보므로(ProductDetailScreen parseProductId·tab-routing extractPath) 옛 앱도 무사하고,
  * 앱의 deeplink_opened{url} 에 그대로 남아 「웹에서 넘어온 열기」를 셀 수 있다.
  *
@@ -43,25 +46,35 @@ export const normalizeHandoffPath = (path: string): string => {
 };
 
 /** Play 스토어 주소. referrer 는 한 번 인코딩된 쿼리 문자열이어야 Play 가 앱에 그대로 넘긴다. */
-export const playStoreUrl = (source: HandoffSource, path = '/'): string => {
-  const referrer = new URLSearchParams({
+export const playStoreUrl = (
+  source: HandoffSource,
+  path = '/',
+  guestDeviceId?: string | null,
+): string => {
+  const params = new URLSearchParams({
     utm_source: 'jirum_web',
     utm_medium: source,
     utm_campaign: 'app_handoff',
     jirum_path: normalizeHandoffPath(path),
-  }).toString();
+  });
+  if (guestDeviceId) params.set('jirum_gd', guestDeviceId);
+  const referrer = params.toString();
   return `${PLAY_STORE_BASE}&referrer=${encodeURIComponent(referrer)}`;
 };
 
 export const appStoreUrl = (): string => IOS_STORE_BASE;
 
 /** 안드로이드: 앱이 있으면 그 화면, 없으면 Play. 사용자 탭으로만 열린다(크롬은 자동 이동 intent 를 막는다). */
-export const androidOpenAppUrl = (path: string, source: HandoffSource): string => {
+export const androidOpenAppUrl = (
+  path: string,
+  source: HandoffSource,
+  guestDeviceId?: string | null,
+): string => {
   const pathname = normalizeHandoffPath(path);
-  const fallback = encodeURIComponent(playStoreUrl(source, pathname));
+  const fallback = encodeURIComponent(playStoreUrl(source, pathname, guestDeviceId));
   // `intent://` + `/경로` → 앱이 받는 주소는 `jirumalarm:///경로?handoff=…`(슬래시 3개 — 앱 normalizeDeepLink 가 받는 모양).
   return (
-    `intent://${pathname}?${HANDOFF_PARAM}=${source}` +
+    `intent://${pathname}?${HANDOFF_PARAM}=${source}${guestSuffix('&', guestDeviceId)}` +
     `#Intent;scheme=jirumalarm;package=${ANDROID_PACKAGE};` +
     `S.browser_fallback_url=${fallback};end`
   );
@@ -70,11 +83,22 @@ export const androidOpenAppUrl = (path: string, source: HandoffSource): string =
 /**
  * iOS: 유니버설 링크가 되는 경로면 www 주소(+#handoff), 아니면 null(호출부가 App Store 로).
  */
-export const iosOpenAppUrl = (path: string, source: HandoffSource): string | null => {
+export const iosOpenAppUrl = (
+  path: string,
+  source: HandoffSource,
+  guestDeviceId?: string | null,
+): string | null => {
   const pathname = normalizeHandoffPath(path);
   if (!UNIVERSAL_LINK_PATH.test(pathname)) return null;
-  return `${WWW_ORIGIN}${pathname}#${HANDOFF_PARAM}=${source}`;
+  return `${WWW_ORIGIN}${pathname}#${HANDOFF_PARAM}=${source}${guestSuffix('&', guestDeviceId)}`;
 };
+
+/** 웹 게스트 기기 id 표시. 기기 id 모양(UUID 등)만 싣는다. */
+export const GUEST_DEVICE_PARAM = 'gd';
+const guestSuffix = (joiner: string, guestDeviceId?: string | null): string =>
+  guestDeviceId && /^[0-9a-z-]{16,64}$/i.test(guestDeviceId)
+    ? `${joiner}${GUEST_DEVICE_PARAM}=${guestDeviceId}`
+    : '';
 
 export type HandoffPlatform = 'android' | 'apple';
 
@@ -90,14 +114,19 @@ export const appHandoffHref = (
   platform: HandoffPlatform,
   path: string,
   source: HandoffSource,
-  { iosUniversalLink = false }: { iosUniversalLink?: boolean } = {},
+  {
+    iosUniversalLink = false,
+    guestDeviceId,
+  }: { iosUniversalLink?: boolean; guestDeviceId?: string | null } = {},
 ): string => {
-  if (platform === 'android') return androidOpenAppUrl(path, source);
-  return (iosUniversalLink && iosOpenAppUrl(path, source)) || appStoreUrl();
+  if (platform === 'android') return androidOpenAppUrl(path, source, guestDeviceId);
+  return (iosUniversalLink && iosOpenAppUrl(path, source, guestDeviceId)) || appStoreUrl();
 };
 
 /** 도착한 주소의 해시에서 넘기기 표시를 읽는다(iOS 유니버설 링크가 안 열려 웹에 떨어진 경우). */
 export const readHandoffHash = (hash: string): string | null => {
-  const matched = hash.match(new RegExp(`^#${HANDOFF_PARAM}=([a-z_]+)$`));
+  const matched = hash.match(
+    new RegExp(`^#${HANDOFF_PARAM}=([a-z_]+)(&${GUEST_DEVICE_PARAM}=[^&]*)?$`),
+  );
   return matched ? matched[1] : null;
 };

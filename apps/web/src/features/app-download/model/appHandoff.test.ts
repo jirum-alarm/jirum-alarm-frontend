@@ -106,3 +106,32 @@ test('도착 해시 읽기 — 정확한 모양만', () => {
   assert.equal(readHandoffHash(''), null);
   assert.equal(readHandoffHash('#handoff=<script>'), null);
 });
+
+const GUEST = '8f14e45f-ceea-467a-9575-5b1c9b3c2a10';
+
+test('웹 게스트: 안드로이드 intent 쿼리와 Play referrer 에 기기 id 가 실린다', () => {
+  const { data, fields } = parseIntent(androidOpenAppUrl('/products/123', 'detail_header', GUEST));
+  assert.equal(data, `/products/123?handoff=detail_header&gd=${GUEST}`);
+  const fallback = new URL(decodeURIComponent(fields['S.browser_fallback_url']));
+  const referrer = new URLSearchParams(fallback.searchParams.get('referrer') ?? '');
+  assert.equal(referrer.get('jirum_gd'), GUEST);
+});
+
+test('웹 게스트: iOS 해시에 기기 id — 착지(앱 없음)도 그대로 읽힌다', () => {
+  const href = iosOpenAppUrl('/products/1', 'detail_header', GUEST);
+  assert.equal(href, `https://www.jirum-alarm.com/products/1#handoff=detail_header&gd=${GUEST}`);
+  assert.equal(readHandoffHash(new URL(href ?? '').hash), 'detail_header');
+});
+
+test('기기 id 모양이 아니면 싣지 않는다', () => {
+  assert.equal(
+    appHandoffHref('android', '/products/1', 'banner', { guestDeviceId: 'x&y=<z>' }).includes(
+      'gd=',
+    ),
+    false,
+  );
+  assert.equal(
+    appHandoffHref('android', '/products/1', 'banner', { guestDeviceId: null }).includes('gd='),
+    false,
+  );
+});

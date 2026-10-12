@@ -1,6 +1,9 @@
 'use client';
 
-import { type AnchorHTMLAttributes, type MouseEvent } from 'react';
+import { useAtomValue } from 'jotai';
+import { type AnchorHTMLAttributes, type MouseEvent, useEffect, useState } from 'react';
+
+import { isGuestAtom, isLoggedInAtom } from '@/shared/hooks/useIsLoggedIn';
 
 import {
   appHandoffHref,
@@ -8,6 +11,9 @@ import {
   type HandoffSource,
   playStoreUrl,
 } from '../model/appHandoff';
+
+/** 웹 기기 id 저장 키(useAlertSession·BrowserHandoffArrival 과 같다). */
+const DEVICE_ID_KEY = 'jirum-alarm-device-id';
 
 /** 앱도 Play 도 안 열리고 이 페이지가 그대로 보이면 Play 로 직접 보낸다. */
 const ANDROID_STORE_FALLBACK_MS = 2000;
@@ -38,7 +44,8 @@ export default function OpenInAppLink({
   children,
   ...rest
 }: OpenInAppLinkProps) {
-  const href = appHandoffHref(platform, path, source, { iosUniversalLink });
+  const guestDeviceId = useWebGuestDeviceId();
+  const href = appHandoffHref(platform, path, source, { iosUniversalLink, guestDeviceId });
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
     onClick?.(event);
@@ -48,7 +55,7 @@ export default function OpenInAppLink({
       source,
       link: href,
     });
-    if (platform === 'android') armStoreFallback(playStoreUrl(source, path));
+    if (platform === 'android') armStoreFallback(playStoreUrl(source, path, guestDeviceId));
   };
 
   return (
@@ -56,6 +63,26 @@ export default function OpenInAppLink({
       {children}
     </a>
   );
+}
+
+/**
+ * 웹 게스트면 게스트를 만든 기기 id — 링크에 실어 앱이 같은 게스트를 이어받게 한다(웹에서 건 키워드가 앱으로).
+ * 회원은 싣지 않는다(앱에서 로그인하면 계정 키워드가 그대로 온다). localStorage 라 하이드레이션 뒤에 읽는다.
+ */
+function useWebGuestDeviceId(): string | null {
+  const isGuest = useAtomValue(isGuestAtom);
+  const isLoggedIn = useAtomValue(isLoggedInAtom);
+  const [deviceId, setDeviceId] = useState<string | null>(null);
+  useEffect(() => {
+    if (!isGuest || isLoggedIn) return;
+    try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage 는 브라우저에만 있다. 서버 HTML(id 없는 링크)과 맞추려 하이드레이션 뒤에 읽는다.
+      setDeviceId(window.localStorage.getItem(DEVICE_ID_KEY));
+    } catch {
+      // 저장소를 못 읽으면 이어받기 없이 그냥 연다.
+    }
+  }, [isGuest, isLoggedIn]);
+  return isGuest && !isLoggedIn ? deviceId : null;
 }
 
 function armStoreFallback(storeUrl: string) {
