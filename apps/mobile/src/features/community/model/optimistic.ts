@@ -56,3 +56,18 @@ export function removeCommentById<T extends {id: string | number}>(
 ): T[] {
   return comments.filter(comment => String(comment.id) !== String(id));
 }
+
+/**
+ * 목록 카드의 댓글 수만 고친다(작성 +1·삭제 -1). 이 숫자는 목록 쿼리만 들고 있다(글 상세엔 없다).
+ * 예전엔 이걸 맞추려고 커뮤니티 쿼리 **전부**(떠 있는 세 탭 목록의 모든 페이지·핫딜 칸까지)를
+ * 무효화했다 — 댓글 하나에 목록 전체를 다시 받을 이유가 없다.
+ */
+export function bumpReplyCount<
+  T extends {id: string | number; replyCount: number},
+>(posts: T[], postId: string | number, delta: number): T[] {
+  return posts.map(post =>
+    String(post.id) === String(postId)
+      ? {...post, replyCount: Math.max(0, post.replyCount + delta)}
+      : post,
+  );
+}

@@ -31,11 +31,31 @@ const RESTORE_TIMEOUT_MS = 800;
  * 화면 데이터만 조용히 다시 받는다 — 화면은 그대로 두고 바꿔치기.
  */
 focusManager.setEventListener(setFocused => {
-  const sub = AppState.addEventListener('change', state =>
-    setFocused(state === 'active'),
-  );
+  // ★'inactive' 는 복귀가 아니다 — iOS 는 알림 센터·제어 센터를 내리거나 Face ID·권한 창·공유 시트가
+  // 뜰 때마다 active→inactive→active 를 오간다. 그걸 포커스로 치면 화면을 떠난 적도 없는데 1분 지난
+  // 쿼리를 전부 다시 받았다. 진짜 백그라운드에 다녀왔을 때만 포커스를 내렸다 올린다.
+  const sub = AppState.addEventListener('change', state => {
+    if (state === 'active') setFocused(true);
+    else if (state === 'background') setFocused(false);
+  });
   return () => sub.remove();
 });
+
+/**
+ * 무한 목록은 이 페이지 수까지만 복귀 때 다시 받는다.
+ * react-query 는 무한 목록을 다시 받을 때 **내린 페이지 전부를 차례로**(커서가 앞 페이지 응답에서
+ * 나오니까) 받는다 — 10페이지 내린 채 앱을 나갔다 오면 목록마다 왕복 10번, 탭이 살아 있는 목록
+ * (홈 실시간·커뮤니티·알림·검색) 전부가 그렇다. 깊이 내린 사람은 보던 자리를 보는 중이라 그대로 두고,
+ * 새 글은 당겨서 새로고침(refetchFirstPage)으로 받는다. 맨 위 근처(2페이지 이하)는 지금처럼 갱신한다.
+ */
+const MAX_PAGES_REFETCHED_ON_FOCUS = 2;
+export const refetchOnFocus = (query: {state: {data: unknown}}): boolean => {
+  const data = query.state.data as {pages?: unknown} | undefined;
+  return !(
+    Array.isArray(data?.pages) &&
+    data.pages.length > MAX_PAGES_REFETCHED_ON_FOCUS
+  );
+};
 onlineManager.setEventListener(setOnline =>
   NetInfo.addEventListener(state => setOnline(state.isConnected !== false)),
 );
@@ -66,6 +86,7 @@ export const queryClient = new QueryClient({
       // 안 그러면 어제 목록이 그대로 굳는다. 화면엔 복원본이 먼저 보이고 바꿔치기된다.
       refetchOnMount: query => query.state.dataUpdatedAt < BOOT_TIME,
       refetchOnReconnect: false,
+      refetchOnWindowFocus: refetchOnFocus,
     },
     mutations: {
       retry: false,

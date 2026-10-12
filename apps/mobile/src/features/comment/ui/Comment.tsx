@@ -90,7 +90,8 @@ export default function Comment({
       );
       return () => queryClient.setQueryData(queryKey, previous);
     },
-    onSuccess: invalidate,
+    // 성공해도 다시 받지 않는다 — 낙관적 값이 곧 서버 값이다. 예전엔 좋아요 한 번에 댓글 목록
+    // **모든 페이지**를 차례로 다시 받았고, 연달아 누르면 늦게 온 응답이 방금 누른 표시를 되돌렸다.
     onError: (_err, _vars, rollback) => {
       rollback?.();
       showToast.error('좋아요에 실패했어요.');
