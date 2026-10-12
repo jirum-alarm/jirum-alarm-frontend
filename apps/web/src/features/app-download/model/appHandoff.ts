@@ -4,10 +4,12 @@
  * 예전엔 모든 앱 버튼이 스토어로 직행했다. 앱이 이미 깔린 사람도 스토어 → 「열기」 → 앱 첫 화면이라
  * 보던 상품을 다시 찾아야 했고, 스토어 링크엔 출처가 없어 어느 버튼이 설치를 만들었는지 몰랐다.
  *
- * - Android: `intent://` + package. 앱이 있으면 그 https 주소로 앱이 열리고(앱의 https intent-filter 가 받는다 —
- *   App Links 검증 여부와 무관하게 package 를 지정했으니 앱으로 간다), 없으면 browser_fallback_url(Play +
- *   referrer)로 간다. referrer 의 utm 은 앱 first_open 의 캠페인으로 잡히고, jirum_path 는 설치 후 첫 실행에
- *   그 화면을 열 때(Install Referrer — 아직 앱에 안 붙음) 쓴다.
+ * - Android: `intent:///<경로>#Intent;scheme=jirumalarm;package=…` — 커스텀 스킴(모든 앱 버전에 등록돼 있다)을
+ *   우리 앱으로 지정해 연다. 앱이 있으면 그 화면, 없으면 browser_fallback_url(Play + referrer). https 가 아니라
+ *   커스텀 스킴인 이유: 매니페스트의 https 필터를 App Links 용으로 경로를 좁히면(APP_LINKS.md) 홈·알림 같은
+ *   경로는 https intent 가 앱에 안 맞아 Play 로 새기 때문 — 스킴은 경로와 무관하다.
+ *   referrer 의 utm 은 앱 first_open 의 캠페인으로 잡히고, jirum_path 는 설치 후 첫 실행에 앱이 그 화면을 연다
+ *   (apps/mobile src/shared/lib/navigation/deferred-link.ts — Play Install Referrer).
  * - iOS: 유니버설 링크는 **지금 페이지와 다른 도메인**을 눌러야 앱으로 간다(같은 도메인이면 사파리가 연다).
  *   사이트는 apex 라 www 주소를 걸면 다른 도메인이 된다 — entitlements·AASA 둘 다 www 를 등록하고 있다.
  *   앱이 없으면 www → apex 301 로 같은 페이지가 다시 열리고, 끝의 #handoff 를 보고 App Store 로 보낸다
@@ -57,9 +59,10 @@ export const appStoreUrl = (): string => IOS_STORE_BASE;
 export const androidOpenAppUrl = (path: string, source: HandoffSource): string => {
   const pathname = normalizeHandoffPath(path);
   const fallback = encodeURIComponent(playStoreUrl(source, pathname));
+  // `intent://` + `/경로` → 앱이 받는 주소는 `jirumalarm:///경로?handoff=…`(슬래시 3개 — 앱 normalizeDeepLink 가 받는 모양).
   return (
-    `intent://www.jirum-alarm.com${pathname}?${HANDOFF_PARAM}=${source}` +
-    `#Intent;scheme=https;package=${ANDROID_PACKAGE};` +
+    `intent://${pathname}?${HANDOFF_PARAM}=${source}` +
+    `#Intent;scheme=jirumalarm;package=${ANDROID_PACKAGE};` +
     `S.browser_fallback_url=${fallback};end`
   );
 };

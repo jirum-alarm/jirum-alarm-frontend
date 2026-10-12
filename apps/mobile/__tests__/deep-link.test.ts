@@ -82,7 +82,7 @@ describe('normalizeDeepLink', () => {
 
 /**
  * 웹 「앱 열기·앱 받기」 버튼이 만드는 주소(apps/web/src/features/app-download/model/appHandoff.ts).
- * 안드로이드는 intent 로 `https://www.jirum-alarm.com<경로>?handoff=<출처>`, iOS 는 유니버설 링크로
+ * 안드로이드는 intent 로 `jirumalarm:///<경로>?handoff=<출처>`, iOS 는 유니버설 링크로
  * `https://www.jirum-alarm.com<경로>#handoff=<출처>` 가 들어온다. 표시를 달고도 보던 화면이 네이티브로 열려야 한다
  * — 웹뷰 폴백으로 떨어지면 웹 상세가 앱 안에 뜬다.
  */
@@ -90,9 +90,9 @@ describe('웹 → 앱 넘기기 링크', () => {
   const route = (url: string) =>
     resolveNativeRoute(normalizeDeepLink(url) ?? '', {allowWebViewRoute: true});
 
-  it('안드로이드 intent(쿼리 표시) — 상품 상세가 네이티브로', () => {
+  it('안드로이드 intent(커스텀 스킴·쿼리 표시) — 상품 상세가 네이티브로', () => {
     expect(
-      route('https://www.jirum-alarm.com/products/123?handoff=detail_header'),
+      route('jirumalarm:///products/123?handoff=detail_header'),
     ).toMatchObject({screen: tabStackNavigations.DETAIL});
   });
 
@@ -103,11 +103,11 @@ describe('웹 → 앱 넘기기 링크', () => {
   });
 
   it('홈·알림 버튼은 각 탭으로', () => {
-    expect(route('https://www.jirum-alarm.com/?handoff=banner')).toMatchObject({
+    expect(route('jirumalarm:///?handoff=banner')).toMatchObject({
       tab: tabNavigations.HOME,
     });
-    expect(
-      route('https://www.jirum-alarm.com/alarm?handoff=alarm_tab'),
-    ).toMatchObject({tab: tabNavigations.ALARM});
+    expect(route('jirumalarm:///alarm?handoff=alarm_tab')).toMatchObject({
+      tab: tabNavigations.ALARM,
+    });
   });
 });

@@ -24,12 +24,10 @@ const parseIntent = (href: string) => {
   return { data: data.replace(/^intent:\/\//, ''), fields };
 };
 
-test('안드로이드: 앱이 있으면 같은 상품을 https 로, 우리 앱에만 연다', () => {
+test('안드로이드: 앱이 있으면 같은 상품을 커스텀 스킴으로, 우리 앱에만 연다', () => {
   const { data, fields } = parseIntent(androidOpenAppUrl('/products/123', 'detail_header'));
-  assert.equal(
-    `${fields.scheme}://${data}`,
-    'https://www.jirum-alarm.com/products/123?handoff=detail_header',
-  );
+  // 크롬은 scheme + ':' + (intent: 뒤 문자열)로 주소를 만든다 — 앱 normalizeDeepLink 의 슬래시 3개 모양.
+  assert.equal(`${fields.scheme}://${data}`, 'jirumalarm:///products/123?handoff=detail_header');
   assert.equal(fields.package, 'com.solcode.jirmalam');
 });
 
@@ -90,9 +88,9 @@ test('iOS: 「App Store」 버튼(기본)은 상품 경로여도 스토어 직�
 });
 
 test('안드로이드는 옵션과 무관하게 intent', () => {
-  assert.match(
-    appHandoffHref('android', '/', 'banner'),
-    /^intent:\/\/www\.jirum-alarm\.com\/\?handoff=banner#Intent;/,
+  assert.equal(
+    appHandoffHref('android', '/', 'banner').split('#Intent;')[0],
+    'intent:///?handoff=banner',
   );
 });
 

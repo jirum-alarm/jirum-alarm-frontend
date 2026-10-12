@@ -1,7 +1,9 @@
 import {useEffect, useRef} from 'react';
 import {Linking} from 'react-native';
 
+import {SERVICE_URL} from '@/constants/env';
 import {normalizeDeepLink} from '@/shared/lib/navigation/deep-link';
+import {readDeferredDeepLinkPath} from '@/shared/lib/navigation/deferred-link';
 import {openWhenNavigatorReady} from '@/navigations/open-when-ready';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 
@@ -21,7 +23,7 @@ export default function useDeepLink(openInWebView: (url: string) => void) {
   useEffect(() => {
     let cancelled = false;
 
-    const open = (rawUrl: string, from: 'cold' | 'running') => {
+    const open = (rawUrl: string, from: 'cold' | 'running' | 'deferred') => {
       const url = normalizeDeepLink(rawUrl);
       if (!url) return;
 
@@ -40,9 +42,16 @@ export default function useDeepLink(openInWebView: (url: string) => void) {
       });
     };
 
-    // 앱이 죽어 있다가 링크로 열린 경우.
-    Linking.getInitialURL().then(url => {
-      if (url && !cancelled) open(url, 'cold');
+    // 앱이 죽어 있다가 링크로 열린 경우. 링크 없이 열렸으면 설치 직후 첫 실행인지 보고, 웹에서 보던 화면이
+    // Play referrer 에 실려 왔으면 그리로(안드로이드 디퍼드 딥링크 — deferred-link.ts).
+    Linking.getInitialURL().then(async url => {
+      if (cancelled) return;
+      if (url) {
+        open(url, 'cold');
+        return;
+      }
+      const path = await readDeferredDeepLinkPath();
+      if (path && !cancelled) open(`${SERVICE_URL}${path}`, 'deferred');
     });
 
     // 앱이 이미 떠 있는 상태에서 링크를 받은 경우.
