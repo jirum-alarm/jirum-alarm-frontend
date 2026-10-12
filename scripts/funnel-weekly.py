@@ -9,6 +9,8 @@
 설치: install -m 0755 scripts/funnel-weekly.py ~/.local/bin/  (launchd 는 TCC 로 ~/Documents 를 못 읽는다 — 이 파일이 원본)
 수동: python3 scripts/funnel-weekly.py [주 수=8]  → 표준출력 + ~/.local/share/jirum/funnel.md + macOS 알림.
 읽을 때 주의: 「푸시 열기」는 앱 이벤트가 생긴 2026-W39 부터만 잡힌다(그 전 0 은 미계측).
+앱 표(iOS·Android 주간 활성·신규 설치)도 W39 부터다 — Firebase 분석이 실린 버전(iOS 1.4.6·Android 1.4.7)으로 업데이트한
+기존 사용자가 first_open 으로 잡혀 W39~W41 은 업데이트 물결이다. 추세는 W43 부터 비교할 것.
 「푸시 수신」이 W34→W35 에 1/3 로 준 건 crawling-server d467fc8c(8/18)가 기존 user_token 을 지운 탓 — 재등록 안 한 휴면 유저가 빠졌다.
 ponytail: 맥이 꺼져 있으면 그 주는 건너뛴다. 매번 과거 주를 다시 계산하므로 빠진 주도 다음 실행 표에 나온다.
 """
@@ -32,6 +34,8 @@ KUBE = ["kubectl", "--context", "prod", "-n", "crawling-server"]
 PROMPT_CLICKS = ["okachat_prompt_click", "keyword_prompt_click", "click_btn_add_notification_keyword",
                  "app_download_click", "click_banner_kakaotalk", "push_channel_sheet_click"]
 PUSH_OPENS = ["notification_open", "notification_clicked"]
+APP_PLATFORMS = ["iOS", "Android"]
+APP = {"filter": {"fieldName": "platform", "inListFilter": {"values": APP_PLATFORMS}}}
 
 today = dt.date.today()
 last_sun = today - dt.timedelta(days=today.isoweekday() % 7 or 7)
@@ -45,16 +49,24 @@ def ga4():
         SA, scopes=["https://www.googleapis.com/auth/analytics.readonly"])
     cred.refresh(google.auth.transport.requests.Request())
 
-    def week_metric(metric, flt):
+    def week_metric(metric, flt, split=None):
+        """주별 값. split(측정기준 이름)을 주면 {주: {그 값: n}}."""
+        dims = [{"name": "isoYearIsoWeek"}] + ([{"name": split}] if split else [])
         body = {"dateRanges": [{"startDate": str(start), "endDate": str(last_sun)}],
-                "dimensions": [{"name": "isoYearIsoWeek"}], "metrics": [{"name": metric}],
+                "dimensions": dims, "metrics": [{"name": metric}], "limit": 1000,
                 "dimensionFilter": {"andGroup": {"expressions": [
                     {"filter": {"fieldName": "country", "stringFilter": {"value": "South Korea"}}}, *flt]}}}
         req = urllib.request.Request(
             f"https://analyticsdata.googleapis.com/v1beta/{PROPERTY}:runReport", data=json.dumps(body).encode(),
             headers={"Authorization": "Bearer " + cred.token, "Content-Type": "application/json"})
         rows = json.load(urllib.request.urlopen(req)).get("rows", [])
-        return {r["dimensionValues"][0]["value"]: int(r["metricValues"][0]["value"]) for r in rows}
+        if not split:
+            return {r["dimensionValues"][0]["value"]: int(r["metricValues"][0]["value"]) for r in rows}
+        out = {}
+        for r in rows:
+            w, k = (v["value"] for v in r["dimensionValues"])
+            out.setdefault(w, {})[k] = int(r["metricValues"][0]["value"])
+        return out
 
     ev = lambda names: [{"filter": {"fieldName": "eventName", "inListFilter": {"values": names}}}]
     src = lambda f, v: {"filter": {"fieldName": f, "stringFilter": {"value": v}}}
@@ -63,6 +75,8 @@ def ga4():
         "prompt": week_metric("totalUsers", ev(PROMPT_CLICKS)),
         "kakao": week_metric("activeUsers", [src("sessionSource", "kakao"), src("sessionMedium", "notification")]),
         "pushopen": week_metric("totalUsers", ev(PUSH_OPENS)),
+        "app_active": week_metric("activeUsers", [APP], "platform"),
+        "app_install": week_metric("totalUsers", [APP, *ev(["first_open"])], "platform"),
     }
 
 
@@ -144,6 +158,13 @@ for w in weeks:
     lines.append(f"| {w[:4]}-W{w[4:]} | {det:,} | {pct(g['prompt'].get(w, 0), det)} | {gcell} | {su} | {pct(kw, su)} | "
                  f"{pct(tok, su)} | {pct(p7, su)} | {recv.get(w, 0):,} | {g['kakao'].get(w, 0):,} | {mcell} | "
                  f"{g['pushopen'].get(w, 0):,} | **{star[w]:,}** |")
+lines += ["", "## 앱 사용자 (주간 활성 · 신규 설치 = first_open)", "",
+          "W39~W41 은 계측 시작 업데이트 물결이라 신규가 부풀어 있다 — 추세는 W43 부터.", "",
+          "| 주 | 앱 활성 | iOS | Android | 신규 설치 | iOS | Android |", "|---|---|---|---|---|---|---|"]
+for w in weeks:
+    act, ins = g["app_active"].get(w, {}), g["app_install"].get(w, {})
+    a, n = (tuple(d.get(p, 0) for p in APP_PLATFORMS) for d in (act, ins))
+    lines.append(f"| {w[:4]}-W{w[4:]} | **{sum(a):,}** | {a[0]:,} | {a[1]:,} | {sum(n):,} | {n[0]:,} | {n[1]:,} |")
 report = "\n".join(lines) + "\n"
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
 with open(OUT, "w") as f:
@@ -151,5 +172,6 @@ with open(OUT, "w") as f:
 print(report)
 
 cur, prev = star[weeks[-1]], star[weeks[-2]] if WEEKS > 1 else 0
-msg = f"알림 경유 재방문 {cur:,}명 (전주 {prev:,}) — {OUT}"
+app_now = sum(g["app_active"].get(weeks[-1], {}).values())
+msg = f"알림 경유 재방문 {cur:,}명 (전주 {prev:,}) · 앱 활성 {app_now:,}명 — {OUT}"
 subprocess.run(["osascript", "-e", f'display notification "{msg}" with title "지름알림 주간 깔때기"'], check=False)
