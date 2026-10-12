@@ -23,7 +23,7 @@ const SUMMARY_ITEMS: {
   title: string;
   Icon: React.ComponentType;
 }[] = [
-  {id: 'summary', title: '핫딜 추천 이유', Icon: AIIcon},
+  {id: 'summary', title: '댓글 반응', Icon: AIIcon},
   {id: 'price', title: '핫딜 가격', Icon: Price},
   {id: 'satisfaction', title: '만족도', Icon: Shop},
   {id: 'option', title: '옵션 및 사이즈', Icon: Option},

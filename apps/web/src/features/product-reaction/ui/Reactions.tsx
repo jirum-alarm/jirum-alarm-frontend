@@ -13,7 +13,7 @@ const SUMMARY_DATA: {
   title: string;
   icon: React.ReactNode;
 }[] = [
-  { id: 'summary', title: '핫딜 추천 이유', icon: <AIIcon /> },
+  { id: 'summary', title: '댓글 반응', icon: <AIIcon /> },
   { id: 'price', title: '핫딜 가격', icon: <Price /> },
   { id: 'satisfaction', title: '만족도', icon: <Shop /> },
   { id: 'option', title: '옵션 및 사이즈', icon: <Option /> },
@@ -22,23 +22,24 @@ const SUMMARY_DATA: {
 ];
 
 export function Reactions({ commentSummary }: { commentSummary: ProductCommentSummary }) {
+  // 댓글이 인사뿐이면 서버가 칸을 전부 비운다(2026-10-13) — 빈 회색 상자를 그리지 않는다(앱 Reactions 와 같다).
+  const rows = SUMMARY_DATA.filter((item) => commentSummary?.[item.id]);
+  if (!rows.length) return null;
   return (
     <section className="rounded-lg bg-gray-50 p-4">
       <ul className="space-y-4">
-        {commentSummary &&
-          SUMMARY_DATA.map((item) => {
-            const value = commentSummary?.[item.id];
-            if (!value) return null;
-            return (
-              <li key={item.id}>
-                <div className="flex items-center gap-x-1 pb-1">
-                  {item.icon}
-                  <span className="font-medium text-gray-900">{item.title}</span>
-                </div>
-                <span className="text-sm text-gray-600">{value}</span>
-              </li>
-            );
-          })}
+        {rows.map((item) => {
+          const value = commentSummary[item.id];
+          return (
+            <li key={item.id}>
+              <div className="flex items-center gap-x-1 pb-1">
+                {item.icon}
+                <span className="font-medium text-gray-900">{item.title}</span>
+              </div>
+              <span className="text-sm text-gray-600">{value}</span>
+            </li>
+          );
+        })}
       </ul>
     </section>
   );
