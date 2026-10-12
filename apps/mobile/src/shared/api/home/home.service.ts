@@ -88,14 +88,14 @@ const QueryHomePage = new TypedDocumentString<
  * 홈(SDUI) 데이터 접근.
  *
  * 홈 목록은 비로그인도 봐야 하므로 access token 이 없어도 동작해야 한다.
- * withAccessToken() 은 토큰이 있으면 붙이고 없으면 그냥 보낸다
- * (guestRecommendedHotDeals 는 로그인 여부로 결과가 갈린다).
+ * ★공개 목록은 withFreshAccessTokenOrNone — 토큰 갱신을 기다리지 않는다(만료면 토큰 없이). 결과가 기기 id 기준이라
+ * 로그인 여부로 안 갈린다(guestRecommendedHotDeals 의 선호도 deviceId). 추천 키워드만 내 등록분을 빼야 해서 withAccessToken.
  */
 export class HomeService {
   static async getHotDealRankingProducts(
     variables: HotDealRankingProductsQueryVariables,
   ) {
-    const res = await HttpClient.withAccessToken().execute(
+    const res = await HttpClient.withFreshAccessTokenOrNone().execute(
       QueryHotDealRankingProducts,
       variables,
     );
@@ -105,7 +105,7 @@ export class HomeService {
   static async getGuestRecommendedHotDeals(
     variables: GuestRecommendedHotDealsQueryVariables,
   ) {
-    const res = await HttpClient.withAccessToken().execute(
+    const res = await HttpClient.withFreshAccessTokenOrNone().execute(
       QueryGuestRecommendedHotDeals,
       variables,
     );
@@ -115,7 +115,7 @@ export class HomeService {
   static async getProductsByKeyword(
     variables: HomeProductsByKeywordQueryVariables,
   ) {
-    const res = await HttpClient.withAccessToken().execute(
+    const res = await HttpClient.withFreshAccessTokenOrNone().execute(
       QueryProductsByKeyword,
       variables,
     );
@@ -123,7 +123,7 @@ export class HomeService {
   }
 
   static async getProducts(variables: HomeProductsQueryVariables) {
-    const res = await HttpClient.withAccessToken().execute(
+    const res = await HttpClient.withFreshAccessTokenOrNone().execute(
       QueryHomeProducts,
       variables,
     );
@@ -133,7 +133,7 @@ export class HomeService {
   static async getExpiringSoonHotDealProducts(
     variables: ExpiringSoonHotDealProductsQueryVariables,
   ) {
-    const res = await HttpClient.withAccessToken().execute(
+    const res = await HttpClient.withFreshAccessTokenOrNone().execute(
       QueryExpiringSoonHotDealProducts,
       variables,
     );
@@ -151,7 +151,9 @@ export class HomeService {
   }
 
   static async getHomePage() {
-    const res = await HttpClient.withAccessToken().execute(QueryHomePage);
+    const res = await HttpClient.withFreshAccessTokenOrNone().execute(
+      QueryHomePage,
+    );
     return res.data?.homePage ?? null;
   }
 
@@ -179,7 +181,7 @@ export class HomeService {
   }
 
   static async getTossProducts(variables: TossProductsQueryVariables) {
-    const res = await HttpClient.withAccessToken().execute(
+    const res = await HttpClient.withFreshAccessTokenOrNone().execute(
       QueryTossProducts,
       variables,
     );
