@@ -35,7 +35,7 @@ const formatWon = (price: number) =>
 /**
  * 키워드 카드에 늘 보이는 한 줄 — "지금 이 키워드로 어떤 알림이 오는지"를 말로 적는다.
  * web `summarizeKeywordAlert` 와 같은 문구.
- * 예: "평소보다 쌀 때만 · 100만원 이하 · ‘케이스’ 외 1개 제외"
+ * 예: "최근 딜보다 쌀 때만 · 100만원 이하 · ‘케이스’ 외 1개 제외"
  */
 export const summarizeKeywordAlert = ({
   priceDropOnly,
@@ -48,7 +48,7 @@ export const summarizeKeywordAlert = ({
   minPrice: number | null;
   maxPrice: number | null;
 }) => {
-  const parts = [priceDropOnly ? '평소보다 쌀 때만' : '새 핫딜 모두'];
+  const parts = [priceDropOnly ? '최근 딜보다 쌀 때만' : '새 핫딜 모두'];
   if (minPrice != null && maxPrice != null) {
     parts.push(`${formatWon(minPrice)}~${formatWon(maxPrice)}`);
   } else if (maxPrice != null) {

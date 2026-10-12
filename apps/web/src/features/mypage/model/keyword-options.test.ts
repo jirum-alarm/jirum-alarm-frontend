@@ -47,7 +47,7 @@ describe('summarizeKeywordAlert', () => {
     const base = { priceDropOnly: true, excludeKeywords: ['케이스', '필름'] };
     assert.equal(
       summarizeKeywordAlert({ ...base, minPrice: null, maxPrice: 1000000 }),
-      '평소보다 쌀 때만 · 100만원 이하 · ‘케이스’ 외 1개 제외',
+      '최근 딜보다 쌀 때만 · 100만원 이하 · ‘케이스’ 외 1개 제외',
     );
     assert.equal(
       summarizeKeywordAlert({
@@ -56,11 +56,11 @@ describe('summarizeKeywordAlert', () => {
         minPrice: 15000,
         maxPrice: null,
       }),
-      '평소보다 쌀 때만 · 15,000원 이상 · ‘케이스’ 제외',
+      '최근 딜보다 쌀 때만 · 15,000원 이상 · ‘케이스’ 제외',
     );
     assert.equal(
       summarizeKeywordAlert({ ...base, excludeKeywords: [], minPrice: 100000, maxPrice: 200000 }),
-      '평소보다 쌀 때만 · 10만원~20만원',
+      '최근 딜보다 쌀 때만 · 10만원~20만원',
     );
   });
 });
