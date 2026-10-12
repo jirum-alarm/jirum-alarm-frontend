@@ -73,9 +73,27 @@ BASE=$(git -C "$WT" rev-parse --short HEAD)
 echo "  기준 $BASE ($WT)"
 
 step "cherry-pick ${COMMITS[*]}"
+# 화면 캐시 지문 줄만 부딪힌 충돌은 풀고 간다 — 지문은 브랜치마다 값이 달라 거의 매번 부딪히고, 아래 지문 단계가
+# 이 브랜치 값으로 다시 맞춘다. 충돌 덩어리의 양쪽이 **전부** 그 한 줄일 때만(다른 줄이 섞이면 손으로).
+resolve_fingerprint_only() {
+  local f="$WT/apps/mobile/src/shared/lib/persistence/query-cache.ts"
+  [ "$(git -C "$WT" diff --name-only --diff-filter=U)" = "apps/mobile/src/shared/lib/persistence/query-cache.ts" ] || return 1
+  python3 - "$f" <<'PY' || return 1
+import re, sys
+p = sys.argv[1]; s = open(p).read()
+blocks = re.findall(r'<<<<<<< [^\n]*\n(.*?)=======\n(.*?)>>>>>>> [^\n]*\n', s, re.S)
+fp = lambda side: all('QUERY_DOCS_FINGERPRINT' in l for l in side.strip().splitlines())
+if not blocks or not all(fp(a) and fp(b) for a, b in blocks): sys.exit(1)
+open(p, 'w').write(re.sub(r'<<<<<<< [^\n]*\n(.*?)=======\n.*?>>>>>>> [^\n]*\n', lambda m: m.group(1), s, flags=re.S))
+PY
+  git -C "$WT" add apps/mobile/src/shared/lib/persistence/query-cache.ts &&
+    GIT_EDITOR=true git -C "$WT" cherry-pick --continue >/dev/null
+}
 for c in "${COMMITS[@]}"; do
-  git -C "$WT" cherry-pick "$c" >/dev/null 2>&1 ||
+  if ! git -C "$WT" cherry-pick "$c" >/dev/null 2>&1; then
+    resolve_fingerprint_only && { echo "  $c — 화면 캐시 지문 줄 충돌만 풀었다(아래에서 이 브랜치 값으로 맞춘다)"; continue; }
     die "$c cherry-pick 충돌 — 그 버전에 있던 코드로 손으로 풀고(git -C $WT status) 이 스크립트 대신 나머지 단계를 따른다"
+  fi
 done
 git -C "$WT" log --oneline "$BASE..HEAD"
 
