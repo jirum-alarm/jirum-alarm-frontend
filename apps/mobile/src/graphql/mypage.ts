@@ -253,6 +253,8 @@ export const QueryMyPushSetting = graphql(`
       marketing
       nightAlerts
       communityAlert
+      quietHoursStart
+      quietHoursEnd
     }
   }
 `);
@@ -263,12 +265,16 @@ export const MutationUpdateMyPushSetting = graphql(`
     $marketing: Boolean
     $nightAlerts: Boolean
     $communityAlert: Boolean
+    $quietHoursStart: Int
+    $quietHoursEnd: Int
   ) {
     updatePushSetting(
       keywordAlert: $keywordAlert
       marketing: $marketing
       nightAlerts: $nightAlerts
       communityAlert: $communityAlert
+      quietHoursStart: $quietHoursStart
+      quietHoursEnd: $quietHoursEnd
     )
   }
 `);
