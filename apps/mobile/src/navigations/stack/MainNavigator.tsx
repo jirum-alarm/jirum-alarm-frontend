@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import MainTabNavigator from '@/navigations/tab/MainTabNavigator';
+import {flushPendingRoute} from '@/navigations/open-when-ready';
 import AppStackHeader from '@/navigations/tab/AppStackHeader';
 import SearchStackNavigator from '@/navigations/tab/SearchStackNavigator';
 import {
@@ -83,6 +84,10 @@ function MainStackNavigator() {
   // 탭바 알림 점의 원료(미읽음 수)를 앱 진입·포그라운드 복귀마다 받아온다.
   // 탭 화면 밖(여기)에 두는 이유: 알림 탭을 한 번도 안 열어도 점은 떠야 한다.
   useAlarmDotSync();
+  // 로그인 화면에 있는 동안 받은 알림·공유 링크를 메인이 뜬 지금 연다(open-when-ready).
+  useEffect(() => {
+    flushPendingRoute();
+  }, []);
   const chrome = useChromeColors();
 
   return (
