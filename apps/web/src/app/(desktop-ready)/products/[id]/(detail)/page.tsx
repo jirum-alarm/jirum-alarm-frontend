@@ -28,6 +28,7 @@ import {
   MISSING_PRODUCT_METADATA,
   parseNumericPrice,
   type PriceHistorySeoSummary,
+  seoTitleVariantOf,
   summarizePriceHistoryForSeo,
   toSeoImageUrl,
 } from '@/features/product-detail/lib/product-seo';
@@ -303,6 +304,7 @@ export async function generateMetadata({
   const title = buildProductSeoTitle(displayTitle, product.isEnd, priceValue, {
     postedAt: dealFreshnessAt(product),
     historyMinPrice: priceHistorySeo?.minPrice ?? null,
+    variant: seoTitleVariantOf(productId),
   });
   const description = hidePrice
     ? displayTitle

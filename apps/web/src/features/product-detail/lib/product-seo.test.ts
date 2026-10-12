@@ -11,6 +11,7 @@ const {
   formatPriceHistorySeoText,
   clipMetaDescription,
   buildProductSeoTitle,
+  seoTitleVariantOf,
   generateDescription,
   buildRssItemDescription,
   buildRssItemTitle,
@@ -90,6 +91,38 @@ describe('summarizePriceHistoryForSeo / formatPriceHistorySeoText', () => {
 });
 
 describe('buildProductSeoTitle', () => {
+  it('price_first 버킷은 가격을 맨 앞에 둔다', () => {
+    assert.equal(
+      buildProductSeoTitle('기가바이트 B650M K 메인보드', false, 89000, { variant: 'price_first' }),
+      '[89,000원] 기가바이트 B650M K 메인보드 핫딜 | 지름알림',
+    );
+    assert.equal(
+      buildProductSeoTitle('기가바이트 B650M K 메인보드', false, 89000, {
+        historyMinPrice: 89000,
+        variant: 'price_first',
+      }),
+      '[최저가 89,000원] 기가바이트 B650M K 메인보드 핫딜 | 지름알림',
+    );
+  });
+
+  it('price_first 라도 가격을 못 붙이는 제목은 control 과 같다', () => {
+    assert.equal(
+      buildProductSeoTitle('에어팟 프로', false, null, { variant: 'price_first' }),
+      buildProductSeoTitle('에어팟 프로'),
+    );
+    assert.equal(
+      buildProductSeoTitle('삼다수 2L 12병 (9,900원/무료)', false, 9900, {
+        variant: 'price_first',
+      }),
+      buildProductSeoTitle('삼다수 2L 12병 (9,900원/무료)', false, 9900),
+    );
+  });
+
+  it('버킷은 id 홀짝', () => {
+    assert.equal(seoTitleVariantOf(31619025), 'price_first');
+    assert.equal(seoTitleVariantOf(31619024), 'control');
+  });
+
   it('가격을 모르는 신선한 딜엔 "핫딜" 만 붙인다', () => {
     assert.equal(buildProductSeoTitle('에어팟 프로'), '에어팟 프로 핫딜 | 지름알림');
   });

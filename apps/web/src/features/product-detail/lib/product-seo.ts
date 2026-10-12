@@ -271,6 +271,8 @@ export function buildProductSeoTitle(
     /** 이상치 가드를 통과한 최근 핫딜 최저가. 이 값 이하일 때만 "최저가" 라고 부른다. */
     historyMinPrice?: number | null;
     now?: number;
+    /** 제목 버킷 실험 — `seoTitleVariantOf(productId)` */
+    variant?: SeoTitleVariant;
   } = {},
 ): string {
   const base = clipTitleBase(displayTitle);
@@ -304,13 +306,33 @@ export function buildProductSeoTitle(
   // 경쟁 딜 사이트는 제목에 전부 "핫딜" 이 들어가는데(2026-10-01 실측) 우리는 27%가 빠져 있었다 —
   // 네이버 질의가 "X 핫딜" 꼴이라 낱말 하나가 매칭을 가른다. 30일 넘은 딜은 건드리지 않는다
   // (옛 딜이 노출당 클릭률이 가장 높다 — 잘 되는 걸 흔들지 않는다).
+  const priceLabel = canAnnotate
+    ? `${isLowest ? '최저가 ' : ''}${price.toLocaleString('ko-KR')}원`
+    : '';
+  if (canAnnotate && opts.variant === 'price_first') {
+    return `[${priceLabel}] ${base}${suffix} 핫딜 | 지름알림`;
+  }
   const dealHint = canAnnotate
-    ? ` ${isLowest ? '최저가 ' : ''}${price.toLocaleString('ko-KR')}원 핫딜`
+    ? ` ${priceLabel} 핫딜`
     : isFresh && !hasHotDealWord(base)
       ? ' 핫딜'
       : '';
 
   return `${base}${suffix}${dealHint} | 지름알림`;
+}
+
+export type SeoTitleVariant = 'control' | 'price_first';
+
+/**
+ * 검색 제목 버킷 실험(2026-10-12 시작, 판정 2026-11-09). 홀수 id 는 가격을 제목 맨 앞에 둔다.
+ *
+ * 제목 기반은 최대 60자라 꼬리에 붙인 "N원 핫딜" 이 네이버 검색결과에서 잘려 안 보이는 일이 많다 —
+ * 앞에 두면 클릭이 느는지 본다. 가격을 붙일 수 있는 신선한 딜만 달라지고 나머지 제목은 두 버킷이 같다.
+ * 판정은 GA4 네이버 랜딩 세션(페이지당 10 상한, 실험 뒤 올라온 상품, 홀/짝) — 지난 4주 A/A 0.996.
+ * 근거·규칙: jirum vault verification/2026-10-12-네이버-CTR-재측정-제목변경-효과판정불가.
+ */
+export function seoTitleVariantOf(productId: number): SeoTitleVariant {
+  return productId % 2 === 1 ? 'price_first' : 'control';
 }
 
 const JIRUM_CDN_HOST = 'cdn.jirum-alarm.com';
