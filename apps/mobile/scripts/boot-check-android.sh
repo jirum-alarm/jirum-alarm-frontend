@@ -12,11 +12,16 @@
 #     `pm clear` 를 쓰면 CI 에뮬레이터에서 GMS 가 죽고 앱이 함께 정리되는 일이 실행당 한 번꼴로 있었다(10/9, hind 세션 분석).
 #   - Release 는 run-as 가 안 돼 AsyncStorage 에 토큰을 못 넣는다 → 로그인 경로는 iOS 쪽만 본다.
 # ponytail: JS 가 그린 뒤 오류 없이 깨진 화면은 못 잡는다 — 사고로 나오면 스크린샷 비교를 더한다.
+# 증거(선택): BOOT_EVIDENCE=<디렉터리> 면 시도마다 화면 녹화(NN-<회차>.mp4)와 대기 끝 스크린샷(NN-<회차>.png)을 남긴다
+#   (iOS boot-check.sh 와 같은 규칙). 판정 전에 찍으므로 실패한 시도도 남는다. CI 아티팩트 boot-evidence-android.
 set -euo pipefail
 
 APK_SRC=${1:?사용법: boot-check-android.sh <Release .apk>}
 PKG=com.solcode.jirmalam
 WAIT=${BOOT_WAIT:-20}
+EVIDENCE=${BOOT_EVIDENCE:-}
+N=0
+[ -n "$EVIDENCE" ] && mkdir -p "$EVIDENCE"
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 BT=$(ls -d "${ANDROID_HOME:?ANDROID_HOME 필요}"/build-tools/* | sort -V | tail -1)
 WORK=$(mktemp -d)
@@ -43,11 +48,27 @@ ACTIVITY=$(adb shell cmd package resolve-activity --brief "$PKG" | tail -1 | tr 
 
 # 한 번 켜 본다. 0=통과 1=실패 2=크래시 기록 없이 사라짐(재시도 대상).
 attempt() {
+  local recpid="" shot=""
+  N=$((N + 1))
   adb uninstall "$PKG" >/dev/null 2>&1 || true
   adb install "$WORK/app.apk" >/dev/null
   adb logcat -c
+  if [ -n "$EVIDENCE" ]; then
+    shot="$EVIDENCE/$(printf '%02d' "$N")-$(printf '%s' "$1" | tr ' ()/' '-__-')"
+    adb shell rm -f /sdcard/boot-evidence.mp4
+    adb shell screenrecord --time-limit $((WAIT + 10)) /sdcard/boot-evidence.mp4 >/dev/null 2>&1 &
+    recpid=$!
+    sleep 1
+  fi
   adb shell am start -n "$ACTIVITY" >/dev/null
   sleep "$WAIT"
+  if [ -n "$recpid" ]; then
+    adb exec-out screencap -p >"$shot.png" 2>/dev/null || true
+    adb shell 'kill -2 $(pidof screenrecord)' >/dev/null 2>&1 || true
+    wait "$recpid" 2>/dev/null || true
+    sleep 1 # mp4 마무리
+    adb pull /sdcard/boot-evidence.mp4 "$shot.mp4" >/dev/null 2>&1 || true
+  fi
   if ! adb shell pidof "$PKG" >/dev/null; then
     echo "✗ $1: ${WAIT}초 안에 종료됨"
     # 자바 크래시가 아니면(네이티브 tombstone·ANR·메모리 부족 kill) FATAL EXCEPTION 이 안 찍힌다 — 왜 죽었는지 남긴다.

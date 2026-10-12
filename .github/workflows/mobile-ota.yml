@@ -244,6 +244,8 @@ jobs:
 
       - name: Boot check (cold start ×2)
         uses: reactivecircus/android-emulator-runner@v2
+        env:
+          BOOT_EVIDENCE: ${{ runner.temp }}/boot-evidence
         with:
           api-level: 33
           arch: x86_64
@@ -252,6 +254,15 @@ jobs:
           # 기본 RAM 에선 2회차에 GMS 사망·lowmemorykiller 로 앱이 정리되는 일이 있었다(10/9).
           ram-size: 4096M
           script: bash apps/mobile/scripts/boot-check-android.sh apps/mobile/android/boot-check.apk
+
+      - name: Upload boot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boot-evidence-android
+          path: ${{ runner.temp }}/boot-evidence
+          retention-days: 7
+          if-no-files-found: ignore
 
   publish:
     needs: [boot-check, boot-check-android]
