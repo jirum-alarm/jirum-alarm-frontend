@@ -11,6 +11,7 @@ import { useToast } from '@/shared/ui/common/Toast';
 
 import { ProductQueries } from '@/entities/product';
 
+import { cleanProductUrl } from './cleanProductUrl';
 import { productCreateErrorMessage } from './productCreateErrorMessage';
 
 export default function useProductCreateForm() {
@@ -20,6 +21,8 @@ export default function useProductCreateForm() {
 
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
+  // 붙여넣은 링크에서 추적 파라미터를 지웠는지. 주소가 갑자기 짧아진 이유를 알려주려고 둔다.
+  const [isUrlCleaned, setIsUrlCleaned] = useState(false);
   const [price, setPrice] = useState('');
   // 업로드 완료된 썸네일 CDN URL (이미지 업로드 결과).
   const [thumbnail, setThumbnail] = useState('');
@@ -50,6 +53,22 @@ export default function useProductCreateForm() {
     }
   };
 
+  const handleUrlChange = (value: string) => {
+    setUrl(value);
+    setIsUrlCleaned(false);
+  };
+
+  // 링크 칸은 주소 하나만 받으니, 주소를 붙여넣으면 칸 전체를 정리된 주소로 바꾼다.
+  // 정리할 게 없으면 false 를 돌려 브라우저 기본 붙여넣기에 맡긴다.
+  const pasteUrl = (text: string): boolean => {
+    if (!isHttpUrl(text)) return false;
+    const cleaned = cleanProductUrl(text);
+    if (cleaned === text.trim()) return false;
+    setUrl(cleaned);
+    setIsUrlCleaned(true);
+    return true;
+  };
+
   // 선택 입력이라 비어 있으면 에러 아님. 값이 있는데 형식이 틀리면 에러.
   const urlError = url.trim().length > 0 && !isHttpUrl(url);
 
@@ -58,7 +77,8 @@ export default function useProductCreateForm() {
       if (categoryId === null) throw new Error('CATEGORY_REQUIRED');
       return ProductService.createUserProduct({
         title: title.trim(),
-        url: url.trim(),
+        // 직접 입력·자동완성처럼 붙여넣기를 안 거친 링크도 저장 전에 정리한다.
+        url: cleanProductUrl(url.trim()),
         categoryId,
         // 한화 숫자만 저장 → 상세 parsePrice 가 "30,000원" 으로 렌더.
         price: price.trim() ? price.trim() : undefined,
@@ -87,7 +107,9 @@ export default function useProductCreateForm() {
     title,
     setTitle,
     url,
-    setUrl,
+    setUrl: handleUrlChange,
+    pasteUrl,
+    isUrlCleaned,
     urlError,
     price,
     setPrice: handlePriceChange,

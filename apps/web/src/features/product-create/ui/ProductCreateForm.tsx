@@ -15,6 +15,8 @@ export default function ProductCreateForm() {
     setTitle,
     url,
     setUrl,
+    pasteUrl,
+    isUrlCleaned,
     urlError,
     price,
     setPrice,
@@ -57,10 +59,19 @@ export default function ProductCreateForm() {
           inputMode="url"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
+          onPaste={(e) => {
+            if (pasteUrl(e.clipboardData.getData('text'))) e.preventDefault();
+          }}
           placeholder="구매 페이지 주소를 붙여넣어 주세요"
           maxLength={2048}
           error={urlError}
-          helperText={urlError ? 'http:// 또는 https:// 로 시작해야 해요.' : undefined}
+          helperText={
+            urlError
+              ? 'http:// 또는 https:// 로 시작해야 해요.'
+              : isUrlCleaned
+                ? '구매에 필요 없는 추적 정보를 지웠어요.'
+                : undefined
+          }
         />
       </Field>
 
