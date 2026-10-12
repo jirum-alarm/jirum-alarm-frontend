@@ -150,10 +150,12 @@ describe('댓글 삭제·수정·작성', () => {
 
   it('작성 후에는 댓글 수(replyCount)까지 맞춘다', () => {
     // 목록 카드의 댓글 수는 다른 쿼리가 들고 있어서, 댓글 목록만
-    // 무효화하면 카드 숫자가 그대로 남는다.
+    // 무효화하면 카드 숫자가 그대로 남는다. 커뮤니티 전부를 무효화하지 않고
+    // 그 자리에서 고친다 — 실제 동작은 data-waste.test 가 본다.
     expect(commentsViewModel).toMatch(
-      /addComment[\s\S]{0,400}CommunityQueries\.keys\.all/,
+      /addComment[\s\S]{0,400}afterCountChange\(1\)/,
     );
+    expect(commentsViewModel).not.toMatch(/CommunityQueries\.keys\.all\s*\}/);
   });
 
   // 중복 등록은 isPending 이 막는다. 비우는 건 **성공했을 때만** — 먼저 비우면

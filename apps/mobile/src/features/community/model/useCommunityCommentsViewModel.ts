@@ -6,15 +6,20 @@ import {
 
 import {CommunityQueries} from '@/entities/community';
 import {CommunityService} from '@/shared/api/community';
-import type {CommunityComment} from '@/shared/api/community';
+import type {CommunityComment, CommunityPost} from '@/shared/api/community';
 import {CommentService} from '@/shared/api/comment/comment.service';
 import {ProductService} from '@/shared/api/product/product.service';
 import {UserLikeTarget} from '@/shared/api/gql/graphql';
 import {showToast} from '@/shared/lib/feedback';
 
-import {applyCommentLike, removeCommentById} from './optimistic';
+import {
+  applyCommentLike,
+  bumpReplyCount,
+  removeCommentById,
+} from './optimistic';
 
 type Page = CommunityComment[];
+type PostPage = CommunityPost[];
 type InfiniteData = {pages: Page[]; pageParams: unknown[]};
 
 /**
@@ -55,6 +60,24 @@ export function useCommunityCommentsViewModel(postId: number) {
     return {previous};
   };
 
+  /**
+   * 작성·삭제 뒤: 이 글의 댓글만 다시 받고, 목록 카드의 댓글 수는 그 자리에서 고친다.
+   * 예전 `keys.all` 무효화는 떠 있는 세 탭 목록의 **모든 페이지**와 핫딜 칸까지 다시 받았다.
+   */
+  const afterCountChange = (delta: number) => {
+    queryClient.setQueriesData<{pages: PostPage[]; pageParams: unknown[]}>(
+      {queryKey: [...CommunityQueries.keys.all, 'posts']},
+      old =>
+        old
+          ? {
+              ...old,
+              pages: old.pages.map(page => bumpReplyCount(page, postId, delta)),
+            }
+          : old,
+    );
+    invalidate();
+  };
+
   const rollback = (context: {previous: unknown} | undefined) => {
     if (context?.previous !== undefined) {
       queryClient.setQueryData(queryKey, context.previous);
@@ -64,11 +87,8 @@ export function useCommunityCommentsViewModel(postId: number) {
   const {mutate: addComment, isPending: isAdding} = useMutation({
     mutationFn: (content: string) =>
       CommunityService.addComment({parentId: postId, content}),
-    onSuccess: () => {
-      // 댓글 수(replyCount)는 목록·상세가 따로 들고 있어 같이 무효화한다.
-      // 안 하면 새 댓글을 달아도 카드의 댓글 수가 그대로다.
-      queryClient.invalidateQueries({queryKey: CommunityQueries.keys.all});
-    },
+    // 카드의 댓글 수(replyCount)는 목록이 따로 들고 있어 같이 고친다 — 안 하면 그대로다.
+    onSuccess: () => afterCountChange(1),
     onError: () => showToast.error('댓글 등록에 실패했어요.'),
   });
 
@@ -84,7 +104,7 @@ export function useCommunityCommentsViewModel(postId: number) {
     onMutate: (id: number) => optimistic(page => removeCommentById(page, id)),
     onSuccess: () => {
       showToast.success('댓글이 삭제되었어요.');
-      queryClient.invalidateQueries({queryKey: CommunityQueries.keys.all});
+      afterCountChange(-1);
     },
     onError: (_err, _id, context) => {
       rollback(context);
