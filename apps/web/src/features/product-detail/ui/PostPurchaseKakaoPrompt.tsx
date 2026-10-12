@@ -3,9 +3,8 @@
 import { useEffect } from 'react';
 
 import { cn } from '@/shared/lib/cn';
+import { markOkachatJoined, OKACHAT_LINK, pushOkachatEvent } from '@/shared/lib/okachat';
 import TalkLight from '@/shared/ui/common/icons/TalkLight';
-
-import { markOkachatJoined, OKACHAT_LINK, pushOkachatEvent } from '../lib/okachat';
 
 /**
  * 구매 링크 클릭 직후 뜨는 오카방 입장 권유.

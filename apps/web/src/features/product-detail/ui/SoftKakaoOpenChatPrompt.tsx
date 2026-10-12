@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react';
 
 import {
   markOkachatJoined,
+  OKACHAT_JOINED_EVENT,
   OKACHAT_LINK,
   pushOkachatEvent,
   shouldShowOkachatSoftPrompt,
-} from '../lib/okachat';
+} from '@/shared/lib/okachat';
 
 import KakaoOpenChatPrompt from './KakaoOpenChatPrompt';
 
@@ -22,6 +23,11 @@ export default function SoftKakaoOpenChatPrompt({ className }: { className?: str
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- utm·localStorage 는 브라우저에만 있다. 서버 HTML(숨김)과 맞추려 하이드레이션 뒤에 판정한다.
     setVisible(shouldShowOkachatSoftPrompt());
+    // 같은 화면의 다른 권유(첫 방문 시트·구매 후)로 입장하면 이 카드도 숨긴다.
+    // 다음 틱에 — 링크 클릭 도중에 a 를 지우면 이동이 씹힐 수 있다.
+    const hide = () => setTimeout(() => setVisible(false), 0);
+    window.addEventListener(OKACHAT_JOINED_EVENT, hide);
+    return () => window.removeEventListener(OKACHAT_JOINED_EVENT, hide);
   }, []);
 
   useEffect(() => {

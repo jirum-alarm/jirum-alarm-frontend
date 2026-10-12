@@ -34,6 +34,11 @@ export function useFcmPermission() {
     }
 
     const permission = await Notification.requestPermission();
+    // 권유 클릭 뒤 실제로 켰는지 — 클릭만 재면 "알림 받는 사람"이 몇 명 늘었는지 모른다.
+    (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+      event: 'push_permission_result',
+      result: permission,
+    });
     if (permission !== 'granted') {
       localStorage.setItem(COOLDOWN_KEY, String(Date.now()));
       return { granted: false as const };

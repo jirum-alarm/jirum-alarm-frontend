@@ -9,6 +9,7 @@ import type { ProductDealEvidence } from '@/shared/api/product/product.service';
 import { hotdealTextMap } from '@/shared/config/hotdeal';
 import { cn } from '@/shared/lib/cn';
 import { getEntry } from '@/shared/lib/entry';
+import { buildPostPurchasePromptQueue, type PostPurchasePromptKind } from '@/shared/lib/okachat';
 import { pushRecentViewedProduct } from '@/shared/lib/recentViewedProducts';
 import Badge from '@/shared/ui/common/Badge';
 import Button from '@/shared/ui/common/Button';
@@ -26,10 +27,6 @@ import TossIcon from '@/entities/product/ui/TossIcon';
 
 import { LikeButton, RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
-import {
-  buildPostPurchasePromptQueue,
-  type PostPurchasePromptKind,
-} from '@/features/product-detail/lib/okachat';
 import { dealFreshnessAt, isSeenBasedFreshness } from '@/features/product-detail/lib/product-seo';
 import { buildProductShareDescription } from '@/features/product-detail/lib/share-card';
 import DealEvidenceBlock from '@/features/product-detail/ui/DealEvidenceBlock';

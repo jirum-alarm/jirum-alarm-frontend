@@ -5,16 +5,13 @@ import { useState } from 'react';
 
 import { ProductService } from '@/shared/api/product';
 import { getEntry } from '@/shared/lib/entry';
+import { buildPostPurchasePromptQueue, type PostPurchasePromptKind } from '@/shared/lib/okachat';
 import Button from '@/shared/ui/common/Button';
 import TopButton from '@/shared/ui/TopButton';
 
 import { ProductQueries } from '@/entities/product';
 
 import { LikeButton } from '@/features/product-actions/ui';
-import {
-  buildPostPurchasePromptQueue,
-  type PostPurchasePromptKind,
-} from '@/features/product-detail/lib/okachat';
 import PostPurchaseKakaoPrompt from '@/features/product-detail/ui/PostPurchaseKakaoPrompt';
 import PostPurchaseKeywordPrompt from '@/features/product-detail/ui/PostPurchaseKeywordPrompt';
 

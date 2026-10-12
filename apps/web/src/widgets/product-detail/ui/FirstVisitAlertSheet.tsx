@@ -12,6 +12,12 @@ import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { getGraphqlErrorMessage } from '@/shared/lib/graphql-error';
+import {
+  markOkachatJoined,
+  OKACHAT_LINK,
+  pushOkachatEvent,
+  shouldShowOkachatSoftPrompt,
+} from '@/shared/lib/okachat';
 import { browserHandoffUrl, canHandoffToBrowser } from '@/shared/lib/push-channel/browserHandoff';
 import { readPushStatus, usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
@@ -23,12 +29,6 @@ import FirstVisitAppAlertModal, {
 } from '@/features/app-download/ui/FirstVisitAppAlertModal';
 import { useUpdateKeyword } from '@/features/mypage/model/update-keyword';
 import { deriveKeyword } from '@/features/product-detail/lib/deriveKeyword';
-import {
-  markOkachatJoined,
-  OKACHAT_LINK,
-  pushOkachatEvent,
-  shouldShowOkachatSoftPrompt,
-} from '@/features/product-detail/lib/okachat';
 
 /**
  * 웹 푸시를 못 받는 첫 방문자 A/B(2026-10-09~): control = 앱 설치 시트(안드로이드 인앱 비회원은 브라우저 넘기기),

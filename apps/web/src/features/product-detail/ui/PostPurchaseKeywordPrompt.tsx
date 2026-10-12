@@ -107,6 +107,13 @@ export default function PostPurchaseKeywordPrompt({
   // 여기서 숨기면 사용자가 누른 직후 배너가 사라져 등록됐는지 알 수 없다.
   const visible = show && hasKeyword && (done || !alreadyRegistered);
 
+  // 띄울 게 없으면(키워드를 못 뽑았거나 이미 등록) 곧바로 다음 권유로 넘긴다. 예전엔 null 만
+  // 돌려 큐가 여기서 멈췄다 — [keyword, kakao] 순서인 로그인 사용자는 오카방 권유를 영영 못 봤다.
+  const skip = show && !visible && (!hasKeyword || keywordData !== undefined);
+  useEffect(() => {
+    if (skip) onClose();
+  }, [skip, onClose]);
+
   // 게스트가 "알림 받기"를 눌러 로그인하고 이 상품으로 돌아왔으면 이어서 등록한다.
   // 배너는 구매 클릭 뒤에만 보이므로(show) 결과는 토스트로 알린다.
   usePendingAction<string>(PendingActionType.NOTIFICATION_KEYWORD_ADD, (pending) => {
@@ -130,6 +137,8 @@ export default function PostPurchaseKeywordPrompt({
     (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
       event: 'keyword_prompt_view',
       keyword,
+      // 첫 방문·브라우저 넘기기와 같은 이벤트라 자리로 가른다.
+      placement: 'post_purchase',
     });
   }, [visible, done, keyword]);
 
@@ -140,6 +149,7 @@ export default function PostPurchaseKeywordPrompt({
       (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
         event: 'keyword_prompt_click',
         keyword,
+        placement: 'post_purchase',
         // 비로그인은 게스트 계정으로 바로 등록된다(2026-10-09). 회원·비회원 등록률을 갈라 보려고 남긴다.
         logged_in: isLoggedIn,
       });
