@@ -46,6 +46,26 @@ const product = (n: number): ProductCardType => ({
 });
 const fifty: ProductCardType[] = Array.from({length: 50}, (_, i) => product(i));
 
+/**
+ * 그린 트리·클라이언트는 테스트마다 거둔다. 안 거두면 react-query 알림 타이머가 테스트가 끝난 뒤
+ * act 밖에서 상태를 바꿔 「Cannot log after tests are done」이 나고, CI(--runInBand)에서 jest 가
+ * 전부 통과하고도 exit 1 로 끝난다(10/12 mobile-validation 실패).
+ */
+const cleanups: Array<() => void> = [];
+const track = (
+  renderer: ReactTestRenderer.ReactTestRenderer,
+  client?: QueryClient,
+) => {
+  cleanups.push(() => {
+    ReactTestRenderer.act(() => renderer.unmount());
+    client?.clear();
+  });
+  return renderer;
+};
+afterEach(() => {
+  while (cleanups.length) cleanups.pop()?.();
+});
+
 describe('buildRankingRows — 줄 목록', () => {
   const rows = buildRankingRows({
     products: fifty,
@@ -105,15 +125,18 @@ describe('RankingList — 첫 화면만 그리고, 보인 줄만 노출로 센�
     client.setQueryData(TrendingQueries.recommended().queryKey, []);
     let renderer!: ReactTestRenderer.ReactTestRenderer;
     ReactTestRenderer.act(() => {
-      renderer = ReactTestRenderer.create(
-        <QueryClientProvider client={client}>
-          <RankingList
-            categoryId={1}
-            categoryName="전체"
-            onPressProduct={() => {}}
-            bottomInset={0}
-          />
-        </QueryClientProvider>,
+      renderer = track(
+        ReactTestRenderer.create(
+          <QueryClientProvider client={client}>
+            <RankingList
+              categoryId={1}
+              categoryName="전체"
+              onPressProduct={() => {}}
+              bottomInset={0}
+            />
+          </QueryClientProvider>,
+        ),
+        client,
       );
     });
     return renderer;
@@ -155,16 +178,18 @@ describe('CurationGrid 공용 그리드(6화면) — 가상화·고정된 카드
     const renderCard = jest.fn(() => null);
     let renderer!: ReactTestRenderer.ReactTestRenderer;
     ReactTestRenderer.act(() => {
-      renderer = ReactTestRenderer.create(
-        <CurationGrid
-          items={fifty}
-          keyOf={(p: ProductCardType) => p.id}
-          renderCard={renderCard}
-          isPending={false}
-          isError={false}
-          label="t"
-          onRetry={() => {}}
-        />,
+      renderer = track(
+        ReactTestRenderer.create(
+          <CurationGrid
+            items={fifty}
+            keyOf={(p: ProductCardType) => p.id}
+            renderCard={renderCard}
+            isPending={false}
+            isError={false}
+            label="t"
+            onRetry={() => {}}
+          />,
+        ),
       );
     });
     const list = renderer.root.findByType(FlatList);
