@@ -20,3 +20,5 @@ export { default as BookOn } from './BookOnIcon';
 export { default as BookOff } from './BookOffIcon';
 export { default as BabyOn } from './BabyOnIcon';
 export { default as BabyOff } from './BabyOffIcon';
+export { default as PetOn } from './PetOnIcon';
+export { default as PetOff } from './PetOffIcon';

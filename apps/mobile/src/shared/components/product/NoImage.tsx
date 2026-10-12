@@ -12,6 +12,7 @@ import FashionOnIcon from '@/shared/components/icons/categories/FashionOnIcon';
 import GameOnIcon from '@/shared/components/icons/categories/GameOnIcon';
 import GiftcardOnIcon from '@/shared/components/icons/categories/GiftcardOnIcon';
 import LeisureOnIcon from '@/shared/components/icons/categories/LeisureOnIcon';
+import PetOnIcon from '@/shared/components/icons/categories/PetOnIcon';
 
 type IconComponent = React.ComponentType<{width?: number; height?: number}>;
 
@@ -31,6 +32,7 @@ export const CATEGORY_ICON: Record<number, IconComponent> = {
   9: GameOnIcon, // 디지털
   10: BabyOnIcon, // 육아
   11: EtcOnIcon, // 기타
+  12: PetOnIcon, // 반려동물
 };
 
 const ICON_SIZE = {product: 64, hotDeal: 52} as const;

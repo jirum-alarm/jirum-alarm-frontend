@@ -81,6 +81,10 @@ const QueryCategories = api.query('QueryCategories', () => {
       id: '11',
       name: '기타',
     },
+    {
+      id: '12',
+      name: '반려동물',
+    },
   ];
 
   return HttpResponse.json({

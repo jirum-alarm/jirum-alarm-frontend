@@ -72,6 +72,13 @@ export const CATEGORIES = [
     offIconComponent: CategoryIcons.FashionOff,
   },
   {
+    icon: '🐶',
+    text: '반려동물',
+    value: 12,
+    iconComponent: CategoryIcons.PetOn,
+    offIconComponent: CategoryIcons.PetOff,
+  },
+  {
     icon: '🔍',
     text: '기타',
     value: 11,

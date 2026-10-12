@@ -23,6 +23,7 @@ export const CATEGORIES: readonly CategoryOption[] = [
   {text: '육아', value: 10},
   {text: '상품권', value: 8},
   {text: '의류/잡화', value: 4},
+  {text: '반려동물', value: 12},
   {text: '기타', value: 11},
 ];
 
