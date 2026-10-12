@@ -7,7 +7,7 @@ import {GRAPHQL_ENDPOINT} from '@/shared/constant/endpoint.ts';
 import {waitForInitialAuth} from './initial-auth';
 import {isAccessTokenUsable} from './token-expiry';
 
-type TokenType = 'access' | 'refresh' | null;
+type TokenType = 'access' | 'fresh-access' | 'refresh' | null;
 
 export class HttpClient {
   private baseUrl: string;
@@ -28,6 +28,18 @@ export class HttpClient {
 
   static withAccessToken() {
     return new HttpClient(GRAPHQL_ENDPOINT, 'access');
+  }
+
+  /**
+   * 누가 보든 결과가 같은 공개 조회(홈 목록 등) — 토큰 갱신을 **기다리지 않는다**.
+   * 저장된 access 가 살아 있으면 붙이고(노출·검색 기록에 회원이 남게), 끝났으면 **없이** 바로 보낸다.
+   *
+   * 서버 JwtAuthGuard 는 만료·잘못된 토큰을 401 이 아니라 비로그인으로 처리하고, 홈 쿼리의 결과는 기기 id 기준이라
+   * 로그인 여부로 안 갈린다(userId 는 기록에만). 그래서 하루 한 번 켜는 사람(토큰 만료)의 첫 화면이 갱신 왕복을
+   * 기다리던 걸 없앤다. ⚠️ 결과가 사용자마다 다른 조회(내 찜·추천 키워드 등)는 withAccessToken 을 쓴다.
+   */
+  static withFreshAccessTokenOrNone() {
+    return new HttpClient(GRAPHQL_ENDPOINT, 'fresh-access');
   }
 
   public async execute<TResult, TVariables>(
@@ -62,6 +74,9 @@ export class HttpClient {
         await waitForInitialAuth();
         token = await getAsyncStorage(StorageKey.ACCESS_TOKEN);
       }
+    } else if (this.tokenType === 'fresh-access') {
+      const stored = await getAsyncStorage(StorageKey.ACCESS_TOKEN);
+      token = isAccessTokenUsable(stored) ? stored : null;
     } else if (this.tokenType === 'refresh') {
       token = await getAsyncStorage(StorageKey.REFRESH_TOKEN);
     }

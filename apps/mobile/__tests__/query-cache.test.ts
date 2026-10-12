@@ -72,11 +72,18 @@ it('GraphQL 문서 지문이 지금 문서와 맞는다 — 쿼리가 바뀌면 
     )
     .sort();
   const hash = crypto.createHash('sha1');
-  for (const f of [
-    pathLocal.join(src, 'shared/api/gql/gql.ts'),
-    ...handWritten,
-  ]) {
-    hash.update(fsLocal.readFileSync(f, 'utf8'));
+  hash.update(
+    fsLocal.readFileSync(pathLocal.join(src, 'shared/api/gql/gql.ts'), 'utf8'),
+  );
+  // 손으로 쓴 파일은 **문서 문자열만** 본다 — 파일 통째면 같은 파일의 서비스 코드·주석만 고쳐도 지문이 바뀌어
+  // 모든 사용자의 화면 캐시를 버렸다(10/13 home.service 의 토큰 모드만 바꿨는데 지문이 바뀜).
+  for (const f of handWritten) {
+    const text: string = fsLocal.readFileSync(f, 'utf8');
+    for (const m of text.matchAll(
+      /new TypedDocumentString[\s\S]*?\(\s*`([\s\S]*?)`/g,
+    )) {
+      hash.update(m[1]);
+    }
   }
   const actual: string = hash.digest('hex').slice(0, 12);
   expect(QUERY_DOCS_FINGERPRINT).toBe(actual);
