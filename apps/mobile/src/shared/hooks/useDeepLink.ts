@@ -4,6 +4,7 @@ import {Linking} from 'react-native';
 import {normalizeDeepLink} from '@/shared/lib/navigation/deep-link';
 import {openWhenNavigatorReady} from '@/navigations/open-when-ready';
 import {Analytics} from '@/shared/lib/analytics/ga4';
+import {offerWebGuestHandoff} from '@/shared/lib/auth/web-guest-handoff';
 
 /**
  * 외부 딥링크(카톡 공유·유니버설 링크·커스텀 스킴)로 앱을 여는 경로.
@@ -24,9 +25,12 @@ export default function useDeepLink(openInWebView: (url: string) => void) {
     const open = (rawUrl: string, from: 'cold' | 'running') => {
       const url = normalizeDeepLink(rawUrl);
       if (!url) return;
+      // 웹 게스트가 「앱 열기」로 넘어왔으면(gd) 같은 게스트로 이어받게 맡긴다(useAdoptWebGuest).
+      offerWebGuestHandoff(url);
 
       Analytics.track('deeplink_opened', {
-        url,
+        // 기기 id(gd)는 GA4 에 싣지 않는다.
+        url: url.replace(/([?&#])gd=[^&#]*&?/, '$1').replace(/[?&#]$/, ''),
         platform: 'app',
         state: from,
       });

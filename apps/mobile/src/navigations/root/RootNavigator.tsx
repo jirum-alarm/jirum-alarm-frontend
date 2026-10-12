@@ -11,13 +11,20 @@ import {UserQueries} from '@/entities/user/user.queries';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {setSentryUser} from '@/shared/lib/monitoring/sentry';
 import {useAutoGuest} from '@/screens/auth/useAutoGuest';
+import {useAdoptWebGuest} from '@/screens/auth/useAdoptWebGuest';
 
 const RootNavigator = () => {
-  const {isLogin, isLoading} = useAuth();
+  const {isLogin, isMember, isLoading} = useAuth();
   const {needsUpdate} = useForceUpdate();
   useAppStateTokenRefresh();
   // 첫 실행은 로그인 화면 대신 게스트로 — 판단·발급 동안 스플래시를 유지한다.
   const {pending: autoGuestPending} = useAutoGuest({isLoading, isLogin});
+  // 웹에서 「앱 열기」로 넘어온 게스트를 이어받는다 — 자동 게스트까지 끝난 뒤에.
+  useAdoptWebGuest({
+    ready: !isLoading && !autoGuestPending,
+    isLogin,
+    isMember,
+  });
 
   // 자동 로그인으로 들어온 사람도 GA4 user_id 를 단다 — 예전엔 로그인 화면을 지날 때만 달아서
   // 이미 로그인돼 있던 대부분의 앱 사용자가 익명으로 남았다. (access 요청은 첫 토큰 갱신까지 줄 선다)

@@ -63,23 +63,36 @@ const copyFor = (keywords: string[]) => {
   };
 };
 
+const nowListeners = new Set<() => void>();
+
+/**
+ * 지금 다시 판단해서 띄운다 — 웹 게스트를 이어받아 키워드가 막 생겼을 때(useAdoptWebGuest).
+ * 첫 판단(마운트 1.5초 뒤)은 그때 키워드가 없어 건너뛰었으므로 그 순간이 이 안내의 자리다.
+ */
+export function showPushPrePromptNow(): void {
+  nowListeners.forEach(listener => listener());
+}
+
 export default function PushPermissionPrePrompt() {
   const [visible, setVisible] = useState(false);
   const [keywords, setKeywords] = useState<string[]>([]);
 
   useEffect(() => {
     let cancelled = false;
-    const timer = setTimeout(async () => {
+    const check = async () => {
       if (!(await shouldShowPushPrePrompt()) || cancelled) return;
       // 키워드 조회가 실패해도 일반 문구로 띄운다 — 안내 자체를 막지 않는다.
       const mine = await MyPageService.getMyKeywords().catch(() => []);
       if (cancelled) return;
       setKeywords(mine.map(k => k.keyword).filter(Boolean));
       setVisible(true);
-    }, SHOW_DELAY_MS);
+    };
+    const timer = setTimeout(check, SHOW_DELAY_MS);
+    nowListeners.add(check);
     return () => {
       cancelled = true;
       clearTimeout(timer);
+      nowListeners.delete(check);
     };
   }, []);
 
