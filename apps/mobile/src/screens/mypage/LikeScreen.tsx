@@ -9,6 +9,7 @@ import type {
 
 import CurationGrid from '@/entities/home/ui/CurationGrid';
 import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
+import type {ProductCardType} from '@/entities/home/model/types';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import Heart from '@/shared/components/icons/Heart';
 import {tabStackNavigations} from '@/shared/constant/navigations';
@@ -55,6 +56,24 @@ export default function LikeScreen({navigation}: Props) {
     [stackNavigation],
   );
 
+  // ★고정한다 — 인라인이면 그리드가 다시 그려질 때마다(페이지 추가·새로고침) 보이는 카드가 전부 다시 그려진다.
+  const renderCard = useCallback(
+    (item: ProductCardType) => (
+      <View>
+        <GridCard
+          product={item}
+          onPress={openDetail}
+          trackingSource="wishlist"
+        />
+        {/* web 은 썸네일 우상단에 하트를 얹는다(ProductGridCard actionIcon). */}
+        <View className="absolute top-0 right-0">
+          <WishlistHeart productId={Number(item.id)} onChange={setWishlist} />
+        </View>
+      </View>
+    ),
+    [openDetail, setWishlist],
+  );
+
   return (
     <View className="flex-1 bg-white">
       <StackHeader title="찜 목록" onBack={navigation.goBack} />
@@ -72,22 +91,7 @@ export default function LikeScreen({navigation}: Props) {
         items={products}
         emptyText="아직 찜한 상품이 없어요."
         keyOf={item => String(item.id)}
-        renderCard={item => (
-          <View>
-            <GridCard
-              product={item}
-              onPress={openDetail}
-              trackingSource="wishlist"
-            />
-            {/* web 은 썸네일 우상단에 하트를 얹는다(ProductGridCard actionIcon). */}
-            <View className="absolute top-0 right-0">
-              <WishlistHeart
-                productId={Number(item.id)}
-                onChange={setWishlist}
-              />
-            </View>
-          </View>
-        )}
+        renderCard={renderCard}
         isPending={isPending}
         isError={isError}
         label="찜 목록"

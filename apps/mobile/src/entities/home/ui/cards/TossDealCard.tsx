@@ -17,7 +17,8 @@ import {CardCornerLabel} from '@/shared/components/product/ProductCardStatus';
  * 토스 전용 카드. web TossDealCard.
  * 코너에서는 판매가·할인율을 숨긴다. 상세 경로는 호출측이 ?from=toss 를 붙인다.
  */
-export default function TossDealCard({
+// memo — 그리드가 다시 그려져도 같은 딜 카드는 건너뛴다(홈 카드들과 같은 처방).
+export default React.memo(function TossDealCard({
   deal,
   onPress,
 }: {
@@ -97,4 +98,4 @@ export default function TossDealCard({
       </View>
     </PressableScale>
   );
-}
+});

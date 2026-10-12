@@ -1,5 +1,12 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {RefreshControl, ScrollView, View} from 'react-native';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
+import {
+  FlatList,
+  Platform,
+  RefreshControl,
+  View,
+  type ListRenderItemInfo,
+  type ViewToken,
+} from 'react-native';
 import {sectionTitle} from '@jirum/design-system/recipes';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useQuery} from '@tanstack/react-query';
@@ -13,6 +20,7 @@ import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {RANKING_SPLIT, TrendingQueries} from '../api/trending.queries';
 import {useRankingImpressionTracker} from '../model/useRankingImpressionTracker';
 import {GridSkeleton} from '@/shared/components/Skeletons';
+import {GRID_WINDOW_SIZE} from '@/entities/home/ui/CurationGrid';
 
 /**
  * 랭킹 목록. web: widgets/trending/ui/TrendingList.tsx + useTrendingViewModel
@@ -20,16 +28,97 @@ import {GridSkeleton} from '@/shared/components/Skeletons';
  * 구성(web 과 같은 순서):
  *   랭킹 1~10 → "'{카테고리}' 실시간 핫딜" 캐러셀 → 랭킹 11~50 → '추천 핫딜' 캐러셀
  *
- * ★ FlatList 가 아니라 ScrollView 다 — 그리드가 캐러셀로 두 동막 나뉘어
- * 한 줄 목록이 아니다(web 도 같은 이유로 grid 두 개를 따로 그린다).
- * 그래서 노출 판정은 onViewableItemsChanged 를 못 쓰고 스크롤 위치로 한다.
+ * ★FlatList 한 줄 = 그리드 한 줄(카드 2장) 또는 캐러셀 하나. 예전엔 ScrollView 에 50장을 한 번에
+ * 그렸다 — 칩을 누를 때마다(key 로 갈아끼움) 카드 50장·사진 50장을 처음부터 다시 만들어 칩 반응이
+ * 한 박자 늦었다. 이제 첫 화면 몇 줄만 그리고 나머지는 스크롤하면서 그린다.
+ * 노출도 카드 onLayout + 스크롤 위치 계산 대신 FlatList 의 onViewableItemsChanged(50% 보임, web 과 같은 기준).
  */
 
 /** 랭킹 탭 노출/클릭 출처. 백엔드 CTR 집계가 이 값으로 필터한다. */
 const RANKING_SOURCE = 'ranking_tab';
+const COLUMNS = 2;
 const GRID_GAP_X = 12; // web gap-x-3
 const GRID_GAP_Y = 20; // web gap-y-5
+const SECTION_GAP = 32;
 const H_PADDING = 20; // web px-5
+/** 첫 화면 = 그리드 4줄(8장). 그 뒤로는 스크롤하며 4줄씩. */
+const ROWS_PER_BATCH = 4;
+const VIEWABILITY_CONFIG = {itemVisiblePercentThreshold: 50};
+
+type GridRow = {
+  type: 'grid';
+  key: string;
+  products: ProductCardType[];
+  /** 이 줄 첫 카드의 0-based position(CTR 계측·뱃지 = position + 1). */
+  positionFrom: number;
+  gapAfter: number;
+};
+type CarouselRow = {
+  type: 'carousel';
+  key: string;
+  title: string;
+  products: ProductCardType[];
+  source: ProductCardSource;
+  gapAfter: number;
+};
+export type RankingRow = GridRow | CarouselRow;
+
+/**
+ * 화면에 그릴 줄 목록. 랭킹을 2장씩 끊고, 11위 앞·맨 끝에 캐러셀을 끼운다.
+ * 줄 사이 간격은 그리드끼리 20, 섹션 경계 32(예전 ScrollView gap 과 같다).
+ */
+export function buildRankingRows({
+  products,
+  categoryName,
+  live,
+  recommended,
+}: {
+  products: ProductCardType[];
+  categoryName: string;
+  live?: ProductCardType[];
+  recommended?: ProductCardType[];
+}): RankingRow[] {
+  const rows: RankingRow[] = [];
+  const pushGrid = (from: number, to: number) => {
+    for (let i = from; i < Math.min(to, products.length); i += COLUMNS) {
+      rows.push({
+        type: 'grid',
+        key: `grid-${i}`,
+        products: products.slice(i, Math.min(i + COLUMNS, to)),
+        positionFrom: i,
+        gapAfter:
+          i + COLUMNS < Math.min(to, products.length)
+            ? GRID_GAP_Y
+            : SECTION_GAP,
+      });
+    }
+  };
+  pushGrid(0, RANKING_SPLIT);
+  if (live && live.length > 0) {
+    rows.push({
+      type: 'carousel',
+      key: 'live',
+      title: `'${categoryName}' 실시간 핫딜`,
+      products: live,
+      source: 'trending_live',
+      gapAfter: SECTION_GAP,
+    });
+  }
+  pushGrid(RANKING_SPLIT, products.length);
+  if (recommended && recommended.length > 0) {
+    rows.push({
+      type: 'carousel',
+      key: 'recommend',
+      title: '추천 핫딜',
+      products: recommended,
+      source: 'trending_recommend',
+      gapAfter: SECTION_GAP,
+    });
+  }
+  const last = rows.at(-1);
+  if (last) rows[rows.length - 1] = {...last, gapAfter: 0};
+  return rows;
+}
 
 export default function RankingList({
   categoryId,
@@ -46,9 +135,6 @@ export default function RankingList({
   const live = useQuery(TrendingQueries.rankingLive(categoryId));
   const recommended = useQuery(TrendingQueries.recommended());
 
-  // ★ `?? []` 를 그대로 쓰면 매 렌더 새 배열이라 아래 useMemo·useCallback 의
-  // 의존성이 항상 바뀐다(노출 기록 콜백이 매 렌더 재생성된다).
-  const products = useMemo(() => ranking.data ?? [], [ranking.data]);
   const {recordImpression, recordClick} =
     useRankingImpressionTracker(RANKING_SOURCE);
 
@@ -66,50 +152,60 @@ export default function RankingList({
     }
   }, [ranking, live, recommended]);
 
-  /**
-   * 노출 기록. ScrollView 라 카드별 뷰포트 판정이 없으므로 스크롤 오프셋과
-   * 카드 y 위치를 비교한다 — onLayout 으로 모은 위치를 쓴다.
-   * (web 은 카드마다 IntersectionObserver 를 달았다)
-   */
-  const positionsRef = React.useRef<Record<number, number>>({});
-  const viewportRef = React.useRef(0);
-
-  const handleScroll = useCallback(
-    (y: number) => {
-      const viewport = viewportRef.current;
-      if (!viewport) return;
-      for (const [key, top] of Object.entries(positionsRef.current)) {
-        const index = Number(key);
-        const product = products[index];
-        if (!product) continue;
-        // 카드 상단이 화면 안에 들어오면 노출로 센다(중복은 트래커가 막는다).
-        if (top >= y && top <= y + viewport) {
-          recordImpression(Number(product.id), index);
-        }
-      }
-    },
-    [products, recordImpression],
+  const rows = useMemo(
+    () =>
+      buildRankingRows({
+        products: ranking.data ?? [],
+        categoryName,
+        live: live.data,
+        recommended: recommended.data,
+      }),
+    [ranking.data, categoryName, live.data, recommended.data],
   );
 
   const handlePress = useCallback(
-    (id: number, index: number) => {
-      recordClick(id, index);
+    (id: number, position: number) => {
+      recordClick(id, position);
       onPressProduct(id);
     },
     [recordClick, onPressProduct],
   );
 
-  const registerPosition = useCallback((index: number, y: number) => {
-    positionsRef.current[index] = y;
-  }, []);
+  // onViewableItemsChanged 는 FlatList 가 첫 렌더의 함수만 쓴다(교체하면 예외) — 최신 기록 함수는 ref 로.
+  const recordImpressionRef = useRef(recordImpression);
+  recordImpressionRef.current = recordImpression;
+  const handleViewableItemsChanged = useRef(
+    ({viewableItems}: {viewableItems: ViewToken<RankingRow>[]}) => {
+      for (const {item} of viewableItems) {
+        if (item?.type !== 'grid') continue;
+        item.products.forEach((product, i) =>
+          recordImpressionRef.current(
+            Number(product.id),
+            item.positionFrom + i,
+          ),
+        );
+      }
+    },
+  ).current;
 
-  const topProducts = useMemo(
-    () => products.slice(0, RANKING_SPLIT),
-    [products],
+  const renderItem = useCallback(
+    ({item}: ListRenderItemInfo<RankingRow>) =>
+      item.type === 'grid' ? (
+        <RankedRow row={item} onPress={handlePress} />
+      ) : (
+        <View style={{marginBottom: item.gapAfter}}>
+          <CarouselSection
+            title={item.title}
+            products={item.products}
+            onPressProduct={onPressProduct}
+            trackingSource={item.source}
+          />
+        </View>
+      ),
+    [handlePress, onPressProduct],
   );
-  const restProducts = useMemo(() => products.slice(RANKING_SPLIT), [products]);
 
-  // 랭킹은 2열 그리드(RankedGrid)로 시작한다 — 같은 골격을 먼저 그린다.
+  // 랭킹은 2열 그리드로 시작한다 — 같은 골격을 먼저 그린다.
   if (ranking.isPending) {
     return (
       <View className="flex-1 bg-white">
@@ -127,127 +223,83 @@ export default function RankingList({
   }
 
   return (
-    <ScrollView
+    <FlatList
       className="flex-1 bg-white"
-      scrollEventThrottle={200}
-      onLayout={e => {
-        viewportRef.current = e.nativeEvent.layout.height;
-      }}
-      onScroll={e => handleScroll(e.nativeEvent.contentOffset.y)}
+      data={rows}
+      keyExtractor={rowKey}
+      renderItem={renderItem}
+      initialNumToRender={ROWS_PER_BATCH}
+      maxToRenderPerBatch={ROWS_PER_BATCH}
+      windowSize={GRID_WINDOW_SIZE}
+      removeClippedSubviews={Platform.OS === 'android'}
+      viewabilityConfig={VIEWABILITY_CONFIG}
+      onViewableItemsChanged={handleViewableItemsChanged}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
       contentContainerStyle={{
         paddingTop: 16,
         paddingBottom: bottomInset + 16,
-        gap: 32,
-      }}>
-      <RankedGrid
-        products={topProducts}
-        rankFrom={1}
-        positionFrom={0}
-        onPress={handlePress}
-        onCardLayout={registerPosition}
-      />
-
-      {live.data && live.data.length > 0 && (
-        <CarouselSection
-          title={`'${categoryName}' 실시간 핫딜`}
-          products={live.data}
-          onPressProduct={onPressProduct}
-          trackingSource="trending_live"
-        />
-      )}
-
-      <RankedGrid
-        products={restProducts}
-        rankFrom={RANKING_SPLIT + 1}
-        positionFrom={RANKING_SPLIT}
-        onPress={handlePress}
-        onCardLayout={registerPosition}
-      />
-
-      {recommended.data && recommended.data.length > 0 && (
-        <CarouselSection
-          title="추천 핫딜"
-          products={recommended.data}
-          onPressProduct={onPressProduct}
-          trackingSource="trending_recommend"
-        />
-      )}
-    </ScrollView>
+      }}
+    />
   );
 }
 
-/**
- * 랭킹 뱃지가 붙은 2열 그리드.
- * FlatList numColumns 대신 flexWrap — 바깥이 이미 ScrollView 라
- * 중첩 VirtualizedList 경고를 피한다(홈 ProductGrid 와 같은 처방).
- */
-function RankedGrid({
-  products,
-  rankFrom,
-  positionFrom,
+const rowKey = (row: RankingRow) => row.key;
+
+/** 랭킹 뱃지가 붙은 그리드 한 줄(2장). 마지막 줄이 1장이면 왼쪽 반만 채운다. */
+const RankedRow = React.memo(function RankedRow({
+  row,
   onPress,
-  onCardLayout,
 }: {
-  products: ProductCardType[];
-  /** 이 그리드 첫 카드의 1-based 랭킹(뱃지 표시용). */
-  rankFrom: number;
-  /** 이 그리드 첫 카드의 0-based position(CTR 계측용). */
-  positionFrom: number;
+  row: GridRow;
   onPress: (id: number, position: number) => void;
-  onCardLayout: (position: number, y: number) => void;
 }) {
-  // 이 그리드가 스크롤 콘텐츠 안에서 시작하는 y. 카드 y 에 더해 절대좌표를 만든다.
-  const gridTopRef = React.useRef(0);
-
-  if (products.length === 0) return null;
-
-  const columns = 2;
-  const lastRowStart = Math.floor((products.length - 1) / columns) * columns;
-
   return (
     <View
-      onLayout={e => {
-        gridTopRef.current = e.nativeEvent.layout.y;
-      }}
       style={{
         flexDirection: 'row',
-        flexWrap: 'wrap',
         paddingHorizontal: H_PADDING - GRID_GAP_X / 2,
+        marginBottom: row.gapAfter,
       }}>
-      {products.map((product, i) => {
-        const position = positionFrom + i;
-        return (
-          <View
-            key={product.id}
-            // ★ onLayout 의 y 는 부모 기준이라 그리드 자체의 y 를 더해야
-            // 스크롤 오프셋과 비교할 수 있는 절대좌표가 된다. 두 번째 그리드는
-            // 캐러셀 아래에 있어 이걸 빼먹으면 노출이 전부 첫 화면으로 계산된다.
-            onLayout={e =>
-              onCardLayout(
-                position,
-                gridTopRef.current + e.nativeEvent.layout.y,
-              )
-            }
-            style={{
-              width: `${100 / columns}%`,
-              paddingHorizontal: GRID_GAP_X / 2,
-              marginBottom: i >= lastRowStart ? 0 : GRID_GAP_Y,
-            }}>
-            <GridCard
-              product={product}
-              rank={rankFrom + i}
-              onPress={id => onPress(id, position)}
-              trackingSource="ranking_tab"
-            />
-          </View>
-        );
-      })}
+      {row.products.map((product, i) => (
+        <RankedCell
+          key={product.id}
+          product={product}
+          position={row.positionFrom + i}
+          onPress={onPress}
+        />
+      ))}
     </View>
   );
-}
+});
+
+const RankedCell = React.memo(function RankedCell({
+  product,
+  position,
+  onPress,
+}: {
+  product: ProductCardType;
+  position: number;
+  onPress: (id: number, position: number) => void;
+}) {
+  // GridCard 는 memo 다 — 인라인 화살표를 넘기면 부모가 그릴 때마다 memo 가 깨진다.
+  const handlePress = useCallback(
+    (id: number) => onPress(id, position),
+    [onPress, position],
+  );
+  return (
+    <View
+      style={{width: `${100 / COLUMNS}%`, paddingHorizontal: GRID_GAP_X / 2}}>
+      <GridCard
+        product={product}
+        rank={position + 1}
+        onPress={handlePress}
+        trackingSource="ranking_tab"
+      />
+    </View>
+  );
+});
 
 /** 제목 + 가로 캐러셀. web CarouselProductsSection(nested) 과 같은 모양. */
 function CarouselSection({

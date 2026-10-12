@@ -94,6 +94,13 @@ export default function TossCurationScreen({
     },
     [navigation],
   );
+  // ★고정한다 — 인라인이면 페이지가 붙을 때마다 보이는 카드(3열이라 한 화면 15장 남짓)가 전부 다시 그려졌다.
+  const renderCard = useCallback(
+    (item: (typeof deals)[number]) => (
+      <TossDealCard deal={item} onPress={handlePressProduct} />
+    ),
+    [handlePressProduct],
+  );
 
   const activeLabel =
     TOSS_SECTIONS.find(s => s.id === activeId)?.label ?? '토스 특가';
@@ -123,9 +130,7 @@ export default function TossCurationScreen({
       <CurationGrid
         items={deals}
         keyOf={item => item.id}
-        renderCard={item => (
-          <TossDealCard deal={item} onPress={handlePressProduct} />
-        )}
+        renderCard={renderCard}
         columns={3}
         topSpacing="tight"
         bottomInset={bottomClip}

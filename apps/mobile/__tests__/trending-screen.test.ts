@@ -157,11 +157,11 @@ describe('CTR 계측 (web 과 같은 출처·규칙)', () => {
     expect(grid).toContain('itemVisiblePercentThreshold: 50');
   });
 
-  it('★두 번째 그리드는 캐러셀 아래라 그리드 y 를 더한다', () => {
-    // 안 더하면 11위 이후 노출이 전부 첫 화면으로 계산된다.
-    expect(rankingList).toContain(
-      'gridTopRef.current + e.nativeEvent.layout.y',
-    );
+  it('★랭킹 노출·순위는 줄 목록이 정한다 — 11위 이후도 position 이 이어진다', () => {
+    // 예전엔 카드 onLayout y + 그리드 y 로 계산했다(빼먹으면 11위 이후가 전부 첫 화면으로 셈).
+    // 이제 FlatList 줄마다 positionFrom 을 들고 있다 — 실제 동작은 ranking-list.test 가 렌더해서 본다.
+    expect(rankingList).toContain('onViewableItemsChanged');
+    expect(rankingList).toContain('item.positionFrom + i');
   });
 
   it('★카테고리를 바꾸면 dedup 집합을 버린다', () => {

@@ -76,14 +76,19 @@ export default function RelatedProductsScreen({
       navigation.push(tabStackNavigations.DETAIL, {path: `/products/${id}`}),
     [navigation],
   );
+  // ★고정한다 — 인라인이면 그리드가 다시 그려질 때마다 보이는 카드가 전부 다시 그려진다.
+  const renderCard = useCallback(
+    (item: (typeof items)[number]) => (
+      <ProductCard product={item} layout="grid" onPress={pushProduct} />
+    ),
+    [pushProduct],
+  );
 
   return (
     <CurationGrid
       items={items}
       keyOf={item => String(item.id)}
-      renderCard={item => (
-        <ProductCard product={item} layout="grid" onPress={pushProduct} />
-      )}
+      renderCard={renderCard}
       // 제목(키워드)을 기다리는 동안도 로딩으로 본다. 키워드가 비면 쿼리가 꺼져 pending 에 머무니 빈 목록으로.
       isPending={info.isPending || (keyword.length > 0 && isPending)}
       isError={info.isError || isError}
