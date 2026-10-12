@@ -38,7 +38,11 @@ export type PushSettingKey =
   | 'marketing'
   | 'nightAlerts'
   | 'communityAlert';
-export type MyPushSetting = Record<PushSettingKey, boolean>;
+/** 방해금지 시간(KST 시 0~23). 둘 다 null = 꺼짐 — 서버는 둘을 함께 받는다(하나만 보내면 거부). */
+export type MyPushSetting = Record<PushSettingKey, boolean> & {
+  quietHoursStart: number | null;
+  quietHoursEnd: number | null;
+};
 
 /**
  * 내정보 프로필·비밀번호·탈퇴·키워드. web `shared/api/auth` + `shared/api/keyword`.

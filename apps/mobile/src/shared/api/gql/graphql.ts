@@ -1231,6 +1231,8 @@ export type MutationUpdatePushSettingArgs = {
   keywordAlert?: InputMaybe<Scalars['Boolean']['input']>;
   marketing?: InputMaybe<Scalars['Boolean']['input']>;
   nightAlerts?: InputMaybe<Scalars['Boolean']['input']>;
+  quietHoursEnd?: InputMaybe<Scalars['Int']['input']>;
+  quietHoursStart?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type MutationUpdateUserProfileArgs = {
@@ -2838,6 +2840,10 @@ export type UserPushSetting = {
   marketingAgreedAt?: Maybe<Scalars['DateTime']['output']>;
   nightAlerts: Scalars['Boolean']['output'];
   nightAlertsAgreedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** 방해금지 끝 시(KST 0~23). null 이면 꺼짐 */
+  quietHoursEnd?: Maybe<Scalars['Int']['output']>;
+  /** 방해금지 시작 시(KST 0~23). null 이면 꺼짐 */
+  quietHoursStart?: Maybe<Scalars['Int']['output']>;
   userId: Scalars['Int']['output'];
 };
 
@@ -3683,6 +3689,8 @@ export type QueryMyPushSettingQuery = {
     marketing: boolean;
     nightAlerts: boolean;
     communityAlert: boolean;
+    quietHoursStart?: number | null;
+    quietHoursEnd?: number | null;
   };
 };
 
@@ -3691,6 +3699,8 @@ export type MutationUpdateMyPushSettingMutationVariables = Exact<{
   marketing?: InputMaybe<Scalars['Boolean']['input']>;
   nightAlerts?: InputMaybe<Scalars['Boolean']['input']>;
   communityAlert?: InputMaybe<Scalars['Boolean']['input']>;
+  quietHoursStart?: InputMaybe<Scalars['Int']['input']>;
+  quietHoursEnd?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 export type MutationUpdateMyPushSettingMutation = {
@@ -5021,6 +5031,8 @@ export const QueryMyPushSettingDocument = new TypedDocumentString(`
     marketing
     nightAlerts
     communityAlert
+    quietHoursStart
+    quietHoursEnd
   }
 }
     `) as unknown as TypedDocumentString<
@@ -5028,12 +5040,14 @@ export const QueryMyPushSettingDocument = new TypedDocumentString(`
   QueryMyPushSettingQueryVariables
 >;
 export const MutationUpdateMyPushSettingDocument = new TypedDocumentString(`
-    mutation MutationUpdateMyPushSetting($keywordAlert: Boolean, $marketing: Boolean, $nightAlerts: Boolean, $communityAlert: Boolean) {
+    mutation MutationUpdateMyPushSetting($keywordAlert: Boolean, $marketing: Boolean, $nightAlerts: Boolean, $communityAlert: Boolean, $quietHoursStart: Int, $quietHoursEnd: Int) {
   updatePushSetting(
     keywordAlert: $keywordAlert
     marketing: $marketing
     nightAlerts: $nightAlerts
     communityAlert: $communityAlert
+    quietHoursStart: $quietHoursStart
+    quietHoursEnd: $quietHoursEnd
   )
 }
     `) as unknown as TypedDocumentString<
