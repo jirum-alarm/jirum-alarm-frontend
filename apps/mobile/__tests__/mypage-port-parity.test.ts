@@ -193,7 +193,7 @@ describe('키워드 화면 — web 이 한 화면에서 관리하는 3덩어리'
     for (const label of [
       '어떤 딜을 알려드릴까요?',
       '새 핫딜 모두',
-      '평소보다 쌀 때만',
+      '최근 딜보다 쌀 때만',
       '가격 범위',
       '빼고 싶은 단어',
       'summarizeKeywordAlert',

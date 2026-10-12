@@ -46,7 +46,7 @@ describe('키워드 알림 조건 파싱 — web keyword-options 와 같은 규�
         minPrice: null,
         maxPrice: 1000000,
       }),
-    ).toBe('평소보다 쌀 때만 · 100만원 이하 · ‘케이스’ 외 1개 제외');
+    ).toBe('최근 딜보다 쌀 때만 · 100만원 이하 · ‘케이스’ 외 1개 제외');
     expect(
       summarizeKeywordAlert({
         priceDropOnly: false,
