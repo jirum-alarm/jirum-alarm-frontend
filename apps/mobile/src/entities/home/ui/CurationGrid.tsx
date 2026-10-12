@@ -2,6 +2,7 @@ import {emptyText as emptyTextClass} from '@jirum/design-system/recipes';
 import React, {useCallback, useRef, useState} from 'react';
 import {
   FlatList,
+  Platform,
   RefreshControl,
   ScrollView,
   View,
@@ -24,6 +25,17 @@ import {GridSkeleton} from '@/shared/components/Skeletons';
 const GRID_GAP_X = 12; // web gap-x-3
 const GRID_GAP_Y = 20; // web gap-y-5
 const HORIZONTAL_PADDING = 20; // web px-5
+
+/**
+ * 가상화 설정 — FlatList 기본값은 한 줄 목록용이다(windowSize 21 = 위아래 10화면씩 그려 둠).
+ * 사진 카드 그리드에 그대로 쓰면 스크롤할수록 화면 밖 카드 수백 장이 메모리에 남고, 새 줄을
+ * 그릴 때 그만큼 JS 가 밀린다(검색·큐레이션·토스·찜·관련 상품·발견 실시간 6화면 공용).
+ * 위아래 3화면이면 빠르게 넘겨도 빈칸이 안 보인다. 첫 화면은 4줄이면 채운다.
+ */
+export const GRID_WINDOW_SIZE = 7;
+const ROWS_PER_BATCH = 4;
+// iOS 는 clipped subviews 가 sticky·이미지와 얽혀 빈칸이 남는 버그가 있어 안드로이드만.
+const REMOVE_CLIPPED = Platform.OS === 'android';
 
 /** web 은 카드가 50% 보이면 노출로 셌다(useInView threshold 0.5). */
 const VIEWABILITY_CONFIG = {itemVisiblePercentThreshold: 50};
@@ -187,6 +199,10 @@ export default function CurationGrid<T>({
         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
       }
       ItemSeparatorComponent={RowGap}
+      initialNumToRender={columns * ROWS_PER_BATCH}
+      maxToRenderPerBatch={columns * ROWS_PER_BATCH}
+      windowSize={GRID_WINDOW_SIZE}
+      removeClippedSubviews={REMOVE_CLIPPED}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
       // ★viewabilityConfig 는 ref 로 고정한다. 매 렌더 새 객체를 주면

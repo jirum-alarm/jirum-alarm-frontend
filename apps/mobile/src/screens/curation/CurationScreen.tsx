@@ -180,6 +180,16 @@ type ListProps = {
   topSpacing: 'normal' | 'tight';
 };
 
+/** 카드 그리기를 고정한다 — 인라인이면 페이지가 붙을 때마다 보이는 카드가 전부 다시 그려진다. */
+function useGridCardRenderer(onPressProduct: (id: number) => void) {
+  return useCallback(
+    (item: ProductCardType) => (
+      <GridCard product={item} onPress={onPressProduct} />
+    ),
+    [onPressProduct],
+  );
+}
+
 /** 커서 페이지네이션 — web 의 useInView 센티넬을 onEndReached 로 대체. */
 function InfiniteList({section, onPressProduct, topSpacing}: ListProps) {
   const {
@@ -192,6 +202,7 @@ function InfiniteList({section, onPressProduct, topSpacing}: ListProps) {
     isFetchingNextPage,
   } = useInfiniteQuery(curationInfiniteQuery(section));
   const bottomClip = useHiddenTabBarClipPadding();
+  const renderCard = useGridCardRenderer(onPressProduct);
 
   const products = useMemo(
     () => (data?.pages ?? []).flat() as ProductCardType[],
@@ -202,7 +213,7 @@ function InfiniteList({section, onPressProduct, topSpacing}: ListProps) {
     <CurationGrid
       items={products}
       keyOf={item => String(item.id)}
-      renderCard={item => <GridCard product={item} onPress={onPressProduct} />}
+      renderCard={renderCard}
       isPending={isPending}
       isError={isError}
       label={section.title}
@@ -229,12 +240,13 @@ function SingleList({section, onPressProduct, topSpacing}: ListProps) {
     curationSingleQuery(section),
   );
   const bottomClip = useHiddenTabBarClipPadding();
+  const renderCard = useGridCardRenderer(onPressProduct);
 
   return (
     <CurationGrid
       items={data ?? []}
       keyOf={item => String(item.id)}
-      renderCard={item => <GridCard product={item} onPress={onPressProduct} />}
+      renderCard={renderCard}
       isPending={isPending}
       isError={isError}
       label={section.title}

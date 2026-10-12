@@ -1,5 +1,5 @@
 import {showToast} from '@/shared/lib/feedback';
-import {useMemo} from 'react';
+import {useCallback, useMemo} from 'react';
 import {useInfiniteQuery, useMutation, useQuery} from '@tanstack/react-query';
 
 import {MyPageQueries, WISHLIST_PAGE_SIZE} from '@/entities/mypage';
@@ -60,6 +60,15 @@ export function useWishlistViewModel() {
     onError: () => showToast.error('찜을 해제하지 못했어요.'),
   });
 
+  // 찜 그리드의 renderCard 가 이걸 쓴다 — 렌더마다 새 함수면 보이는 카드가 전부 다시 그려진다.
+  const setWishlist = useCallback(
+    (productId: number, liked: boolean) => {
+      if (liked) addWishlist({productId});
+      else removeWishlist({productId});
+    },
+    [addWishlist, removeWishlist],
+  );
+
   return {
     products,
     count: count ?? 0,
@@ -73,9 +82,6 @@ export function useWishlistViewModel() {
     },
     isFetchingNextPage,
     pageSize: WISHLIST_PAGE_SIZE,
-    setWishlist: (productId: number, liked: boolean) => {
-      if (liked) addWishlist({productId});
-      else removeWishlist({productId});
-    },
+    setWishlist,
   };
 }

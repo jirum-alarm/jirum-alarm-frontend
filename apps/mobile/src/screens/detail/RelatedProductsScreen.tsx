@@ -68,14 +68,19 @@ export default function RelatedProductsScreen({
       navigation.push(tabStackNavigations.DETAIL, {path: `/products/${id}`}),
     [navigation],
   );
+  // ★고정한다 — 인라인이면 그리드가 다시 그려질 때마다 보이는 카드가 전부 다시 그려진다.
+  const renderCard = useCallback(
+    (item: (typeof items)[number]) => (
+      <ProductCard product={item} layout="grid" onPress={pushProduct} />
+    ),
+    [pushProduct],
+  );
 
   return (
     <CurationGrid
       items={items}
       keyOf={item => String(item.id)}
-      renderCard={item => (
-        <ProductCard product={item} layout="grid" onPress={pushProduct} />
-      )}
+      renderCard={renderCard}
       isPending={same.isPending || latest.isPending}
       // 한쪽만 실패하면 받은 쪽만 보인다 — 둘 다 비었을 때만 오류.
       isError={(same.isError || latest.isError) && items.length === 0}
