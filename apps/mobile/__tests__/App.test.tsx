@@ -64,6 +64,9 @@ jest.mock('../src/shared/lib/monitoring/sentry.ts', () => ({
   // init 이 안 돌면 wrap 도 안 건다 — 실제 구현과 같이 원본을 그대로 통과시킨다.
   wrapApp: (c: unknown) => c,
   setSentryUser: jest.fn(),
+  setSentryScreen: jest.fn(),
+  reportEmergencyLaunch: jest.fn(),
+  captureQueryError: jest.fn(),
   Sentry: {
     wrap: (c: unknown) => c,
     ErrorBoundary: ({children}: {children: React.ReactNode}) => children,

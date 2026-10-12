@@ -1,5 +1,7 @@
 import * as Sentry from '@sentry/react-native';
 import * as Updates from 'expo-updates';
+import {Analytics} from '@/shared/lib/analytics/ga4';
+import {queryErrorReportKey, queryName} from './query-errors';
 
 // 앱(RN) 크래시·에러 수집. web 은 @sentry/nextjs 로 이미 보내고 있었지만
 // 앱은 유저 폰에서 죽어도 아무 기록이 남지 않았다(유일한 신호가 스토어 리뷰).
@@ -45,6 +47,8 @@ export function initSentry() {
   if (Updates.channel) {
     Sentry.setTag('update_channel', Updates.channel);
   }
+  // 내장 번들로 뜬 실행인지(OTA 를 아직 못 받았거나 되돌아간 것) — dist 가 비어 있는 이유를 가른다.
+  Sentry.setTag('embedded_launch', String(Updates.isEmbeddedLaunch));
 }
 
 /**
@@ -67,6 +71,58 @@ export function wrapApp<T>(app: T): T {
 export function setSentryUser(userId: string | null) {
   if (!isEnabled()) return;
   Sentry.setUser(userId ? {id: userId} : null);
+}
+
+/**
+ * 지금 보고 있는 화면을 에러에 붙인다. 화면 전환 추적(tracing)은 쿼터 때문에 꺼 둬서
+ * 그동안 에러가 **어느 화면에서** 났는지 스택으로만 짐작했다. 이동 흔적은 breadcrumb 로.
+ */
+export function setSentryScreen(name: string) {
+  if (!isEnabled()) return;
+  Sentry.setTag('screen', name);
+  Sentry.addBreadcrumb({category: 'navigation', message: name, level: 'info'});
+}
+
+// 같은 쿼리·같은 원인은 실행당 한 번만 보낸다 — 서버가 잠깐 죽으면 화면마다 수십 건이
+// 쏟아져 무료 쿼터(크래시용)를 다 먹는다. 첫 건이 알려주는 사실로 충분하다.
+const reportedQueryErrors = new Set<string>();
+
+/**
+ * react-query 쿼리·뮤테이션 실패를 보낸다. 화면은 실패를 「다시 시도」 칸으로 삼켜서
+ * 서버 오류·응답 모양 변화(스키마 드리프트)가 **어디에도 기록되지 않았다.**
+ * 네트워크 끊김·인증 만료·취소처럼 정상 흐름인 실패는 query-errors 가 걸러 낸다.
+ */
+export function captureQueryError(
+  error: unknown,
+  source: {kind: 'query' | 'mutation'; key: unknown},
+) {
+  if (!isEnabled()) return;
+  const reportKey = queryErrorReportKey(error, source);
+  if (!reportKey || reportedQueryErrors.has(reportKey)) return;
+  reportedQueryErrors.add(reportKey);
+  Sentry.captureException(error, {
+    tags: {[source.kind]: queryName(source.key)},
+    fingerprint: [reportKey],
+  });
+}
+
+/**
+ * OTA 가 깨져 내장 번들로 되돌아간 실행(emergency launch)을 남긴다.
+ *
+ * expo-updates 는 받은 업데이트가 실행에 실패하면 조용히 스토어 번들로 띄운다 — 사용자에겐
+ * 「업데이트가 안 온 앱」으로만 보이고, 우리는 OTA 가 기기에서 죽었다는 걸 알 길이 없었다
+ * (2026-10-01 실행 즉시 종료 OTA 도 원인을 못 가렸다). GA4 는 DSN 과 무관하게 항상 보낸다.
+ */
+export function reportEmergencyLaunch() {
+  if (!Updates.isEmergencyLaunch) return;
+  const reason = Updates.emergencyLaunchReason ?? 'unknown';
+  Analytics.track('ota_emergency_launch', {reason, platform: 'app'});
+  if (!isEnabled()) return;
+  Sentry.captureMessage('expo-updates emergency launch', {
+    level: 'warning',
+    tags: {emergency_launch: 'true'},
+    extra: {reason},
+  });
 }
 
 export {Sentry};
