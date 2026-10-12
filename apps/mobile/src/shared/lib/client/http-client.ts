@@ -5,6 +5,7 @@ import {getDeviceId} from '@/shared/lib/device/device-id';
 import {StorageKey} from '@/shared/constant/storage-key.ts';
 import {GRAPHQL_ENDPOINT} from '@/shared/constant/endpoint.ts';
 import {waitForInitialAuth} from './initial-auth';
+import {isAccessTokenUsable} from './token-expiry';
 
 type TokenType = 'access' | 'refresh' | null;
 
@@ -50,14 +51,33 @@ export class HttpClient {
 
   private async fetchWithAuth(url: string, options: RequestInit) {
     let token: string | null = null;
+    // 첫 갱신을 기다리지 않고 저장된 access 로 바로 보냈는가(그러다 401 이면 한 번 다시).
+    let skippedInitialAuth = false;
 
     if (this.tokenType === 'access') {
-      await waitForInitialAuth();
       token = await getAsyncStorage(StorageKey.ACCESS_TOKEN);
+      // ★저장된 access 가 아직 살아 있으면 콜드 스타트 첫 갱신을 기다리지 않는다(token-expiry 주석).
+      skippedInitialAuth = isAccessTokenUsable(token);
+      if (!skippedInitialAuth) {
+        await waitForInitialAuth();
+        token = await getAsyncStorage(StorageKey.ACCESS_TOKEN);
+      }
     } else if (this.tokenType === 'refresh') {
       token = await getAsyncStorage(StorageKey.REFRESH_TOKEN);
     }
 
+    try {
+      return await this.send(url, options, token);
+    } catch (error) {
+      // 기기 시계가 틀려 서버에선 이미 만료였던 경우 — 예전 경로(갱신을 기다린 새 토큰)로 한 번 더.
+      if (!skippedInitialAuth || !isAuthFailure(error)) throw error;
+      await waitForInitialAuth();
+      const fresh = await getAsyncStorage(StorageKey.ACCESS_TOKEN);
+      return this.send(url, options, fresh);
+    }
+  }
+
+  private async send(url: string, options: RequestInit, token: string | null) {
     const deviceId = await getDeviceId();
 
     const response = await fetch(url, {
