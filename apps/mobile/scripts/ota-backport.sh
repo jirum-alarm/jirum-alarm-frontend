@@ -2,6 +2,9 @@
 # 옛 runtime(스토어에 나가 있는 버전)에 main 커밋을 백포트해 OTA 로 낸다 — 단계마다 막는다.
 #
 #   scripts/ota-backport.sh --runtime 1.5.0 --app <그 runtime 의 Release .app> [--message "…"] [--dry-run] [--keep] <커밋…>
+#   scripts/ota-backport.sh --runtime all <커밋…>          # origin 의 ota/runtime-* 전부를 차례로(하나가 실패해도 나머지는 간다)
+#   scripts/ota-backport.sh --runtime 1.5.0,1.4.8 <커밋…>  # 골라서
+#   --app 을 안 주면 ~/.cache/jirum/ota-apps/<runtime>.app 을 쓴다(남의 scratchpad 사본은 사라진다 — 여기 두고 쓴다).
 #
 # 왜: main 은 다음 스토어 버전(runtime)으로 먼저 올라가 있어서 main 푸시 자동 OTA 는 스토어 사용자에게 안 간다.
 #   스토어 버전마다 origin ota/runtime-<버전> 브랜치에 cherry-pick 해 손으로 발행해 왔는데(10/12 하루 여섯 번),
@@ -36,7 +39,31 @@ while [ $# -gt 0 ]; do
     *) COMMITS+=("$1"); shift ;;
   esac
 done
-[ -n "$RUNTIME" ] || { echo "--runtime 이 필요하다(예: 1.5.0)" >&2; exit 2; }
+[ -n "$RUNTIME" ] || { echo "--runtime 이 필요하다(예: 1.5.0 · 1.5.0,1.4.8 · all)" >&2; exit 2; }
+
+# 여러 runtime — 하나씩 이 스크립트를 다시 부른다. 스토어에 나가 있는 버전이 여럿이면 같은 수정을 전부에 내야 한다.
+if [ "$RUNTIME" = all ] || [[ "$RUNTIME" == *,* ]]; then
+  if [ "$RUNTIME" = all ]; then
+    REPO_ALL=$(git -C "$(dirname "$0")" rev-parse --show-toplevel)
+    RUNTIMES=$(git -C "$REPO_ALL" ls-remote origin 'refs/heads/ota/runtime-*' | sed 's#.*refs/heads/ota/runtime-##' | sort -rV | tr '\n' ' ')
+  else
+    RUNTIMES=$(printf '%s' "$RUNTIME" | tr ',' ' ')
+  fi
+  [ -n "$APP" ] && { echo "여러 runtime 이면 --app 대신 ~/.cache/jirum/ota-apps/<runtime>.app 을 쓴다" >&2; exit 2; }
+  SUMMARY=""; FAILED=0
+  for rt in $RUNTIMES; do
+    printf '\n════════ runtime %s ════════\n' "$rt"
+    args=(--runtime "$rt")
+    [ -n "$MESSAGE" ] && args+=(--message "$MESSAGE ($rt 백포트)")
+    [ $DRY = 1 ] && args+=(--dry-run)
+    [ $KEEP = 1 ] && args+=(--keep)
+    if bash "$0" "${args[@]}" "${COMMITS[@]}"; then SUMMARY+="  ✓ $rt\n"; else SUMMARY+="  ✗ $rt\n"; FAILED=1; fi
+  done
+  printf '\n════════ 요약 ════════\n%b' "$SUMMARY"
+  exit $FAILED
+fi
+
+[ -n "$APP" ] || APP="$HOME/.cache/jirum/ota-apps/$RUNTIME.app"
 [ -d "$APP" ] || { echo "--app 에 그 runtime 의 Release .app 경로가 필요하다(기동 확인용)" >&2; exit 2; }
 [ ${#COMMITS[@]} -gt 0 ] || { echo "백포트할 커밋을 하나 이상 준다" >&2; exit 2; }
 
