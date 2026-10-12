@@ -23,6 +23,7 @@ import {
   QueryProductStats,
 } from '@/graphql/product';
 import {HttpClient} from '@/shared/lib/client';
+import {TypedDocumentString} from '@/shared/api/gql/graphql.ts';
 import type {
   AddUserLikeOrDislikeMutationVariables,
   AddNotificationKeywordMutationVariables,
@@ -50,6 +51,21 @@ import type {
 
 /** 근거(판정 포함) 대기 상한. 운영 실측 응답은 0.2초 안팎이라 넉넉히 잡았다. */
 const DEAL_EVIDENCE_TIMEOUT_MS = 1500;
+
+export type CoupangSearchCta = {url: string; query: string};
+
+// 오래된 딜의 「쿠팡에서 지금 가격 보기」(실험 coupang_search_cta_v1). 코드젠 스키마 갱신 전이라 손으로 둔다(web 과 같은 쿼리).
+const QueryCoupangSearchCta = new TypedDocumentString<
+  {coupangSearchCta: CoupangSearchCta | null},
+  {productId: number}
+>(`
+  query QueryCoupangSearchCta($productId: Int!) {
+    coupangSearchCta(productId: $productId) {
+      url
+      query
+    }
+  }
+`);
 
 export class ProductService {
   /**
@@ -213,6 +229,19 @@ export class ProductService {
       variables,
     );
     return res.data?.sameProductDeals ?? [];
+  }
+
+  /** 대상이 아니거나 아직 링크가 없으면 null. 부가 버튼이라 실패도 null. */
+  static async getCoupangSearchCta(variables: {productId: number}) {
+    try {
+      const res = await HttpClient.withAccessToken().execute(
+        QueryCoupangSearchCta,
+        variables,
+      );
+      return res.data?.coupangSearchCta ?? null;
+    } catch {
+      return null;
+    }
   }
 
   static async getLatestSimilarDeals(

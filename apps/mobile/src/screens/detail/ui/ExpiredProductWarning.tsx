@@ -10,6 +10,7 @@ import SectionErrorRow from '@/shared/components/SectionErrorRow';
 
 import type {ProductDetail} from '../model/types';
 import {dealFreshnessAt} from '../lib/price-signals';
+import CoupangSearchCta from './CoupangSearchCta';
 
 /** 7일 지나면 품절·종료됐을 수 있다고 본다(web 과 같은 기준). */
 const EXPIRE_DAYS = 7;
@@ -92,56 +93,61 @@ export default function ExpiredProductWarning({
     latest.refetch();
   };
 
-  if (!isPending && !isError && similar.length === 0) return null;
+  // 오래된 딜에 검색으로 들어온 사람에게 지금 살 곳 — 실험군·대상 딜만 서버가 링크를 준다(web 과 같은 자리).
+  const coupangCta = <CoupangSearchCta productId={currentId} />;
+  if (!isPending && !isError && similar.length === 0) return coupangCta;
 
   return (
-    <View className="pt-7">
-      <View className="flex-row items-center justify-between px-5">
-        <Text className="text-lg font-semibold text-gray-900">
-          최신 핫딜을 확인해 보세요
+    <>
+      {coupangCta}
+      <View className="pt-7">
+        <View className="flex-row items-center justify-between px-5">
+          <Text className="text-lg font-semibold text-gray-900">
+            최신 핫딜을 확인해 보세요
+          </Text>
+          {hasMore && onPressMore ? (
+            <Pressable
+              onPress={onPressMore}
+              hitSlop={12}
+              accessibilityRole="link"
+              accessibilityLabel="최신 핫딜 더보기"
+              style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+              <Text className="text-xs font-medium text-gray-500">더보기</Text>
+            </Pressable>
+          ) : null}
+        </View>
+        <Text className="px-5 pt-1 text-xs text-gray-500">
+          이 상품은 올라온 지 며칠 지나 품절·종료됐을 수 있어요
         </Text>
-        {hasMore && onPressMore ? (
-          <Pressable
-            onPress={onPressMore}
-            hitSlop={12}
-            accessibilityRole="link"
-            accessibilityLabel="최신 핫딜 더보기"
-            style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-            <Text className="text-xs font-medium text-gray-500">더보기</Text>
-          </Pressable>
-        ) : null}
+        {isError ? (
+          <SectionErrorRow label="최신 핫딜" onRetry={refetch} />
+        ) : isPending ? (
+          <View className="h-[220px] items-center justify-center">
+            <ActivityIndicator size="small" className="text-gray-500" />
+          </View>
+        ) : (
+          <View className="flex-row flex-wrap px-[17px] pt-3">
+            {similar.slice(0, DISPLAY_LIMIT).map((item, index) => (
+              <View
+                key={String(item.id)}
+                style={{
+                  width: '33.333%',
+                  paddingHorizontal: 3,
+                  paddingBottom: 12,
+                }}>
+                <ProductCard
+                  product={item}
+                  layout="grid"
+                  onPress={id => {
+                    recordClick(Number(item.id), index);
+                    onPressProduct(id);
+                  }}
+                />
+              </View>
+            ))}
+          </View>
+        )}
       </View>
-      <Text className="px-5 pt-1 text-xs text-gray-500">
-        이 상품은 올라온 지 며칠 지나 품절·종료됐을 수 있어요
-      </Text>
-      {isError ? (
-        <SectionErrorRow label="최신 핫딜" onRetry={refetch} />
-      ) : isPending ? (
-        <View className="h-[220px] items-center justify-center">
-          <ActivityIndicator size="small" className="text-gray-500" />
-        </View>
-      ) : (
-        <View className="flex-row flex-wrap px-[17px] pt-3">
-          {similar.slice(0, DISPLAY_LIMIT).map((item, index) => (
-            <View
-              key={String(item.id)}
-              style={{
-                width: '33.333%',
-                paddingHorizontal: 3,
-                paddingBottom: 12,
-              }}>
-              <ProductCard
-                product={item}
-                layout="grid"
-                onPress={id => {
-                  recordClick(Number(item.id), index);
-                  onPressProduct(id);
-                }}
-              />
-            </View>
-          ))}
-        </View>
-      )}
-    </View>
+    </>
   );
 }

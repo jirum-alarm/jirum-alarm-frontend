@@ -14,6 +14,8 @@ import TrackedProductGridCard from '@/entities/product-list/ui/grid/TrackedProdu
 
 import { dealFreshnessAt } from '@/features/product-detail/lib/product-seo';
 
+import CoupangSearchCta from '../ui/CoupangSearchCta';
+
 interface Props {
   product: ProductInfoFragment;
   isMobile: boolean;
@@ -26,9 +28,13 @@ export default function ExpiredProductWarning({ product, isMobile }: Props) {
   if (!isExpired) return null;
 
   return (
-    <Suspense>
-      <ExpiredProductRecommendations product={product} isMobile={isMobile} />
-    </Suspense>
+    <>
+      {/* 오래된 딜에 검색으로 들어온 사람에게 지금 살 곳 — 실험군·대상 딜만 서버가 링크를 준다. */}
+      <CoupangSearchCta productId={Number(product.id)} className="pc:px-0 mb-6 px-5" />
+      <Suspense>
+        <ExpiredProductRecommendations product={product} isMobile={isMobile} />
+      </Suspense>
+    </>
   );
 }
 

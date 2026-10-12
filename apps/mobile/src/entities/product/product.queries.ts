@@ -44,6 +44,8 @@ export class ProductQueries {
       [...this.keys.detail(id), 'sameProductDeals'] as const,
     latestSimilarDeals: (id: number, limit: number) =>
       [...this.keys.detail(id), 'latestSimilarDeals', limit] as const,
+    coupangSearchCta: (id: number) =>
+      [...this.keys.detail(id), 'coupangSearchCta'] as const,
     categoryPopular: (categoryId: number) =>
       [...this.keys.all, 'categoryPopular', categoryId] as const,
     togetherViewed: (id: number) =>
@@ -130,6 +132,13 @@ export class ProductQueries {
       queryKey: this.keys.latestSimilarDeals(variables.id, variables.limit),
       queryFn: () => ProductService.getLatestSimilarDeals(variables),
       retry: RETRY,
+    });
+  }
+
+  static coupangSearchCta(variables: {productId: number}) {
+    return queryOptions({
+      queryKey: this.keys.coupangSearchCta(variables.productId),
+      queryFn: () => ProductService.getCoupangSearchCta(variables),
     });
   }
 

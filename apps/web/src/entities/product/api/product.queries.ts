@@ -184,6 +184,17 @@ export const ProductQueries = {
       queryFn: () => ProductService.getLatestSimilarDeals(variables),
     }),
 
+  coupangSearchCta: (variables: { productId: number }) =>
+    queryOptions({
+      queryKey: [
+        ...ProductQueries.all(),
+        'detail',
+        { id: variables.productId },
+        'coupang-search-cta',
+      ],
+      queryFn: () => ProductService.getCoupangSearchCta(variables),
+    }),
+
   similarProducts: (variables: { id: number }) =>
     queryOptions({
       queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'similar'],
