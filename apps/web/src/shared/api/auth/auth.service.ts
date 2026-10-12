@@ -82,12 +82,15 @@ export class AuthService {
     return execute(UpdatePassword, variables).then((res) => res.data);
   }
 
-  static async updateKeyword(variables: {
-    keyword: string;
-    fromRecommendation?: boolean;
-    priceDropOnly?: boolean;
-  }) {
+  static async updateKeyword(variables: AddNotificationKeywordVariables) {
     return execute(MutationAddNotificationKeyword, variables).then((res) => res.data);
+  }
+
+  /** 문장 → 키워드 알림 조건 + 지난 30일 미리보기(서버 Haiku 5.5). 해석 못 하면 null. */
+  static async parseNotificationIntent(variables: { text: string }) {
+    return execute(QueryParseNotificationIntent, variables).then(
+      (res) => res.data?.parseNotificationIntent ?? null,
+    );
   }
 
   static async removeKeyword(variables: MutationRemoveNotificationKeywordMutationVariables) {
@@ -256,20 +259,73 @@ const QueryRecommendedNotificationKeywords = graphql(`
  * dev 엔드포인트가 죽어 스키마 재생성이 막혀 있기 때문(shared/api/keyword 주석 참고).
  * dev 복구 후 codegen 을 돌리면 graphql() 로 되돌릴 수 있다.
  */
+type AddNotificationKeywordVariables = {
+  keyword: string;
+  fromRecommendation?: boolean;
+  priceDropOnly?: boolean;
+  /** 「문장으로 알림 만들기」처럼 등록과 동시에 조건을 거는 경우 */
+  minPrice?: number | null;
+  maxPrice?: number | null;
+  excludeKeywords?: string[];
+};
+
 const MutationAddNotificationKeyword = new TypedDocumentString<
   { addNotificationKeyword: boolean },
-  { keyword: string; fromRecommendation?: boolean; priceDropOnly?: boolean }
+  AddNotificationKeywordVariables
 >(`
   mutation MutationAddNotificationKeyword(
     $keyword: String!
     $fromRecommendation: Boolean
     $priceDropOnly: Boolean
+    $minPrice: Int
+    $maxPrice: Int
+    $excludeKeywords: [String!]
   ) {
     addNotificationKeyword(
       keyword: $keyword
       fromRecommendation: $fromRecommendation
       priceDropOnly: $priceDropOnly
+      minPrice: $minPrice
+      maxPrice: $maxPrice
+      excludeKeywords: $excludeKeywords
     )
+  }
+`);
+
+export type NotificationIntent = {
+  keyword: string;
+  excludeKeywords: string[];
+  minPrice: number | null;
+  maxPrice: number | null;
+  /** 지난 30일 이 조건이면 왔을 알림 수(대략) */
+  recentMatchCount: number;
+  recentSamples: { id: number; title: string; price: number | null }[];
+  /** 키워드 후보 전부(구체적인 것부터)와 각자의 30일 건수 */
+  candidates: { keyword: string; recentMatchCount: number }[];
+};
+
+/** 수기 TypedDocumentString — 위와 같은 이유(codegen 스키마가 뒤처져 있다). */
+const QueryParseNotificationIntent = new TypedDocumentString<
+  { parseNotificationIntent: NotificationIntent | null },
+  { text: string }
+>(`
+  query QueryParseNotificationIntent($text: String!) {
+    parseNotificationIntent(text: $text) {
+      keyword
+      excludeKeywords
+      minPrice
+      maxPrice
+      recentMatchCount
+      recentSamples {
+        id
+        title
+        price
+      }
+      candidates {
+        keyword
+        recentMatchCount
+      }
+    }
   }
 `);
 

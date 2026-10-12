@@ -16,7 +16,8 @@ export type KeywordRegisterSource =
   | 'post_purchase'
   | 'signup_complete' // 가입 완료 화면(웹만)
   | 'search_no_result' // 검색 결과 없음(웹만)
-  | 'first_visit'; // 상세 첫 방문 시트(웹만)
+  | 'first_visit' // 상세 첫 방문 시트(웹만)
+  | 'mypage_sentence'; // 마이페이지 「문장으로 만들기」(웹만)
 
 export const useUpdateKeyword = (options: {
   source: KeywordRegisterSource;
