@@ -542,6 +542,8 @@ export type ModelPageListItemOutput = {
   brand?: Maybe<Scalars['String']['output']>;
   buyLine?: Maybe<Scalars['Int']['output']>;
   buyLineUnitLabel?: Maybe<Scalars['String']['output']>;
+  /** 목록 카드의 작은 추이선 — payload.priceHistory 의 최근 점 최대 12개(오래된→최근). */
+  trendPrices: Array<Scalars['Float']['output']>;
   categoryId?: Maybe<Scalars['Int']['output']>;
   categoryName?: Maybe<Scalars['String']['output']>;
   dealCount: Scalars['Int']['output'];
@@ -3496,6 +3498,7 @@ export type PublishedModelPagesQuery = {
     savePct?: number | null;
     buyLine?: number | null;
     buyLineUnitLabel?: string | null;
+    trendPrices: Array<number>;
   }>;
 };
 
@@ -4604,6 +4607,7 @@ export const PublishedModelPagesDocument = new TypedDocumentString(`
     savePct
     buyLine
     buyLineUnitLabel
+    trendPrices
   }
 }
     `) as unknown as TypedDocumentString<

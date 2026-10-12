@@ -9,17 +9,20 @@ import { convertToWebp } from '@/shared/lib/utils/image';
 import Badge from '@/shared/ui/common/Badge';
 import ImageComponent from '@/shared/ui/ImageComponent';
 
-import { buildModelDisplayName } from '@/features/deals/lib/model-page-insights';
+import { buildModelDisplayName, relativeTimeLabel } from '@/features/deals/lib/model-page-insights';
 
 import DealsMobileHeader from './[slug]/DealsMobileHeader';
 import DealsCategoryTabs from './DealsCategoryTabs';
+import DealsSearch, { DealsSearchItem } from './DealsSearch';
 
 import type { ReactNode } from 'react';
 
 // /deals 인덱스 — "이 상품, 지금 사도 되나?"에 답하는 곳. 새 딜 피드(홈·랭킹)와 역할이 다르다.
 // 섹션: ① 지금 사기 좋아요(진행 딜이 추이보다 쌈) ② 최근 핫딜(진행 중, 평소·비쌈 그대로 표시)
-// ③ 기다리는 상품(30일 내 진행 딜 없음 — 종료된 최근 딜은 있을 수 있다. 적정가 + 알림). 판정은 백엔드 publishedModelPages 가 상세와 같은 규칙으로 계산.
+// ③ 기다리는 상품(3일 내 진행 딜 없음 — 종료된 최근 딜은 있을 수 있다. 적정가 + 알림). 판정은 백엔드 publishedModelPages 가 상세와 같은 규칙으로 계산.
 // ③을 숨기지 않는 이유: 모델 페이지 751개의 내부링크 허브이고, 옛 딜 페이지가 검색 유입 원천이다.
+// ③은 사진 카드 대신 줄 목록 — 사진 카드 500장이 같은 모양으로 이어져 "그냥 나열"로 읽혔다(2026-10-13).
+// 맨 위 검색창은 그 500장을 훑는 대신 사려던 상품으로 바로 가는 길.
 // 앱은 /deals 를 열지 않는다(apps/mobile tab-routing) — 웹 전용.
 
 export const metadata: Metadata = {
@@ -37,7 +40,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 600; // 10분 ISR — 판정의 '30일 이내'도 이 주기로 갱신된다
+export const revalidate = 600; // 10분 ISR — 판정의 '3일 이내'도 이 주기로 갱신된다(배치는 매시)
 
 export default async function DealsIndexPage() {
   const pages = await ModelPageService.getPublishedModelPages();
@@ -66,6 +69,12 @@ export default async function DealsIndexPage() {
         }
       : null;
 
+  const searchItems: DealsSearchItem[] = pages.map((p) => ({
+    slug: p.slug,
+    name: buildModelDisplayName(p.brand, p.modelName),
+    hint: searchHint(p),
+  }));
+
   const sections = groupByCategory(waiting);
   // 활성 categoryId — 딜 총합순(섹션 순서 그대로). 탭 순서=섹션(스크롤) 순서 일치.
   const activeIdOrder = sections
@@ -92,12 +101,14 @@ export default async function DealsIndexPage() {
       )}
       <DealsMobileHeader title="핫딜 최저가 모음" />
 
-      <header className="mb-8">
+      <header className="mb-4">
         <h1 className="text-2xl font-bold text-gray-900">핫딜 최저가 모음</h1>
         <p className="mt-1 text-sm text-gray-600">
           {leadSentence ?? '인기 상품별로 커뮤니티 핫딜 가격을 모았어요.'}
         </p>
       </header>
+
+      {pages.length > 0 && <DealsSearch items={searchItems} />}
 
       {pages.length === 0 ? (
         <p className="py-20 text-center text-gray-500">준비 중이에요.</p>
@@ -117,7 +128,7 @@ export default async function DealsIndexPage() {
             <section className="mb-12">
               <SectionTitle
                 title="최근 핫딜이 떴어요"
-                description="한 달 안에 올라온 핫딜이에요. 평소 가격과 비교해 보세요."
+                description="사흘 안에 올라온 핫딜이에요. 평소 가격과 비교해 보세요."
               />
               <FoldedGrid items={recent} visible={RECENT_VISIBLE} />
             </section>
@@ -155,7 +166,7 @@ export default async function DealsIndexPage() {
                       {section.items.length}
                     </span>
                   </h3>
-                  <FoldedGrid items={section.items} visible={CATEGORY_VISIBLE} />
+                  <FoldedRows items={section.items} visible={CATEGORY_VISIBLE} />
                 </section>
               ))}
             </>
@@ -170,8 +181,8 @@ type DealItem = Awaited<ReturnType<typeof ModelPageService.getPublishedModelPage
 
 /** ② 최근 핫딜에서 접지 않고 보여줄 개수. 모바일 2열 기준 6줄. */
 const RECENT_VISIBLE = 12;
-/** ③ 카테고리 섹션마다 접지 않고 보여줄 개수. 안 접으면 식품 한 섹션만 수백 장이라 아래 카테고리에 닿지 못했다. */
-const CATEGORY_VISIBLE = 10;
+/** ③ 카테고리 섹션마다 접지 않고 보여줄 개수(PC 3열 × 4줄). 안 접으면 식품 한 섹션만 수백 개라 아래 카테고리에 닿지 못했다. */
+const CATEGORY_VISIBLE = 12;
 
 const GOOD_TONES = new Set(['lowest', 'cheap']);
 
@@ -243,6 +254,122 @@ function FoldedGrid({ items, visible }: { items: DealItem[]; visible: number }) 
   );
 }
 
+/** ③ 줄 목록 — FoldedGrid 와 같은 접기. 줄 하나 = 작은 사진·이름·적정가·마지막 핫딜. */
+function FoldedRows({ items, visible }: { items: DealItem[]; visible: number }) {
+  const rows = (list: DealItem[], className?: string) => (
+    <ul className={`pc:grid-cols-3 grid grid-cols-1 gap-2 sm:grid-cols-2 ${className ?? ''}`}>
+      {list.map((p) => (
+        <li key={p.slug}>
+          <WaitingRow item={p} />
+        </li>
+      ))}
+    </ul>
+  );
+  return (
+    <>
+      {rows(items.slice(0, visible))}
+      {items.length > visible && (
+        <details className="group mt-3">
+          <summary className="cursor-pointer list-none rounded-xl border border-gray-200 py-3 text-center text-sm font-medium text-gray-700 group-open:hidden">
+            {items.length - visible}개 더 보기
+          </summary>
+          {rows(items.slice(visible), 'mt-2')}
+        </details>
+      )}
+    </>
+  );
+}
+
+function WaitingRow({ item: p }: { item: DealItem }) {
+  return (
+    <Link
+      href={`/deals/${p.slug}`}
+      className="flex items-center gap-3 rounded-lg border border-gray-100 p-2.5 hover:bg-gray-50"
+    >
+      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded bg-gray-50">
+        <ImageComponent
+          src={convertToWebp(p.heroImage) ?? p.heroImage ?? ''}
+          fallbackSrc={p.heroImage ?? undefined}
+          fallback={<NoImage />}
+          alt={p.modelName}
+          width={48}
+          height={48}
+          className="h-full w-full object-cover"
+        />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="line-clamp-1 text-sm font-medium text-gray-900">
+          {buildModelDisplayName(p.brand, p.modelName)}
+        </p>
+        <p className="line-clamp-1 text-xs text-gray-500">
+          {[
+            waitingPriceText(p),
+            p.lastDealAt ? `마지막 핫딜 ${relativeTimeLabel(p.lastDealAt)}` : null,
+          ]
+            .filter(Boolean)
+            .join(' · ')}
+        </p>
+      </div>
+    </Link>
+  );
+}
+
+function waitingPriceText(p: DealItem): string | null {
+  if (p.buyLine != null && p.buyLine > 0) {
+    return `적정가 ${p.buyLineUnitLabel ? `${p.buyLineUnitLabel} ` : ''}${p.buyLine.toLocaleString()}원 이하`;
+  }
+  if (p.heroMinPrice != null) return `지난 최저 ${p.heroMinPrice.toLocaleString()}원`;
+  return null;
+}
+
+/** 검색 결과 한 줄 — 진행 중이면 지금 가격과 판정, 아니면 적정가. */
+function searchHint(p: DealItem): string | null {
+  if (p.activeDealCount > 0 && p.activePrice != null) {
+    const verdict = verdictBadge(p)?.text;
+    return [`진행 중 ${p.activePrice.toLocaleString()}원`, verdict].filter(Boolean).join(' · ');
+  }
+  return waitingPriceText(p);
+}
+
+/**
+ * 카드의 작은 추이선 — 최근 점 최대 12개. 마지막 점(가장 최근 추이)을 판정 색으로 찍는다.
+ * 숫자 축은 그리지 않는다: 카드 폭에선 읽히지 않고, "지금이 바닥 쪽인가"만 보이면 된다.
+ */
+function TrendLine({ prices, tone }: { prices: number[]; tone: 'success' | 'warning' | 'gray' }) {
+  if (prices.length < 3) return null;
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  const W = 100;
+  const H = 24;
+  const y = (v: number) => (max === min ? H / 2 : 2 + (1 - (v - min) / (max - min)) * (H - 4));
+  const x = (i: number) => (i / (prices.length - 1)) * (W - 4) + 2;
+  const points = prices.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const last = prices.length - 1;
+  const dotClass =
+    tone === 'success'
+      ? 'fill-success-500'
+      : tone === 'warning'
+        ? 'fill-warning-500'
+        : 'fill-gray-400';
+  return (
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      preserveAspectRatio="none"
+      className="mt-1.5 h-6 w-full"
+      aria-hidden="true"
+    >
+      <polyline
+        points={points}
+        fill="none"
+        className="stroke-secondary-300"
+        strokeWidth={1.5}
+        vectorEffect="non-scaling-stroke"
+      />
+      <circle cx={x(last)} cy={y(prices[last])} r={2.5} className={dotClass} />
+    </svg>
+  );
+}
+
 function DealCard({ item: p }: { item: DealItem }) {
   const isActive = p.activeDealCount > 0 && p.activePrice != null;
   const verdict = verdictBadge(p);
@@ -282,12 +409,13 @@ function DealCard({ item: p }: { item: DealItem }) {
             </p>
             <p className="text-xs text-gray-500">
               {[
-                relativeDayLabel(p.activePostedAt),
+                relativeTimeLabel(p.activePostedAt),
                 p.activeDealCount > 1 ? `진행 ${p.activeDealCount}건` : null,
               ]
                 .filter(Boolean)
                 .join(' · ')}
             </p>
+            <TrendLine prices={p.trendPrices ?? []} tone={verdict?.tone ?? 'gray'} />
           </div>
         ) : (
           <div className="mt-auto">
@@ -308,7 +436,7 @@ function DealCard({ item: p }: { item: DealItem }) {
               </>
             ) : null}
             {p.lastDealAt && (
-              <p className="text-xs text-gray-500">마지막 핫딜 {relativeDayLabel(p.lastDealAt)}</p>
+              <p className="text-xs text-gray-500">마지막 핫딜 {relativeTimeLabel(p.lastDealAt)}</p>
             )}
           </div>
         )}
@@ -345,21 +473,6 @@ function verdictBadge(p: DealItem): { text: string; tone: 'success' | 'warning' 
     default:
       return null;
   }
-}
-
-/**
- * "오늘"/"어제"/"N일 전"/"N달 전"/"N년 전". 서버 렌더라 KST 자정 경계는 근사(경과 시간 기준) — 목록 표기엔 충분.
- */
-function relativeDayLabel(at?: string | null): string | null {
-  if (!at) return null;
-  const then = Date.parse(at);
-  if (Number.isNaN(then)) return null;
-  const days = Math.floor((Date.now() - then) / 86_400_000);
-  if (days <= 0) return '오늘';
-  if (days === 1) return '어제';
-  if (days < 30) return `${days}일 전`;
-  if (days < 365) return `${Math.floor(days / 30)}달 전`;
-  return `${Math.floor(days / 365)}년 전`;
 }
 
 /**

@@ -58,6 +58,7 @@ const PublishedModelPagesDocument = graphql(`
       savePct
       buyLine
       buyLineUnitLabel
+      trendPrices
     }
   }
 `);

@@ -165,7 +165,7 @@ describe('buildTimingInsight', () => {
 
   it('가격 오독(추이 중앙값의 40% 미만)은 현재가로 쓰지 않는다', () => {
     const t = buildTimingInsight({
-      deals: [deal(4454, '2026-09-28T00:00:00Z'), deal(14454, '2026-09-27T00:00:00Z')],
+      deals: [deal(4454, '2026-09-28T00:00:00Z'), deal(14454, '2026-09-29T00:00:00Z')],
       histPrices,
       histBasis: 'total',
       now,
@@ -173,12 +173,14 @@ describe('buildTimingInsight', () => {
     assert.equal(t.current, 14454);
   });
 
-  it('30일 지난 딜·게시일 모르는 딜은 "진행 중"에서 뺀다', () => {
+  it('3일 지난 딜·게시일 모르는 딜은 "진행 중"에서 뺀다', () => {
     const t = buildTimingInsight({
       deals: [
         deal(13000, '2024-05-01T00:00:00Z'),
         deal(13500, null),
-        deal(15500, '2026-09-20T00:00:00Z'),
+        // 나흘 전 딜 — 더 싸도 진행 중이 아니다(종료 표시가 안 붙었을 뿐 대개 끝났다).
+        deal(12000, '2026-09-27T00:00:00Z'),
+        deal(15500, '2026-09-30T00:00:00Z'),
       ],
       histPrices,
       histBasis: 'total',
@@ -205,7 +207,7 @@ describe('buildTimingInsight', () => {
 
   it('추이가 평평하면 역대 최저여도 "역대급"이라 하지 않는다', () => {
     const t = buildTimingInsight({
-      deals: [deal(10000, '2026-09-20T00:00:00Z')],
+      deals: [deal(10000, '2026-09-30T00:00:00Z')],
       histPrices: [10000, 10000, 10000, 10000, 10000],
       histBasis: 'total',
       now,
@@ -228,7 +230,7 @@ describe('buildTimingInsight', () => {
       ...gb,
       deals: [
         deal(219.76, '2026-09-28T00:00:00Z'),
-        deal(500000, '2026-09-27T00:00:00Z', { unitLabel: 'GB당', unitPrice: 250 }),
+        deal(500000, '2026-09-29T00:00:00Z', { unitLabel: 'GB당', unitPrice: 250 }),
       ],
       now,
     });
@@ -247,7 +249,7 @@ describe('buildTimingInsight', () => {
 
   it('추이 점이 5개 미만이면 판정하지 않는다', () => {
     const t = buildTimingInsight({
-      deals: [deal(5000, '2026-09-20T00:00:00Z')],
+      deals: [deal(5000, '2026-09-30T00:00:00Z')],
       histPrices: [9000, 10000],
       histBasis: 'total',
       now,
@@ -257,7 +259,7 @@ describe('buildTimingInsight', () => {
 });
 
 describe('splitDealsForList', () => {
-  const now = Date.parse('2026-10-05T00:00:00Z');
+  const now = Date.parse('2026-10-03T00:00:00Z');
   const deal = (productId: number, postedAt: string, isEnd = false) => ({
     productId,
     title: `딜 ${productId}`,
@@ -270,7 +272,7 @@ describe('splitDealsForList', () => {
     thumbnail: null,
   });
 
-  it('진행 중 = 비종료 + 30일 이내 (isEnd 가 안 꺼진 옛 딜은 이력에만)', () => {
+  it('진행 중 = 비종료 + 3일 이내 (isEnd 가 안 꺼진 옛 딜은 이력에만)', () => {
     const { active, history } = splitDealsForList(
       [
         deal(1, '2026-10-01T00:00:00Z'),
@@ -314,5 +316,83 @@ describe('cleanDealTitle', () => {
       '[네이버] 스팸 & 햄',
     );
     assert.equal(cleanDealTitle('사랑해요 <3 스팸'), '사랑해요 <3 스팸');
+  });
+});
+
+describe('buildRecentDeals', () => {
+  const { buildRecentDeals, modelNameTokens } =
+    require('./model-page-insights.ts') as typeof import('./model-page-insights');
+  const now = Date.parse('2026-10-13T00:00:00Z');
+  const matched = (productId: number, postedAt: string, isEnd = false) => ({
+    productId,
+    title: 'CJ제일제당 맛밤 60g 20개',
+    price: 19900,
+    url: '',
+    providerId: 1,
+    mallName: '쿠팡',
+    postedAt,
+    thumbnail: null,
+    isEnd,
+  });
+
+  it('모델 이름 낱말에서 용량·수량은 빼고 모델 번호는 남긴다', () => {
+    assert.deepEqual(modelNameTokens('펩시콜라 제로슈거 라임향 210ml 30개 + 칠성사이다'), [
+      '펩시콜라',
+      '제로슈거',
+      '라임향',
+      '칠성사이다',
+    ]);
+    assert.deepEqual(modelNameTokens('RTX 4060'), ['rtx', '4060']);
+  });
+
+  it('매칭 딜과 이름 검색 딜을 날짜순으로 합치고, 낱말이 다 안 들어간 검색 결과·겹치는 딜은 뺀다', () => {
+    const rows = buildRecentDeals({
+      deals: [matched(1, '2026-10-12T00:00:00Z'), matched(2, '2026-08-01T00:00:00Z')],
+      searched: [
+        { id: 1, title: '맛밤 60g', postedAt: '2026-10-12T00:00:00Z' },
+        { id: 10, title: 'CJ 맛밤 80g 12개', price: '23,800원', postedAt: '2026-10-12T12:00:00Z' },
+        // 같은 딜이 다른 커뮤니티에도 — 한 줄만
+        { id: 13, title: 'CJ 맛밤 80g 12개 23,800원', postedAt: '2026-10-12T11:00:00Z' },
+        // 브랜드 없는 제목 — 이름이 짧은 상품은 다른 회사 상품이 섞여서 브랜드를 본다
+        { id: 14, title: '윤서의달밤 맛밤 30봉', postedAt: '2026-10-12T15:00:00Z' },
+        { id: 11, title: '해태 맛동산 밤라떼맛', postedAt: '2026-10-12T13:00:00Z' },
+        { id: 12, title: '간편하게 즐기는 달달맛밤 10봉', postedAt: '2026-10-12T14:00:00Z' },
+      ],
+      modelName: '맛밤',
+      brand: 'CJ제일제당',
+      now,
+    });
+    assert.deepEqual(
+      rows.map((r) => [r.productId, r.source]),
+      [
+        [10, 'search'],
+        [1, 'matched'],
+      ],
+    );
+    assert.equal(rows[0].priceText, '23,800원');
+    assert.equal(rows[1].priceText, '19,900원');
+  });
+
+  it('모델 번호가 있으면 브랜드가 제목에 없어도 받는다', () => {
+    const { isSameModelTitle } =
+      require('./model-page-insights.ts') as typeof import('./model-page-insights');
+    assert.equal(
+      isSameModelTitle('에어프라이어 오븐 TOA-70KR 99000원', 'TOA-70KR', '쿠진아트'),
+      true,
+    );
+    assert.equal(isSameModelTitle('로봇 짱구 잠옷세트', '짱구', '삼양식품'), false);
+  });
+
+  it('사흘 지난 딜은 종료 표시가 없어도 끝난 딜로 보여 준다', () => {
+    const rows = buildRecentDeals({
+      deals: [matched(1, '2026-10-12T00:00:00Z'), matched(2, '2026-10-05T00:00:00Z')],
+      searched: [],
+      modelName: '맛밤',
+      now,
+    });
+    assert.deepEqual(
+      rows.map((r) => r.isEnd),
+      [false, true],
+    );
   });
 });

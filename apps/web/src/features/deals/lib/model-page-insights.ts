@@ -57,7 +57,11 @@ export function dealComparePrice(
   return deal.price;
 }
 
-const ACTIVE_DEAL_MAX_DAYS = 30;
+/**
+ * 진행 중이라고 부를 게시 후 일수. 종료 표시는 다시 수집될 때만 붙어 믿을 수 없다 — 30일로 두니 /deals 의
+ * 진행 중 271개 중 73% 가 7~30일 전 딜이었다(2026-10-13). 백엔드 model-page-price-verdict.ts 와 같은 값.
+ */
+const ACTIVE_DEAL_MAX_DAYS = 3;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 /**
@@ -69,7 +73,7 @@ export function isForeignPriceDeal(deal: Deal, currency: 'KRW' | 'USD' = 'KRW'):
   return currency === 'KRW' && deal.price != null && !Number.isInteger(deal.price);
 }
 
-/** 진행 중 = 비종료 + 게시 30일 이내. 판정과 목록 "진행 중" 탭이 같은 기준을 써야 숫자가 맞는다. */
+/** 진행 중 = 비종료 + 게시 3일 이내. 판정과 목록 "진행 중" 탭이 같은 기준을 써야 숫자가 맞는다. */
 export function isActiveDeal(d: Deal, now = Date.now()): boolean {
   if (d.isEnd) return false;
   const posted = d.postedAt ? Date.parse(d.postedAt) : NaN;
@@ -150,7 +154,7 @@ export function buildTimingInsight(input: {
     now = Date.now(),
   } = input;
   // "지금 진행 중 최저가" 는 검색결과 설명에 그대로 찍힌다 — 근거 없는 딜은 넣지 않는다.
-  // ① 게시 30일 이내만: 종료 자동 판정이 없어 2024년 딜도 isEnd=false 로 남는다(2026-10-01 실측: "진행 중 24건"에 2024년 딜).
+  // ① 게시 3일 이내만: 종료 자동 판정이 없어 2024년 딜도 isEnd=false 로 남는다(2026-10-01 실측: "진행 중 24건"에 2024년 딜).
   // ② 추이 중앙값의 40% 미만은 오독: 신라면 14,454원을 4,454원으로 읽어 "100g당 186원·평균보다 64% 저렴" 이 나갔다.
   const histMedian = median(histPrices);
   const pool = deals.filter((d) => isActiveDeal(d, now) && !isLikelyBundleDeal(d.title));
@@ -423,4 +427,182 @@ export function buildModelDisplayName(brand: string | null | undefined, modelNam
   if (lowerName.includes(lowerBrand) || lowerBrand.startsWith(firstToken)) return name;
 
   return `${b} ${name}`;
+}
+
+/** 상세 "최근 올라온 핫딜" 한 줄. 매칭된 딜(payload)과 이름 검색으로 찾은 딜을 같은 모양으로. */
+export interface RecentDealRow {
+  productId: number;
+  title: string;
+  /** 표시용 가격 문자열. 검색 결과는 서버가 "18,500원" 문자열로 준다. */
+  priceText: string | null;
+  mallName: string | null;
+  postedAt: string;
+  thumbnail: string | null;
+  isEnd: boolean;
+  /** matched = 이 상품으로 확인된 딜(가격 추이에 들어감), search = 이름이 같아 보여 붙인 딜(확인 전). */
+  source: 'matched' | 'search';
+}
+
+export interface SearchedDeal {
+  id: number;
+  title: string;
+  price?: string | null;
+  mallName?: string | null;
+  postedAt: string;
+  thumbnail?: string | null;
+  isEnd?: boolean | null;
+}
+
+/**
+ * 용량·수량·묶음 표기(210ml·30개·+)는 상품 이름이 아니라 구성이라 검색 거르기에서 뺀다.
+ * 숫자만 있는 낱말(4060·990)은 모델 번호라 남긴다.
+ */
+const SPEC_TOKEN_RE =
+  /^[\d.,]+(ml|l|g|kg|mg|개|입|팩|캔|병|봉|매|롤|인분|포|박스|세트|p|gb|tb|mm|cm|m|w|인치|구)$|^[+x×*/·,&-]$/i;
+
+/** 모델 이름에서 제목에 반드시 들어 있어야 할 낱말. "펩시콜라 제로슈거 라임향 210ml 30개" → [펩시콜라, 제로슈거, 라임향]. */
+export function modelNameTokens(modelName: string): string[] {
+  return modelName
+    .toLowerCase()
+    .split(/\s+/)
+    .map((t) => t.replace(/[()[\]]/g, ''))
+    .filter((t) => t.length >= 2 && !SPEC_TOKEN_RE.test(t));
+}
+
+/**
+ * 제목에 모델 낱말이 다 있는가 — 낱말은 제목 낱말의 **시작**과 맞아야 한다. 그냥 포함으로 보면 "맛밤"이
+ * "달달맛밤"(다른 상품)에 걸렸다(2026-10-13). 띄어 쓰지 않은 제목(불닭볶음면큰컵)은 놓치지만, 이 목록은
+ * 놓치는 쪽이 엉뚱한 상품을 보여 주는 쪽보다 싸다.
+ */
+export function titleHasModelTokens(title: string, tokens: string[]): boolean {
+  if (tokens.length === 0) return false;
+  const words = title.toLowerCase().split(/[\s/()[\],+·|]+/);
+  return tokens.every((tok) => words.some((w) => w.startsWith(tok)));
+}
+
+const RECENT_MATCHED_MAX_DAYS = 30;
+
+/** 낱말에 영문과 숫자가 섞였으면 모델 번호(toa-70kr·s27dg500) — 그것만으로 상품이 특정된다. */
+const isModelCode = (tok: string) => tok.length >= 3 && /[a-z]/.test(tok) && /\d/.test(tok);
+
+/**
+ * 이름 검색 결과를 이 상품 딜로 볼 것인가. 모델 낱말이 다 있어야 하고, 브랜드 앞 두 글자(삼양식품→삼양)도 제목에
+ * 있어야 한다 — "짱구"가 짱구 잠옷에, "진한 콩국물"이 다른 회사 콩국물에 걸렸다(2026-10-13 표본 30개).
+ * 모델 번호가 있으면 브랜드는 안 본다(제목에 브랜드를 안 쓰는 전자제품 딜이 많다).
+ */
+export function isSameModelTitle(title: string, modelName: string, brand?: string | null): boolean {
+  const tokens = modelNameTokens(modelName);
+  if (!titleHasModelTokens(title, tokens)) return false;
+  if (!brand || tokens.some(isModelCode)) return true;
+  const prefix = brand.toLowerCase().replace(/\s+/g, '').slice(0, 2);
+  return title.toLowerCase().replace(/\s+/g, '').includes(prefix);
+}
+
+/** 같은 딜이 여러 커뮤니티에 올라온 것 — 가격 표기·괄호·공백을 지운 제목이 같고 하루 안이면 한 줄로. */
+const sameDealKey = (title: string) =>
+  title
+    .toLowerCase()
+    .replace(/\([^)]*\)|\[[^\]]*\]/g, '')
+    .replace(/[\d,]+\s*원/g, '')
+    .replace(/[\s/·,]+/g, '');
+
+/**
+ * 상세 "최근 올라온 핫딜" — 날짜순. 페이지에 묶이는 딜은 매칭 검증을 통과한 것뿐이라(최근 7일 커뮤니티 딜의 3.5%,
+ * 2026-10-13) 그것만 보여 주면 오늘 올라온 같은 상품 딜이 안 보였다. 이름 검색 결과 중 같은 상품으로 보이는 것을
+ * "이름으로 찾은 딜"로 붙인다. 판정·추이에는 매칭된 딜만 쓴다(검색 결과는 다른 용량·다른 상품이 섞일 수 있다).
+ */
+export function buildRecentDeals({
+  deals,
+  searched,
+  modelName,
+  brand,
+  currency = 'KRW',
+  now = Date.now(),
+  limit = 8,
+}: {
+  deals: Deal[];
+  searched: SearchedDeal[];
+  modelName: string;
+  brand?: string | null;
+  currency?: 'KRW' | 'USD';
+  now?: number;
+  limit?: number;
+}): RecentDealRow[] {
+  const byNewest = <T extends { postedAt: string }>(a: T, b: T) =>
+    Date.parse(b.postedAt) - Date.parse(a.postedAt);
+  const ids = new Set<number>();
+  // 같은 제목이라도 하루 넘게 떨어지면 다시 뜬 딜이다.
+  const seenAt = new Map<string, number[]>();
+  const rows: RecentDealRow[] = [];
+  const push = (row: RecentDealRow) => {
+    const key = sameDealKey(row.title);
+    const at = Date.parse(row.postedAt);
+    const times = seenAt.get(key) ?? [];
+    if (ids.has(row.productId) || times.some((t) => Math.abs(t - at) < DAY_MS)) return;
+    ids.add(row.productId);
+    seenAt.set(key, [...times, at]);
+    rows.push(row);
+  };
+
+  // 매칭 딜을 먼저 넣는다 — 같은 딜이 검색에도 잡히면 매칭 쪽(확인된 딜)이 남는다.
+  const matched = deals
+    .filter((d): d is Deal & { postedAt: string } => {
+      const posted = d.postedAt ? Date.parse(d.postedAt) : NaN;
+      return !Number.isNaN(posted) && now - posted <= RECENT_MATCHED_MAX_DAYS * DAY_MS;
+    })
+    .sort(byNewest);
+  for (const d of matched) {
+    const foreign = currency === 'USD' || isForeignPriceDeal(d, currency);
+    push({
+      productId: d.productId,
+      title: cleanDealTitle(d.title),
+      priceText:
+        d.price == null
+          ? null
+          : foreign
+            ? `$${d.price.toLocaleString('en-US', { maximumFractionDigits: 2 })}`
+            : `${Math.round(d.price).toLocaleString('ko-KR')}원`,
+      mallName: d.mallName,
+      postedAt: d.postedAt,
+      thumbnail: d.thumbnail,
+      isEnd: !!d.isEnd || now - Date.parse(d.postedAt) > ACTIVE_DEAL_MAX_DAYS * DAY_MS,
+      source: 'matched',
+    });
+  }
+  const found = searched
+    .filter(
+      (s) => !Number.isNaN(Date.parse(s.postedAt)) && isSameModelTitle(s.title, modelName, brand),
+    )
+    .sort(byNewest);
+  for (const s of found) {
+    push({
+      productId: s.id,
+      title: cleanDealTitle(s.title),
+      priceText: s.price ?? null,
+      mallName: s.mallName ?? null,
+      postedAt: s.postedAt,
+      thumbnail: s.thumbnail ?? null,
+      isEnd: !!s.isEnd || now - Date.parse(s.postedAt) > ACTIVE_DEAL_MAX_DAYS * DAY_MS,
+      source: 'search',
+    });
+  }
+  return rows.sort(byNewest).slice(0, limit);
+}
+
+/**
+ * "방금"/"N시간 전"/"어제"/"N일 전"/"N달 전"/"N년 전". 서버 렌더라 자정 경계는 근사(경과 시간 기준) — 목록 표기엔 충분.
+ * 하루 안은 시간으로 — "오늘"만으로는 아침 딜과 방금 딜이 구분되지 않는다.
+ */
+export function relativeTimeLabel(at?: string | null, now = Date.now()): string | null {
+  if (!at) return null;
+  const then = Date.parse(at);
+  if (Number.isNaN(then)) return null;
+  const hours = Math.floor((now - then) / 3_600_000);
+  if (hours < 1) return '방금';
+  if (hours < 24) return `${hours}시간 전`;
+  const days = Math.floor(hours / 24);
+  if (days === 1) return '어제';
+  if (days < 30) return `${days}일 전`;
+  if (days < 365) return `${Math.floor(days / 30)}달 전`;
+  return `${Math.floor(days / 365)}년 전`;
 }

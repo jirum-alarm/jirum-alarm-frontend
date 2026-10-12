@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { ModelPageService } from '@/shared/api/model-page';
+import { ProductService } from '@/shared/api/product';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
@@ -14,11 +15,13 @@ import ImageComponent from '@/shared/ui/ImageComponent';
 import {
   buildDealsLeadSentence,
   buildModelDisplayName,
+  buildRecentDeals,
   buildTimingInsight,
   Deal,
   HeroPrice,
   rankRepresentatives,
   Representative,
+  SearchedDeal,
   splitDealsForList,
 } from '@/features/deals/lib/model-page-insights';
 import { toSeoImageUrl } from '@/features/product-detail/lib/product-seo';
@@ -26,6 +29,7 @@ import { toSeoImageUrl } from '@/features/product-detail/lib/product-seo';
 import DealsListSection from './DealsListSection';
 import DealsMobileHeader from './DealsMobileHeader';
 import DealsTracking from './DealsTracking';
+import RecentDealsSection from './RecentDealsSection';
 
 // 에버그린 모델 페이지 (/deals/{slug}) — 상품별 핫딜 구매 판단 허브. SEO + 상품상세 CTA 유입.
 // 백엔드 model_page(isPublished=true) precompute payload 를 단일 slug 조회로 SSR.
@@ -135,6 +139,36 @@ function deriveModelPageInsights(page: ModelPageData, displayName: string) {
   return { fmtHist, histPrices, timing, leadSentence };
 }
 
+/** 이름 검색으로 찾을 최근 딜 기간. */
+const RECENT_SEARCH_DAYS = 14;
+
+/**
+ * 모델 이름으로 최근 딜 검색 — 매칭 안 된 같은 상품 딜을 "최근 올라온 핫딜"에 붙이려고.
+ * 시작일을 하루 단위로 내림해 fetch 캐시 키를 하루 동안 같게 둔다(밀리초 시각이면 매 요청 캐시 미스).
+ * 검색이 실패해도 페이지는 매칭된 딜만으로 그린다.
+ */
+async function searchRecentDeals(modelName: string): Promise<SearchedDeal[]> {
+  const day = 24 * 60 * 60 * 1000;
+  const startDate = new Date(Math.floor(Date.now() / day) * day - RECENT_SEARCH_DAYS * day);
+  try {
+    const res = await ProductService.getProducts(
+      { limit: 30, keyword: modelName, startDate: startDate.toISOString() },
+      { public: true, revalidate: 600 },
+    );
+    return (res.products ?? []).map((p) => ({
+      id: Number(p.id),
+      title: p.title,
+      price: p.price ?? null,
+      mallName: p.mallName ?? null,
+      postedAt: p.postedAt,
+      thumbnail: p.thumbnail ?? null,
+      isEnd: p.isEnd ?? null,
+    }));
+  } catch {
+    return [];
+  }
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -169,6 +203,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   const { slug } = await params;
   const page = await ModelPageService.getModelPage({ slug: decodeURIComponent(slug) });
   if (!page) notFound();
+  const searched = await searchRecentDeals(page.modelName);
 
   const payload = (page.payload ?? {}) as ModelPagePayload;
   const {
@@ -207,6 +242,14 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
     undefined,
     histCurrency,
   );
+
+  const recentRows = buildRecentDeals({
+    deals,
+    searched,
+    modelName: page.modelName,
+    brand: page.brand,
+    currency: histCurrency,
+  });
 
   const offerPrice = heroPrice?.minPrice ?? null;
   // 진행 중인 딜이 없으면 재고를 주장하지 않고, 가격 유효기간도 마지막 딜 기준으로 잡는다.
@@ -329,7 +372,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                 {leadSentence ?? '커뮤니티 핫딜을 단위가로 모아, 사도 되는 가격을 알려드립니다.'}
               </p>
               <p className="mt-1 text-xs text-gray-400">
-                {page.brand ? `${page.brand} · ` : ''}최근 핫딜 {page.dealCount}건
+                {page.brand ? `${page.brand} · ` : ''}지금까지 핫딜 {page.dealCount}건
                 {page.lastDealAt
                   ? ` · 마지막 ${new Date(page.lastDealAt).toLocaleDateString('ko-KR')}`
                   : ''}
@@ -420,6 +463,8 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
               )}
             </div>
           </header>
+
+          <RecentDealsSection rows={recentRows} />
 
           {/* 용량·수량 — 추천 팩 */}
           {rankedReps.length > 0 && (
