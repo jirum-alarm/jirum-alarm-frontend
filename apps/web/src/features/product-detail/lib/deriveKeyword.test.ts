@@ -60,3 +60,45 @@ describe('deriveKeyword 특수문자', () => {
     assert.equal(deriveKeyword('*긴급* 다이슨 청소기'), '긴급 다이슨');
   });
 });
+
+// 2026-10-12 리플레이(9/1~9/11 상세가 열린 커뮤니티 딜 1,000건 → 이후 30일 제목에 운영 매칭)에서 나온 구멍들.
+// 말머리는 같은 판매처의 다른 상품에, 날짜는 숫자 든 제목 전부에 걸리고, 수량은 같은 상품의 다른 묶음을 놓친다.
+describe('deriveKeyword 말머리·상태어·수량', () => {
+  it('닫는 괄호로 끝나는 말머리를 뗀다', () => {
+    assert.equal(deriveKeyword('하루특가) 돌쇠네 수제 떡갈비, 120g, 10팩'), '돌쇠네 수제');
+    assert.equal(deriveKeyword('최저가) 주파집 전세계 호환 4구 어댑터'), '주파집 전세계');
+    assert.equal(deriveKeyword('신카)롯카)현카) 3개월 미구매 할인'), '3개월 미구매');
+  });
+
+  it('닫는 괄호 말머리 뒤 대괄호는 브랜드라 남긴다', () => {
+    assert.equal(deriveKeyword('티멤) [삼다수] 무라벨 2L, 12개 (9,080원/무료)'), '삼다수 무라벨');
+  });
+
+  it('이모지·상태어 뒤 대괄호는 판매처라 뗀다', () => {
+    assert.equal(deriveKeyword('🔥인기 [지마켓] 웍스 WORX WX242 드라이버'), '웍스 WORX');
+    assert.equal(deriveKeyword('품절 화려한우 육회 200g'), '화려한우 육회');
+  });
+
+  it('괄호로 시작하는 말머리를 떼서 빈 키워드를 막는다', () => {
+    assert.equal(deriveKeyword('(무료) Modular Animal Knight Polyart'), 'Modular Animal');
+  });
+
+  it('날짜 머리를 뗀다 (9/4 → "9 4" 는 숫자 든 제목 전부에 걸린다)', () => {
+    assert.equal(deriveKeyword('9/4 네이버포인트'), '네이버포인트');
+  });
+
+  it('종료 안내 글은 빈 문자열', () => {
+    assert.equal(deriveKeyword('종료된 행사입니다.'), '');
+  });
+
+  it('두 번째 단어가 수량·용량이면 버린다', () => {
+    assert.equal(deriveKeyword('펩시제로 210ml 30캔 +사이다제로 210ml 30캔'), '펩시제로');
+    assert.equal(deriveKeyword('새우깡 8봉 + 매운새우깡 8봉'), '새우깡');
+    assert.equal(deriveKeyword('구운계란 60구 대란 (5,900원/무료)'), '구운계란');
+  });
+
+  it('천 단위 쉼표 숫자(가격·용량)부터는 자른다', () => {
+    assert.equal(deriveKeyword('Rocoren 5,000mAh 자기식 보조배터리'), 'Rocoren');
+    assert.equal(deriveKeyword('쉐이크쉑 12,000원 이상 구매 시 할인'), '쉐이크쉑');
+  });
+});
