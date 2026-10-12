@@ -14,6 +14,7 @@ import {tabStackNavigations} from '@/shared/constant/navigations';
 import Switch from '@/shared/components/ui/Switch';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import {useUpdatePushSetting} from '@/features/mypage/model/mutations';
+import QuietHoursRow from '@/features/mypage/ui/QuietHoursRow';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -86,24 +87,32 @@ export default function NotificationSettingScreen({navigation}: Props) {
               <ActivityIndicator size="small" className="text-gray-500" />
             </View>
           ) : (
-            ROWS.map(({key, title, description}) => (
-              <View
-                key={key}
-                accessible={false}
-                className="flex-row items-center gap-4 border-b border-gray-200 py-4">
-                <View className="min-w-0 flex-1">
-                  <Text className="font-medium text-gray-900">{title}</Text>
-                  <Text className="mt-0.5 text-sm text-gray-500">
-                    {description}
-                  </Text>
+            <>
+              {ROWS.map(({key, title, description}) => (
+                <View
+                  key={key}
+                  accessible={false}
+                  className="flex-row items-center gap-4 border-b border-gray-200 py-4">
+                  <View className="min-w-0 flex-1">
+                    <Text className="font-medium text-gray-900">{title}</Text>
+                    <Text className="mt-0.5 text-sm text-gray-500">
+                      {description}
+                    </Text>
+                  </View>
+                  <Switch
+                    value={data[key]}
+                    onChange={next => mutate({[key]: next})}
+                    accessibilityLabel={title}
+                  />
                 </View>
-                <Switch
-                  value={data[key]}
-                  onChange={next => mutate({[key]: next})}
-                  accessibilityLabel={title}
-                />
-              </View>
-            ))
+              ))}
+              <QuietHoursRow
+                start={data.quietHoursStart}
+                end={data.quietHoursEnd}
+                nightAlerts={data.nightAlerts}
+                onChange={mutate}
+              />
+            </>
           )}
         </View>
       </ScrollView>

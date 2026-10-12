@@ -954,6 +954,10 @@ type Mutation {
     marketing: Boolean
     """야간(21~08시) 푸시 수신 허용"""
     nightAlerts: Boolean
+    """방해금지 끝 시(KST 0~23). 시작과 함께 보내고, 둘 다 null 이면 해제"""
+    quietHoursEnd: Int
+    """방해금지 시작 시(KST 0~23). 끝과 함께 보내고, 둘 다 null 이면 해제"""
+    quietHoursStart: Int
   ): Boolean!
   """유저 프로필 수정"""
   updateUserProfile(birthYear: Float, favoriteCategories: [Int!], gender: Gender, nickname: String): Boolean!
@@ -2213,6 +2217,10 @@ type UserPushSetting {
   marketingAgreedAt: DateTime
   nightAlerts: Boolean!
   nightAlertsAgreedAt: DateTime
+  """방해금지 끝 시(KST 0~23). null 이면 꺼짐"""
+  quietHoursEnd: Int
+  """방해금지 시작 시(KST 0~23). null 이면 꺼짐"""
+  quietHoursStart: Int
   userId: Int!
 }
 
