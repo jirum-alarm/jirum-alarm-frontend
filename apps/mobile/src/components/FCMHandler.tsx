@@ -1,11 +1,11 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import messaging from '@react-native-firebase/messaging';
 import * as Notifications from 'expo-notifications';
 import useFCMTokenManager from '@/shared/hooks/useFCMTokenManager.ts';
 import {onForegroundMessageHandler} from '../shared/lib/fcm/index.ts';
 import {useWebviewContext} from '../provider/WebViewRefProvider.tsx';
 import {Analytics} from '@/shared/lib/analytics/ga4';
-import {navigateToNativeRoute} from '@/navigations/navigation-ref.ts';
+import {openWhenNavigatorReady} from '@/navigations/open-when-ready.ts';
 import useDeepLink from '@/shared/hooks/useDeepLink.ts';
 import {queryClient} from '@/provider/ReactQueryProvider.tsx';
 import {NotificationQueries} from '@/entities/notification';
@@ -58,7 +58,6 @@ const trackNotificationClick = (
 
 const FcmHandler = ({children}: FcmHandlerProps) => {
   const {getWebViewRefByUrl, webviewRef} = useWebviewContext();
-  const pendingUrlRef = useRef<string | null>(null);
 
   useFCMTokenManager();
 
@@ -66,58 +65,25 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
     return getWebViewRefByUrl(url) ?? webviewRef;
   };
 
-  // 딥링크(공유 링크·유니버설 링크)도 푸시와 같은 열기 경로를 탄다.
-  // 네이티브 판정은 useDeepLink 안에서 끝나고, 거기서 거른 URL 만 여기로 떨어진다
-  // (커뮤니티·내정보 탭 = 루트가 아직 웹뷰).
-  useDeepLink((url: string) => {
+  // 네이티브가 못 가져간 URL 을 웹뷰로 넘긴다(커뮤니티·내정보 탭 = 루트가 아직 웹뷰).
+  const openInWebView = (url: string) => {
     getTargetWebViewRef(url).current?.injectJavaScript(goProductDetail(url));
-  });
-
-  // ✅ 앱이 종료된 상태에서 푸시 알람을 클릭했을 때 처리
-  const tryInjectPendingUrl = () => {
-    if (pendingUrlRef.current) {
-      const targetRef = getTargetWebViewRef(pendingUrlRef.current);
-
-      const attemptInject = (retryCount = 0) => {
-        if (retryCount > 10) {
-          return;
-        }
-
-        setTimeout(() => {
-          // 콜드 스타트에서는 네비게이터가 아직 안 떠 있을 수 있으므로
-          // 재시도 루프 안에서 매번 확인한다. 루프 밖에서 한 번만 보면
-          // 첫 시도에 실패해 웹뷰로 새고, iOS 에선 상세가 안 뜬다.
-          if (
-            pendingUrlRef.current &&
-            navigateToNativeRoute(pendingUrlRef.current, {
-              allowWebViewRoute: true,
-            })
-          ) {
-            pendingUrlRef.current = null;
-            return;
-          }
-
-          if (targetRef.current && pendingUrlRef.current) {
-            targetRef.current.injectJavaScript(`
-              if (document.readyState === 'complete') {
-                ${goProductDetail(pendingUrlRef.current)}
-              } else {
-                setTimeout(() => { ${goProductDetail(
-                  pendingUrlRef.current,
-                )} }, 500);
-              }
-            `);
-            pendingUrlRef.current = null;
-          } else {
-            attemptInject(retryCount + 1);
-          }
-        }, 1000 + retryCount * 500);
-      };
-
-      attemptInject();
-    }
   };
 
+  // 딥링크(공유 링크·유니버설 링크)도 푸시와 같은 열기 경로를 탄다.
+  useDeepLink(openInWebView);
+
+  /**
+   * 알림이 가리키는 URL 을 연다 — 콜드 스타트·백그라운드·포그라운드 셋 다 같은 루프.
+   * 네이티브 화면이 있으면 그쪽으로, 없으면 웹뷰 주입으로 넘긴다(open-when-ready 주석).
+   *
+   * 웹뷰 주입만 쓰면 iOS 에서 네이티브 상세가 안 뜬다 — 주입된 이동은
+   * TabWebView URL 필터의 navigationType === 'click' 게이트를 못 통과한다.
+   */
+  const openNotificationUrl = (url: string) =>
+    openWhenNavigatorReady(url, openInWebView, {source: 'push'});
+
+  // ✅ 앱이 종료된 상태에서 푸시 알람을 클릭했을 때 처리
   const handleInitialNotification = async () => {
     const initialNotification = await messaging().getInitialNotification();
     if (initialNotification) {
@@ -125,25 +91,9 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
       if (!!url && typeof url === 'string') {
         if (isDuplicateOpen(initialNotification.data)) return;
         trackNotificationClick(initialNotification.data, 'killed');
-        pendingUrlRef.current = url;
-        tryInjectPendingUrl();
+        openNotificationUrl(url);
       }
     }
-  };
-
-  /**
-   * 알림이 가리키는 URL 을 연다. 네이티브 화면이 있으면 그쪽으로,
-   * 없으면 기존 웹뷰 주입으로 넘긴다.
-   *
-   * 웹뷰 주입만 쓰면 iOS 에서 네이티브 상세가 안 뜬다 — 주입된 이동은
-   * TabWebView URL 필터의 navigationType === 'click' 게이트를 못 통과한다.
-   */
-  const openNotificationUrl = (url: string) => {
-    // 네이티브가 그릴 수 있는 화면이면 전부 여기서 가져간다 — 웹뷰 폴백으로 새면
-    // 홈·발견·알림 탭에선 주입 대상이 없어 **아무 일도 일어나지 않는다**.
-    if (navigateToNativeRoute(url, {allowWebViewRoute: true})) return;
-    const targetRef = getTargetWebViewRef(url);
-    targetRef.current?.injectJavaScript(goProductDetail(url));
   };
 
   // ✅ 포그라운드에서 푸시 알람을 클릭했을 때 처리
@@ -173,13 +123,6 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
     handleInitialNotification();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (webviewRef.current && pendingUrlRef.current) {
-      tryInjectPendingUrl();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [webviewRef]);
 
   useEffect(() => {
     const unsubscribeMessage = messaging().onMessage(

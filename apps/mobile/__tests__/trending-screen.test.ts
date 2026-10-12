@@ -88,9 +88,16 @@ describe('★웹뷰 주입에 기대던 경로를 전부 옮겼다', () => {
     expect(routing).toContain("path.startsWith('/trending')");
     expect(routing).toContain('trendingView');
     expect(ref).toContain('export function navigateToNativeRoute');
-    expect(fcm).toContain('navigateToNativeRoute');
-    // 콜드스타트·포그라운드·딥링크 3경로 모두
-    expect(fcm.match(/navigateToNativeRoute/g)?.length).toBeGreaterThanOrEqual(
+    // 푸시·딥링크는 한 입구(openWhenNavigatorReady)를 거쳐 navigateToNativeRoute 로 간다.
+    const ready = read('src/navigations/open-when-ready.ts');
+    const deepLink = read('src/shared/hooks/useDeepLink.ts');
+    expect(ready).toContain(
+      'navigateToNativeRoute(url, {allowWebViewRoute: true})',
+    );
+    expect(fcm).toContain('openWhenNavigatorReady(url, openInWebView');
+    expect(deepLink).toContain('openWhenNavigatorReady(');
+    // 콜드스타트·백그라운드·포그라운드 3경로 모두
+    expect(fcm.match(/openNotificationUrl\(/g)?.length).toBeGreaterThanOrEqual(
       3,
     );
     // 웹뷰 안 링크 클릭용 입구는 따로 남아 있다(TabWebView 가 쓴다).
