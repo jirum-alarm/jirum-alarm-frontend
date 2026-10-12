@@ -1,5 +1,6 @@
 import Footer from './components/footer/Footer';
 import Header from './components/header/Header';
+import IntroVideo from './components/intro-video/IntroVideo';
 import KeyVisual from './components/key-visual/KeyVisual';
 import PainPoint from './components/pain-point/PainPoint';
 import ServiceIntroduction from './components/service-introduction/ServiceIntroduction';
@@ -11,6 +12,7 @@ export default function Home() {
       <Header />
       <KeyVisual />
       <PainPoint />
+      <IntroVideo />
       <ServiceIntroduction />
       <Talk />
       <Footer />
