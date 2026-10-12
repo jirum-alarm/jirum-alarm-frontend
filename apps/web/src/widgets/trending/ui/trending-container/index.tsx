@@ -21,6 +21,7 @@ import { CategoryQueries } from '@/entities/category';
 import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
 
 import { TAB_META } from '../../lib/tabMeta';
+import { orderTrendingCategories } from '../../lib/tabOrder';
 import TabBarV2 from '../TabbarV2';
 import TrendingList from '../TrendingList';
 
@@ -42,7 +43,10 @@ export const TrendingContainer = ({ initialTab }: Props) => {
     data: { categories },
   } = useSuspenseQuery(CategoryQueries.categoriesForUser());
 
-  const allCategories = useMemo(() => [{ id: 0, name: '전체' }, ...categories], [categories]);
+  const allCategories = useMemo(
+    () => [{ id: 0, name: '전체' }, ...orderTrendingCategories(categories)],
+    [categories],
+  );
   const categoryIds = useMemo(() => allCategories.map((c) => c.id), [allCategories]);
 
   const [tabId, setTabId] = useQueryState('tab', {
