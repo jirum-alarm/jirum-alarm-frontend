@@ -61,7 +61,9 @@ describe('★웹뷰 주입에 기대던 경로를 전부 옮겼다', () => {
 
   it('★카테고리도 store 가 정본 — 밖(?tab=N)에서 지정할 수 있다', () => {
     expect(screen).toContain('useTrendingCategory()');
-    expect(screen).toContain('onSelect={requestTrendingCategory}');
+    // 칩 선택은 이벤트를 남긴 뒤 store 로 보낸다(화면 state 가 아니다).
+    expect(screen).toContain('onSelect={handleSelectCategory}');
+    expect(screen).toContain('requestTrendingCategory(id)');
     expect(screen).not.toContain('useState<number>(ALL_CATEGORY.id)');
   });
 

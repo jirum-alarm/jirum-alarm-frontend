@@ -20,6 +20,8 @@ import {
   useTrendingCategory,
   useTrendingView,
 } from './trending-view-store';
+import {orderTrendingCategories} from './trending-tab-order';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
@@ -67,7 +69,10 @@ export default function TrendingScreen() {
 
   // '전체' 는 서버에 없는 합성 카테고리라 맨 앞에 끼운다(web 과 같다).
   const allCategories = useMemo(
-    () => [ALL_CATEGORY as {id: number; name: string}, ...(categories ?? [])],
+    () => [
+      ALL_CATEGORY as {id: number; name: string},
+      ...orderTrendingCategories(categories ?? []),
+    ],
     [categories],
   );
 
@@ -83,6 +88,21 @@ export default function TrendingScreen() {
   const activeCategoryName =
     allCategories.find(c => c.id === activeCategoryId)?.name ??
     ALL_CATEGORY.name;
+
+  // 칩 선택 — 순서 판단 근거(web 은 ?tab= page_view 로 잰다). 앱은 칩 줄에 스와이프가 없어 전부 누름이다.
+  const handleSelectCategory = useCallback(
+    (id: number) => {
+      if (id !== activeCategoryId) {
+        Analytics.track('trending_category_select', {
+          category_id: id,
+          position: allCategories.findIndex(c => c.id === id), // 0 = 전체
+          view,
+        });
+      }
+      requestTrendingCategory(id);
+    },
+    [activeCategoryId, allCategories, view],
+  );
 
   const handlePressProduct = useCallback(
     (id: number) => {
@@ -116,7 +136,7 @@ export default function TrendingScreen() {
           <CategoryTabBar
             categories={allCategories}
             activeId={activeCategoryId}
-            onSelect={requestTrendingCategory}
+            onSelect={handleSelectCategory}
           />
 
           {/*

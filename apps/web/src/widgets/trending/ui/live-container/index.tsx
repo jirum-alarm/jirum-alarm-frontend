@@ -20,6 +20,7 @@ import { cn } from '@/shared/lib/cn';
 import { CategoryQueries } from '@/entities/category';
 import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
 
+import { orderTrendingCategories } from '../../lib/tabOrder';
 import LiveList from '../LiveList';
 import TabBarV2 from '../TabbarV2';
 
@@ -41,7 +42,10 @@ export const LiveContainer = ({ initialTab }: Props) => {
     data: { categories },
   } = useSuspenseQuery(CategoryQueries.categoriesForUser());
 
-  const allCategories = useMemo(() => [{ id: 0, name: '전체' }, ...categories], [categories]);
+  const allCategories = useMemo(
+    () => [{ id: 0, name: '전체' }, ...orderTrendingCategories(categories)],
+    [categories],
+  );
   const categoryIds = useMemo(() => allCategories.map((c) => c.id), [allCategories]);
 
   const [tabId, setTabId] = useQueryState('tab', {
