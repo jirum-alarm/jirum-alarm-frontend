@@ -1,3 +1,4 @@
+declare const __dirname: string;
 /**
  * 콜드 스타트 — 저장된 access 가 아직 살아 있으면 첫 토큰 갱신을 기다리지 않고 바로 보낸다.
  *
@@ -144,5 +145,111 @@ describe('HttpClient.withAccessToken — 갱신 대기 건너뛰기', () => {
     releaseAuth();
     await expect(pending).resolves.toEqual({data: {ok: true}});
     expect(authHeaders()).toEqual([`Bearer ${TOKEN_EXP_2E9}`, 'Bearer fresh']);
+  });
+});
+
+describe('HttpClient.withFreshAccessTokenOrNone — 공개 조회는 갱신을 기다리지 않는다', () => {
+  const storage: Record<string, string | null> = {};
+  const fetchMock = jest.fn();
+  let waited = 0;
+
+  const load = () => {
+    let mod: typeof import('../src/shared/lib/client/http-client') | undefined;
+    jest.isolateModules(() => {
+      jest.doMock('../src/shared/lib/persistence', () => ({
+        getAsyncStorage: async (key: string) => storage[key] ?? null,
+      }));
+      jest.doMock('../src/shared/lib/device/device-id', () => ({
+        getDeviceId: async () => 'dev-1',
+      }));
+      jest.doMock('../src/shared/lib/client/initial-auth', () => ({
+        // 이걸 부르면 영영 안 끝난다 — 공개 조회가 기다리면 테스트가 멈춘다.
+        waitForInitialAuth: () => {
+          waited += 1;
+          return new Promise<void>(() => {});
+        },
+      }));
+      mod = require('../src/shared/lib/client/http-client');
+    });
+    return mod as NonNullable<typeof mod>;
+  };
+  const QUERY = 'query { ok }' as unknown as TypedDocumentString<
+    {ok: boolean},
+    Record<string, never>
+  >;
+  const auth = () =>
+    (fetchMock.mock.calls[0][1] as {headers: Record<string, string>}).headers
+      .Authorization;
+
+  let realNow: () => number;
+  beforeEach(() => {
+    waited = 0;
+    fetchMock.mockReset().mockResolvedValue({
+      json: async () => ({data: {ok: true}}),
+    });
+    (globalThis as unknown as {fetch: unknown}).fetch = fetchMock;
+    realNow = Date.now;
+    for (const k of Object.keys(storage)) delete storage[k];
+  });
+  afterEach(() => {
+    Date.now = realNow;
+  });
+
+  it('★토큰이 끝났으면(하루 한 번 켠 사람) 기다리지 않고 토큰 없이 바로 보낸다', async () => {
+    Date.now = () => EXP_MS + 60_000;
+    storage.accessToken = TOKEN_EXP_2E9;
+    const {HttpClient} = load();
+    await expect(
+      HttpClient.withFreshAccessTokenOrNone().execute(QUERY),
+    ).resolves.toEqual({data: {ok: true}});
+    expect(waited).toBe(0);
+    expect(auth()).toBe('');
+  });
+
+  it('살아 있으면 붙여 보낸다(노출 기록에 회원이 남게)', async () => {
+    Date.now = () => EXP_MS - 30 * 60_000;
+    storage.accessToken = TOKEN_EXP_2E9;
+    const {HttpClient} = load();
+    await HttpClient.withFreshAccessTokenOrNone().execute(QUERY);
+    expect(waited).toBe(0);
+    expect(auth()).toBe(`Bearer ${TOKEN_EXP_2E9}`);
+  });
+
+  it('토큰이 아예 없어도 바로', async () => {
+    const {HttpClient} = load();
+    await HttpClient.withFreshAccessTokenOrNone().execute(QUERY);
+    expect(waited).toBe(0);
+    expect(auth()).toBe('');
+  });
+});
+
+describe('홈 서비스 — 어떤 조회가 기다리지 않나', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const src: string = fs.readFileSync(
+    path.join(__dirname, '../src/shared/api/home/home.service.ts'),
+    'utf8',
+  );
+  const clientOf = (query: string) =>
+    src.match(
+      new RegExp(`HttpClient\\.(\\w+)\\(\\)\\.execute\\(\\s*${query}\\b`),
+    )?.[1];
+
+  it.each([
+    'QueryHomePage',
+    'QueryHotDealRankingProducts',
+    'QueryGuestRecommendedHotDeals',
+    'QueryHomeProducts',
+    'QueryProductsByKeyword',
+    'QueryExpiringSoonHotDealProducts',
+    'QueryTossProducts',
+  ])('공개 목록 %s 는 기다리지 않는다', q => {
+    expect(clientOf(q)).toBe('withFreshAccessTokenOrNone');
+  });
+
+  it('추천 키워드는 내가 등록한 걸 빼야 해서 갱신을 기다린다', () => {
+    expect(clientOf('QueryRecommendedNotificationKeywords')).toBe(
+      'withAccessToken',
+    );
   });
 });
