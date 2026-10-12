@@ -14,7 +14,6 @@ import Button from '@/shared/ui/common/Button';
 import Jirume from '@/shared/ui/common/icons/Jirume';
 import DisplayPrice from '@/shared/ui/DisplayPrice';
 import DisplayTime from '@/shared/ui/DisplayTime';
-import HotdealBadge from '@/shared/ui/HotdealBadge';
 import ShareButton from '@/shared/ui/ShareButton';
 
 import { ProductQueries } from '@/entities/product';
@@ -33,6 +32,7 @@ import {
 import { dealFreshnessAt, isSeenBasedFreshness } from '@/features/product-detail/lib/product-seo';
 import DealEvidenceBlock from '@/features/product-detail/ui/DealEvidenceBlock';
 import ViewerCount from '@/features/product-detail/ui/desktop/ViewerCount';
+import HotdealCriteriaBadge from '@/features/product-detail/ui/HotdealCriteriaBadge';
 import PostPurchaseKakaoPrompt from '@/features/product-detail/ui/PostPurchaseKakaoPrompt';
 import PostPurchaseKeywordPrompt from '@/features/product-detail/ui/PostPurchaseKeywordPrompt';
 import ProductGuideMetaRows, {
@@ -96,9 +96,9 @@ export default function ProductInfo({
                   판매종료
                 </Badge>
               )}
-              {/* 배지가 왜 붙었는지는 가격 아래 근거 블록이 말한다(대부분 커뮤니티 인기글). */}
+              {/* 배지 뜻 한 줄 + 누르면 기준 시트. 이 딜의 구체적 근거는 가격 아래 근거 블록이 말한다. */}
               {!product.isEnd && product.hotDealType && (
-                <HotdealBadge badgeVariant="page" hotdealType={product.hotDealType} />
+                <HotdealCriteriaBadge hotdealType={product.hotDealType} />
               )}
             </div>
           )}

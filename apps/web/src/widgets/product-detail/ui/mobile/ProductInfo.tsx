@@ -11,7 +11,6 @@ import Badge from '@/shared/ui/common/Badge';
 import Jirume from '@/shared/ui/common/icons/Jirume';
 import DisplayPrice from '@/shared/ui/DisplayPrice';
 import DisplayTime from '@/shared/ui/DisplayTime';
-import HotdealBadge from '@/shared/ui/HotdealBadge';
 
 import { ProductQueries } from '@/entities/product';
 import { stripPriceFromTitle } from '@/entities/product/lib/from-toss';
@@ -24,6 +23,7 @@ import { RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
 import { dealFreshnessAt, isSeenBasedFreshness } from '@/features/product-detail/lib/product-seo';
 import DealEvidenceBlock from '@/features/product-detail/ui/DealEvidenceBlock';
+import HotdealCriteriaBadge from '@/features/product-detail/ui/HotdealCriteriaBadge';
 import ProductGuideMetaRows, {
   type GuideRow as ProductGuideRow,
 } from '@/features/product-detail/ui/ProductGuideMetaRows';
@@ -76,9 +76,9 @@ export default function ProductInfo({
               판매종료
             </Badge>
           )}
-          {/* 배지가 왜 붙었는지는 가격 아래 근거 블록이 말한다(대부분 커뮤니티 인기글). */}
+          {/* 배지 뜻 한 줄 + 누르면 기준 시트. 이 딜의 구체적 근거는 가격 아래 근거 블록이 말한다. */}
           {!product.isEnd && product.hotDealType && (
-            <HotdealBadge badgeVariant="page" hotdealType={product.hotDealType} />
+            <HotdealCriteriaBadge hotdealType={product.hotDealType} />
           )}
           <div className="ml-auto shrink-0 text-sm text-gray-600">
             <DisplayTime time={dealFreshnessAt(product) ?? product.postedAt} />

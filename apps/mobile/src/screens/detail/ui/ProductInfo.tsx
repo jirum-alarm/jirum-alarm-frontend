@@ -4,10 +4,10 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 
 import {HotDealType, UploaderType} from '@/shared/api/gql/graphql';
 import DisplayPrice from '@/shared/components/product/DisplayPrice';
-import HotdealBadge from '@/shared/components/product/HotdealBadge';
 import {displayTime} from '@/shared/lib/format/price';
 
 import ProductGuideMetaRows from './ProductGuideMetaRows';
+import HotdealCriteriaBadge from './HotdealCriteriaBadge';
 import RecommendButton from './RecommendButton';
 import TossBadges from './TossBadges';
 import TossIcon from './TossIcon';
@@ -74,10 +74,9 @@ export default function ProductInfo({
             판매종료
           </Badge>
         ) : product.hotDealType ? (
-          // 배지가 왜 붙었는지는 가격 아래 근거 블록이 말한다(대부분 커뮤니티 인기글).
-          <HotdealBadge
+          // 배지 뜻 한 줄 + 누르면 기준 시트. 이 딜의 구체적 근거는 가격 아래 근거 블록이 말한다.
+          <HotdealCriteriaBadge
             hotdealType={product.hotDealType as HotDealType}
-            badgeVariant="page"
           />
         ) : null}
       </View>
