@@ -172,6 +172,7 @@
 				0E10B7442C99A5C52C7C5B76 /* [CP] Embed Pods Frameworks */,
 				0E5E8BB18A44E4560BA4A186 /* [CP] Copy Pods Resources */,
 				C97FDB15EB6891834B2F9889 /* [CP-User] [RNFB] Core Configuration */,
+				16A7ED2CDCD589BD9B8F31FE /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
@@ -285,6 +286,26 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-jirumAlarmMobile/Pods-jirumAlarmMobile-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		16A7ED2CDCD589BD9B8F31FE /* Upload Debug Symbols to Sentry */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(DWARF_DSYM_FOLDER_PATH)/$(DWARF_DSYM_FILE_NAME)",
+			);
+			name = "Upload Debug Symbols to Sentry";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# 크래시 스택의 네이티브 줄(파일·줄 번호)을 Sentry 가 읽게 dSYM 을 올린다.\n# 토큰이 없으면(로컬·CI 빌드) 건너뛰고, 업로드가 실패해도 빌드를 막지 않는다 — sentry 스크립트의\n# \"error:\" 출력은 Xcode 가 빌드 실패로 보므로 warning 으로 바꾼다. 토큰은 EAS production env(sensitive).\nif [ -z \"$SENTRY_AUTH_TOKEN\" ]; then\n  echo \"warning: SENTRY_AUTH_TOKEN 없음 — dSYM 업로드 건너뜀\"\n  exit 0\nfi\nexport SENTRY_ORG=jirumalarm SENTRY_PROJECT=jirum-alarm-app SENTRY_URL=https://sentry.io/\nfor c in \"$PROJECT_DIR/../../../node_modules\" \"$PROJECT_DIR/../node_modules\"; do\n  s=\"$c/@sentry/react-native/scripts/sentry-xcode-debug-files.sh\"\n  if [ -f \"$s\" ]; then\n    /bin/sh \"$s\" 2>&1 | sed 's/error:/warning:/g'\n    exit 0\n  fi\ndone\necho \"warning: sentry-xcode-debug-files.sh 를 못 찾음 — dSYM 업로드 건너뜀\"\n";
+		};
 		24B8FC2EC19CDCAF56E19861 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -380,7 +401,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -416,7 +437,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

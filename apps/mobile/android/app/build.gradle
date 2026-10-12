@@ -2,6 +2,31 @@ apply plugin: "com.android.application"
 apply plugin: 'com.google.gms.google-services'
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+apply plugin: "io.sentry.android.gradle"
+
+/**
+ * 릴리스는 minify(R8)라 Sentry 에 쌓이는 안드로이드 크래시 스택이 a.b.c() 로 읽을 수 없었다 — 매핑을 같이 올린다.
+ * - autoInstallation 끔: @sentry/react-native 가 sentry-android 를 이미 넣는다(플러그인이 또 넣으면 버전이 갈린다).
+ * - 업로드는 토큰이 있을 때만(EAS production env 의 SENTRY_AUTH_TOKEN, sensitive) — 로컬·CI 빌드는 매핑 UUID 만 심고 건너뛴다.
+ * - 네이티브 심볼·소스 컨텍스트·계측·텔레메트리는 끈다 — 매핑 하나만 바라는 일이다.
+ */
+sentry {
+    org = "jirumalarm"
+    projectName = "jirum-alarm-app"
+    authToken = System.getenv("SENTRY_AUTH_TOKEN")
+    includeProguardMapping = true
+    autoUploadProguardMapping = System.getenv("SENTRY_AUTH_TOKEN") != null
+    uploadNativeSymbols = false
+    includeNativeSources = false
+    includeSourceContext = false
+    telemetry = false
+    tracingInstrumentation {
+        enabled = false
+    }
+    autoInstallation {
+        enabled = false
+    }
+}
 
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 def keystoreProperties = new Properties()
@@ -107,7 +132,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 26
-        versionName "1.5.1"
+        versionName "1.5.2"
     }
     sourceSets {
         main {

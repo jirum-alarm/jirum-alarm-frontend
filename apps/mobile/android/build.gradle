@@ -18,6 +18,8 @@ buildscript {
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
         classpath("com.google.gms:google-services:4.4.2")
+        // 난독화(minify) 매핑을 Sentry 에 올려 안드로이드 크래시 스택을 읽게 한다(app/build.gradle 의 sentry {}).
+        classpath("io.sentry:sentry-android-gradle-plugin:6.23.0")
     }
 }
 

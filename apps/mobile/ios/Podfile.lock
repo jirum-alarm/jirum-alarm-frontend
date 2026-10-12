@@ -11,7 +11,7 @@ PODS:
   - EXJSONUtils (57.0.2)
   - EXManifests (57.0.2):
     - ExpoModulesCore
-  - Expo (57.0.27):
+  - Expo (57.0.28):
     - boost
     - DoubleConversion
     - ExpoModulesCore
@@ -43,17 +43,17 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - expo-dev-client (57.0.19):
+  - expo-dev-client (57.0.20):
     - EXManifests
     - expo-dev-launcher
     - expo-dev-menu
     - expo-dev-menu-interface
     - EXUpdatesInterface
-  - expo-dev-launcher (57.0.20):
+  - expo-dev-launcher (57.0.21):
     - boost
     - DoubleConversion
     - EXManifests
-    - expo-dev-launcher/Main (= 57.0.20)
+    - expo-dev-launcher/Main (= 57.0.21)
     - expo-dev-menu
     - expo-dev-menu-interface
     - ExpoModulesCore
@@ -86,7 +86,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - expo-dev-launcher/Main (57.0.20):
+  - expo-dev-launcher/Main (57.0.21):
     - boost
     - DoubleConversion
     - EXManifests
@@ -123,7 +123,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - expo-dev-launcher/Unsafe (57.0.20):
+  - expo-dev-launcher/Unsafe (57.0.21):
     - boost
     - DoubleConversion
     - EXManifests
@@ -159,10 +159,10 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - expo-dev-menu (57.0.19):
+  - expo-dev-menu (57.0.20):
     - boost
     - DoubleConversion
-    - expo-dev-menu/Main (= 57.0.19)
+    - expo-dev-menu/Main (= 57.0.20)
     - fast_float
     - fmt
     - glog
@@ -189,7 +189,7 @@ PODS:
     - SocketRocket
     - Yoga
   - expo-dev-menu-interface (57.0.0)
-  - expo-dev-menu/Main (57.0.19):
+  - expo-dev-menu/Main (57.0.20):
     - boost
     - DoubleConversion
     - EXManifests
@@ -245,7 +245,7 @@ PODS:
     - ExpoModulesCore
   - ExpoLogBox (57.0.4):
     - React-Core
-  - ExpoModulesCore (57.0.21):
+  - ExpoModulesCore (57.0.22):
     - boost
     - DoubleConversion
     - ExpoModulesJSI
@@ -275,13 +275,13 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - ExpoModulesJSI (57.1.1):
+  - ExpoModulesJSI (57.1.2):
     - React-Core
     - ReactCommon
-  - ExpoModulesWorklets (57.0.21):
+  - ExpoModulesWorklets (57.0.22):
     - ExpoModulesCore
     - ExpoModulesJSI
-  - ExpoModulesWorkletsAdapter (57.0.21):
+  - ExpoModulesWorkletsAdapter (57.0.22):
     - ExpoModulesCore
     - ExpoModulesJSI
     - ExpoModulesWorklets
@@ -291,7 +291,7 @@ PODS:
   - ExpoWebBrowser (57.0.3):
     - ExpoModulesCore
   - EXStructuredHeaders (57.0.1)
-  - EXUpdates (57.0.25):
+  - EXUpdates (57.0.26):
     - boost
     - DoubleConversion
     - EASClient
@@ -4099,10 +4099,10 @@ SPEC CHECKSUMS:
   EXConstants: b4e9051547ee9b8337155565fbdbe66036865120
   EXJSONUtils: a49e3ef80dff762108e5690c7b2f360675dcf7f6
   EXManifests: 4c53b2602e03ccf44d0b4ff9c5d655b2c5acba3f
-  Expo: d2461c6bec6a62f1ad2624e759b61347a4bb4160
-  expo-dev-client: 9cd43bb07fb625c51b436d4cb23be2fc932f8d26
-  expo-dev-launcher: 858d5e7f38cb8c6438bd16fff87c867e76514274
-  expo-dev-menu: 5c259b9f1e1d9fa771d6a8d1643bd236343f49f9
+  Expo: 24679eb0c11bd332f141d8e56d7152f6ee4a9c8f
+  expo-dev-client: 2a2fe5cdd576b29c097356cb922d2403abe6df8d
+  expo-dev-launcher: e30338a585f4ecfb1d8795539497a8e74ad13560
+  expo-dev-menu: a8e2004100083807e2fff63c3680526cf7b23935
   expo-dev-menu-interface: 7a59e803916fbfd1b96c75ff91ea8dddac7e722f
   ExpoAppleAuthentication: 16c2955d33ec7315e5a99d17fb5d62ed33cdb5b9
   ExpoAsset: 78dbecc7bc9f60d839fb37ba8b10317b64779685
@@ -4113,16 +4113,16 @@ SPEC CHECKSUMS:
   ExpoImage: abe60c6c68d08d837b2c51fb9e8b6c6e320b9125
   ExpoKeepAwake: 72af0b3be3615e59bc819d26061ff4e06b155ee0
   ExpoLogBox: 80957303325cd4439137765c90a87d7f22aaf2ff
-  ExpoModulesCore: a331a62b1ce80bf0da94e21fcfddabc77823edb4
-  ExpoModulesJSI: 9e2ac522bf1ce86b7b1f8f0bb8ef87b20156e38b
-  ExpoModulesWorklets: 1916bfde983876e6caf849398b91a0b492b73869
-  ExpoModulesWorkletsAdapter: 3e587d38dcb83487362c1c1c77cde34f31bfbbc3
+  ExpoModulesCore: 419b7b8131e33d9b9b7184cba573bca73e08bc54
+  ExpoModulesJSI: 0853c5456f7926218337a8e007c12b75fb10bdc3
+  ExpoModulesWorklets: 1fb83b3dfe735f8c940ce8a69ca2904f164e888b
+  ExpoModulesWorkletsAdapter: b0aa7e05c8cd9a8b4039e8eb5c8d9c18cbddf91a
   ExpoNotifications: b91c7c9e21df9b9649b382d8fbf297262c6c4c76
   ExpoWebBrowser: a4d7c382116fbe33c1ec7f60293f02b7e97042e4
   EXStructuredHeaders: 07c88ee9f7dfcbafeaaab0e78ea276dfe0eb332e
-  EXUpdates: 43bb3749098c0f5fe7fd8d5410f554537aa8beb2
+  EXUpdates: 0eb0e55073788a69799218e08803f852c3b66434
   EXUpdatesInterface: 4c96533f11c8cefe879bd506564cc2d537f56804
-  fast_float: 914e00b8b67cb8ba184a778c7bbc2e9fe98d37b3
+  fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
   FBLazyVector: 94a9e5b949d0f65bbc1a741f8a7c72499da32567
   Firebase: 6a8f201c61eda24e98f1ce2b44b1b9c2caf525cc
   FirebaseAnalytics: acfa848bf81e1a4dbf60ef1f0eddd7328fe6673e
@@ -4131,12 +4131,12 @@ SPEC CHECKSUMS:
   FirebaseCoreInternal: 31ee350d87b30a9349e907f84bf49ef8e6791e5a
   FirebaseInstallations: 781e0e37aa0e1c92b44d00e739aba79ad31b2dba
   FirebaseMessaging: c7be9357fd8ba33bc45b9a6c3cdff0b466e1e2a4
-  fmt: c4f2460be3fa005428eb91c945f4a0b0942260c7
-  glog: 9727f8e1f2026e4660eaaf6f49fc4db34b2b7a16
+  fmt: 530618a01105dae0fa3a2f27c81ae11fa8f67eac
+  glog: 9c7bd858f1402a8e680d1637276210773c093b76
   GoogleAppMeasurement: 8a82b93a6400c8e6551c0bcd66a9177f2e067aed
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
-  hermes-engine: 0f34d34b690cbbd60f93fab0a7336151e8e1721d
+  hermes-engine: 8930e5f68b09f76e00ab617da3f7587e7262efd0
   kakao-login: 5feac69c76f8c1f2886606bdb6a408a8d91ad0dc
   KakaoSDKAuth: 45204252ff7c379c0f86c5573f97ec36885afca0
   KakaoSDKCommon: 132164a6bac8bcd3a4346d3bf777f34f8f39fdca
@@ -4147,7 +4147,7 @@ SPEC CHECKSUMS:
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   naveridlogin-sdk-ios: d9d46d02119d303023d7000cd5963864d5bb89e5
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  RCT-Folly: 3b5990f93bdbd863a2854311d890f6935e847db5
+  RCT-Folly: 36c4f904fb6cd0219dcb76b94e9502d2a72fab0b
   RCTDeprecation: 5268fe9d45036e52deb765d242297f1011e17333
   RCTRequired: 4ecfd325edd95cbbdc202163fb9cb2ba54ac3c9f
   RCTSwiftUI: e8b9cdb0d9fbea9284db6420bb726206819a9287
