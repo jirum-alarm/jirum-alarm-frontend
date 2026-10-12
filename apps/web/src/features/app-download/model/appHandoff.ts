@@ -28,8 +28,13 @@ export const ANDROID_PACKAGE = 'com.solcode.jirmalam';
 export const HANDOFF_PARAM = 'handoff';
 
 const PLAY_STORE_BASE = `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE}`;
-const IOS_STORE_BASE =
-  'https://apps.apple.com/sg/app/%EC%A7%80%EB%A6%84%EC%95%8C%EB%A6%BC/id6474611420';
+/**
+ * App Store 캠페인 링크(App Store Connect 앱 분석 → 획득 → 캠페인). pt = 프로바이더 토큰(2026-10-12 캠페인 링크
+ * 생성기에서 확인), ct = 버튼 자리(최대 30자) — 설치·재다운로드가 캠페인별로 잡힌다(첫 다운로드 5건 이상부터 표시).
+ * 스토어프런트 없는 주소라 사용자 나라 스토어로 열린다(예전 상수는 /sg/ 를 박고 있었다).
+ */
+const IOS_STORE_BASE = 'https://apps.apple.com/app/apple-store/id6474611420';
+const IOS_PROVIDER_TOKEN = '126805495';
 const WWW_ORIGIN = 'https://www.jirum-alarm.com';
 
 /** apps/web/public/.well-known/apple-app-site-association 의 components 와 맞춘다. */
@@ -62,7 +67,10 @@ export const playStoreUrl = (
   return `${PLAY_STORE_BASE}&referrer=${encodeURIComponent(referrer)}`;
 };
 
-export const appStoreUrl = (): string => IOS_STORE_BASE;
+export const appStoreUrl = (source?: string | null): string =>
+  source
+    ? `${IOS_STORE_BASE}?pt=${IOS_PROVIDER_TOKEN}&ct=${encodeURIComponent(source.slice(0, 30))}&mt=8`
+    : IOS_STORE_BASE;
 
 /** 안드로이드: 앱이 있으면 그 화면, 없으면 Play. 사용자 탭으로만 열린다(크롬은 자동 이동 intent 를 막는다). */
 export const androidOpenAppUrl = (
@@ -120,7 +128,7 @@ export const appHandoffHref = (
   }: { iosUniversalLink?: boolean; guestDeviceId?: string | null } = {},
 ): string => {
   if (platform === 'android') return androidOpenAppUrl(path, source, guestDeviceId);
-  return (iosUniversalLink && iosOpenAppUrl(path, source, guestDeviceId)) || appStoreUrl();
+  return (iosUniversalLink && iosOpenAppUrl(path, source, guestDeviceId)) || appStoreUrl(source);
 };
 
 /** 도착한 주소의 해시에서 넘기기 표시를 읽는다(iOS 유니버설 링크가 안 열려 웹에 떨어진 경우). */

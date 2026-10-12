@@ -18,13 +18,14 @@ import { appStoreUrl, readHandoffHash } from '../model/appHandoff';
  */
 export default function AppHandoffLanding() {
   useEffect(() => {
-    if (!readHandoffHash(window.location.hash)) return;
+    const source = readHandoffHash(window.location.hash);
+    if (!source) return;
     const { pathname, search } = window.location;
     window.history.replaceState(window.history.state, '', pathname + search);
 
     const ua = navigator.userAgent;
     if (isJirumAlarmAppUA(ua) || !/iPhone|iPad|iPod/i.test(ua)) return;
-    window.location.href = appStoreUrl();
+    window.location.href = appStoreUrl(source);
   }, []);
 
   return null;

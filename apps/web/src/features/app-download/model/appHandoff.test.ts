@@ -135,3 +135,11 @@ test('기기 id 모양이 아니면 싣지 않는다', () => {
     false,
   );
 });
+
+test('iOS App Store 링크엔 캠페인(pt·ct=버튼 자리)이 붙는다 — App Store Connect 캠페인으로 설치를 센다', () => {
+  const url = new URL(appHandoffHref('apple', '/products/1', 'first_visit_detail'));
+  assert.equal(url.origin + url.pathname, 'https://apps.apple.com/app/apple-store/id6474611420');
+  assert.equal(url.searchParams.get('pt'), '126805495');
+  assert.equal(url.searchParams.get('ct'), 'first_visit_detail');
+  assert.equal(url.searchParams.get('mt'), '8');
+});
