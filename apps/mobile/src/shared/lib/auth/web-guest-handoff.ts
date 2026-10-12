@@ -33,7 +33,11 @@ const listeners = new Set<(deviceId: string) => void>();
 /** 딥링크가 들어올 때마다 부른다. gd 가 있으면 맡겨 두고 이어받기 쪽을 깨운다. */
 export function offerWebGuestHandoff(url: string): void {
   const deviceId = readWebGuestDeviceId(url);
-  if (!deviceId) return;
+  if (deviceId) offerWebGuestDeviceId(deviceId);
+}
+
+/** 기기 id 를 바로 맡긴다 — 안드로이드 설치 직후 Play referrer(jirum_gd)로 온 경우. */
+export function offerWebGuestDeviceId(deviceId: string): void {
   pending = deviceId;
   listeners.forEach(listener => listener(deviceId));
 }

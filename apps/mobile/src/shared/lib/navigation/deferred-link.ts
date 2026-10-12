@@ -24,6 +24,34 @@ const REFERRER_TIMEOUT_MS = 3000;
 export function parseHandoffReferrer(
   referrer: string | null | undefined,
 ): string | null {
+  const params = readHandoffParams(referrer);
+  if (!params) return null;
+  const path = params.get('jirum_path') ?? '';
+  // '/' 는 열 게 없다(앱은 원래 홈으로 뜬다). 경로 문자만 허용 — 호스트·스킴·쿼리를 못 싣게.
+  if (
+    path === '/' ||
+    !/^\/[A-Za-z0-9/_-]+$/.test(path) ||
+    path.startsWith('//')
+  )
+    return null;
+  return path;
+}
+
+/**
+ * 웹 게스트 기기 id(jirum_gd) — 웹에서 게스트로 키워드를 건 사람이면 앱이 같은 게스트를 이어받는다
+ * (screens/auth/useAdoptWebGuest). 기기 id 모양만.
+ */
+export function parseHandoffReferrerGuest(
+  referrer: string | null | undefined,
+): string | null {
+  const id = readHandoffParams(referrer)?.get('jirum_gd') ?? '';
+  return /^[0-9a-z-]{16,64}$/i.test(id) ? id : null;
+}
+
+/** 우리 넘기기 캠페인의 referrer 만 읽는다 — 남이 만든 Play 링크(광고 등)의 값을 따르지 않는다. */
+function readHandoffParams(
+  referrer: string | null | undefined,
+): Map<string, string> | null {
   if (!referrer) return null;
   const params = new Map<string, string>();
   for (const pair of referrer.split('&')) {
@@ -39,15 +67,7 @@ export function parseHandoffReferrer(
     }
   }
   if (params.get('utm_campaign') !== 'app_handoff') return null;
-  const path = params.get('jirum_path') ?? '';
-  // '/' 는 열 게 없다(앱은 원래 홈으로 뜬다). 경로 문자만 허용 — 호스트·스킴·쿼리를 못 싣게.
-  if (
-    path === '/' ||
-    !/^\/[A-Za-z0-9/_-]+$/.test(path) ||
-    path.startsWith('//')
-  )
-    return null;
-  return path;
+  return params;
 }
 
 export function isFreshInstall(
@@ -64,8 +84,15 @@ const withTimeout = <T>(promise: Promise<T>, ms: number): Promise<T | null> =>
     new Promise<null>(resolve => setTimeout(() => resolve(null), ms)),
   ]);
 
+export type DeferredDeepLink = {
+  /** 열 화면(없으면 홈 그대로). */
+  path: string | null;
+  /** 이어받을 웹 게스트 기기 id. */
+  guestDeviceId: string | null;
+};
+
 /** 한 번만 읽는다(읽기 전에 표시) — 다음 실행부터는 바로 null. 실패는 전부 null(홈으로 뜨는 지금 그대로). */
-export async function readDeferredDeepLinkPath(): Promise<string | null> {
+export async function readDeferredDeepLink(): Promise<DeferredDeepLink | null> {
   if (Platform.OS !== 'android') return null;
   try {
     if (await AsyncStorage.getItem(CHECKED_KEY)) return null;
@@ -82,7 +109,10 @@ export async function readDeferredDeepLinkPath(): Promise<string | null> {
       Application.getInstallReferrerAsync(),
       REFERRER_TIMEOUT_MS,
     );
-    return parseHandoffReferrer(referrer);
+    return {
+      path: parseHandoffReferrer(referrer),
+      guestDeviceId: parseHandoffReferrerGuest(referrer),
+    };
   } catch {
     return null;
   }

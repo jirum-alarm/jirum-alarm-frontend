@@ -3,10 +3,13 @@ import {Linking} from 'react-native';
 
 import {SERVICE_URL} from '@/constants/env';
 import {normalizeDeepLink} from '@/shared/lib/navigation/deep-link';
-import {readDeferredDeepLinkPath} from '@/shared/lib/navigation/deferred-link';
+import {readDeferredDeepLink} from '@/shared/lib/navigation/deferred-link';
 import {openWhenNavigatorReady} from '@/navigations/open-when-ready';
 import {Analytics} from '@/shared/lib/analytics/ga4';
-import {offerWebGuestHandoff} from '@/shared/lib/auth/web-guest-handoff';
+import {
+  offerWebGuestDeviceId,
+  offerWebGuestHandoff,
+} from '@/shared/lib/auth/web-guest-handoff';
 
 /**
  * 외부 딥링크(카톡 공유·유니버설 링크·커스텀 스킴)로 앱을 여는 경로.
@@ -54,8 +57,11 @@ export default function useDeepLink(openInWebView: (url: string) => void) {
         open(url, 'cold');
         return;
       }
-      const path = await readDeferredDeepLinkPath();
-      if (path && !cancelled) open(`${SERVICE_URL}${path}`, 'deferred');
+      const deferred = await readDeferredDeepLink();
+      if (!deferred || cancelled) return;
+      // 웹 게스트였으면 같은 게스트로 이어받는다(보던 경로가 홈이라 열 화면이 없어도).
+      if (deferred.guestDeviceId) offerWebGuestDeviceId(deferred.guestDeviceId);
+      if (deferred.path) open(`${SERVICE_URL}${deferred.path}`, 'deferred');
     });
 
     // 앱이 이미 떠 있는 상태에서 링크를 받은 경우.

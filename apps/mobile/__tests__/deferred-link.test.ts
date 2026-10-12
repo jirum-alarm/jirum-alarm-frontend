@@ -1,4 +1,5 @@
 import {
+  parseHandoffReferrerGuest,
   isFreshInstall,
   parseHandoffReferrer,
 } from '../src/shared/lib/navigation/deferred-link';
@@ -54,5 +55,25 @@ describe('isFreshInstall', () => {
 
   it('업데이트로 코드를 처음 받은 옛 설치자는 아니다', () => {
     expect(isFreshInstall(new Date('2026-09-01T00:00:00Z'), now)).toBe(false);
+  });
+});
+
+describe('parseHandoffReferrerGuest — 웹 게스트 이어받기(jirum_gd)', () => {
+  const GUEST = '8f14e45f-ceea-467a-9575-5b1c9b3c2a10';
+  it('우리 넘기기 캠페인이면 기기 id 를 꺼낸다(보던 경로가 홈이어도)', () => {
+    expect(
+      parseHandoffReferrerGuest(
+        `utm_source=jirum_web&utm_campaign=app_handoff&jirum_path=%2F&jirum_gd=${GUEST}`,
+      ),
+    ).toBe(GUEST);
+  });
+  it('다른 캠페인·이상한 모양은 버린다', () => {
+    expect(
+      parseHandoffReferrerGuest(`utm_campaign=ads&jirum_gd=${GUEST}`),
+    ).toBeNull();
+    expect(
+      parseHandoffReferrerGuest('utm_campaign=app_handoff&jirum_gd=%3Cx%3E'),
+    ).toBeNull();
+    expect(parseHandoffReferrerGuest(null)).toBeNull();
   });
 });
