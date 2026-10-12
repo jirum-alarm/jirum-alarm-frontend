@@ -84,6 +84,22 @@ cd "$WT/apps/mobile"
 step "설치 — 그 커밋의 lockfile 로"
 (cd "$WT" && pnpm install --frozen-lockfile >/dev/null 2>&1) || die "pnpm install --frozen-lockfile 실패"
 
+step "화면 캐시 지문 — 브랜치마다 값이 다르다"
+# GraphQL 문서가 브랜치마다 달라 QUERY_DOCS_FINGERPRINT 도 다르다. 어긋나면 테스트가 이 브랜치의 값을 알려 준다 —
+# 그 값을 넣고 커밋한다(값이 바뀌면 그 버전 사용자의 화면 캐시가 한 번 버려진다 — 문서가 달라졌으니 맞다).
+if [ -f __tests__/query-cache.test.ts ] && grep -q QUERY_DOCS_FINGERPRINT src/shared/lib/persistence/query-cache.ts; then
+  FP_OUT=$(npx jest --runInBand __tests__/query-cache.test.ts -t '지문이 지금 문서와 맞는다' 2>&1 || true)
+  EXPECTED=$(printf '%s' "$FP_OUT" | grep -o 'Expected: "[0-9a-f]*"' | head -1 | cut -d'"' -f2)
+  if [ -n "$EXPECTED" ]; then
+    sed -i '' "s/export const QUERY_DOCS_FINGERPRINT = '[0-9a-f]*';/export const QUERY_DOCS_FINGERPRINT = '$EXPECTED';/" \
+      src/shared/lib/persistence/query-cache.ts
+    git commit -q -m "chore(mobile): $BRANCH 캐시 지문 $EXPECTED" -- src/shared/lib/persistence/query-cache.ts
+    echo "  지문을 $EXPECTED 로 맞춰 커밋"
+  else
+    echo "  그대로"
+  fi
+fi
+
 step "tsc · 네이티브 지문"
 npx tsc --noEmit -p . || die "tsc 실패"
 node scripts/native-fingerprint.mjs --check || die "네이티브 지문이 runtime $RUNTIME 과 다르다 — JS 만이 아닌 변경은 백포트할 수 없다"
