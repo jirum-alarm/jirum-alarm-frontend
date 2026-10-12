@@ -56,13 +56,21 @@ jest.mock('../src/provider/WebViewRefProvider.tsx', () => ({
   useWebviewContext: jest.fn(),
 }));
 
-// 이 스위트는 "웹뷰 주입" 경로를 검사한다. 네비게이터가 준비 안 된 것으로 두면
-// navigateToNativeRoute 가 false 를 반환해 기존 폴백 경로가 그대로 돈다.
-jest.mock('@react-navigation/native', () => ({
-  createNavigationContainerRef: () => ({
-    isReady: () => false,
-    navigate: jest.fn(),
-  }),
+/**
+ * 네비게이터 상태를 테스트가 직접 쥔다 — 열기 루프(open-when-ready)는 진짜로 돈다.
+ * 기본값: 탭이 떠 있고 네이티브 화면이 없음 → 웹뷰 주입 경로.
+ */
+const mockNavigateToNativeRoute = jest.fn((_url: string, _o?: object) => false);
+const mockAreNativeTabsMounted = jest.fn(() => true);
+jest.mock('../src/navigations/navigation-ref', () => ({
+  navigateToNativeRoute: (url: string, o?: object) =>
+    mockNavigateToNativeRoute(url, o),
+  areNativeTabsMounted: () => mockAreNativeTabsMounted(),
+}));
+
+const mockTrack = jest.fn();
+jest.mock('../src/shared/lib/analytics/ga4', () => ({
+  Analytics: {track: (...args: unknown[]) => mockTrack(...args)},
 }));
 
 const flushMicrotasks = async (cycles = 5) => {
@@ -115,6 +123,8 @@ describe('FCMHandler', () => {
     mockWebviewRef.current = {
       injectJavaScript: mockInjectJavaScript,
     };
+    mockNavigateToNativeRoute.mockImplementation(() => false);
+    mockAreNativeTabsMounted.mockImplementation(() => true);
   });
 
   afterEach(() => {
@@ -122,24 +132,115 @@ describe('FCMHandler', () => {
     jest.useRealTimers();
   });
 
-  it('routes cold-start notification links into the WebView after the bootstrap delay', async () => {
-    mockGetInitialNotification.mockResolvedValue({
-      data: {
-        link: '/products/1',
-      },
-    });
+  /**
+   * ★예전엔 첫 시도가 무조건 1초 뒤였다(1000 + n×500ms). 탭이 이미 떠 있으면 기다릴 이유가 없다.
+   */
+  it('콜드 스타트 알림 — 탭이 떠 있으면 기다리지 않고 바로 상세로 간다', async () => {
+    mockGetInitialNotification.mockResolvedValue({data: {link: '/products/1'}});
+    mockNavigateToNativeRoute.mockImplementation(() => true);
 
     const renderer = await renderHandler();
 
-    await ReactTestRenderer.act(async () => {
-      jest.advanceTimersByTime(1000);
-      await flushMicrotasks();
-    });
-
     expect(mockUseFCMTokenManager).toHaveBeenCalled();
-    expect(mockInjectJavaScript).toHaveBeenCalledTimes(1);
-    expect(mockInjectJavaScript.mock.calls[0][0]).toContain(
-      'window.location.href = "/products/1";',
+    expect(mockNavigateToNativeRoute).toHaveBeenCalledWith('/products/1', {
+      allowWebViewRoute: true,
+    });
+    expect(mockInjectJavaScript).not.toHaveBeenCalled();
+
+    await ReactTestRenderer.act(async () => {
+      renderer.unmount();
+    });
+  });
+
+  it('콜드 스타트 알림 — 탭이 아직 안 떴으면 300ms 마다 보다가 뜨는 즉시 연다', async () => {
+    mockGetInitialNotification.mockResolvedValue({
+      data: {link: '/products/11'},
+    });
+    let tabsMounted = false;
+    mockAreNativeTabsMounted.mockImplementation(() => tabsMounted);
+    mockNavigateToNativeRoute.mockImplementation(() => tabsMounted);
+
+    const renderer = await renderHandler();
+    expect(mockNavigateToNativeRoute).toHaveBeenCalledTimes(1);
+
+    await ReactTestRenderer.act(async () => {
+      jest.advanceTimersByTime(300);
+    });
+    expect(mockNavigateToNativeRoute).toHaveBeenCalledTimes(2);
+
+    tabsMounted = true;
+    await ReactTestRenderer.act(async () => {
+      jest.advanceTimersByTime(300);
+    });
+    expect(mockNavigateToNativeRoute).toHaveBeenCalledTimes(3);
+    expect(mockNavigateToNativeRoute).toHaveLastReturnedWith(true);
+
+    // 열었으면 더 시도하지 않는다.
+    await ReactTestRenderer.act(async () => {
+      jest.advanceTimersByTime(3000);
+    });
+    expect(mockNavigateToNativeRoute).toHaveBeenCalledTimes(3);
+    expect(mockInjectJavaScript).not.toHaveBeenCalled();
+
+    await ReactTestRenderer.act(async () => {
+      renderer.unmount();
+    });
+  });
+
+  /**
+   * ★실행 중 탭도 같은 루프 — 예전엔 단발 시도라 부팅 창에 오면 웹뷰 주입(홈엔 대상 없음)으로 흘렸다.
+   * 안드로이드 콜드 스타트는 expo 응답 리스너가 먼저 올 수 있고, 그걸 흘리면 중복 판정 때문에
+   * getInitialNotification 경로까지 버려져 링크가 사라진다.
+   */
+  it('포그라운드·백그라운드 알림도 탭이 뜰 때까지 기다린다', async () => {
+    let tabsMounted = false;
+    mockAreNativeTabsMounted.mockImplementation(() => tabsMounted);
+    mockNavigateToNativeRoute.mockImplementation(() => tabsMounted);
+
+    const renderer = await renderHandler();
+    const foregroundEventHandler =
+      mockAddNotificationResponseReceivedListener.mock.calls[0][0];
+
+    ReactTestRenderer.act(() => {
+      foregroundEventHandler({
+        notification: {request: {content: {data: {link: '/products/5'}}}},
+      });
+    });
+    expect(mockInjectJavaScript).not.toHaveBeenCalled();
+
+    tabsMounted = true;
+    await ReactTestRenderer.act(async () => {
+      jest.advanceTimersByTime(300);
+    });
+    expect(mockNavigateToNativeRoute).toHaveLastReturnedWith(true);
+    expect(mockInjectJavaScript).not.toHaveBeenCalled();
+
+    await ReactTestRenderer.act(async () => {
+      renderer.unmount();
+    });
+  });
+
+  it('끝내 탭이 안 뜨면(10초) 웹뷰 경로로 넘기고 기록을 남긴다', async () => {
+    mockGetInitialNotification.mockResolvedValue({
+      data: {link: '/products/12'},
+    });
+    mockAreNativeTabsMounted.mockImplementation(() => false);
+
+    const renderer = await renderHandler();
+    await ReactTestRenderer.act(async () => {
+      jest.advanceTimersByTime(9000);
+    });
+    expect(mockInjectJavaScript).not.toHaveBeenCalled();
+
+    await ReactTestRenderer.act(async () => {
+      jest.advanceTimersByTime(1500);
+    });
+    expect(mockInjectJavaScript).toHaveBeenCalledWith(
+      'window.location.href = "/products/12";',
+    );
+    expect(mockTrack).toHaveBeenCalledWith(
+      'route_open_timeout',
+      expect.objectContaining({url: '/products/12', source: 'push'}),
     );
 
     await ReactTestRenderer.act(async () => {

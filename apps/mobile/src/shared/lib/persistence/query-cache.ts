@@ -19,8 +19,13 @@ import {
  * 쓰기 throttle 이 필요해지면(백그라운드 저장만으로 부족하면) 그때 패키지로.
  */
 const STORAGE_KEY = 'rq-cache';
-// 쿼리 결과 모양이 바뀌는 변경을 내보낼 때 올린다 — 옛 모양 캐시가 새 화면을 깨지 않게.
+// queryFn 이 서버 응답을 **가공하는 모양**을 바꿀 때 올린다 — 옛 모양 캐시가 새 화면을 깨지 않게.
 const SCHEMA_VERSION = 1;
+/**
+ * GraphQL 문서(코드젠 gql.ts + 손으로 쓴 TypedDocumentString) 지문 — 쿼리 필드가 바뀌면 결과 모양도 바뀌므로 캐시를 버린다.
+ * 손으로 맞출 필요 없다: 문서가 바뀌면 query-cache 테스트가 실패하며 새 값을 알려 준다(CI 가 OTA 전에 막는다).
+ */
+export const QUERY_DOCS_FINGERPRINT = 'a0b638fbc0bf';
 const MAX_AGE_MS = 24 * 60 * 60 * 1000;
 // Android AsyncStorage 한 항목은 ~2MB 에서 읽기가 깨진다 — 넉넉히 아래에서 포기한다.
 const MAX_BYTES = 1_000_000;
@@ -40,15 +45,12 @@ type Snapshot = {
   state: DehydratedState;
 };
 
-/** OTA 가 바뀌면 캐시를 버린다 — 새 번들이 옛 모양 데이터를 받지 않게. */
-function buster(): string {
-  let updateId = 'embedded';
-  try {
-    // jest 는 expo-updates(ESM) 를 못 읽는다 — 앱에서만 실제 값이 나온다.
-    updateId = require('expo-updates').updateId ?? 'embedded';
-  } catch {}
-  return `${SCHEMA_VERSION}:${updateId}`;
-}
+/**
+ * 캐시를 버리는 기준 = **결과 모양**이 바뀌었을 때만.
+ * ★예전엔 OTA updateId 를 넣었다 — main 푸시마다 자동 OTA 가 나가니 하루 한 번 켜는 사람은
+ * 거의 매번 캐시가 버려져 스켈레톤부터 봤다(알림 → 상세 → 뒤로 가기도 빈 홈).
+ */
+const buster = () => `${SCHEMA_VERSION}:${QUERY_DOCS_FINGERPRINT}`;
 
 type InfiniteData = {pages: unknown[]; pageParams: unknown[]};
 const isInfinite = (data: unknown): data is InfiniteData =>

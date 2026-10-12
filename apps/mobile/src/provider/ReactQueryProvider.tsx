@@ -11,6 +11,9 @@ import {
   restoreQueryCache,
   saveQueryCache,
 } from '@/shared/lib/persistence/query-cache';
+import {getAsyncStorage} from '@/shared/lib/persistence';
+import {StorageKey} from '@/shared/constant/storage-key';
+import {AuthQueries} from '@/entities/auth';
 
 // 이 실행이 시작된 시각 — 이보다 오래된 데이터는 디스크에서 복원된 것이다.
 const BOOT_TIME = Date.now();
@@ -59,6 +62,20 @@ function ReactQueryProvider({children}: {children: React.ReactNode}) {
   const [restored, setRestored] = useState(false);
 
   useEffect(() => {
+    /**
+     * 토큰 갱신을 복원과 **동시에** 시작한다. 예전엔 복원(최대 800ms)이 끝나 화면이 마운트된 뒤에야
+     * useAuth 가 갱신을 걸었고, 홈 쿼리(access token)는 그 왕복을 또 기다렸다(waitForInitialAuth).
+     * 같은 키라 useAuth 는 진행 중인 요청을 그대로 이어받는다. 복원 스냅숏엔 auth 가 없어(PERSISTED_ROOTS)
+     * hydrate 와 부딪히지 않는다. refresh token 이 없으면 걸지 않는다 — 곧 거절될 요청을 두 번 보내지 않게.
+     */
+    getAsyncStorage(StorageKey.REFRESH_TOKEN)
+      .then(token => {
+        if (token) {
+          queryClient.prefetchQuery(AuthQueries.loginByRefreshToken());
+        }
+      })
+      .catch(() => {});
+
     const done = () => setRestored(true);
     const timer = setTimeout(done, RESTORE_TIMEOUT_MS);
     restoreQueryCache(queryClient).finally(() => {
