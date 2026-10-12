@@ -219,6 +219,8 @@ pnpm build            # Production build
     **`ota/runtime-<버전>` 브랜치가 이미 있으면 한 줄로**: `bash apps/mobile/scripts/ota-backport.sh --runtime <버전> --app <그 버전 Release .app> <커밋…>`
     (브랜치 끝 워크트리 → cherry-pick → 설치·tsc·지문·jest(CI 조건) → 기동 확인 → 원격 끝 재확인 → `ota:publish` → push → 매니페스트 확인. `--dry-run` 은 발행 직전까지).
     JS 수정은 스토어에 나가 있는 runtime **전부**(10/12 기준 1.5.0·1.4.8 — main 은 1.5.1)에 따로 낸다.
+    **어느 runtime 까지?** 지난 7일 앱 활성 사용자(GA4 `appVersion` — 바이너리 버전이라 OTA 와 무관)의 **10% 이상**이면 낸다, 그 아래로 떨어지면 끊는다.
+    2026-10-13 실측(7일): Android 1.4.7 114·1.5.0 72·1.4.8 65, iOS 1.4.8 53·1.5.0 40·1.4.7 36 — **1.4.7(약 39%)이 빠져 있다**(마지막 OTA 10/9, 브랜치 없음).
   - 네이티브 변경은 몇 주에 한 번 묶어 낸다(스토어 업데이트를 사용자가 마주치는 횟수를 줄인다).
 - **업데이트 안내 = `apps/web/public/app-release.json`**(웹 운영 배포로 발효, 플랫폼별 값).
   - `latestVersion`(권유): 새 스토어 버전이 **출시된 뒤** 그 플랫폼만 올린다 → 버전당 한 번 "새 버전이 나왔어요" 시트.
