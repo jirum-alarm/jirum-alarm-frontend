@@ -24,6 +24,7 @@ import {
   clipMetaDescription,
   dealFreshnessAt,
   formatDealAgeNotice,
+  formatEvidenceSentence,
   generateDescription,
   MISSING_PRODUCT_METADATA,
   parseNumericPrice,
@@ -52,7 +53,7 @@ const getPriceHistoryCached = cache(async (id: number) => {
     return null;
   }
 });
-/** 근거 블록(왜 핫딜인지)용 — 실패해도 상세는 막지 않음. generateMetadata 는 안 기다린다. */
+/** 근거 블록(왜 핫딜인지)용 — 실패해도 상세는 막지 않음. generateMetadata 도 설명 둘째 문장에 쓴다. */
 const getDealEvidenceCached = cache(async (id: number) => {
   try {
     return await ProductService.getDealEvidence({ id });
@@ -144,6 +145,7 @@ function generateProductJsonLd(
   priceHistorySeo?: PriceHistorySeoSummary | null,
   hidePrice?: boolean,
   commentSummary?: string | null,
+  evidenceSentence?: string | null,
 ) {
   if (!product) return null;
 
@@ -152,7 +154,14 @@ function generateProductJsonLd(
   const image = toSeoImageUrl(product.thumbnail) ?? DEFAULT_OG_IMAGE;
   const description = hidePrice
     ? product.title
-    : generateDescription(productGuides, product, categoryName, priceHistorySeo, commentSummary);
+    : generateDescription(
+        productGuides,
+        product,
+        categoryName,
+        priceHistorySeo,
+        commentSummary,
+        evidenceSentence,
+      );
   const productUrl = `${METADATA_SERVICE_URL}/products/${product.id}`;
   const mallName = product.mallName?.trim() || null;
   // 게시일 기준 재고·가격 유효기간. 오래된 딜을 InStock 으로 단정하지 않는다.
@@ -288,10 +297,11 @@ export async function generateMetadata({
     return { ...MISSING_PRODUCT_METADATA };
   }
 
-  const [productGuides, priceHistoryData, additionalInfo] = await Promise.all([
+  const [productGuides, priceHistoryData, additionalInfo, dealEvidence] = await Promise.all([
     getProductGuidesCached(+product.id),
     getPriceHistoryCached(+product.id),
     getProductAdditionalInfoCached(+product.id),
+    hidePrice ? null : getDealEvidenceCached(+product.id),
   ]);
   const priceValue = hidePrice ? null : parseNumericPrice(product.price);
   const priceHistorySeo = hidePrice ? null : priceHistoryFromProduct(priceHistoryData, priceValue);
@@ -309,7 +319,17 @@ export async function generateMetadata({
   const description = hidePrice
     ? displayTitle
     : clipMetaDescription(
-        generateDescription(productGuides, product, categoryName, priceHistorySeo, commentSummary),
+        generateDescription(
+          productGuides,
+          product,
+          categoryName,
+          priceHistorySeo,
+          commentSummary,
+          formatEvidenceSentence(dealEvidence?.headline, {
+            postedAt: dealFreshnessAt(product),
+            isEnd: product.isEnd,
+          }),
+        ),
       );
 
   const image = toSeoImageUrl(product.thumbnail) ?? DEFAULT_OG_IMAGE;
@@ -498,12 +518,18 @@ export default async function ProductDetail({
   const modelPageLink = modelPageLinkFromProduct(priceHistoryData);
   // JSON-LD 가 availability 를 생략하는 것과 같은 임계(30일)로 화면에도 안내를 낸다.
   const ageNotice = hidePrice ? null : formatDealAgeNotice(dealFreshnessAt(product), product.isEnd);
+  // JSON-LD description 도 meta 와 같은 근거 문장 — 같은 페이지가 두 설명을 내지 않게.
+  const evidenceSentence = formatEvidenceSentence(dealEvidence?.headline, {
+    postedAt: dealFreshnessAt(product),
+    isEnd: product.isEnd,
+  });
   const jsonLd = generateProductJsonLd(
     product,
     productGuides ?? undefined,
     hidePrice ? null : priceHistorySeo,
     hidePrice,
     commentSummary,
+    evidenceSentence,
   );
   const breadcrumbLd = generateBreadcrumbJsonLd(product, modelPageLink);
 

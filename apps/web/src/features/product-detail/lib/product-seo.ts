@@ -335,6 +335,28 @@ export function seoTitleVariantOf(productId: number): SeoTitleVariant {
   return productId % 2 === 1 ? 'price_first' : 'control';
 }
 
+/**
+ * 설명 둘째 문장에 넣는 「왜 핫딜인지」 근거(dealEvidence.headline — "지난 1년 최저가 그대로예요" 등).
+ * 상세 화면 근거 블록과 같은 말이라 설명이 내용과 어긋나지 않는다. 30일 넘은 딜·종료 딜엔 「지금 싸다」는
+ * 말을 하지 않는다(제목 주석과 같은 이유 — 네이버 스팸 기준 「제목·설명이 내용과 다름」).
+ *
+ * AB 로 재지 않고 전체에 켰다(2026-10-12): 근거가 붙는 페이지가 네이버 랜딩의 24%뿐이라 4주 군당 ~670세션,
+ * 잡을 수 있는 최소 효과가 클릭 +16.5% — 설명 한 줄로 기대할 크기보다 크다. 등록부 seo_description_evidence_v1(기각).
+ * 모든 페이지에 똑같이 들어가 제목 실험(seoTitleVariantOf)의 홀/짝 비교는 흔들지 않는다.
+ */
+export function formatEvidenceSentence(
+  headline: { title: string; detail?: string | null } | null | undefined,
+  opts: { postedAt?: string | Date | null; isEnd?: boolean | null; now?: number } = {},
+): string {
+  const title = headline?.title?.trim().replace(/[.\s]+$/, '');
+  if (!title || opts.isEnd) return '';
+  const posted = opts.postedAt ? new Date(opts.postedAt) : null;
+  if (!posted || Number.isNaN(posted.getTime())) return '';
+  if (((opts.now ?? Date.now()) - posted.getTime()) / DAY_MS > STALE_AFTER_DAYS) return '';
+  const detail = headline?.detail?.trim().replace(/[.\s]+$/, '');
+  return `${title}${detail ? ` (${detail})` : ''}.`;
+}
+
 const JIRUM_CDN_HOST = 'cdn.jirum-alarm.com';
 
 /**
@@ -391,6 +413,8 @@ export function generateDescription(
   categoryName?: string,
   priceHistorySeo?: PriceHistorySeoSummary | null,
   commentSummary?: string | null,
+  /** `formatEvidenceSentence` 결과. 첫 문장 바로 뒤 — 검색결과 스니펫은 앞 두 문장 남짓만 보인다. */
+  evidenceSentence?: string | null,
 ): string {
   const mallName = product.mallName?.trim() || '';
   const providerName = product.provider?.nameKr?.trim() || '';
@@ -423,6 +447,7 @@ export function generateDescription(
 
   return [
     lead,
+    evidenceSentence?.trim() || '',
     commentSummary?.trim() || '',
     guideText ? `${guideText}.` : '',
     priceHistorySeo ? `${formatPriceHistorySeoText(priceHistorySeo)}.` : '',

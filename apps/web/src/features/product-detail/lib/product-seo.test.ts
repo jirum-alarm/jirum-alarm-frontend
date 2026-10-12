@@ -12,6 +12,7 @@ const {
   clipMetaDescription,
   buildProductSeoTitle,
   seoTitleVariantOf,
+  formatEvidenceSentence,
   generateDescription,
   buildRssItemDescription,
   buildRssItemTitle,
@@ -514,5 +515,50 @@ describe('dealFreshnessAt', () => {
       '2026-08-10',
     );
     assert.equal(isSeenBasedFreshness({ postedAt: '2026-08-10', data: {} }), false);
+  });
+});
+
+describe('검색 설명 근거 문장', () => {
+  const NOW = Date.parse('2026-10-12T12:00:00Z');
+  const fresh = { postedAt: '2026-10-10T00:00:00Z', isEnd: false, now: NOW };
+
+  it('근거 제목과 상세를 한 문장으로', () => {
+    assert.equal(
+      formatEvidenceSentence(
+        {
+          title: '지난 1년 최저가 그대로예요',
+          detail: '보통가 8,410원보다 1,030원 싸요 · 핫딜 14건 기준',
+        },
+        fresh,
+      ),
+      '지난 1년 최저가 그대로예요 (보통가 8,410원보다 1,030원 싸요 · 핫딜 14건 기준).',
+    );
+    assert.equal(
+      formatEvidenceSentence({ title: '뽐뿌 인기글에 오른 딜이에요', detail: null }, fresh),
+      '뽐뿌 인기글에 오른 딜이에요.',
+    );
+  });
+
+  it('30일 넘은 딜·종료 딜·게시일 모름엔 넣지 않는다', () => {
+    const headline = { title: '지난 1년 최저가 그대로예요' };
+    assert.equal(
+      formatEvidenceSentence(headline, { ...fresh, postedAt: '2026-08-01T00:00:00Z' }),
+      '',
+    );
+    assert.equal(formatEvidenceSentence(headline, { ...fresh, isEnd: true }), '');
+    assert.equal(formatEvidenceSentence(headline, { now: NOW }), '');
+    assert.equal(formatEvidenceSentence(null, fresh), '');
+  });
+
+  it('근거는 첫 문장 바로 뒤, 댓글 요약 앞', () => {
+    const desc = generateDescription(
+      null,
+      { title: '칙촉', price: '7380', mallName: '쿠팡' },
+      undefined,
+      null,
+      '댓글 요약',
+      '지난 1년 최저가 그대로예요.',
+    );
+    assert.equal(desc, '쿠팡 7,380원 핫딜이에요. 지난 1년 최저가 그대로예요. 댓글 요약');
   });
 });
