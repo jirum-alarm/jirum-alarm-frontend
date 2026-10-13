@@ -2,87 +2,39 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 import { PAGE } from '@/shared/config/page';
-import useAlertSession from '@/shared/hooks/useAlertSession';
-import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
-import { getGraphqlErrorMessage } from '@/shared/lib/graphql-error';
-import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
-import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import { ErrorIllust } from '@/shared/ui/common/icons/Illust';
-import { useToast } from '@/shared/ui/common/Toast';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
 import { CarouselProductList } from '@/entities/product-list/ui/carousel';
 
-import { useUpdateKeyword } from '@/features/mypage/model';
 import { useHotDealsRandom } from '@/features/product-list/hooks';
+
+import { pushDataLayer, useSearchKeywordAlert } from '../hooks/useSearchKeywordAlert';
 
 const ProductNotFound = () => {
   const router = useMyRouter();
-  const { isLoggedIn } = useIsLoggedIn();
-  const { ensureAlertSession } = useAlertSession();
   const searchParams = useSearchParams();
   const keyword = searchParams.get('keyword') ?? '';
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
-      event: 'search_no_result',
-      keyword,
-    });
+    pushDataLayer({ event: 'search_no_result', keyword });
   }, [keyword]);
 
   const { data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();
 
-  const { toast } = useToast();
-  const promptPushChannel = usePushChannelPrompt();
-  // 검색어를 그대로 등록한다. 예전엔 빈 키워드 화면으로 보내 검색어를 다시 치게 했다.
-  const { mutate: addKeyword, isPending } = useUpdateKeyword({
-    source: 'search_no_result',
-    onSuccess: ({ keyword: added }) => {
-      toast.success(`'${added}' 알림을 등록했어요.`, {
-        action: { label: '보기', onClick: () => router.push(PAGE.MYPAGE_KEYWORD) },
-      });
-      promptPushChannel(added);
-    },
-    onError: (error) => {
-      toast.error(getGraphqlErrorMessage(error) || '키워드 저장에 실패했습니다.');
-    },
-  });
-  const segments = [...new Intl.Segmenter().segment(keyword.trim())].length;
-  const canRegister = segments >= 2 && segments <= 20;
-
-  // 게스트가 눌러 로그인하고 돌아왔으면 그 검색어를 이어서 등록한다.
-  usePendingAction<string>(PendingActionType.NOTIFICATION_KEYWORD_ADD, (pending) => {
-    if (pending) addKeyword({ keyword: pending });
-  });
+  const { canRegister, isOn, isPending, isLoggedIn, register, ensureAlertSession } =
+    useSearchKeywordAlert({ keyword, source: 'search_no_result' });
 
   const handleAddKeywordClick = async () => {
-    // 비로그인 유저는 검색 결과가 없을 때 가장 강한 "알림받고 싶은" 의도를 보인다.
-    // 게이트 직전에 keyword_intent를 쏴서 "막힌 알림 수요"를 측정한다. (Phase 1 익명→회원 전환)
-    if (!isLoggedIn && typeof window !== 'undefined') {
-      (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
-        event: 'keyword_intent',
-        keyword,
-      });
-    }
-
-    if (!canRegister) {
-      if (!(await ensureAlertSession())) return;
-      router.push(PAGE.MYPAGE_KEYWORD);
+    if (canRegister) {
+      await register();
       return;
     }
-    if (
-      !(await ensureAlertSession(
-        {
-          title: '키워드 알림은 로그인이 필요해요',
-          description: `로그인하고 '${keyword.trim()}' 알림을 받아보세요`,
-        },
-        { type: PendingActionType.NOTIFICATION_KEYWORD_ADD, payload: keyword.trim() },
-      ))
-    )
-      return;
-    if (!isPending) addKeyword({ keyword: keyword.trim() });
+    // 2~20자 밖이면 검색어로 못 건다 — 키워드 화면에서 직접 입력하게 보낸다.
+    if (!isLoggedIn) pushDataLayer({ event: 'keyword_intent', keyword });
+    if (!(await ensureAlertSession())) return;
+    router.push(PAGE.MYPAGE_KEYWORD);
   };
 
   const handleShowMoreClick = () => {
@@ -99,12 +51,23 @@ const ProductNotFound = () => {
         <p className="text-gray-500">키워드를 등록하고 알림을 받아보세요</p>
       </div>
       <div className="w-full pb-16 text-center">
-        <button
-          onClick={handleAddKeywordClick}
-          className="text-primary-500 bg-fixed-800 rounded-lg px-5 py-1.5 font-semibold"
-        >
-          {canRegister ? `'${keyword.trim()}' 알림 받기` : '키워드 등록'}
-        </button>
+        {isOn ? (
+          <p
+            role="status"
+            className="inline-block rounded-lg bg-gray-100 px-5 py-1.5 font-semibold text-gray-700"
+          >
+            알림 받는 중
+          </p>
+        ) : (
+          <button
+            type="button"
+            onClick={handleAddKeywordClick}
+            disabled={isPending}
+            className="text-primary-500 bg-fixed-800 rounded-lg px-5 py-1.5 font-semibold disabled:opacity-60"
+          >
+            {canRegister ? `'${keyword.trim()}' 알림 받기` : '키워드 등록'}
+          </button>
+        )}
       </div>
       {hotDeals?.length ? (
         <>

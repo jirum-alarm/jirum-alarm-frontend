@@ -11,8 +11,10 @@ import { SearchInFeedAd } from '@/features/adsense/ui/SearchInFeedAd';
 import { useProductListViewModel } from '../hooks/useProductListViewModel';
 import { useSearchFilters } from '../hooks/useSearchFilters';
 
+import EndedDealsRescue from './EndedDealsRescue';
 import ProductNotFound from './ProductNotFound';
 import SearchFilterBar from './SearchFilterBar';
+import SearchKeywordAlertBar from './SearchKeywordAlertBar';
 
 // 광고를 보여줄 최소 상품 수. 결과가 너무 적으면 광고를 띄우지 않는다.
 const AD_MIN_PRODUCTS = 8;
@@ -25,7 +27,7 @@ export default function SearchResult({ show }: { show: boolean }) {
   // (인스턴스 중복 시 필터 전환이 깨짐, 훅 주석 참고). 전환 중 그리드 디밍은
   // keepPreviousData 의 isPlaceholderData 가 담당한다.
   const filterController = useSearchFilters();
-  const { filters, hasActiveFilters, resetFilters } = filterController;
+  const { filters, setFilters, hasActiveFilters, resetFilters } = filterController;
   const {
     products,
     hasNextPage,
@@ -82,9 +84,16 @@ export default function SearchResult({ show }: { show: boolean }) {
               </button>
             </div>
           ) : (
-            <Suspense fallback={<></>}>
-              <ProductNotFound />
-            </Suspense>
+            // 진짜 0건(필터 없음·종료 제외). 종료된 딜만 있는 검색어면 위에 '품절 포함'으로 넘어갈 길을 낸다.
+            <div className="flex w-full flex-col">
+              <EndedDealsRescue
+                keyword={keyword ?? ''}
+                onShowEnded={() => setFilters({ ended: true })}
+              />
+              <Suspense fallback={<></>}>
+                <ProductNotFound />
+              </Suspense>
+            </div>
           )}
         </div>
       ) : (
@@ -101,6 +110,8 @@ export default function SearchResult({ show }: { show: boolean }) {
               건{estimatedTotal >= 5000 && '+'}
             </p>
           )}
+          {/* 결과를 보는 그 자리에서 이 단어로 알림을 건다(0건 화면엔 큰 버튼). 앱 SearchResults 와 같은 자리. */}
+          {keyword && <SearchKeywordAlertBar keyword={keyword} />}
           {/* 광고는 유기 결과 뒤 독립 블록. 그리드 안/사이에 끼우면 직전 카드 수가 컬럼 수
               (모바일2·sm3·pc5)의 배수가 아닐 때 행 끝에 빈칸이 생기므로, 앞 블록은 AD_AFTER_ROWS(30,
               공배수)로 끊어 어느 뷰포트에서도 꽉 차게 한다. */}
