@@ -6,10 +6,12 @@ import React, {
   useState,
   useSyncExternalStore,
 } from 'react';
-import {RefreshControl, ScrollView, View} from 'react-native';
+import {Pressable, RefreshControl, ScrollView, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {HELP_PATH} from '@/constants/env';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 import {SystemBars} from 'react-native-edge-to-edge';
-import {useNavigation} from '@react-navigation/native';
+import {StackActions, useNavigation} from '@react-navigation/native';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
@@ -370,6 +372,31 @@ function NativeDetail({
               /deals 를 열지 않으므로(2026-09-09 결정) 뺐다. */}
           {ageNotice ? (
             <Text className="mx-5 mb-6 text-sm text-gray-500">{ageNotice}</Text>
+          ) : null}
+          {/* web ProductPriceContext 「지름알림이 가격을 판단하는 법」 — 근거 칸 밖에 둔다. 그 칸은 「답」 숨김
+              실험(price_answer_holdout_v1)이 숨기므로 안에 넣으면 실험 군만 링크가 생긴다. 검색 스택에서 열려도
+              WEBVIEW 는 루트 스택이 받는다(push 가 부모로 올라간다). */}
+          {!hidePrice ? (
+            <Pressable
+              accessibilityRole="link"
+              className="mx-5 mb-6 self-start"
+              hitSlop={8}
+              onPress={() => {
+                Analytics.track('help_link_click', {
+                  placement: 'detail_price_context',
+                });
+                // 상세 스택 타입엔 WEBVIEW 가 없다(상세·댓글만) — 액션으로 보내 루트 스택이 받게 한다.
+                navigation.dispatch(
+                  StackActions.push(tabStackNavigations.WEBVIEW, {
+                    uri: `${HELP_PATH}#evidence`,
+                    title: '사용법 · 자주 묻는 질문',
+                  }),
+                );
+              }}>
+              <Text className="text-sm text-gray-500">
+                지름알림이 가격을 판단하는 법 ›
+              </Text>
+            </Pressable>
           ) : null}
         </View>
         {/* web 순서: 카톡방 → 쿠팡 고지 → 만료 경고 → 가격추이. 광고는 앱에서 제거. */}

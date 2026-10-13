@@ -141,6 +141,7 @@ export default async function DesktopProductDetailPage({
                 ageNotice={hidePrice ? null : ageNotice}
                 modelPage={hidePrice ? null : modelPage}
                 productTitle={initialProduct?.title}
+                showHelpLink={!hidePrice}
               />
             </div>
           </div>

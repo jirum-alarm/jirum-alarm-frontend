@@ -8,6 +8,8 @@ import { ArrowDown } from '@/shared/ui/common/icons';
 
 import DealsMobileHeader from '../deals/[slug]/DealsMobileHeader';
 
+import OpenFaqFromHash from './OpenFaqFromHash';
+
 /**
  * 지름알림이란 · 다른 점 · 쓸 수 있는 기능 · 자주 묻는 질문. 서비스 안(마이페이지 「지원」·홈 「어떻게 쓰나요?」
  * 배너·앱 내정보·데스크톱 푸터)에서 여는 문서이자, 「지름알림」·「핫딜 사이트 추천」·「핫딜 알림 앱」 같은 정보형
@@ -271,6 +273,7 @@ export default function HelpPage() {
         />
       ))}
       <DealsMobileHeader title="지름알림 사용법" />
+      <OpenFaqFromHash />
 
       <article className="text-15 space-y-12 leading-relaxed text-gray-800">
         <header>
@@ -354,7 +357,7 @@ export default function HelpPage() {
               <div className="divide-y divide-gray-100 border-y border-gray-100">
                 {group.items.map((f) => (
                   // 접힌 답도 HTML 에 있다(details) — 크롤러·AI 가 본문으로 읽는다.
-                  <details key={f.id} id={f.id} className="group py-1">
+                  <details key={f.id} id={f.id} className="group scroll-mt-16 py-1">
                     <summary className="flex cursor-pointer list-none items-center justify-between gap-3 py-3 font-medium text-gray-900 [&::-webkit-details-marker]:hidden">
                       <span>{f.q}</span>
                       <ArrowDown

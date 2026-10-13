@@ -12,6 +12,8 @@ type Props = {
   modelPage?: ProductModelPageLink | null;
   /** 제목에 걸리는 키워드 허브(`/keywords/삼다수`)로 링크한다. */
   productTitle?: string | null;
+  /** 「지름알림이 가격을 판단하는 법」 → /help#evidence. 가격을 숨기는 상품(hidePrice)엔 끈다. */
+  showHelpLink?: boolean;
   className?: string;
 };
 
@@ -36,6 +38,7 @@ export default async function ProductPriceContext({
   ageNotice,
   modelPage,
   productTitle,
+  showHelpLink = false,
   className,
 }: Props) {
   // 키워드 허브 링크: 모델 페이지는 매핑된 상품에만 있어 무작위 상품 59개 중 0개였다(2026-10-01 실측).
@@ -44,7 +47,7 @@ export default async function ProductPriceContext({
   const keywordHubs = productTitle
     ? findKeywordHubsForTitle(productTitle, await fetchKeywordHubs())
     : [];
-  if (!ageNotice && !modelPage && keywordHubs.length === 0) return null;
+  if (!ageNotice && !modelPage && keywordHubs.length === 0 && !showHelpLink) return null;
 
   return (
     <section className={cn('flex flex-col gap-2', className)}>
@@ -92,6 +95,19 @@ export default async function ProductPriceContext({
             </Link>
           ))}
         </p>
+      ) : null}
+
+      {/* 근거 칸(DealEvidenceBlock) 밖에 둔다 — 그 칸은 「답」 숨김 실험(price_answer_holdout_v1)이 20% 기기에서
+          숨기므로, 안에 넣으면 실험 군만 링크가 생겨 판독이 섞인다. 여기는 두 군 모두 똑같이 보인다. */}
+      {showHelpLink ? (
+        <Link
+          href="/help#evidence"
+          data-track="help-link"
+          data-source="detail_price_context"
+          className="self-start text-sm text-gray-500 underline-offset-2 hover:underline"
+        >
+          지름알림이 가격을 판단하는 법 ›
+        </Link>
       ) : null}
     </section>
   );

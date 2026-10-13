@@ -96,6 +96,7 @@ function ProductDetailPage({
               ageNotice={hidePrice ? null : ageNotice}
               modelPage={hidePrice ? null : modelPage}
               productTitle={initialProduct?.title}
+              showHelpLink={!hidePrice}
               className="mx-5 mb-6"
             />
             <AdvertiseSlotBanner
