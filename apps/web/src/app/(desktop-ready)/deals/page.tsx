@@ -120,7 +120,7 @@ export default async function DealsIndexPage() {
                 title="지금 사기 좋아요"
                 description="진행 중인 핫딜이 그동안의 가격보다 싼 상품이에요."
               />
-              <DealGrid items={buyNow} />
+              <FoldedGrid items={buyNow} visible={BUY_NOW_VISIBLE} />
             </section>
           )}
 
@@ -179,10 +179,14 @@ export default async function DealsIndexPage() {
 
 type DealItem = Awaited<ReturnType<typeof ModelPageService.getPublishedModelPages>>[number];
 
-/** ② 최근 핫딜에서 접지 않고 보여줄 개수. 모바일 2열 기준 6줄. */
-const RECENT_VISIBLE = 12;
-/** ③ 카테고리 섹션마다 접지 않고 보여줄 개수(PC 3열 × 4줄). 안 접으면 식품 한 섹션만 수백 개라 아래 카테고리에 닿지 못했다. */
-const CATEGORY_VISIBLE = 12;
+/**
+ * ①② 에서 접지 않고 보여줄 개수 — PC 5열 × 2줄, 모바일 2열 × 5줄. 발행 페이지가 1,136개로 늘자(2026-10-13)
+ * ① 25개가 다 펼쳐져 모바일에선 ② 가 화면 6장 아래에서야 시작했다. 12개면 PC 마지막 줄에 2개만 남는다.
+ */
+const BUY_NOW_VISIBLE = 10;
+const RECENT_VISIBLE = 10;
+/** ③ 카테고리 섹션마다 접지 않고 보여줄 줄 수(PC 3열 × 2줄). 모바일은 1열이라 12줄 × 카테고리 10개면 너무 길었다. */
+const CATEGORY_VISIBLE = 6;
 
 const GOOD_TONES = new Set(['lowest', 'cheap']);
 
