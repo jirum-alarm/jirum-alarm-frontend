@@ -6,6 +6,8 @@
 - traffic.json 구매클릭·웹 활성·채널별 활성 — GA4(한국만, 사용자 지표는 봇게이트 desktop∧Windows 제외)
 - loop.json    북극성(알림 경유 재방문)과 그 앞단 — GA4 + 운영 MySQL + 카톡방 counts.csv. funnel-weekly.py 와 같은 정의
 - experiments.json 실험 등록부(crawling-server src/experiment/experiment-registry.ts)
+- linkmix.json  구매클릭(서버 purchase_link_click, W40~)을 상품의 지금 수익링크 제휴사로 나눈 주간 수 — Mongo + MySQL product
+- list_ctr.json 웹 카드 출처별 최근 7일 화면 노출(post_impression)·출처 붙은 상세 진입(post_view)
 
 수동: python3 scripts/growth-snapshot.py [주 수=16]  → ~/.local/share/jirum/growth/*.json
 대시보드 https://claude.ai/artifact/BhUKjPYmSFP7WEzX6Vh7wp 반영은 Orca 정기 자동화(Claude 세션)가 이 파일들을 올린다
@@ -17,6 +19,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import time
 import urllib.request
 
 import google.auth.transport.requests
@@ -166,6 +169,64 @@ def experiments():
     return rows
 
 
+# 웹 카드 출처(frontend card-tracking.ts). home_hotdeal·random_ranking 은 서버가 목록을 내준 기록이라 화면 노출이 아니다.
+CARD_SOURCES = ["home_ranking", "home_promotion", "search", "search_recommend", "ranking_tab", "trending_live",
+                "trending_recommend", "wishlist", "related", "keyword_recommend", "together_viewed",
+                "category_popular", "notification_theme", "expired_latest"]
+# 서버측 구매클릭(purchase_link_click)은 2026-09-27 부터 — 그 주 W39 는 이틀뿐이라 W40 부터 쓴다.
+CLICKS_SINCE = "202640"
+MONGO_PORT = 27118
+
+MONGO_JS = r"""
+const { MongoClient } = require(process.env.MONGO_DRIVER);
+(async () => {
+  const c = new MongoClient(process.env.MONGO_URI); await c.connect();
+  const h = c.db('jirum-alarm').collection('user_history');
+  const [since, sources] = [new Date(process.argv[1]), JSON.parse(process.argv[2])];
+  const wk = { $concat: [{ $toString: { $isoWeekYear: { date: '$createdAt', timezone: 'Asia/Seoul' } } },
+    { $cond: [{ $lt: [{ $isoWeek: { date: '$createdAt', timezone: 'Asia/Seoul' } }, 10] }, '0', ''] },
+    { $toString: { $isoWeek: { date: '$createdAt', timezone: 'Asia/Seoul' } } }] };
+  const clicks = await h.aggregate([
+    { $match: { target: 'purchase_link_click', createdAt: { $gte: since } } },
+    { $group: { _id: { wk, pid: '$targetId' }, n: { $sum: 1 } } }], { maxTimeMS: 600000 }).toArray();
+  const d7 = new Date(Date.now() - 7 * 864e5);
+  const lists = await h.aggregate([
+    { $match: { target: { $in: ['post_impression', 'post_view'] }, source: { $in: sources }, createdAt: { $gte: d7 } } },
+    { $group: { _id: { t: '$target', s: '$source' }, n: { $sum: 1 } } }], { maxTimeMS: 600000 }).toArray();
+  console.log(JSON.stringify({ clicks: clicks.map((r) => [r._id.wk, String(r._id.pid), r.n]),
+    lists: lists.map((r) => [r._id.t, r._id.s, r.n]), d7 }));
+  await c.close();
+})().catch((e) => { console.error('ERR', e.message); process.exit(1); });
+"""
+
+
+def mongo():
+    """구매클릭(주×상품)과 웹 카드 출처별 최근 7일 노출·진입. 맥에서 Mongo 직접 접속이 안 돼 port-forward 로 붙는다."""
+    pf = subprocess.Popen(["kubectl", "--context", "prod", "-n", "mongodb", "port-forward", "pod/mongodb-0",
+                           f"{MONGO_PORT}:27017"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    try:
+        time.sleep(3)
+        env = {**os.environ, "MONGO_DRIVER": os.path.join(CRAWLING, "node_modules/mongodb"),
+               "MONGO_URI": f"mongodb://root:%21REDACTED@localhost:{MONGO_PORT}/jirum-alarm?authSource=admin"
+                            "&readPreference=secondaryPreferred&directConnection=true"}
+        return json.loads(subprocess.check_output(["node", "-e", MONGO_JS, f"{start}T00:00:00+09:00",
+                                                   json.dumps(CARD_SOURCES)], env=env, text=True, timeout=600))
+    finally:
+        pf.terminate()
+
+
+def link_of(pids):
+    """상품별 지금의 수익링크 제휴사 — 링크가 비었으면 none. 클릭 시점이 아니라 지금 상태다."""
+    if not pids:
+        return {}
+    sql = ("SELECT id, IF(profitLink IS NULL OR profitLink='', 'none', COALESCE(profitLinkProvider, 'other')) "
+           f"FROM product WHERE id IN ({','.join(p for p in pids if p.isdigit())})")
+    tsv = subprocess.check_output(KUBE + ["exec", "-i", "mysql-0", "--", "bash", "-c",
+                                          'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -D crawling -B -N 2>/dev/null'],
+                                  input=sql, text=True, timeout=120).splitlines()
+    return dict(line.split("\t") for line in tsv if "\t" in line)
+
+
 log = lambda m: print(f"[{dt.datetime.now():%H:%M:%S}] {m}", file=sys.stderr, flush=True)
 log("GA4"); g = ga4()
 log("DB"); d = db()
@@ -205,10 +266,34 @@ for k, mon in zip(keys, mondays):
                  "kakao_inflow": kakao, "push_opens": opens, "notified_returns": kakao + opens,
                  "room_members": members.get(k), "app_active": g["app_active"].get(k, 0)})
 
+log("Mongo"); mg = mongo()
+log("상품 링크"); links = link_of(sorted({pid for _, pid, _ in mg["clicks"]}))
+LINKS = ["none", "toss", "link_price", "adpick", "coupang", "ali_express", "naver"]
+linkmix = []
+for k, mon in zip(keys, mondays):
+    if k < CLICKS_SINCE:
+        continue
+    row = {"week": label(k), "week_start": str(mon), **{p: 0 for p in LINKS}, "other": 0}
+    for w, pid, n in mg["clicks"]:
+        if w == k:
+            p = links.get(pid, "other")
+            row[p if p in LINKS else "other"] += n
+    row["clicks"] = sum(row[p] for p in LINKS + ["other"])
+    linkmix.append(row)
+
+imp = {s: n for t, s, n in mg["lists"] if t == "post_impression"}
+view = {s: n for t, s, n in mg["lists"] if t == "post_view"}
+list_ctr = [{"source": s, "impressions": imp.get(s, 0), "views": view.get(s, 0),
+             "ctr": round(view.get(s, 0) / imp[s], 5) if imp.get(s) else None,
+             "app_mixed": s == "ranking_tab"}  # 앱도 랭킹 탭 노출을 남기지만 앱 진입은 app_detail 이라 CTR 이 낮게 나온다
+            for s in CARD_SOURCES if imp.get(s) or view.get(s)]
+list_ctr.sort(key=lambda r: -r["impressions"])
+
 os.makedirs(OUT, exist_ok=True)
 meta = {"generated": dt.datetime.now().astimezone().isoformat(timespec="seconds"), "from": str(start), "to": str(last_sun)}
 log("실험 등록부"); exps = experiments()
-for name, rows in (("money", money), ("traffic", traffic), ("loop", loop), ("room", readings), ("experiments", exps)):
+for name, rows in (("money", money), ("traffic", traffic), ("loop", loop), ("room", readings), ("experiments", exps),
+                   ("linkmix", linkmix), ("list_ctr", list_ctr)):
     with open(os.path.join(OUT, f"{name}.json"), "w") as f:
         json.dump({"meta": meta, "rows": rows}, f, ensure_ascii=False, indent=1)
 print(f"{OUT} — {meta['from']} ~ {meta['to']} ({WEEKS}주)")
