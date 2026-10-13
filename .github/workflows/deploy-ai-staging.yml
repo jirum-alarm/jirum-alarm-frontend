@@ -77,6 +77,9 @@ jobs:
           context: .
           file: apps/ai/deploy/development/Dockerfile
           platforms: linux/amd64
+          # Harbor v2.10 은 buildx provenance 첨부물(attestation)을 index 자식이자 accessory 로 이중 등록해
+          # 보존 정책·삭제가 412(referenced by others)로 막힌다 — 단일 매니페스트로 올린다.
+          provenance: false
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
