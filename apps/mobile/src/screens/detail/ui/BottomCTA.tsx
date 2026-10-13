@@ -8,6 +8,7 @@ import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
 import * as Haptics from 'expo-haptics';
 import {useNavigation} from '@react-navigation/native';
+import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {ProductQueries} from '@/entities/product/product.queries';
 import {ProductService} from '@/shared/api/product/product.service';
@@ -18,6 +19,8 @@ import {showToast} from '@/shared/lib/feedback';
 import {openInAppBrowser} from '@/shared/lib/navigation';
 import {resolveEntryScreen} from '@/shared/lib/navigation/entry-screen';
 import {cn} from '@/shared/lib/styling';
+import {tabStackNavigations} from '@/shared/constant/navigations';
+import type {TabStackParamList} from '@/navigations/tab/types';
 
 import PressableScale from '@/shared/components/PressableScale';
 import {useReduceMotion} from '@/shared/hooks/useReduceMotion';
@@ -32,6 +35,7 @@ import {
   hasJoinedOkachat,
   type PostPurchasePromptKind,
 } from '../lib/okachat';
+import {usePurchaseBrowserArm} from '../lib/purchase-browser-experiment';
 import PostPurchaseKakaoPrompt from './PostPurchaseKakaoPrompt';
 import PostPurchaseKeywordPrompt from './PostPurchaseKeywordPrompt';
 import TopButton from './TopButton';
@@ -58,7 +62,9 @@ export default function BottomCTA({
   const [promptQueue, setPromptQueue] = useState<PostPurchasePromptKind[]>([]);
   const queryClient = useQueryClient();
   const productId = Number(product.id);
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<TabStackParamList>>();
+  const purchaseArm = usePurchaseBrowserArm();
   const {requireLogin} = useRequireLogin(`/products/${productId}`);
 
   const phase = promptQueue[0] ?? null;
@@ -103,6 +109,7 @@ export default function BottomCTA({
       click_url: product.detailUrl,
       monetized: product.isProfitUrl ?? false,
       profit_provider: product.profitLinkProvider ?? null,
+      purchase_browser: purchaseArm,
     });
 
     // 서버 user_history 에도 남긴다(상품별 수요·쿠팡 클릭 집계율 분모). 진입 직전 화면을 entry 로.
@@ -117,7 +124,16 @@ export default function BottomCTA({
 
     // 브라우저를 먼저 연다 — 저장소 읽기(await)를 앞에 두면 구매 탭이 한 박자 늦게 반응했다.
     // 돌아왔을 때 띄울 안내 순서는 브라우저가 떠 있는 동안 계산해도 충분하다.
-    openInAppBrowser(product.detailUrl);
+    // 구매 웹뷰는 http(s) 만 — RN WebView iOS 는 data:·커스텀 스킴 source 를 파일 URL 로 열다 앱째 죽는다.
+    if (purchaseArm === 'webview' && /^https?:\/\//i.test(product.detailUrl)) {
+      navigation.navigate(tabStackNavigations.PURCHASE_BROWSER, {
+        url: product.detailUrl,
+        title: product.mallName ?? undefined,
+        productId: Number(product.id),
+      });
+    } else {
+      openInAppBrowser(product.detailUrl);
+    }
     const joined = await hasJoinedOkachat();
     setPromptQueue(buildPostPurchasePromptQueue(joined));
   }, [
@@ -125,7 +141,9 @@ export default function BottomCTA({
     product.id,
     product.isProfitUrl,
     product.profitLinkProvider,
+    product.mallName,
     navigation,
+    purchaseArm,
   ]);
 
   const isWishlisted = !!stats?.isMyWishlist;
