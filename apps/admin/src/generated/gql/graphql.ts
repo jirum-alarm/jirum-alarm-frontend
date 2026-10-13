@@ -260,6 +260,14 @@ export type CommentOutput = {
   viewCount: Scalars['Int']['output'];
 };
 
+export type CoupangSearchCtaOutput = {
+  __typename?: 'CoupangSearchCtaOutput';
+  /** 쿠팡 검색어 */
+  query: Scalars['String']['output'];
+  /** 쿠팡 파트너스 링크(쿠팡 검색 결과로 간다) */
+  url: Scalars['String']['output'];
+};
+
 export type CreateAdvertiseInput = {
   displayPrice?: InputMaybe<AdvertisePriceInput>;
   displayTitle?: InputMaybe<Scalars['String']['input']>;
@@ -607,6 +615,57 @@ export type KeywordCountOutput = {
   keyword: Scalars['String']['output'];
 };
 
+export type KeywordHubDetailOutput = {
+  __typename?: 'KeywordHubDetailOutput';
+  /** 최근 30일 딜(진행 중 먼저, 최대 40) */
+  deals: Array<ProductOutput>;
+  /** 통계는 아래 deals 와 같은 묶음에서 센 값 */
+  hub: KeywordHubOutput;
+  /** 이 키워드의 모델별 모음(/deals/{slug}) */
+  modelPages: Array<KeywordHubModelPageOutput>;
+};
+
+export type KeywordHubModelPageOutput = {
+  __typename?: 'KeywordHubModelPageOutput';
+  brand?: Maybe<Scalars['String']['output']>;
+  dealCount: Scalars['Int']['output'];
+  modelName: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+};
+
+/** 키워드 허브(웹 /keywords/{slug}) — "삼다수 핫딜" 같은 검색어 그대로의 모음 */
+export type KeywordHubOutput = {
+  __typename?: 'KeywordHubOutput';
+  /** 최근 30일 중 딜이 올라온 날 수(KST) */
+  activeDays: Scalars['Int']['output'];
+  /** recentDealCount 중 진행 중 */
+  activeDealCount: Scalars['Int']['output'];
+  /** 제목에 이게 있어도 같은 상품(표기 흔들림) */
+  aliases: Array<Scalars['String']['output']>;
+  /** 수집 상한에 걸려 실제보다 적게 셌다 — "N건+" 로 표시 */
+  countCapped: Scalars['Boolean']['output'];
+  /** 제목에 이게 있으면 뺀다(부분 문자열 오탐) */
+  excludes: Array<Scalars['String']['output']>;
+  lastDealAt?: Maybe<Scalars['DateTime']['output']>;
+  /** 화면·제목용 이름 */
+  name: Scalars['String']['output'];
+  /** 최근 30일 올라온 딜 수(종료 포함) */
+  recentDealCount: Scalars['Int']['output'];
+  /** URL 세그먼트. 소문자·공백 없음 */
+  slug: Scalars['String']['output'];
+  /** 이 키워드로 알림을 건 사람 수 */
+  subscriberCount: Scalars['Int']['output'];
+  /** 많이 올라온 곳 최대 2곳(몫 15%+) */
+  topSources: Array<KeywordHubSourceOutput>;
+};
+
+export type KeywordHubSourceOutput = {
+  __typename?: 'KeywordHubSourceOutput';
+  name: Scalars['String']['output'];
+  /** % */
+  share: Scalars['Int']['output'];
+};
+
 export type KeywordMapEntry = {
   __typename?: 'KeywordMapEntry';
   groupId: Scalars['Int']['output'];
@@ -736,6 +795,7 @@ export type ModelPageListItemOutput = {
   priceTone?: Maybe<Scalars['String']['output']>;
   savePct?: Maybe<Scalars['Int']['output']>;
   slug: Scalars['String']['output'];
+  trendPrices: Array<Scalars['Float']['output']>;
   unitLabel?: Maybe<Scalars['String']['output']>;
   unitPrice?: Maybe<Scalars['Int']['output']>;
 };
@@ -967,8 +1027,11 @@ export type MutationAddKeywordMapGroupByAdminArgs = {
 };
 
 export type MutationAddNotificationKeywordArgs = {
+  excludeKeywords?: InputMaybe<Array<Scalars['String']['input']>>;
   fromRecommendation?: InputMaybe<Scalars['Boolean']['input']>;
   keyword: Scalars['String']['input'];
+  maxPrice?: InputMaybe<Scalars['Int']['input']>;
+  minPrice?: InputMaybe<Scalars['Int']['input']>;
   priceDropOnly?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -1349,6 +1412,8 @@ export type MutationUpdatePushSettingArgs = {
   keywordAlert?: InputMaybe<Scalars['Boolean']['input']>;
   marketing?: InputMaybe<Scalars['Boolean']['input']>;
   nightAlerts?: InputMaybe<Scalars['Boolean']['input']>;
+  quietHoursEnd?: InputMaybe<Scalars['Int']['input']>;
+  quietHoursStart?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type MutationUpdateUserProfileArgs = {
@@ -1392,6 +1457,37 @@ export type NotificationByAdminOutput = {
   target: Scalars['String']['output'];
   targetId?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+};
+
+/** 키워드 후보와 지난 30일 건수 */
+export type NotificationIntentCandidate = {
+  __typename?: 'NotificationIntentCandidate';
+  keyword: Scalars['String']['output'];
+  recentMatchCount: Scalars['Int']['output'];
+};
+
+/** 문장을 해석한 키워드 알림 조건 + 지난 30일 미리보기 */
+export type NotificationIntentOutput = {
+  __typename?: 'NotificationIntentOutput';
+  /** 키워드 후보 전부(구체적인 것부터) — keyword 는 그중 지난 30일에 걸린 가장 구체적인 것 */
+  candidates: Array<NotificationIntentCandidate>;
+  excludeKeywords: Array<Scalars['String']['output']>;
+  keyword: Scalars['String']['output'];
+  maxPrice?: Maybe<Scalars['Int']['output']>;
+  minPrice?: Maybe<Scalars['Int']['output']>;
+  /** 지난 30일 이 조건이면 왔을 알림 수(대략 — 하락 전용·하루 상한은 빼고 셈) */
+  recentMatchCount: Scalars['Int']['output'];
+  /** 그중 최신 3건 */
+  recentSamples: Array<NotificationIntentSample>;
+};
+
+/** 알림 미리보기용 지난 딜 */
+export type NotificationIntentSample = {
+  __typename?: 'NotificationIntentSample';
+  id: Scalars['Int']['output'];
+  /** 원화 가격. 외화·미파싱은 null */
+  price?: Maybe<Scalars['Int']['output']>;
+  title: Scalars['String']['output'];
 };
 
 export type NotificationKeyword = {
@@ -1483,9 +1579,11 @@ export enum PriceComparisonBasis {
 
 export type PriceContext = {
   __typename?: 'PriceContext';
+  basePriceAt?: Maybe<Scalars['String']['output']>;
   danawaPrice: Scalars['Float']['output'];
   danawaProductName?: Maybe<Scalars['String']['output']>;
   dealPrice: Scalars['Float']['output'];
+  dealShippingFee?: Maybe<Scalars['Float']['output']>;
   delta: Scalars['Float']['output'];
   normalPriceMax?: Maybe<Scalars['Float']['output']>;
   normalPriceMedian?: Maybe<Scalars['Float']['output']>;
@@ -2085,6 +2183,8 @@ export type Query = {
   communityProviders: Array<Provider>;
   /** 상품 랭킹 랜덤 조회 */
   communityRandomRankingProducts: Array<ProductOutput>;
+  /** 오래된 딜 상세의 「쿠팡에서 지금 가격 보기」 — 실험군(coupang_search_cta_v1)·게시 7일+ 딜이고 링크가 발급돼 있을 때만 */
+  coupangSearchCta?: Maybe<CoupangSearchCtaOutput>;
   /** 어드민) 일별/주별/월별 서비스 조회수 합계 */
   dailyServiceViewStats: Array<DateCountOutput>;
   /** 안읽은 알림 존재 여부 조회 */
@@ -2132,6 +2232,10 @@ export type Query = {
   hotDealRatioStats: Array<HotDealRatioOutput>;
   /** 어드민) 핫딜 유형별 분포 */
   hotDealTypeDistribution: Array<HotDealTypeCountOutput>;
+  /** 키워드 허브 하나. 목록 밖 slug 는 null */
+  keywordHub?: Maybe<KeywordHubDetailOutput>;
+  /** 공개 키워드 허브 목록(30일 딜 많은 순) */
+  keywordHubs: Array<KeywordHubOutput>;
   /** 어드민) 키워드 맵 그룹 조회 */
   keywordMapGroupByAdmin?: Maybe<KeywordMapGroupOutput>;
   /** 어드민) 키워드 맵 그룹 목록 조회 */
@@ -2168,6 +2272,8 @@ export type Query = {
   notifications: Array<Notification>;
   /** 어드민) 알림 발송 이력 조회 */
   notificationsByAdmin: Array<NotificationByAdminOutput>;
+  /** 문장 → 키워드 알림 조건 + 지난 30일 미리보기. 해석 못 하면 null(키워드 직접 입력으로) */
+  parseNotificationIntent?: Maybe<NotificationIntentOutput>;
   /** 검증 대기 중인 매핑 목록 조회 */
   pendingVerifications: Array<ProductMappingOutput>;
   /** 검증 대기 중인 매핑 전체 개수 조회 (필터 적용 가능) */
@@ -2237,6 +2343,8 @@ export type Query = {
   topNotificationKeywords: Array<KeywordCountOutput>;
   /** 토스 카테고리 인기 하위 탭 목록(실제 존재하는 categoryLabel) */
   tossCategoryLabels: Array<Scalars['String']['output']>;
+  /** 토스 상세의 「토스에서 함께 보는 상품」 — 실험 toss_internal_link_v1 대상 군 토스 상품(같은 카테고리 먼저, 최대 8). 토스 상품이 아니면 빈 배열 */
+  tossInternalLinks: Array<ProductOutput>;
   /** 안읽은 알림 수 목록 조회 */
   unreadNotificationsCount: Scalars['Int']['output'];
   /** 유저 조회 */
@@ -2355,6 +2463,10 @@ export type QueryCommunityRandomRankingProductsArgs = {
   limit: Scalars['Int']['input'];
 };
 
+export type QueryCoupangSearchCtaArgs = {
+  productId: Scalars['Int']['input'];
+};
+
 export type QueryDailyServiceViewStatsArgs = {
   endDate: Scalars['DateTime']['input'];
   interval?: DateInterval;
@@ -2449,6 +2561,10 @@ export type QueryHotDealTypeDistributionArgs = {
   startDate: Scalars['DateTime']['input'];
 };
 
+export type QueryKeywordHubArgs = {
+  slug: Scalars['String']['input'];
+};
+
 export type QueryKeywordMapGroupByAdminArgs = {
   id: Scalars['Int']['input'];
 };
@@ -2521,6 +2637,10 @@ export type QueryNotificationsArgs = {
 export type QueryNotificationsByAdminArgs = {
   limit: Scalars['Int']['input'];
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type QueryParseNotificationIntentArgs = {
+  text: Scalars['String']['input'];
 };
 
 export type QueryPendingVerificationsArgs = {
@@ -2694,6 +2814,10 @@ export type QueryTopFavoriteCategoriesArgs = {
 export type QueryTopNotificationKeywordsArgs = {
   limit?: Scalars['Int']['input'];
   since?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type QueryTossInternalLinksArgs = {
+  id: Scalars['Int']['input'];
 };
 
 export type QueryUserArgs = {
@@ -2932,6 +3056,10 @@ export type User = {
 /** 하루 끝(23:55 KST) 스냅숏 — 접속은 KST 달력 기준(그날·7일·30일) */
 export type UserActivityDailyOutput = {
   __typename?: 'UserActivityDailyOutput';
+  /** 그날 접속 게스트 — 2026-10-14 이전은 게스트 재방문을 안 세던 때라 null */
+  activeGuests1d?: Maybe<Scalars['Int']['output']>;
+  /** 그날까지 7일 접속 게스트(2026-10-14 이전 null) */
+  activeGuests7d?: Maybe<Scalars['Int']['output']>;
   /** 그날 접속 회원(DAU) */
   activeMembers1d: Scalars['Int']['output'];
   /** 그날까지 7일 접속 회원 */
@@ -2971,6 +3099,10 @@ export enum UserLikeTarget {
 
 export type UserOverviewOutput = {
   __typename?: 'UserOverviewOutput';
+  /** 최근 24시간 접속 게스트(2026-10-14 전엔 재방문을 안 세서 생성 시각만 잡힌다) */
+  activeGuests1d: Scalars['Int']['output'];
+  /** 최근 7일 접속 게스트 */
+  activeGuests7d: Scalars['Int']['output'];
   /** 최근 24시간 접속 회원(lastLoggedInAt — 백그라운드 토큰 갱신은 제외) */
   activeMembers1d: Scalars['Int']['output'];
   /** 최근 7일 접속 회원 */
@@ -3003,6 +3135,10 @@ export type UserPushSetting = {
   marketingAgreedAt?: Maybe<Scalars['DateTime']['output']>;
   nightAlerts: Scalars['Boolean']['output'];
   nightAlertsAgreedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** 방해금지 끝 시(KST 0~23, 이 시각에 모아 보냄) */
+  quietHoursEnd?: Maybe<Scalars['Int']['output']>;
+  /** 방해금지 시작 시(KST 0~23). quietHoursEnd 와 함께 null 이면 꺼짐 */
+  quietHoursStart?: Maybe<Scalars['Int']['output']>;
   userId: Scalars['Int']['output'];
 };
 
@@ -4060,6 +4196,8 @@ export type QueryUserOverviewQuery = {
     activeMembers1d: number;
     activeMembers7d: number;
     activeMembers30d: number;
+    activeGuests1d: number;
+    activeGuests7d: number;
     pushMembers: number;
     pushGuests: number;
     dailySignups: Array<{
@@ -4072,8 +4210,13 @@ export type QueryUserOverviewQuery = {
     dailyActivity: Array<{
       __typename?: 'UserActivityDailyOutput';
       date: string;
+      members: number;
+      guests: number;
       activeMembers1d: number;
       activeMembers7d: number;
+      activeGuests1d?: number | null;
+      pushMembers: number;
+      pushGuests: number;
     }>;
   };
 };
@@ -5427,6 +5570,8 @@ export const QueryUserOverviewDocument = new TypedDocumentString(`
     activeMembers1d
     activeMembers7d
     activeMembers30d
+    activeGuests1d
+    activeGuests7d
     pushMembers
     pushGuests
     dailySignups {
@@ -5437,8 +5582,13 @@ export const QueryUserOverviewDocument = new TypedDocumentString(`
     }
     dailyActivity {
       date
+      members
+      guests
       activeMembers1d
       activeMembers7d
+      activeGuests1d
+      pushMembers
+      pushGuests
     }
   }
 }

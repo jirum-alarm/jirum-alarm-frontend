@@ -264,6 +264,17 @@ type CommentOutput {
   viewCount: Int!
 }
 
+type CoupangSearchCtaOutput {
+  """
+  쿠팡 검색어
+  """
+  query: String!
+  """
+  쿠팡 파트너스 링크(쿠팡 검색 결과로 간다)
+  """
+  url: String!
+}
+
 input CreateAdvertiseInput {
   displayPrice: AdvertisePriceInput
   displayTitle: String
@@ -686,6 +697,83 @@ type KeywordCountOutput {
   keyword: String!
 }
 
+type KeywordHubDetailOutput {
+  """
+  최근 30일 딜(진행 중 먼저, 최대 40)
+  """
+  deals: [ProductOutput!]!
+  """
+  통계는 아래 deals 와 같은 묶음에서 센 값
+  """
+  hub: KeywordHubOutput!
+  """
+  이 키워드의 모델별 모음(/deals/{slug})
+  """
+  modelPages: [KeywordHubModelPageOutput!]!
+}
+
+type KeywordHubModelPageOutput {
+  brand: String
+  dealCount: Int!
+  modelName: String!
+  slug: String!
+}
+
+"""
+키워드 허브(웹 /keywords/{slug}) — "삼다수 핫딜" 같은 검색어 그대로의 모음
+"""
+type KeywordHubOutput {
+  """
+  최근 30일 중 딜이 올라온 날 수(KST)
+  """
+  activeDays: Int!
+  """
+  recentDealCount 중 진행 중
+  """
+  activeDealCount: Int!
+  """
+  제목에 이게 있어도 같은 상품(표기 흔들림)
+  """
+  aliases: [String!]!
+  """
+  수집 상한에 걸려 실제보다 적게 셌다 — "N건+" 로 표시
+  """
+  countCapped: Boolean!
+  """
+  제목에 이게 있으면 뺀다(부분 문자열 오탐)
+  """
+  excludes: [String!]!
+  lastDealAt: DateTime
+  """
+  화면·제목용 이름
+  """
+  name: String!
+  """
+  최근 30일 올라온 딜 수(종료 포함)
+  """
+  recentDealCount: Int!
+  """
+  URL 세그먼트. 소문자·공백 없음
+  """
+  slug: String!
+  """
+  이 키워드로 알림을 건 사람 수
+  """
+  subscriberCount: Int!
+  """
+  많이 올라온 곳 최대 2곳(몫 15%+)
+  """
+  topSources: [KeywordHubSourceOutput!]!
+}
+
+type KeywordHubSourceOutput {
+  name: String!
+  """
+  %
+  """
+  share: Int!
+}
+
 type KeywordMapEntry {
   groupId: Int!
   id: ID!
@@ -819,6 +907,7 @@ type ModelPageListItemOutput {
   priceTone: String
   savePct: Int
   slug: String!
+  trendPrices: [Float!]!
   unitLabel: String
   unitPrice: Int
 }
@@ -877,10 +966,22 @@ type Mutation {
   """
   addNotificationKeyword(
     """
+    제목에 이 중 하나라도 있으면 알림 제외
+    """
+    excludeKeywords: [String!]
+    """
     추천 키워드에서 등록했는지 여부
     """
     fromRecommendation: Boolean
     keyword: String!
+    """
+    이 가격 이하만 알림
+    """
+    maxPrice: Int
+    """
+    이 가격 이상만 알림
+    """
+    minPrice: Int
     """
     가격이 내려갔을 때만 알림 받기
     """
@@ -1394,6 +1495,14 @@ type Mutation {
     야간(21~08시) 푸시 수신 허용
     """
     nightAlerts: Boolean
+    """
+    방해금지 끝 시(KST 0~23). null 이면 해제
+    """
+    quietHoursEnd: Int
+    """
+    방해금지 시작 시(KST 0~23). null 이면 해제
+    """
+    quietHoursStart: Int
   ): Boolean!
   """
   유저 프로필 수정
@@ -1444,6 +1553,48 @@ type NotificationByAdminOutput {
   target: String!
   targetId: String
   title: String
+}
+
+"""
+키워드 후보와 지난 30일 건수
+"""
+type NotificationIntentCandidate {
+  keyword: String!
+  recentMatchCount: Int!
+}
+
+"""
+문장을 해석한 키워드 알림 조건 + 지난 30일 미리보기
+"""
+type NotificationIntentOutput {
+  """
+  키워드 후보 전부(구체적인 것부터) — keyword 는 그중 지난 30일에 걸린 가장 구체적인 것
+  """
+  candidates: [NotificationIntentCandidate!]!
+  excludeKeywords: [String!]!
+  keyword: String!
+  maxPrice: Int
+  minPrice: Int
+  """
+  지난 30일 이 조건이면 왔을 알림 수(대략 — 하락 전용·하루 상한은 빼고 셈)
+  """
+  recentMatchCount: Int!
+  """
+  그중 최신 3건
+  """
+  recentSamples: [NotificationIntentSample!]!
+}
+
+"""
+알림 미리보기용 지난 딜
+"""
+type NotificationIntentSample {
+  id: Int!
+  """
+  원화 가격. 외화·미파싱은 null
+  """
+  price: Int
+  title: String!
 }
 
 type NotificationKeyword {
@@ -1546,9 +1697,11 @@ enum PriceComparisonBasis {
 }
 
 type PriceContext {
+  basePriceAt: String
   danawaPrice: Float!
   danawaProductName: String
   dealPrice: Float!
+  dealShippingFee: Float
   delta: Float!
   normalPriceMax: Float
   normalPriceMedian: Float
@@ -2364,6 +2517,10 @@ type Query {
     limit: Int!
   ): [ProductOutput!]!
   """
+  오래된 딜 상세의 「쿠팡에서 지금 가격 보기」 — 실험군(coupang_search_cta_v1)·게시 7일+ 딜이고 링크가 발급돼 있을 때만
+  """
+  coupangSearchCta(productId: Int!): CoupangSearchCtaOutput
+  """
   어드민) 일별/주별/월별 서비스 조회수 합계
   """
   dailyServiceViewStats(
@@ -2536,6 +2693,14 @@ type Query {
     startDate: DateTime!
   ): [HotDealTypeCountOutput!]!
   """
+  키워드 허브 하나. 목록 밖 slug 는 null
+  """
+  keywordHub(slug: String!): KeywordHubDetailOutput
+  """
+  공개 키워드 허브 목록(30일 딜 많은 순)
+  """
+  keywordHubs: [KeywordHubOutput!]!
+  """
   어드민) 키워드 맵 그룹 조회
   """
   keywordMapGroupByAdmin(id: Int!): KeywordMapGroupOutput
@@ -2648,6 +2813,15 @@ type Query {
   어드민) 알림 발송 이력 조회
   """
   notificationsByAdmin(limit: Int!, searchAfter: [String!]): [NotificationByAdminOutput!]!
+  """
+  문장 → 키워드 알림 조건 + 지난 30일 미리보기. 해석 못 하면 null(키워드 직접 입력으로)
+  """
+  parseNotificationIntent(
+    """
+    예: "에어팟 프로 20만원 밑으로 뜨면 알려줘"
+    """
+    text: String!
+  ): NotificationIntentOutput
   """
   검증 대기 중인 매핑 목록 조회
   """
@@ -2911,6 +3085,10 @@ type Query {
   토스 카테고리 인기 하위 탭 목록(실제 존재하는 categoryLabel)
   """
   tossCategoryLabels: [String!]!
+  """
+  토스 상세의 「토스에서 함께 보는 상품」 — 실험 toss_internal_link_v1 대상 군 토스 상품(같은 카테고리 먼저, 최대 8). 토스 상품이 아니면 빈 배열
+  """
+  tossInternalLinks(id: Int!): [ProductOutput!]!
   """
   안읽은 알림 수 목록 조회
   """
@@ -3204,6 +3382,14 @@ type User {
 """
 type UserActivityDailyOutput {
   """
+  그날 접속 게스트 — 2026-10-14 이전은 게스트 재방문을 안 세던 때라 null
+  """
+  activeGuests1d: Int
+  """
+  그날까지 7일 접속 게스트(2026-10-14 이전 null)
+  """
+  activeGuests7d: Int
+  """
   그날 접속 회원(DAU)
   """
   activeMembers1d: Int!
@@ -3249,6 +3435,14 @@ enum UserLikeTarget {
 }
 
 type UserOverviewOutput {
+  """
+  최근 24시간 접속 게스트(2026-10-14 전엔 재방문을 안 세서 생성 시각만 잡힌다)
+  """
+  activeGuests1d: Int!
+  """
+  최근 7일 접속 게스트
+  """
+  activeGuests7d: Int!
   """
   최근 24시간 접속 회원(lastLoggedInAt — 백그라운드 토큰 갱신은 제외)
   """
@@ -3298,6 +3492,14 @@ type UserPushSetting {
   marketingAgreedAt: DateTime
   nightAlerts: Boolean!
   nightAlertsAgreedAt: DateTime
+  """
+  방해금지 끝 시(KST 0~23, 이 시각에 모아 보냄)
+  """
+  quietHoursEnd: Int
+  """
+  방해금지 시작 시(KST 0~23). quietHoursEnd 와 함께 null 이면 꺼짐
+  """
+  quietHoursStart: Int
   userId: Int!
 }
 
