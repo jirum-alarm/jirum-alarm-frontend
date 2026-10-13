@@ -16,8 +16,11 @@ import {experimentBucket} from '@/shared/lib/experiment/experiment-bucket';
  * 기기 id 를 아직 못 읽었으면 대조로 연다(배정과 다른 경험을 한 클릭은 분석에서 소수라 무시).
  */
 export const PURCHASE_WEBVIEW_EXPERIMENT_ID = 'app_purchase_webview_v1';
-/** 처치 비율 — 실험 중엔 바꾸지 않는다(분석이 같은 값을 쓴다). */
-export const PURCHASE_WEBVIEW_PERCENT = 50;
+/**
+ * 처치 비율. 2026-10-13 50 으로 시작 → 같은 날 100(전원 웹뷰, 사용자 결정 — 경험 개선을 반만 주지 않는다).
+ * AB 는 중단, 효과는 앱 클릭당 주문의 전후 비교로 본다(등록부 app_purchase_webview_v1). 되돌리려면 0.
+ */
+export const PURCHASE_WEBVIEW_PERCENT = 100;
 /** 운영자 계정은 늘 처치로 연다 — 분석은 이 계정 클릭을 뺀다(가격추이 holdout 과 같은 방식). */
 export const PURCHASE_WEBVIEW_FORCED_USER_IDS: readonly number[] = [9];
 
@@ -27,6 +30,7 @@ export function purchaseBrowserArm(
   deviceId: string | null | undefined,
   /** me.id — GraphQL ID 라 문자열로 온다. */
   userId: string | number | null | undefined,
+  percent: number = PURCHASE_WEBVIEW_PERCENT,
 ): PurchaseBrowserArm {
   if (
     userId != null &&
@@ -34,9 +38,10 @@ export function purchaseBrowserArm(
   ) {
     return 'webview';
   }
-  if (!deviceId) return 'in_app_browser';
-  return experimentBucket(deviceId, PURCHASE_WEBVIEW_EXPERIMENT_ID) <
-    PURCHASE_WEBVIEW_PERCENT
+  // 전원 적용이면 기기 id 를 못 읽은 탭도 웹뷰로.
+  if (percent >= 100) return 'webview';
+  if (!deviceId || percent <= 0) return 'in_app_browser';
+  return experimentBucket(deviceId, PURCHASE_WEBVIEW_EXPERIMENT_ID) < percent
     ? 'webview'
     : 'in_app_browser';
 }

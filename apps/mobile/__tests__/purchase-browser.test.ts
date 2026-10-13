@@ -51,18 +51,29 @@ describe('experimentBucket — 서버(node crypto)와 같은 값', () => {
 describe('purchaseBrowserArm', () => {
   it('버킷 50 미만이면 웹뷰, 이상이면 인앱 브라우저', () => {
     expect(
-      purchaseBrowserArm('0b7f6a62-1c1e-4d7a-9f3e-2a7c5d9e8b10', null),
+      purchaseBrowserArm('0b7f6a62-1c1e-4d7a-9f3e-2a7c5d9e8b10', null, 50),
     ).toBe('webview'); // 45
-    expect(purchaseBrowserArm('가나다-기기', null)).toBe('in_app_browser'); // 59
+    expect(purchaseBrowserArm('가나다-기기', null, 50)).toBe('in_app_browser'); // 59
   });
 
   it('기기 id 를 못 읽었으면 지금까지처럼 인앱 브라우저', () => {
-    expect(purchaseBrowserArm(null, null)).toBe('in_app_browser');
+    expect(purchaseBrowserArm(null, null, 50)).toBe('in_app_browser');
   });
 
   it('운영자 계정(me.id 는 문자열)은 늘 웹뷰', () => {
-    expect(purchaseBrowserArm('가나다-기기', '9')).toBe('webview');
-    expect(purchaseBrowserArm(null, '9')).toBe('webview');
+    expect(purchaseBrowserArm('가나다-기기', '9', 50)).toBe('webview');
+    expect(purchaseBrowserArm(null, '9', 0)).toBe('webview');
+  });
+
+  it('지금 설정(전원 적용) — 버킷·기기 id 와 무관하게 웹뷰', () => {
+    expect(purchaseBrowserArm('가나다-기기', null)).toBe('webview');
+    expect(purchaseBrowserArm(null, null)).toBe('webview');
+  });
+
+  it('0 이면 전원 인앱 브라우저(되돌리기)', () => {
+    expect(
+      purchaseBrowserArm('0b7f6a62-1c1e-4d7a-9f3e-2a7c5d9e8b10', null, 0),
+    ).toBe('in_app_browser');
   });
 });
 
