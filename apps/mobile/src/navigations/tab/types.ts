@@ -24,6 +24,12 @@ export type TabStackParamList = ProductFlowParamList & {
   [tabStackNavigations.CURATION]: {sectionId: string; title?: string};
   [tabStackNavigations.TOSS_CURATION]: {sectionId?: string};
   [tabStackNavigations.WEBVIEW]: {uri: string; title?: string};
+  [tabStackNavigations.PURCHASE_BROWSER]: {
+    url: string;
+    /** 쇼핑몰 이름(mallName) — 없으면 헤더에 호스트. */
+    title?: string;
+    productId: number;
+  };
 
   // 내정보 — 대부분 파라미터가 없다(넓고 얕은 설정 화면들).
   [tabStackNavigations.MYPAGE_ACCOUNT]: undefined;

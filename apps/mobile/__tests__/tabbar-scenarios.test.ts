@@ -24,6 +24,7 @@ const constants = read('src/shared/constant/navigations.ts');
 const STACKED = [
   'DETAIL',
   'COMMENTS',
+  'PURCHASE_BROWSER',
   'SEARCH',
   'CURATION',
   'TOSS_CURATION',
