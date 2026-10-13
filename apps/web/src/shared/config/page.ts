@@ -19,6 +19,8 @@ export enum PAGE {
 
   KEYWORDS = '/keywords',
 
+  HELP = '/help',
+
   COMMUNITY = '/community',
   COMMUNITY_WRITE = '/community/write',
 

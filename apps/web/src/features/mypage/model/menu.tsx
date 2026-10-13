@@ -1,5 +1,5 @@
 import { PAGE } from '@/shared/config/page';
-import { Alert, Description, Grid, Hashtag, Heart, Setting } from '@/shared/ui/common/icons';
+import { Alert, Description, Grid, Hashtag, Heart, Help, Setting } from '@/shared/ui/common/icons';
 
 /** 마이페이지 메뉴 묶음(PC 사이드바·첫 화면, 모바일 목록 공통). 자주 여는 것(내 핫딜) → 가끔 바꾸는 것(맞춤 설정) → 거의 안 여는 것(지원) 순. */
 export const MYPAGE_GROUPS = [
@@ -59,6 +59,13 @@ export const MYPAGE_MENU: Array<{
     group: 'custom',
     url: '/mypage/notification',
     description: '알림 종류·야간 알림을 켜고 꺼요',
+  },
+  {
+    icon: <Help />,
+    title: '사용법 · 자주 묻는 질문',
+    group: 'support',
+    url: PAGE.HELP,
+    description: '지름알림을 잘 쓰는 법',
   },
   {
     icon: <Description />,

@@ -11,6 +11,7 @@ import type { MetadataRoute } from 'next';
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: `${METADATA_SERVICE_URL}/keywords`, changeFrequency: 'weekly', priority: 0.6 },
+    { url: `${METADATA_SERVICE_URL}/help`, changeFrequency: 'monthly', priority: 0.5 },
     {
       url: `${METADATA_SERVICE_URL}/guide/hotdeal-alarm`,
       changeFrequency: 'monthly',

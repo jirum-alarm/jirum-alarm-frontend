@@ -17,6 +17,7 @@ const BannerItem = ({
   isAd,
   priority,
   onClick,
+  newTab = true,
 }: {
   isMobile: boolean;
   href: string;
@@ -29,6 +30,8 @@ const BannerItem = ({
   isAd?: boolean;
   priority?: boolean;
   onClick?: (e: MouseEvent<HTMLAnchorElement>) => void;
+  /** 외부(광고·카톡) 배너는 새 탭. 서비스 안 페이지로 가는 배너는 false. */
+  newTab?: boolean;
 }) => {
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
     onClick?.(e);
@@ -47,7 +50,7 @@ const BannerItem = ({
         className,
       )}
       href={href}
-      target="_blank"
+      target={newTab ? '_blank' : undefined}
       data-google-vignette={isAd ? 'false' : undefined}
     >
       <m.div

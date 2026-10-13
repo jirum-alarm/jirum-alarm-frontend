@@ -22,6 +22,7 @@ export { default as EyeOff } from './EyeOff';
 export { default as Grid } from './Grid';
 export { default as Hashtag } from './Hashtag';
 export { default as Headset } from './Headset';
+export { default as Help } from './Help';
 export { default as Home } from './Home';
 export { default as HomeFill } from './HomeFill';
 export { default as Hot } from './_legacy/Hot';

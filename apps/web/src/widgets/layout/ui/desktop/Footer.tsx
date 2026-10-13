@@ -48,6 +48,11 @@ const Footer = () => {
               <Link href="/deals" className="underline">
                 핫딜 최저가 모음
               </Link>
+              <span className="text-gray-400">ㅣ</span>
+              {/* 사용법·차별점·FAQ — 모든 PC 페이지에서 걸리는 내부 링크(검색엔진이 따라가는 상시 경로). */}
+              <Link href="/help" className="underline">
+                지름알림이란 · 자주 묻는 질문
+              </Link>
             </div>
             <p className="text-sm text-gray-600">
               Copyright {new Date().getFullYear()}. 지름알림. All rights reserved.
