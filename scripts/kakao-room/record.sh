@@ -13,8 +13,8 @@ DIR="$HOME/jirum-kakao-room"
 CSV="$DIR/counts.csv"
 [ -f "$CSV" ] || print "at,room,members" > "$CSV"
 now=$(date '+%Y-%m-%dT%H:%M:%S%z')
-# 방 이름 = 이 맥 카톡의 창 제목(핫딜 온리방 = open.kakao.com/o/gJZTWAAg, 핫딜 전체방 = gwexV0zg).
-osascript "$DIR/read-room-counts.applescript" "핫딜 온리방" "핫딜 전체방" | while IFS=$'\t' read -r room raw; do
+# 방 이름 = 이 맥 카톡의 창 제목(핫딜 온리방 = open.kakao.com/o/gJZTWAAg, 핫딜 전체방 = gwexV0zg, 핫딜 뷰티방 = pQ6ZAhSi).
+osascript "$DIR/read-room-counts.applescript" "핫딜 온리방" "핫딜 전체방" "핫딜 뷰티방" | while IFS=$'\t' read -r room raw; do
   [ -z "$room" ] && continue
   n=$(print -r -- "$raw" | tr -dc '0-9')
   print "$now,$room,${n:-NA}" >> "$CSV"
