@@ -4,7 +4,9 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { useDevice } from '@/shared/hooks/useDevice';
-import useMyRouter from '@/shared/hooks/useMyRouter';
+import useMyRouter, { type MyRouter } from '@/shared/hooks/useMyRouter';
+
+import { searchHref } from '../lib/search-href';
 
 const RECENT_KEYWORDS_KEY = 'gr-recent-keywords';
 const RECENT_KEYWORDS_LIMIT = 10;
@@ -44,7 +46,10 @@ export const useSearchInputViewModel = () => {
     if (!trimmed) return;
     // 새 키워드 검색 시 필터·정렬 리셋은 의도된 동작 — 새 검색=새 의도, 잔존 필터로 0건 함정 방지
     // (2026-07-22 디자인 리뷰 결정 6A).
-    router.replace(`/search?keyword=${encodeURIComponent(trimmed)}`);
+    // push — 검색A→검색B 뒤 뒤로가기가 A로 돌아와야 한다(replace 면 검색 전 페이지까지 튕겼다).
+    // 빈 검색 화면→첫 검색도 push: 뒤로가기가 최근 검색어 화면으로 오는 게 자연스럽다.
+    // 같은 검색어를 다시 제출하면 replace — 뒤로가기 한 번이 같은 화면에 막히지 않게. 필터·정렬 변경은 useSearchFilters 가 replace.
+    navigateToSearch(router, trimmed, keywordParam);
     setRecentKeyord(trimmed);
     setKeyword(trimmed);
   };
@@ -102,4 +107,15 @@ function setRecentKeyord(keyword: string) {
     RECENT_KEYWORDS_KEY,
     JSON.stringify(recentKeywords.slice(0, RECENT_KEYWORDS_LIMIT)),
   );
+}
+
+/** 새 검색어는 push, 지금 보고 있는 검색어면 replace(필터만 리셋). 칩·자동완성·입력 제출이 같이 쓴다. */
+export function navigateToSearch(
+  router: Pick<MyRouter, 'push' | 'replace'>,
+  keyword: string,
+  currentKeyword: string | null,
+) {
+  const href = searchHref(keyword);
+  if (keyword.trim() === currentKeyword?.trim()) router.replace(href);
+  else router.push(href);
 }

@@ -1,9 +1,12 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import SectionHeader from '@/shared/ui/SectionHeader';
+
+import { navigateToSearch } from '../hooks/useSearchInputViewModel';
 
 const KEYWORDS = [
   '쌀',
@@ -54,24 +57,19 @@ export default function RecommendationKeywords() {
 
 function Chip({ keyword }: { keyword: string }) {
   const router = useMyRouter();
+  const searchParams = useSearchParams();
 
   const handleClick = () => {
-    router.replace(`/search?keyword=${keyword}`);
-
-    // TODO: Need GTM Migration
-    // mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
-    //   keyword,
-    //   type: EVENT.PRODUCT_SEARCH.TYPE.RECOMMENDATION,
-    //   page: EVENT.PAGE.SEARCH,
-    // });
+    navigateToSearch(router, keyword, searchParams.get('keyword'));
   };
 
   return (
-    <div
+    <button
+      type="button"
       onClick={handleClick}
       className="rounded-full bg-gray-50 px-3 py-2 text-gray-900 hover:cursor-pointer hover:bg-gray-200"
     >
       {keyword}
-    </div>
+    </button>
   );
 }

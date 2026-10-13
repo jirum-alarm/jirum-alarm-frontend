@@ -122,6 +122,7 @@ const SearchInput = () => {
           value={displayValue}
           className="h-10 w-full bg-gray-50 px-3 text-sm outline-hidden"
           role="combobox"
+          aria-label="핫딜 검색"
           aria-expanded={dropdownOpen}
           aria-controls="search-suggestions"
           aria-autocomplete="list"
@@ -175,7 +176,8 @@ function ResetButton({ handleReset }: { handleReset: () => void }) {
   return (
     <button
       className="-m-2 grid h-full w-14 cursor-pointer place-items-center p-2 text-gray-300"
-      type="reset"
+      type="button"
+      aria-label="검색어 지우기"
       onClick={handleReset}
     >
       <Cancel />

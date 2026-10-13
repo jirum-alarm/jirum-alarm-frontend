@@ -10,6 +10,8 @@ import { cn } from '@/shared/lib/cn';
 import { Close } from '@/shared/ui/common/icons';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
+import { navigateToSearch } from '../hooks/useSearchInputViewModel';
+
 export default function RecentKeywords() {
   const [loading, setLoading] = useState(true);
   const [keywords, setKeywords] = useState<string[]>([]);
@@ -72,39 +74,34 @@ function Chip({
   handleRemoveRecentKeyword: (keyword: string) => void;
 }) {
   const router = useMyRouter();
+  const searchParams = useSearchParams();
 
   const handleClick = () => {
-    router.replace(`/search?keyword=${keyword}`);
-
-    // TODO: Need GTM Migration
-    // mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
-    //   keyword,
-    //   type: EVENT.PRODUCT_SEARCH.TYPE.RECENT,
-    //   page: EVENT.PAGE.SEARCH,
-    // });
+    navigateToSearch(router, keyword, searchParams.get('keyword'));
   };
 
-  const handleClose = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
-
-    handleRemoveRecentKeyword(keyword);
-  };
-
+  // 칩 = 검색어 버튼 + 삭제 버튼. button 안에 button 을 못 넣으므로 겉 div 가 칩 모양을 맡는다.
   return (
     <div
-      onClick={handleClick}
       className={cn(
-        'flex shrink-0 items-center gap-x-1 truncate hover:cursor-pointer hover:bg-gray-50',
+        'flex shrink-0 items-center gap-x-1 truncate hover:bg-gray-50',
         keywordChip.box,
         keywordChip.text,
       )}
     >
-      {keyword.slice(0, 15)}
-      {keyword.length > 15 ? '...' : ''}
+      <button type="button" onClick={handleClick} className="cursor-pointer truncate">
+        {keyword.slice(0, 15)}
+        {keyword.length > 15 ? '...' : ''}
+      </button>
 
-      <div onClick={handleClose}>
+      <button
+        type="button"
+        onClick={() => handleRemoveRecentKeyword(keyword)}
+        aria-label={`최근 검색어 ${keyword} 삭제`}
+        className="shrink-0 cursor-pointer"
+      >
         <Close />
-      </div>
+      </button>
     </div>
   );
 }
