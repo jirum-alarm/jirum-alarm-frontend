@@ -14,6 +14,7 @@ import useMyRouter from '@/shared/hooks/useMyRouter';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { getGraphqlErrorMessage } from '@/shared/lib/graphql-error';
 import {
+  hasJoinedOkachat,
   markOkachatJoined,
   OKACHAT_LINK,
   openOkachatDirect,
@@ -35,6 +36,10 @@ import {
   isFirstVisitHoldout,
   waitForDeviceId,
 } from '@/features/product-detail/lib/first-visit-holdout';
+import {
+  type BeautyRoomAssignment,
+  resolveBeautyRoom,
+} from '@/features/product-detail/lib/useBeautyRoomAssignment';
 
 /**
  * 웹 푸시를 못 받는 첫 방문자 A/B(2026-10-09~): control = 앱 설치 시트(안드로이드 인앱 비회원은 브라우저 넘기기),
@@ -85,13 +90,17 @@ export default function FirstVisitAlertSheet({
   device,
   title,
   productId,
+  categoryId,
 }: {
   device: CheckDeviceResult;
   title?: string;
   /** 상품 id — 첫 방문 배정 기록용(product.id 는 문자열로 온다) */
   productId?: string | number;
+  /** 화장품(3)이면 뷰티방 실험 beauty_detail_room_v1 — b 군의 카톡방 시트는 뷰티방을 권한다. */
+  categoryId?: number | null;
 }) {
   const [mode, setMode] = useState<SheetMode>('none');
+  const [beautyRoom, setBeautyRoom] = useState<BeautyRoomAssignment | null>(null);
   const keyword = deriveKeyword(title ?? '');
   const { isLoggedIn } = useIsLoggedIn();
 
@@ -132,22 +141,28 @@ export default function FirstVisitAlertSheet({
         recordArm('holdout');
         return;
       }
-      decide();
+      decide(resolveBeautyRoom(deviceId, categoryId));
     });
     return () => {
       cancelled = true;
     };
 
-    function decide() {
+    function decide(beauty: BeautyRoomAssignment | null) {
       const status = readPushStatus();
       const canPush = status === 'default' || status === 'ok';
       const hasKeyword = [...new Intl.Segmenter().segment(keyword)].length >= 2;
+      // 뷰티방 실험 b 군은 뷰티방 입장 기록으로 거른다(대조·비화장품은 핫딜방 그대로).
+      const room = beauty?.arm === 'b' ? 'beauty' : 'hotdeal';
       // 웹 푸시를 못 받는 사람(이미 카톡방에 있는 사람 제외)은 절반에게 카톡방 시트.
-      if (!(canPush && hasKeyword) && shouldShowOkachatSoftPrompt()) {
+      if (
+        !(canPush && hasKeyword) &&
+        shouldShowOkachatSoftPrompt({ joined: hasJoinedOkachat(room) })
+      ) {
         if (pickFirstVisitVariant() === 'okachat') {
           localStorage.setItem(FIRST_VISIT_SEEN_KEY, '1');
+          setBeautyRoom(beauty);
           show('okachat');
-          pushOkachatEvent('okachat_prompt_view', 'first_visit');
+          pushOkachatEvent('okachat_prompt_view', 'first_visit', room, beauty?.exp);
           return;
         }
       }
@@ -173,11 +188,17 @@ export default function FirstVisitAlertSheet({
       show('keyword');
       pushEvent('keyword_prompt_view', { keyword, push_status: status });
     }
-  }, [device.isJirumAlarmApp, device.isMobile, keyword, isLoggedIn, productId]);
+  }, [device.isJirumAlarmApp, device.isMobile, keyword, isLoggedIn, productId, categoryId]);
 
   if (mode === 'app') return <FirstVisitAppAlertModal device={device} />;
   if (mode === 'okachat') {
-    return <OkachatSheet isMobile={device.isMobile} onClose={() => setMode('none')} />;
+    return (
+      <OkachatSheet
+        isMobile={device.isMobile}
+        beautyRoom={beautyRoom}
+        onClose={() => setMode('none')}
+      />
+    );
   }
   if (mode === 'none') return null;
 
@@ -325,15 +346,40 @@ function KeywordAlertSheet({
   );
 }
 
-function OkachatSheet({ isMobile, onClose }: { isMobile: boolean; onClose: () => void }) {
-  const heading = (
+function OkachatSheet({
+  isMobile,
+  beautyRoom,
+  onClose,
+}: {
+  isMobile: boolean;
+  /** 뷰티방 실험 배정(화장품 상세만). b 군이면 뷰티방을 권한다. */
+  beautyRoom: BeautyRoomAssignment | null;
+  onClose: () => void;
+}) {
+  const beauty = beautyRoom?.arm === 'b';
+  const room = beauty ? 'beauty' : 'hotdeal';
+  const link = beauty ? beautyRoom.beautyLink : OKACHAT_LINK;
+  const exp = beautyRoom?.exp;
+  const heading = beauty ? (
+    <>
+      뷰티 핫딜만,
+      <br />
+      카톡방에서 받아보세요
+    </>
+  ) : (
     <>
       핫딜, 카톡방에서
       <br />
       바로 받아보세요
     </>
   );
-  const bodyText = (
+  const bodyText = beauty ? (
+    <>
+      앱 설치 없이 카카오톡 오픈채팅방으로
+      <br />
+      화장품·스킨케어 핫딜만 모아 보내드려요.
+    </>
+  ) : (
     <>
       앱 설치 없이 카카오톡 오픈채팅방으로
       <br />
@@ -343,13 +389,13 @@ function OkachatSheet({ isMobile, onClose }: { isMobile: boolean; onClose: () =>
   const actions = (
     <div className="mt-5 flex flex-col gap-y-2">
       <a
-        href={OKACHAT_LINK}
+        href={link}
         target="_blank"
         rel="noopener noreferrer"
         onClick={(e) => {
-          markOkachatJoined();
-          pushOkachatEvent('okachat_prompt_click', 'first_visit');
-          if (openOkachatDirect('first_visit')) e.preventDefault();
+          markOkachatJoined(room);
+          pushOkachatEvent('okachat_prompt_click', 'first_visit', room, exp);
+          if (openOkachatDirect('first_visit', { room, link, exp })) e.preventDefault();
           onClose();
         }}
         className="bg-primary-500 text-fixed-900 flex h-12 w-full items-center justify-center rounded-lg font-semibold"

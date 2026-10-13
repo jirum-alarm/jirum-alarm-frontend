@@ -67,6 +67,7 @@ export default async function DesktopProductDetailPage({
           device={device}
           title={initialProduct?.title}
           productId={initialProduct?.id}
+          categoryId={initialProduct?.categoryId}
         />
       )}
       {/* google-anno-skip: 애드센스 '광고 인텐트'가 UI 글자("가격 추이"의 "가격" 등)를 광고 링크로 바꾸고
@@ -88,7 +89,10 @@ export default async function DesktopProductDetailPage({
                 priority
               />
               {/* 비오카방 유입만 soft 안내. 헤더/푸터 아이콘만으로는 방 존재가 안 전달된다. */}
-              <SoftKakaoOpenChatPrompt />
+              <SoftKakaoOpenChatPrompt
+                categoryId={initialProduct?.categoryId}
+                productId={productId}
+              />
               <CoupangPartnerGuide productId={productId} />
             </div>
 

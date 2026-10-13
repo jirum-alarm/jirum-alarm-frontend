@@ -5,13 +5,18 @@ import { useState } from 'react';
 
 import { ProductService } from '@/shared/api/product';
 import { getEntry } from '@/shared/lib/entry';
-import { buildPostPurchasePromptQueue, type PostPurchasePromptKind } from '@/shared/lib/okachat';
+import {
+  buildPostPurchasePromptQueue,
+  hasJoinedOkachat,
+  type PostPurchasePromptKind,
+} from '@/shared/lib/okachat';
 import Button from '@/shared/ui/common/Button';
 import TopButton from '@/shared/ui/TopButton';
 
 import { ProductQueries } from '@/entities/product';
 
 import { LikeButton } from '@/features/product-actions/ui';
+import { useBeautyRoomAssignment } from '@/features/product-detail/lib/useBeautyRoomAssignment';
 import PostPurchaseKakaoPrompt from '@/features/product-detail/ui/PostPurchaseKakaoPrompt';
 import PostPurchaseKeywordPrompt from '@/features/product-detail/ui/PostPurchaseKeywordPrompt';
 
@@ -27,12 +32,18 @@ export default function BottomCTA({
 
   const phase = promptQueue[0] ?? null;
   const advancePrompt = () => setPromptQueue((q) => q.slice(1));
+  // 화장품 상세 실험 beauty_detail_room_v1 — b 군은 구매 후 권유도 뷰티방(입장 기록도 뷰티방 것으로 본다).
+  const beautyRoom = useBeautyRoomAssignment(product?.categoryId);
 
   // GTM Click URL 변수는 클릭된 안쪽 <button>(href 없음)을 읽어 click_url 이 99.7% 빈값이었다.
   // href·수익화 여부를 dataLayer 로 명시 전송 — GTM 태그를 customEvent 트리거로 전환해야 반영됨 (2026-07-20).
   const handlePurchaseClick = () => {
     // 구매 링크는 target=_blank 라 유저는 이 페이지에 남는다. 그 순간에만 알림/오카방을 권한다.
-    setPromptQueue(buildPostPurchasePromptQueue(isUserLogin));
+    setPromptQueue(
+      buildPostPurchasePromptQueue(isUserLogin, {
+        joined: hasJoinedOkachat(beautyRoom?.arm === 'b' ? 'beauty' : 'hotdeal'),
+      }),
+    );
     // fire-and-forget — 새 탭으로 나가도 이 페이지에 남아 요청이 끝난다.
     void ProductService.collectPurchaseClick({
       productId,
@@ -56,6 +67,7 @@ export default function BottomCTA({
         show={phase === 'kakao'}
         onClose={advancePrompt}
         className="border-b border-gray-100 px-5"
+        beautyRoom={beautyRoom}
       />
       <PostPurchaseKeywordPrompt
         show={phase === 'keyword'}

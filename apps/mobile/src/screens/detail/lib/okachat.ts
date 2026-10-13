@@ -1,23 +1,30 @@
 import {Analytics} from '@/shared/lib/analytics/ga4';
+import type {OkachatRoom} from '@/shared/lib/okachat';
 
 // 입장 기록·열기는 홈 배너도 써서 shared 에 둔다.
 export {
+  OKACHAT_BEAUTY_LINK,
   OKACHAT_LINK,
   hasJoinedOkachat,
   markOkachatJoined,
   openOkachat,
+  type OkachatRoom,
 } from '@/shared/lib/okachat';
 
 export type PostPurchasePromptKind = 'kakao' | 'keyword';
 
 export type OkachatPlacement = 'soft' | 'after_purchase';
 
-/** web `features/product-detail/lib/okachat.ts` pushOkachatEvent 와 같은 이름·파라미터. */
+/**
+ * web `shared/lib/okachat.ts` pushOkachatEvent 와 같은 이름·파라미터(placement·room·exp).
+ * exp = 실험 군 표식(`beauty_detail_room_v1:b` 등) — 실험 대상 화면에서만 싣는다.
+ */
 export function trackOkachatEvent(
   event: 'okachat_prompt_view' | 'okachat_prompt_click',
   placement: OkachatPlacement,
+  {room = 'hotdeal', exp}: {room?: OkachatRoom; exp?: string} = {},
 ): void {
-  Analytics.track(event, {placement});
+  Analytics.track(event, {placement, room, exp});
 }
 
 /**

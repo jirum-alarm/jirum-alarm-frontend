@@ -68,6 +68,7 @@ function ProductDetailPage({
           device={device}
           title={initialProduct?.title}
           productId={initialProduct?.id}
+          categoryId={initialProduct?.categoryId}
         />
       )}
 
@@ -104,7 +105,11 @@ function ProductDetailPage({
 
             {/* 비오카방 유입만 soft 안내. 오카방 UTM·이미 입장한 유저는 SoftKakao 가 숨김.
                 광고 슬롯이 비어 있는 시간이 대부분이라 상품 정보 바로 아래 = 보이는 자리. */}
-            <SoftKakaoOpenChatPrompt className="mx-5 mb-4" />
+            <SoftKakaoOpenChatPrompt
+              className="mx-5 mb-4"
+              categoryId={initialProduct?.categoryId}
+              productId={productId}
+            />
 
             <CoupangPartnerGuide productId={productId} />
 

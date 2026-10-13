@@ -20,6 +20,10 @@ const joinedKey = (room: OkachatRoom) =>
 /** markOkachatJoined 가 window 에 쏘는 이벤트 — 떠 있는 권유가 듣고 숨는다. */
 export const OKACHAT_JOINED_EVENT = 'jirum:okachat-joined';
 
+/** 방별 입장 이벤트 이름. 핫딜방은 옛 이름 그대로 — 다른 방 입장은 핫딜방 권유를 숨기지 않는다. */
+export const okachatJoinedEvent = (room: OkachatRoom) =>
+  room === 'hotdeal' ? OKACHAT_JOINED_EVENT : `${OKACHAT_JOINED_EVENT}:${room}`;
+
 export function hasJoinedOkachat(room: OkachatRoom = 'hotdeal'): boolean {
   if (typeof window === 'undefined') return false;
   try {
@@ -36,11 +40,10 @@ export function markOkachatJoined(room: OkachatRoom = 'hotdeal'): void {
   } catch {
     // private mode 등 — 권유만 반복될 수 있음, 클릭 자체는 동작
   }
-  // 아래 이벤트는 핫딜방 권유들이 듣는다. 다른 방 입장으로 핫딜방 권유를 숨기지 않는다.
-  if (room !== 'hotdeal') return;
-  // 같은 화면에 떠 있는 다른 오카방 권유(상세 soft 카드 등)도 바로 숨도록 알린다 —
+  // 같은 화면에 떠 있는 같은 방 권유(상세 soft 카드 등)도 바로 숨도록 알린다 —
   // 예전엔 첫 방문 시트에서 들어가도 아래 카드가 그대로 남아 같은 방을 또 권했다.
-  window.dispatchEvent(new Event(OKACHAT_JOINED_EVENT));
+  // 이벤트 이름이 방마다 달라 다른 방 입장으로 핫딜방 권유가 숨지 않는다.
+  window.dispatchEvent(new Event(okachatJoinedEvent(room)));
 }
 
 export type OkachatPlacement =
@@ -90,7 +93,11 @@ export function shouldOpenOkachatDirect(ua: string): boolean {
  */
 export function openOkachatDirect(
   placement: OkachatPlacement,
-  { room = 'hotdeal', link = OKACHAT_LINK }: { room?: OkachatRoom; link?: string } = {},
+  {
+    room = 'hotdeal',
+    link = OKACHAT_LINK,
+    exp,
+  }: { room?: OkachatRoom; link?: string; exp?: string } = {},
 ): boolean {
   if (typeof window === 'undefined' || !shouldOpenOkachatDirect(window.navigator.userAgent)) {
     return false;
@@ -108,7 +115,7 @@ export function openOkachatDirect(
     settled = true;
     document.removeEventListener('visibilitychange', onVisibility);
     window.removeEventListener('pagehide', onPageHide);
-    pushOkachatHandoff(placement, result, room);
+    pushOkachatHandoff(placement, result, room, exp);
   };
   const onPageHide = () => settle('fallback');
 
@@ -133,12 +140,14 @@ function pushOkachatHandoff(
   placement: OkachatPlacement,
   result: 'app' | 'fallback',
   room: OkachatRoom,
+  exp?: string,
 ) {
   (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
     event: 'okachat_handoff',
     placement,
     result,
     room,
+    ...(exp ? { exp } : {}),
   });
 }
 
@@ -186,15 +195,21 @@ export function buildPostPurchasePromptQueue(
   return ['keyword', 'kakao'];
 }
 
+/**
+ * exp = 실험 군 표식 `<실험id>:<군>`(예: `beauty_detail_room_v1:b`). 실험 대상 화면에서만 싣는다 —
+ * GA4 에서 같은 이벤트를 군별로 가른다.
+ */
 export function pushOkachatEvent(
   event: 'okachat_prompt_view' | 'okachat_prompt_click',
   placement: OkachatPlacement,
   room: OkachatRoom = 'hotdeal',
+  exp?: string,
 ) {
   if (typeof window === 'undefined') return;
   (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
     event,
     placement,
     room,
+    ...(exp ? { exp } : {}),
   });
 }

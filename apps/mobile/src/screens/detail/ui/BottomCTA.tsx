@@ -36,6 +36,8 @@ import {
   type PostPurchasePromptKind,
 } from '../lib/okachat';
 import {usePurchaseBrowserArm} from '../lib/purchase-browser-experiment';
+import {useBeautyRoomAssignment} from '../lib/beauty-room-experiment';
+
 import PostPurchaseKakaoPrompt from './PostPurchaseKakaoPrompt';
 import PostPurchaseKeywordPrompt from './PostPurchaseKeywordPrompt';
 import TopButton from './TopButton';
@@ -65,6 +67,8 @@ export default function BottomCTA({
   const navigation =
     useNavigation<NativeStackNavigationProp<TabStackParamList>>();
   const purchaseArm = usePurchaseBrowserArm();
+  // 화장품 상세 실험 beauty_detail_room_v1 — b 군은 구매 후 권유도 뷰티방(입장 기록도 뷰티방 것으로 본다).
+  const beautyRoom = useBeautyRoomAssignment(product.categoryId);
   const {requireLogin} = useRequireLogin(`/products/${productId}`);
 
   const phase = promptQueue[0] ?? null;
@@ -134,7 +138,9 @@ export default function BottomCTA({
     } else {
       openInAppBrowser(product.detailUrl);
     }
-    const joined = await hasJoinedOkachat();
+    const joined = await hasJoinedOkachat(
+      beautyRoom?.arm === 'b' ? 'beauty' : 'hotdeal',
+    );
     setPromptQueue(buildPostPurchasePromptQueue(joined));
   }, [
     product.detailUrl,
@@ -144,6 +150,7 @@ export default function BottomCTA({
     product.mallName,
     navigation,
     purchaseArm,
+    beautyRoom,
   ]);
 
   const isWishlisted = !!stats?.isMyWishlist;
@@ -163,6 +170,7 @@ export default function BottomCTA({
       <PostPurchaseKakaoPrompt
         show={phase === 'kakao'}
         onClose={advancePrompt}
+        beautyRoom={beautyRoom}
       />
       <PostPurchaseKeywordPrompt
         show={phase === 'keyword'}

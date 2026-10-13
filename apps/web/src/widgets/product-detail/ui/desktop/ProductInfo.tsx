@@ -9,7 +9,11 @@ import type { ProductDealEvidence } from '@/shared/api/product/product.service';
 import { hotdealTextMap } from '@/shared/config/hotdeal';
 import { cn } from '@/shared/lib/cn';
 import { getEntry } from '@/shared/lib/entry';
-import { buildPostPurchasePromptQueue, type PostPurchasePromptKind } from '@/shared/lib/okachat';
+import {
+  buildPostPurchasePromptQueue,
+  hasJoinedOkachat,
+  type PostPurchasePromptKind,
+} from '@/shared/lib/okachat';
 import { pushRecentViewedProduct } from '@/shared/lib/recentViewedProducts';
 import Badge from '@/shared/ui/common/Badge';
 import Button from '@/shared/ui/common/Button';
@@ -29,6 +33,7 @@ import { LikeButton, RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
 import { dealFreshnessAt, isSeenBasedFreshness } from '@/features/product-detail/lib/product-seo';
 import { buildProductShareDescription } from '@/features/product-detail/lib/share-card';
+import { useBeautyRoomAssignment } from '@/features/product-detail/lib/useBeautyRoomAssignment';
 import DealEvidenceBlock from '@/features/product-detail/ui/DealEvidenceBlock';
 import ViewerCount from '@/features/product-detail/ui/desktop/ViewerCount';
 import HotdealCriteriaBadge from '@/features/product-detail/ui/HotdealCriteriaBadge';
@@ -66,6 +71,8 @@ export default function ProductInfo({
   const [promptQueue, setPromptQueue] = useState<PostPurchasePromptKind[]>([]);
   const phase = promptQueue[0] ?? null;
   const advancePrompt = () => setPromptQueue((q) => q.slice(1));
+  // 화장품 상세 실험 beauty_detail_room_v1 — b 군은 구매 후 권유도 뷰티방(입장 기록도 뷰티방 것으로 본다).
+  const beautyRoom = useBeautyRoomAssignment(product.categoryId);
 
   useEffect(() => {
     pushRecentViewedProduct({
@@ -283,7 +290,11 @@ export default function ProductInfo({
             href={product.detailUrl ?? ''}
             // 모바일 BottomCTA 와 동일 — GTM Click URL 빈값 문제로 dataLayer 명시 전송 (2026-07-20)
             onClick={() => {
-              setPromptQueue(buildPostPurchasePromptQueue(isUserLogin));
+              setPromptQueue(
+                buildPostPurchasePromptQueue(isUserLogin, {
+                  joined: hasJoinedOkachat(beautyRoom?.arm === 'b' ? 'beauty' : 'hotdeal'),
+                }),
+              );
               void ProductService.collectPurchaseClick({
                 productId,
                 source: 'detail_desktop',
@@ -314,6 +325,7 @@ export default function ProductInfo({
             show={phase === 'kakao'}
             onClose={advancePrompt}
             className="rounded-lg border border-gray-100 px-4"
+            beautyRoom={beautyRoom}
           />
           <PostPurchaseKeywordPrompt
             show={phase === 'keyword'}

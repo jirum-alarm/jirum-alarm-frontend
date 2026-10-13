@@ -373,7 +373,10 @@ function NativeDetail({
           ) : null}
         </View>
         {/* web 순서: 카톡방 → 쿠팡 고지 → 만료 경고 → 가격추이. 광고는 앱에서 제거. */}
-        <KakaoOpenChatPrompt />
+        <KakaoOpenChatPrompt
+          categoryId={product.categoryId}
+          productId={Number(product.id)}
+        />
         <AffiliateNotice mallName={product.mallName} variant="coupang" />
         <View
           onLayout={e => {
