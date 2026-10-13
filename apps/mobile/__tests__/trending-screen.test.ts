@@ -168,8 +168,21 @@ describe('CTR 계측 (web 과 같은 출처·규칙)', () => {
 
   it('★카테고리를 바꾸면 dedup 집합을 버린다', () => {
     // 유지하면 새 카테고리 상단이 "이미 본 것"이 되어 분모가 빈다.
-    expect(screen).toContain('key={`live-${activeCategoryId}`}');
-    expect(screen).toContain('key={`ranking-${activeCategoryId}`}');
+    expect(screen).toContain('key={`live-${category.id}`}');
+    expect(screen).toContain('key={`ranking-${category.id}`}');
+  });
+
+  it('★좌우 스와이프 페이저는 보고 있는 페이지의 목록만 그린다', () => {
+    // 옆 페이지 목록까지 그리면 가로로 화면 밖인데도 onViewableItemsChanged 가 "보였다"로 세서
+    // 노출 분모가 부푼다. 옆 페이지는 스켈레톤.
+    const pager = read('src/entities/trending/ui/CategoryPager.tsx');
+    expect(pager).toContain('pagingEnabled');
+    expect(pager).toContain(
+      'item.id === activeId ? renderPage(item) : renderPlaceholder()',
+    );
+    expect(screen).toContain('onSwipeTo={handleSwipeCategory}');
+    // 스와이프로 바꾼 것도 store 를 거친다(칩과 같은 입구).
+    expect(screen).toContain("selectCategory(id, 'swipe')");
   });
 });
 
