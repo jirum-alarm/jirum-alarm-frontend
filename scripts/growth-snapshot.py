@@ -7,6 +7,7 @@
 - loop.json    북극성(알림 경유 재방문)과 그 앞단 — GA4 + 운영 MySQL + 카톡방 counts.csv. funnel-weekly.py 와 같은 정의
 - experiments.json 실험 등록부(crawling-server src/experiment/experiment-registry.ts)
 - linkmix.json  구매클릭(서버 purchase_link_click, W40~)을 상품의 지금 수익링크 제휴사로 나눈 주간 수 — Mongo + MySQL product
+- nolink_source.json 마지막 완료 주 구매클릭을 딜 출처별로 — 그중 링크 없는 클릭 수·비율
 - list_ctr.json 웹 카드 출처별 최근 7일 화면 노출(post_impression)·출처 붙은 상세 진입(post_view)
 
 수동: python3 scripts/growth-snapshot.py [주 수=16]  → ~/.local/share/jirum/growth/*.json
@@ -216,15 +217,16 @@ def mongo():
 
 
 def link_of(pids):
-    """상품별 지금의 수익링크 제휴사 — 링크가 비었으면 none. 클릭 시점이 아니라 지금 상태다."""
+    """상품별 (지금의 수익링크 제휴사, 출처) — 링크가 비었으면 none. 클릭 시점이 아니라 지금 상태다."""
     if not pids:
         return {}
-    sql = ("SELECT id, IF(profitLink IS NULL OR profitLink='', 'none', COALESCE(profitLinkProvider, 'other')) "
-           f"FROM product WHERE id IN ({','.join(p for p in pids if p.isdigit())})")
+    sql = ("SELECT p.id, IF(p.profitLink IS NULL OR p.profitLink='', 'none', COALESCE(p.profitLinkProvider, 'other')), "
+           "COALESCE(pr.nameKr, pr.name, '?') FROM product p LEFT JOIN provider pr ON pr.id = p.providerId "
+           f"WHERE p.id IN ({','.join(p for p in pids if p.isdigit())})")
     tsv = subprocess.check_output(KUBE + ["exec", "-i", "mysql-0", "--", "bash", "-c",
                                           'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -D crawling -B -N 2>/dev/null'],
                                   input=sql, text=True, timeout=120).splitlines()
-    return dict(line.split("\t") for line in tsv if "\t" in line)
+    return {c[0]: (c[1], c[2]) for c in (line.split("\t") for line in tsv) if len(c) == 3}
 
 
 log = lambda m: print(f"[{dt.datetime.now():%H:%M:%S}] {m}", file=sys.stderr, flush=True)
@@ -276,10 +278,25 @@ for k, mon in zip(keys, mondays):
     row = {"week": label(k), "week_start": str(mon), **{p: 0 for p in LINKS}, "other": 0}
     for w, pid, n in mg["clicks"]:
         if w == k:
-            p = links.get(pid, "other")
+            p = links.get(pid, ("other", "?"))[0]
             row[p if p in LINKS else "other"] += n
     row["clicks"] = sum(row[p] for p in LINKS + ["other"])
     linkmix.append(row)
+
+# 링크 없는 구매클릭을 딜 출처(커뮤니티·소싱)별로 — 마지막 완료 주. 어느 출처의 무링크부터 메울지 고른다.
+last_k = max((w for w, _, _ in mg["clicks"] if w <= keys[-1]), default=None)
+by_src = {}
+for w, pid, n in mg["clicks"]:
+    if w != last_k:
+        continue
+    link, src = links.get(pid, ("other", "?"))
+    r = by_src.setdefault(src, {"source": src, "clicks": 0, "no_link": 0})
+    r["clicks"] += n
+    r["no_link"] += n if link == "none" else 0
+nolink_source = sorted(by_src.values(), key=lambda r: -r["no_link"])
+for r in nolink_source:
+    r["week"] = label(last_k)
+    r["no_link_rate"] = round(r["no_link"] / r["clicks"], 4) if r["clicks"] else None
 
 imp = {s: n for t, s, n in mg["lists"] if t == "post_impression"}
 view = {s: n for t, s, n in mg["lists"] if t == "post_view"}
@@ -293,7 +310,7 @@ os.makedirs(OUT, exist_ok=True)
 meta = {"generated": dt.datetime.now().astimezone().isoformat(timespec="seconds"), "from": str(start), "to": str(last_sun)}
 log("실험 등록부"); exps = experiments()
 for name, rows in (("money", money), ("traffic", traffic), ("loop", loop), ("room", readings), ("experiments", exps),
-                   ("linkmix", linkmix), ("list_ctr", list_ctr)):
+                   ("linkmix", linkmix), ("list_ctr", list_ctr), ("nolink_source", nolink_source)):
     with open(os.path.join(OUT, f"{name}.json"), "w") as f:
         json.dump({"meta": meta, "rows": rows}, f, ensure_ascii=False, indent=1)
 print(f"{OUT} — {meta['from']} ~ {meta['to']} ({WEEKS}주)")
