@@ -10,6 +10,11 @@ import { formatHubCount, keywordHubPath } from '@/entities/keyword-hub/lib/keywo
 
 import DealsMobileHeader from '../deals/[slug]/DealsMobileHeader';
 
+// 빌드 때 정적 생성하지 않는다 — 빌드 API(dev)가 keywordHubs 를 모르면 400 인데, 정적 생성 중 데이터 캐시 붙은 요청이
+// 400 을 받으면 응답 본문 읽기가 안 끝나 60초×3 으로 빌드가 죽었다(2026-10-14 deploy-web-staging 실측·로컬 재현).
+// 요청 시 렌더해도 데이터 캐시(fetch revalidate)는 그대로라 API 부하는 같다.
+export const dynamic = 'force-dynamic';
+
 const title = '키워드별 핫딜 모음 | 지름알림';
 const buildDescription = (count: number) =>
   `삼다수·햇반·기저귀·노트북 등 ${count}개 키워드로 커뮤니티 핫딜을 모았어요. 키워드를 누르면 최근 30일 핫딜을 볼 수 있어요.`;

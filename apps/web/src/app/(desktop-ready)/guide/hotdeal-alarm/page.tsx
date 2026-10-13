@@ -63,6 +63,11 @@ const howToLd = {
   })),
 };
 
+// 빌드 때 정적 생성하지 않는다 — 빌드 API(dev)가 keywordHubs 를 모르면 400 인데, 정적 생성 중 데이터 캐시 붙은 요청이
+// 400 을 받으면 응답 본문 읽기가 안 끝나 60초×3 으로 빌드가 죽었다(2026-10-14 deploy-web-staging 실측·로컬 재현).
+// 요청 시 렌더해도 데이터 캐시(fetch revalidate)는 그대로라 API 부하는 같다.
+export const dynamic = 'force-dynamic';
+
 export default async function HotdealAlarmGuidePage() {
   // 알림을 건 사람이 많은 순 — 이 섹션 제목이 "요즘 많이 받는 키워드"다.
   const popular = [...(await fetchKeywordHubs())]
