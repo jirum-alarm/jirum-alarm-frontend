@@ -83,6 +83,13 @@ const webAutocomplete = web(
 const webRecent = web('widgets/search/ui/RecentKeywords.tsx');
 const webRecommend = web('widgets/search/ui/RecommendationKeywords.tsx');
 const webNotFound = web('widgets/search/ui/ProductNotFound.tsx');
+// 0건 버튼·결과 위 한 줄이 같이 쓰는 등록 로직(로그인 게이트·keyword_intent 가 여기 있다).
+const webKeywordAlert = web('widgets/search/hooks/useSearchKeywordAlert.ts');
+const webAlertBar = web('widgets/search/ui/SearchKeywordAlertBar.tsx');
+const webEndedRescue = web('widgets/search/ui/EndedDealsRescue.tsx');
+const webRegisterSource = web('features/mypage/model/update-keyword.ts');
+const appEndedRescue = read('src/screens/search/ui/EndedDealsRescue.tsx');
+const appRegisterSource = read('src/shared/lib/analytics/keyword-tracking.ts');
 const webCardTracking = web('entities/product-list/model/card-tracking.ts');
 
 /** `[...]` 안의 따옴표 문자열을 순서대로 뽑는다. */
@@ -351,8 +358,8 @@ describe('안 옮긴 것 — 도달 불가/불필요를 못박는다', () => {
   it('비로그인 게이트·keyword_intent 는 앱에서 도달 불가다', () => {
     // RootNavigator 가 앱 전체를 로그인(또는 게스트) 뒤에 둔다 → 옮기면 0건짜리 죽은 코드.
     // web 은 2026-10-09 부터 로그인 벽 대신 게스트 계정으로 바로 등록한다(useAlertSession).
-    expect(webNotFound).toContain('useAlertSession');
-    expect(webNotFound).toContain('keyword_intent');
+    expect(webKeywordAlert).toContain('useAlertSession');
+    expect(webKeywordAlert).toContain('keyword_intent');
     for (const source of appCode) {
       expect(source).not.toContain('useRedirectIfNotLoggedIn');
       expect(source).not.toContain('keyword_intent');
@@ -460,5 +467,45 @@ describe('재사용 — 목록·카드를 새로 만들지 않았다', () => {
     expect(webListVm).toContain('placeholderData: keepPreviousData');
     expect(queries).toContain('placeholderData: keepPreviousData');
     expect(results).toContain('isPlaceholderData');
+  });
+});
+
+describe('검색어 알림·종료 딜 구제 — web 과 같은 규칙', () => {
+  it('결과 위 한 줄은 두 플랫폼 모두 search_bar 로 센다', () => {
+    expect(webAlertBar).toContain("source: 'search_bar'");
+    expect(webRegisterSource).toContain("| 'search_bar'");
+    expect(appRegisterSource).toContain("| 'search_bar'");
+    expect(results).toContain('variant="bar"');
+  });
+
+  it('결과 위 한 줄은 같은 문구다', () => {
+    for (const phrase of [
+      ' 새 핫딜, 놓치지 마세요',
+      ' 새 핫딜을 알려드리고 있어요',
+    ]) {
+      expect(webAlertBar).toContain(phrase);
+      expect(
+        read('src/features/keyword-prompt/ui/KeywordAlertButton.tsx'),
+      ).toContain(phrase);
+    }
+  });
+
+  it('진짜 0건이면 종료 포함으로 한 번 더 세어 「종료된 딜 N건 보기」를 낸다', () => {
+    // 종료 포함(isEnd true)으로 한 페이지(20)를 받아 첫 행 estimatedTotal 을 건수로 쓴다.
+    // limit 1 은 서버 후처리로 첫 행이 걸러지면 0건으로 오판한다(2026-10-13 실측).
+    expect(webEndedRescue).toContain('limit: 20, keyword, isEnd: true');
+    expect(queries).toContain("'ended-count'");
+    expect(queries).toContain(
+      'limit: SEARCH_LIMIT,\n          keyword,\n          isEnd: true',
+    );
+    for (const source of [webEndedRescue, appEndedRescue]) {
+      expect(source).toContain('진행 중인 딜은 없어요');
+      expect(source).toContain('ESTIMATED_TOTAL_CAP = 5000');
+      expect(source).toContain('search_ended_rescue_click');
+    }
+    // 누르면 '품절 포함'을 켠다. 필터가 하나라도 켜져 있으면 이 화면(SearchNotFound)에 오지 않는다.
+    expect(webResult).toContain('setFilters({ ended: true })');
+    expect(results).toContain('setFilters({ended: true})');
+    expect(notFound).toContain('<EndedDealsRescue');
   });
 });

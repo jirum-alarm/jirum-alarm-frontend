@@ -10,6 +10,8 @@ import {Analytics} from '@/shared/lib/analytics/ga4';
 
 import KeywordAlertButton from '@/features/keyword-prompt/ui/KeywordAlertButton';
 
+import EndedDealsRescue from './EndedDealsRescue';
+
 import SectionHeader from '@/shared/components/ui/SectionHeader';
 
 /**
@@ -29,10 +31,13 @@ import SectionHeader from '@/shared/components/ui/SectionHeader';
 export default function SearchNotFound({
   keyword,
   onPressProduct,
+  onShowEnded,
   bottomInset,
 }: {
   keyword: string;
   onPressProduct: (id: number) => void;
+  /** 종료된 딜만 있는 검색어일 때 '품절 포함'을 켠다. */
+  onShowEnded: () => void;
   bottomInset: number;
 }) {
   const {data: hotDeals} = useQuery(TrendingQueries.recommended());
@@ -49,6 +54,9 @@ export default function SearchNotFound({
         styles.content,
         {paddingBottom: 24 + bottomInset},
       ]}>
+      {/* 지난 딜만 있는 검색어면 맨 위에 '품절 포함'으로 넘어갈 길을 낸다(없으면 안 그린다). */}
+      <EndedDealsRescue keyword={keyword} onShowEnded={onShowEnded} />
+
       <View className="items-center px-5 pb-8">
         {/*
           ⚠️web 은 `ErrorIllust`(240x240, 그라디언트 3개)를 쓴다. 그 SVG 는

@@ -55,6 +55,8 @@ export class SearchQueries {
     all: ['search'] as const,
     products: (keyword: string, filters: SearchFilters) =>
       [...this.keys.all, 'products', keyword, filters] as const,
+    endedCount: (keyword: string) =>
+      [...this.keys.all, 'ended-count', keyword] as const,
     suggestions: (prefix: string) =>
       [...this.keys.all, 'suggestions', prefix] as const,
     categories: () => [...this.keys.all, 'categories'] as const,
@@ -97,6 +99,33 @@ export class SearchQueries {
       retry: RETRY,
       staleTime: STALE_TIME,
       enabled: keyword.trim().length > 0,
+    });
+  }
+
+  /**
+   * 진짜 0건(필터 없음·종료 제외)일 때 같은 검색어를 **종료 포함**으로 한 번 더 센다.
+   * 지금 진행 중인 딜이 0건이므로 종료 포함 총량 = 종료된 딜 수. 건수는 첫 행의 estimatedTotal.
+   * web: widgets/search/ui/EndedDealsRescue.tsx 와 같은 조회(limit 20·isEnd true).
+   */
+  static endedCount(keyword: string) {
+    return queryOptions({
+      queryKey: this.keys.endedCount(keyword),
+      queryFn: async () => {
+        // limit 은 목록과 같은 20 — 서버가 검색 엔진에서 limit 만큼 받은 뒤 걸러 내서,
+        // 1로 물으면 첫 행이 걸러질 때 0건으로 오판한다(2026-10-13 실측).
+        const rows = (await SearchService.getProducts({
+          limit: SEARCH_LIMIT,
+          keyword,
+          isEnd: true,
+        })) as SearchProductCard[];
+        return {
+          hasEnded: rows.length > 0,
+          count: rows[0]?.estimatedTotal ?? null,
+        };
+      },
+      enabled: keyword.trim().length > 0,
+      staleTime: STALE_TIME,
+      retry: RETRY,
     });
   }
 

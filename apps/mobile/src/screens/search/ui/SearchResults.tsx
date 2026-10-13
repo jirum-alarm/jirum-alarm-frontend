@@ -50,7 +50,7 @@ export default function SearchResults({
   onPressProduct: (id: number) => void;
   bottomInset: number;
 }) {
-  const {filters, hasActiveFilters, resetFilters} = controller;
+  const {filters, setFilters, hasActiveFilters, resetFilters} = controller;
 
   const queryClient = useQueryClient();
   const searchQuery = SearchQueries.products(keyword, filters);
@@ -200,6 +200,7 @@ export default function SearchResults({
             <SearchNotFound
               keyword={keyword}
               onPressProduct={onPressProduct}
+              onShowEnded={() => setFilters({ended: true})}
               bottomInset={bottomInset}
             />
           )}
