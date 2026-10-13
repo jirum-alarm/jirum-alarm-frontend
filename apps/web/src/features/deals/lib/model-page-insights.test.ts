@@ -205,6 +205,46 @@ describe('buildTimingInsight', () => {
     assert.equal(t.isActivePrice, false);
   });
 
+  // 백엔드 model-page-price-verdict.ts(buildPriceVerdict)와 같은 규칙 — 목록 카드와 상세가 어긋나지 않게.
+  it('증정 딜도 진행 중 건수엔 세고, 판정에선 뺀다', () => {
+    const t = buildTimingInsight({
+      deals: [
+        deal(9000, '2026-09-30T00:00:00Z', { title: '신라면 40개 + 포인트 증정' }),
+        deal(15500, '2026-09-30T00:00:00Z'),
+      ],
+      histPrices,
+      histBasis: 'total',
+      now,
+    });
+    assert.equal(t.activeDealCount, 2);
+    assert.equal(t.current, 15500);
+  });
+
+  it('증정 딜만 진행 중이면 "없음"이라 하지 않고 판정은 보류한다', () => {
+    const t = buildTimingInsight({
+      deals: [deal(9000, '2026-09-30T00:00:00Z', { title: '신라면 40개 + 포인트 증정' })],
+      histPrices,
+      histBasis: 'total',
+      heroPrice: { minPrice: 15900, label: '40개', unitPrice: null, unitLabel: null },
+      now,
+    });
+    assert.equal(t.activeDealCount, 1);
+    assert.equal(t.tone, 'unknown');
+    assert.equal(t.label, '증정·혜택 딜만 진행 중');
+    assert.equal(t.isActivePrice, false);
+  });
+
+  it('"평소보다 저렴"은 반올림한 절약률 10% 이상 — 백엔드 cheap 과 같은 경계', () => {
+    const t = buildTimingInsight({
+      deals: [deal(9040, '2026-09-30T00:00:00Z')],
+      histPrices: [10000, 10000, 10000, 10000, 8000, 12000],
+      histBasis: 'total',
+      now,
+    });
+    assert.equal(t.savePct, 10);
+    assert.equal(t.label, '평소보다 저렴 · 사기 좋은 구간');
+  });
+
   it('추이가 평평하면 역대 최저여도 "역대급"이라 하지 않는다', () => {
     const t = buildTimingInsight({
       deals: [deal(10000, '2026-09-30T00:00:00Z')],

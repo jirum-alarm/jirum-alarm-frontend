@@ -129,6 +129,8 @@ const OUTLIER_MIN_RATIO = 0.4;
 const MIN_HISTORY_POINTS = 5;
 /** 역대 최저라도 평균보다 이만큼(%) 싸야 그렇게 부른다 — 평평한 추이에서 "역대급(0% 저렴)"이 37건 나왔다(2026-10-01). */
 const LOWEST_MIN_SAVE_PCT = 5;
+/** 역대 최저가 아니면 평균보다 이만큼(%, 반올림) 싸야 "평소보다 저렴". 백엔드 CHEAP_MIN_SAVE_PCT 와 같다. */
+const CHEAP_MIN_SAVE_PCT = 10;
 
 /**
  * 진행 중(비종료) 딜 기준 현재가 + 추이 평균으로 타이밍 판정.
@@ -157,13 +159,15 @@ export function buildTimingInsight(input: {
   // ① 게시 3일 이내만: 종료 자동 판정이 없어 2024년 딜도 isEnd=false 로 남는다(2026-10-01 실측: "진행 중 24건"에 2024년 딜).
   // ② 추이 중앙값의 40% 미만은 오독: 신라면 14,454원을 4,454원으로 읽어 "100g당 186원·평균보다 64% 저렴" 이 나갔다.
   const histMedian = median(histPrices);
-  const pool = deals.filter((d) => isActiveDeal(d, now) && !isLikelyBundleDeal(d.title));
+  // 진행 중 건수는 증정 딜도 센다(백엔드 activeDealCount 와 같은 수 — 목록 카드 "진행 N건"과 맞춘다). 판정에서만 뺀다.
+  const active = deals.filter((d) => isActiveDeal(d, now));
+  const pool = active.filter((d) => !isLikelyBundleDeal(d.title));
 
   let best: { price: number; deal: Deal } | null = null;
   for (const deal of pool) {
     if (isForeignPriceDeal(deal, currency)) continue;
     const p = dealComparePrice(deal, histBasis, histUnitLabel);
-    if (p == null) continue;
+    if (p == null || p <= 0) continue;
     if (histMedian != null && p < histMedian * OUTLIER_MIN_RATIO) continue;
     if (!best || p < best.price) best = { price: p, deal };
   }
@@ -195,7 +199,7 @@ export function buildTimingInsight(input: {
       unitLabel: histUnitLabel,
       packLabel: heroPrice?.label ?? null,
       totalPrice: heroPrice?.minPrice ?? null,
-      activeDealCount: pool.length,
+      activeDealCount: active.length,
       isActivePrice: false,
     };
   }
@@ -207,8 +211,9 @@ export function buildTimingInsight(input: {
   let label: string;
   if (!best) {
     // 지난 가격으로 "사기 좋은 구간"이라 하면 /deals 목록("핫딜을 기다리는 상품")과 모순된다.
+    // 증정·포인트 딜만 진행 중이면 목록은 "진행 중"으로 세니 "없음"이라 하지 않는다(가격엔 사은품이 섞여 판정은 보류).
     tone = 'unknown';
-    label = '진행 중인 핫딜 없음';
+    label = active.length > 0 ? '증정·혜택 딜만 진행 중' : '진행 중인 핫딜 없음';
   } else if (histPrices.length < MIN_HISTORY_POINTS) {
     tone = 'unknown';
     label = '추이 대비 판단 불가';
@@ -220,7 +225,7 @@ export function buildTimingInsight(input: {
   ) {
     tone = 'good';
     label = '역대급 · 사기 좋은 구간';
-  } else if (avg != null && current <= avg * 0.9) {
+  } else if (savePct != null && savePct >= CHEAP_MIN_SAVE_PCT) {
     tone = 'good';
     label = '평소보다 저렴 · 사기 좋은 구간';
   } else if (avg != null && current <= avg) {
@@ -246,7 +251,7 @@ export function buildTimingInsight(input: {
     unitLabel: histUnitLabel,
     packLabel: best?.deal ? undefined : (heroPrice?.label ?? null),
     totalPrice: best?.deal.price ?? heroPrice?.minPrice ?? null,
-    activeDealCount: pool.length,
+    activeDealCount: active.length,
     isActivePrice: best != null,
   };
 }

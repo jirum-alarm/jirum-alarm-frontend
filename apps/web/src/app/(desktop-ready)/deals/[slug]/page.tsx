@@ -388,7 +388,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                     )}
                     {timing.activeDealCount > 0 && (
                       <span className="text-11 text-gray-400">
-                        진행 중 {timing.activeDealCount}건 기준
+                        진행 중 {timing.activeDealCount}건
                       </span>
                     )}
                   </div>
