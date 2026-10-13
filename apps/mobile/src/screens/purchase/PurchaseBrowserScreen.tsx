@@ -1,5 +1,12 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {AppState, BackHandler, Linking, Pressable, View} from 'react-native';
+import {
+  ActivityIndicator,
+  AppState,
+  BackHandler,
+  Linking,
+  Pressable,
+  View,
+} from 'react-native';
 import WebView from 'react-native-webview';
 import type {
   ShouldStartLoadRequest,
@@ -17,8 +24,11 @@ import {HEADER_HEIGHT} from '@/features/mypage/ui/StackHeader';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {tabStackNavigations} from '@/shared/constant/navigations';
+import {useColors} from '@/shared/theme/useColors';
 
 import {
+  LANDING_COVER_MAX_MS,
+  LANDING_COVER_SETTLE_MS,
   LANDING_HANDOFF_WINDOW_MS,
   appSchemeName,
   decidePurchaseNavigation,
@@ -53,6 +63,30 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
   const [canGoBack, setCanGoBack] = useState(false);
   const [currentUrl, setCurrentUrl] = useState(url);
   const [hasError, setHasError] = useState(false);
+  const c = useColors();
+
+  // 여는 동안의 가림막(LANDING_COVER_* 주석). handedOff = 앱으로 넘겼다(가린 채 「앱에서 열었어요」).
+  const [cover, setCover] = useState<'loading' | 'handedOff' | null>('loading');
+  const lastTopNavAt = useRef(Date.now());
+  const settleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const revealIfStillLoading = useCallback(() => {
+    setCover(prev => (prev === 'loading' ? null : prev));
+  }, []);
+  useEffect(() => {
+    const max = setTimeout(revealIfStillLoading, LANDING_COVER_MAX_MS);
+    return () => {
+      clearTimeout(max);
+      if (settleTimer.current) clearTimeout(settleTimer.current);
+    };
+  }, [revealIfStillLoading]);
+  const handleLoadEnd = useCallback(() => {
+    if (settleTimer.current) clearTimeout(settleTimer.current);
+    settleTimer.current = setTimeout(() => {
+      if (Date.now() - lastTopNavAt.current >= LANDING_COVER_SETTLE_MS) {
+        revealIfStillLoading();
+      }
+    }, LANDING_COVER_SETTLE_MS);
+  }, [revealIfStillLoading]);
 
   const close = useCallback(() => {
     if (navigation.canGoBack()) navigation.goBack();
@@ -91,6 +125,8 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
     async (appUrl: string) => {
       const result = await openExternalApp(appUrl);
       if (result.opened) {
+        // 여는 동안(가림막이 아직 있을 때) 넘어갔으면 중간 웹 화면을 끝까지 보이지 않는다.
+        setCover(prev => (prev === 'loading' ? 'handedOff' : prev));
         if (handedOffAt.current == null) {
           handedOffAt.current = Date.now();
           Analytics.track('purchase_app_handoff', {
@@ -118,6 +154,10 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
       });
       switch (decision.kind) {
         case 'load':
+          if (request.isTopFrame !== false) {
+            lastTopNavAt.current = Date.now();
+            if (settleTimer.current) clearTimeout(settleTimer.current);
+          }
           return true;
         case 'block':
           return false;
@@ -208,7 +248,11 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
           onNavigationStateChange={handleNavigationStateChange}
           onLoadProgress={({nativeEvent}) => setProgress(nativeEvent.progress)}
           onLoadStart={() => setHasError(false)}
-          onError={() => setHasError(true)}
+          onLoadEnd={handleLoadEnd}
+          onError={() => {
+            setHasError(true);
+            setCover(null);
+          }}
           allowsBackForwardNavigationGestures
           sharedCookiesEnabled
           // 결제창(PG)이 새 창으로 뜨는 쇼핑몰이 있다 — 같은 웹뷰에서 연다.
@@ -217,6 +261,39 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
           allowsInlineMediaPlayback
           decelerationRate="normal"
         />
+        {cover ? (
+          <View
+            className="absolute inset-0 items-center justify-center gap-y-3 bg-white px-8"
+            accessibilityLiveRegion="polite">
+            {cover === 'loading' ? (
+              <>
+                <ActivityIndicator color={c.gray[900]} />
+                <Text className="text-sm text-gray-600">
+                  {title ? `${title} 상품으로 이동 중…` : '상품으로 이동 중…'}
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text className="text-base font-semibold text-gray-900">
+                  {title
+                    ? `${title} 앱에서 열었어요`
+                    : '쇼핑몰 앱에서 열었어요'}
+                </Text>
+                {/* 앱이 안 떴거나 여기서 보고 싶은 사람 — 가림막만 걷는다. */}
+                <Pressable
+                  onPress={() => setCover(null)}
+                  hitSlop={8}
+                  className="h-11 justify-center px-3"
+                  accessibilityRole="button"
+                  style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+                  <Text className="text-sm text-gray-600 underline">
+                    여기서 계속 보기
+                  </Text>
+                </Pressable>
+              </>
+            )}
+          </View>
+        ) : null}
         {hasError ? (
           <WebViewErrorView
             onRetry={() => {
