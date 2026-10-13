@@ -6,7 +6,8 @@ import { LANDING_URL, METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
 
-import { KEYWORD_HUBS, keywordHubPath } from '@/entities/keyword-hub/lib/keyword-hub';
+import { fetchKeywordHubs } from '@/entities/keyword-hub/api/fetchKeywordHub';
+import { keywordHubPath } from '@/entities/keyword-hub/lib/keyword-hub';
 
 import DealsMobileHeader from '../../deals/[slug]/DealsMobileHeader';
 
@@ -62,9 +63,12 @@ const howToLd = {
   })),
 };
 
-const POPULAR = KEYWORD_HUBS.slice(0, 12);
+export default async function HotdealAlarmGuidePage() {
+  // 알림을 건 사람이 많은 순 — 이 섹션 제목이 "요즘 많이 받는 키워드"다.
+  const popular = [...(await fetchKeywordHubs())]
+    .sort((a, b) => b.subscriberCount - a.subscriberCount)
+    .slice(0, 12);
 
-export default function HotdealAlarmGuidePage() {
   return (
     <main className="max-w-mobile-max pc:pt-24 mx-auto w-full px-5 pt-14 pb-24">
       <script
@@ -153,7 +157,7 @@ export default function HotdealAlarmGuidePage() {
         <section>
           <h2 className="mb-3 text-lg font-semibold text-gray-900">요즘 많이 받는 키워드</h2>
           <ul className="flex flex-wrap gap-2">
-            {POPULAR.map((h) => (
+            {popular.map((h) => (
               <li key={h.slug}>
                 <Link href={keywordHubPath(h)} className={cn('inline-block', linkChip)}>
                   {h.name} 핫딜

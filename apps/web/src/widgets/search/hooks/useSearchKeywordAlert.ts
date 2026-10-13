@@ -42,7 +42,8 @@ export const useSearchKeywordAlert = ({
   source,
 }: {
   keyword: string;
-  source: 'search_bar' | 'search_no_result';
+  /** 키워드 허브(/keywords/{slug})의 알림 버튼도 같은 규칙으로 쓴다. */
+  source: 'search_bar' | 'search_no_result' | 'keyword_hub';
 }) => {
   const router = useMyRouter();
   const { toast } = useToast();

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { ProductModelPageLink } from '@/shared/api/product/product.service';
 import { cn } from '@/shared/lib/cn';
 
+import { fetchKeywordHubs } from '@/entities/keyword-hub/api/fetchKeywordHub';
 import { findKeywordHubsForTitle, keywordHubPath } from '@/entities/keyword-hub/lib/keyword-hub';
 
 type Props = {
@@ -31,7 +32,7 @@ type Props = {
  *
  * 가격 추이 섹션에 있던 CTA 를 여기로 올렸다(링크 중복 방지 + 첫 화면 노출).
  */
-export default function ProductPriceContext({
+export default async function ProductPriceContext({
   ageNotice,
   modelPage,
   productTitle,
@@ -39,7 +40,10 @@ export default function ProductPriceContext({
 }: Props) {
   // 키워드 허브 링크: 모델 페이지는 매핑된 상품에만 있어 무작위 상품 59개 중 0개였다(2026-10-01 실측).
   // 허브는 제목만으로 걸리니 매핑이 안 된 딜도 허브로 가는 크롤 경로가 생긴다.
-  const keywordHubs = productTitle ? findKeywordHubsForTitle(productTitle) : [];
+  // 목록은 서버 등록부(10분 데이터 캐시). 실패하면 빈 목록이라 링크만 빠진다.
+  const keywordHubs = productTitle
+    ? findKeywordHubsForTitle(productTitle, await fetchKeywordHubs())
+    : [];
   if (!ageNotice && !modelPage && keywordHubs.length === 0) return null;
 
   return (

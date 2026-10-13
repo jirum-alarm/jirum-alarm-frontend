@@ -15,6 +15,7 @@ import EndedDealsRescue from './EndedDealsRescue';
 import ProductNotFound from './ProductNotFound';
 import SearchFilterBar from './SearchFilterBar';
 import SearchKeywordAlertBar from './SearchKeywordAlertBar';
+import SearchKeywordHubCard from './SearchKeywordHubCard';
 
 // 광고를 보여줄 최소 상품 수. 결과가 너무 적으면 광고를 띄우지 않는다.
 const AD_MIN_PRODUCTS = 8;
@@ -115,6 +116,7 @@ export default function SearchResult({ show }: { show: boolean }) {
             </p>
           )}
           {/* 결과를 보는 그 자리에서 이 단어로 알림을 건다(0건 화면엔 큰 버튼). 앱 SearchResults 와 같은 자리. */}
+          {keyword && <SearchKeywordHubCard keyword={keyword} />}
           {keyword && <SearchKeywordAlertBar keyword={keyword} />}
           {/* 광고는 유기 결과 뒤 독립 블록. 그리드 안/사이에 끼우면 직전 카드 수가 컬럼 수
               (모바일2·sm3·pc5)의 배수가 아닐 때 행 끝에 빈칸이 생기므로, 앞 블록은 AD_AFTER_ROWS(30,

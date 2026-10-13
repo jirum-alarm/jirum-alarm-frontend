@@ -12,6 +12,13 @@ import { convertToWebp } from '@/shared/lib/utils/image';
 import Badge from '@/shared/ui/common/Badge';
 import ImageComponent from '@/shared/ui/ImageComponent';
 
+import { fetchKeywordHubs } from '@/entities/keyword-hub/api/fetchKeywordHub';
+import {
+  findKeywordHubsForTitle,
+  formatHubCount,
+  keywordHubPath,
+} from '@/entities/keyword-hub/lib/keyword-hub';
+
 import {
   buildDealsLeadSentence,
   buildModelDisplayName,
@@ -204,6 +211,12 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   const page = await ModelPageService.getModelPage({ slug: decodeURIComponent(slug) });
   if (!page) notFound();
   const searched = await searchRecentDeals(page.modelName);
+  // 이 모델이 속한 키워드 허브(삼다수 2L → 삼다수 핫딜). 구글은 사람을 모델 페이지로 데려오고(10/1~13 착지 53),
+  // 허브는 아직 거의 안 데려온다 — 같은 키워드의 다른 상품을 보러 갈 길을 낸다(허브 → 모델 페이지 칩과 짝).
+  const keywordHubs = findKeywordHubsForTitle(
+    `${page.brand ?? ''} ${page.modelName}`,
+    await fetchKeywordHubs(),
+  );
 
   const payload = (page.payload ?? {}) as ModelPagePayload;
   const {
@@ -656,6 +669,28 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
               </div>
               <span className="text-sm text-gray-400">바로가기 →</span>
             </a>
+          )}
+
+          {keywordHubs.length > 0 && (
+            <section className="rounded-lg border border-gray-100 p-4">
+              <h2 className="mb-3 text-base font-semibold">같은 키워드 핫딜</h2>
+              <div className="flex flex-wrap gap-2">
+                {keywordHubs.map((hub) => (
+                  <Link
+                    key={hub.slug}
+                    href={keywordHubPath(hub)}
+                    data-track="keyword-hub-link"
+                    data-source="model_page"
+                    className={linkChip}
+                  >
+                    {hub.name} 핫딜 전체
+                    {hub.recentDealCount > 0 && (
+                      <span className="text-gray-500"> (최근 30일 {formatHubCount(hub)})</span>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </section>
           )}
 
           {relatedModels.length > 0 && (
