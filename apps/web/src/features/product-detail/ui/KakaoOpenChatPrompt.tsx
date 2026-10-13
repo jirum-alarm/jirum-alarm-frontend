@@ -20,9 +20,14 @@ export default function KakaoOpenChatPrompt({
   href,
   className,
   onNavigate,
+  title = '핫딜 오픈 채팅방 입장하기',
+  description = '지름알림이 엄선한 핫딜만 골라 받아보세요!',
 }: {
   href: string;
   className?: string;
+  /** 다른 방(예: /beauty 의 뷰티방)이 같은 모양을 쓸 때 문구만 바꾼다. */
+  title?: string;
+  description?: string;
   /** soft/구매후 공통 — 입장 클릭 시 joined 플래그·계측용 */
   onNavigate?: (e: MouseEvent<HTMLAnchorElement>) => void;
 }) {
@@ -50,10 +55,8 @@ export default function KakaoOpenChatPrompt({
       <span className="min-w-0 flex-1">
         {/* "핫딜 Only"는 UTM 캠페인명(hotdeal_only)·봇 설정값이 새어 나온 내부 용어라
             유저에겐 정체불명 고유명사로 읽힌다. 방 성격은 아래 줄이 이미 말한다. */}
-        <span className="block text-sm font-semibold text-gray-800">핫딜 오픈 채팅방 입장하기</span>
-        <span className="mt-0.5 block truncate text-xs text-gray-500">
-          지름알림이 엄선한 핫딜만 골라 받아보세요!
-        </span>
+        <span className="block text-sm font-semibold text-gray-800">{title}</span>
+        <span className="mt-0.5 block truncate text-xs text-gray-500">{description}</span>
       </span>
       {/* 이 줄이 클릭 가능하다는 유일한 신호였는데 평문이라 그냥 라벨로 읽혔다.
           다만 카드 전체가 이미 링크라 알약이 "카드 안의 또 다른 버튼"으로 읽히면

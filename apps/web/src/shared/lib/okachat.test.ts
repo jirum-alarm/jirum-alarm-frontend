@@ -7,6 +7,7 @@ const {
   buildPostPurchasePromptQueue,
   OKACHAT_ANDROID_INTENT,
   OKACHAT_LINK,
+  okachatAndroidIntent,
   shouldOpenOkachatDirect,
   shouldShowOkachatSoftPrompt,
 } = require('./okachat.ts') as typeof import('./okachat');
@@ -90,5 +91,24 @@ describe('OKACHAT_ANDROID_INTENT', () => {
         `S.browser_fallback_url=${encodeURIComponent(OKACHAT_LINK)};`,
       ),
     );
+  });
+});
+
+describe('okachatAndroidIntent', () => {
+  it('핫딜방 링크면 기존 intent 와 같다', () => {
+    assert.equal(okachatAndroidIntent(OKACHAT_LINK), OKACHAT_ANDROID_INTENT);
+  });
+
+  it('다른 방은 그 방 코드·링크로 만든다', () => {
+    const link = 'https://open.kakao.com/o/abcXYZ12';
+    const intent = okachatAndroidIntent(link);
+    assert.ok(intent?.startsWith('intent://join?l=abcXYZ12&'));
+    assert.ok(intent?.includes(`S.browser_fallback_url=${encodeURIComponent(link)};`));
+  });
+
+  it('오픈채팅 방 링크가 아니면 null — 그냥 링크로 보낸다', () => {
+    assert.equal(okachatAndroidIntent('https://example.com/o/abc'), null);
+    assert.equal(okachatAndroidIntent('https://open.kakao.com/me/abc'), null);
+    assert.equal(okachatAndroidIntent(''), null);
   });
 });

@@ -103,6 +103,22 @@ export const ProductQueries = {
         return lastPage.products.at(-1)?.searchAfter?.[0];
       },
     }),
+  /**
+   * 커뮤니티 반응 순(COMMUNITY_RANKING) 무한 스크롤. 이 순서의 커서는 [점수, id] 두 값이라
+   * 위 infiniteProducts(첫 값만 넘김)로는 다음 쪽이 매번 1쪽으로 되돌아온다(2026-10-14 운영 API 실측).
+   * 커서를 통째로 넘긴다. 키를 따로 둬 infiniteProducts 캐시와 섞이지 않게 한다.
+   */
+  infiniteRankingProducts: (variables: ProductListQueryVariables) =>
+    infiniteQueryOptions({
+      queryKey: [...ProductQueries.products(variables).queryKey, 'infinite-ranking'],
+      queryFn: ({ pageParam }) =>
+        ProductService.getProducts({ ...variables, searchAfter: pageParam }),
+      initialPageParam: null as null | string[],
+      getNextPageParam: (lastPage) =>
+        lastPage.products.length < variables.limit
+          ? undefined
+          : (lastPage.products.at(-1)?.searchAfter ?? undefined),
+    }),
   reportUserNames: (variables: QueryReportUserNamesQueryVariables) =>
     queryOptions({
       queryKey: [...ProductQueries.all(), 'reportUserNames', { productId: variables.productId }],

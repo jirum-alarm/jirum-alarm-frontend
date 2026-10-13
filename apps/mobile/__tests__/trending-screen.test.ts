@@ -124,10 +124,11 @@ describe('web 과 같은 데이터 규칙', () => {
   });
 
   it('★물량 적은 카테고리는 60일까지 넓힌다 — web 과 같은 목록', () => {
-    const webServer = web('widgets/trending/ui/trending-container/server.tsx');
+    // web 은 랭킹 탭·/beauty 가 같이 쓰는 rankingQuery 한 곳에 둔다.
+    const webRanking = web('widgets/trending/lib/rankingQuery.ts');
     // web 이 쓰는 카테고리 목록과 같아야 한다(갈리면 앱 목록이 비어 보인다).
+    expect(webRanking).toContain('[3, 5, 7, 8, 10]');
     for (const id of [3, 5, 7, 8, 10]) {
-      expect(webServer).toContain(String(id));
       expect(queries).toContain(String(id));
     }
     expect(queries).toContain('60');

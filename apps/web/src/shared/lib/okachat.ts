@@ -4,34 +4,47 @@
  */
 export const OKACHAT_LINK = 'https://open.kakao.com/o/gJZTWAAg';
 
+/**
+ * 오카방 구분. hotdeal = 위 핫딜 Only 방(기존 권유 전부), beauty = 뷰티 핫딜 방(/beauty 랜딩, 링크는 env).
+ * GA4 이벤트에 room 파라미터로 실어 방별 입장 클릭을 가른다.
+ */
+export type OkachatRoom = 'hotdeal' | 'beauty';
+
 /** 입장 클릭 후 soft/구매후 권유를 다시 안 띄우기 위한 플래그. */
 export const OKACHAT_JOINED_KEY = 'jirum:okachat-joined';
+
+/** 방마다 입장 기록을 따로 둔다 — 핫딜방에 들어간 사람에게도 뷰티방 권유는 보여야 한다. 핫딜방은 옛 키 그대로. */
+const joinedKey = (room: OkachatRoom) =>
+  room === 'hotdeal' ? OKACHAT_JOINED_KEY : `${OKACHAT_JOINED_KEY}:${room}`;
 
 /** markOkachatJoined 가 window 에 쏘는 이벤트 — 떠 있는 권유가 듣고 숨는다. */
 export const OKACHAT_JOINED_EVENT = 'jirum:okachat-joined';
 
-export function hasJoinedOkachat(): boolean {
+export function hasJoinedOkachat(room: OkachatRoom = 'hotdeal'): boolean {
   if (typeof window === 'undefined') return false;
   try {
-    return window.localStorage.getItem(OKACHAT_JOINED_KEY) === '1';
+    return window.localStorage.getItem(joinedKey(room)) === '1';
   } catch {
     return false;
   }
 }
 
-export function markOkachatJoined(): void {
+export function markOkachatJoined(room: OkachatRoom = 'hotdeal'): void {
   if (typeof window === 'undefined') return;
   try {
-    window.localStorage.setItem(OKACHAT_JOINED_KEY, '1');
+    window.localStorage.setItem(joinedKey(room), '1');
   } catch {
     // private mode 등 — 권유만 반복될 수 있음, 클릭 자체는 동작
   }
+  // 아래 이벤트는 핫딜방 권유들이 듣는다. 다른 방 입장으로 핫딜방 권유를 숨기지 않는다.
+  if (room !== 'hotdeal') return;
   // 같은 화면에 떠 있는 다른 오카방 권유(상세 soft 카드 등)도 바로 숨도록 알린다 —
   // 예전엔 첫 방문 시트에서 들어가도 아래 카드가 그대로 남아 같은 방을 또 권했다.
   window.dispatchEvent(new Event(OKACHAT_JOINED_EVENT));
 }
 
-export type OkachatPlacement = 'soft' | 'after_purchase' | 'first_visit' | 'home_banner';
+export type OkachatPlacement =
+  'soft' | 'after_purchase' | 'first_visit' | 'home_banner' | 'beauty_landing';
 
 /**
  * 안드로이드에서 카카오 중간 페이지(open.kakao.com)를 건너뛰고 카톡을 바로 여는 intent.
@@ -42,6 +55,16 @@ export type OkachatPlacement = 'soft' | 'after_purchase' | 'first_visit' | 'home
  * 방 순증 ~40명(2026-10-12). 앱(apps/mobile openOkachat)은 이미 카톡으로 바로 넘긴다.
  */
 export const OKACHAT_ANDROID_INTENT = `intent://join?l=gJZTWAAg&r=EW#Intent;scheme=kakaoopen;package=com.kakao.talk;S.browser_fallback_url=${encodeURIComponent(OKACHAT_LINK)};end`;
+
+/**
+ * 다른 방(open.kakao.com/o/<코드>) 링크로 같은 모양의 intent 를 만든다. 코드를 못 읽으면 null —
+ * 호출자는 그냥 링크로 보낸다. 핫딜방 링크를 넣으면 OKACHAT_ANDROID_INTENT 와 같아야 한다(테스트).
+ */
+export function okachatAndroidIntent(link: string): string | null {
+  const code = /^https:\/\/open\.kakao\.com\/o\/([A-Za-z0-9]+)\/?$/.exec(link.trim())?.[1];
+  if (!code) return null;
+  return `intent://join?l=${code}&r=EW#Intent;scheme=kakaoopen;package=com.kakao.talk;S.browser_fallback_url=${encodeURIComponent(link.trim())};end`;
+}
 
 /** 카톡으로 넘어갔는지 판정하는 대기 시간. 넘어가면 이 안에 화면이 가려진다. */
 const OKACHAT_HANDOFF_WAIT_MS = 2500;
@@ -65,10 +88,15 @@ export function shouldOpenOkachatDirect(ua: string): boolean {
  * - 카톡이 없어 브라우저가 폴백 페이지로 이동하면 pagehide 가 온다 → fallback.
  * - 아무 일도 없으면(인앱 웹뷰가 intent 를 삼킴) 대기 후 중간 페이지로 직접 보낸다 → fallback.
  */
-export function openOkachatDirect(placement: OkachatPlacement): boolean {
+export function openOkachatDirect(
+  placement: OkachatPlacement,
+  { room = 'hotdeal', link = OKACHAT_LINK }: { room?: OkachatRoom; link?: string } = {},
+): boolean {
   if (typeof window === 'undefined' || !shouldOpenOkachatDirect(window.navigator.userAgent)) {
     return false;
   }
+  const intent = room === 'hotdeal' ? OKACHAT_ANDROID_INTENT : okachatAndroidIntent(link);
+  if (!intent) return false;
 
   let hidden = false;
   let settled = false;
@@ -80,13 +108,13 @@ export function openOkachatDirect(placement: OkachatPlacement): boolean {
     settled = true;
     document.removeEventListener('visibilitychange', onVisibility);
     window.removeEventListener('pagehide', onPageHide);
-    pushOkachatHandoff(placement, result);
+    pushOkachatHandoff(placement, result, room);
   };
   const onPageHide = () => settle('fallback');
 
   document.addEventListener('visibilitychange', onVisibility);
   window.addEventListener('pagehide', onPageHide);
-  window.location.href = OKACHAT_ANDROID_INTENT;
+  window.location.href = intent;
 
   window.setTimeout(() => {
     if (settled) return;
@@ -95,17 +123,22 @@ export function openOkachatDirect(placement: OkachatPlacement): boolean {
       return;
     }
     settle('fallback');
-    window.location.href = OKACHAT_LINK;
+    window.location.href = link;
   }, OKACHAT_HANDOFF_WAIT_MS);
 
   return true;
 }
 
-function pushOkachatHandoff(placement: OkachatPlacement, result: 'app' | 'fallback') {
+function pushOkachatHandoff(
+  placement: OkachatPlacement,
+  result: 'app' | 'fallback',
+  room: OkachatRoom,
+) {
   (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
     event: 'okachat_handoff',
     placement,
     result,
+    room,
   });
 }
 
@@ -156,10 +189,12 @@ export function buildPostPurchasePromptQueue(
 export function pushOkachatEvent(
   event: 'okachat_prompt_view' | 'okachat_prompt_click',
   placement: OkachatPlacement,
+  room: OkachatRoom = 'hotdeal',
 ) {
   if (typeof window === 'undefined') return;
   (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
     event,
     placement,
+    room,
   });
 }
