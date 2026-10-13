@@ -15,6 +15,7 @@ import type {SearchFiltersController} from '@/features/search/model/useSearchFil
 
 import SearchFilterBar from './SearchFilterBar';
 import SearchNotFound from './SearchNotFound';
+import SearchKeywordHubSummary from './SearchKeywordHubSummary';
 import KeywordAlertButton from '@/features/keyword-prompt/ui/KeywordAlertButton';
 import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';
 import {cn} from '@/shared/lib/styling';
@@ -153,6 +154,9 @@ export default function SearchResults({
                     {`건${estimatedTotal >= ESTIMATED_TOTAL_CAP ? '+' : ''}`}
                   </Text>
                 </View>
+              ) : null}
+              {!isPending && !isError && !isEmpty ? (
+                <SearchKeywordHubSummary keyword={keyword} />
               ) : null}
               {/* 결과를 보는 그 자리에서 이 단어로 알림을 건다(결과 없음 화면엔 큰 버튼). */}
               {!isPending && !isError && !isEmpty ? (

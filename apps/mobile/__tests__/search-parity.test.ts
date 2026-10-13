@@ -173,14 +173,14 @@ describe('딥링크 keyword 인수', () => {
 });
 
 describe('web 과 같아야 하는 상수', () => {
-  it('추천 검색어 목록이 글자까지 같다', () => {
-    const webKeywords = stringsInArray(webRecommend, 'const KEYWORDS');
-    const appKeywords = stringsInArray(
-      recommendedUi,
-      'export const RECOMMENDED_KEYWORDS',
-    );
-    expect(webKeywords).toHaveLength(25);
-    expect(appKeywords).toEqual(webKeywords);
+  it('추천 검색어는 둘 다 서버 키워드 허브 목록에서 30일 딜 5건+ 만 고른다', () => {
+    expect(webRecommend).toContain('useKeywordHubs');
+    expect(webRecommend).toContain('KEYWORD_HUB_MIN_DEALS');
+    expect(recommendedUi).toContain('useKeywordHubs');
+    expect(recommendedUi).toContain('pickRecommendedKeywords');
+    // 하드코딩 목록이 돌아오면 웹·앱이 다시 따로 놀기 시작한다.
+    expect(webRecommend).not.toContain('const KEYWORDS');
+    expect(recommendedUi).not.toContain('RECOMMENDED_KEYWORDS =');
   });
 
   it('추천 검색어는 5개만 보여준다', () => {

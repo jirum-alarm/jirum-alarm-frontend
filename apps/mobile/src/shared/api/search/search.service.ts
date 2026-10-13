@@ -1,4 +1,8 @@
-import {QuerySearchProducts, QuerySearchSuggestions} from '@/graphql/search';
+import {
+  QueryKeywordHubs,
+  QuerySearchProducts,
+  QuerySearchSuggestions,
+} from '@/graphql/search';
 import {HttpClient} from '@/shared/lib/client';
 import type {
   SearchProductsQueryVariables,
@@ -28,5 +32,11 @@ export class SearchService {
       variables,
     );
     return res.data?.searchSuggestions ?? [];
+  }
+
+  /** 공개 키워드 허브 목록. 개인화가 없어 무인증. 실패하면 요약 줄만 안 뜬다. */
+  static async getKeywordHubs() {
+    const res = await HttpClient.withNoAuth().execute(QueryKeywordHubs);
+    return res.data?.keywordHubs ?? [];
   }
 }

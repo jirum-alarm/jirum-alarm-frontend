@@ -61,3 +61,24 @@ export const QuerySearchSuggestions = graphql(`
     searchSuggestions(prefix: $prefix, limit: $limit)
   }
 `);
+
+/**
+ * 공개 키워드 허브 목록(서버 등록부). 검색어가 허브 키워드 자체면 결과 위에 30일 요약을 띄운다.
+ * web: shared/api/keyword-hub/keyword-hub.service.ts
+ */
+export const QueryKeywordHubs = graphql(`
+  query KeywordHubs {
+    keywordHubs {
+      slug
+      name
+      aliases
+      recentDealCount
+      countCapped
+      activeDays
+      topSources {
+        name
+        share
+      }
+    }
+  }
+`);

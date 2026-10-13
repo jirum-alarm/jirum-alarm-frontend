@@ -228,6 +228,13 @@ type CommentOutput {
   viewCount: Int!
 }
 
+type CoupangSearchCtaOutput {
+  """쿠팡 검색어"""
+  query: String!
+  """쿠팡 파트너스 링크(쿠팡 검색 결과로 간다)"""
+  url: String!
+}
+
 input CreateAdvertiseInput {
   displayPrice: AdvertisePriceInput
   displayTitle: String
@@ -317,9 +324,68 @@ type DoubleRowSection implements BaseSection {
   viewMoreLink: String
 }
 
+"""
+커뮤니티 반응 신호 하나(사이트 × 좋아요·댓글·조회·인기글) — 매일 08:05 Mattermost 알림과 같은 계산(engagement-signal-health)
+"""
+type EngagementSignalOutput {
+  """평소(7~30일 전 수집) 0 아닌 글 비율 0~1"""
+  baselineRate: Float!
+  """꺼짐 — 최근 창이 평소 비율로 기대한 수의 10% 이하이고 우연일 확률 0.1% 미만"""
+  dead: Boolean!
+  """평소 비율로 기대한 0 아닌 글 수"""
+  expected: Float!
+  """좋아요 | 댓글 | 조회 | 인기글"""
+  label: String!
+  providerName: String!
+  """그중 값이 0 아닌 글"""
+  recentNonzero: Int!
+  """최근 창(수집된 지 windowToHours~windowFromHours 시간) 글 수"""
+  recentPosts: Int!
+  """like | comment | view | hot"""
+  signal: String!
+  windowFromHours: Int!
+  windowToHours: Int!
+}
+
 type ExistsUserOutput {
   email: Boolean!
   social: Boolean!
+}
+
+"""실험·관찰 등록부 항목(src/experiment/experiment-registry.ts)"""
+type ExperimentOutput {
+  """다음 판독일"""
+  checkAt: String
+  code: [String!]!
+  decisionRule: String!
+  design: String!
+  endedAt: String
+  id: String!
+  """AB | OBSERVATION"""
+  kind: String!
+  """판독일이 지났는데 그날 이후 결과가 없다"""
+  overdue: Boolean!
+  power: String!
+  primaryMetric: String!
+  question: String!
+  readout: String!
+  results: [ExperimentResultOutput!]!
+  startedAt: String
+  """PLANNED | RUNNING | CONCLUDED | STOPPED | REJECTED"""
+  status: String!
+  title: String!
+  """켜고 끄는 법"""
+  toggle: String!
+}
+
+"""실험 판독 기록 한 줄"""
+type ExperimentResultOutput {
+  """KST 날짜 YYYY-MM-DD"""
+  date: String!
+  """이 판독으로 정한 것(중간 판독이면 없음)"""
+  decision: String
+  """숫자 그대로 — 군별 분모·분자, 비율과 95% 구간"""
+  summary: String!
 }
 
 type FiringAlertOutput {
@@ -475,13 +541,13 @@ type HotDealRatioOutput {
   totalCount: Int!
 }
 
-"""핫딜 타입"""
+"""배지 등급 — 기준은 hot-deal-criteria.ts"""
 enum HotDealType {
-  """핫딜"""
+  """핫딜: 커뮤니티에서 반응이 뜨거운 딜 — 원 커뮤니티 인기글이거나 추천·댓글이 많이 달린 글"""
   HOT_DEAL
-  """대박딜"""
+  """대박딜: 평소보다 확실히 싼 딜 — 지난 1년 같은 상품 핫딜 보통가나 다나와 최저가보다 15% 이상 쌈"""
   SUPER_DEAL
-  """초대박딜"""
+  """초대박딜: 1년 중 가장 싼 딜 — 지난 1년 같은 상품 핫딜 중 최저가이면서 보통가보다 15% 이상 쌈"""
   ULTRA_DEAL
 }
 
@@ -505,6 +571,53 @@ type KakaoProfitLinkOutput {
 type KeywordCountOutput {
   count: Int!
   keyword: String!
+}
+
+type KeywordHubDetailOutput {
+  """최근 30일 딜(진행 중 먼저, 최대 40)"""
+  deals: [ProductOutput!]!
+  """통계는 아래 deals 와 같은 묶음에서 센 값"""
+  hub: KeywordHubOutput!
+  """이 키워드의 모델별 모음(/deals/{slug})"""
+  modelPages: [KeywordHubModelPageOutput!]!
+}
+
+type KeywordHubModelPageOutput {
+  brand: String
+  dealCount: Int!
+  modelName: String!
+  slug: String!
+}
+
+"""키워드 허브(웹 /keywords/{slug}) — "삼다수 핫딜" 같은 검색어 그대로의 모음"""
+type KeywordHubOutput {
+  """최근 30일 중 딜이 올라온 날 수(KST)"""
+  activeDays: Int!
+  """recentDealCount 중 진행 중"""
+  activeDealCount: Int!
+  """제목에 이게 있어도 같은 상품(표기 흔들림)"""
+  aliases: [String!]!
+  """수집 상한에 걸려 실제보다 적게 셌다 — "N건+" 로 표시"""
+  countCapped: Boolean!
+  """제목에 이게 있으면 뺀다(부분 문자열 오탐)"""
+  excludes: [String!]!
+  lastDealAt: DateTime
+  """화면·제목용 이름"""
+  name: String!
+  """최근 30일 올라온 딜 수(종료 포함)"""
+  recentDealCount: Int!
+  """URL 세그먼트. 소문자·공백 없음"""
+  slug: String!
+  """이 키워드로 알림을 건 사람 수"""
+  subscriberCount: Int!
+  """많이 올라온 곳 최대 2곳(몫 15%+)"""
+  topSources: [KeywordHubSourceOutput!]!
+}
+
+type KeywordHubSourceOutput {
+  name: String!
+  """%"""
+  share: Int!
 }
 
 type KeywordMapEntry {
@@ -626,6 +739,7 @@ type ModelPageListItemOutput {
   priceTone: String
   savePct: Int
   slug: String!
+  trendPrices: [Float!]!
   unitLabel: String
   unitPrice: Int
 }
@@ -658,9 +772,15 @@ type Mutation {
   addKeywordMapGroupByAdmin(description: String, name: String!): Int!
   """알림 키워드 추가"""
   addNotificationKeyword(
+    """제목에 이 중 하나라도 있으면 알림 제외"""
+    excludeKeywords: [String!]
     """추천 키워드에서 등록했는지 여부"""
     fromRecommendation: Boolean
     keyword: String!
+    """이 가격 이하만 알림"""
+    maxPrice: Int
+    """이 가격 이상만 알림"""
+    minPrice: Int
     """가격이 내려갔을 때만 알림 받기"""
     priceDropOnly: Boolean
   ): Boolean!
@@ -954,9 +1074,9 @@ type Mutation {
     marketing: Boolean
     """야간(21~08시) 푸시 수신 허용"""
     nightAlerts: Boolean
-    """방해금지 끝 시(KST 0~23). 시작과 함께 보내고, 둘 다 null 이면 해제"""
+    """방해금지 끝 시(KST 0~23). null 이면 해제"""
     quietHoursEnd: Int
-    """방해금지 시작 시(KST 0~23). 끝과 함께 보내고, 둘 다 null 이면 해제"""
+    """방해금지 시작 시(KST 0~23). null 이면 해제"""
     quietHoursStart: Int
   ): Boolean!
   """유저 프로필 수정"""
@@ -993,6 +1113,34 @@ type NotificationByAdminOutput {
   target: String!
   targetId: String
   title: String
+}
+
+"""키워드 후보와 지난 30일 건수"""
+type NotificationIntentCandidate {
+  keyword: String!
+  recentMatchCount: Int!
+}
+
+"""문장을 해석한 키워드 알림 조건 + 지난 30일 미리보기"""
+type NotificationIntentOutput {
+  """키워드 후보 전부(구체적인 것부터) — keyword 는 그중 지난 30일에 걸린 가장 구체적인 것"""
+  candidates: [NotificationIntentCandidate!]!
+  excludeKeywords: [String!]!
+  keyword: String!
+  maxPrice: Int
+  minPrice: Int
+  """지난 30일 이 조건이면 왔을 알림 수(대략 — 하락 전용·하루 상한은 빼고 셈)"""
+  recentMatchCount: Int!
+  """그중 최신 3건"""
+  recentSamples: [NotificationIntentSample!]!
+}
+
+"""알림 미리보기용 지난 딜"""
+type NotificationIntentSample {
+  id: Int!
+  """원화 가격. 외화·미파싱은 null"""
+  price: Int
+  title: String!
 }
 
 type NotificationKeyword {
@@ -1079,9 +1227,11 @@ enum PriceComparisonBasis {
 }
 
 type PriceContext {
+  basePriceAt: String
   danawaPrice: Float!
   danawaProductName: String
   dealPrice: Float!
+  dealShippingFee: Float
   delta: Float!
   normalPriceMax: Float
   normalPriceMedian: Float
@@ -1712,6 +1862,10 @@ type Query {
     isReward: Boolean
     limit: Int!
   ): [ProductOutput!]!
+  """
+  오래된 딜 상세의 「쿠팡에서 지금 가격 보기」 — 실험군(coupang_search_cta_v1)·게시 7일+ 딜이고 링크가 발급돼 있을 때만
+  """
+  coupangSearchCta(productId: Int!): CoupangSearchCtaOutput
   """어드민) 일별/주별/월별 서비스 조회수 합계"""
   dailyServiceViewStats(endDate: DateTime!, interval: DateInterval! = DAILY, startDate: DateTime!): [DateCountOutput!]!
   """안읽은 알림 존재 여부 조회"""
@@ -1719,6 +1873,8 @@ type Query {
   existsUnreadNotice: Boolean!
   """유저 존재 여부 조회"""
   existsUser(email: String!): ExistsUserOutput!
+  """어드민) 실험·관찰 등록부 — 판독 기한 지난 것 먼저, 그다음 진행·준비·끝난 순"""
+  experiments: [ExperimentOutput!]!
   """해당 상품 신고된 횟수 조회"""
   expireProductReportCount(productId: Int!): Int!
   """종료된 상품 제보 내역 조회"""
@@ -1742,10 +1898,6 @@ type Query {
     productTitle: String
     searchAfter: [String!]
   ): [ProductMappingOutput!]!
-  """특정 사용자의 추천 상품 조회 (관리자용)"""
-  getPersonalizedProductsByUserId(categoryId: Int, limit: Int, userId: Int!): [RecommendedProductOutput!]!
-  """특정 상품과 유사한 상품 조회"""
-  getSimilarProducts(limit: Int = 10, productId: Int!): [ProductOutput!]!
   """게스트 카테고리 선호 기반 추천 핫딜 (비로그인 허용, 선호 없으면 인기순 폴백)"""
   guestRecommendedHotDeals(
     """한 페이지당 아이템 개수 (최대 20개)"""
@@ -1790,6 +1942,10 @@ type Query {
   hotDealRatioStats(endDate: DateTime!, interval: DateInterval! = DAILY, startDate: DateTime!): [HotDealRatioOutput!]!
   """어드민) 핫딜 유형별 분포"""
   hotDealTypeDistribution(endDate: DateTime!, interval: DateInterval! = DAILY, startDate: DateTime!): [HotDealTypeCountOutput!]!
+  """키워드 허브 하나. 목록 밖 slug 는 null"""
+  keywordHub(slug: String!): KeywordHubDetailOutput
+  """공개 키워드 허브 목록(30일 딜 많은 순)"""
+  keywordHubs: [KeywordHubOutput!]!
   """어드민) 키워드 맵 그룹 조회"""
   keywordMapGroupByAdmin(id: Int!): KeywordMapGroupOutput
   """어드민) 키워드 맵 그룹 목록 조회"""
@@ -1844,6 +2000,13 @@ type Query {
   notifications(limit: Int! = 10, offset: Int! = 0): [Notification!]!
   """어드민) 알림 발송 이력 조회"""
   notificationsByAdmin(limit: Int!, searchAfter: [String!]): [NotificationByAdminOutput!]!
+  """문장 → 키워드 알림 조건 + 지난 30일 미리보기. 해석 못 하면 null(키워드 직접 입력으로)"""
+  parseNotificationIntent(
+    """
+    예: "에어팟 프로 20만원 밑으로 뜨면 알려줘"
+    """
+    text: String!
+  ): NotificationIntentOutput
   """검증 대기 중인 매핑 목록 조회"""
   pendingVerifications(
     """AI 추천으로 필터 (reject = 사전분류가 오매칭 의심 플래그한 것만)"""
@@ -1887,8 +2050,6 @@ type Query {
     target: ProductMappingTarget
     verificationStatus: [ProductMappingVerificationStatus!]
   ): Int!
-  """개인화 추천 상품 조회 (로그인 필요)"""
-  personalizedProducts(categoryId: Int, excludeProductIds: [Int!], limit: Int = 20): [RecommendedProductOutput!]!
   """상품 조회"""
   product(id: Int!): ProductOutput
   """어드민) 카테고리별 상품 수"""
@@ -1985,6 +2146,10 @@ type Query {
   topNotificationKeywords(limit: Int! = 30, since: DateTime): [KeywordCountOutput!]!
   """토스 카테고리 인기 하위 탭 목록(실제 존재하는 categoryLabel)"""
   tossCategoryLabels: [String!]!
+  """
+  토스 상세의 「토스에서 함께 보는 상품」 — 실험 toss_internal_link_v1 대상 군 토스 상품(같은 카테고리 먼저, 최대 8). 토스 상품이 아니면 빈 배열
+  """
+  tossInternalLinks(id: Int!): [ProductOutput!]!
   """안읽은 알림 수 목록 조회"""
   unreadNotificationsCount: Int!
   """유저 조회"""
@@ -1995,6 +2160,8 @@ type Query {
   userByEmail(email: String!): User!
   """어드민) 성별/연령대 분포"""
   userDemographicStats: UserDemographicStatsOutput!
+  """어드민) 사용자 요약 — 회원·게스트·최근 접속·알림 닿는 사람 + 기간 안 가입 경로별 일별 신규"""
+  userOverview(endDate: DateTime!, startDate: DateTime!): UserOverviewOutput!
   """어드민) 일별/주별/월별 가입자 수 추이"""
   userRegistrationStats(endDate: DateTime!, interval: DateInterval! = DAILY, startDate: DateTime!): [DateCountOutput!]!
   """어드민) 사용자 목록 조회"""
@@ -2009,12 +2176,6 @@ type Query {
   wishlistCount: Int!
   """위시리스트 목록 조회"""
   wishlists(limit: Int!, orderBy: WishlistOrderType!, orderOption: OrderOptionType!, searchAfter: [String!]): [WishlistOutput!]!
-}
-
-type RecommendedProductOutput {
-  product: ProductOutput!
-  recommendationReason: String
-  recommendationScore: Float
 }
 
 type RevenueDailyOutput {
@@ -2046,6 +2207,8 @@ type ServiceHealthSignalsOutput {
   지금 울리는 Prometheus 알람(critical·warning, 상시 신호 제외). null = Prometheus 응답 없음
   """
   alerts: [FiringAlertOutput!]
+  """커뮤니티 반응 신호(사이트 × 신호). null = 집계 실패"""
+  engagementSignals: [EngagementSignalOutput!]
   """최근 24시간 실패한 LLM 작업 수"""
   llmFailed24h: Int!
   """LLM 작업이 마지막으로 끝난 지 몇 분. 일괄 작업으로 대기열이 수만 건 쌓이는 건 정상이라 생존은 이걸로 본다"""
@@ -2185,6 +2348,22 @@ type User {
   nickname: String!
 }
 
+"""하루 끝(23:55 KST) 스냅숏 — 접속은 KST 달력 기준(그날·7일·30일)"""
+type UserActivityDailyOutput {
+  """그날 접속 회원(DAU)"""
+  activeMembers1d: Int!
+  """그날까지 7일 접속 회원"""
+  activeMembers7d: Int!
+  """그날까지 30일 접속 회원"""
+  activeMembers30d: Int!
+  """KST 날짜 YYYY-MM-DD"""
+  date: String!
+  guests: Int!
+  members: Int!
+  pushGuests: Int!
+  pushMembers: Int!
+}
+
 type UserByAdminOutput {
   birthYear: Int
   createdAt: DateTime!
@@ -2206,6 +2385,27 @@ enum UserLikeTarget {
   PRODUCT
 }
 
+type UserOverviewOutput {
+  """최근 24시간 접속 회원(lastLoggedInAt — 백그라운드 토큰 갱신은 제외)"""
+  activeMembers1d: Int!
+  """최근 7일 접속 회원"""
+  activeMembers7d: Int!
+  """최근 30일 접속 회원"""
+  activeMembers30d: Int!
+  """기간 안 일별 스냅숏(2026-10-11 부터) — 지난 날짜의 접속 수는 이것만 있다"""
+  dailyActivity: [UserActivityDailyOutput!]!
+  """기간 안 일별·가입 경로별 신규 계정"""
+  dailySignups: [UserSignupDailyOutput!]!
+  """게스트 계정 수(로그인 없이 알림만 받는 기기)"""
+  guests: Int!
+  """회원 수(게스트 제외)"""
+  members: Int!
+  """살아 있는 푸시 토큰이 있는 게스트"""
+  pushGuests: Int!
+  """살아 있는 푸시 토큰이 있는 회원 = 알림이 닿는 회원"""
+  pushMembers: Int!
+}
+
 type UserPushSetting {
   communityAlert: Boolean!
   createdAt: DateTime!
@@ -2217,9 +2417,9 @@ type UserPushSetting {
   marketingAgreedAt: DateTime
   nightAlerts: Boolean!
   nightAlertsAgreedAt: DateTime
-  """방해금지 끝 시(KST 0~23). null 이면 꺼짐"""
+  """방해금지 끝 시(KST 0~23, 이 시각에 모아 보냄)"""
   quietHoursEnd: Int
-  """방해금지 시작 시(KST 0~23). null 이면 꺼짐"""
+  """방해금지 시작 시(KST 0~23). quietHoursEnd 와 함께 null 이면 꺼짐"""
   quietHoursStart: Int
   userId: Int!
 }
@@ -2237,6 +2437,16 @@ enum UserReportReason {
 enum UserReportTarget {
   COMMENT
   COMMENT_REPLY
+}
+
+type UserSignupDailyOutput {
+  """가입 경로 — kakao·naver·apple·google(첫 소셜 연결), email(소셜 없음), guest(게스트 계정)"""
+  channel: String!
+  count: Int!
+  """KST 날짜 YYYY-MM-DD"""
+  date: String!
+  """그중 지금 살아 있는 푸시 토큰이 있는 계정 = 가입해서 알림까지 닿은 수(조회 시점 기준)"""
+  reachable: Int!
 }
 
 type VerificationStatistics {

@@ -9,10 +9,46 @@
 import * as React from 'react';
 import * as ReactTestRenderer from 'react-test-renderer';
 
+// 추천 검색어는 서버 키워드 허브 목록에서 고른다(30일 딜 5건+ 만).
+const mockHubNames = [
+  '삼다수',
+  '햇반',
+  '모니터',
+  '라면',
+  '칫솔',
+  '사이다',
+  '콜라',
+];
+jest.mock('../src/shared/api/search', () => ({
+  SearchService: {
+    getKeywordHubs: async () => [
+      ...mockHubNames.map(name => ({
+        slug: name,
+        name,
+        aliases: [],
+        recentDealCount: 50,
+        countCapped: false,
+        activeDays: 20,
+        topSources: [],
+      })),
+      // 딜이 적은 허브는 추천하지 않는다.
+      {
+        slug: '에어컨',
+        name: '에어컨',
+        aliases: [],
+        recentDealCount: 4,
+        countCapped: false,
+        activeDays: 4,
+        topSources: [],
+      },
+    ],
+  },
+}));
+
 import RecentKeywords from '../src/screens/search/ui/RecentKeywords';
-import RecommendedKeywords, {
-  RECOMMENDED_KEYWORDS,
-} from '../src/screens/search/ui/RecommendedKeywords';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+
+import RecommendedKeywords from '../src/screens/search/ui/RecommendedKeywords';
 import SearchHeader from '../src/screens/search/ui/SearchHeader';
 import SuggestionList from '../src/screens/search/ui/SuggestionList';
 
@@ -153,24 +189,45 @@ describe('최근 검색어', () => {
 });
 
 describe('추천 검색어', () => {
-  it('목록에서 5개만 그린다', () => {
-    const tree = render(<RecommendedKeywords onSelect={() => {}} />);
-    const chips = tree.root.findAll(
+  /** 허브 목록 응답을 기다린 뒤의 트리. */
+  async function renderRecommended(onSelect: (keyword: string) => void) {
+    const client = new QueryClient({defaultOptions: {queries: {retry: false}}});
+    let tree!: ReactTestRenderer.ReactTestRenderer;
+    await ReactTestRenderer.act(async () => {
+      tree = ReactTestRenderer.create(
+        <QueryClientProvider client={client}>
+          <RecommendedKeywords onSelect={onSelect} />
+        </QueryClientProvider>,
+      );
+    });
+    // react-query 는 응답을 다음 틱에 알린다 — 한 틱 더 흘려야 칩이 그려진다.
+    await ReactTestRenderer.act(async () => {
+      await new Promise<void>(resolve => setTimeout(resolve, 0));
+    });
+    clients.push(client);
+    return tree;
+  }
+  // gc 타이머가 남으면 jest 가 안 끝난다.
+  const clients: QueryClient[] = [];
+  afterEach(() => {
+    clients.splice(0).forEach(c => c.clear());
+  });
+  const chipsOf = (tree: ReactTestRenderer.ReactTestRenderer) =>
+    tree.root.findAll(
       node =>
         typeof node.props?.onPress === 'function' &&
-        RECOMMENDED_KEYWORDS.includes(node.props?.accessibilityLabel),
+        [...mockHubNames, '에어컨'].includes(node.props?.accessibilityLabel),
     );
+
+  it('허브 목록에서 30일 딜 5건+ 인 것만 5개 그린다', async () => {
+    const chips = chipsOf(await renderRecommended(() => {}));
     expect(chips).toHaveLength(5);
+    expect(chips.map(c => c.props.accessibilityLabel)).not.toContain('에어컨');
   });
 
-  it('누르면 그 검색어로 검색한다', () => {
+  it('누르면 그 검색어로 검색한다', async () => {
     const onSelect = jest.fn();
-    const tree = render(<RecommendedKeywords onSelect={onSelect} />);
-    const chip = tree.root.findAll(
-      node =>
-        typeof node.props?.onPress === 'function' &&
-        RECOMMENDED_KEYWORDS.includes(node.props?.accessibilityLabel),
-    )[0];
+    const chip = chipsOf(await renderRecommended(onSelect))[0];
     ReactTestRenderer.act(() => {
       chip.props.onPress();
     });

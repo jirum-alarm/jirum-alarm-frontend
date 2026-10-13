@@ -49,6 +49,17 @@ jest.mock('../src/shared/api/search', () => ({
   SearchService: {
     getProducts: mockGetProducts,
     getSuggestions: mockGetSuggestions,
+    // 추천 검색어·검색 요약 줄은 서버 키워드 허브 목록을 읽는다.
+    getKeywordHubs: async () =>
+      ['삼다수', '햇반', '모니터', '라면', '칫솔', '사이다'].map(name => ({
+        slug: name,
+        name,
+        aliases: [],
+        recentDealCount: 50,
+        countCapped: false,
+        activeDays: 20,
+        topSources: [],
+      })),
   },
 }));
 jest.mock('../src/shared/api/category', () => ({
