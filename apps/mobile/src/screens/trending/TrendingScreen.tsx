@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
 import {View} from 'react-native';
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {useNavigation} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -9,7 +9,10 @@ import {SystemBars} from 'react-native-edge-to-edge';
 import {
   ALL_CATEGORY,
   CategoryQueries,
+  type CategoryItem,
 } from '@/entities/category/category.queries';
+import {TrendingQueries} from '@/entities/trending/api/trending.queries';
+import CategoryPager from '@/entities/trending/ui/CategoryPager';
 import CategoryTabBar from '@/entities/trending/ui/CategoryTabBar';
 import LiveList from '@/entities/trending/ui/LiveList';
 import RankingList from '@/entities/trending/ui/RankingList';
@@ -26,7 +29,11 @@ import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
 import type {TabStackParamList} from '@/navigations/tab/types';
-import {ChipRowSkeleton, ListRowsSkeleton} from '@/shared/components/Skeletons';
+import {
+  ChipRowSkeleton,
+  GridSkeleton,
+  ListRowsSkeleton,
+} from '@/shared/components/Skeletons';
 
 /**
  * 발견 탭. web: app/(desktop-ready)/trending/{live,ranking}
@@ -36,10 +43,9 @@ import {ChipRowSkeleton, ListRowsSkeleton} from '@/shared/components/Skeletons';
  * 스택에 화면이 쌓여 뒤로가기가 실시간↔랭킹을 왕복하고, 탭을 다시 누를 때
  * 어느 화면으로 돌아갈지가 흐려진다.
  *
- * ★ web 의 Swiper(카테고리 좌우 스와이프)는 옮기지 않았다. 카테고리마다 슬라이드를
- * 미리 만들어 두는 구조라 목록이 50개인 랭킹에서 메모리·초기 렌더가 비싸고,
- * 네이티브 탭 제스처(스와이프 뒤로가기)와 방향이 겹친다. 칩으로 고른다.
- * ponytail: 스와이프 요구가 실제로 나오면 react-native-pager-view 로 올린다.
+ * ★ 카테고리는 칩으로도, web Swiper 처럼 본문을 좌우로 밀어서도 고른다(2026-10-13 사용자 요청).
+ * 페이저(CategoryPager)는 보고 있는 페이지의 목록 하나만 그린다 — 이유는 그 파일 주석.
+ * 발견 탭 루트라 스택 뒤로가기 스와이프와 겹치지 않는다.
  */
 
 type Nav = NativeStackNavigationProp<TabStackParamList>;
@@ -85,23 +91,44 @@ export default function TrendingScreen() {
     ? categoryId
     : ALL_CATEGORY.id;
 
-  const activeCategoryName =
-    allCategories.find(c => c.id === activeCategoryId)?.name ??
-    ALL_CATEGORY.name;
-
-  // 칩 선택 — 순서 판단 근거(web 은 ?tab= page_view 로 잰다). 앱은 칩 줄에 스와이프가 없어 전부 누름이다.
-  const handleSelectCategory = useCallback(
-    (id: number) => {
+  // 카테고리 선택 — 순서 판단 근거(web 은 ?tab= page_view 로 잰다). method 로 칩 누름·본문 스와이프를 가른다.
+  const selectCategory = useCallback(
+    (id: number, method: 'tap' | 'swipe') => {
       if (id !== activeCategoryId) {
         Analytics.track('trending_category_select', {
           category_id: id,
           position: allCategories.findIndex(c => c.id === id), // 0 = 전체
           view,
+          method,
         });
       }
       requestTrendingCategory(id);
     },
     [activeCategoryId, allCategories, view],
+  );
+  const handleSelectCategory = useCallback(
+    (id: number) => selectCategory(id, 'tap'),
+    [selectCategory],
+  );
+  const handleSwipeCategory = useCallback(
+    (id: number) => selectCategory(id, 'swipe'),
+    [selectCategory],
+  );
+
+  // 끌기 시작하면 양옆 카테고리를 미리 받는다 — 손을 떼면 스켈레톤 없이 바로 채워진다.
+  const queryClient = useQueryClient();
+  const prefetchNeighbors = useCallback(
+    (ids: number[]) => {
+      for (const id of ids) {
+        if (view === 'live') {
+          queryClient.prefetchInfiniteQuery(TrendingQueries.live(id));
+        } else {
+          queryClient.prefetchQuery(TrendingQueries.ranking(id));
+          queryClient.prefetchQuery(TrendingQueries.rankingLive(id));
+        }
+      }
+    },
+    [queryClient, view],
   );
 
   const handlePressProduct = useCallback(
@@ -112,6 +139,32 @@ export default function TrendingScreen() {
   );
 
   const reservedBottom = getReservedBottomPx(insets.bottom);
+
+  /*
+    ★ key 로 카테고리를 갈아끼운다. 같은 컴포넌트를 유지하면 스크롤
+    위치와 노출 dedup 집합이 이전 카테고리에서 넘어와, 새 카테고리
+    상단이 "이미 본 것"으로 취급돼 CTR 분모가 빈다.
+  */
+  const renderPage = useCallback(
+    (category: CategoryItem) =>
+      view === 'live' ? (
+        <LiveList
+          key={`live-${category.id}`}
+          categoryId={category.id}
+          onPressProduct={handlePressProduct}
+          bottomInset={reservedBottom}
+        />
+      ) : (
+        <RankingList
+          key={`ranking-${category.id}`}
+          categoryId={category.id}
+          categoryName={category.name}
+          onPressProduct={handlePressProduct}
+          bottomInset={reservedBottom}
+        />
+      ),
+    [view, handlePressProduct, reservedBottom],
+  );
 
   return (
     <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>
@@ -139,29 +192,18 @@ export default function TrendingScreen() {
             onSelect={handleSelectCategory}
           />
 
-          {/*
-            ★ key 로 카테고리를 갈아끼운다. 같은 컴포넌트를 유지하면 스크롤
-            위치와 노출 dedup 집합이 이전 카테고리에서 넘어와, 새 카테고리
-            상단이 "이미 본 것"으로 취급돼 CTR 분모가 빈다.
-          */}
-          {view === 'live' ? (
-            <LiveList
-              key={`live-${activeCategoryId}`}
-              categoryId={activeCategoryId}
-              onPressProduct={handlePressProduct}
-              bottomInset={reservedBottom}
-            />
-          ) : (
-            <RankingList
-              key={`ranking-${activeCategoryId}`}
-              categoryId={activeCategoryId}
-              categoryName={activeCategoryName}
-              onPressProduct={handlePressProduct}
-              bottomInset={reservedBottom}
-            />
-          )}
+          <CategoryPager
+            categories={allCategories}
+            activeId={activeCategoryId}
+            onSwipeTo={handleSwipeCategory}
+            onDragStart={prefetchNeighbors}
+            renderPage={renderPage}
+            renderPlaceholder={renderPagePlaceholder}
+          />
         </View>
       )}
     </View>
   );
 }
+
+const renderPagePlaceholder = () => <GridSkeleton />;
