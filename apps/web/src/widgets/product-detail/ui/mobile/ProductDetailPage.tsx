@@ -63,7 +63,13 @@ function ProductDetailPage({
 
   return (
     <>
-      {device && <FirstVisitAlertSheet device={device} title={initialProduct?.title} />}
+      {device && (
+        <FirstVisitAlertSheet
+          device={device}
+          title={initialProduct?.title}
+          productId={initialProduct?.id}
+        />
+      )}
 
       {/* google-anno-skip: desktop ProductDetailPage 와 같은 이유 — UI 글자에 광고 인텐트 링크·칩이 끼지 않게. */}
       <main className="google-anno-skip">

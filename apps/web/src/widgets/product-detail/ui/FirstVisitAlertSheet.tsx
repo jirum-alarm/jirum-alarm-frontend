@@ -5,6 +5,7 @@ import { Drawer } from 'vaul';
 
 import { CheckDeviceResult } from '@/app/actions/agent.types';
 
+import { ProductService } from '@/shared/api/product';
 import { PAGE } from '@/shared/config/page';
 import { isAndroidUA, isInAppBrowserUA } from '@/shared/config/user-agent';
 import useAlertSession from '@/shared/hooks/useAlertSession';
@@ -30,6 +31,10 @@ import FirstVisitAppAlertModal, {
 } from '@/features/app-download/ui/FirstVisitAppAlertModal';
 import { useUpdateKeyword } from '@/features/mypage/model/update-keyword';
 import { deriveKeyword } from '@/features/product-detail/lib/deriveKeyword';
+import {
+  isFirstVisitHoldout,
+  waitForDeviceId,
+} from '@/features/product-detail/lib/first-visit-holdout';
 
 /**
  * 웹 푸시를 못 받는 첫 방문자 A/B(2026-10-09~): control = 앱 설치 시트(안드로이드 인앱 비회원은 브라우저 넘기기),
@@ -38,6 +43,7 @@ import { deriveKeyword } from '@/features/product-detail/lib/deriveKeyword';
  * 판정: okachat_prompt_click(placement=first_visit)/view vs app_download_click·handoff 클릭/노출.
  */
 const FIRST_VISIT_AB_KEY = 'jirum:fv-ab-okachat';
+const FIRST_VISIT_HOLDOUT_RECORDED_KEY = 'jirum:fv-holdout-recorded';
 
 function pickFirstVisitVariant(): 'okachat' | 'control' {
   try {
@@ -73,14 +79,19 @@ function pushEvent(event: string, props: Record<string, unknown>) {
  * 계측은 GTM 에 태그가 있는 keyword_prompt_view/click 을 재사용한다(placement=first_visit) — 새 이벤트명은 GTM
  * 태그 없이는 GA4 에 안 들어간다. 등록 자체는 keyword_register(source=first_visit).
  */
+type SheetMode = 'none' | 'keyword' | 'handoff' | 'okachat' | 'app';
+
 export default function FirstVisitAlertSheet({
   device,
   title,
+  productId,
 }: {
   device: CheckDeviceResult;
   title?: string;
+  /** 상품 id — 첫 방문 배정 기록용(product.id 는 문자열로 온다) */
+  productId?: string | number;
 }) {
-  const [mode, setMode] = useState<'none' | 'keyword' | 'handoff' | 'okachat' | 'app'>('none');
+  const [mode, setMode] = useState<SheetMode>('none');
   const keyword = deriveKeyword(title ?? '');
   const { isLoggedIn } = useIsLoggedIn();
 
@@ -93,41 +104,76 @@ export default function FirstVisitAlertSheet({
       return;
     }
     if (seen) return;
-    const status = readPushStatus();
-    const canPush = status === 'default' || status === 'ok';
-    const hasKeyword = [...new Intl.Segmenter().segment(keyword)].length >= 2;
-    // 웹 푸시를 못 받는 사람(이미 카톡방에 있는 사람 제외)은 절반에게 카톡방 시트.
-    if (!(canPush && hasKeyword) && shouldShowOkachatSoftPrompt()) {
-      if (pickFirstVisitVariant() === 'okachat') {
-        localStorage.setItem(FIRST_VISIT_SEEN_KEY, '1');
-        // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage·알림 권한·UA 는 브라우저에만 있다. 첫 방문 판정은 하이드레이션 뒤에 한 번 한다.
-        setMode('okachat');
-        pushOkachatEvent('okachat_prompt_view', 'first_visit');
+    let cancelled = false;
+    // 시트 숨김 실험(first_visit_sheet_holdout_v1) — 어느 군이든 배정을 서버에 남긴다(분석: 같은 기기 구매 클릭).
+    const recordArm = (arm: string) => {
+      const id = Number(productId);
+      if (!id) return;
+      void ProductService.collectPriceContextImpression({
+        productId: id,
+        source: device.isMobile ? 'detail_mobile' : 'detail_desktop',
+        detail: `first_visit:${arm}`,
+      }).catch(() => {});
+    };
+    const show = (next: Exclude<SheetMode, 'none'>) => {
+      recordArm(next);
+      setMode(next);
+    };
+    void waitForDeviceId().then((deviceId) => {
+      if (cancelled) return;
+      if (deviceId && isFirstVisitHoldout(deviceId)) {
+        // 숨김 군은 SEEN 을 안 남겨 상세마다 여기로 온다 — 배정 기록은 기기당 한 번.
+        try {
+          if (localStorage.getItem(FIRST_VISIT_HOLDOUT_RECORDED_KEY)) return;
+          localStorage.setItem(FIRST_VISIT_HOLDOUT_RECORDED_KEY, '1');
+        } catch {
+          return;
+        }
+        recordArm('holdout');
         return;
       }
-    }
-    const ua = navigator.userAgent;
-    const handoff =
-      !isLoggedIn &&
-      canHandoffToBrowser({
-        isAndroid: isAndroidUA(ua),
-        isInAppBrowser: isInAppBrowserUA(ua),
-        hasNotificationApi: 'Notification' in window,
-      });
-    if (hasKeyword && handoff) {
+      decide();
+    });
+    return () => {
+      cancelled = true;
+    };
+
+    function decide() {
+      const status = readPushStatus();
+      const canPush = status === 'default' || status === 'ok';
+      const hasKeyword = [...new Intl.Segmenter().segment(keyword)].length >= 2;
+      // 웹 푸시를 못 받는 사람(이미 카톡방에 있는 사람 제외)은 절반에게 카톡방 시트.
+      if (!(canPush && hasKeyword) && shouldShowOkachatSoftPrompt()) {
+        if (pickFirstVisitVariant() === 'okachat') {
+          localStorage.setItem(FIRST_VISIT_SEEN_KEY, '1');
+          show('okachat');
+          pushOkachatEvent('okachat_prompt_view', 'first_visit');
+          return;
+        }
+      }
+      const ua = navigator.userAgent;
+      const handoff =
+        !isLoggedIn &&
+        canHandoffToBrowser({
+          isAndroid: isAndroidUA(ua),
+          isInAppBrowser: isInAppBrowserUA(ua),
+          hasNotificationApi: 'Notification' in window,
+        });
+      if (hasKeyword && handoff) {
+        localStorage.setItem(FIRST_VISIT_SEEN_KEY, '1');
+        show('handoff');
+        pushEvent('keyword_prompt_view', { keyword, push_status: 'handoff' });
+        return;
+      }
+      if (!canPush || !hasKeyword) {
+        show('app'); // 앱 설치 시트가 스스로 SEEN 을 남긴다.
+        return;
+      }
       localStorage.setItem(FIRST_VISIT_SEEN_KEY, '1');
-      setMode('handoff');
-      pushEvent('keyword_prompt_view', { keyword, push_status: 'handoff' });
-      return;
+      show('keyword');
+      pushEvent('keyword_prompt_view', { keyword, push_status: status });
     }
-    if (!canPush || !hasKeyword) {
-      setMode('app'); // 앱 설치 시트가 스스로 SEEN 을 남긴다.
-      return;
-    }
-    localStorage.setItem(FIRST_VISIT_SEEN_KEY, '1');
-    setMode('keyword');
-    pushEvent('keyword_prompt_view', { keyword, push_status: status });
-  }, [device.isJirumAlarmApp, keyword, isLoggedIn]);
+  }, [device.isJirumAlarmApp, device.isMobile, keyword, isLoggedIn, productId]);
 
   if (mode === 'app') return <FirstVisitAppAlertModal device={device} />;
   if (mode === 'okachat') {
