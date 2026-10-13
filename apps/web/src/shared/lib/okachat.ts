@@ -46,8 +46,7 @@ export function markOkachatJoined(room: OkachatRoom = 'hotdeal'): void {
   window.dispatchEvent(new Event(okachatJoinedEvent(room)));
 }
 
-export type OkachatPlacement =
-  'soft' | 'after_purchase' | 'first_visit' | 'home_banner' | 'beauty_landing';
+export type OkachatPlacement = 'soft' | 'after_purchase' | 'first_visit' | 'home_banner';
 
 /**
  * 안드로이드에서 카카오 중간 페이지(open.kakao.com)를 건너뛰고 카톡을 바로 여는 intent.
@@ -147,7 +146,8 @@ function pushOkachatHandoff(
     placement,
     result,
     room,
-    ...(exp ? { exp } : {}),
+    // GTM 데이터 영역은 페이지 동안 값을 기억한다 — 실험 없는 이벤트도 exp 를 비워야 앞 이벤트 값이 안 샌다.
+    exp: exp ?? undefined,
   });
 }
 
@@ -210,6 +210,7 @@ export function pushOkachatEvent(
     event,
     placement,
     room,
-    ...(exp ? { exp } : {}),
+    // GTM 데이터 영역은 페이지 동안 값을 기억한다 — 실험 없는 이벤트도 exp 를 비워야 앞 이벤트 값이 안 샌다.
+    exp: exp ?? undefined,
   });
 }
