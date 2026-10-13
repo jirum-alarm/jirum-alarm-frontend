@@ -8,6 +8,10 @@ import {
   DealEvidenceStrength,
   type ProductDealEvidenceQuery,
 } from '@/shared/api/gql/graphql';
+import {
+  isPriceAnswerKind,
+  usePriceAnswerHoldout,
+} from '@/screens/detail/lib/price-answer-holdout';
 import {ProductService} from '@/shared/api/product/product.service';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {Analytics} from '@/shared/lib/analytics/ga4';
@@ -38,10 +42,22 @@ export default function DealEvidenceBlock({
   const c = useColors();
   const headline = evidence?.headline ?? null;
   const impressedRef = useRef<number | null>(null);
+  const priceAnswer = isPriceAnswerKind(headline?.kind);
+  const holdout = usePriceAnswerHoldout();
 
   useEffect(() => {
     if (!headline || impressedRef.current === productId) return;
+    // 가격 답은 실험 군을 안 뒤에 센다 — 숨김 군이면 숨긴 사실만 남긴다(web 과 같은 detail).
+    if (priceAnswer && holdout === null) return;
     impressedRef.current = productId;
+    if (priceAnswer && holdout) {
+      void ProductService.collectPriceContextImpression({
+        productId,
+        source: 'app_detail',
+        detail: `evidence_holdout:${headline.kind}`,
+      }).catch(() => {});
+      return;
+    }
     Analytics.track('price_verdict_impression', {
       productId,
       kind: headline.kind,
@@ -53,9 +69,11 @@ export default function DealEvidenceBlock({
       source: 'app_detail',
       detail: `evidence:${headline.kind}`,
     }).catch(() => {});
-  }, [headline, productId]);
+  }, [headline, productId, priceAnswer, holdout]);
 
   if (!evidence || !headline) return null;
+  // 「답」 숨김 실험(price_answer_holdout_v1) — 군을 알기 전·숨김 군이면 가격 답 블록을 그리지 않는다.
+  if (priceAnswer && holdout !== false) return null;
 
   const target: EvidenceTarget | null =
     headline.kind === DealEvidenceKind.History

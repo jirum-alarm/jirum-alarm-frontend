@@ -13,6 +13,8 @@ import { CHUNK_RELOAD_SCRIPT } from '@/shared/lib/chunk-reload';
 import { cn } from '@/shared/lib/cn';
 import { pretendard } from '@/shared/lib/fonts';
 
+import { PRICE_ANSWER_HOLDOUT_SCRIPT } from '@/features/product-detail/lib/price-answer-holdout';
+
 import { PATHNAME_HEADER } from '../proxy';
 
 import { checkDevice } from './actions/agent';
@@ -66,6 +68,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <PublicEnvScript />
         {/* 다른 스크립트보다 먼저 — 배포 중 조각 404 를 새로고침으로 복구(chunk-reload.ts). */}
         <script dangerouslySetInnerHTML={{ __html: CHUNK_RELOAD_SCRIPT }} />
+        {/* 첫 페인트 전 — 「답」 숨김 실험 군 표식(price-answer-holdout.ts). 캐시 SSR 이라 서버가 못 정한다. */}
+        <script dangerouslySetInnerHTML={{ __html: PRICE_ANSWER_HOLDOUT_SCRIPT }} />
         <link rel="preconnect" href="https://cdn.jirum-alarm.com" crossOrigin="" />
         {/* GTM 컨테이너(GTM_ID)는 load 이후 lazyOnload 로 붙는다(AppProvider). dataLayer 는 그보다 먼저
             있어야 그 사이의 push(identify·view_item…)가 큐에 남는다. 표준 스니펫의 gtm.start 도 여기서. */}

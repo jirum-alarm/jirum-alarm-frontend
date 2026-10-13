@@ -7,6 +7,8 @@ import { ProductService } from '@/shared/api/product';
 import type { ProductDealEvidence } from '@/shared/api/product/product.service';
 import { cn } from '@/shared/lib/cn';
 
+import { isPriceAnswerHoldoutPage, isPriceAnswerKind } from '../lib/price-answer-holdout';
+
 function pushEvent(event: string, props: Record<string, unknown>) {
   if (typeof window === 'undefined') return;
   (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
@@ -41,6 +43,15 @@ export default function DealEvidenceBlock({ productId, source, evidence }: Props
   useEffect(() => {
     if (!headline || impressedRef.current === productId) return;
     impressedRef.current = productId;
+    // 「답」 숨김 실험 군이면 블록은 CSS 로 숨겨져 있다 — 숨긴 사실만 따로 남긴다(분석: 같은 기기·상품 구매 클릭).
+    if (isPriceAnswerKind(headline.kind) && isPriceAnswerHoldoutPage()) {
+      void ProductService.collectPriceContextImpression({
+        productId,
+        source,
+        detail: `evidence_holdout:${headline.kind}`,
+      }).catch(() => {});
+      return;
+    }
     // GA4 이벤트 이름은 판정 카드 때 그대로 — GTM 태그가 이 이름을 본다.
     pushEvent('price_verdict_impression', {
       productId,
@@ -88,7 +99,10 @@ export default function DealEvidenceBlock({ productId, source, evidence }: Props
   ) : null;
 
   return (
-    <div className={cn('mt-3 px-4 py-3', infoBox)}>
+    <div
+      className={cn('mt-3 px-4 py-3', infoBox)}
+      data-price-answer={isPriceAnswerKind(headline.kind) ? '1' : undefined}
+    >
       <div className="flex gap-2.5">
         <span
           className={cn(

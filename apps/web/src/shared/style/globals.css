@@ -46,6 +46,11 @@ html {
   --bottom-fab-gap: 1rem;
 }
 
+/* 「답」 숨김 실험(price_answer_holdout_v1) — 첫 페인트 전 인라인 스크립트가 html 에 표식을 단 기기만 가격 답 블록을 숨긴다. */
+html[data-answer-holdout='1'] [data-price-answer='1'] {
+  display: none !important;
+}
+
 html[data-bottom-nav='true'] {
   --bottom-nav-padding: calc(56px + env(safe-area-inset-bottom));
   --bottom-chrome-padding: 0.75rem;
