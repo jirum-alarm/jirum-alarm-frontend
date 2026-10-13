@@ -10,6 +10,8 @@ const {
   findKeywordHubsForTitle,
   keywordHubPath,
   buildKeywordHubSeo,
+  summarizeKeywordHubRhythm,
+  describeKeywordHubRhythm,
   KEYWORD_HUB_MIN_DEALS,
 } = require('./keyword-hub.ts') as typeof import('./keyword-hub');
 
@@ -50,6 +52,22 @@ describe('matchesKeywordHub', () => {
     assert.equal(matchesKeywordHub('아이폰 17 프로 케이스', hub('아이폰')), false);
     assert.equal(matchesKeywordHub('진흥 전등 스위치 2구', hub('스위치2')), false);
   });
+
+  it('2026-10-14 실측 오탐을 뺀다 — 휴지통·고양이 참치·에어컨 필터·기저귀 사은품', () => {
+    assert.equal(matchesKeywordHub('셀미닉 냄새차단 자동 센서 휴지통 18L', hub('휴지')), false);
+    assert.equal(matchesKeywordHub('모나리자 화장지 20m 30롤', hub('휴지')), true);
+    assert.equal(matchesKeywordHub('테비 고양이캔 치킨참치 85g 48개', hub('참치')), false);
+    assert.equal(matchesKeywordHub('사조 안심따개 살코기참치 135g 4개', hub('참치')), true);
+    assert.equal(matchesKeywordHub('필립스 차량용 에어컨 필터 PM0.3', hub('에어컨')), false);
+    assert.equal(matchesKeywordHub('캐리어 벽걸이 인버터 에어컨 6평', hub('에어컨')), true);
+    assert.equal(
+      matchesKeywordHub('팸퍼스 통잠팬티 기저귀 8팩+컬쳐랜드 5천원 증정', hub('컬쳐랜드')),
+      false,
+    );
+    assert.equal(matchesKeywordHub('아삭아삭 제주 콜라비 2kg', hub('콜라')), false);
+    assert.equal(matchesKeywordHub('갤럭시 Z폴드8 256GB 자급제', hub('갤럭시')), true);
+    assert.equal(matchesKeywordHub('미에르 구스다운 갤럭시 패브릭 모듈소파', hub('갤럭시')), false);
+  });
 });
 
 describe('findKeywordHubsForTitle', () => {
@@ -82,7 +100,7 @@ describe('buildKeywordHubSeo', () => {
     assert.equal(seo.title, '삼다수 핫딜 모음 · 최근 30일 12건 | 지름알림');
     assert.equal(
       seo.lead,
-      '최근 30일 동안 커뮤니티에 올라온 삼다수 핫딜 12건을 모았어요. 가장 최근 딜은 제주 삼다수 2L 48통 33,570원(뽐뿌 · 10월 1일).',
+      '최근 30일 동안 커뮤니티·쇼핑몰 특가에 올라온 삼다수 핫딜 12건을 모았어요. 가장 최근 딜은 제주 삼다수 2L 48통 33,570원(뽐뿌 · 10월 1일).',
     );
     assert.equal(seo.indexable, true);
   });
@@ -104,5 +122,57 @@ describe('buildKeywordHubSeo', () => {
   it('최저가 숫자는 제목·설명에 넣지 않는다(원값 오독)', () => {
     const seo = buildKeywordHubSeo(hub('삼다수'), Array(6).fill(deal));
     assert.doesNotMatch(`${seo.title} ${seo.description}`, /최저/);
+  });
+});
+
+describe('summarizeKeywordHubRhythm', () => {
+  const at = (iso: string, nameKr = '뽐뿌') => ({
+    title: 't',
+    postedAt: iso,
+    provider: { nameKr },
+  });
+
+  it('올라온 날은 KST 날짜로 센다 — 같은 날 여러 건은 하루', () => {
+    const r = summarizeKeywordHubRhythm([
+      at('2026-10-01T01:00:00Z'),
+      at('2026-10-01T10:00:00Z'),
+      // 10/1 16:00 UTC = 10/2 01:00 KST
+      at('2026-10-01T16:00:00Z'),
+    ]);
+    assert.equal(r.activeDays, 2);
+  });
+
+  it('주로 올라오는 곳은 몫 15% 이상 최대 2곳', () => {
+    const deals = [
+      ...Array(6).fill(at('2026-10-01T01:00:00Z', '뽐뿌')),
+      ...Array(3).fill(at('2026-10-01T01:00:00Z', '이토랜드')),
+      at('2026-10-01T01:00:00Z', '클리앙'),
+    ];
+    assert.deepEqual(
+      summarizeKeywordHubRhythm(deals).topSources.map((s) => s.name),
+      ['뽐뿌', '이토랜드'],
+    );
+  });
+});
+
+describe('describeKeywordHubRhythm', () => {
+  it('30일 중 21일 이상이면 「거의 매일」, 아니면 알림 권유', () => {
+    const often = describeKeywordHubRhythm('계란', {
+      activeDays: 29,
+      windowDays: 30,
+      topSources: [],
+    });
+    assert.equal(often?.headline, '최근 30일 중 29일 올라왔어요');
+    assert.match(often?.advice ?? '', /거의 매일/);
+    const rare = describeKeywordHubRhythm('에어컨', {
+      activeDays: 6,
+      windowDays: 30,
+      topSources: [],
+    });
+    assert.match(rare?.advice ?? '', /놓치지 않아요/);
+    assert.equal(
+      describeKeywordHubRhythm('x', { activeDays: 0, windowDays: 30, topSources: [] }),
+      null,
+    );
   });
 });

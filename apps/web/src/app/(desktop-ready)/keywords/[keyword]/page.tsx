@@ -10,9 +10,11 @@ import { cn } from '@/shared/lib/cn';
 
 import {
   buildKeywordHubSeo,
+  describeKeywordHubRhythm,
   findKeywordHub,
   KEYWORD_HUBS,
   keywordHubPath,
+  summarizeKeywordHubRhythm,
 } from '@/entities/keyword-hub/lib/keyword-hub';
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
@@ -37,8 +39,8 @@ const safeDecode = (s: string) => {
 async function loadHub(params: Params) {
   const hub = findKeywordHub(safeDecode((await params).keyword));
   if (!hub) return null;
-  const deals = await fetchKeywordHubDeals(hub);
-  return { hub, deals, seo: buildKeywordHubSeo(hub, deals) };
+  const { deals, windowDays } = await fetchKeywordHubDeals(hub);
+  return { hub, deals, windowDays, seo: buildKeywordHubSeo(hub, deals, windowDays) };
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
@@ -68,7 +70,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 export default async function KeywordHubPage({ params }: { params: Params }) {
   const loaded = await loadHub(params);
   if (!loaded) notFound();
-  const { hub, deals, seo } = loaded;
+  const { hub, deals, windowDays, seo } = loaded;
 
   // 건수(제목·설명)는 전체로 세고, 화면엔 최근 것만 싣는다 — 기저귀는 30일 149건이라 카드가 HTML 을 무겁게 한다.
   const cards: ProductCardType[] = deals.slice(0, MAX_CARDS).map((d) => ({
@@ -110,10 +112,45 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
 
   const otherHubs = KEYWORD_HUBS.filter((h) => h.slug !== hub.slug);
 
+  // 얼마나 자주·어디에 — 셀 수 있는 사실만(가격은 원값 오독이 많아 쓰지 않는다).
+  const rhythm = describeKeywordHubRhythm(hub.name, summarizeKeywordHubRhythm(deals, windowDays));
+  const faqs = rhythm
+    ? [
+        {
+          q: `${hub.name} 핫딜은 얼마나 자주 올라오나요?`,
+          a: `${rhythm.headline}. 모두 ${deals.length}건이에요. ${rhythm.advice}`,
+        },
+        ...(rhythm.sources
+          ? [
+              {
+                q: `${hub.name} 핫딜은 어디에 주로 올라오나요?`,
+                a: `최근 ${windowDays}일 기준 ${rhythm.sources} 순으로 많이 올라왔어요.`,
+              },
+            ]
+          : []),
+        {
+          q: `${hub.name} 핫딜 알림은 어떻게 받나요?`,
+          a: `지름알림 마이페이지 → 키워드 알림에 「${hub.name}」 키워드를 등록하면 ${hub.name} 핫딜이 올라올 때 푸시로 알려드려요. 제외할 단어와 가격 범위도 정할 수 있어요.`,
+        },
+      ]
+    : [];
+  const faqLd =
+    faqs.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faqs.map((f) => ({
+            '@type': 'Question',
+            name: f.q,
+            acceptedAnswer: { '@type': 'Answer', text: f.a },
+          })),
+        }
+      : null;
+
   // /deals 와 같은 틀: UA 분기 없이 한 마크업(크롤러·모바일 모두 같은 h1·본문).
   return (
     <main className="max-w-mobile-max pc:max-w-layout-max pc:pt-24 mx-auto w-full px-5 pt-14 pb-24">
-      {[itemListLd, breadcrumbLd].filter(Boolean).map((ld, i) => (
+      {[itemListLd, breadcrumbLd, faqLd].filter(Boolean).map((ld, i) => (
         <script
           key={i}
           type="application/ld+json"
@@ -140,11 +177,46 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
         </Link>
       </header>
 
+      {rhythm ? (
+        <section
+          aria-label={`${hub.name} 핫딜이 올라오는 리듬`}
+          className="mb-6 rounded-xl bg-gray-50 px-4 py-3"
+        >
+          <p className="text-sm font-semibold text-gray-900">{rhythm.headline}</p>
+          {rhythm.sources ? (
+            <p className="mt-0.5 text-xs text-gray-500">주로 올라오는 곳 · {rhythm.sources}</p>
+          ) : null}
+          <p className="mt-1.5 text-sm text-gray-600">{rhythm.advice}</p>
+        </section>
+      ) : null}
+
       {cards.length > 0 ? (
         <ProductGridList products={cards} priorityCount={4} />
       ) : (
         <p className={cn('py-20 text-center', emptyText)}>최근 올라온 {hub.name} 핫딜이 없어요.</p>
       )}
+
+      {faqs.length > 0 ? (
+        <section className="mt-14">
+          <h2 className="mb-2 text-base font-semibold text-gray-900">
+            {hub.name} 핫딜, 자주 묻는 질문
+          </h2>
+          <dl className="divide-y divide-gray-100 border-y border-gray-100 text-sm">
+            {faqs.map((f) => (
+              <div key={f.q} className="py-3">
+                <dt className="font-medium text-gray-900">{f.q}</dt>
+                <dd className="mt-1 leading-relaxed text-gray-600">{f.a}</dd>
+              </div>
+            ))}
+          </dl>
+          <Link
+            href={PAGE.HELP}
+            className="mt-3 inline-block text-sm text-gray-500 underline underline-offset-2"
+          >
+            지름알림 사용법 · 자주 묻는 질문
+          </Link>
+        </section>
+      ) : null}
 
       <nav aria-label="다른 키워드 핫딜" className="mt-14">
         <h2 className="mb-3 text-base font-semibold text-gray-900">다른 키워드 핫딜</h2>
