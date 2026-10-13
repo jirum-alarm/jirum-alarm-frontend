@@ -39,9 +39,11 @@ import {
   GridMenuIcon,
   HashtagMenuIcon,
   HeadsetMenuIcon,
+  HelpMenuIcon,
   ThemeMenuIcon,
 } from '@/features/mypage/ui/icons';
 import {useColors} from '@/shared/theme/useColors';
+import {HELP_PATH} from '@/constants/env';
 import {useAuth} from '@/shared/hooks/useAuth';
 import {useLeaveGuestSession} from '@/shared/hooks/useRequireLogin';
 import {
@@ -216,6 +218,17 @@ export default function MyPageScreen() {
             />
           </MenuGroup>
           <MenuGroup label="지원">
+            {/* 본문은 web /help(약관과 같은 방식 — 정본 하나, 고칠 때 OTA·스토어 불필요). */}
+            <MenuRow
+              icon={<HelpMenuIcon />}
+              title="사용법 · 자주 묻는 질문"
+              onPress={() =>
+                navigation.push(tabStackNavigations.WEBVIEW, {
+                  uri: HELP_PATH,
+                  title: '사용법 · 자주 묻는 질문',
+                })
+              }
+            />
             <MenuRow
               icon={<DescriptionMenuIcon />}
               title="약관 및 정책"

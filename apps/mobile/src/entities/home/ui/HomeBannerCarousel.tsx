@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {NavigationContext} from '@react-navigation/native';
+import {NavigationContext, StackActions} from '@react-navigation/native';
 import {
   Dimensions,
   Image,
@@ -26,7 +26,8 @@ import {useQuery} from '@tanstack/react-query';
 import PressableScale from '@/shared/components/PressableScale';
 import {openInAppBrowser} from '@/shared/lib/navigation';
 import {AdvertiseSlotLocation} from '@/shared/api/gql/graphql';
-import {LANDING_URL} from '@/constants/env';
+import {HELP_PATH} from '@/constants/env';
+import {tabStackNavigations} from '@/shared/constant/navigations';
 import {
   useReduceMotion,
   useScreenReaderEnabled,
@@ -266,6 +267,8 @@ function BannerSlideView({
   isVisible: boolean;
 }) {
   const {recordImpression, recordClick} = useAdTracking();
+  // 사용법 배너가 웹뷰 화면을 쌓는다. 컨텍스트로 받는 이유는 아래 포커스 훅과 같다(내비게이터 밖 렌더 허용).
+  const navigation = useContext(NavigationContext);
 
   // 광고 노출 집계: 화면에 보이는 슬라이드만 1회.
   // web 은 useInView({threshold:0.5, triggerOnce:true}) — 같은 의미다.
@@ -313,11 +316,18 @@ function BannerSlideView({
     <BannerCard
       title="지름알림, "
       strongTitle="어떻게 쓰나요?"
-      description="소개 페이지에서 한눈에 알아보세요!"
+      description="사용법과 자주 묻는 질문을 모았어요"
       image={LANDING_IMAGE}
       // eslint-disable-next-line no-restricted-syntax -- 소개 페이지 배너 고유색(짙은 초록, web AboutLink 와 같은 값)
       backgroundClassName="bg-[#193E21] border-[#34673C]"
-      onPress={() => openInAppBrowser(LANDING_URL)}
+      onPress={() =>
+        navigation?.dispatch(
+          StackActions.push(tabStackNavigations.WEBVIEW, {
+            uri: HELP_PATH,
+            title: '사용법 · 자주 묻는 질문',
+          }),
+        )
+      }
     />
   );
 }
