@@ -72,7 +72,13 @@ jobs:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: |
           set -euo pipefail
-          group=$(npx eas update:list --branch production --limit 1 --json --non-interactive | jq -r '.currentPage[0].group // empty')
+          # 이 커밋 runtime 의 마지막 발행과 비교한다. runtime 을 안 가리면 ① 네이티브 버전을 올린 푸시가 옛 runtime 커밋과
+          # 비교돼 기동 확인 없이 건너뛰고(10/13 1.5.2), ② 백포트(ota/runtime-*) 발행이 가장 최근이면 그 브랜치 커밋과
+          # 비교돼 web 만 바뀐 푸시에도 같은 OTA 가 또 나간다. 새 runtime 의 첫 푸시는 발행 기록이 없어 app=true —
+          # 새 바이너리로 기동 확인을 돌고 내장 번들과 같은 내용을 발행한다(무해).
+          runtime=$(jq -r '.expo.runtimeVersion' app.json)
+          group=$(npx eas update:list --branch production --limit 50 --json --non-interactive \
+            | jq -r --arg rt "$runtime" '[.currentPage[] | select(.runtimeVersion == $rt)][0].group // empty')
           last=""
           [ -n "$group" ] && last=$(npx eas update:view "$group" --json | jq -r '.[0].gitCommitHash // empty')
           app=true
@@ -85,7 +91,7 @@ jobs:
             app=false
           fi
           echo "app=$app" >> "$GITHUB_OUTPUT"
-          echo "마지막 production OTA 커밋 ${last:-없음} → 앱 번들 입력 변경: $app" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "runtime $runtime 마지막 production OTA 커밋 ${last:-없음} → 앱 번들 입력 변경: $app" | tee -a "$GITHUB_STEP_SUMMARY"
 
   boot-check:
     needs: changes
