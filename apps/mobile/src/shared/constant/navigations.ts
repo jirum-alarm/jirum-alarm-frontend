@@ -36,6 +36,8 @@ const tabStackNavigations = {
   /** 네이티브 화면이 아직 없는 web 페이지(토스 등)를 루트 스택에 쌓는다. */
   WEBVIEW: 'TabWebViewPage',
   COMMENTS: 'ProductComments',
+  /** 구매 링크 웹뷰 — 쇼핑몰 앱으로 바로 넘긴다(실험 app_purchase_webview_v1). */
+  PURCHASE_BROWSER: 'PurchaseBrowser',
 
   // ── 내정보 탭 (web /mypage/** · /like · /themes · /policies) ──
   // ★8개 라우트를 한 번에 내야 한다 — 절반만 네이티브면 같은 설정 화면이
