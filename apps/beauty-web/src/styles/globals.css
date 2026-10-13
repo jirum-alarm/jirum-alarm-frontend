@@ -1,0 +1,52 @@
+@import 'tailwindcss';
+
+/* 색·글자·모서리·그림자 토큰(디자인 시스템). 값을 바꾸려면 packages/design-system/tokens.js */
+@import '@jirum/design-system/theme.css';
+
+@theme {
+  --font-sans: var(--font-pretendard);
+  /* web globals.css 와 같은 모바일 폭 — 폰은 꽉 차게, 넓은 화면은 600px 칸을 가운데. */
+  --breakpoint-mobile-max: min(600px, 100vw);
+  --container-mobile-max: min(600px, 100vw);
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+html {
+  @apply text-gray-900;
+  font-synthesis: none !important;
+}
+
+body {
+  background-color: var(--color-white);
+}
+
+/* 다크모드 = 클래스를 바꾸지 않고 토큰 값을 바꾼다(theme.css 의 html.dark) — web 과 같은 방식.
+   COLOR_SCHEME=dark 쿠키(web 마이페이지에서 켬, path=/ 라 이 앱도 받는다) → 서버가 <html class="dark"> 를 심는다. */
+html.dark {
+  color-scheme: dark;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

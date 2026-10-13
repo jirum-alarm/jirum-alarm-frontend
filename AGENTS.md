@@ -24,7 +24,8 @@ jirum-alarm-frontend/
 │   ├── mobile/             # Expo bare React Native app (iOS·Android)
 │   ├── web/                # Main web application (port 3000)
 │   ├── admin/              # Admin dashboard (port 3000, 운영 도구)
-│   └── landing/            # Landing page (port 3100)
+│   ├── landing/            # Landing page (port 3100)
+│   └── beauty-web/         # 지름알림 뷰티 — jirum-alarm.com/beauty (basePath, port 3300)
 ├── packages/               # Shared packages
 │   ├── eslint/            # ESLint configuration
 │   ├── prettier/          # Prettier configuration  
@@ -234,6 +235,22 @@ pnpm build            # Production build
   - 테마와 무관해야 하는 자리(홈 상단 어두운 띠·사진 위 배지·색 배지 위 흰 글자·라임 버튼 위 짙은 글자)는 `fixed-*`(`text-fixed-white`, `bg-fixed-900`).
   - className 이 안 닿는 색(아이콘 color·placeholderTextColor·RefreshControl·StyleSheet)은 hex 대신 `useColors()`, 헤더·탭바는 `useChromeColors()`.
   - 웹뷰 화면(글쓰기·약관·고객센터·공용 웹뷰)도 같은 모드다 — 앱이 지금 모드를 웹뷰 쿠키 `COLOR_SCHEME` 에 적고(`shared/theme/webview-color-scheme-cookie.ts`) web 서버가 그 값으로 `<html class="dark">` 를 그린다(2026-10-10). 이미 열린 웹뷰는 다시 열어야 바뀐다. 웹뷰 틀(상태바 영역·안전 영역)에 흰색을 박지 말 것. 네이티브 탭바 PNG 는 `*-dark` 변형이 따로 있다(`assets/tab-icons/README.md`).
+
+### 5. **Beauty Web** (`apps/beauty-web/`) — 지름알림 뷰티
+화장품(categoryId 3)만 보이는 별도 Next 앱. 도메인은 그대로 `jirum-alarm.com/beauty/*`(검색 색인 승계) — 게이트웨이가 `/beauty` 접두만 이 파드로 보낸다.
+- **basePath `/beauty` 는 gitops 라우팅과의 계약**(정적 자산도 `/beauty/_next/…`). 컨테이너 포트 3000.
+- basePath 밖(`/products/{id}`·`/search`·`/login`·`/api/graphql`·`/_next/image`)은 본 서비스(web) 파드가 받는다 → 그쪽 링크는 next/link 가 아니라 일반 `<a>`(`ServiceLink`).
+  브라우저 GraphQL·사진 최적화도 web 의 루트 `/api/graphql`·`/_next/image` 를 같이 쓴다(로컬 단독 실행은 next.config.ts rewrites 가 운영으로 넘긴다 — 읽기만, 쓰기는 `service-host.ts` 가 막는다).
+  `next.config.ts` 의 이미지 크기 목록은 web 과 같아야 한다.
+- 런타임 env 는 서버에서 next-runtime-env `env()` 로 읽는다(`NEXT_PUBLIC_*` 를 process.env 로 직접 읽으면 빌드 값이 박힌다): `API_URL`·`NEXT_PUBLIC_SERVICE_URL`·`NEXT_PUBLIC_KAKAO_BEAUTY_ROOM_URL`(비면 카톡방 안내 숨김).
+- 계측은 web 과 같은 GTM 컨테이너·같은 data-* 카드 속성. 노출 출처 `beauty_home`·`beauty_ranking`, 카드에 `data-service="beauty"`, dataLayer `service`·`content_group`=beauty.
+- web 에서 옮긴 조각(카드 표기·okachat·노출 추적·로고·아이콘)은 파일 머리 주석에 원본 경로가 있다 — web 쪽 규칙을 바꾸면 같이 바꾼다.
+- 배포: main push → `deploy-beauty-web-staging`, `v*.*.*` 태그 → `deploy-beauty-web-prod`(이미지 `jirum-alarm-frontend-beauty-web`, gitops `apps/frontend-beauty-web/overlays/*`).
+
+```bash
+pnpm --filter beauty-web dev     # http://localhost:3300/beauty (운영 공개 API 를 읽는다)
+pnpm --filter beauty-web build && pnpm --filter beauty-web test
+```
 
 ## 📦 Shared Packages
 

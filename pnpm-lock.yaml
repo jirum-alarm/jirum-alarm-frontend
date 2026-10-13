@@ -176,6 +176,73 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
 
+  apps/beauty-web:
+    dependencies:
+      '@jirum/design-system':
+        specifier: workspace:*
+        version: link:../../packages/design-system
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      dayjs:
+        specifier: ^1.11.23
+        version: 1.11.23
+      next:
+        specifier: 16.4.0
+        version: 16.4.0(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@types/node@22.20.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      next-runtime-env:
+        specifier: ^3.3.0
+        version: 3.3.0(next@16.4.0(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@types/node@22.20.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
+      react:
+        specifier: 19.3.0
+        version: 19.3.0
+      react-dom:
+        specifier: 19.3.0
+        version: 19.3.0(react@19.3.0)
+      tailwind-merge:
+        specifier: ^3.7.0
+        version: 3.7.0
+    devDependencies:
+      '@jirum/eslint-config-jirum':
+        specifier: workspace:*
+        version: link:../../packages/eslint
+      '@jirum/prettier':
+        specifier: workspace:*
+        version: link:../../packages/prettier
+      '@jirum/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/typescript
+      '@tailwindcss/postcss':
+        specifier: ^4.3.3
+        version: 4.3.3
+      '@types/node':
+        specifier: ^22.20.5
+        version: 22.20.5
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: ^19.3.0
+        version: 19.3.0(@types/react@19.3.0)
+      eslint:
+        specifier: ^10.12.0
+        version: 10.12.0(jiti@2.7.0)
+      postcss:
+        specifier: ^8.5.29
+        version: 8.5.29
+      prettier:
+        specifier: ^3.9.9
+        version: 3.9.9
+      prettier-plugin-tailwindcss:
+        specifier: ^0.8.1
+        version: 0.8.1(prettier@3.9.9)
+      tailwindcss:
+        specifier: ^4.3.3
+        version: 4.3.3
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+
   apps/landing:
     dependencies:
       '@jirum/design-system':
