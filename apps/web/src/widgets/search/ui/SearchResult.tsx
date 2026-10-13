@@ -67,35 +67,39 @@ export default function SearchResult({ show }: { show: boolean }) {
           <ProductGridListSkeleton length={20} />
         </div>
       ) : isProductEmpty ? (
-        <div className="flex justify-center pt-5 pb-10">
-          {hasActiveFilters ? (
-            <div className="flex flex-col items-center gap-4 pt-5 text-center">
-              <p className={emptyText}>
-                선택한 필터에 맞는 결과가 없어요.
-                <br />
-                필터를 조정하면 더 많은 딜을 볼 수 있어요.
-              </p>
-              <button
-                type="button"
-                onClick={resetFilters}
-                className="rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700"
-              >
-                필터 초기화
-              </button>
-            </div>
-          ) : (
-            // 진짜 0건(필터 없음·종료 제외). 종료된 딜만 있는 검색어면 위에 '품절 포함'으로 넘어갈 길을 낸다.
-            <div className="flex w-full flex-col">
-              <EndedDealsRescue
-                keyword={keyword ?? ''}
-                onShowEnded={() => setFilters({ ended: true })}
-              />
-              <Suspense fallback={<></>}>
-                <ProductNotFound />
-              </Suspense>
-            </div>
-          )}
-        </div>
+        // 검색어가 없으면(검색 초기 화면 — 이 컴포넌트는 숨긴 채 마운트돼 있다) 빈 화면도 그리지 않는다. 그리면
+        // 숨은 0건 화면이 매 진입마다 search_no_result(키워드 빈 값)를 쏘고 인기 핫딜까지 불러왔다 — GA4 0건의 대부분이 이것.
+        !keyword ? null : (
+          <div className="flex justify-center pt-5 pb-10">
+            {hasActiveFilters ? (
+              <div className="flex flex-col items-center gap-4 pt-5 text-center">
+                <p className={emptyText}>
+                  선택한 필터에 맞는 결과가 없어요.
+                  <br />
+                  필터를 조정하면 더 많은 딜을 볼 수 있어요.
+                </p>
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700"
+                >
+                  필터 초기화
+                </button>
+              </div>
+            ) : (
+              // 진짜 0건(필터 없음·종료 제외). 종료된 딜만 있는 검색어면 위에 '품절 포함'으로 넘어갈 길을 낸다.
+              <div className="flex w-full flex-col">
+                <EndedDealsRescue
+                  keyword={keyword ?? ''}
+                  onShowEnded={() => setFilters({ ended: true })}
+                />
+                <Suspense fallback={<></>}>
+                  <ProductNotFound />
+                </Suspense>
+              </div>
+            )}
+          </div>
+        )
       ) : (
         <div
           className={cn(
