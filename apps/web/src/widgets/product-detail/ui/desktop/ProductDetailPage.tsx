@@ -23,7 +23,11 @@ import PriceHistorySection from '@/features/product-detail/ui/PriceHistorySectio
 import type { GuideRow as ProductGuideRow } from '@/features/product-detail/ui/ProductGuideMetaRows';
 import ProductPriceContext from '@/features/product-detail/ui/ProductPriceContext';
 import SoftKakaoOpenChatPrompt from '@/features/product-detail/ui/SoftKakaoOpenChatPrompt';
-import { CategoryPopularByProductSection, TogetherViewedSection } from '@/features/product-list/ui';
+import {
+  CategoryPopularByProductSection,
+  TogetherViewedSection,
+  TossInternalLinksSection,
+} from '@/features/product-list/ui';
 
 import CommunityReaction from '../CommunityReaction';
 import FirstVisitAlertSheet from '../FirstVisitAlertSheet';
@@ -140,6 +144,12 @@ export default async function DesktopProductDetailPage({
               </div>
               <Hr />
               <div>
+                {/* 토스 상품끼리 잇는 내부 링크(실험 toss_internal_link_v1) — 네이버가 토스 상세를 더 긁게. */}
+                {tossData && (
+                  <Suspense>
+                    <TossInternalLinksSection productId={productId} />
+                  </Suspense>
+                )}
                 <Suspense>
                   <TogetherViewedSection productId={productId} />
                 </Suspense>

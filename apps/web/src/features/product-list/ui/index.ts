@@ -2,3 +2,4 @@ export { default as CategoryPopularByProductSection } from './CategoryPopularByP
 export { default as CategoryPopularSection } from './CategoryPopularSection';
 export { default as ClusteredPriceSection } from './ClusteredPriceSection';
 export { default as TogetherViewedSection } from './TogetherViewedSection';
+export { default as TossInternalLinksSection } from './TossInternalLinksSection';

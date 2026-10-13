@@ -184,6 +184,12 @@ export const ProductQueries = {
       queryFn: () => ProductService.getLatestSimilarDeals(variables),
     }),
 
+  tossInternalLinks: (variables: { id: number }) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'toss-internal-links'],
+      queryFn: () => ProductService.getTossInternalLinks(variables),
+    }),
+
   coupangSearchCta: (variables: { productId: number }) =>
     queryOptions({
       queryKey: [

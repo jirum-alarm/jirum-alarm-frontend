@@ -208,6 +208,15 @@ export class ProductService {
       .catch(() => empty);
   }
 
+  // 토스 상세의 「토스에서 함께 보는 상품」(실험 toss_internal_link_v1) — 토스 상품이 아니면 빈 목록.
+  // 부가 블록이라 실패는 빈 목록.
+  static async getTossInternalLinks(variables: { id: number }) {
+    const empty = { tossInternalLinks: [] as ProductListResult['products'] };
+    return execute(QueryTossInternalLinks, variables)
+      .then((res) => res.data ?? empty)
+      .catch(() => empty);
+  }
+
   // 오래된 딜의 「쿠팡에서 지금 가격 보기」(실험 coupang_search_cta_v1) — 대상이 아니거나 아직 링크가 없으면 null.
   // 부가 버튼이라 실패는 null.
   static async getCoupangSearchCta(variables: { productId: number }) {
@@ -622,6 +631,35 @@ const QueryCoupangSearchCta = new TypedDocumentString<
     coupangSearchCta(productId: $productId) {
       url
       query
+    }
+  }
+`);
+
+const QueryTossInternalLinks = new TypedDocumentString<
+  { tossInternalLinks: ProductListResult['products'] },
+  { id: number }
+>(`
+  query QueryTossInternalLinks($id: Int!) {
+    tossInternalLinks(id: $id) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      mallName
+      hotDealType
+      provider {
+        nameKr
+      }
+      searchAfter
+      estimatedTotal
+      postedAt
     }
   }
 `);
