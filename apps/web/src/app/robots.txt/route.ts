@@ -19,7 +19,19 @@ Sitemap: ${METADATA_SERVICE_URL}/sitemap/sitemap-recent-index.xml
 Sitemap: ${METADATA_SERVICE_URL}/keywords/sitemap.xml`
     : '';
 
-  const robotsTxt = `User-agent: *
+  // SEO 분석 툴 크롤러는 통째로 막는다. 검색 노출과 무관하고(우리가 이 툴들을 쓰지 않는다)
+  // 2026-10-13 게이트웨이 로그 기준 하루 ~3.6만 요청(Ahrefs 2.3만·Semrush 7.7천·MJ12 3.5천·DotBot 1.7천)이
+  // 대부분 상품 SSR 이었다. 이름을 지정한 그룹은 `*` 그룹 대신 적용되므로 `*` 규칙과 섞이지 않는다.
+  // dev 호스트도 같이 막는다 — 위 noindex 논리는 검색엔진 얘기이고 이 툴들은 색인과 상관없다.
+  const robotsTxt = `User-agent: AhrefsBot
+User-agent: SemrushBot
+User-agent: MJ12bot
+User-agent: DotBot
+User-agent: DataForSeoBot
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: *
 Disallow: /admin/
 Disallow: /mypage
 Disallow: /like
