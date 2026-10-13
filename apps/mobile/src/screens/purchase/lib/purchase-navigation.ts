@@ -133,3 +133,14 @@ export function appSchemeName(url: string): string {
  * 웹에서 결제하다 카드·은행 앱으로 갔다 오는 경우는 결제 화면이 남아 있어야 한다.
  */
 export const LANDING_HANDOFF_WINDOW_MS = 8000;
+
+/**
+ * 여는 동안 웹뷰를 가리는 시간. 제휴 링크는 중간 페이지(쿠팡 「Deeplink Redirect」의 바로가기 버튼 화면,
+ * 토스 onelink 등)를 0.3~2초 거쳐 앱으로 넘어간다 — 그 중간 화면이 그대로 보이면 「웹이 떴다가 모달이
+ * 뜨고 넘어간다」로 읽힌다(사용자, 2026-10-13). 그 사이엔 우리 로딩 화면을 보이고,
+ * - 앱으로 넘어가면 가린 채로 둔다(돌아오면 화면이 닫힌다),
+ * - 웹 페이지가 다 뜬 뒤 SETTLE 동안 다음 이동이 없으면(= 앱 없이 웹으로 끝남) 걷는다,
+ * - 그래도 MAX 를 넘기면 걷는다(느린 중간 페이지에서 사람을 붙잡지 않게).
+ */
+export const LANDING_COVER_SETTLE_MS = 900;
+export const LANDING_COVER_MAX_MS = 4000;
