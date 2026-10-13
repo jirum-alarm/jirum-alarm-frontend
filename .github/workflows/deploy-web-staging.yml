@@ -144,8 +144,6 @@ jobs:
             NEXT_PUBLIC_ADSENSE_SLOT_PRODUCT_DETAIL=${{ env.NEXT_PUBLIC_ADSENSE_SLOT_PRODUCT_DETAIL }}
             NEXT_PUBLIC_ADSENSE_SLOT_SEARCH_INFEED=${{ env.NEXT_PUBLIC_ADSENSE_SLOT_SEARCH_INFEED }}
             NODE_ENV=${{ vars.NODE_ENV }}
-          provenance: true
-          sbom: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
