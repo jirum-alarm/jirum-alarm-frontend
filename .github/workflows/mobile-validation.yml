@@ -19,6 +19,10 @@ on:
       - pnpm-workspace.yaml
       - turbo.json
   push:
+    # ota/runtime-* 는 scripts/ota-backport.sh 가 발행 전에 같은 검사(설치·tsc·지문·jest)와 기동 확인을 돈다.
+    # 옛 브랜치에선 그때의 워크플로·expo-doctor 가 지금 러너·SDK 와 안 맞아 늘 빨갰다(10/13) — 신호를 흐려서 끈다.
+    branches-ignore:
+      - 'ota/**'
     paths:
       - .github/workflows/mobile-validation.yml
       - .npmrc
