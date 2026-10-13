@@ -16,7 +16,9 @@
  * 뷰티방 링크 env(NEXT_PUBLIC_KAKAO_BEAUTY_ROOM_URL)가 비어도 꺼진다.
  */
 export const BEAUTY_ROOM_EXPERIMENT_ID = 'beauty_detail_room_v1';
-export const BEAUTY_ROOM_PERCENT = 50;
+// 2026-10-14 전면 적용(100): 4주 군별 권유 클릭 ~26회(GA4 9/30~10/13 기준선 × 화장품 7.8%)라 검출 가능 최소 2.2배 —
+// 판정이 안 나는 실험이라 접고 화장품 상세 전원에게 뷰티방을 권한다. 효과는 관찰 obs_beauty_kakao_room 으로 본다.
+export const BEAUTY_ROOM_PERCENT = 100;
 /** shared/config/categories 의 '화장품'. /beauty 랜딩(beauty.query.ts)과 같은 카테고리. */
 export const BEAUTY_CATEGORY_ID = 3;
 

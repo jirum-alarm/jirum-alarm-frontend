@@ -30,13 +30,17 @@ test('버킷은 서버 experimentBucket 과 같은 값이다', () => {
   }
 });
 
-test('화장품 상세만 배정 — 버킷 50 미만이 b(뷰티방), 나머지 a', () => {
-  assert.equal(beautyRoomArmForBucket(10, BEAUTY_CATEGORY_ID), 'b');
-  assert.equal(beautyRoomArmForBucket(49, BEAUTY_CATEGORY_ID), 'b');
-  assert.equal(beautyRoomArmForBucket(50, BEAUTY_CATEGORY_ID), 'a');
-  assert.equal(beautyRoomArmForBucket(85, BEAUTY_CATEGORY_ID), 'a');
+test('화장품 상세만 배정 — 비율을 주면 버킷 < 비율이 b(뷰티방), 나머지 a', () => {
+  assert.equal(beautyRoomArmForBucket(10, BEAUTY_CATEGORY_ID, 50), 'b');
+  assert.equal(beautyRoomArmForBucket(49, BEAUTY_CATEGORY_ID, 50), 'b');
+  assert.equal(beautyRoomArmForBucket(50, BEAUTY_CATEGORY_ID, 50), 'a');
   assert.equal(beautyRoomArmForBucket(10, 1), null);
   assert.equal(beautyRoomArmForBucket(10, undefined), null);
+});
+
+test('기본값(전면 적용 100) — 화장품 상세는 버킷과 무관하게 전부 b', () => {
+  assert.equal(beautyRoomArmForBucket(0, BEAUTY_CATEGORY_ID), 'b');
+  assert.equal(beautyRoomArmForBucket(99, BEAUTY_CATEGORY_ID), 'b');
 });
 
 test('기기 id 가 없거나(버킷 없음) 실험을 끄면 대상이 아니다', () => {

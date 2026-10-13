@@ -12,7 +12,9 @@ import {experimentBucket} from '@/shared/lib/experiment/experiment-bucket';
  * ★진행 중인 실험 id 를 바꾸면 배정이 섞인다. 끄려면 PERCENT 를 0 으로(OTA).
  */
 export const BEAUTY_ROOM_EXPERIMENT_ID = 'beauty_detail_room_v1';
-export const BEAUTY_ROOM_PERCENT = 50;
+// 2026-10-14 전면 적용(100): 4주 군별 권유 클릭 ~26회(GA4 9/30~10/13 기준선 × 화장품 7.8%)라 검출 가능 최소 2.2배 —
+// 판정이 안 나는 실험이라 접고 화장품 상세 전원에게 뷰티방을 권한다. 효과는 관찰 obs_beauty_kakao_room 으로 본다.
+export const BEAUTY_ROOM_PERCENT = 100;
 export const BEAUTY_CATEGORY_ID = 3;
 
 export type BeautyRoomArm = 'a' | 'b';

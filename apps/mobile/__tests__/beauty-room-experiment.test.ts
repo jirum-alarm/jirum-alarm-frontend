@@ -42,18 +42,22 @@ describe('beauty_detail_room_v1 — 화장품 상세 뷰티방 실험', () => {
     }
   });
 
-  it('화장품 상세만, 버킷 50 미만이 b(뷰티방)·나머지 a', () => {
-    expect(beautyRoomAssignment('device-6', BEAUTY_CATEGORY_ID)).toEqual({
+  it('화장품 상세만, 비율을 주면 버킷 < 비율이 b(뷰티방)·나머지 a', () => {
+    expect(beautyRoomAssignment('device-6', BEAUTY_CATEGORY_ID, 50)).toEqual({
       arm: 'b',
       exp: 'beauty_detail_room_v1:b',
     });
-    expect(beautyRoomAssignment('device-1', BEAUTY_CATEGORY_ID)).toEqual({
+    expect(beautyRoomAssignment('device-1', BEAUTY_CATEGORY_ID, 50)).toEqual({
       arm: 'a',
       exp: 'beauty_detail_room_v1:a',
     });
     expect(beautyRoomAssignment('device-6', 1)).toBeNull();
     expect(beautyRoomAssignment(null, BEAUTY_CATEGORY_ID)).toBeNull();
     expect(beautyRoomAssignment('device-6', BEAUTY_CATEGORY_ID, 0)).toBeNull();
+  });
+
+  it('기본값(전면 적용 100) — 화장품 상세는 전부 b', () => {
+    expect(beautyRoomAssignment('device-1', BEAUTY_CATEGORY_ID)?.arm).toBe('b');
   });
 
   it('okachat 이벤트에 room·exp 를 싣는다 (web 과 같은 파라미터)', () => {
