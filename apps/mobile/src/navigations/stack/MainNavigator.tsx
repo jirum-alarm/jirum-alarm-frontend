@@ -17,6 +17,7 @@ import CurationScreen from '@/screens/curation/CurationScreen';
 import TossCurationScreen from '@/screens/curation/TossCurationScreen';
 import ProductDetailScreen from '@/screens/detail/ProductDetailScreen';
 import ProductCommentsScreen from '@/screens/comment/ProductCommentsScreen';
+import PurchaseBrowserScreen from '@/screens/purchase/PurchaseBrowserScreen';
 // 내정보 — 하위 화면들은 자체 StackHeader 를 그린다(네비게이터 옵션 불필요).
 import AccountScreen from '@/screens/mypage/AccountScreen';
 import NicknameScreen from '@/screens/mypage/NicknameScreen';
@@ -139,6 +140,11 @@ function MainStackNavigator() {
           // 갖고 있어 헤더가 두 개로 겹친다. 뒤로가기는 웹 헤더와
           // iOS 스와이프가 담당한다.
           options={{headerShown: false}}
+        />
+        {/* 헤더는 화면이 직접 그린다(닫기·이전 페이지·브라우저로 열기). */}
+        <RootStack.Screen
+          name={tabStackNavigations.PURCHASE_BROWSER}
+          component={PurchaseBrowserScreen}
         />
         <RootStack.Screen
           name={tabStackNavigations.COMMENTS}
