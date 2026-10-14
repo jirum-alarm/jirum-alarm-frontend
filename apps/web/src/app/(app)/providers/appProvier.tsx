@@ -12,12 +12,11 @@ import FCMConfig from '@/shared/lib/firebase/FCMConfig';
 
 import AppHandoffLanding from '@/features/app-download/ui/AppHandoffLanding';
 import BrowserHandoffArrival from '@/features/app-download/ui/BrowserHandoffArrival';
-import PushChannelSheet from '@/features/app-download/ui/PushChannelSheet';
-import LoginModal from '@/features/auth/ui/login/LoginModal';
 
 import { ClarityProvider } from './clarityProvider';
 import { DeviceId } from './deviceId';
 import { EntryTracker } from './entryTracker';
+import { LazyLoginModal, LazyPushChannelSheet } from './lazyOverlays';
 import { ProductCardTracker } from './productCardTracker';
 import { ReactQueryProviders } from './ReactQueryProviders';
 import ServerStateProvider from './ServerStateProvider';
@@ -70,8 +69,8 @@ export const AppProvider = ({ children, device, isLoggedIn, isGuest }: Props) =>
               <EntryTracker />
               <ProductCardTracker />
               <NuqsAdapter>{children}</NuqsAdapter>
-              <LoginModal />
-              <PushChannelSheet />
+              <LazyLoginModal />
+              <LazyPushChannelSheet />
               <BrowserHandoffArrival />
               <AppHandoffLanding />
             </ReactQueryProviders>

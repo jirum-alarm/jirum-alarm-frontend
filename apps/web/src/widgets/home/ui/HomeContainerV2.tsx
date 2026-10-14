@@ -51,11 +51,7 @@ async function HomeContainerV2() {
   ]);
 
   const renderDesktop = () => {
-    return (
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <DesktopHeroSection />
-      </HydrationBoundary>
-    );
+    return <DesktopHeroSection />;
   };
 
   const renderMobile = () => {
@@ -63,9 +59,7 @@ async function HomeContainerV2() {
       return (
         <>
           <MobileHomeHeader />
-          <HydrationBoundary state={dehydrate(queryClient)}>
-            <MobileBackgroundHeader />
-          </HydrationBoundary>
+          <MobileBackgroundHeader />
         </>
       );
     }
@@ -82,10 +76,11 @@ async function HomeContainerV2() {
 
   // bg-white 는 pb-[--bottom-nav-padding] 과 같은 요소에 있어야 한다(BasicLayout 과 동일).
   // main 에만 두면 하단 여백이 흰 배경 밖이라 탭바 위로 페이지 배경이 비친다.
+  // HydrationBoundary 는 하나만 — 상단·본문에 따로 두면 같은 쿼리 4개가 RSC 페이로드에 두 번 실린다.
   return (
     <div className="pc:max-w-none pc:pb-0 max-w-mobile-max mx-auto h-full w-full overflow-x-hidden bg-white pb-[var(--bottom-nav-padding)]">
-      {!isMobile ? renderDesktop() : renderMobile()}
       <HydrationBoundary state={dehydrate(queryClient)}>
+        {!isMobile ? renderDesktop() : renderMobile()}
         <main className="pc:mt-[770px] pc:w-full pc:max-w-none pc:rounded-t-3xl pc:pt-[72px] max-w-mobile-max rounded-t-sheet relative z-10 mt-[160px] bg-white pt-3">
           <h1 className="sr-only">지름알림 · 실시간 초특가 핫딜 정보 모아보기</h1>
           <div className="pc:mx-auto pc:max-w-layout-max">
