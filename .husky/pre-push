@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+# 2026-10-15 이력 재작성 가드: 비밀번호가 평문으로 들어 있던 옛 커밋(7ced8361, 재작성 전 main)을 조상으로
+# 가진 브랜치를 push 하면 지운 비밀번호가 원격에 다시 올라간다. 옛 main 위 브랜치는
+#   git rebase --onto origin/main $(git merge-base HEAD 860da98e)
+# 로 새 이력에 옮긴 뒤 push 한다.
+LEAK=7ced836155e81a582a1ba4b2ce322447ea790b34
+git cat-file -e "$LEAK^{commit}" 2>/dev/null || exit 0
+while read -r local_ref local_sha remote_ref remote_sha; do
+  case "$local_sha" in 0000000000000000000000000000000000000000) continue ;; esac
+  if git merge-base --is-ancestor "$LEAK" "$local_sha" 2>/dev/null; then
+    echo "✋ $local_ref 는 재작성 전 옛 이력(7ced8361 포함) 위에 있습니다 — push 하면 지운 비밀번호가 다시 올라갑니다." >&2
+    echo "   git rebase --onto origin/main \$(git merge-base HEAD 860da98e) 로 옮긴 뒤 push 하세요." >&2
+    exit 1
+  fi
+done
+exit 0
