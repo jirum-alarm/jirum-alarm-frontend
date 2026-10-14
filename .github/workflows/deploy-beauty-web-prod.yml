@@ -100,7 +100,7 @@ jobs:
         with:
           repository: ${{ secrets.INFRA_GITHUB_REPOSITORY }}
           ref: main
-          token: ${{ secrets.ACTION_TOKEN }}
+          ssh-key: ${{ secrets.GITOPS_DEPLOY_KEY }}
           path: infra
 
       - name: Install yq
