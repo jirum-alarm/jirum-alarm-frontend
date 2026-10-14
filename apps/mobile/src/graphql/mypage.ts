@@ -250,6 +250,7 @@ export const QueryMyPushSetting = graphql(`
   query QueryMyPushSetting {
     pushSetting {
       keywordAlert
+      keywordAlertLevel
       marketing
       nightAlerts
       communityAlert
@@ -262,6 +263,7 @@ export const QueryMyPushSetting = graphql(`
 export const MutationUpdateMyPushSetting = graphql(`
   mutation MutationUpdateMyPushSetting(
     $keywordAlert: Boolean
+    $keywordAlertLevel: KeywordAlertLevel
     $marketing: Boolean
     $nightAlerts: Boolean
     $communityAlert: Boolean
@@ -270,6 +272,7 @@ export const MutationUpdateMyPushSetting = graphql(`
   ) {
     updatePushSetting(
       keywordAlert: $keywordAlert
+      keywordAlertLevel: $keywordAlertLevel
       marketing: $marketing
       nightAlerts: $nightAlerts
       communityAlert: $communityAlert

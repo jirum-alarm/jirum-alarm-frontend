@@ -497,6 +497,12 @@ export type KakaoProfitLinkOutput = {
   profitLink?: Maybe<Scalars['String']['output']>;
 };
 
+/** 키워드 알림 받는 기준 — ALL 올라오는 즉시 / HOT 핫딜·대박딜이 됐을 때만 */
+export enum KeywordAlertLevel {
+  All = 'ALL',
+  Hot = 'HOT',
+}
+
 export type KeywordCountOutput = {
   __typename?: 'KeywordCountOutput';
   count: Scalars['Int']['output'];
@@ -1229,6 +1235,7 @@ export type MutationUpdatePushSettingArgs = {
   hotDealAlert?: InputMaybe<Scalars['Boolean']['input']>;
   info?: InputMaybe<Scalars['Boolean']['input']>;
   keywordAlert?: InputMaybe<Scalars['Boolean']['input']>;
+  keywordAlertLevel?: InputMaybe<KeywordAlertLevel>;
   marketing?: InputMaybe<Scalars['Boolean']['input']>;
   nightAlerts?: InputMaybe<Scalars['Boolean']['input']>;
   quietHoursEnd?: InputMaybe<Scalars['Int']['input']>;
@@ -1255,6 +1262,8 @@ export type Notification = {
   groupId: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
   keyword?: Maybe<Scalars['String']['output']>;
+  /** 알림 종류. 2026-10-14 이전 알림엔 없다(그땐 제목으로 구분) */
+  kind?: Maybe<NotificationKind>;
   message: Scalars['String']['output'];
   product?: Maybe<ProductOutput>;
   readAt?: Maybe<Scalars['DateTime']['output']>;
@@ -1291,6 +1300,17 @@ export type NotificationKeyword = {
   updatedAt: Scalars['DateTime']['output'];
   userId: Scalars['Int']['output'];
 };
+
+/** 알림 종류 */
+export enum NotificationKind {
+  Community = 'COMMUNITY',
+  GoodDeal = 'GOOD_DEAL',
+  Keyword = 'KEYWORD',
+  KeywordConfirm = 'KEYWORD_CONFIRM',
+  KeywordHot = 'KEYWORD_HOT',
+  KeywordPriceDrop = 'KEYWORD_PRICE_DROP',
+  Theme = 'THEME',
+}
 
 export enum NotificationTarget {
   Comment = 'COMMENT',
@@ -2836,6 +2856,8 @@ export type UserPushSetting = {
   id: Scalars['ID']['output'];
   info: Scalars['Boolean']['output'];
   keywordAlert: Scalars['Boolean']['output'];
+  /** 키워드 알림 받는 기준 — ALL 올라오는 즉시 / HOT 핫딜·대박딜이 됐을 때만 */
+  keywordAlertLevel: KeywordAlertLevel;
   marketing: Scalars['Boolean']['output'];
   marketingAgreedAt?: Maybe<Scalars['DateTime']['output']>;
   nightAlerts: Scalars['Boolean']['output'];
@@ -3686,6 +3708,7 @@ export type QueryMyPushSettingQuery = {
   pushSetting: {
     __typename?: 'UserPushSetting';
     keywordAlert: boolean;
+    keywordAlertLevel: KeywordAlertLevel;
     marketing: boolean;
     nightAlerts: boolean;
     communityAlert: boolean;
@@ -3696,6 +3719,7 @@ export type QueryMyPushSettingQuery = {
 
 export type MutationUpdateMyPushSettingMutationVariables = Exact<{
   keywordAlert?: InputMaybe<Scalars['Boolean']['input']>;
+  keywordAlertLevel?: InputMaybe<KeywordAlertLevel>;
   marketing?: InputMaybe<Scalars['Boolean']['input']>;
   nightAlerts?: InputMaybe<Scalars['Boolean']['input']>;
   communityAlert?: InputMaybe<Scalars['Boolean']['input']>;
@@ -5028,6 +5052,7 @@ export const QueryMyPushSettingDocument = new TypedDocumentString(`
     query QueryMyPushSetting {
   pushSetting {
     keywordAlert
+    keywordAlertLevel
     marketing
     nightAlerts
     communityAlert
@@ -5040,9 +5065,10 @@ export const QueryMyPushSettingDocument = new TypedDocumentString(`
   QueryMyPushSettingQueryVariables
 >;
 export const MutationUpdateMyPushSettingDocument = new TypedDocumentString(`
-    mutation MutationUpdateMyPushSetting($keywordAlert: Boolean, $marketing: Boolean, $nightAlerts: Boolean, $communityAlert: Boolean, $quietHoursStart: Int, $quietHoursEnd: Int) {
+    mutation MutationUpdateMyPushSetting($keywordAlert: Boolean, $keywordAlertLevel: KeywordAlertLevel, $marketing: Boolean, $nightAlerts: Boolean, $communityAlert: Boolean, $quietHoursStart: Int, $quietHoursEnd: Int) {
   updatePushSetting(
     keywordAlert: $keywordAlert
+    keywordAlertLevel: $keywordAlertLevel
     marketing: $marketing
     nightAlerts: $nightAlerts
     communityAlert: $communityAlert
