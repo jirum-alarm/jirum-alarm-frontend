@@ -20,9 +20,8 @@ export default async function Layout({ children }: { children: ReactNode }) {
   const renderDesktop = () => {
     return (
       <div className="mt-14 pt-8">
-        {/* 데스크톱엔 TrendingPageHeader(=sr-only h1 보유)가 안 깔려 h1 이 0개였다.
-            크롤러는 대부분 데스크톱 UA 라 실제로 색인되는 쪽이 이 분기다(2026-09-02 실측). */}
-        <h1 className="sr-only">지금 뜨는 핫딜 · 실시간 인기 상품</h1>
+        {/* h1 은 페이지마다(실시간=live/page.tsx, 랭킹=탭별 TrendingContainer). 레이아웃에 두면 두 화면·모든 탭이
+            같은 h1 이었다. 데스크톱 분기도 잊지 말 것 — 크롤러는 대부분 데스크톱 UA 다(2026-09-02 실측). */}
         <div className="max-w-layout-max mx-auto">{children}</div>
       </div>
     );

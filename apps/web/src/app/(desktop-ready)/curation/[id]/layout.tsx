@@ -39,7 +39,10 @@ export default async function Layout({ children, params }: LayoutProps) {
     return (
       <div className="mt-14 pt-8">
         {/* 헤더(h1)는 모바일 분기에만 있다 — 크롤러는 데스크톱 UA 라 여기에도 둔다. */}
-        <h1 className="sr-only">{section.title} 핫딜 모음</h1>
+        {/* 제목에 이미 「핫딜」이 있으면 붙이지 않는다(「놓치면 아까운 핫딜 핫딜 모음」이었다) — page.tsx 메타 제목과 같은 규칙. */}
+        <h1 className="sr-only">
+          {/핫딜/.test(section.title) ? section.title : `${section.title} 핫딜`} 모음
+        </h1>
         <SectionHeader title={section.title} />
         <div className="max-w-layout-max mx-auto">{children}</div>
       </div>

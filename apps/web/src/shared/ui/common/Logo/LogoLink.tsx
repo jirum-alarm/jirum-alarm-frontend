@@ -31,14 +31,15 @@ export default function LogoLink({ inverted = false, subtitle = LOGO_SUBTITLE }:
             두 줄 모두의 기준선이 되므로 들여쓰기를 따로 계산할 필요가 없다.
             leading-tight 로 두 줄 높이를 h-14 안에 들어오게 잡는다. */}
         <span className="flex flex-col justify-center whitespace-nowrap">
-          <h2
+          {/* 제목 태그가 아니다 — 모든 페이지 헤더에 깔려 문서 개요가 매번 「지름알림」 h2 로 시작했다(h1 보다 앞). */}
+          <span
             className={cn('relative text-lg leading-tight font-bold', {
               'text-fixed-white': inverted,
               'text-gray-800': !inverted,
             })}
           >
             지름알림
-          </h2>
+          </span>
           {subtitle && (
             <span
               className={cn('text-11 leading-tight', {

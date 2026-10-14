@@ -15,7 +15,6 @@ const TrendingPageHeader = () => {
         '-translate-y-14': !isHeaderVisible,
       })}
     >
-      <h1 className="sr-only">지금 뜨는 핫딜 · 실시간 인기 상품</h1>
       <PageTabNavigation />
       {/* <SearchLinkButton color="var(--color-gray-800)" /> */}
     </PageHeader>

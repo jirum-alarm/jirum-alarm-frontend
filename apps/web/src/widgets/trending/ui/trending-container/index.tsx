@@ -124,10 +124,18 @@ export const TrendingContainer = ({ initialTab }: Props) => {
   // tabId가 목록에 없는 창(로그인 상태 변화·선호 카테고리 수정으로 categoryIds가 줄어들 때
   // nuqs parse가 옛 클로저로 이미 통과시킨 값)에 대비해 0('전체')으로 떨어뜨린다.
   const activeIndex = Math.max(0, categoryIds.indexOf(tabId));
+  // 탭마다 주제가 다르다(카테고리 허브 — 상품 상세 빵부스러기의 가운데 단계). 예전엔 레이아웃이 실시간·랭킹·
+  // 모든 탭에 같은 h1 을 깔았다. 탭 전환은 클라이언트라 여기서 그린다(첫 HTML 은 initialTab 기준).
+  const activeName = allCategories[activeIndex]?.name;
+  const heading =
+    activeIndex === 0 || !activeName
+      ? '핫딜 랭킹 · 커뮤니티 반응 순 인기 핫딜'
+      : `${activeName} 핫딜 랭킹 · 커뮤니티 반응 순`;
 
   return (
     <Tabs.Root value={`${tabId}`} asChild>
       <div>
+        <h1 className="sr-only">{heading}</h1>
         <TabBarV2
           allCategories={allCategories}
           tabIndex={activeIndex}

@@ -3,7 +3,9 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { OrderOptionType, ProductOrderType, ThumbnailType } from '@/shared/api/gql/graphql';
+import { categoryRankingPath } from '@/shared/config/category-ranking';
 import { PAGE } from '@/shared/config/page';
+import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
 
 import { ProductQueries } from '@/entities/product';
 import { CarouselProductsSection } from '@/entities/product-list/ui/carousel';
@@ -39,5 +41,26 @@ export default function CategoryPopularSection({
 
   if (!products.length) return null;
 
-  return <CarouselProductsSection title={title} products={products} source="category_popular" />;
+  // 카테고리 허브(랭킹 탭)로 가는 크롤 가능한 링크. 상세 JSON-LD 빵부스러기의 가운데 단계와 같은 주소다 —
+  // 구조화 데이터가 말하는 경로가 화면에도 있어야 한다.
+  const rankingPath = categoryRankingPath(categoryId);
+
+  return (
+    <CarouselProductsSection
+      title={title}
+      products={products}
+      source="category_popular"
+      right={
+        rankingPath ? (
+          <InteractiveMoreLink
+            href={rankingPath}
+            className="text-sm text-gray-500 hover:text-gray-700"
+            aria-label={`${categoryName || '기타'} 핫딜 랭킹 더보기`}
+          >
+            더보기
+          </InteractiveMoreLink>
+        ) : undefined
+      }
+    />
+  );
 }

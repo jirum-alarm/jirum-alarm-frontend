@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { ReactNode, Suspense } from 'react';
 
 import { cn } from '@/shared/lib/cn';
 import SectionHeader from '@/shared/ui/SectionHeader';
@@ -17,6 +17,7 @@ export default function CarouselProductsSection({
   isFullWidth = false,
   priorityCount = 0,
   source,
+  right,
 }: {
   title: string;
   products: ProductCardType[];
@@ -25,11 +26,13 @@ export default function CarouselProductsSection({
   isFullWidth?: boolean;
   priorityCount?: number;
   source?: ProductCardSource;
+  /** 제목 오른쪽(더보기 링크 등). */
+  right?: ReactNode;
 }) {
   return (
     <section>
       <div className="pc:px-0 px-5">
-        <SectionHeader shouldShowMobileUI={shouldShowMobileHeader} title={title} />
+        <SectionHeader shouldShowMobileUI={shouldShowMobileHeader} title={title} right={right} />
       </div>
       {/* 리스트가 -mx-5 로 양옆 20px 를 빼 쓰므로 모바일은 여기서 px-5 로 받아준다. 없으면 페이지가
           20px 가로로 밀린다(상세·검색, 2026-10-08 실측 scrollWidth 380/360). */}

@@ -36,7 +36,12 @@ const LivePage = async ({ searchParams }: { searchParams: Promise<{ tab: string 
   const { tab } = await searchParams;
   const tabNumber = tab ? Number(tab) : 0;
 
-  return <LiveContainerServer tab={tabNumber} />;
+  return (
+    <>
+      <h1 className="sr-only">지금 뜨는 핫딜 · 실시간 인기 상품</h1>
+      <LiveContainerServer tab={tabNumber} />
+    </>
+  );
 };
 
 export default LivePage;

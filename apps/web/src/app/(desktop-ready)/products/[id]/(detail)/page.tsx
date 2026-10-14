@@ -6,9 +6,11 @@ import { cache } from 'react';
 import { checkDevice } from '@/app/actions/agent';
 import { getAccessToken } from '@/app/actions/token';
 
+import { UploaderType } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
 import type { ProductModelPageLink } from '@/shared/api/product/product.service';
 import { CATEGORY_MAP } from '@/shared/config/categories';
+import { categoryRankingPath } from '@/shared/config/category-ranking';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { robotsDirective } from '@/shared/config/metadata';
 import { isLightSsrCrawlerUA } from '@/shared/config/user-agent';
@@ -33,6 +35,10 @@ import {
   summarizePriceHistoryForSeo,
   toSeoImageUrl,
 } from '@/features/product-detail/lib/product-seo';
+import {
+  buildProductBreadcrumbItems,
+  buildProductItemPageJsonLd,
+} from '@/features/product-detail/lib/product-structured-data';
 import { isShareRequest } from '@/features/product-detail/lib/share-card';
 import { ProductPrefetch } from '@/features/product-detail/prefetch';
 
@@ -201,6 +207,8 @@ function generateProductJsonLd(
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
+    // ItemPage.mainEntity 가 이 id 로 가리킨다(generateItemPageJsonLd).
+    '@id': `${productUrl}#product`,
     name: product.title,
     url: productUrl,
     image: [image],
@@ -243,32 +251,49 @@ function generateProductJsonLd(
   };
 }
 
-// 지름알림 > (모델 페이지) > 상품. 카테고리 전용 URL 이 없어, 모델 페이지가 있을 때만 3단계다.
-// 네이버는 검색결과에 이 경로를 그대로 찍는다 — 2단이면 "지름알림 > 상품명" 이라 주제가 안 보인다.
 function generateBreadcrumbJsonLd(
   product: Awaited<ReturnType<typeof ProductService.getProductInfo>>,
   modelPage?: ProductModelPageLink | null,
 ) {
   if (!product) return null;
 
-  const items = [
-    { name: '지름알림', item: METADATA_SERVICE_URL },
-    ...(modelPage
-      ? [
-          {
-            name: `${buildModelDisplayName(modelPage.brand, modelPage.modelName)} 핫딜 모음`,
-            item: `${METADATA_SERVICE_URL}/deals/${modelPage.slug}`,
-          },
-        ]
-      : []),
-    { name: product.title, item: `${METADATA_SERVICE_URL}/products/${product.id}` },
-  ];
+  const categoryName = resolveCategoryName(product);
+  const items = buildProductBreadcrumbItems({
+    serviceUrl: METADATA_SERVICE_URL,
+    productId: product.id,
+    productTitle: product.title,
+    category: categoryName
+      ? { name: categoryName, path: categoryRankingPath(product.categoryId) }
+      : null,
+    modelPage: modelPage
+      ? { name: buildModelDisplayName(modelPage.brand, modelPage.modelName), slug: modelPage.slug }
+      : null,
+  });
 
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    '@id': `${METADATA_SERVICE_URL}/products/${product.id}#breadcrumb`,
     itemListElement: items.map((it, i) => ({ '@type': 'ListItem', position: i + 1, ...it })),
   };
+}
+
+function generateItemPageJsonLd(
+  product: Awaited<ReturnType<typeof ProductService.getProductInfo>>,
+  description: string,
+) {
+  if (!product) return null;
+
+  return buildProductItemPageJsonLd({
+    serviceUrl: METADATA_SERVICE_URL,
+    productId: product.id,
+    name: product.title,
+    description,
+    postedAt: product.postedAt,
+    image: toSeoImageUrl(product.thumbnail) ?? DEFAULT_OG_IMAGE,
+    // 사용자가 직접 올린 상품의 url 은 커뮤니티 글이 아니라 쇼핑몰 링크다.
+    sourceUrl: product.uploaderType === UploaderType.User ? null : product.url,
+  });
 }
 
 export async function generateMetadata({
@@ -532,6 +557,7 @@ export default async function ProductDetail({
     evidenceSentence,
   );
   const breadcrumbLd = generateBreadcrumbJsonLd(product, modelPageLink);
+  const itemPageLd = jsonLd ? generateItemPageJsonLd(product, jsonLd.description) : null;
 
   // LCP 이미지 preload 는 ProductDetailImage 의 next/image `priority` 가 head 에 만든다. 여기서
   // react-dom preload() 를 부르면 RSC HL 힌트로 나가 JS 로드 뒤에나 실행되고(Slow 4G 7.4s) URL 도 달라
@@ -543,6 +569,12 @@ export default async function ProductDetail({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {itemPageLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemPageLd) }}
+        />
+      )}
       {breadcrumbLd && (
         <script
           type="application/ld+json"

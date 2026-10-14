@@ -27,7 +27,8 @@ export function GET() {
 컴퓨터, 생활/식품, 화장품, 도서, 가전/가구, 등산/레저, 디지털, 육아, 상품권, 의류/잡화, 반려동물
 
 ## 상품 상세
-각 핫딜은 ${base}/products/{id} 에서 확인 가능하며, Product 구조화 데이터(JSON-LD)로 가격·판매처·카테고리를 제공합니다.
+각 핫딜은 ${base}/products/{id} 에서 확인 가능하며, 구조화 데이터(JSON-LD)로 가격·판매처·카테고리(Product), 게시일·처음 올라온 커뮤니티 글 주소(ItemPage datePublished·isBasedOn), 카테고리 경로(BreadcrumbList)를 제공합니다. 30일이 지난 딜은 재고를 주장하지 않습니다(availability 생략).
+카테고리별 인기 핫딜은 ${base}/trending/ranking?tab={카테고리 번호}, 같은 상품의 핫딜 이력은 ${base}/deals/{모델} 에 있습니다.
 
 ## 참고
 - 가격·재고는 실시간 변동되므로 상세 페이지의 최신 정보를 우선하세요.

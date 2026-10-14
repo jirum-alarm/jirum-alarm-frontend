@@ -24,7 +24,8 @@ export default async function Layout({ children }: { children: ReactNode }) {
         header={
           <PageHeader
             leading={<BackButton backTo={PAGE.HOME} />}
-            title={TITLE}
+            // 문자열을 넘기면 PageHeader 가 h1 을 만든다 — page.tsx 의 「토스 하루특가」 h1 과 겹쳐 모바일만 h1 이 둘이었다.
+            title={<span className="truncate text-lg font-semibold text-gray-900">{TITLE}</span>}
             actions={
               <>
                 <Link href={PAGE.SEARCH} aria-label="검색" title="검색" className="-m-2 p-2">
