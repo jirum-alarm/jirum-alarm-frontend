@@ -4,11 +4,14 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 import { PAGE } from '@/shared/config/page';
+import { isAndroidUA } from '@/shared/config/user-agent';
 import useAlertSession from '@/shared/hooks/useAlertSession';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import { cn } from '@/shared/lib/cn';
 import { getGraphqlErrorMessage } from '@/shared/lib/graphql-error';
+import { markKakaoBridgeSeen, seenKakaoBridgeToday } from '@/shared/lib/kakao-bridge';
+import { shouldUseKakaoBridge } from '@/shared/lib/kakao-bridge-ua';
 import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import { Alert } from '@/shared/ui/common/icons';
@@ -16,6 +19,7 @@ import { useToast } from '@/shared/ui/common/Toast';
 
 import { AuthQueries } from '@/entities/auth';
 
+import OpenInAppLink from '@/features/app-download/ui/OpenInAppLink';
 import { useUpdateKeyword } from '@/features/mypage/model';
 
 import { deriveKeyword } from '../lib/deriveKeyword';
@@ -54,6 +58,15 @@ export default function PostPurchaseKeywordPrompt({
   const { ensureAlertSession, canUseAlerts } = useAlertSession();
   const promptPushChannel = usePushChannelPrompt();
   const [done, setDone] = useState(false);
+  // 카톡 인앱이면 등록 뒤 「어디로 받을까요」 대신 앱으로 잇는다(shared/lib/kakao-bridge.ts).
+  // 이 배너는 구매 클릭 뒤에만 보여서(show) 서버 HTML 과 엇갈릴 일이 없다 — 렌더 중 UA 를 읽어도 된다.
+  const ua = typeof navigator === 'undefined' ? '' : navigator.userAgent;
+  const kakaoBridge = shouldUseKakaoBridge(ua);
+  const placement = kakaoBridge ? 'kakao_bridge_post_purchase' : 'post_purchase';
+  // 카톡 사람은 구매마다 같은 권유를 봤다(1인 10.7회) — 하루 한 번만. 열 때 한 번 읽어 고정한다.
+  const [kakaoSeenToday] = useState(
+    () => kakaoBridge && seenKakaoBridgeToday(typeof window === 'undefined' ? null : localStorage),
+  );
   // 상품이 바뀌면 이전 상품의 완료 상태가 남지 않도록 초기화 — effect 대신 렌더 중 비교로.
   const [doneResetTitle, setDoneResetTitle] = useState(title);
   if (title !== doneResetTitle) {
@@ -62,12 +75,13 @@ export default function PostPurchaseKeywordPrompt({
   }
 
   const { mutate: addNotificationKeyword, isPending } = useUpdateKeyword({
-    source: 'post_purchase',
+    source: kakaoBridge ? 'kakao_bridge' : 'post_purchase',
     onSuccess: () => {
       // 등록되면 배너가 사라지는 게 아니라 안내 문구로 바뀐다. 사라지면 등록이 된 건지
       // 눌림이 씹힌 건지 알 수 없다 — 결과를 남겨두는 쪽이 신뢰를 만든다.
       setDone(true);
-      promptPushChannel(keyword);
+      // 카톡 인앱은 웹 푸시도 브라우저 넘기기도 약한 통로라 묻지 않고, 완료 카드의 「앱에서 받기」로 잇는다.
+      if (!kakaoBridge) promptPushChannel(keyword);
     },
     onError: (error) => {
       // '이미 등록된 키워드'는 사용자 입장에선 실패가 아니라 이미 목적이 달성된 상태다.
@@ -105,11 +119,11 @@ export default function PostPurchaseKeywordPrompt({
 
   // done 이면 alreadyRegistered 를 무시한다. 방금 등록해서 목록에 들어간 것이므로
   // 여기서 숨기면 사용자가 누른 직후 배너가 사라져 등록됐는지 알 수 없다.
-  const visible = show && hasKeyword && (done || !alreadyRegistered);
+  const visible = show && hasKeyword && (done || (!alreadyRegistered && !kakaoSeenToday));
 
   // 띄울 게 없으면(키워드를 못 뽑았거나 이미 등록) 곧바로 다음 권유로 넘긴다. 예전엔 null 만
   // 돌려 큐가 여기서 멈췄다 — [keyword, kakao] 순서인 로그인 사용자는 오카방 권유를 영영 못 봤다.
-  const skip = show && !visible && (!hasKeyword || keywordData !== undefined);
+  const skip = show && !visible && (!hasKeyword || kakaoSeenToday || keywordData !== undefined);
   useEffect(() => {
     if (skip) onClose();
   }, [skip, onClose]);
@@ -138,9 +152,10 @@ export default function PostPurchaseKeywordPrompt({
       event: 'keyword_prompt_view',
       keyword,
       // 첫 방문·브라우저 넘기기와 같은 이벤트라 자리로 가른다.
-      placement: 'post_purchase',
+      placement,
     });
-  }, [visible, done, keyword]);
+    if (kakaoBridge) markKakaoBridgeSeen(localStorage);
+  }, [visible, done, keyword, placement, kakaoBridge]);
 
   if (!visible) return null;
 
@@ -149,7 +164,7 @@ export default function PostPurchaseKeywordPrompt({
       (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
         event: 'keyword_prompt_click',
         keyword,
-        placement: 'post_purchase',
+        placement,
         // 비로그인은 게스트 계정으로 바로 등록된다(2026-10-09). 회원·비회원 등록률을 갈라 보려고 남긴다.
         logged_in: isLoggedIn,
       });
@@ -209,9 +224,25 @@ export default function PostPurchaseKeywordPrompt({
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-gray-800">알림을 등록했어요</p>
           <p className="mt-0.5 truncate text-xs text-gray-500">
-            &lsquo;{keyword}&rsquo; 새 딜이 나오면 알려드려요
+            {kakaoBridge ? (
+              <>앱을 열면 &lsquo;{keyword}&rsquo; 알림이 와요</>
+            ) : (
+              <>&lsquo;{keyword}&rsquo; 새 딜이 나오면 알려드려요</>
+            )}
           </p>
         </div>
+        {kakaoBridge ? (
+          // 진짜 <a> — 앱 열기(intent·유니버설 링크)는 사용자 탭으로만 된다. 등록(비동기) 뒤의 두 번째 탭이 여기다.
+          <OpenInAppLink
+            platform={isAndroidUA(ua) ? 'android' : 'apple'}
+            path={typeof window === 'undefined' ? '/' : window.location.pathname}
+            source="kakao_bridge"
+            iosUniversalLink
+            className="text-secondary-600 flex h-11 shrink-0 items-center px-1 text-xs font-bold"
+          >
+            앱에서 받기
+          </OpenInAppLink>
+        ) : null}
         <button
           type="button"
           onClick={onClose}
@@ -242,9 +273,15 @@ export default function PostPurchaseKeywordPrompt({
         {/* 375px 에서 텍스트 가용폭은 ~215px 인데 제목 문장만 ~170px 라
             키워드와 한 줄에 넣으면 키워드가 2자로 잘린다. 줄을 나눠 각자 온전히 보여준다.
             아이콘(28px+gap 12px)이 생겨 가용폭이 그만큼 더 줄었으므로 truncate 는 유지한다. */}
-        <p className="text-sm font-semibold text-gray-800">또 뜨면 알려드릴까요?</p>
+        <p className="text-sm font-semibold text-gray-800">
+          {kakaoBridge ? '이런 딜, 폰 알림으로 먼저 받을까요?' : '또 뜨면 알려드릴까요?'}
+        </p>
         <p className="mt-0.5 truncate text-xs text-gray-500">
-          &lsquo;{keyword}&rsquo; 핫딜이 올라오면 알려드려요
+          {kakaoBridge ? (
+            <>카톡방 말고 &lsquo;{keyword}&rsquo; 딜만 앱으로</>
+          ) : (
+            <>&lsquo;{keyword}&rsquo; 핫딜이 올라오면 알려드려요</>
+          )}
         </p>
       </div>
       {/* 채운 pill 을 쓰지 않는다 — 바로 아래 구매 버튼(primary-500)과 같은 화면에서

@@ -42,7 +42,13 @@ const UNIVERSAL_LINK_PATH = /^\/(products|community|trending|curation|toss|deals
 
 /** 버튼이 놓인 자리. GA4 app_download_click 의 source, Play referrer 의 utm_medium 으로 간다. */
 export type HandoffSource =
-  'detail_header' | 'first_visit_detail' | 'banner' | 'alarm_tab' | 'push_channel' | 'app_page';
+  | 'detail_header'
+  | 'first_visit_detail'
+  | 'banner'
+  | 'alarm_tab'
+  | 'push_channel'
+  | 'app_page'
+  | 'kakao_bridge'; // 카톡 인앱에서 키워드를 건 뒤 「앱에서 받기」(shared/lib/kakao-bridge.ts)
 
 /** 쿼리·해시를 뗀 '/'로 시작하는 경로만 남긴다 — 외부 주소를 실어 보내지 않는다. */
 export const normalizeHandoffPath = (path: string): string => {

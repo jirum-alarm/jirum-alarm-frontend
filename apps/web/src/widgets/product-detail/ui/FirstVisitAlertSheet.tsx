@@ -13,6 +13,7 @@ import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { getGraphqlErrorMessage } from '@/shared/lib/graphql-error';
+import { shouldUseKakaoBridge } from '@/shared/lib/kakao-bridge-ua';
 import {
   hasJoinedOkachat,
   markOkachatJoined,
@@ -30,6 +31,7 @@ import { useToast } from '@/shared/ui/common/Toast';
 import FirstVisitAppAlertModal, {
   FIRST_VISIT_SEEN_KEY,
 } from '@/features/app-download/ui/FirstVisitAppAlertModal';
+import OpenInAppLink from '@/features/app-download/ui/OpenInAppLink';
 import { useUpdateKeyword } from '@/features/mypage/model/update-keyword';
 import { deriveKeyword } from '@/features/product-detail/lib/deriveKeyword';
 import {
@@ -84,7 +86,7 @@ function pushEvent(event: string, props: Record<string, unknown>) {
  * 계측은 GTM 에 태그가 있는 keyword_prompt_view/click 을 재사용한다(placement=first_visit) — 새 이벤트명은 GTM
  * 태그 없이는 GA4 에 안 들어간다. 등록 자체는 keyword_register(source=first_visit).
  */
-type SheetMode = 'none' | 'keyword' | 'handoff' | 'okachat' | 'app';
+type SheetMode = 'none' | 'keyword' | 'handoff' | 'okachat' | 'app' | 'kakao_app';
 
 export default function FirstVisitAlertSheet({
   device,
@@ -167,6 +169,13 @@ export default function FirstVisitAlertSheet({
         }
       }
       const ua = navigator.userAgent;
+      // 카톡 인앱 — 크롬 넘기기(웹 푸시, 앱의 1/10 열기율)·앱 설치 시트 대신 「키워드 걸고 → 앱에서 받기」 두 탭(shared/lib/kakao-bridge.ts).
+      if (hasKeyword && shouldUseKakaoBridge(ua)) {
+        localStorage.setItem(FIRST_VISIT_SEEN_KEY, '1');
+        show('kakao_app');
+        pushEvent('keyword_prompt_view', { keyword, push_status: 'kakao_bridge' });
+        return;
+      }
       const handoff =
         !isLoggedIn &&
         canHandoffToBrowser({
@@ -207,6 +216,8 @@ export default function FirstVisitAlertSheet({
       keyword={keyword}
       isMobile={device.isMobile}
       handoff={mode === 'handoff'}
+      appBridge={mode === 'kakao_app'}
+      platform={isAndroidUA(navigator.userAgent) ? 'android' : 'apple'}
       onClose={() => setMode('none')}
     />
   );
@@ -216,12 +227,17 @@ function KeywordAlertSheet({
   keyword,
   isMobile,
   handoff,
+  appBridge,
+  platform,
   onClose,
 }: {
   keyword: string;
   isMobile: boolean;
   /** 인앱 → 기본 브라우저로 넘겨 거기서 알림을 켠다. */
   handoff: boolean;
+  /** 카톡 인앱 → 키워드를 건 뒤 「앱에서 받기」(실제 <a>)로 앱을 연다. 두 번째 탭이어야 intent·유니버설 링크가 열린다. */
+  appBridge: boolean;
+  platform: 'android' | 'apple';
   onClose: () => void;
 }) {
   const { toast } = useToast();
@@ -230,8 +246,9 @@ function KeywordAlertSheet({
   const { requestPermission } = useFcmPermission();
   const promptPushChannel = usePushChannelPrompt();
   const [pending, setPending] = useState(false);
+  const [bridgeRegistered, setBridgeRegistered] = useState(false);
   const { mutateAsync: addKeyword } = useUpdateKeyword({
-    source: 'first_visit',
+    source: appBridge ? 'kakao_bridge' : 'first_visit',
     onError: (error) => {
       toast.error(getGraphqlErrorMessage(error) || '키워드 저장에 실패했습니다.');
     },
@@ -240,7 +257,24 @@ function KeywordAlertSheet({
   const handleAlert = async () => {
     if (pending) return;
     setPending(true);
-    pushEvent('keyword_prompt_click', { keyword, push_status: handoff ? 'handoff' : undefined });
+    pushEvent('keyword_prompt_click', {
+      keyword,
+      push_status: handoff ? 'handoff' : appBridge ? 'kakao_bridge' : undefined,
+    });
+    if (appBridge) {
+      // 시트를 닫지 않고 「앱에서 받기」 버튼으로 바꾼다 — 등록(비동기) 뒤 자동 이동은 웹뷰가 막을 수 있다.
+      try {
+        if (!(await ensureAlertSession())) return;
+        await addKeyword({ keyword });
+        setBridgeRegistered(true);
+      } catch (error) {
+        // '이미 등록된 키워드'는 목적이 달성된 상태 — 앱으로 잇는다. 나머지 실패 토스트는 onError 가 띄운다.
+        if (getGraphqlErrorMessage(error).includes('이미 등록된')) setBridgeRegistered(true);
+      } finally {
+        setPending(false);
+      }
+      return;
+    }
     if (handoff) {
       try {
         if (!(await ensureAlertSession())) return;
@@ -281,14 +315,31 @@ function KeywordAlertSheet({
     if (registered) promptPushChannel(keyword);
   };
 
-  const heading = (
+  const heading = bridgeRegistered ? (
+    <>
+      등록했어요,
+      <br />
+      앱에서 받기만 남았어요
+    </>
+  ) : (
     <>
       이 상품, 또 싸게 뜨면
       <br />
       바로 알려드릴까요?
     </>
   );
-  const bodyText = handoff ? (
+  const bodyText = bridgeRegistered ? (
+    <>
+      앱을 열면 ‘{keyword}’ 핫딜 알림이 와요.
+      <br />
+      카톡 안에서는 알림을 보낼 수 없어서 앱으로 받아요.
+    </>
+  ) : appBridge ? (
+    <>
+      카톡방은 모두의 딜, 앱은 ‘{keyword}’ 딜만.
+      <br />새 딜이 뜨면 폰 알림으로 먼저 알려드려요.
+    </>
+  ) : handoff ? (
     <>
       ‘{keyword}’ 핫딜이 올라오면 알림을 보내드려요.
       <br />
@@ -301,7 +352,24 @@ function KeywordAlertSheet({
       로그인하지 않아도 돼요.
     </>
   );
-  const actions = (
+  const actions = bridgeRegistered ? (
+    <div className="mt-5 flex flex-col gap-y-2">
+      <OpenInAppLink
+        platform={platform}
+        path={window.location.pathname}
+        source="kakao_bridge"
+        iosUniversalLink
+        // 바로 닫으면 <a> 가 DOM 에서 빠져 이동이 취소된다(연결 안 된 앵커는 이동하지 않는다) — 한 박자 뒤에.
+        onClick={() => window.setTimeout(onClose, 500)}
+        className="bg-primary-500 text-fixed-900 flex h-12 w-full items-center justify-center rounded-lg font-semibold"
+      >
+        앱에서 알림 받기
+      </OpenInAppLink>
+      <button type="button" onClick={onClose} className="h-10 text-sm text-gray-500">
+        다음에 할게요
+      </button>
+    </div>
+  ) : (
     <div className="mt-5 flex flex-col gap-y-2">
       <button
         type="button"

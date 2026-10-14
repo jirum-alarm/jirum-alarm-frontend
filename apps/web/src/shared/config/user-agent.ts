@@ -13,6 +13,9 @@ export const IN_APP_BROWSER_PATTERN = /KAKAOTALK|Instagram|Threads|FB[AS]V|Line\
 
 export const isInAppBrowserUA = (ua: string) => IN_APP_BROWSER_PATTERN.test(ua);
 
+/** 카카오톡 인앱 브라우저 — 카톡방 링크가 열리는 곳. 웹 푸시가 안 되고 크롬·사파리와 저장소도 따로다. */
+export const isKakaoInAppUA = (ua: string) => /KAKAOTALK/i.test(ua);
+
 /**
  * 안드로이드 기기. ua-parser 의 device.vendor 로 보면 안 된다 — 삼성 폰은 'Samsung' 이라
  * 네이버 앱(GA4 "Whale Browser", 안드로이드 최대 유입)이 안드로이드가 아닌 것으로 판정돼
