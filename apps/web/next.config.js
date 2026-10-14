@@ -65,7 +65,6 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; img-src 'self' data: cdn.jirum-alarm.com;",
   },
   experimental: {
-    optimizeCss: true,
     scrollRestoration: true,
     // 라우터 캐시(브라우저 탭 안) 수명. 기본 0 이면 prefetch={true} 로 받아둔 상세 본문도 탐색 때 안 쓰고
     // 다시 받는다(실측: 완전 프리페치된 카드를 탭해도 본문 680ms). 5분이면 홈에 머무는 시간을 덮는다.
