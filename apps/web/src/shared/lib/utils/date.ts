@@ -32,8 +32,10 @@ export const getFromNow = (date: string) => {
   return dayjsDate.fromNow();
 };
 
+// KST 로 고정 — 실행 환경 시간대로 포맷하면 서버(UTC)·브라우저(KST)가 00~09시 KST 에 하루씩 갈려
+// 「유통기한 10.15」 같은 문구가 하이드레이션 오류(#418)를 냈다(10/15 실측).
 export const formatDateToMMD = (date: Date) => {
-  return dayjs(date).format('MM.DD');
+  return dayjs(date).tz('Asia/Seoul').format('MM.DD');
 };
 
 export const period = (timeZone: TimeZone = 'Asia/Seoul') => ({

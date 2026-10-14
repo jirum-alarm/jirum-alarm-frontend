@@ -236,9 +236,13 @@ describe('탭·섹션 상수가 web 과 같다', () => {
 
   it('날짜 기반 선택식이 web 과 같다(같은 날 같은 섹션)', () => {
     const web = readWeb('features/community/ui/CommunityHotDeals.tsx');
-    expect(web).toMatch(/getDate\(\) % RANKING_OPTIONS\.length/);
+    expect(web).toMatch(
+      /\+ KST_OFFSET_MS\)\.getUTCDate\(\) %\s*RANKING_OPTIONS\.length/,
+    );
     const app = read('src/features/community/ui/CommunityHotDeals.tsx');
-    expect(app).toMatch(/date\.getDate\(\) % RANKING_OPTIONS\.length/);
+    expect(app).toMatch(
+      /\+ KST_OFFSET_MS\)\.getUTCDate\(\) %\s*RANKING_OPTIONS\.length/,
+    );
   });
 
   it('목록 정렬이 web defaultPostsVariables 와 같다', () => {

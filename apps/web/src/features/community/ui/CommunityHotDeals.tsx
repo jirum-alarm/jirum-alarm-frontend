@@ -32,8 +32,11 @@ const RANKING_OPTIONS: RankingOption[] = [
   },
 ];
 
-// 날짜 기반 인덱스: 서버/클라이언트 동일한 값 보장
-const getDailyOptionIndex = () => new Date().getDate() % RANKING_OPTIONS.length;
+// 날짜 기반 인덱스 — KST 날짜로 고정한다. getDate() 는 실행 환경 시간대라 서버(UTC)·브라우저(KST)가
+// 00~09시 KST 에 하루씩 갈려 다른 제목을 그렸다(하이드레이션 오류 #418, 10/15 실측).
+const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
+const getDailyOptionIndex = () =>
+  new Date(Date.now() + KST_OFFSET_MS).getUTCDate() % RANKING_OPTIONS.length;
 
 type ProductItem = {
   id: string | number;

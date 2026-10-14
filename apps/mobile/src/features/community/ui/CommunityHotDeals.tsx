@@ -57,9 +57,14 @@ export const RANKING_OPTIONS: RankingOption[] = [
   },
 ];
 
-/** web `getDailyOptionIndex` — 날짜 기반이라 하루 동안 값이 안 바뀐다. */
+const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
+
+/** web `getDailyOptionIndex` — 날짜 기반이라 하루 동안 값이 안 바뀐다. 기기 시간대와 무관하게 KST 날짜(web 과 같게). */
 export function getDailyOptionIndex(date: Date = new Date()): number {
-  return date.getDate() % RANKING_OPTIONS.length;
+  return (
+    new Date(date.getTime() + KST_OFFSET_MS).getUTCDate() %
+    RANKING_OPTIONS.length
+  );
 }
 
 /**
