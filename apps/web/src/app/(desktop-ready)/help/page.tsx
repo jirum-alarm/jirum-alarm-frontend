@@ -1,4 +1,4 @@
-import { infoBox, linkChip } from '@jirum/design-system/recipes';
+import { infoBox, linkChip, wordTag } from '@jirum/design-system/recipes';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -9,10 +9,12 @@ import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
 import { OKACHAT_LINK } from '@/shared/lib/okachat';
 import { ArrowDown, ArrowRight } from '@/shared/ui/common/icons';
+import { IconLogo } from '@/shared/ui/common/icons/Illust';
 
 import DealsMobileHeader from '../deals/[slug]/DealsMobileHeader';
 
 import HelpIcon, { type HelpIconName } from './HelpIcons';
+import HelpToc, { type TocItem } from './HelpToc';
 import OpenFaqFromHash from './OpenFaqFromHash';
 
 /**
@@ -37,6 +39,9 @@ import OpenFaqFromHash from './OpenFaqFromHash';
  * 모양(2026-10-14 개편 — "디자인이 구리다"): 글만 이어지던 문서를 훑어 읽는 모양으로 바꿨다.
  * 첫 화면에 정의 한 문장 + 숫자 3개 + 상세 근거 칸 예시(말보다 실물) → 바로가기 칩 → 아이콘 카드 → 단계 → 기능 타일 → 묶음별
  * 질문 → 「찾는 답이 없나요?」 → 행동 유도 띠. 한국어는 break-keep(낱말 중간 줄바꿈 금지).
+ * PC(2026-10-14 2차 — "PC 가 어색하고 딱딱하다"): 600px 모바일 기둥이 넓은 화면 가운데 떠 있던 것을 1024px 로 넓혀
+ * 첫 화면은 2단(왼쪽 정의·숫자·행동 버튼 / 오른쪽 근거 칸 예시), 본문은 왼쪽 고정 목차(HelpToc) + 본문 폭 ~700px.
+ * 딱딱함은 회색 테두리 상자 나열이 원인이라 테두리를 빼고 면(gray-50)·구역별 색 아이콘·마스코트·작은 색 eyebrow 로 바꿨다.
  * 질문 묶음 상자는 overflow-clip — overflow-hidden 은 스크롤 컨테이너가 돼 /help#evidence 의 scroll-margin 이 무시되고
  * 질문 제목이 헤더 밑으로 숨었다.
  * 숫자(커뮤니티 목록·하루 건수·키워드 20개·제외 단어 10개·하루 3건·21~08시)는 실제 데이터·서버 값이다
@@ -65,26 +70,45 @@ export const metadata: Metadata = {
 const COMMUNITIES =
   '뽐뿌·에펨코리아·아카라이브·이토랜드·맘이베베·퀘이사존·루리웹·쿨엔조이·어미새·딜바다·다모앙·클리앙';
 
-/** 다른 핫딜 커뮤니티·사이트와 다른 점. 순서 = 사람들이 오는 이유(싸게 사기) 순. */
-const DIFFERENCES: { icon: HelpIconName; title: string; text: string }[] = [
+/** 다른 핫딜 커뮤니티·사이트와 다른 점. 순서 = 사람들이 오는 이유(싸게 사기) 순. tone = 아이콘 칸 색(싸다=빨강 관례). */
+type Tone = 'error' | 'secondary' | 'primary' | 'success';
+const TONE: Record<Tone, string> = {
+  error: 'bg-error-50 text-error-500',
+  secondary: 'bg-secondary-50 text-secondary-600',
+  primary: 'bg-primary-100 text-primary-700',
+  success: 'bg-success-50 text-success-700',
+};
+
+const DIFFERENCES: {
+  icon: HelpIconName;
+  tone: Tone;
+  title: string;
+  text: string;
+  tags?: string[];
+}[] = [
   {
     icon: 'tag',
-    title: '「진짜 싼지」 근거를 먼저 보여줘요',
+    tone: 'error',
+    title: '「진짜 싼지」 근거를 먼저 보여드려요',
     text: '커뮤니티 핫딜은 올린 사람의 「싸다」에서 시작해요. 지름알림은 같은 상품이 예전에 핫딜로 올라온 가격, 다나와 최저가, 쿠팡의 같은 상품 가격과 비교한 근거를 가격 바로 아래에 붙여요. 근거가 없으면 억지로 싸다고 하지 않아요.',
   },
   {
     icon: 'layers',
-    title: '커뮤니티 13곳을 한 번에',
-    text: `핫딜은 ${COMMUNITIES} 등 커뮤니티마다 따로 올라와요. 커뮤니티 핫딜만 하루 900건 안팎이라(2026년 10월 기준) 한두 곳만 보면 나머지를 놓쳐요. 토스쇼핑·네이버쇼핑·오늘의집 특가도 함께 모아요.`,
+    tone: 'secondary',
+    title: '커뮤니티 13곳을 한눈에',
+    text: '핫딜은 커뮤니티마다 따로 올라와요. 커뮤니티 핫딜만 하루 900건 안팎이라(2026년 10월 기준) 한두 곳만 보면 나머지를 놓쳐요. 토스쇼핑·네이버쇼핑·오늘의집 특가도 함께 모아요.',
+    tags: COMMUNITIES.split('·'),
   },
   {
     icon: 'bell',
-    title: '원하는 상품만 골라 알림',
+    tone: 'primary',
+    title: '원하는 상품만 골라서 알려드려요',
     text: '키워드 하나로 모든 커뮤니티를 지켜봐요. 「콜라」에서 「콜라겐」을 빼는 제외 단어, 원하는 가격 범위까지 정할 수 있어 필요 없는 알림이 줄어요.',
   },
   {
     icon: 'chat',
-    title: '커뮤니티 반응은 그대로',
+    tone: 'success',
+    title: '커뮤니티 반응도 그대로',
     text: '원문 커뮤니티의 추천·댓글 반응과 댓글 요약, 종료 여부를 같이 보여주고 원문으로 바로 이어져요. 커뮤니티를 대신하는 게 아니라 여러 커뮤니티를 한 번에 읽게 해 주는 서비스예요.',
   },
 ];
@@ -94,9 +118,10 @@ const DIFFERENCES: { icon: HelpIconName; title: string; text: string }[] = [
  */
 type Feature = { icon: HelpIconName; name: string; text: string; href?: string };
 
-const FEATURE_GROUPS: { title: string; items: Feature[] }[] = [
+const FEATURE_GROUPS: { title: string; tone: Tone; items: Feature[] }[] = [
   {
     title: '둘러보기',
+    tone: 'secondary',
     items: [
       { icon: 'home', name: '홈', text: '카테고리별로 지금 올라온 핫딜', href: PAGE.HOME },
       {
@@ -132,6 +157,7 @@ const FEATURE_GROUPS: { title: string; items: Feature[] }[] = [
   },
   {
     title: '알림 받기',
+    tone: 'primary',
     items: [
       {
         icon: 'bell',
@@ -154,6 +180,7 @@ const FEATURE_GROUPS: { title: string; items: Feature[] }[] = [
   },
   {
     title: '함께 쓰기',
+    tone: 'error',
     items: [
       { icon: 'heart', name: '찜', text: '마음에 드는 핫딜을 저장해 두고 나중에' },
       {
@@ -305,7 +332,9 @@ const faqLd = {
       name: '지름알림은 다른 핫딜 커뮤니티와 무엇이 다른가요?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: DIFFERENCES.map((d) => `${d.title}: ${d.text}`).join(' '),
+        text: DIFFERENCES.map(
+          (d) => `${d.title}: ${d.text}${d.tags ? ` 모으는 곳: ${COMMUNITIES} 등.` : ''}`,
+        ).join(' '),
       },
     },
     ...ALL_FAQ.map((f) => ({
@@ -329,12 +358,19 @@ const isExternal = (href: string) => href.startsWith('http');
 const externalProps = (href: string) =>
   isExternal(href) ? { target: '_blank', rel: 'noopener' } : {};
 
-/** 페이지 안 바로가기. 긴 문서에서 원하는 곳으로 건너뛰게 하고, 검색 결과의 「바로가기」 링크 재료도 된다. */
-const TOC = [
+/**
+ * 페이지 안 바로가기. 긴 문서에서 원하는 곳으로 건너뛰게 하고, 검색 결과의 「바로가기」 링크 재료도 된다.
+ * 모바일은 본문 위 칩, PC 는 왼쪽 고정 목차(HelpToc — 지금 읽는 곳 표시).
+ */
+const TOC: TocItem[] = [
   { id: 'differences', label: '다른 점' },
   { id: 'how-to', label: '사용법' },
   { id: 'features', label: '기능' },
-  { id: 'faq', label: '자주 묻는 질문' },
+  {
+    id: 'faq',
+    label: '자주 묻는 질문',
+    children: FAQ_GROUPS.map((g) => ({ id: g.id, label: g.title })),
+  },
 ];
 
 const STATS = [
@@ -343,13 +379,25 @@ const STATS = [
   { value: '0원', label: '보기·알림 모두 무료' },
 ];
 
-function SectionHeading({ id, title, sub }: { id: string; title: string; sub?: string }) {
+/** 구역 제목. eyebrow(작은 색 글씨)는 목차 이름과 같아 「지금 어디인지」를 알려 주고, 문서가 딱딱한 제목 나열로 안 보이게 한다. */
+function SectionHeading({
+  id,
+  eyebrow,
+  title,
+  sub,
+}: {
+  id: string;
+  eyebrow: string;
+  title: string;
+  sub?: string;
+}) {
   return (
-    <div className="mb-4">
-      <h2 id={`${id}-title`} className="text-xl font-bold text-gray-900">
+    <div className="pc:mb-6 mb-5">
+      <p className="text-primary-700 text-sm font-semibold">{eyebrow}</p>
+      <h2 id={`${id}-title`} className="pc:text-2xl mt-1 text-xl font-bold text-gray-900">
         {title}
       </h2>
-      {sub ? <p className="mt-1 text-sm text-gray-500">{sub}</p> : null}
+      {sub ? <p className="mt-1.5 text-sm text-gray-500">{sub}</p> : null}
     </div>
   );
 }
@@ -360,12 +408,8 @@ function SectionHeading({ id, title, sub }: { id: string; title: string; sub?: s
  */
 function EvidenceExample() {
   return (
-    <figure className="mt-6" data-nosnippet>
-      <figcaption className="mb-2 flex items-center gap-1.5 text-xs text-gray-500">
-        <span className="rounded bg-gray-100 px-1.5 py-0.5 font-semibold text-gray-600">예시</span>
-        상품을 누르면 가격 바로 아래에 이렇게 보여요
-      </figcaption>
-      <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+    <figure data-nosnippet>
+      <div className="shadow-card rounded-2xl bg-white p-4">
         <p className="text-sm text-gray-500">제주 삼다수 2L 24병</p>
         <p className="mt-0.5 text-xl font-bold text-gray-900">
           <span className="text-error-500 mr-1.5">19%</span>12,900원
@@ -384,7 +428,39 @@ function EvidenceExample() {
           </div>
         </div>
       </div>
+      <figcaption className="mt-2.5 flex items-center justify-center gap-1.5 text-xs text-gray-500">
+        <span className="rounded bg-white px-1.5 py-0.5 font-semibold text-gray-600">예시</span>
+        상품을 누르면 가격 바로 아래에 이렇게 보여요
+      </figcaption>
     </figure>
+  );
+}
+
+/** 웹에서만 — 앱 웹뷰에선 마이페이지 링크가 엉뚱한 곳으로 가서 글로 안내한다(파일 머리 주석). */
+function CtaButtons({ track, onDark }: { track: string; onDark?: boolean }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Link
+        href={PAGE.MYPAGE_KEYWORD}
+        data-track={`${track}-keyword`}
+        className="bg-primary-500 active:bg-primary-300 hover:bg-primary-400 text-fixed-900 inline-flex items-center gap-1.5 rounded-xl px-4 py-3 text-sm font-semibold"
+      >
+        <HelpIcon name="bell" className="size-4" />
+        키워드 알림 걸기
+      </Link>
+      <Link
+        href={PAGE.HOME}
+        data-track={`${track}-home`}
+        className={cn(
+          'rounded-xl px-4 py-3 text-sm font-semibold',
+          onDark
+            ? 'border-fixed-600 text-fixed-white hover:bg-fixed-white/10 border'
+            : 'bg-white text-gray-900 hover:bg-gray-50',
+        )}
+      >
+        지금 올라온 핫딜 보기
+      </Link>
+    </div>
   );
 }
 
@@ -393,7 +469,7 @@ export default async function HelpPage() {
   const { isJirumAlarmApp } = await checkDevice();
 
   return (
-    <main className="max-w-mobile-max pc:pt-24 mx-auto w-full px-5 pt-14 pb-24">
+    <main className="max-w-mobile-max pc:max-w-5xl pc:px-10 pc:pt-20 mx-auto w-full px-5 pt-14 pb-24">
       {[faqLd, breadcrumbLd].map((ld, i) => (
         <script
           key={i}
@@ -405,239 +481,313 @@ export default async function HelpPage() {
       <OpenFaqFromHash />
 
       {/* break-keep: 한국어를 낱말 중간에서 자르지 않는다(「서 비스예요」처럼 끊겨 읽기 거슬렸다). */}
-      <article className="text-15 space-y-14 leading-relaxed break-keep text-gray-800">
-        <header className="pt-4">
-          <span className="bg-primary-100 text-primary-800 inline-block rounded-full px-2.5 py-1 text-xs font-semibold">
-            처음 오셨나요?
-          </span>
-          <h1 className="text-28 mt-3 leading-tight font-bold text-gray-900">지름알림이란?</h1>
-          <p className="mt-3 text-base leading-relaxed text-gray-700">
-            커뮤니티 13곳과 쇼핑몰 특가의 핫딜을 한곳에 모아,{' '}
-            <strong className="font-semibold text-gray-900">
-              지난 핫딜가·다나와·쿠팡 가격과 비교해 진짜 싼지 근거
-            </strong>
-            를 붙여 주고, 원하는 상품이 올라오면 알려주는 무료 핫딜 서비스예요.
-          </p>
+      <article className="text-15 leading-relaxed break-keep text-gray-800">
+        {/* 첫 화면: 연한 브랜드색 판 위에 마스코트·정의·숫자, 오른쪽(PC)·아래(모바일)에 실제 근거 칸 예시. */}
+        <header className="bg-primary-50 pc:mt-6 pc:grid pc:grid-cols-[1fr_380px] pc:items-center pc:gap-12 pc:rounded-3xl pc:p-12 pc:mx-0 -mx-5 mt-3 px-5 pt-7 pb-8">
+          <div>
+            <IconLogo width={44} height={44} className="pc:size-14" />
+            <h1 className="pc:mt-5 mt-4 font-bold text-gray-900">
+              <span className="text-primary-700 block text-sm font-semibold">지름알림이란?</span>
+              <span className="text-28 pc:text-4xl mt-1.5 block leading-tight">
+                흩어진 핫딜을 모아
+                <br />
+                진짜 싼지 알려드려요
+              </span>
+            </h1>
+            <p className="pc:text-lg mt-4 text-base leading-relaxed text-gray-700">
+              지름알림은 커뮤니티 13곳과 쇼핑몰 특가의 핫딜을 한곳에 모아,{' '}
+              <strong className="font-semibold text-gray-900">
+                지난 핫딜가·다나와·쿠팡 가격과 비교해 진짜 싼지 근거
+              </strong>
+              를 붙여 주고, 원하는 상품이 올라오면 알려주는 무료 핫딜 서비스예요.
+            </p>
 
-          <ul className="mt-5 grid grid-cols-3 gap-2">
-            {STATS.map((s) => (
-              <li key={s.label} className="rounded-xl bg-gray-50 px-3 py-3 text-center">
-                <strong className="block text-lg font-bold text-gray-900">{s.value}</strong>
-                <span className="mt-0.5 block text-xs leading-snug text-gray-500">{s.label}</span>
-              </li>
-            ))}
-          </ul>
+            <ul className="pc:max-w-md mt-6 grid grid-cols-3 gap-2">
+              {STATS.map((s) => (
+                <li key={s.label} className="rounded-2xl bg-white px-2 py-3 text-center">
+                  <strong className="pc:text-xl block text-lg font-bold text-gray-900">
+                    {s.value}
+                  </strong>
+                  <span className="mt-0.5 block text-xs leading-snug text-gray-500">{s.label}</span>
+                </li>
+              ))}
+            </ul>
 
-          <EvidenceExample />
+            {isJirumAlarmApp ? null : (
+              <div className="pc:block mt-7 hidden">
+                <CtaButtons track="help-hero-cta" />
+              </div>
+            )}
+          </div>
 
-          <nav aria-label="이 페이지에서" className="mt-6 flex flex-wrap gap-2">
-            {TOC.map((t) => (
-              <a key={t.id} href={`#${t.id}`} className={linkChip}>
-                {t.label}
-              </a>
-            ))}
-          </nav>
+          <div className="pc:mt-0 mt-7">
+            <EvidenceExample />
+          </div>
         </header>
 
-        <section id="differences" aria-labelledby="differences-title" className="scroll-mt-16">
-          <SectionHeading
-            id="differences"
-            title="다른 핫딜 커뮤니티와 무엇이 다른가요?"
-            sub="사람들이 핫딜을 보는 이유, 싸게 사는 것부터 챙겨요."
-          />
-          <ul className="grid gap-3">
-            {DIFFERENCES.map((d) => (
-              <li key={d.title} className="flex gap-3.5 rounded-2xl border border-gray-100 p-4">
-                <span className="bg-primary-100 text-primary-700 flex size-10 shrink-0 items-center justify-center rounded-full">
-                  <HelpIcon name={d.icon} className="size-5" />
-                </span>
-                <div className="min-w-0">
-                  <h3 className="text-base font-semibold text-gray-900">{d.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-gray-600">{d.text}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <nav aria-label="이 페이지에서" className="pc:hidden mt-6 flex flex-wrap gap-2">
+          {TOC.map((t) => (
+            <a key={t.id} href={`#${t.id}`} className={linkChip}>
+              {t.label}
+            </a>
+          ))}
+        </nav>
 
-        <section id="how-to" aria-labelledby="how-to-title" className="scroll-mt-16">
-          <SectionHeading id="how-to" title="이렇게 쓰세요" sub="세 단계면 충분해요." />
-          <ol>
-            {STEPS.map((s, i) => (
-              <li key={s.name} className="relative flex gap-4 pb-6 last:pb-0">
-                {/* 단계 사이 세로선 — 마지막 단계엔 없다. */}
-                {i < STEPS.length - 1 ? (
-                  <span
-                    aria-hidden
-                    className="absolute top-9 bottom-1 left-[15px] w-0.5 bg-gray-100"
-                  />
-                ) : null}
-                <span
-                  aria-hidden
-                  className="flex size-8 shrink-0 items-center justify-center rounded-full bg-gray-900 text-sm font-bold text-white"
-                >
-                  {i + 1}
-                </span>
-                <div className="pt-1">
-                  <h3 className="text-base font-semibold text-gray-900">{s.name}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-gray-600">{s.text}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
+        {/* PC: 왼쪽 고정 목차 + 본문(읽기 좋은 폭 ~700px). 모바일: 본문만. */}
+        <div className="pc:mt-16 pc:grid pc:grid-cols-[168px_1fr] pc:gap-14 mt-12">
+          <aside className="pc:block hidden">
+            <div className="sticky top-24">
+              <HelpToc items={TOC} />
+            </div>
+          </aside>
 
-        <section id="features" aria-labelledby="features-title" className="scroll-mt-16">
-          <SectionHeading id="features" title="지름알림에서 쓸 수 있는 기능" />
-          <div className="space-y-6">
-            {FEATURE_GROUPS.map((g) => (
-              <div key={g.title}>
-                <h3 className="mb-2 text-sm font-semibold text-gray-500">{g.title}</h3>
-                <ul className="pc:grid-cols-3 grid grid-cols-2 gap-2">
-                  {g.items.map((f) => {
-                    const body = (
-                      <>
-                        <span className="flex items-center justify-between">
-                          <HelpIcon name={f.icon} className="size-5 text-gray-700" />
-                          {f.href ? (
-                            <ArrowRight
-                              width={16}
-                              height={16}
-                              color="var(--color-gray-400)"
-                              aria-hidden
-                            />
-                          ) : null}
-                        </span>
-                        <span className="mt-2.5 block text-sm font-semibold text-gray-900">
-                          {f.name}
-                        </span>
-                        <span className="mt-0.5 block text-xs leading-snug text-gray-500">
-                          {f.text}
-                        </span>
-                      </>
-                    );
-                    const box = 'block h-full rounded-xl bg-gray-50 p-3.5';
-                    return (
-                      <li key={f.name}>
-                        {f.href ? (
-                          <Link
-                            href={f.href}
-                            {...externalProps(f.href)}
+          <div className="pc:space-y-20 min-w-0 space-y-14">
+            <section id="differences" aria-labelledby="differences-title" className="scroll-mt-20">
+              <SectionHeading
+                id="differences"
+                eyebrow="다른 점"
+                title="다른 핫딜 커뮤니티와 무엇이 다른가요?"
+                sub="싸게 사는 데 꼭 필요한 것부터 챙겼어요."
+              />
+              <ul className="pc:grid-cols-2 grid gap-3">
+                {DIFFERENCES.map((d) => (
+                  <li key={d.title} className="rounded-2xl bg-gray-50 p-5">
+                    <span
+                      className={cn(
+                        'flex size-11 items-center justify-center rounded-xl',
+                        TONE[d.tone],
+                      )}
+                    >
+                      <HelpIcon name={d.icon} className="size-5" />
+                    </span>
+                    <h3 className="mt-4 text-base font-bold text-gray-900">{d.title}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-gray-600">{d.text}</p>
+                    {d.tags ? (
+                      <p className="mt-3 flex flex-wrap gap-1.5">
+                        {d.tags.map((t) => (
+                          <span
+                            key={t}
                             className={cn(
-                              box,
-                              'transition-colors hover:bg-gray-100 active:bg-gray-100',
+                              wordTag.box,
+                              wordTag.text,
+                              wordTag.tone.fill.box,
+                              wordTag.tone.fill.text,
                             )}
                           >
-                            {body}
-                          </Link>
-                        ) : (
-                          <div className={box}>{body}</div>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
+                            {t}
+                          </span>
+                        ))}
+                        <span className="py-1 text-xs text-gray-500">등</span>
+                      </p>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            </section>
 
-        <section id="faq" aria-labelledby="faq-title" className="scroll-mt-16">
-          <SectionHeading id="faq" title="자주 묻는 질문" />
-          <nav aria-label="질문 분류" className="-mt-1 mb-5 flex flex-wrap gap-2">
-            {FAQ_GROUPS.map((g) => (
-              <a key={g.id} href={`#${g.id}`} className={linkChip}>
-                {g.title}
-              </a>
-            ))}
-          </nav>
-          <div className="space-y-6">
-            {FAQ_GROUPS.map((group) => (
-              <div key={group.id} id={group.id} className="scroll-mt-16">
-                <h3 className="mb-2 text-sm font-semibold text-gray-500">{group.title}</h3>
-                <div className="divide-y divide-gray-100 overflow-clip rounded-2xl border border-gray-100">
-                  {group.items.map((f) => (
-                    // 접힌 답도 HTML 에 있다(details) — 크롤러·AI 가 본문으로 읽는다.
-                    <details key={f.id} id={f.id} className="group scroll-mt-16">
-                      <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3.5 font-medium text-gray-900 group-open:font-semibold hover:bg-gray-50 focus-visible:bg-gray-50 focus-visible:outline-none [&::-webkit-details-marker]:hidden">
-                        <span>{f.q}</span>
-                        <ArrowDown
-                          aria-hidden
-                          width={18}
-                          height={18}
-                          color="var(--color-gray-400)"
-                          className="shrink-0 transition-transform group-open:rotate-180"
-                        />
-                      </summary>
-                      <div className="px-4 pb-4 text-sm leading-relaxed text-gray-700">
-                        <p>{f.a}</p>
-                        {f.link ? (
-                          <Link
-                            href={f.link.href}
-                            {...externalProps(f.link.href)}
-                            className="text-secondary-600 mt-2 inline-flex items-center gap-0.5 font-medium"
-                          >
-                            {f.link.label} ›
-                          </Link>
-                        ) : null}
-                      </div>
-                    </details>
-                  ))}
+            <section id="how-to" aria-labelledby="how-to-title" className="scroll-mt-20">
+              <SectionHeading
+                id="how-to"
+                eyebrow="사용법"
+                title="이렇게 쓰면 돼요"
+                sub="세 단계면 충분해요."
+              />
+              <ol className="pc:grid pc:grid-cols-3 pc:gap-3">
+                {STEPS.map((s, i) => (
+                  <li
+                    key={s.name}
+                    className="pc:block pc:rounded-2xl pc:bg-gray-50 pc:p-5 relative flex gap-4 pb-6 last:pb-0"
+                  >
+                    {/* 모바일 단계 사이 세로선 — 마지막 단계엔 없다. PC 는 카드 3장이 나란히라 필요 없다. */}
+                    {i < STEPS.length - 1 ? (
+                      <span
+                        aria-hidden
+                        className="pc:hidden absolute top-9 bottom-1 left-[15px] w-0.5 bg-gray-100"
+                      />
+                    ) : null}
+                    <span
+                      aria-hidden
+                      className="bg-primary-500 text-fixed-900 flex size-8 shrink-0 items-center justify-center rounded-full text-sm font-bold"
+                    >
+                      {i + 1}
+                    </span>
+                    <div className="pc:pt-0 pc:mt-4 pt-1">
+                      <h3 className="text-base font-bold text-gray-900">{s.name}</h3>
+                      <p className="mt-1 text-sm leading-relaxed text-gray-600">{s.text}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </section>
+
+            <section id="features" aria-labelledby="features-title" className="scroll-mt-20">
+              <SectionHeading
+                id="features"
+                eyebrow="기능"
+                title="지름알림에서 쓸 수 있는 기능"
+                sub="화살표가 있는 건 눌러서 바로 가 볼 수 있어요."
+              />
+              <div className="space-y-7">
+                {FEATURE_GROUPS.map((g) => (
+                  <div key={g.title}>
+                    <h3 className="mb-2.5 text-sm font-semibold text-gray-500">{g.title}</h3>
+                    <ul className="pc:grid-cols-3 grid grid-cols-2 gap-2">
+                      {g.items.map((f) => {
+                        const body = (
+                          <>
+                            <span className="flex items-center justify-between">
+                              <span
+                                className={cn(
+                                  'flex size-9 items-center justify-center rounded-lg',
+                                  TONE[g.tone],
+                                )}
+                              >
+                                <HelpIcon name={f.icon} className="size-[18px]" />
+                              </span>
+                              {f.href ? (
+                                <ArrowRight
+                                  width={16}
+                                  height={16}
+                                  color="var(--color-gray-400)"
+                                  aria-hidden
+                                  className="transition-transform group-hover:translate-x-0.5"
+                                />
+                              ) : null}
+                            </span>
+                            <span className="mt-3 block text-sm font-semibold text-gray-900">
+                              {f.name}
+                            </span>
+                            <span className="mt-0.5 block text-xs leading-snug text-gray-500">
+                              {f.text}
+                            </span>
+                          </>
+                        );
+                        const box = 'block h-full rounded-2xl bg-gray-50 p-4';
+                        return (
+                          <li key={f.name}>
+                            {f.href ? (
+                              <Link
+                                href={f.href}
+                                {...externalProps(f.href)}
+                                className={cn(
+                                  box,
+                                  'group transition-colors hover:bg-gray-100 active:bg-gray-100',
+                                )}
+                              >
+                                {body}
+                              </Link>
+                            ) : (
+                              <div className={box}>{body}</div>
+                            )}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section id="faq" aria-labelledby="faq-title" className="scroll-mt-20">
+              <SectionHeading
+                id="faq"
+                eyebrow="자주 묻는 질문"
+                title="궁금한 게 있으신가요?"
+                sub="질문을 누르면 답이 펼쳐져요."
+              />
+              <nav aria-label="질문 분류" className="pc:hidden -mt-1 mb-5 flex flex-wrap gap-2">
+                {FAQ_GROUPS.map((g) => (
+                  <a key={g.id} href={`#${g.id}`} className={linkChip}>
+                    {g.title}
+                  </a>
+                ))}
+              </nav>
+              <div className="space-y-7">
+                {FAQ_GROUPS.map((group) => (
+                  <div key={group.id} id={group.id} className="scroll-mt-20">
+                    <h3 className="mb-2.5 text-sm font-semibold text-gray-500">{group.title}</h3>
+                    <div className="divide-y divide-gray-100 overflow-clip rounded-2xl bg-gray-50">
+                      {group.items.map((f) => (
+                        // 접힌 답도 HTML 에 있다(details) — 크롤러·AI 가 본문으로 읽는다.
+                        <details key={f.id} id={f.id} className="group scroll-mt-20">
+                          <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 px-4 py-3.5 font-medium text-gray-900 group-open:font-semibold hover:bg-gray-100 focus-visible:bg-gray-100 focus-visible:outline-none [&::-webkit-details-marker]:hidden">
+                            <span aria-hidden className="text-primary-700 shrink-0 font-bold">
+                              Q
+                            </span>
+                            <span className="flex-1">{f.q}</span>
+                            <ArrowDown
+                              aria-hidden
+                              width={18}
+                              height={18}
+                              color="var(--color-gray-400)"
+                              className="shrink-0 transition-transform group-open:rotate-180"
+                            />
+                          </summary>
+                          <div className="pr-4 pb-4 pl-[42px] text-sm leading-relaxed text-gray-700">
+                            <p>{f.a}</p>
+                            {f.link ? (
+                              <Link
+                                href={f.link.href}
+                                {...externalProps(f.link.href)}
+                                className="text-secondary-600 mt-2 inline-flex items-center gap-0.5 font-medium hover:underline"
+                              >
+                                {f.link.label} ›
+                              </Link>
+                            ) : null}
+                          </div>
+                        </details>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-7 flex items-center gap-3 rounded-2xl border border-gray-100 p-4">
+                <span className="bg-secondary-50 text-secondary-600 flex size-10 shrink-0 items-center justify-center rounded-full">
+                  <HelpIcon name="mail" className="size-5" />
+                </span>
+                <div className="min-w-0 text-sm">
+                  <p className="font-semibold text-gray-900">찾는 답이 없나요?</p>
+                  <p className="mt-0.5 text-gray-600">
+                    {isJirumAlarmApp ? '내정보 → 고객센터' : '마이페이지 → 고객센터'}에서 채팅으로
+                    묻거나{' '}
+                    <a
+                      href="mailto:jirumalarm@gmail.com"
+                      className="text-secondary-600 font-medium hover:underline"
+                    >
+                      메일
+                    </a>
+                    을 보내 주세요.
+                  </p>
                 </div>
               </div>
-            ))}
+            </section>
           </div>
-
-          <div className="mt-6 flex items-center gap-3 rounded-2xl bg-gray-50 p-4">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-gray-700">
-              <HelpIcon name="mail" className="size-5" />
-            </span>
-            <div className="min-w-0 text-sm">
-              <p className="font-semibold text-gray-900">찾는 답이 없나요?</p>
-              <p className="mt-0.5 text-gray-600">
-                {isJirumAlarmApp ? '내정보 → 고객센터' : '마이페이지 → 고객센터'}에서 채팅으로
-                묻거나{' '}
-                <a href="mailto:jirumalarm@gmail.com" className="text-secondary-600 font-medium">
-                  메일
-                </a>
-                을 보내 주세요.
-              </p>
-            </div>
-          </div>
-        </section>
+        </div>
 
         <section
           aria-label="시작하기"
-          className="bg-fixed-900 rounded-2xl px-5 py-6 dark:bg-gray-50"
+          className="bg-fixed-900 pc:mt-24 pc:flex pc:items-center pc:justify-between pc:gap-8 pc:px-10 pc:py-9 mt-14 rounded-3xl px-5 py-7 dark:bg-gray-50"
         >
-          <p className="text-fixed-white text-xl leading-snug font-bold">
-            원하는 상품,
-            <br />
-            올라오면 바로 알려드릴게요
-          </p>
-          <p className="text-fixed-300 mt-2 text-sm">
-            키워드 하나만 걸어 두면 커뮤니티 13곳을 대신 지켜봐요.
-          </p>
+          <div className="flex items-start gap-3.5">
+            <IconLogo width={40} height={40} className="pc:block hidden shrink-0" />
+            <div>
+              <p className="text-fixed-white pc:text-2xl text-xl leading-snug font-bold">
+                원하는 상품,
+                <br className="pc:hidden" /> 올라오면 바로 알려드릴게요
+              </p>
+              <p className="text-fixed-300 mt-2 text-sm">
+                키워드 하나만 걸어 두면 커뮤니티 13곳을 대신 지켜봐요.
+              </p>
+            </div>
+          </div>
           {isJirumAlarmApp ? (
-            <p className="text-primary-500 mt-4 text-sm font-semibold">
+            <p className="text-primary-500 pc:mt-0 mt-4 shrink-0 text-sm font-semibold">
               내정보 → 키워드 알림에서 바로 걸 수 있어요
             </p>
           ) : (
-            <div className="mt-5 flex flex-wrap gap-2">
-              <Link
-                href={PAGE.MYPAGE_KEYWORD}
-                data-track="help-cta-keyword"
-                className="bg-primary-500 active:bg-primary-300 text-fixed-900 rounded-lg px-4 py-2.5 text-sm font-semibold"
-              >
-                키워드 알림 걸기
-              </Link>
-              <Link
-                href={PAGE.HOME}
-                data-track="help-cta-home"
-                className="border-fixed-600 text-fixed-white rounded-lg border px-4 py-2.5 text-sm font-semibold"
-              >
-                지금 올라온 핫딜 보기
-              </Link>
+            <div className="pc:mt-0 mt-5 shrink-0">
+              <CtaButtons track="help-cta" onDark />
             </div>
           )}
         </section>
