@@ -14,7 +14,6 @@ import {
   QueryHotDealRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
   QueryReportUserNamesQueryVariables,
-  TogetherViewedProductsQueryVariables,
 } from '@/shared/api/gql/graphql';
 import { ProductListQueryVariables, ProductService } from '@/shared/api/product';
 
@@ -114,18 +113,6 @@ export const ProductQueries = {
       queryFn: () => ProductService.getProductGuides(variables),
     }),
 
-  togetherViewed: (variables: TogetherViewedProductsQueryVariables) =>
-    queryOptions({
-      queryKey: [
-        ...ProductQueries.all(),
-        'viewed',
-        {
-          limit: variables.limit,
-          productId: variables.productId,
-        },
-      ],
-      queryFn: () => ProductService.getTogetherViewedProducts(variables),
-    }),
   productKeywords: () =>
     queryOptions({
       queryKey: [...ProductQueries.all(), 'keywords'],
@@ -182,6 +169,18 @@ export const ProductQueries = {
         variables.limit,
       ],
       queryFn: () => ProductService.getLatestSimilarDeals(variables),
+    }),
+
+  liveAlternativeDeals: (variables: { id: number; limit?: number }) =>
+    queryOptions({
+      queryKey: [
+        ...ProductQueries.all(),
+        'detail',
+        { id: variables.id },
+        'live-alternative',
+        variables.limit,
+      ],
+      queryFn: () => ProductService.getLiveAlternativeDeals(variables),
     }),
 
   tossInternalLinks: (variables: { id: number }) =>

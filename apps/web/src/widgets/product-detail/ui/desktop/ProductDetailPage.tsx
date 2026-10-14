@@ -16,7 +16,7 @@ import TossDetailImages from '@/entities/product/ui/TossDetailImages';
 import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
 import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
-import { ExpiredProductWarning } from '@/features/product-detail/components';
+import { ExpiredProductWarning, LiveAlternativeDeals } from '@/features/product-detail/components';
 import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuide';
 import NoticeProfitLink from '@/features/product-detail/ui/NoticeProfitUrl';
 import PriceHistorySection from '@/features/product-detail/ui/PriceHistorySection';
@@ -25,7 +25,6 @@ import ProductPriceContext from '@/features/product-detail/ui/ProductPriceContex
 import SoftKakaoOpenChatPrompt from '@/features/product-detail/ui/SoftKakaoOpenChatPrompt';
 import {
   CategoryPopularByProductSection,
-  TogetherViewedSection,
   TossInternalLinksSection,
 } from '@/features/product-list/ui';
 
@@ -97,6 +96,7 @@ export default async function DesktopProductDetailPage({
             </div>
 
             {initialProduct && <ExpiredProductWarning product={initialProduct} isMobile={false} />}
+            {initialProduct && <LiveAlternativeDeals product={initialProduct} className="mb-10" />}
 
             <div className="space-y-12">
               <Suspense fallback={null}>
@@ -161,9 +161,6 @@ export default async function DesktopProductDetailPage({
                     <TossInternalLinksSection productId={productId} />
                   </Suspense>
                 )}
-                <Suspense>
-                  <TogetherViewedSection productId={productId} />
-                </Suspense>
                 <Suspense>
                   <CategoryPopularByProductSection productId={productId} />
                 </Suspense>

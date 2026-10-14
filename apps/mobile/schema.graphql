@@ -1446,6 +1446,14 @@ enum ProductMappingFeedbackType {
   REJECTED
 }
 
+type LiveAlternativeDealOutput {
+  """same=같은 상품(다른 곳·다른 값), related=같은 라인(용량·구성·색이 다름)"""
+  kind: String!
+  """이 딜 값 − 지금 보는 딜 값(원). 같은 상품이고 둘 다 원화일 때만, 아니면 null"""
+  priceDiff: Int
+  product: ProductOutput!
+}
+
 type ProductMappingInfoOutput {
   amount: String!
   brandProductId: Int!
@@ -1985,6 +1993,8 @@ type Query {
   keywordMapGroupsByAdmin(limit: Int!, orderBy: KeywordMapGroupOrderType!, orderOption: OrderOptionType!, searchAfter: [String!]): [KeywordMapGroupOutput!]!
   """종료됐을 수 있는 딜 상세의 '최신 핫딜' — 이 글보다 새 진행 중 딜(같은 상품 먼저, 같은 라인 뒤, 최대 20)"""
   latestSimilarDeals(id: Int!, limit: Int! = 10): [ProductOutput!]!
+  """진행 중 딜 상세의 '다른 곳 진행 중인 딜' — 최근 7일 진행 중 딜 중 같은 상품(싼 순) 먼저, 같은 라인 뒤(최대 10)"""
+  liveAlternativeDeals(id: Int!, limit: Int! = 3): [LiveAlternativeDealOutput!]!
   mallGroups: [MallGroup!]!
   """어드민) 매칭 실행 상세 조회 (스텝 포함)"""
   matchRunByAdmin(runId: Int!): MatchRun

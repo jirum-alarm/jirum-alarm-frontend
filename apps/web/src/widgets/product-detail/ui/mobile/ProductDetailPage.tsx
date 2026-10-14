@@ -15,7 +15,7 @@ import TossDetailImages from '@/entities/product/ui/TossDetailImages';
 import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
 import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
-import { ExpiredProductWarning } from '@/features/product-detail/components';
+import { ExpiredProductWarning, LiveAlternativeDeals } from '@/features/product-detail/components';
 import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuide';
 import ViewerCount from '@/features/product-detail/ui/mobile/ViewerCount';
 import NoticeProfitLink from '@/features/product-detail/ui/NoticeProfitUrl';
@@ -25,7 +25,6 @@ import ProductPriceContext from '@/features/product-detail/ui/ProductPriceContex
 import SoftKakaoOpenChatPrompt from '@/features/product-detail/ui/SoftKakaoOpenChatPrompt';
 import {
   CategoryPopularByProductSection,
-  TogetherViewedSection,
   TossInternalLinksSection,
 } from '@/features/product-list/ui';
 
@@ -115,6 +114,10 @@ function ProductDetailPage({
             <CoupangPartnerGuide productId={productId} />
 
             {initialProduct && <ExpiredProductWarning product={initialProduct} isMobile={true} />}
+            {/* 막 올라온 딜(7일 미만)엔 위 종료 딜 블록 대신 같은 상품·같은 라인의 다른 진행 중 딜. */}
+            {initialProduct && (
+              <LiveAlternativeDeals product={initialProduct} className="mx-5 mb-6" />
+            )}
 
             <div className="mt-4 mb-12 flex flex-col gap-y-9 px-5">
               <Suspense>
@@ -148,9 +151,6 @@ function ProductDetailPage({
                   <TossInternalLinksSection productId={productId} />
                 </Suspense>
               )}
-              <Suspense>
-                <TogetherViewedSection productId={productId} />
-              </Suspense>
               <Suspense>
                 <CategoryPopularByProductSection productId={productId} />
               </Suspense>

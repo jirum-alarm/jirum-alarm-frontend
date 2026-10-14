@@ -26,6 +26,7 @@ export type ProductCardSource =
   | 'category_popular' // 카테고리 인기
   | 'notification_theme' // 알림 묶음 상세 라이브딜
   | 'expired_latest' // 종료 딜 상세의 '최신 핫딜' 블록
+  | 'live_alternative' // 진행 중 딜 상세의 '다른 곳 진행 중인 딜' 블록
   | 'toss_internal_link'; // 토스 상세의 '토스에서 함께 보는 상품'(실험 toss_internal_link_v1)
 
 export interface ProductCardTrackingAttrs {

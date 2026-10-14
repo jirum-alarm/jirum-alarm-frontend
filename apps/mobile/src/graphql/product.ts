@@ -200,28 +200,6 @@ export const QueryCategorizedReactionKeywords = graphql(`
   }
 `);
 
-/** 함께 본 상품 캐러셀. */
-export const QueryTogetherViewedProducts = graphql(`
-  query TogetherViewedProducts($productId: Int!, $limit: Int!) {
-    togetherViewedProducts(productId: $productId, limit: $limit) {
-      id
-      title
-      price
-      thumbnail
-      isEnd
-      hotDealType
-      categoryId
-      mallName
-      postedAt
-      earliestExpiryDate
-      provider {
-        id
-        nameKr
-      }
-    }
-  }
-`);
-
 /**
  * 상세 조회 수집. 랭킹이 조회수를 먹으므로 네이티브가 대신 쏘지 않으면
  * 조용히 랭킹이 왜곡된다. nid = 이 상세를 연 푸시의 발송 id(push-origin, 없으면 생략).
@@ -330,6 +308,31 @@ export const QueryLatestSimilarDeals = graphql(`
       provider {
         id
         nameKr
+      }
+    }
+  }
+`);
+
+/** 진행 중 딜의 「다른 곳 진행 중인 딜」 — 최근 7일 같은 상품(싼 순)·같은 라인(서버 live-alternative-deals.logic). */
+export const QueryLiveAlternativeDeals = graphql(`
+  query LiveAlternativeDeals($id: Int!, $limit: Int!) {
+    liveAlternativeDeals(id: $id, limit: $limit) {
+      kind
+      priceDiff
+      product {
+        id
+        title
+        price
+        thumbnail
+        isEnd
+        hotDealType
+        categoryId
+        mallName
+        postedAt
+        provider {
+          id
+          nameKr
+        }
       }
     }
   }

@@ -28,7 +28,6 @@ import {
   QueryProductsQuery,
   QueryProductsQueryVariables,
   QueryReportUserNamesQueryVariables,
-  TogetherViewedProductsQueryVariables,
   TypedDocumentString,
 } from '../gql/graphql';
 
@@ -53,6 +52,14 @@ type ProductListResult = Omit<QueryProductsQuery, 'products'> & {
     /** 급상승(서버 ranking/rising.ts). 랭킹 아닌 목록은 null. */
     isRising?: boolean | null;
   })[];
+};
+
+/** liveAlternativeDeals 한 줄. same=같은 상품(다른 곳·다른 값), related=같은 라인(용량·구성·색이 다름). */
+export type LiveAlternativeDeal = {
+  kind: 'same' | 'related';
+  /** 이 딜 값 − 지금 보는 딜 값(원). 같은 상품·원화끼리만, 아니면 null. */
+  priceDiff: number | null;
+  product: ProductListResult['products'][number];
 };
 
 export class ProductService {
@@ -101,10 +108,6 @@ export class ProductService {
 
   static async getProductGuides(variables: ProductGuidesQueryVariables) {
     return execute(QueryProductGuides, variables).then((res) => res.data);
-  }
-
-  static async getTogetherViewedProducts(variables: TogetherViewedProductsQueryVariables) {
-    return execute(QueryTogetherViewedProducts, variables).then((res) => res.data);
   }
 
   static async collectProduct(variables: {
@@ -212,6 +215,15 @@ export class ProductService {
   static async getLatestSimilarDeals(variables: { id: number; limit?: number }) {
     const empty = { latestSimilarDeals: [] as ProductListResult['products'] };
     return execute(QueryLatestSimilarDeals, variables)
+      .then((res) => res.data ?? empty)
+      .catch(() => empty);
+  }
+
+  // 진행 중 딜의 「다른 곳 진행 중인 딜」 — 최근 7일 같은 상품(싼 순)·같은 라인(서버 live-alternative-deals.logic).
+  // 부가 블록이라 실패는 빈 목록.
+  static async getLiveAlternativeDeals(variables: { id: number; limit?: number }) {
+    const empty: { liveAlternativeDeals: LiveAlternativeDeal[] } = { liveAlternativeDeals: [] };
+    return execute(QueryLiveAlternativeDeals, variables)
       .then((res) => res.data ?? empty)
       .catch(() => empty);
   }
@@ -674,6 +686,37 @@ const QueryTossInternalLinks = new TypedDocumentString<
   }
 `);
 
+const QueryLiveAlternativeDeals = new TypedDocumentString<
+  { liveAlternativeDeals: LiveAlternativeDeal[] },
+  { id: number; limit?: number }
+>(`
+  query QueryLiveAlternativeDeals($id: Int!, $limit: Int) {
+    liveAlternativeDeals(id: $id, limit: $limit) {
+      kind
+      priceDiff
+      product {
+        id
+        title
+        mallId
+        url
+        isHot
+        isEnd
+        price
+        providerId
+        categoryId
+        category
+        thumbnail
+        mallName
+        hotDealType
+        provider {
+          nameKr
+        }
+        postedAt
+      }
+    }
+  }
+`);
+
 const QueryLatestSimilarDeals = new TypedDocumentString<
   { latestSimilarDeals: ProductListResult['products'] },
   { id: number; limit?: number }
@@ -738,29 +781,6 @@ const QueryProductGuides = graphql(`
       id
       title
       content
-    }
-  }
-`);
-
-const QueryTogetherViewedProducts = graphql(`
-  query togetherViewedProducts($limit: Int!, $productId: Int!) {
-    togetherViewedProducts(limit: $limit, productId: $productId) {
-      id
-      title
-      mallId
-      url
-      isHot
-      isEnd
-      price
-      providerId
-      categoryId
-      category
-      thumbnail
-      provider {
-        nameKr
-      }
-      searchAfter
-      postedAt
     }
   }
 `);

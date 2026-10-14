@@ -722,6 +722,15 @@ export type ListSection = BaseSection & {
   viewMoreLink?: Maybe<Scalars['String']['output']>;
 };
 
+export type LiveAlternativeDealOutput = {
+  __typename?: 'LiveAlternativeDealOutput';
+  /** same=같은 상품(다른 곳·다른 값), related=같은 라인(용량·구성·색이 다름) */
+  kind: Scalars['String']['output'];
+  /** 이 딜 값 − 지금 보는 딜 값(원). 같은 상품이고 둘 다 원화일 때만, 아니면 null */
+  priceDiff?: Maybe<Scalars['Int']['output']>;
+  product: ProductOutput;
+};
+
 export type MallGroup = {
   __typename?: 'MallGroup';
   createdAt: Scalars['DateTime']['output'];
@@ -2274,6 +2283,8 @@ export type Query = {
   keywordMapGroupsByAdmin: Array<KeywordMapGroupOutput>;
   /** 종료됐을 수 있는 딜 상세의 '최신 핫딜' — 이 글보다 새 진행 중 딜(같은 상품 먼저, 같은 라인 뒤, 최대 20) */
   latestSimilarDeals: Array<ProductOutput>;
+  /** 진행 중 딜 상세의 '다른 곳 진행 중인 딜' — 최근 7일 진행 중 딜 중 같은 상품(싼 순) 먼저, 같은 라인 뒤(최대 10) */
+  liveAlternativeDeals: Array<LiveAlternativeDealOutput>;
   mallGroups: Array<MallGroup>;
   /** 어드민) 매칭 실행 상세 조회 (스텝 포함) */
   matchRunByAdmin?: Maybe<MatchRun>;
@@ -2609,6 +2620,11 @@ export type QueryKeywordMapGroupsByAdminArgs = {
 };
 
 export type QueryLatestSimilarDealsArgs = {
+  id: Scalars['Int']['input'];
+  limit?: Scalars['Int']['input'];
+};
+
+export type QueryLiveAlternativeDealsArgs = {
   id: Scalars['Int']['input'];
   limit?: Scalars['Int']['input'];
 };
@@ -4343,29 +4359,6 @@ export type CategorizedReactionKeywordsQuery = {
   };
 };
 
-export type TogetherViewedProductsQueryVariables = Exact<{
-  productId: Scalars['Int']['input'];
-  limit: Scalars['Int']['input'];
-}>;
-
-export type TogetherViewedProductsQuery = {
-  __typename?: 'Query';
-  togetherViewedProducts: Array<{
-    __typename?: 'ProductOutput';
-    id: string;
-    title: string;
-    price?: string | null;
-    thumbnail?: string | null;
-    isEnd?: boolean | null;
-    hotDealType?: HotDealType | null;
-    categoryId: number;
-    mallName?: string | null;
-    postedAt: any;
-    earliestExpiryDate?: any | null;
-    provider: {__typename?: 'Provider'; id: string; nameKr: string};
-  }>;
-};
-
 export type CollectProductMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
   source?: InputMaybe<Scalars['String']['input']>;
@@ -4454,6 +4447,33 @@ export type LatestSimilarDealsQuery = {
     postedAt: any;
     earliestExpiryDate?: any | null;
     provider: {__typename?: 'Provider'; id: string; nameKr: string};
+  }>;
+};
+
+export type LiveAlternativeDealsQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+}>;
+
+export type LiveAlternativeDealsQuery = {
+  __typename?: 'Query';
+  liveAlternativeDeals: Array<{
+    __typename?: 'LiveAlternativeDealOutput';
+    kind: string;
+    priceDiff?: number | null;
+    product: {
+      __typename?: 'ProductOutput';
+      id: string;
+      title: string;
+      price?: string | null;
+      thumbnail?: string | null;
+      isEnd?: boolean | null;
+      hotDealType?: HotDealType | null;
+      categoryId: number;
+      mallName?: string | null;
+      postedAt: any;
+      provider: {__typename?: 'Provider'; id: string; nameKr: string};
+    };
   }>;
 };
 
@@ -5697,29 +5717,6 @@ export const CategorizedReactionKeywordsDocument = new TypedDocumentString(`
   CategorizedReactionKeywordsQuery,
   CategorizedReactionKeywordsQueryVariables
 >;
-export const TogetherViewedProductsDocument = new TypedDocumentString(`
-    query TogetherViewedProducts($productId: Int!, $limit: Int!) {
-  togetherViewedProducts(productId: $productId, limit: $limit) {
-    id
-    title
-    price
-    thumbnail
-    isEnd
-    hotDealType
-    categoryId
-    mallName
-    postedAt
-    earliestExpiryDate
-    provider {
-      id
-      nameKr
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<
-  TogetherViewedProductsQuery,
-  TogetherViewedProductsQueryVariables
->;
 export const CollectProductDocument = new TypedDocumentString(`
     mutation CollectProduct($productId: Int!, $source: String, $position: Int, $nid: String) {
   collectProduct(
@@ -5815,6 +5812,32 @@ export const LatestSimilarDealsDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   LatestSimilarDealsQuery,
   LatestSimilarDealsQueryVariables
+>;
+export const LiveAlternativeDealsDocument = new TypedDocumentString(`
+    query LiveAlternativeDeals($id: Int!, $limit: Int!) {
+  liveAlternativeDeals(id: $id, limit: $limit) {
+    kind
+    priceDiff
+    product {
+      id
+      title
+      price
+      thumbnail
+      isEnd
+      hotDealType
+      categoryId
+      mallName
+      postedAt
+      provider {
+        id
+        nameKr
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  LiveAlternativeDealsQuery,
+  LiveAlternativeDealsQueryVariables
 >;
 export const CategoryProductsDocument = new TypedDocumentString(`
     query CategoryProducts($categoryIds: [Int!], $limit: Int!, $orderBy: ProductOrderType, $orderOption: OrderOptionType) {

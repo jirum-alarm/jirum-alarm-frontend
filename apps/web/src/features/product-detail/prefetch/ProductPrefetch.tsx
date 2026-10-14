@@ -8,6 +8,8 @@ import type { ProductService } from '@/shared/api/product/product.service';
 import { AdvertisementQueries } from '@/entities/advertisement/api';
 import { ProductQueries } from '@/entities/product';
 
+import { isLiveAlternativeTarget, LIVE_ALTERNATIVE_LIMIT } from '../lib/live-alternatives';
+
 /** page.tsx 가 SEO 용으로 이미 받은 응답. 있으면 캐시에 심고 다시 부르지 않는다. */
 type InitialData = {
   product?: Awaited<ReturnType<typeof ProductService.getProductInfo>> | null;
@@ -52,6 +54,13 @@ export default async function ProductPrefetch({
     skipPriceChart
       ? null
       : queryClient.prefetchQuery(ProductQueries.priceHistory({ id: productId, days: 730 })),
+    // 「다른 곳 진행 중인 딜」은 가격 이력 위라 안 받아두면 하이드레이션 뒤에 끼어들어 아래를 밀어낸다.
+    // 대상(게시 7일 미만)일 때만 — 블록과 같은 판정. 실패는 서비스가 빈 목록으로 삼킨다.
+    initial?.product && isLiveAlternativeTarget(initial.product)
+      ? queryClient.prefetchQuery(
+          ProductQueries.liveAlternativeDeals({ id: productId, limit: LIVE_ALTERNATIVE_LIMIT }),
+        )
+      : null,
     queryClient.fetchQuery(
       AdvertisementQueries.activeAds({
         slotLocation: AdvertiseSlotLocation.ProductMainBanner,
