@@ -1,6 +1,7 @@
 import {
   notificationSourceKey,
   parseSourceKey,
+  recentKeywordAlertCount,
   sourceLabel,
 } from '../src/screens/alarm/lib/notification-source';
 
@@ -36,5 +37,25 @@ describe('notificationSourceKey', () => {
     expect(label('삼다수')).toBeUndefined();
     expect(label('🍜 [없어진 관심사] 라면 핫딜')).toBeUndefined();
     expect(label(null)).toBeUndefined();
+  });
+});
+
+describe('recentKeywordAlertCount — 알림함 「핫딜만 받기」 권유', () => {
+  const NOW = new Date('2026-10-14T12:00:00Z').getTime();
+  const hoursAgo = (h: number): string =>
+    new Date(NOW - h * 3600_000).toISOString();
+
+  it('최근 24시간의 내 키워드 알림만 센다(관심사·좋은 딜·지난 날은 빼고)', () => {
+    const mine: Set<string> = new Set(['콜라', '에어팟 프로']);
+    const notifications: {keyword: string | null; createdAt: string}[] = [
+      {keyword: '콜라', createdAt: hoursAgo(1)},
+      {keyword: '콜라 최근 딜보다 싸게 떴어요 📉', createdAt: hoursAgo(2)},
+      {keyword: '에어팟 프로', createdAt: hoursAgo(23)},
+      {keyword: '콜라', createdAt: hoursAgo(25)},
+      {keyword: '🥤 [생수·음료 쟁이기] 펩시 핫딜', createdAt: hoursAgo(1)},
+      {keyword: '(광고) 🔥 지금 뜨는 좋은 딜', createdAt: hoursAgo(1)},
+      {keyword: null, createdAt: hoursAgo(1)},
+    ];
+    expect(recentKeywordAlertCount(notifications, mine, NOW)).toBe(3);
   });
 });
