@@ -51,6 +51,7 @@ import ProductDetailSkeleton from './ui/ProductDetailSkeleton';
 import ProductInfo from './ui/ProductInfo';
 import AffiliateNotice from './ui/AffiliateNotice';
 import ExpiredProductWarning from './ui/ExpiredProductWarning';
+import LiveAlternativeDeals from './ui/LiveAlternativeDeals';
 import {
   DetailHeaderActions,
   DetailHeaderBackButton,
@@ -71,6 +72,9 @@ type Props = NativeStackScreenProps<
 >;
 
 type DetailNavigationProp = Props['navigation'];
+
+/** 「다른 곳 진행 중인 딜」 블록 머리+첫 줄 높이 — 이만큼 화면에 들어와야 노출로 센다. */
+const ALT_FIRST_ROW_PX = 160;
 
 /** `/products/123` 만 네이티브가 맡는다. 하위 경로(`/comment` 등)는 웹뷰로 넘긴다. */
 function parseProductId(path: string): number | null {
@@ -115,6 +119,15 @@ function NativeDetail({
 }) {
   const scrollRef = useRef<ScrollView>(null);
   const lastScrollY = useRef(0);
+  // 「다른 곳 진행 중인 딜」 — 첫 줄이 화면에 들어오면 노출로 센다(블록이 기록). 한 번만 state 를 바꾼다.
+  const altBlockY = useRef<number | null>(null);
+  const viewportHeight = useRef(0);
+  const [altSeen, setAltSeen] = useState(false);
+  const checkAltSeen = (scrollY: number) => {
+    if (altSeen || altBlockY.current == null || !viewportHeight.current) return;
+    if (scrollY + viewportHeight.current > altBlockY.current + ALT_FIRST_ROW_PX)
+      setAltSeen(true);
+  };
   const [scrollFlags] = useState(createScrollFlags);
   // 가격 추이 섹션의 스크롤 위치 — 판정 카드 "기준 보기"가 여기로 간다.
   const priceHistoryY = useRef<number | null>(null);
@@ -151,13 +164,6 @@ function NativeDetail({
 
   const {data: myUserId} = useQuery(UserQueries.me());
   const {isMember: isLogin} = useAuth();
-
-  const {
-    data: togetherViewed,
-    isPending: isTogetherViewedPending,
-    isError: isTogetherViewedError,
-    refetch: refetchTogetherViewed,
-  } = useQuery(ProductQueries.togetherViewed({productId, limit: 10}));
 
   const {
     data: categoryPopular,
@@ -288,8 +294,13 @@ function NativeDetail({
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        onLayout={e => {
+          viewportHeight.current = e.nativeEvent.layout.height;
+          checkAltSeen(lastScrollY.current);
+        }}
         onScroll={e => {
           const y = e.nativeEvent.contentOffset.y;
+          checkAltSeen(y);
           // ★상세 state 가 아니라 작은 store 에 쓴다 — 방향이 바뀔 때마다 상세 전체
           // (차트·댓글·캐러셀)가 다시 그려져 스크롤 직후 탭이 한 박자 늦었다.
           scrollFlags.set({
@@ -355,6 +366,18 @@ function NativeDetail({
             })
           }
         />
+        {/* 막 올라온 딜(7일 미만)엔 위 종료 딜 블록 대신 같은 상품·같은 라인의 다른 진행 중 딜(둘은 겹치지 않는다). */}
+        <View
+          onLayout={e => {
+            altBlockY.current = e.nativeEvent.layout.y;
+            checkAltSeen(lastScrollY.current);
+          }}>
+          <LiveAlternativeDeals
+            product={product}
+            seen={altSeen}
+            onPressProduct={pushProduct}
+          />
+        </View>
         {!hidePrice ? (
           <PriceHistorySection
             productId={productId}
@@ -386,15 +409,6 @@ function NativeDetail({
           }
         />
         <Hr />
-        <ProductCarouselSection
-          title="다른 고객이 함께 본 상품"
-          products={togetherViewed}
-          isPending={isTogetherViewedPending}
-          isError={isTogetherViewedError}
-          onRetry={refetchTogetherViewed}
-          onPressProduct={pushProduct}
-          trackingSource="together_viewed"
-        />
         <ProductCarouselSection
           title={`${product.categoryName ?? '기타'} 인기 상품`}
           products={categoryPopular?.filter(
