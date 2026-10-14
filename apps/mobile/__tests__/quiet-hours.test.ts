@@ -2,7 +2,7 @@ import {
   describeQuietHours,
   formatHour,
   toQuietHours,
-} from '@/features/mypage/lib/quiet-hours';
+} from '@jirum/domain/quiet-hours';
 
 describe('방해금지 시간 — web quiet-hours 와 같은 규칙', () => {
   it('오전·오후 12시간제로 쓴다', () => {

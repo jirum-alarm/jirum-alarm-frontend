@@ -20,7 +20,7 @@ import {
   formatPriceInput,
   parsePrice,
   summarizeKeywordAlert,
-} from '../lib/keyword-options';
+} from '@jirum/domain/keyword-options';
 import {useUpdateKeywordOptions} from '../model/mutations';
 
 const DEAL_CHOICES = [

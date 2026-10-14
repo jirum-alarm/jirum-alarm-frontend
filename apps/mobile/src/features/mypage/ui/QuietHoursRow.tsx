@@ -13,7 +13,7 @@ import {
   HOURS,
   type QuietHours,
   toQuietHours,
-} from '../lib/quiet-hours';
+} from '@jirum/domain/quiet-hours';
 
 type Edge = 'start' | 'end';
 

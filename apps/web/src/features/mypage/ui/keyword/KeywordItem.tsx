@@ -1,5 +1,11 @@
 'use client';
 
+import {
+  formatPriceInput,
+  parseExcludeKeywords,
+  parsePrice,
+  summarizeKeywordAlert,
+} from '@jirum/domain/keyword-options';
 import { useRef, useState } from 'react';
 
 import { PAGE } from '@/shared/config/page';
@@ -8,12 +14,6 @@ import { trackAlarmLink } from '@/shared/lib/trackAlarmLink';
 import { ArrowDown } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
 
-import {
-  formatPriceInput,
-  parseExcludeKeywords,
-  parsePrice,
-  summarizeKeywordAlert,
-} from '../../model/keyword-options';
 import { useUpdateKeywordOptions } from '../../model/update-keyword-options';
 
 type Keyword = {

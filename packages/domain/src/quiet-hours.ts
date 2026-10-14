@@ -1,7 +1,7 @@
 /**
  * 방해금지 시간 — 서버(user_push_setting.quietHoursStart/End, KST 시 0~23)와 같은 규칙.
  * [start, end) 동안 키워드·핫딜·커뮤니티 푸시를 모아 뒀다가 end 시각에 보낸다. 자정을 넘길 수 있다(23→7).
- * 앱 `features/mypage/lib/quiet-hours.ts` 와 같은 내용 — 한쪽을 고치면 같이 고친다.
+ * web·앱 알림 설정 화면이 같이 쓴다(@jirum/domain).
  */
 export type QuietHours = { start: number; end: number };
 

@@ -3,7 +3,7 @@ import {
   parseExcludeKeywords,
   parsePrice,
   summarizeKeywordAlert,
-} from '@/features/mypage/lib/keyword-options';
+} from '@jirum/domain/keyword-options';
 
 describe('키워드 알림 조건 파싱 — web keyword-options 와 같은 규칙', () => {
   it('제외 단어는 쉼표로 나누고 공백·빈칸·중복을 정리한다', () => {

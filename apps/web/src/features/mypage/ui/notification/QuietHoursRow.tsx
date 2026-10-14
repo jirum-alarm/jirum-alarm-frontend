@@ -1,9 +1,5 @@
 'use client';
 
-import { useId } from 'react';
-
-import Switch from '@/shared/ui/common/Switch';
-
 import {
   DEFAULT_QUIET_HOURS,
   describeQuietHours,
@@ -11,7 +7,10 @@ import {
   HOURS,
   type QuietHours,
   toQuietHours,
-} from '../../model/quiet-hours';
+} from '@jirum/domain/quiet-hours';
+import { useId } from 'react';
+
+import Switch from '@/shared/ui/common/Switch';
 
 type Props = {
   start: number | null;

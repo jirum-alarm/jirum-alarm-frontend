@@ -7,6 +7,8 @@
   "exports": {
     "./derive-keyword": "./src/derive-keyword.ts",
     "./deal-status-reaction": "./src/deal-status-reaction.ts",
+    "./keyword-options": "./src/keyword-options.ts",
+    "./quiet-hours": "./src/quiet-hours.ts",
     "./package.json": "./package.json"
   },
   "scripts": {
