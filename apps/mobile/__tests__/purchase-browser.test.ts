@@ -11,6 +11,7 @@ import {
 import {
   appSchemeName,
   decidePurchaseNavigation,
+  isShoppingAppUniversalLink,
   openExternalApp,
   parseIntentUrl,
 } from '../src/screens/purchase/lib/purchase-navigation';
@@ -201,5 +202,60 @@ describe('appSchemeName', () => {
     expect(
       appSchemeName('intent://p#Intent;scheme=ohouseapp;package=x;end'),
     ).toBe('ohouseapp');
+  });
+});
+
+describe('지마켓·옥션 Universal Link(iOS)', () => {
+  const GMKT =
+    'https://appgate.gmarket.com/universal?app=gmkt&url=https%3A%2F%2Fitem.gmarket.co.kr%2FItem%3Fgoodscode%3D1';
+  const IAC = 'https://appgate.gmarket.com/universal?url=x&app=iac';
+
+  it('appgate /universal 의 app=gmkt|iac 만 앱 주소로 본다', () => {
+    expect(isShoppingAppUniversalLink(GMKT)).toBe(true);
+    expect(isShoppingAppUniversalLink(IAC)).toBe(true);
+    expect(
+      isShoppingAppUniversalLink('https://appgate.gmarket.com/universal?app=x'),
+    ).toBe(false);
+    expect(
+      isShoppingAppUniversalLink('https://item.gmarket.co.kr/Item?goodscode=1'),
+    ).toBe(false);
+    expect(
+      isShoppingAppUniversalLink(
+        'http://appgate.gmarket.com/universal?app=gmkt',
+      ),
+    ).toBe(false);
+  });
+
+  it('되는 바이너리에서 페이지 본체 이동만 앱으로 열어 본다', () => {
+    const on = {handedOff: false, universalLinks: true};
+    expect(decidePurchaseNavigation({url: GMKT, isTopFrame: true}, on)).toEqual(
+      {kind: 'universal', url: GMKT},
+    );
+    expect(
+      decidePurchaseNavigation({url: GMKT, isTopFrame: false}, on),
+    ).toEqual({kind: 'load'});
+  });
+
+  it('모듈 없는 바이너리·한 번 실패한 뒤·이미 넘긴 뒤엔 웹으로 그대로', () => {
+    expect(decidePurchaseNavigation({url: GMKT}, {handedOff: false})).toEqual({
+      kind: 'load',
+    });
+    expect(
+      decidePurchaseNavigation(
+        {url: GMKT},
+        {handedOff: false, universalLinks: false},
+      ),
+    ).toEqual({kind: 'load'});
+    expect(
+      decidePurchaseNavigation(
+        {url: GMKT},
+        {handedOff: true, universalLinks: true},
+      ),
+    ).toEqual({kind: 'load'});
+  });
+
+  it('GA4 앱 이름은 지마켓·옥션으로 나눈다', () => {
+    expect(appSchemeName(GMKT)).toBe('gmarket-ul');
+    expect(appSchemeName(IAC)).toBe('auction-ul');
   });
 });

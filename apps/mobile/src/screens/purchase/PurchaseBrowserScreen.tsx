@@ -25,6 +25,10 @@ import {Analytics} from '@/shared/lib/analytics/ga4';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useColors} from '@/shared/theme/useColors';
+import {
+  canOpenUniversalLinks,
+  openUniversalLink,
+} from '@/shared/lib/universal-link';
 
 import {
   LANDING_COVER_MAX_MS,
@@ -121,9 +125,19 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
     }, [canGoBack]),
   );
 
+  const universalFailed = useRef(false);
+
   const handOff = useCallback(
-    async (appUrl: string) => {
-      const result = await openExternalApp(appUrl);
+    async (appUrl: string, via: 'scheme' | 'universal' = 'scheme') => {
+      const result =
+        via === 'universal'
+          ? {
+              opened: await openUniversalLink(appUrl),
+              // 앱이 없으면 같은 주소를 웹으로 — 지금까지(웹뷰가 그대로 로드)와 같은 결과.
+              fallbackUrl: appUrl,
+            }
+          : await openExternalApp(appUrl);
+      if (via === 'universal' && !result.opened) universalFailed.current = true;
       if (result.opened) {
         // 여는 동안(가림막이 아직 있을 때) 넘어갔으면 중간 웹 화면을 끝까지 보이지 않는다.
         setCover(prev => (prev === 'loading' ? 'handedOff' : prev));
@@ -151,6 +165,7 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
     (request: ShouldStartLoadRequest) => {
       const decision = decidePurchaseNavigation(request, {
         handedOff: handedOffAt.current != null,
+        universalLinks: canOpenUniversalLinks && !universalFailed.current,
       });
       switch (decision.kind) {
         case 'load':
@@ -166,6 +181,9 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
           return false;
         case 'app':
           void handOff(decision.url);
+          return false;
+        case 'universal':
+          void handOff(decision.url, 'universal');
           return false;
       }
     },

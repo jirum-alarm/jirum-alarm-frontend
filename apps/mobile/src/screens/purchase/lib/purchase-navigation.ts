@@ -18,6 +18,8 @@ export type PurchaseNavDecision =
   | {kind: 'block'}
   /** 다른 앱으로 넘긴다(쇼핑몰 앱·결제 앱). */
   | {kind: 'app'; url: string}
+  /** iOS — Universal Link 로만 앱을 열어 본다. 앱이 없으면 같은 주소를 웹으로 이어 띄운다. */
+  | {kind: 'universal'; url: string}
   /** 앱 스토어로 보낸다(앱 미설치 폴백). */
   | {kind: 'store'; url: string};
 
@@ -36,12 +38,43 @@ const schemeOf = (url: string) => {
   return match ? `${match[1].toLowerCase()}:` : '';
 };
 
+/**
+ * 쇼핑몰 앱이 iOS 에서 앱 스킴 대신 Universal Link 로만 받는 주소.
+ * 지마켓·옥션(링크프라이스 → `appgate.gmarket.com/universal?app=gmkt|iac`, AASA 에 두 앱이 등록 — 2026-10-14 실측).
+ * 안드로이드는 같은 페이지가 `intent://openLink?url=…` 을 내보내 이미 앱으로 넘어간다.
+ * WKWebView 안의 이동은 Universal Link 를 열지 않아 iOS 만 웹으로 끝났다.
+ */
+export function isShoppingAppUniversalLink(url: string): boolean {
+  const match = url.match(
+    /^https:\/\/appgate\.gmarket\.com\/universal\b[^#]*[?&]app=([a-z]+)/i,
+  );
+  return match != null && ['gmkt', 'iac'].includes(match[1].toLowerCase());
+}
+
 export function decidePurchaseNavigation(
   request: {url: string; isTopFrame?: boolean},
-  state: {handedOff: boolean},
+  state: {
+    handedOff: boolean;
+    /**
+     * Universal Link 로 앱을 열어 볼지 — 그게 되는 바이너리(iOS 1.5.2~)이고, 이 화면에서 아직 실패한 적 없을 때.
+     * 한 번 실패(앱 미설치)하면 같은 주소를 웹으로 이어 띄우므로 다시 가로채면 안 된다(주소 비교 대신 끄기 —
+     * 웹뷰가 주소를 정규화해 넘기면 비교가 빗나가 무한 반복이 된다).
+     */
+    universalLinks?: boolean;
+  },
 ): PurchaseNavDecision {
   const scheme = schemeOf(request.url);
-  if (!scheme || WEB_SCHEMES.includes(scheme)) return {kind: 'load'};
+  if (!scheme || WEB_SCHEMES.includes(scheme)) {
+    if (
+      state.universalLinks &&
+      request.isTopFrame !== false &&
+      !state.handedOff &&
+      isShoppingAppUniversalLink(request.url)
+    ) {
+      return {kind: 'universal', url: request.url};
+    }
+    return {kind: 'load'};
+  }
 
   // 광고·추적 iframe 이 앱을 띄우지 못하게 — 앱 이동은 페이지 본체만.
   if (request.isTopFrame === false) return {kind: 'block'};
@@ -122,6 +155,9 @@ async function tryOpen(url: string): Promise<boolean> {
 
 /** GA4 파라미터용 — 어느 앱으로 넘겼는지(스킴 이름만, 제휴 파라미터는 싣지 않는다). */
 export function appSchemeName(url: string): string {
+  if (isShoppingAppUniversalLink(url)) {
+    return /[?&]app=iac\b/i.test(url) ? 'auction-ul' : 'gmarket-ul';
+  }
   if (/^intent:/i.test(url)) {
     return parseIntentUrl(url).appUrl?.split(':')[0] ?? 'intent';
   }
