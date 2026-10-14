@@ -11,7 +11,7 @@
 - list_ctr.json 웹 카드 출처별 최근 7일 화면 노출(post_impression)·출처 붙은 상세 진입(post_view)
 
 수동: python3 scripts/growth-snapshot.py [주 수=16]  → ~/.local/share/jirum/growth/*.json
-대시보드 https://claude.ai/artifact/BhUKjPYmSFP7WEzX6Vh7wp 반영은 Orca 정기 자동화(Claude 세션)가 이 파일들을 올린다
+대시보드 https://claude.ai/artifact/QajT8bE1EooG2jHKeujbCj 반영은 Orca 정기 자동화(Claude 세션)가 이 파일들을 올린다
 — launchd 는 아티팩트에 못 올린다. 설치: install -m 0755 scripts/growth-snapshot.py ~/.local/bin/
 """
 import base64
@@ -28,6 +28,17 @@ import urllib.request
 import google.auth.transport.requests
 from google.oauth2 import service_account
 
+
+def _notify_failure(kind, exc, tb):
+    """launchd 는 실패해도 조용하다(성공 알림만 있었다) — 죽으면 macOS 알림으로 알린다. traceback 은 그대로 로그로."""
+    sys.__excepthook__(kind, exc, tb)
+    msg = f"{os.path.basename(__file__)}: {kind.__name__}: {exc}"[:200].replace("\"", "'").replace("\\", "/")
+    subprocess.run(["osascript", "-e", f"display notification \"{msg}\" with title \"지름알림 지표 작업 실패\" sound name \"Basso\""],
+                   check=False)
+
+
+sys.excepthook = _notify_failure
+
 WEEKS = int(sys.argv[1]) if len(sys.argv) > 1 else 16
 PROPERTY = "properties/394356262"
 SA = os.path.expanduser("~/.config/jirum/gtm-sa.json")
@@ -37,7 +48,7 @@ CRAWLING = os.path.expanduser("~/Documents/github/jirum-alarm/jirum-alarm-crawli
 
 PROMPT_CLICKS = ["okachat_prompt_click", "keyword_prompt_click", "click_btn_add_notification_keyword",
                  "app_download_click", "click_banner_kakaotalk", "push_channel_sheet_click"]
-PUSH_OPENS = ["notification_open", "notification_clicked"]
+PUSH_OPENS = ["notification_open", "notification_clicked"]  # 앱 notification_clicked 는 푸시+알림함, 웹은 알림함 — 둘 다 «알림 경유»
 
 today = dt.date.today()
 last_sun = today - dt.timedelta(days=today.isoweekday() % 7 or 7)
@@ -62,6 +73,9 @@ def ga4():
     app = {"filter": {"fieldName": "platform", "inListFilter": {"values": ["iOS", "Android"]}}}
     ev = lambda names: {"filter": {"fieldName": "eventName", "inListFilter": {"values": names}}}
     src = lambda f, v: {"filter": {"fieldName": f, "stringFilter": {"value": v}}}
+    KAKAO = {"andGroup": {"expressions": [src("sessionSource", "kakao"), src("sessionMedium", "notification")]}}
+    # 앱은 이벤트로, 웹 푸시는 이벤트가 안 남아(백그라운드 알림은 SDK 가 직접 연다) 랜딩 utm_source=notification 으로 잡는다.
+    PUSH = {"orGroup": {"expressions": [ev(PUSH_OPENS), src("sessionSource", "notification")]}}
 
     def q(metric, flt, split=None):
         dims = [{"name": "isoYearIsoWeek"}] + ([{"name": split}] if split else [])
@@ -82,14 +96,18 @@ def ga4():
         return out
 
     return {
-        "buy_clicks": q("eventCount", [web, ev(["click_btn_buy"])]),
+        # 분자(클릭)·분모(활성) 모두 같은 봇게이트 — 한쪽만 걸면 «1명당 클릭»이 부푼다.
+        "buy_clicks": q("eventCount", [web, bot, ev(["click_btn_buy"])]),
         "buy_users": q("totalUsers", [web, bot, ev(["click_btn_buy"])]),
         "web_users": q("activeUsers", [web, bot]),
         "channel": q("activeUsers", [web, bot], "sessionDefaultChannelGroup"),
         "detail": q("totalUsers", [ev(["view_item"])]),
         "prompt": q("totalUsers", [ev(PROMPT_CLICKS)]),
-        "kakao": q("activeUsers", [src("sessionSource", "kakao"), src("sessionMedium", "notification")]),
-        "pushopen": q("totalUsers", [ev(PUSH_OPENS)]),
+        # 북극성 세 칸은 전부 totalUsers — activeUsers 와 섞어 더하면 단위가 어긋난다.
+        "kakao": q("totalUsers", [KAKAO]),
+        "pushopen": q("totalUsers", [PUSH]),
+        # 북극성 = 한 사람이 카톡·푸시를 둘 다 타도 한 번만 세는 합집합(따로 센 값을 더하지 않는다).
+        "notified": q("totalUsers", [{"orGroup": {"expressions": [KAKAO, PUSH]}}]),
         "app_active": q("activeUsers", [app]),
     }
 
@@ -260,6 +278,8 @@ for k, mon in zip(keys, mondays):
     row = {**wk, **{p: round(by.get(p, 0)) for p in PROVIDERS},
            "other": round(sum(v for p, v in by.items() if p not in PROVIDERS)), "adsense": round(ad)}
     row["revenue"] = sum(row[p] for p in PROVIDERS + ["other", "adsense"])
+    # 제휴 실적은 평균 2일·최대 ~10일 늦게 적재된다 — 끝난 지 10일이 안 된 주는 덜 찬 값이라 판정에서 뺀다.
+    row["provisional"] = (today - (mon + dt.timedelta(days=6))).days < 10
     money.append(row)
 
     ch = g["channel"].get(k, {})
@@ -274,7 +294,7 @@ for k, mon in zip(keys, mondays):
     loop.append({**wk, "detail_users": g["detail"].get(k, 0), "prompt_users": g["prompt"].get(k, 0),
                  "registered": reg, "registered_with_token": tok,
                  "push_recipients": next((int(r["recv"]) for r in d["recv"] if r["wk"] == k), 0),
-                 "kakao_inflow": kakao, "push_opens": opens, "notified_returns": kakao + opens,
+                 "kakao_inflow": kakao, "push_opens": opens, "notified_returns": g["notified"].get(k, 0),
                  "room_members": members.get(k), "app_active": g["app_active"].get(k, 0)})
 
 log("Mongo"); mg = mongo()

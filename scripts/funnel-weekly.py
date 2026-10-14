@@ -24,6 +24,17 @@ import urllib.request
 import google.auth.transport.requests
 from google.oauth2 import service_account
 
+
+def _notify_failure(kind, exc, tb):
+    """launchd 는 실패해도 조용하다(성공 알림만 있었다) — 죽으면 macOS 알림으로 알린다. traceback 은 그대로 로그로."""
+    sys.__excepthook__(kind, exc, tb)
+    msg = f"{os.path.basename(__file__)}: {kind.__name__}: {exc}"[:200].replace("\"", "'").replace("\\", "/")
+    subprocess.run(["osascript", "-e", f"display notification \"{msg}\" with title \"지름알림 지표 작업 실패\" sound name \"Basso\""],
+                   check=False)
+
+
+sys.excepthook = _notify_failure
+
 WEEKS = int(sys.argv[1]) if len(sys.argv) > 1 else 8
 PROPERTY = "properties/394356262"
 SA = os.path.expanduser("~/.config/jirum/gtm-sa.json")
@@ -70,43 +81,50 @@ def ga4():
 
     ev = lambda names: [{"filter": {"fieldName": "eventName", "inListFilter": {"values": names}}}]
     src = lambda f, v: {"filter": {"fieldName": f, "stringFilter": {"value": v}}}
+    # growth-snapshot.py 와 같은 정의 — 세 칸 다 totalUsers, ★ 은 따로 센 값의 합이 아니라 합집합.
+    kakao = {"andGroup": {"expressions": [src("sessionSource", "kakao"), src("sessionMedium", "notification")]}}
+    push = {"orGroup": {"expressions": [*ev(PUSH_OPENS), src("sessionSource", "notification")]}}
     return {
         "detail": week_metric("totalUsers", ev(["view_item"])),
         "prompt": week_metric("totalUsers", ev(PROMPT_CLICKS)),
-        "kakao": week_metric("activeUsers", [src("sessionSource", "kakao"), src("sessionMedium", "notification")]),
-        "pushopen": week_metric("totalUsers", ev(PUSH_OPENS)),
+        "kakao": week_metric("totalUsers", [kakao]),
+        "pushopen": week_metric("totalUsers", [push]),
+        "notified": week_metric("totalUsers", [{"orGroup": {"expressions": [kakao, push]}}]),
         "app_active": week_metric("activeUsers", [APP], "platform"),
         "app_install": week_metric("totalUsers", [APP, *ev(["first_open"])], "platform"),
     }
 
 
-DB_JS = r"""
-const c=require("/var/www/html/ormconfig.json");const m=require("mysql2/promise");
-(async()=>{const cn=await m.createConnection({host:c.host,port:c.port,user:c.username,password:c.password,database:c.database,dateStrings:true});
-const [s,e]=process.argv.slice(1);
-// user.id<=1682 는 2026-07-27 createdAt 일괄 백필로 가입 시각이 오염됐다.
-const [cohort]=await cn.query(`SELECT CAST(YEARWEEK(u.createdAt,3) AS CHAR) wk, COUNT(*) signup,
+# 앱 파드가 아니라 mysql-0 에서 읽는다 — 앱 파드는 배포마다 교체돼 긴 exec 가 137 로 끊긴다(growth-snapshot.py 와 같은 이유, 2026-10-14 재발).
+DB_SQL = {
+    # user.id<=1682 는 2026-07-27 createdAt 일괄 백필로 가입 시각이 오염됐다.
+    "cohort": """SELECT CAST(YEARWEEK(u.createdAt,3) AS CHAR) wk, COUNT(*) signup,
   SUM(EXISTS(SELECT 1 FROM notification_keyword k WHERE k.userId=u.id)) kw,
   SUM(EXISTS(SELECT 1 FROM user_token t WHERE t.userId=u.id AND t.deletedAt IS NULL)) tok,
   SUM(EXISTS(SELECT 1 FROM push_history p WHERE p.userId=u.id AND p.errorCode IS NULL
       AND p.createdAt < u.createdAt + INTERVAL 7 DAY)) push7
-  FROM user u WHERE u.id>1682 AND u.isGuest=0 AND u.createdAt>=? AND u.createdAt<? GROUP BY wk`,[s,e]);
-// 게스트(로그인 없이 알림만 받는 기기 계정, 2026-10-09~) — 가입자가 아니라 따로 센다. 알림 키워드·관심사가 있는 게스트만.
-const [guest]=await cn.query(`SELECT CAST(YEARWEEK(u.createdAt,3) AS CHAR) wk, COUNT(*) guest,
+  FROM user u WHERE u.id>1682 AND u.isGuest=0 AND u.createdAt>='{s}' AND u.createdAt<'{e}' GROUP BY wk""",
+    # 게스트(로그인 없이 알림만 받는 기기 계정, 2026-10-09~) — 가입자가 아니라 따로 센다. 알림 키워드·관심사가 있는 게스트만.
+    "guest": """SELECT CAST(YEARWEEK(u.createdAt,3) AS CHAR) wk, COUNT(*) guest,
   SUM(EXISTS(SELECT 1 FROM user_token t WHERE t.userId=u.id AND t.deletedAt IS NULL)) gtok
-  FROM user u WHERE u.isGuest=1 AND u.createdAt>=? AND u.createdAt<?
+  FROM user u WHERE u.isGuest=1 AND u.createdAt>='{s}' AND u.createdAt<'{e}'
    AND (EXISTS(SELECT 1 FROM notification_keyword k WHERE k.userId=u.id) OR EXISTS(SELECT 1 FROM user_notification_theme n WHERE n.userId=u.id))
-  GROUP BY wk`,[s,e]);
-const [recv]=await cn.query(`SELECT CAST(YEARWEEK(createdAt,3) AS CHAR) wk, COUNT(DISTINCT userId) recv
-  FROM push_history WHERE userId IS NOT NULL AND errorCode IS NULL AND createdAt>=? AND createdAt<? GROUP BY wk`,[s,e]);
-console.log(JSON.stringify({cohort,recv,guest}));await cn.end();})().catch(x=>{console.error("ERR",x.message);process.exit(1)});
-"""
+  GROUP BY wk""",
+    "recv": """SELECT CAST(YEARWEEK(createdAt,3) AS CHAR) wk, COUNT(DISTINCT userId) recv
+  FROM push_history WHERE userId IS NOT NULL AND errorCode IS NULL AND createdAt>='{s}' AND createdAt<'{e}' GROUP BY wk""",
+}
 
 
 def db():
-    pod = subprocess.check_output(KUBE + ["get", "pods", "-l", "app=crawling-server", "-o", "name"], text=True).split()[0]
     end = last_sun + dt.timedelta(days=1)
-    out = json.loads(subprocess.check_output(KUBE + ["exec", pod, "--", "node", "-e", DB_JS, str(start), str(end)], text=True))
+    out = {}
+    for name, sql in DB_SQL.items():
+        sql = sql.format(s=start, e=end).replace("\n", " ")
+        tsv = subprocess.check_output(KUBE + ["exec", "mysql-0", "--", "bash", "-c",
+                                              'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -D crawling -B -e "$0" 2>/dev/null', sql],
+                                      text=True, timeout=120).splitlines()
+        cols = tsv[0].split("\t") if tsv else []
+        out[name] = [dict(zip(cols, line.split("\t"))) for line in tsv[1:]]
     return ({r["wk"]: r for r in out["cohort"]}, {r["wk"]: int(r["recv"]) for r in out["recv"]},
             {r["wk"]: r for r in out["guest"]})
 
@@ -140,7 +158,7 @@ g = ga4()
 cohort, recv, guests = db()
 members = room()
 lines = [f"# 지름알림 주간 깔때기 ({start} ~ {last_sun}, 생성 {today})", "",
-         "★ = 알림 경유 재방문(오카방 유입 + 푸시 열기, 중복 가능). 가입 코호트는 그 주 가입자 기준, "
+         "★ = 알림 경유 재방문(오카방 유입 ∪ 푸시·알림 열기, 한 사람은 한 번 — 2026-10-14 정의 변경). 앱 푸시 열기 계측은 W39 부터. 가입 코호트는 그 주 가입자 기준, "
          "첫알림7일은 마지막 주가 아직 덜 찼다. 카톡방 인원 = 핫딜 온리방 그 주 마지막 측정(전주 대비 순증, 입장−퇴장).", "",
          "| 주 | 상세 조회 | 알림 권유 클릭 | 게스트 등록(토큰) | 가입 | 키워드 등록 | 토큰 있음 | 첫 알림(7일) | 푸시 수신 | 오카방 유입 | 카톡방 인원 | 푸시 열기 | ★ |",
          "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
@@ -148,7 +166,7 @@ star = {}
 for w in weeks:
     c = cohort.get(w, {})
     su, kw, tok, p7 = (int(c.get(k) or 0) for k in ("signup", "kw", "tok", "push7"))
-    star[w] = g["kakao"].get(w, 0) + g["pushopen"].get(w, 0)
+    star[w] = g["notified"].get(w, 0)
     det = g["detail"].get(w, 0)
     gu = guests.get(w, {})
     gcell = f"{int(gu.get('guest') or 0)} ({int(gu.get('gtok') or 0)})"
