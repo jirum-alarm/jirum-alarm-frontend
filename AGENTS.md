@@ -84,6 +84,11 @@ pnpm storybook       # Storybook development
 pnpm code-gen        # GraphQL code generation
 ```
 
+**운영 배포 = `python3 scripts/release-tag.py`** (손으로 `git tag` 하지 않는다). main 포함 확인 → 직전 태그 이후 포함분·같이 나갈 admin/ai/beauty 배포 →
+feat=minor/그 외 patch → 스테이징 빌드 성공 증거 → 웹·어드민 GraphQL 문서를 **운영 스키마**로 검증(서버 롤아웃 전 태그 차단) →
+원격 기준 번호로 annotated 태그(경합 시 재계산) → deploy-web-prod 결과 → gitops `scripts/deploy-verify.py frontend-web` 까지 한 번에.
+`--dry-run` 은 관문까지만. 성공 출력 `RELEASE-TAG DONE vX.Y.Z` 가 «운영 배포됨» 보고의 근거다.
+
 ### 2. **Admin App** (`apps/admin/`)
 **Administrative Dashboard** — 매칭 검수·핫딜 키워드·키워드맵·광고·알림·통계·수익링크 운영 도구
 
