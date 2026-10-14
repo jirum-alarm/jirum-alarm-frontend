@@ -3673,6 +3673,8 @@ PODS:
     - SDWebImage/Core (~> 5.17)
   - Sentry/HybridSDK (8.58.0)
   - SocketRocket (0.7.1)
+  - UniversalLink (1.0.0):
+    - ExpoModulesCore
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -3803,6 +3805,7 @@ DEPENDENCIES:
   - RNSVG (from `../../../node_modules/react-native-svg`)
   - RNWorklets (from `../../../node_modules/react-native-worklets`)
   - SocketRocket (~> 0.7.1)
+  - UniversalLink (from `../modules/universal-link/ios`)
   - Yoga (from `../../../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -4087,6 +4090,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/react-native-svg"
   RNWorklets:
     :path: "../../../node_modules/react-native-worklets"
+  UniversalLink:
+    :path: "../modules/universal-link/ios"
   Yoga:
     :path: "../../../node_modules/react-native/ReactCommon/yoga"
 
@@ -4243,6 +4248,7 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
   Sentry: d587a8fe91ca13503ecd69a1905f3e8a0fcf61be
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
+  UniversalLink: 86613b088b0cfbb95bc0e1d6741d3713abb95954
   Yoga: 9690ea6ce9c77aee633f4815cc42202c701edbd8
 
 PODFILE CHECKSUM: 3df36fb1e7c5d026c16197d516288d02b6537d6d
