@@ -144,3 +144,20 @@ export const LANDING_HANDOFF_WINDOW_MS = 8000;
  */
 export const LANDING_COVER_SETTLE_MS = 900;
 export const LANDING_COVER_MAX_MS = 4000;
+
+/**
+ * 페이지 본체가 `http://` 로 가려 하면 같은 주소의 https 를 돌려준다(아니면 null).
+ * iOS 는 앱 웹뷰의 평문 http 를 App Transport Security 가 막고(NSURLError -1022), 안드로이드 release 도
+ * cleartext 를 막아 「페이지를 불러오지 못했어요」가 된다. 옥션 게이트가 마지막에 `http://mitem.auction.co.kr/vip…`
+ * 로 보내 옥션·지마켓 구매가 전부 여기서 막혔다(2026-10-14 시뮬 실측). 브라우저는 https 로 올려 열므로 같게 한다.
+ * iframe(광고·추적)은 건드리지 않는다.
+ */
+export function httpsUpgradeOf(request: {
+  url: string;
+  isTopFrame?: boolean;
+}): string | null {
+  if (request.isTopFrame === false) return null;
+  return /^http:\/\//i.test(request.url)
+    ? request.url.replace(/^http:/i, 'https:')
+    : null;
+}
