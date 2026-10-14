@@ -97,7 +97,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web
+          images: ${{ secrets.DOCKER_REGISTRY }}/tjsry0466/jirum-alarm-frontend-web
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -153,7 +153,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web:${{ needs.build-and-push.outputs.image-tag }}
+          image-ref: ${{ secrets.DOCKER_REGISTRY }}/tjsry0466/jirum-alarm-frontend-web:${{ needs.build-and-push.outputs.image-tag }}
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
@@ -201,7 +201,7 @@ jobs:
           # (이전: server/.../deployment.yaml 의 image 라인 직접 치환 — 더는 ArgoCD 가 보지 않는 경로)
           # semver 태그라 매 배포마다 값이 달라져 ArgoCD 가 자연 rollout (어노테이션 트릭 불필요).
           KUSTOMIZATION="apps/frontend-web/overlays/production/kustomization.yaml"
-          IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web"
+          IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/tjsry0466/jirum-alarm-frontend-web"
           export IMAGE_NAME NEW_TAG
           yq eval -i '(.images[] | select(.name == strenv(IMAGE_NAME)) | .newTag) = strenv(NEW_TAG)' "$KUSTOMIZATION"
 

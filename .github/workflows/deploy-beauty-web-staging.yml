@@ -55,7 +55,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-beauty-web-dev
+          images: ${{ secrets.DOCKER_REGISTRY }}/tjsry0466/jirum-alarm-frontend-beauty-web-dev
           tags: |
             type=ref,event=branch
             type=sha,prefix={{branch}}-,format=short
@@ -114,7 +114,7 @@ jobs:
         run: |
           set -euo pipefail
           KUSTOMIZATION="apps/frontend-beauty-web/overlays/development/kustomization.yaml"
-          IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-beauty-web"
+          IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/tjsry0466/jirum-alarm-frontend-beauty-web"
           export IMAGE_NAME NEW_TAG
           yq eval -i '(.images[] | select(.name == strenv(IMAGE_NAME)) | .newTag) = strenv(NEW_TAG)' "$KUSTOMIZATION"
           yq eval '.' "$KUSTOMIZATION" > /dev/null

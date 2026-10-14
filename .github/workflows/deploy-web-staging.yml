@@ -103,7 +103,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web-dev
+          images: ${{ secrets.DOCKER_REGISTRY }}/tjsry0466/jirum-alarm-frontend-web-dev
           tags: |
             type=ref,event=branch
             type=sha,prefix={{branch}}-,format=short
@@ -172,7 +172,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web-dev:${{ needs.build-and-push.outputs.image-tag }}
+          image-ref: ${{ secrets.DOCKER_REGISTRY }}/tjsry0466/jirum-alarm-frontend-web-dev:${{ needs.build-and-push.outputs.image-tag }}
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
@@ -223,7 +223,7 @@ jobs:
           #   ArgoCD sync 대상이 될 수 없었다(그래서 dev 가 안 떴다). dev 를 별개 앱으로 분리.
           # 2026-10-12: 다시 apps/frontend-web/overlays/development 로 — gitops appset 마커가 appPath+overlay 로 이 경로를 직접 가리킨다.
           KUSTOMIZATION="apps/frontend-web/overlays/development/kustomization.yaml"
-          IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web"
+          IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/tjsry0466/jirum-alarm-frontend-web"
           export IMAGE_NAME NEW_TAG
           yq eval -i '(.images[] | select(.name == strenv(IMAGE_NAME)) | .newTag) = strenv(NEW_TAG)' "$KUSTOMIZATION"
 
