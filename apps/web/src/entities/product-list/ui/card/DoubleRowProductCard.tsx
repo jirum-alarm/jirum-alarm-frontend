@@ -48,7 +48,11 @@ export default function DoubleRowProductCard({
             <span className="line-clamp-2 text-sm font-normal break-all text-gray-800">
               {product.title}
             </span>
-            <DisplayProductSource mallName={product.mallName} provider={product.provider} />
+            <DisplayProductSource
+              mallName={product.mallName}
+              provider={product.provider}
+              postedCommunityCount={product.postedCommunityCount}
+            />
             <div className="mt-auto flex items-center gap-2">
               <DisplayListPrice price={product.price} widthType="wide" />
               {product.hotDealType && !product.isEnd && (

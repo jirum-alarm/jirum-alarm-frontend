@@ -15,6 +15,7 @@ import { type ProductCardType } from '@/entities/product-list/model/types';
 import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
 import DisplayProductSource from '@/entities/product-list/ui/card/DisplayProductSource';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
+import { ProductCardStatus } from '@/entities/product-list/ui/ProductCardStatus';
 
 export default function ProductRankingImageCard({
   product,
@@ -61,6 +62,8 @@ export default function ProductRankingImageCard({
               priority={priority}
               quality={priority ? 85 : 75}
             />
+            {/* 랭킹 1~10위는 홈에서 가장 많이 보이는데 「왜 좋은 딜인지」가 없었다 — 다른 카드와 같은 배지(핫딜·대박딜·초대박딜). */}
+            <ProductCardStatus product={product} />
           </div>
           <div className="pc:h-[132px] p-3 pb-0">
             <div className="xl:pc:text-base line-clamp-2 text-sm text-gray-700">
@@ -69,6 +72,7 @@ export default function ProductRankingImageCard({
             <DisplayProductSource
               mallName={product.mallName}
               provider={product.provider}
+              postedCommunityCount={product.postedCommunityCount}
               time={product.postedAt ? <DisplayTime time={product.postedAt} /> : undefined}
               className="pt-1"
             />

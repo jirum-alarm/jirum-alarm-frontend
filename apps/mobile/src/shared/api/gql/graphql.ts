@@ -1917,6 +1917,8 @@ export type ProductOutput = {
   parsedPrice?: Maybe<Scalars['Float']['output']>;
   positiveCommunityReactionCount: Scalars['Int']['output'];
   postedAt: Scalars['DateTime']['output'];
+  /** 이 딜이 올라온 커뮤니티 수 — 랭킹 목록(커뮤니티 랭킹·홈 핫딜)에서 같은 딜을 한 칸으로 접으며 센다. 2 이상이면 「커뮤니티 N곳」. 다른 목록에선 비어 있다. */
+  postedCommunityCount?: Maybe<Scalars['Int']['output']>;
   precomputedRankingScore?: Maybe<Scalars['Float']['output']>;
   price?: Maybe<Scalars['String']['output']>;
   /** 통합 가격비교(DANAWA 배지 또는 COMMUNITY_CLUSTER 블록, 상세 전용) */
@@ -3062,6 +3064,10 @@ export type User = {
 /** 하루 끝(23:55 KST) 스냅숏 — 접속은 KST 달력 기준(그날·7일·30일) */
 export type UserActivityDailyOutput = {
   __typename?: 'UserActivityDailyOutput';
+  /** 그날 접속 게스트 — 2026-10-14 이전은 게스트 재방문을 안 세던 때라 null */
+  activeGuests1d?: Maybe<Scalars['Int']['output']>;
+  /** 그날까지 7일 접속 게스트(2026-10-14 이전 null) */
+  activeGuests7d?: Maybe<Scalars['Int']['output']>;
   /** 그날 접속 회원(DAU) */
   activeMembers1d: Scalars['Int']['output'];
   /** 그날까지 7일 접속 회원 */
@@ -3101,6 +3107,10 @@ export enum UserLikeTarget {
 
 export type UserOverviewOutput = {
   __typename?: 'UserOverviewOutput';
+  /** 최근 24시간 접속 게스트(2026-10-14 전엔 재방문을 안 세서 생성 시각만 잡힌다) */
+  activeGuests1d: Scalars['Int']['output'];
+  /** 최근 7일 접속 게스트 */
+  activeGuests7d: Scalars['Int']['output'];
   /** 최근 24시간 접속 회원(lastLoggedInAt — 백그라운드 토큰 갱신은 제외) */
   activeMembers1d: Scalars['Int']['output'];
   /** 최근 7일 접속 회원 */
@@ -3610,6 +3620,7 @@ export type HomeProductsQuery = {
     mallName?: string | null;
     hotDealType?: HotDealType | null;
     searchAfter?: Array<string> | null;
+    postedCommunityCount?: number | null;
     postedAt: any;
     provider: {__typename?: 'Provider'; nameKr: string};
   }>;
@@ -4996,6 +5007,7 @@ export const HomeProductsDocument = new TypedDocumentString(`
       nameKr
     }
     searchAfter
+    postedCommunityCount
     postedAt
   }
 }

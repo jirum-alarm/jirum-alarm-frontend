@@ -91,6 +91,7 @@ export const GridCard = React.memo(function GridCard({
         <DisplayProductSource
           mallName={product.mallName}
           providerName={product.provider?.nameKr}
+          postedCommunityCount={product.postedCommunityCount}
           time={
             showTime && product.postedAt
               ? displayTime(product.postedAt)
@@ -136,6 +137,7 @@ export const CarouselCard = React.memo(function CarouselCard({
         <DisplayProductSource
           mallName={product.mallName}
           providerName={product.provider?.nameKr}
+          postedCommunityCount={product.postedCommunityCount}
           time={product.postedAt ? displayTime(product.postedAt) : undefined}
         />
         <View className="pt-1">
@@ -197,6 +199,7 @@ export const ListCard = React.memo(function ListCard({
           <DisplayProductSource
             mallName={product.mallName}
             providerName={product.provider?.nameKr}
+            postedCommunityCount={product.postedCommunityCount}
             time={product.postedAt ? formatMMD(product.postedAt) : undefined}
             spacing="none"
           />
@@ -245,6 +248,7 @@ export const DoubleRowCard = React.memo(function DoubleRowCard({
           <DisplayProductSource
             mallName={product.mallName}
             providerName={product.provider?.nameKr}
+            postedCommunityCount={product.postedCommunityCount}
             spacing="none"
           />
           {/* web `mt-auto` — 120px 썸네일 높이 안에서 가격을 바닥에 붙인다.

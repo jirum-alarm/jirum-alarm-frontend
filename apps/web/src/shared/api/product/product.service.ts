@@ -46,7 +46,11 @@ export type ProductListQueryVariables = QueryProductsQueryVariables & {
 // codegen 이 복구되면 지우면 된다. graphql() 로 만든 쿼리도 TypedDocumentString 으로 바꾸면
 // 문서 문자열을 직접 소유해 같은 보강을 할 수 있다(아래 QueryExpiringSoonHotDealProducts).
 type ProductListResult = Omit<QueryProductsQuery, 'products'> & {
-  products: (QueryProductsQuery['products'][number] & { mallName?: string | null })[];
+  products: (QueryProductsQuery['products'][number] & {
+    mallName?: string | null;
+    /** 랭킹 목록에서 같은 딜을 접으며 센 커뮤니티 수(서버 same-deal-collapse). 랭킹 아닌 목록은 null. */
+    postedCommunityCount?: number | null;
+  })[];
 };
 
 export class ProductService {
@@ -589,6 +593,7 @@ const QueryProducts = new TypedDocumentString<ProductListResult, ProductListQuer
       }
       searchAfter
       estimatedTotal
+      postedCommunityCount
       postedAt
     }
   }

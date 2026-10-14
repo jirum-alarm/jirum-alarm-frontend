@@ -82,6 +82,7 @@ export default function ProductGridCard({
           <DisplayProductSource
             mallName={product.mallName}
             provider={product.provider}
+            postedCommunityCount={product.postedCommunityCount}
             time={displayTime ? <DisplayTime time={product.postedAt} /> : undefined}
             className="pt-1"
           />

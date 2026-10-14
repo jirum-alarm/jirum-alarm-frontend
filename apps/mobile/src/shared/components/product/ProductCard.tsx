@@ -28,6 +28,7 @@ export type ProductCardItem = {
   postedAt?: string | null;
   earliestExpiryDate?: string | null;
   provider?: {nameKr?: string | null} | null;
+  postedCommunityCount?: number | null;
 };
 
 const CARD_WIDTH = 120;
@@ -91,6 +92,7 @@ const ProductCard = React.memo(function ProductCard({
         <DisplayProductSource
           mallName={product.mallName}
           providerName={product.provider?.nameKr}
+          postedCommunityCount={product.postedCommunityCount}
           time={product.postedAt ? displayTime(product.postedAt) : undefined}
         />
         <Text

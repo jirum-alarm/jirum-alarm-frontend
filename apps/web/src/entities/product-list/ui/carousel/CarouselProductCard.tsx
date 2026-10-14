@@ -56,6 +56,7 @@ export default function CarouselProductCard({
           <DisplayProductSource
             mallName={product.mallName}
             provider={product.provider}
+            postedCommunityCount={product.postedCommunityCount}
             time={<DisplayTime time={product.postedAt} />}
             className="pt-1"
           />

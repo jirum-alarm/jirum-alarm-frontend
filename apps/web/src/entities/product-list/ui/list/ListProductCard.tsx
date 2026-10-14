@@ -60,6 +60,7 @@ export default function ListProductCard({
             <DisplayProductSource
               mallName={product.mallName}
               provider={product.provider}
+              postedCommunityCount={product.postedCommunityCount}
               time={product.postedAt ? formatDateToMMD(product.postedAt) : undefined}
             />
           </div>

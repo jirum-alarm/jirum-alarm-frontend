@@ -161,6 +161,7 @@ export const QueryHomeProducts = graphql(`
         nameKr
       }
       searchAfter
+      postedCommunityCount
       postedAt
     }
   }

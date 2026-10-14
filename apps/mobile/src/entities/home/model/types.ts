@@ -91,4 +91,6 @@ export interface ProductCardType {
   mallName?: string | null;
   /** 제보 커뮤니티. 100% 채워지며 판매처와 항상 다른 값(폴백 대상 아님). */
   provider?: {nameKr?: string | null} | null;
+  /** 이 딜이 올라온 커뮤니티 수. 랭킹 목록에서만 채워진다 — 2 이상이면 「뽐뿌 외 N곳」(web 과 같음). */
+  postedCommunityCount?: number | null;
 }

@@ -1548,6 +1548,10 @@ type ProductOutput {
   parsedPrice: Float
   positiveCommunityReactionCount: Int!
   postedAt: DateTime!
+  """
+  이 딜이 올라온 커뮤니티 수 — 랭킹 목록(커뮤니티 랭킹·홈 핫딜)에서 같은 딜을 한 칸으로 접으며 센다. 2 이상이면 「커뮤니티 N곳」. 다른 목록에선 비어 있다.
+  """
+  postedCommunityCount: Int
   precomputedRankingScore: Float
   price: String
   """통합 가격비교(DANAWA 배지 또는 COMMUNITY_CLUSTER 블록, 상세 전용)"""
@@ -2350,6 +2354,10 @@ type User {
 
 """하루 끝(23:55 KST) 스냅숏 — 접속은 KST 달력 기준(그날·7일·30일)"""
 type UserActivityDailyOutput {
+  """그날 접속 게스트 — 2026-10-14 이전은 게스트 재방문을 안 세던 때라 null"""
+  activeGuests1d: Int
+  """그날까지 7일 접속 게스트(2026-10-14 이전 null)"""
+  activeGuests7d: Int
   """그날 접속 회원(DAU)"""
   activeMembers1d: Int!
   """그날까지 7일 접속 회원"""
@@ -2386,6 +2394,10 @@ enum UserLikeTarget {
 }
 
 type UserOverviewOutput {
+  """최근 24시간 접속 게스트(2026-10-14 전엔 재방문을 안 세서 생성 시각만 잡힌다)"""
+  activeGuests1d: Int!
+  """최근 7일 접속 게스트"""
+  activeGuests7d: Int!
   """최근 24시간 접속 회원(lastLoggedInAt — 백그라운드 토큰 갱신은 제외)"""
   activeMembers1d: Int!
   """최근 7일 접속 회원"""

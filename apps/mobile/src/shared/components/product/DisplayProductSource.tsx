@@ -12,11 +12,14 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 export default function DisplayProductSource({
   mallName,
   providerName,
+  postedCommunityCount,
   time,
   spacing = 'top',
 }: {
   mallName?: string | null;
   providerName?: string | null;
+  /** 랭킹이 같은 딜을 한 칸으로 접으며 센 커뮤니티 수. 2 이상이면 「뽐뿌 외 N곳」. */
+  postedCommunityCount?: number | null;
   time?: string;
   /**
    * 위 여백. web 은 호출부가 className 으로 정한다 —
@@ -30,6 +33,9 @@ export default function DisplayProductSource({
   // 몰이 직접 제보하는 상품은 판매처와 제보처가 같은 이름이라 그대로 두면
   // "알토란마켓 · 알토란마켓"으로 두 번 찍힌다.
   const community = rawCommunity === mall ? undefined : rawCommunity;
+  // 여러 커뮤니티가 동시에 올렸다는 것도 좋은 딜의 근거다(web DisplayProductSource 와 같은 표기).
+  const otherCommunities =
+    community && postedCommunityCount ? postedCommunityCount - 1 : 0;
 
   if (!mall && !community && !time) return null;
 
@@ -48,6 +54,11 @@ export default function DisplayProductSource({
         ) : null}
         {mall && community ? dot : null}
         {community ? <Text>{community}</Text> : null}
+        {otherCommunities > 0 ? (
+          <Text className="font-medium text-gray-600">
+            {` 외 ${otherCommunities}곳`}
+          </Text>
+        ) : null}
         {time && (mall || community) ? dot : null}
         {time ? <Text>{time}</Text> : null}
       </Text>
