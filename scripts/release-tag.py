@@ -95,13 +95,25 @@ class Lock:
                     f.write(f'{os.getpid()} {time.strftime("%F %T")}\n')
                 return self
             except FileExistsError:
-                if time.time() - os.path.getmtime(self.path) > 3600:
+                if self._owner_dead() or time.time() - os.path.getmtime(self.path) > 3600:
                     shutil.rmtree(self.path, ignore_errors=True)  # 죽은 세션이 남긴 잠금
                     continue
                 if _ == 0:
                     log(f'⏳ 다른 세션이 태그 중({self.path}) — 대기')
                 time.sleep(10)
         die('잠금 10분 대기 초과', 2)
+
+    def _owner_dead(self):
+        """잠금을 잡은 프로세스가 이미 없으면 죽은 잠금이다(2026-10-15: 태그 뒤 세션이 끊겨 남은 잠금에 10분 막혔다)."""
+        try:
+            with open(os.path.join(self.path, 'owner')) as f:
+                pid = int(f.read().split()[0])
+            os.kill(pid, 0)
+            return False
+        except ProcessLookupError:
+            return True
+        except (OSError, ValueError, IndexError):
+            return False  # owner 파일을 아직 못 썼거나 권한 문제 — 기다린다
 
     def __exit__(self, *exc):
         shutil.rmtree(self.path, ignore_errors=True)
