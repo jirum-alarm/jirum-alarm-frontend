@@ -1,6 +1,7 @@
 'use client';
 
 import * as m from 'motion/react-m';
+import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 
@@ -14,7 +15,10 @@ import LogoLink from '@/shared/ui/common/Logo/LogoLink';
 import Link from '@/shared/ui/Link';
 
 import NavLink from './MenuLink';
-import UserMenu from './UserMenu';
+
+// PC 전용 사용자 메뉴(Radix DropdownMenu 14K gz). 레이아웃이 모바일·PC 분기를 한 파일에서 import 해서
+// 정적 import 면 모바일 라우트 첫 JS 에도 실렸다 — PC 에서 그릴 때만 받는다(SSR 은 그대로).
+const UserMenu = dynamic(() => import('./UserMenu'));
 
 const HOME_SCROLLTHRESHOLD = 720;
 
