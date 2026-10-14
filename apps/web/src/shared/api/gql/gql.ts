@@ -39,9 +39,8 @@ type Documents = {
   '\n  mutation ReportCommunityPost(\n    $targetId: Float!\n    $target: UserReportTarget!\n    $reason: UserReportReason!\n    $description: String\n  ) {\n    addUserReport(target: $target, targetId: $targetId, reason: $reason, description: $description)\n  }\n': typeof types.ReportCommunityPostDocument;
   '\n  mutation LikeCommunityPost($targetId: Int!, $isLike: Boolean) {\n    addUserLikeOrDislike(target: COMMENT, targetId: $targetId, isLike: $isLike)\n  }\n': typeof types.LikeCommunityPostDocument;
   '\n  mutation MutationAddNotificationKeyword($keyword: String!, $fromRecommendation: Boolean) {\n    addNotificationKeyword(keyword: $keyword, fromRecommendation: $fromRecommendation)\n  }\n': typeof types.MutationAddNotificationKeywordDocument;
-  '\n  query QueryRecommendedNotificationKeywords {\n    recommendedNotificationKeywords\n  }\n': typeof types.QueryRecommendedNotificationKeywordsDocument;
   '\n  mutation MutationRemoveNotificationKeyword($id: Float!) {\n    removeNotificationKeyword(id: $id)\n  }\n': typeof types.MutationRemoveNotificationKeywordDocument;
-  '\n  query QueryMypageKeyword($limit: Int!, $searchAfter: [String!]) {\n    notificationKeywordsByMe(limit: $limit, searchAfter: $searchAfter) {\n      id\n      keyword\n    }\n  }\n': typeof types.QueryMypageKeywordDocument;
+  '\n  query QueryMypageKeyword($limit: Int!, $searchAfter: [String!]) {\n    notificationKeywordsByMe(limit: $limit, searchAfter: $searchAfter) {\n      id\n      keyword\n      priceDropOnly\n    }\n  }\n': typeof types.QueryMypageKeywordDocument;
   '\n  mutation AddUserLikeOrDislike($target: UserLikeTarget!, $targetId: Int!, $isLike: Boolean) {\n    addUserLikeOrDislike(target: $target, targetId: $targetId, isLike: $isLike)\n  }\n': typeof types.AddUserLikeOrDislikeDocument;
   '\n  query QueryNotifications($offset: Int!, $limit: Int!) {\n    notifications(offset: $offset, limit: $limit) {\n      id\n      readAt\n      createdAt\n      message\n      title\n      url\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n        categoryId\n      }\n    }\n  }\n': typeof types.QueryNotificationsDocument;
   '\n  query QueryUnreadNotificationsCount {\n    unreadNotificationsCount\n  }\n': typeof types.QueryUnreadNotificationsCountDocument;
@@ -73,6 +72,7 @@ type Documents = {
   '\n  mutation RemoveWishlist($productId: Int!) {\n    removeWishlist(productId: $productId)\n  }\n': typeof types.RemoveWishlistDocument;
   '\n  query QueryWishlists(\n    $orderBy: WishlistOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    wishlists(\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      productId\n      searchAfter\n      product {\n        id\n        title\n        price\n        isHot\n        isEnd\n        isPrivate\n        postedAt\n        hotDealType\n        thumbnail\n        isMyWishlist\n        categoryId\n      }\n    }\n  }\n': typeof types.QueryWishlistsDocument;
   '\n  query QueryWishlistCount {\n    wishlistCount\n  }\n': typeof types.QueryWishlistCountDocument;
+  '\n  query QueryRecommendedNotificationKeywords {\n    recommendedNotificationKeywords\n  }\n': typeof types.QueryRecommendedNotificationKeywordsDocument;
   '\n  query publishedModelPages {\n    publishedModelPages {\n      slug\n      brand\n      modelName\n      dealCount\n      heroImage\n      heroMinPrice\n      unitLabel\n      unitPrice\n      categoryId\n      categoryName\n      lastDealAt\n      activeDealCount\n      activePrice\n      activePostedAt\n      priceTone\n      savePct\n      buyLine\n      buyLineUnitLabel\n      trendPrices\n    }\n  }\n': typeof types.PublishedModelPagesDocument;
   '\n  query modelPage($slug: String!) {\n    modelPage(slug: $slug) {\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n': typeof types.ModelPageDocument;
 };
@@ -130,11 +130,9 @@ const documents: Documents = {
     types.LikeCommunityPostDocument,
   '\n  mutation MutationAddNotificationKeyword($keyword: String!, $fromRecommendation: Boolean) {\n    addNotificationKeyword(keyword: $keyword, fromRecommendation: $fromRecommendation)\n  }\n':
     types.MutationAddNotificationKeywordDocument,
-  '\n  query QueryRecommendedNotificationKeywords {\n    recommendedNotificationKeywords\n  }\n':
-    types.QueryRecommendedNotificationKeywordsDocument,
   '\n  mutation MutationRemoveNotificationKeyword($id: Float!) {\n    removeNotificationKeyword(id: $id)\n  }\n':
     types.MutationRemoveNotificationKeywordDocument,
-  '\n  query QueryMypageKeyword($limit: Int!, $searchAfter: [String!]) {\n    notificationKeywordsByMe(limit: $limit, searchAfter: $searchAfter) {\n      id\n      keyword\n    }\n  }\n':
+  '\n  query QueryMypageKeyword($limit: Int!, $searchAfter: [String!]) {\n    notificationKeywordsByMe(limit: $limit, searchAfter: $searchAfter) {\n      id\n      keyword\n      priceDropOnly\n    }\n  }\n':
     types.QueryMypageKeywordDocument,
   '\n  mutation AddUserLikeOrDislike($target: UserLikeTarget!, $targetId: Int!, $isLike: Boolean) {\n    addUserLikeOrDislike(target: $target, targetId: $targetId, isLike: $isLike)\n  }\n':
     types.AddUserLikeOrDislikeDocument,
@@ -197,6 +195,8 @@ const documents: Documents = {
   '\n  query QueryWishlists(\n    $orderBy: WishlistOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    wishlists(\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      productId\n      searchAfter\n      product {\n        id\n        title\n        price\n        isHot\n        isEnd\n        isPrivate\n        postedAt\n        hotDealType\n        thumbnail\n        isMyWishlist\n        categoryId\n      }\n    }\n  }\n':
     types.QueryWishlistsDocument,
   '\n  query QueryWishlistCount {\n    wishlistCount\n  }\n': types.QueryWishlistCountDocument,
+  '\n  query QueryRecommendedNotificationKeywords {\n    recommendedNotificationKeywords\n  }\n':
+    types.QueryRecommendedNotificationKeywordsDocument,
   '\n  query publishedModelPages {\n    publishedModelPages {\n      slug\n      brand\n      modelName\n      dealCount\n      heroImage\n      heroMinPrice\n      unitLabel\n      unitPrice\n      categoryId\n      categoryName\n      lastDealAt\n      activeDealCount\n      activePrice\n      activePostedAt\n      priceTone\n      savePct\n      buyLine\n      buyLineUnitLabel\n      trendPrices\n    }\n  }\n':
     types.PublishedModelPagesDocument,
   '\n  query modelPage($slug: String!) {\n    modelPage(slug: $slug) {\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n':
@@ -369,19 +369,13 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query QueryRecommendedNotificationKeywords {\n    recommendedNotificationKeywords\n  }\n',
-): typeof import('./graphql').QueryRecommendedNotificationKeywordsDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
   source: '\n  mutation MutationRemoveNotificationKeyword($id: Float!) {\n    removeNotificationKeyword(id: $id)\n  }\n',
 ): typeof import('./graphql').MutationRemoveNotificationKeywordDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query QueryMypageKeyword($limit: Int!, $searchAfter: [String!]) {\n    notificationKeywordsByMe(limit: $limit, searchAfter: $searchAfter) {\n      id\n      keyword\n    }\n  }\n',
+  source: '\n  query QueryMypageKeyword($limit: Int!, $searchAfter: [String!]) {\n    notificationKeywordsByMe(limit: $limit, searchAfter: $searchAfter) {\n      id\n      keyword\n      priceDropOnly\n    }\n  }\n',
 ): typeof import('./graphql').QueryMypageKeywordDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -569,6 +563,12 @@ export function graphql(
 export function graphql(
   source: '\n  query QueryWishlistCount {\n    wishlistCount\n  }\n',
 ): typeof import('./graphql').QueryWishlistCountDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryRecommendedNotificationKeywords {\n    recommendedNotificationKeywords\n  }\n',
+): typeof import('./graphql').QueryRecommendedNotificationKeywordsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
