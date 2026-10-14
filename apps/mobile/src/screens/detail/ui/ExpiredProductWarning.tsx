@@ -82,7 +82,8 @@ export default function ExpiredProductWarning({
     shownKey.split(',').forEach((id, i) => recordImpression(Number(id), i));
   }, [seen, shownKey, recordImpression]);
 
-  if (!isExpired) return null;
+  // 새 딜은 오래된 딜 블록 대신 링크 없는 딜의 쿠팡 버튼만(nolink_coupang_cta_v1) — 대상·실험군만 서버가 링크를 준다.
+  if (!isExpired) return <CoupangSearchCta productId={currentId} />;
   // web 과 같은 판정: 거른 뒤에도 조회 한도만큼 남아야 "더 있다"고 본다.
   const hasMore = similar.length >= FETCH_LIMIT;
   const isPending = same.isPending || latest.isPending;

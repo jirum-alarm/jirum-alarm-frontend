@@ -237,7 +237,8 @@ export class ProductService {
       .catch(() => empty);
   }
 
-  // 오래된 딜의 「쿠팡에서 지금 가격 보기」(실험 coupang_search_cta_v1) — 대상이 아니거나 아직 링크가 없으면 null.
+  // 딜 상세의 「쿠팡에서 지금 가격 보기」 — 오래된 딜(kind=aged, coupang_search_cta_v1)·링크 없는 새 딜(kind=nolink,
+  // nolink_coupang_cta_v1). 대상이 아니거나 아직 링크가 없으면 null.
   // 부가 버튼이라 실패는 null.
   static async getCoupangSearchCta(variables: { productId: number }) {
     return execute(QueryCoupangSearchCta, variables)
@@ -646,13 +647,14 @@ const QuerySameProductDeals = new TypedDocumentString<
 `);
 
 const QueryCoupangSearchCta = new TypedDocumentString<
-  { coupangSearchCta: { url: string; query: string } | null },
+  { coupangSearchCta: { url: string; query: string; kind: 'aged' | 'nolink' } | null },
   { productId: number }
 >(`
   query QueryCoupangSearchCta($productId: Int!) {
     coupangSearchCta(productId: $productId) {
       url
       query
+      kind
     }
   }
 `);

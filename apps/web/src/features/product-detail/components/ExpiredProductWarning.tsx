@@ -25,7 +25,9 @@ export default function ExpiredProductWarning({ product, isMobile }: Props) {
   // 토스처럼 매일 재확인되는 딜은 마지막 확인 시각 기준 — 판매 중인데 "품절됐을 수 있어요"가 붙지 않게.
   const isExpired = dayjs().diff(dayjs(dealFreshnessAt(product)), 'day') >= 7;
 
-  if (!isExpired) return null;
+  // 새 딜은 오래된 딜 블록 대신 링크 없는 딜의 쿠팡 버튼만(nolink_coupang_cta_v1) — 대상·실험군만 서버가 링크를 준다.
+  if (!isExpired)
+    return <CoupangSearchCta productId={Number(product.id)} className="pc:px-0 mb-6 px-5" />;
 
   return (
     <>

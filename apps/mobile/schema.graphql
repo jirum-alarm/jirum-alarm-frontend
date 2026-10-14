@@ -229,6 +229,10 @@ type CommentOutput {
 }
 
 type CoupangSearchCtaOutput {
+  """
+  aged = 게시 7일+ 딜(coupang_search_cta_v1) · nolink = 게시 7일 안의 수익 링크 없는 딜(nolink_coupang_cta_v1) — 문구를 고른다
+  """
+  kind: String!
   """쿠팡 검색어"""
   query: String!
   """쿠팡 파트너스 링크(쿠팡 검색 결과로 간다)"""

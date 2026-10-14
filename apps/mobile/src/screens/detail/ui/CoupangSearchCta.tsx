@@ -14,9 +14,16 @@ import {resolveEntryScreen} from '@/shared/lib/navigation/entry-screen';
 
 const SOURCE = 'coupang_search_cta';
 
+// 새 딜은 가격이 아직 살아 있으니 «지금 얼마일까»가 아니라 쿠팡과 견줘 보라고 권한다(web 과 같은 문구).
+const COPY = {
+  aged: {title: '이 상품, 지금은 얼마일까요?', action: '가격 보기'},
+  nolink: {title: '쿠팡에서도 찾아볼까요?', action: '쿠팡 보기'},
+} as const;
+
 /**
- * 오래된 딜 상세의 「쿠팡에서 지금 가격 보기」 (실험 coupang_search_cta_v1). web CoupangSearchCta 와 같은 자리·문구.
- * 서버가 실험군·대상 딜(게시 7일+)에만 링크를 돌려준다. 구매 버튼과 같이 인앱 브라우저로 연다.
+ * 딜 상세의 「쿠팡에서 지금 가격 보기」 — 오래된 딜(coupang_search_cta_v1)·링크 없는 새 딜(nolink_coupang_cta_v1).
+ * web CoupangSearchCta 와 같은 자리·문구. 서버가 실험군·대상 딜에만 링크를 돌려주고, 문구는 kind 로 고른다.
+ * 구매 버튼과 같이 인앱 브라우저로 연다.
  */
 export default function CoupangSearchCta({productId}: {productId: number}) {
   const navigation = useNavigation();
@@ -32,6 +39,7 @@ export default function CoupangSearchCta({productId}: {productId: number}) {
   }, [cta, productId]);
 
   if (!cta) return null;
+  const copy = COPY[cta.kind] ?? COPY.aged;
 
   const handlePress = () => {
     Analytics.track('purchase_link_click', {
@@ -63,14 +71,16 @@ export default function CoupangSearchCta({productId}: {productId: number}) {
         className="flex-row items-center gap-x-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
         <View className="min-w-0 flex-1">
           <Text className="text-sm font-semibold text-gray-800">
-            이 상품, 지금은 얼마일까요?
+            {copy.title}
           </Text>
           <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
             쿠팡에서 ‘{cta.query}’ 검색 결과 보기
           </Text>
         </View>
         <View className="shrink-0 rounded-full border border-gray-300 bg-white px-3 py-1.5">
-          <Text className="text-xs font-semibold text-gray-700">가격 보기</Text>
+          <Text className="text-xs font-semibold text-gray-700">
+            {copy.action}
+          </Text>
         </View>
       </PressableScale>
       <Text className="mt-1.5 px-1 text-11 text-gray-400">

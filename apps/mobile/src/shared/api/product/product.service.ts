@@ -52,9 +52,14 @@ import type {
 /** 근거(판정 포함) 대기 상한. 운영 실측 응답은 0.2초 안팎이라 넉넉히 잡았다. */
 const DEAL_EVIDENCE_TIMEOUT_MS = 1500;
 
-export type CoupangSearchCta = {url: string; query: string};
+export type CoupangSearchCta = {
+  url: string;
+  query: string;
+  kind: 'aged' | 'nolink';
+};
 
-// 오래된 딜의 「쿠팡에서 지금 가격 보기」(실험 coupang_search_cta_v1). 코드젠 스키마 갱신 전이라 손으로 둔다(web 과 같은 쿼리).
+// 딜 상세의 「쿠팡에서 지금 가격 보기」 — 오래된 딜(kind=aged, coupang_search_cta_v1)·링크 없는 새 딜(kind=nolink,
+// nolink_coupang_cta_v1). 코드젠 스키마 갱신 전이라 손으로 둔다(web 과 같은 쿼리).
 const QueryCoupangSearchCta = new TypedDocumentString<
   {coupangSearchCta: CoupangSearchCta | null},
   {productId: number}
@@ -63,6 +68,7 @@ const QueryCoupangSearchCta = new TypedDocumentString<
     coupangSearchCta(productId: $productId) {
       url
       query
+      kind
     }
   }
 `);
