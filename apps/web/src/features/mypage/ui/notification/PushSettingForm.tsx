@@ -1,6 +1,6 @@
 'use client';
 
-import { useId } from 'react';
+import { Fragment, useId } from 'react';
 
 import Switch from '@/shared/ui/common/Switch';
 
@@ -12,8 +12,7 @@ const ROWS: { key: PushSettingKey; title: string; description: string }[] = [
   {
     key: 'keywordAlert',
     title: '키워드 알림',
-    description:
-      '등록한 키워드가 들어간 딜이 올라오면 알려드려요. 관심사 알림은 각 관심사 화면에서 끌 수 있어요',
+    description: '등록한 키워드나 구독한 관심사의 딜이 올라오면 알려드려요',
   },
   {
     // 광고성 정보(정보통신망법 §50) — 서버는 이 동의(marketing)한 유저에게만 "(광고)" 를 붙여 낮에만 보낸다.
@@ -34,6 +33,17 @@ const ROWS: { key: PushSettingKey; title: string; description: string }[] = [
 ];
 
 /**
+ * 키워드 알림 받는 기준(서버 keywordAlertLevel). 끄면 딜이 올라오자마자, 켜면 인기글이 되거나 근거로 대박딜이 됐을 때
+ * 「콜라 핫딜 떴어요 🔥」로 받는다. 조건(가격·제외 단어)을 늘리는 대신 단계 하나 — 조건은 거의 아무도 안 썼다(10/12).
+ * 앱 NotificationSettingScreen 과 같은 문구.
+ */
+const HOT_ONLY = {
+  title: '핫딜이 되면만 받기',
+  description:
+    '딜이 올라오자마자가 아니라, 반응이 뜨거워지거나 확실히 싸다고 확인됐을 때만 알려드려요',
+};
+
+/**
  * 계정 단위 푸시 설정. 백엔드(pushSetting / updatePushSetting)는 있었는데 화면이 없어서
  * 2026-10-01 기준 1,204명 전원이 기본값 그대로였다(야간 동의 0명 → 밤 알림 전부 아침으로 밀림).
  */
@@ -44,22 +54,42 @@ const PushSettingForm = () => {
   return (
     <ul>
       {ROWS.map(({ key, title, description }) => (
-        <li key={key} className="flex items-center gap-4 border-b border-gray-200 py-4">
-          <label
-            htmlFor={`${id}-${key}`}
-            className="flex min-w-0 flex-1 cursor-pointer flex-col gap-0.5"
-          >
-            <span className="font-medium text-gray-900">{title}</span>
-            <span className="text-sm text-gray-500">{description}</span>
-          </label>
-          <Switch
-            id={`${id}-${key}`}
-            aria-label={title}
-            checked={setting[key]}
-            disabled={isPending}
-            onCheckedChange={(next) => update({ [key]: next })}
-          />
-        </li>
+        <Fragment key={key}>
+          <li className="flex items-center gap-4 border-b border-gray-200 py-4">
+            <label
+              htmlFor={`${id}-${key}`}
+              className="flex min-w-0 flex-1 cursor-pointer flex-col gap-0.5"
+            >
+              <span className="font-medium text-gray-900">{title}</span>
+              <span className="text-sm text-gray-500">{description}</span>
+            </label>
+            <Switch
+              id={`${id}-${key}`}
+              aria-label={title}
+              checked={setting[key]}
+              disabled={isPending}
+              onCheckedChange={(next) => update({ [key]: next })}
+            />
+          </li>
+          {key === 'keywordAlert' && setting.keywordAlert ? (
+            <li className="flex items-center gap-4 border-b border-gray-200 py-4 pl-4">
+              <label
+                htmlFor={`${id}-hot-only`}
+                className="flex min-w-0 flex-1 cursor-pointer flex-col gap-0.5"
+              >
+                <span className="font-medium text-gray-900">{HOT_ONLY.title}</span>
+                <span className="text-sm text-gray-500">{HOT_ONLY.description}</span>
+              </label>
+              <Switch
+                id={`${id}-hot-only`}
+                aria-label={HOT_ONLY.title}
+                checked={setting.keywordAlertLevel === 'HOT'}
+                disabled={isPending}
+                onCheckedChange={(next) => update({ keywordAlertLevel: next ? 'HOT' : 'ALL' })}
+              />
+            </li>
+          ) : null}
+        </Fragment>
       ))}
       <QuietHoursRow
         start={setting.quietHoursStart}

@@ -1,6 +1,7 @@
 import React from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {KeywordAlertLevel} from '@/shared/api/gql/graphql';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useQuery} from '@tanstack/react-query';
 
@@ -25,8 +26,7 @@ const ROWS: {key: PushSettingKey; title: string; description: string}[] = [
   {
     key: 'keywordAlert',
     title: '키워드 알림',
-    description:
-      '등록한 키워드가 들어간 딜이 올라오면 알려드려요. 관심사 알림은 각 관심사 화면에서 끌 수 있어요',
+    description: '등록한 키워드나 구독한 관심사의 딜이 올라오면 알려드려요',
   },
   {
     // 광고성 정보(정보통신망법 §50) — 서버는 이 동의(marketing)한 유저에게만 "(광고)" 를 붙여 낮에만 보낸다.
@@ -46,6 +46,16 @@ const ROWS: {key: PushSettingKey; title: string; description: string}[] = [
     description: '끄면 밤사이 알림은 아침 8시에 모아서 보내드려요',
   },
 ];
+
+/**
+ * 키워드 알림 받는 기준(서버 keywordAlertLevel). 끄면 딜이 올라오자마자, 켜면 인기글이 되거나 근거로 대박딜이 됐을 때
+ * 「콜라 핫딜 떴어요 🔥」로 받는다. web PushSettingForm 과 같은 문구.
+ */
+const HOT_ONLY = {
+  title: '핫딜이 되면만 받기',
+  description:
+    '딜이 올라오자마자가 아니라, 반응이 뜨거워지거나 확실히 싸다고 확인됐을 때만 알려드려요',
+};
 
 /**
  * 알림 설정. web `/mypage/notification`(PushSettingForm).
@@ -89,22 +99,48 @@ export default function NotificationSettingScreen({navigation}: Props) {
           ) : (
             <>
               {ROWS.map(({key, title, description}) => (
-                <View
-                  key={key}
-                  accessible={false}
-                  className="flex-row items-center gap-4 border-b border-gray-200 py-4">
-                  <View className="min-w-0 flex-1">
-                    <Text className="font-medium text-gray-900">{title}</Text>
-                    <Text className="mt-0.5 text-sm text-gray-500">
-                      {description}
-                    </Text>
+                <React.Fragment key={key}>
+                  <View
+                    accessible={false}
+                    className="flex-row items-center gap-4 border-b border-gray-200 py-4">
+                    <View className="min-w-0 flex-1">
+                      <Text className="font-medium text-gray-900">{title}</Text>
+                      <Text className="mt-0.5 text-sm text-gray-500">
+                        {description}
+                      </Text>
+                    </View>
+                    <Switch
+                      value={data[key]}
+                      onChange={next => mutate({[key]: next})}
+                      accessibilityLabel={title}
+                    />
                   </View>
-                  <Switch
-                    value={data[key]}
-                    onChange={next => mutate({[key]: next})}
-                    accessibilityLabel={title}
-                  />
-                </View>
+                  {key === 'keywordAlert' && data.keywordAlert ? (
+                    <View
+                      accessible={false}
+                      className="flex-row items-center gap-4 border-b border-gray-200 py-4 pl-4">
+                      <View className="min-w-0 flex-1">
+                        <Text className="font-medium text-gray-900">
+                          {HOT_ONLY.title}
+                        </Text>
+                        <Text className="mt-0.5 text-sm text-gray-500">
+                          {HOT_ONLY.description}
+                        </Text>
+                      </View>
+                      <Switch
+                        value={data.keywordAlertLevel === KeywordAlertLevel.Hot}
+                        onChange={next =>
+                          mutate({
+                            keywordAlertLevel: next
+                              ? KeywordAlertLevel.Hot
+                              : KeywordAlertLevel.All,
+                          })
+                        }
+                        accessibilityLabel={HOT_ONLY.title}
+                      />
+                    </View>
+                  ) : null}
+                </React.Fragment>
               ))}
               <QuietHoursRow
                 start={data.quietHoursStart}

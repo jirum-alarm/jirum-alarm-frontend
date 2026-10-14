@@ -56,3 +56,23 @@ export function notificationSource(
   }
   return undefined;
 }
+
+/** 이 건수 넘게 하루에 키워드 알림을 받은 사람에게 알림함 위에서 「핫딜이 되면만 받기」를 권한다. */
+export const HEAVY_KEYWORD_ALERTS_PER_DAY = 5;
+
+/**
+ * 최근 24시간 동안 받은 **키워드 알림** 건수(관심사·좋은 딜·커뮤니티는 빼고).
+ * 「핫딜만 받기」는 설정 화면에만 두면 아무도 안 켠다 — 키워드 조건(가격·제외 단어)이 그랬다(10/12 0/1,731, 그 화면 2주 방문 수십 명).
+ * 그래서 알림이 많은 사람이 실제로 보는 자리(알림함)에서 권한다. 2026-10-07~13 사람·하루 평균 4.3건, 5건 넘는 날이 26%.
+ * 앱 `screens/alarm/lib/notification-source.ts` recentKeywordAlertCount 와 같은 규칙.
+ */
+export function recentKeywordAlertCount(
+  notifications: { keyword?: string | null; createdAt: string | number | Date }[],
+  mine: Set<string>,
+  now: number = Date.now(),
+): number {
+  const since = now - 24 * 3600_000;
+  return notifications.filter(
+    (n) => new Date(n.createdAt).getTime() >= since && matchMyKeyword(n.keyword, mine),
+  ).length;
+}
