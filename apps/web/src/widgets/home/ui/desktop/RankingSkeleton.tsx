@@ -24,6 +24,7 @@ export const RankingPreview = ({ products }: RankingPreviewProps) => {
           activeIndex={0}
           index={i}
           priority={i === 0}
+          eager
           source="home_ranking"
         />
       ))}

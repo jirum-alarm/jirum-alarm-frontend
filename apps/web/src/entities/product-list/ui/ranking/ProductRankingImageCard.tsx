@@ -23,20 +23,24 @@ export default function ProductRankingImageCard({
   index,
   rank,
   priority,
+  eager,
   source,
 }: {
   product: ProductCardType;
   activeIndex: number;
   index: number;
   rank?: number;
+  /** LCP 카드 — preload + fetchpriority=high. 화면에 한 장만. */
   priority?: boolean;
+  /** 첫 화면에 보이지만 LCP 는 아닌 카드 — lazy 만 끈다(High 로 LCP 와 회선을 다투지 않게). */
+  eager?: boolean;
   source?: ProductCardSource;
 }) {
   // 첫 화면(priority) 카드만 상세를 통째로 미리 받는다(탭 즉시 전환). 나머지는 뷰포트 프리페치를 끈다 —
   // 상세에 loading.tsx 가 없어 auto 프리페치(레이아웃 조각 ~600B)가 아무것도 안 주는데 서버만 때렸다.
   return (
     <Link
-      prefetch={!!priority}
+      prefetch={!!(priority || eager)}
       href={PAGE.DETAIL + '/' + product.id}
       rel="preload"
       {...productCardTracking(source, product.id, rank ?? index + 1)}
@@ -60,7 +64,7 @@ export default function ProductRankingImageCard({
               alt={product.title}
               sizes="252px"
               priority={priority}
-              quality={priority ? 85 : 75}
+              loading={eager && !priority ? 'eager' : undefined}
             />
             {/* 랭킹 1~10위는 홈에서 가장 많이 보이는데 「왜 좋은 딜인지」가 없었다 — 다른 카드와 같은 배지(핫딜·대박딜·초대박딜). */}
             <ProductCardStatus product={product} />

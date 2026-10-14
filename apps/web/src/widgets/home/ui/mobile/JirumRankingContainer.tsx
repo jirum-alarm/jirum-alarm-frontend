@@ -1,6 +1,5 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
-import { preload } from 'react-dom';
 import { SwiperOptions } from 'swiper/types';
 
 import { getQueryClient } from '@/app/(app)/react-query/query-client';
@@ -8,7 +7,6 @@ import { getQueryClient } from '@/app/(app)/react-query/query-client';
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { PAGE } from '@/shared/config/page';
 import { getDayBefore } from '@/shared/lib/utils/date';
-import { convertToWebp } from '@/shared/lib/utils/image';
 import ApiErrorBoundary from '@/shared/ui/ApiErrorBoundary';
 import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
 import SectionHeader from '@/shared/ui/SectionHeader';
@@ -44,21 +42,9 @@ const JirumRankingContainer = async () => {
   });
 
   await queryClient.prefetchQuery(queryOptions);
-  const data = queryClient.getQueryData(queryOptions.queryKey) as
-    { products: Array<{ thumbnail?: string | null }> } | undefined;
-  const firstThumbnail =
-    convertToWebp(data?.products?.[0]?.thumbnail) ?? data?.products?.[0]?.thumbnail;
-
-  if (firstThumbnail) {
-    const optimizedUrl = `/_next/image?url=${encodeURIComponent(firstThumbnail)}&w=256&q=75`;
-    const optimizedUrl15x = `/_next/image?url=${encodeURIComponent(firstThumbnail)}&w=384&q=75`;
-    preload(optimizedUrl, {
-      as: 'image',
-      fetchPriority: 'high',
-      imageSizes: '252px',
-      imageSrcSet: `${optimizedUrl} 1x, ${optimizedUrl15x} 1.5x`,
-    });
-  }
+  // 첫 사진 preload 는 next/image priority(1위 카드)가 <head> 에 낸다. 여기서 react-dom preload() 를 따로 부르면
+  // RSC 힌트라 JS 로드 뒤(Slow4G 4.9s)에야 실행되고, srcset(256/384)이 img(sizes 252px → DPR3 750w)와 달라
+  // 같은 사진을 한 번 더 받았다(10/14 실측).
 
   return (
     <div className="w-full">

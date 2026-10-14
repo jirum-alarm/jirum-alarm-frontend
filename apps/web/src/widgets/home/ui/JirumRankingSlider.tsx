@@ -87,8 +87,10 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             rank={i + 1}
             product={product}
             // 모바일 loop 는 마지막 상품이 첫 화면 왼쪽에 걸린다 — lazy 면 스와이퍼가 뜬 뒤에야 받아서
-            // 미리보기에 있던 사진이 빈칸으로 돌아갔다 다시 뜬다.
-            priority={slideIndex < 4 || (isMobile && i === products.length - 1)}
+            // 미리보기에 있던 사진이 빈칸으로 돌아갔다 다시 뜬다 → 첫 화면 카드는 eager.
+            // High(priority)는 1위 한 장만 — 8장이 전부 High 면 LCP 사진이 회선을 나눠 써 홈 LCP 1.4→3.5s(10/14).
+            priority={slideIndex === 0}
+            eager={slideIndex < 4 || (isMobile && i === products.length - 1)}
             source="home_ranking"
           />
         </SwiperSlide>
