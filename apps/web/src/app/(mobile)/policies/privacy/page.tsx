@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-import { PRIVACY_CONTENT_DATA, PRIVACY_INDEX_DATA } from '@/shared/config/policy';
+import { PRIVACY_CONTENT_DATA, PRIVACY_DATES, PRIVACY_INDEX_DATA } from '@/shared/config/policy';
 
 import TermsLayout from '../components/TermsLayout';
 
@@ -15,6 +15,7 @@ const PrivacyPolicyPage = () => {
   return (
     <TermsLayout
       title="개인정보 처리방침"
+      dates={PRIVACY_DATES}
       termsIndexData={PRIVACY_INDEX_DATA}
       termsContentData={PRIVACY_CONTENT_DATA}
     />

@@ -2,6 +2,7 @@
 
 import { Link } from 'react-scroll';
 
+import { PolicyDates } from '@/shared/config/policy';
 import useGoBack from '@/shared/hooks/useGoBack';
 import { cn } from '@/shared/lib/cn';
 import { Close } from '@/shared/ui/common/icons';
@@ -23,12 +24,15 @@ type TermsContentData = {
 
 const TermsLayout = ({
   title,
+  dates,
   termsIndexData,
   termsContentData,
 }: {
   /** 이 레이아웃은 약관·개인정보 두 페이지가 공유한다 — 제목을 하드코딩하면
    *  개인정보 페이지에도 "서비스 이용약관"이 뜬다(실제로 그랬다). */
   title: string;
+  /** 문서마다 시행일이 다르다(처리방침·약관) — 예전엔 둘 다 2023-12-01 로 박혀 있었다. */
+  dates: PolicyDates;
   termsIndexData: TermsIndexData;
   termsContentData: TermsContentData;
 }) => {
@@ -60,8 +64,8 @@ const TermsLayout = ({
       />
       <article className="max-w-mobile-max pc:max-w-none flex w-full flex-col gap-6 p-5">
         <div className="text-13 flex w-full flex-col gap-[8px] text-gray-500">
-          <p>공고일자 : 2023년 12월 01일</p>
-          <p>시행일자 : 2023년 12월 01일</p>
+          <p>공고일자 : {dates.announcedAt}</p>
+          <p>시행일자 : {dates.effectiveAt}</p>
         </div>
         <section className="text-sm text-gray-600">
           <p>목차</p>

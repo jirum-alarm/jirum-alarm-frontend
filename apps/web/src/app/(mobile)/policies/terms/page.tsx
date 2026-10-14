@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-import { TERMS_CONTENT_DATA, TERMS_INDEX_DATA } from '@/shared/config/policy';
+import { TERMS_CONTENT_DATA, TERMS_DATES, TERMS_INDEX_DATA } from '@/shared/config/policy';
 
 import TermsLayout from '../components/TermsLayout';
 
@@ -15,6 +15,7 @@ const TermsOfUsePage = () => {
   return (
     <TermsLayout
       title="서비스 이용약관"
+      dates={TERMS_DATES}
       termsIndexData={TERMS_INDEX_DATA}
       termsContentData={TERMS_CONTENT_DATA}
     />
