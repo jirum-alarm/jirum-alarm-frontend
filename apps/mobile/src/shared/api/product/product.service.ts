@@ -17,7 +17,7 @@ import {
   QueryMyNotificationKeywords,
   QueryProductPriceHistory,
   QueryProductDealEvidence,
-  QueryTogetherViewedProducts,
+  QueryLiveAlternativeDeals,
   QueryProductGuides,
   QueryProductInfo,
   QueryProductStats,
@@ -43,7 +43,7 @@ import type {
   SameProductDealsQueryVariables,
   ProductPriceHistoryQueryVariables,
   ProductDealEvidenceQueryVariables,
-  TogetherViewedProductsQueryVariables,
+  LiveAlternativeDealsQueryVariables,
   ProductGuidesQueryVariables,
   ProductInfoQueryVariables,
   ProductStatsQueryVariables,
@@ -156,16 +156,6 @@ export class ProductService {
     return res.data?.recordProductImpressions ?? null;
   }
 
-  static async getTogetherViewedProducts(
-    variables: TogetherViewedProductsQueryVariables,
-  ) {
-    const res = await HttpClient.withAccessToken().execute(
-      QueryTogetherViewedProducts,
-      variables,
-    );
-    return res.data?.togetherViewedProducts ?? [];
-  }
-
   static async getPriceHistory(variables: ProductPriceHistoryQueryVariables) {
     const res = await HttpClient.withAccessToken().execute(
       QueryProductPriceHistory,
@@ -241,6 +231,21 @@ export class ProductService {
       return res.data?.coupangSearchCta ?? null;
     } catch {
       return null;
+    }
+  }
+
+  /** 진행 중 딜의 「다른 곳 진행 중인 딜」. 부가 블록이라 실패는 빈 목록. */
+  static async getLiveAlternativeDeals(
+    variables: LiveAlternativeDealsQueryVariables,
+  ) {
+    try {
+      const res = await HttpClient.withAccessToken().execute(
+        QueryLiveAlternativeDeals,
+        variables,
+      );
+      return res.data?.liveAlternativeDeals ?? [];
+    } catch {
+      return [];
     }
   }
 
