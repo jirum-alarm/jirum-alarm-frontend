@@ -80,6 +80,11 @@ const track = (
 ) => {
   cleanups.push(() => {
     ReactTestRenderer.act(() => renderer.unmount());
+    // clear() 는 뮤테이션의 gc 타이머(5분)를 안 끈다 — 남으면 --runInBand 가 5분 동안 안 끝난다.
+    client
+      ?.getMutationCache()
+      .getAll()
+      .forEach(m => m.destroy());
     client?.clear();
   });
   return renderer;

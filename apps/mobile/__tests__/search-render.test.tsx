@@ -204,13 +204,20 @@ describe('추천 검색어', () => {
     await ReactTestRenderer.act(async () => {
       await new Promise<void>(resolve => setTimeout(resolve, 0));
     });
-    clients.push(client);
+    mounted.push({tree, client});
     return tree;
   }
-  // gc 타이머가 남으면 jest 가 안 끝난다.
-  const clients: QueryClient[] = [];
+  // 트리를 안 내리면 구독 중인 observer 의 staleTime(30분) 타이머가 남아 jest --runInBand 가
+  // 30분 동안 안 끝난다(CI mobile-validation 6분→31분, 10/13). clear() 만으론 observer 가 안 풀린다.
+  const mounted: {
+    tree: ReactTestRenderer.ReactTestRenderer;
+    client: QueryClient;
+  }[] = [];
   afterEach(() => {
-    clients.splice(0).forEach(c => c.clear());
+    mounted.splice(0).forEach(({tree, client}) => {
+      ReactTestRenderer.act(() => tree.unmount());
+      client.clear();
+    });
   });
   const chipsOf = (tree: ReactTestRenderer.ReactTestRenderer) =>
     tree.root.findAll(

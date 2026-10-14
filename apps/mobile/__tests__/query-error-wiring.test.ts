@@ -16,6 +16,15 @@ import {queryClient} from '../src/provider/ReactQueryProvider';
 
 describe('queryClient → captureQueryError', () => {
   beforeEach(() => mockCapture.mockClear());
+  // 앱 전역 client 라 남긴 쿼리·뮤테이션의 gc 타이머(5분)가 --runInBand 를 붙잡는다.
+  // clear() 는 뮤테이션 타이머를 안 끄니 먼저 destroy 한다.
+  afterAll(() => {
+    queryClient
+      .getMutationCache()
+      .getAll()
+      .forEach(m => m.destroy());
+    queryClient.clear();
+  });
 
   it('쿼리 실패를 쿼리 키와 함께 넘긴다', async () => {
     const error = new Error('HTTP 502');

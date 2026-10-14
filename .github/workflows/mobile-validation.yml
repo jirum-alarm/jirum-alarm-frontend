@@ -51,6 +51,9 @@ jobs:
   mobile-js-validation:
     name: Mobile JS Validation
     runs-on: ubuntu-latest
+    # 평소 6~7분. 테스트가 타이머를 남기면 jest --runInBand 가 끝나고도 그만큼 살아 있다
+    # (10/13~14 react-query staleTime 30분 → 31분씩 12회). 기본값 360분까지 기다리지 않게.
+    timeout-minutes: 20
 
     steps:
       - name: Checkout
