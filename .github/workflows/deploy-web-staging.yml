@@ -75,6 +75,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --filter=web...
 
+      # node --test 0.5초. 웹 PR 검사(web-pr-check)는 PR 에서만 돌아 main 직접 푸시엔 테스트가 없었다.
+      - name: Test web
+        run: pnpm --filter web test
+
       - name: Build web
         env:
           NODE_ENV: ${{ vars.NODE_ENV }}

@@ -4,7 +4,7 @@ const path = require("node:path");
 // 워크스페이스 앱 목록. 새 앱을 추가하면 **여기만** 고친다.
 // (이전엔 세 함수가 각자 4개를 하드코딩해서 apps/ai 추가 시 check-types 가
 //  `--filter=` 빈 셀렉터로 죽었다 — turbo 가 "selector must have a reference" 로 거부.)
-const APPS = ["admin", "mobile", "web", "landing", "ai"];
+const APPS = ["admin", "mobile", "web", "landing", "ai", "beauty-web"];
 
 const matchedApps = (filenames) => {
   const rel = filenames.map((f) => path.relative(process.cwd(), f));
@@ -23,6 +23,14 @@ const buildCheckTypesCommands = (filenames) => {
   if (apps.length === 0) return [];
   return [`pnpm check-types ${apps.map((a) => `--filter=${a}`).join(" ")}`];
 };
+
+// web·beauty-web 의 node --test(0.5초 안팎)는 main 푸시 배포에서 안 돈다(웹 PR 검사만 돌린다) → 커밋 때 돌린다.
+// (2026-10-14: web 테스트 331개가 어디서도 자동으로 돌지 않았다. 배지 기준 web·앱 대조 테스트 포함.)
+const NODE_TEST_APPS = ["web", "beauty-web"];
+const buildNodeTestCommands = (filenames) =>
+  matchedApps(filenames)
+    .filter((app) => NODE_TEST_APPS.includes(app))
+    .map((app) => `pnpm --filter=${app} test`);
 
 // apps/mobile 테스트 중 web 소스를 직접 읽어 대조하는 것("web/src" 를 담은 파일)은 web 만 고쳐도 깨진다.
 // web 커밋 때 같이 돌려 깨뜨린 커밋에서 막는다 — 목록은 매번 grep 하므로 테스트가 늘어도 손댈 곳이 없다.
@@ -46,6 +54,6 @@ module.exports = {
   "*.{js,ts,tsx}": [buildEslintCommands, buildPrettierCommands],
   "packages/design-system/**": [buildDesignSystemCommands],
   "packages/design-system/eslint.js": [buildDesignSystemLintCommands],
-  "*.{ts,tsx}": [buildCheckTypesCommands],
+  "*.{ts,tsx}": [buildCheckTypesCommands, buildNodeTestCommands],
   "apps/web/src/**": [buildWebCoupledMobileTests],
 };
