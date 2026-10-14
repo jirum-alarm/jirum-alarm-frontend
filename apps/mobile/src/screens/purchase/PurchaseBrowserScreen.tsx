@@ -36,6 +36,7 @@ import {
   LANDING_HANDOFF_WINDOW_MS,
   appSchemeName,
   decidePurchaseNavigation,
+  httpsUpgradeOf,
   openExternalApp,
 } from './lib/purchase-navigation';
 
@@ -62,6 +63,8 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
   /** 앱으로 넘긴 시각 — 있으면 뒤늦은 스토어 폴백을 막고, 복귀 시 닫을지 판단한다. */
   const handedOffAt = useRef<number | null>(null);
   const leftApp = useRef(false);
+  // http→https 로 올려 다시 띄운 주소(한 번만 — 아래 handleShouldStart).
+  const upgradedUrls = useRef(new Set<string>());
 
   const [progress, setProgress] = useState(0);
   const [canGoBack, setCanGoBack] = useState(false);
@@ -163,6 +166,15 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
 
   const handleShouldStart = useCallback(
     (request: ShouldStartLoadRequest) => {
+      const httpsUrl = httpsUpgradeOf(request);
+      // https 가 다시 http 로 돌려보내는 사이트면 한 번만 — 무한 왕복 대신 에러 화면(「브라우저」로 열기)으로.
+      if (httpsUrl && !upgradedUrls.current.has(httpsUrl)) {
+        upgradedUrls.current.add(httpsUrl);
+        webviewRef.current?.injectJavaScript(
+          `window.location.replace(${JSON.stringify(httpsUrl)}); true;`,
+        );
+        return false;
+      }
       const decision = decidePurchaseNavigation(request, {
         handedOff: handedOffAt.current != null,
         universalLinks: canOpenUniversalLinks && !universalFailed.current,
@@ -260,7 +272,7 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
       <View className="flex-1" style={{paddingBottom: insets.bottom}}>
         <WebView
           ref={webviewRef}
-          source={{uri: url}}
+          source={{uri: url.replace(/^http:/i, 'https:')}}
           originWhitelist={['*']}
           onShouldStartLoadWithRequest={handleShouldStart}
           onNavigationStateChange={handleNavigationStateChange}
