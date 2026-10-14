@@ -1557,6 +1557,10 @@ type ProductOutput {
   isMyWishlist: Boolean
   isPrivate: Boolean!
   isProfitUrl: Boolean!
+  """
+  급상승 — 커뮤니티 랭킹 목록(홈 지름 랭킹·랭킹 탭)에서 최근 2시간 동안 붙은 댓글·추천이 큰 딜(목록당 최대 5개). 다른 목록에선 비어 있다.
+  """
+  isRising: Boolean
   likeCount: Int!
   mallId: Int
   mallName: String

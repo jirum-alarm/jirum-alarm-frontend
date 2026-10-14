@@ -2,6 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {cardLabel} from '@jirum/design-system/recipes';
 import HotdealBadge from '@/shared/components/product/HotdealBadge';
+import Badge from '@/shared/components/ui/Badge';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {formatMMD} from '@/shared/lib/format/date';
 import {cn} from '@/shared/lib/styling';
@@ -30,7 +31,7 @@ export function CardCornerLabel({
 }
 
 /**
- * 상품 카드 사진 위 상태 — 판매종료 / 핫딜 배지 / 유통기한 띠. 홈 카드·검색 카드가 같이 쓴다.
+ * 상품 카드 사진 위 상태 — 판매종료 / 핫딜 배지 / 유통기한 띠 / 급상승. 홈 카드·검색 카드가 같이 쓴다.
  * ★같은 상품을 홈·검색·상세를 오가며 다시 보므로 카드마다 다르게 그리면 버그로 읽힌다 — 여기서만 그린다.
  * 유통기한 띠(22px)가 있으면 핫딜 배지(24px)는 숨긴다 — 같은 자리라 띠가 배지를 덮고 윗변 2px 만 삐져나왔다.
  * 모양은 recipes 의 cardLabel — web ProductCardStatus 와 같다.
@@ -43,12 +44,23 @@ export default function ProductCardStatus({
     isEnd?: boolean | null;
     hotDealType?: HotDealType | string | null;
     earliestExpiryDate?: string | null;
+    isRising?: boolean | null;
   };
   showHotdealBadge?: boolean;
 }) {
-  const {isEnd, hotDealType, earliestExpiryDate} = product;
+  const {isEnd, hotDealType, earliestExpiryDate, isRising} = product;
   return (
     <>
+      {/* 급상승(랭킹 목록만) — 오른쪽 위. 왼쪽 위는 순위 숫자, 아래는 핫딜 배지·유통기한 띠 자리. web 과 같다. */}
+      {isRising && !isEnd ? (
+        <Badge
+          variant="solid"
+          tone="error"
+          size="xs"
+          className="absolute right-1.5 top-1.5 z-10">
+          급상승
+        </Badge>
+      ) : null}
       {isEnd ? (
         <CardCornerLabel tone="light">판매종료</CardCornerLabel>
       ) : showHotdealBadge && hotDealType && !earliestExpiryDate ? (

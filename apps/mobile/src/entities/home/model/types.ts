@@ -93,4 +93,6 @@ export interface ProductCardType {
   provider?: {nameKr?: string | null} | null;
   /** 이 딜이 올라온 커뮤니티 수. 랭킹 목록에서만 채워진다 — 2 이상이면 「뽐뿌 외 N곳」(web 과 같음). */
   postedCommunityCount?: number | null;
+  /** 급상승 — 최근 2시간 댓글·추천이 크게 붙은 딜. 랭킹 목록에서만 채워진다(web 과 같음). */
+  isRising?: boolean | null;
 }

@@ -50,6 +50,8 @@ type ProductListResult = Omit<QueryProductsQuery, 'products'> & {
     mallName?: string | null;
     /** 랭킹 목록에서 같은 딜을 접으며 센 커뮤니티 수(서버 same-deal-collapse). 랭킹 아닌 목록은 null. */
     postedCommunityCount?: number | null;
+    /** 급상승(서버 ranking/rising.ts). 랭킹 아닌 목록은 null. */
+    isRising?: boolean | null;
   })[];
 };
 
@@ -594,6 +596,7 @@ const QueryProducts = new TypedDocumentString<ProductListResult, ProductListQuer
       searchAfter
       estimatedTotal
       postedCommunityCount
+      isRising
       postedAt
     }
   }

@@ -1927,6 +1927,8 @@ export type ProductOutput = {
   isMyWishlist?: Maybe<Scalars['Boolean']['output']>;
   isPrivate: Scalars['Boolean']['output'];
   isProfitUrl: Scalars['Boolean']['output'];
+  /** 급상승 — 커뮤니티 랭킹 목록(홈 지름 랭킹·랭킹 탭)에서 최근 2시간 동안 붙은 댓글·추천이 큰 딜(목록당 최대 5개). 다른 목록에선 비어 있다. */
+  isRising?: Maybe<Scalars['Boolean']['output']>;
   likeCount: Scalars['Int']['output'];
   mallId?: Maybe<Scalars['Int']['output']>;
   mallName?: Maybe<Scalars['String']['output']>;
@@ -3643,6 +3645,7 @@ export type HomeProductsQuery = {
     hotDealType?: HotDealType | null;
     searchAfter?: Array<string> | null;
     postedCommunityCount?: number | null;
+    isRising?: boolean | null;
     postedAt: any;
     provider: {__typename?: 'Provider'; nameKr: string};
   }>;
@@ -5032,6 +5035,7 @@ export const HomeProductsDocument = new TypedDocumentString(`
     }
     searchAfter
     postedCommunityCount
+    isRising
     postedAt
   }
 }

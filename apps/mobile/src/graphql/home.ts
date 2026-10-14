@@ -162,6 +162,7 @@ export const QueryHomeProducts = graphql(`
       }
       searchAfter
       postedCommunityCount
+      isRising
       postedAt
     }
   }
