@@ -1,6 +1,6 @@
 'use client';
 
-import { m } from 'motion/react';
+import * as m from 'motion/react-m';
 
 import customerService from '@/shared/lib/customerservice/customer-service';
 import { ArrowRight, Headset } from '@/shared/ui/common/icons';

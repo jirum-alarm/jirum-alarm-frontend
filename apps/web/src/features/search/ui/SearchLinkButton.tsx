@@ -1,6 +1,6 @@
 'use client';
 
-import { m } from 'motion/react';
+import * as m from 'motion/react-m';
 
 import { PAGE } from '@/shared/config/page';
 import { Search } from '@/shared/ui/common/icons';

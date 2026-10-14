@@ -1,6 +1,6 @@
 'use client';
 
-import { m } from 'motion/react';
+import * as m from 'motion/react-m';
 
 import { ArrowRight } from '@/shared/ui/common/icons';
 

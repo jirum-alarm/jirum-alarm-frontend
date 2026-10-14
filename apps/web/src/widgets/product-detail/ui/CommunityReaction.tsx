@@ -2,7 +2,7 @@
 
 import { emptyText } from '@jirum/design-system/recipes';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { m } from 'motion/react';
+import * as m from 'motion/react-m';
 import { Suspense } from 'react';
 
 import { cn } from '@/shared/lib/cn';

@@ -1,6 +1,6 @@
 'use client';
 
-import { m } from 'motion/react';
+import * as m from 'motion/react-m';
 import Image, { StaticImageData } from 'next/image';
 import { MouseEvent, ReactNode } from 'react';
 

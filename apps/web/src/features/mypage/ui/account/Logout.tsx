@@ -1,6 +1,6 @@
 'use client';
 
-import { m } from 'motion/react';
+import * as m from 'motion/react-m';
 
 import { useLogout } from '@/shared/hooks/useLogout';
 import AlertDialog from '@/shared/ui/common/AlertDialog';

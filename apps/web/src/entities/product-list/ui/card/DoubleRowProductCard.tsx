@@ -1,7 +1,7 @@
 'use client';
 
 import { cardThumb } from '@jirum/design-system/recipes';
-import { m } from 'motion/react';
+import * as m from 'motion/react-m';
 
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';

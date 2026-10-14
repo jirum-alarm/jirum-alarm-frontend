@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { m } from 'motion/react';
+import * as m from 'motion/react-m';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 

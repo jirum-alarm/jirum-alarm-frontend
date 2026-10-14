@@ -1,6 +1,6 @@
 'use client';
 
-import { m } from 'motion/react';
+import * as m from 'motion/react-m';
 
 import { cn } from '@/shared/lib/cn';
 import { IconLogo } from '@/shared/ui/common/icons/Illust';

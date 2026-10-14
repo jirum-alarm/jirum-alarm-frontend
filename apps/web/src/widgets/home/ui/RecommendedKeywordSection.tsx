@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { m } from 'motion/react';
+import * as m from 'motion/react-m';
 import { useRef, useState } from 'react';
 
 import { PAGE } from '@/shared/config/page';

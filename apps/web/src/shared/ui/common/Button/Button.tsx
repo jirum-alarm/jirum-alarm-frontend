@@ -1,6 +1,7 @@
 'use client';
 import { button, buttonTone } from '@jirum/design-system/recipes';
-import { type HTMLMotionProps, m } from 'motion/react';
+import { type HTMLMotionProps } from 'motion/react';
+import * as m from 'motion/react-m';
 
 import { cn } from '@/shared/lib/cn';
 

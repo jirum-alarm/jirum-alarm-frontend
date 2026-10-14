@@ -1,7 +1,7 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
-import { m } from 'motion/react';
+import * as m from 'motion/react-m';
 
 import { AuthService } from '@/shared/api/auth';
 import { useLogout } from '@/shared/hooks/useLogout';

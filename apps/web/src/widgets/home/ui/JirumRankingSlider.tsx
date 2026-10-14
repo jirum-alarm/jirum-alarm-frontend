@@ -4,7 +4,7 @@ import 'swiper/css';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { atom, useAtom } from 'jotai';
-import { m } from 'motion/react';
+import * as m from 'motion/react-m';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';

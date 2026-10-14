@@ -1,7 +1,7 @@
 'use client';
 /* eslint-disable no-restricted-syntax -- 2026-07 시월 캠페인 페이지: 캠페인 고유 색·크기(토큰 밖이 의도) */
 
-import { m } from 'motion/react';
+import * as m from 'motion/react-m';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
