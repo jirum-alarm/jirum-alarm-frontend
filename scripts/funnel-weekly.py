@@ -17,8 +17,11 @@ ponytail: 맥이 꺼져 있으면 그 주는 건너뛴다. 매번 과거 주를 
 import datetime as dt
 import json
 import os
+import base64
 import subprocess
 import sys
+import time
+import urllib.parse
 import urllib.request
 
 import google.auth.transport.requests
@@ -183,6 +186,64 @@ for w in weeks:
     act, ins = g["app_active"].get(w, {}), g["app_install"].get(w, {})
     a, n = (tuple(d.get(p, 0) for p in APP_PLATFORMS) for d in (act, ins))
     lines.append(f"| {w[:4]}-W{w[4:]} | **{sum(a):,}** | {a[0]:,} | {a[1]:,} | {sum(n):,} | {n[0]:,} | {n[1]:,} |")
+
+
+NID_SINCE = dt.date(2026, 10, 15)  # push_history.nid·user_history.nid 수집 시작(crawling-server 5eb25c7c, 앱·웹 v1.105.0)
+CRAWLING = os.path.expanduser("~/Documents/github/jirum-alarm/jirum-alarm-crawling-server")
+NID_JS = r"""
+const { MongoClient } = require(process.env.MONGO_DRIVER);
+(async () => { const c = await MongoClient.connect(process.env.MONGO_URI);
+  const h = c.db('jirum-alarm').collection('user_history'); const [s, e] = process.argv.slice(1).map((d) => new Date(d));
+  const q = (t) => h.distinct('nid', { target: t, nid: { $exists: true }, createdAt: { $gte: s, $lt: e } }, { maxTimeMS: 300000 });
+  console.log(JSON.stringify({ view: await q('post_view'), buy: await q('purchase_link_click') })); await c.close();
+})().catch((x) => { console.error('ERR', x.message); process.exit(1); });
+"""
+
+
+def notif_attribution(s, e):
+    """지난주 알림 종류(push_history.target)별 발송 → 열람(post_view) → 구매 클릭을 nid 로 잇는다."""
+    sql = (f"SELECT nid, COALESCE(target,'(없음)') FROM push_history WHERE nid IS NOT NULL AND errorCode IS NULL "
+           f"AND createdAt>='{s}' AND createdAt<'{e}'")
+    sent = [l.split("\t") for l in subprocess.check_output(
+        KUBE + ["exec", "mysql-0", "--", "bash", "-c",
+                'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -D crawling -B -N -e "$0" 2>/dev/null', sql],
+        text=True, timeout=120).splitlines() if l]
+    # 열람·구매는 발송 뒤 며칠 걸쳐 일어난다 — 끝 경계를 이틀 늘려 지난주 발송분의 늦은 열람까지 센다.
+    pw = base64.b64decode(subprocess.check_output(["kubectl", "--context", "prod", "-n", "mongodb", "get", "secret", "mongodb",
+                                                   "-o", "jsonpath={.data.mongodb-root-password}"], text=True)).decode()
+    pf = subprocess.Popen(["kubectl", "--context", "prod", "-n", "mongodb", "port-forward", "pod/mongodb-1", "27119:27017"],
+                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    try:
+        time.sleep(3)
+        env = {**os.environ, "MONGO_DRIVER": os.path.join(CRAWLING, "node_modules/mongodb"),
+               "MONGO_URI": f"mongodb://root:{urllib.parse.quote(pw, safe='')}@localhost:27119/jirum-alarm?authSource=admin"
+                            "&readPreference=secondaryPreferred&directConnection=true"}
+        got = json.loads(subprocess.check_output(["node", "-e", NID_JS, f"{s}T00:00:00+09:00",
+                                                  f"{e + dt.timedelta(days=2)}T00:00:00+09:00"], env=env, text=True, timeout=600))
+    finally:
+        pf.terminate()
+    view, buy = set(got["view"]), set(got["buy"])
+    by = {}
+    for nid, target in sent:
+        r = by.setdefault(target, [0, 0, 0])
+        r[0] += 1
+        r[1] += nid in view
+        r[2] += nid in buy
+    return sorted(by.items(), key=lambda kv: -kv[1][0])
+
+
+wk_s, wk_e = last_sun - dt.timedelta(days=6), last_sun + dt.timedelta(days=1)
+if wk_e > NID_SINCE:
+    lines += ["", f"## 알림 종류별 발송 → 열람 → 구매 클릭 ({wk_s} ~ {last_sun} 발송, nid 귀속)", "",
+              "발송 = 성공한 기기별 푸시(push_history), 열람·구매 = 그 푸시의 nid 가 실린 상세 진입·구매 클릭(user_history, 발송 주 + 이틀). "
+              "nid 를 안 보내는 옛 앱·웹 진입은 빠져 «최소값»이다.", "",
+              "| 알림 종류 | 발송 | 열람 | 열람률 | 구매 클릭 | 발송당 구매 |", "|---|---|---|---|---|---|"]
+    try:
+        for target, (n, v, b) in notif_attribution(max(wk_s, NID_SINCE), wk_e):
+            rate = lambda x: f"{x / n:.1%}" if n else "—"
+            lines.append(f"| {target} | {n:,} | {v:,} | {rate(v)} | {b:,} | {rate(b)} |")
+    except Exception as x:  # 귀속 표 실패가 주간 리포트 전체를 막지 않게
+        lines.append(f"| (집계 실패: {type(x).__name__}) | | | | | |")
 report = "\n".join(lines) + "\n"
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
 with open(OUT, "w") as f:
