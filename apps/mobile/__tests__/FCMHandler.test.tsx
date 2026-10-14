@@ -4,6 +4,7 @@ import * as ReactTestRenderer from 'react-test-renderer';
 declare const __dirname: string;
 import FCMHandler from '../src/components/FCMHandler';
 import {flushPendingRoute} from '../src/navigations/open-when-ready';
+import {peekPushOrigin} from '../src/shared/lib/analytics/push-origin';
 import {useWebviewContext} from '../src/provider/WebViewRefProvider';
 import useFCMTokenManager from '../src/shared/hooks/useFCMTokenManager.ts';
 import {onForegroundMessageHandler} from '../src/shared/lib/fcm/index.ts';
@@ -346,6 +347,30 @@ describe('FCMHandler', () => {
       openedAppHandler({data});
     });
     expect(mockInjectJavaScript).toHaveBeenCalledTimes(2);
+
+    await ReactTestRenderer.act(async () => {
+      renderer.unmount();
+    });
+  });
+
+  // 서버가 기기별 발송마다 붙인 nid 가 클릭 이벤트와 상세 기록(push-origin) 양쪽에 가야 발송 → 열람 → 구매가 이어진다.
+  it('푸시의 nid 를 notification_clicked 에 싣고 그 상품 상세가 꺼내 쓰게 적어 둔다', async () => {
+    const renderer = await renderHandler();
+    const openedAppHandler = mockOnNotificationOpenedApp.mock.calls[0][0];
+    const nid = 'aB3_x-9QzK1m';
+
+    ReactTestRenderer.act(() => {
+      openedAppHandler({
+        data: {link: `https://jirum-alarm.com/products/41?nid=${nid}`, nid},
+      });
+    });
+
+    expect(mockTrack).toHaveBeenCalledWith(
+      'notification_clicked',
+      expect.objectContaining({nid, state: 'background'}),
+    );
+    expect(peekPushOrigin(41)).toBe(nid);
+    expect(peekPushOrigin(42)).toBeUndefined();
 
     await ReactTestRenderer.act(async () => {
       renderer.unmount();

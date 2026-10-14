@@ -8,6 +8,7 @@ import {ProductQueries} from '@/entities/product/product.queries';
 import {ProductService} from '@/shared/api/product/product.service';
 import PressableScale from '@/shared/components/PressableScale';
 import {Analytics} from '@/shared/lib/analytics/ga4';
+import {peekPushOrigin} from '@/shared/lib/analytics/push-origin';
 import {openInAppBrowser} from '@/shared/lib/navigation';
 import {resolveEntryScreen} from '@/shared/lib/navigation/entry-screen';
 
@@ -47,6 +48,8 @@ export default function CoupangSearchCta({productId}: {productId: number}) {
         navigation.getState(),
         navigation.getParent()?.getState(),
       ),
+      // 이것도 구매 클릭이다 — 푸시로 들어온 상세면 nid 를 같이(BottomCTA 와 같은 귀속).
+      nid: peekPushOrigin(productId),
     }).catch(() => {});
     openInAppBrowser(cta.url);
   };

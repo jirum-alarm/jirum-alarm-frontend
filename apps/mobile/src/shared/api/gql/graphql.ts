@@ -1143,6 +1143,7 @@ export type MutationCollectPriceContextImpressionArgs = {
 
 export type MutationCollectProductArgs = {
   entry?: InputMaybe<Scalars['String']['input']>;
+  nid?: InputMaybe<Scalars['String']['input']>;
   position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
   source?: InputMaybe<Scalars['String']['input']>;
@@ -1150,6 +1151,7 @@ export type MutationCollectProductArgs = {
 
 export type MutationCollectPurchaseClickArgs = {
   entry?: InputMaybe<Scalars['String']['input']>;
+  nid?: InputMaybe<Scalars['String']['input']>;
   position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
   source?: InputMaybe<Scalars['String']['input']>;
@@ -4368,6 +4370,7 @@ export type CollectProductMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
   source?: InputMaybe<Scalars['String']['input']>;
   position?: InputMaybe<Scalars['Int']['input']>;
+  nid?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 export type CollectProductMutation = {
@@ -4379,6 +4382,7 @@ export type CollectPurchaseClickMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
   source?: InputMaybe<Scalars['String']['input']>;
   entry?: InputMaybe<Scalars['String']['input']>;
+  nid?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 export type CollectPurchaseClickMutation = {
@@ -5717,16 +5721,26 @@ export const TogetherViewedProductsDocument = new TypedDocumentString(`
   TogetherViewedProductsQueryVariables
 >;
 export const CollectProductDocument = new TypedDocumentString(`
-    mutation CollectProduct($productId: Int!, $source: String, $position: Int) {
-  collectProduct(productId: $productId, source: $source, position: $position)
+    mutation CollectProduct($productId: Int!, $source: String, $position: Int, $nid: String) {
+  collectProduct(
+    productId: $productId
+    source: $source
+    position: $position
+    nid: $nid
+  )
 }
     `) as unknown as TypedDocumentString<
   CollectProductMutation,
   CollectProductMutationVariables
 >;
 export const CollectPurchaseClickDocument = new TypedDocumentString(`
-    mutation CollectPurchaseClick($productId: Int!, $source: String, $entry: String) {
-  collectPurchaseClick(productId: $productId, source: $source, entry: $entry)
+    mutation CollectPurchaseClick($productId: Int!, $source: String, $entry: String, $nid: String) {
+  collectPurchaseClick(
+    productId: $productId
+    source: $source
+    entry: $entry
+    nid: $nid
+  )
 }
     `) as unknown as TypedDocumentString<
   CollectPurchaseClickMutation,

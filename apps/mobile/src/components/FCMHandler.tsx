@@ -5,6 +5,10 @@ import useFCMTokenManager from '@/shared/hooks/useFCMTokenManager.ts';
 import {onForegroundMessageHandler} from '../shared/lib/fcm/index.ts';
 import {useWebviewContext} from '../provider/WebViewRefProvider.tsx';
 import {Analytics} from '@/shared/lib/analytics/ga4';
+import {
+  rememberPushOpen,
+  resolvePushProductId,
+} from '@/shared/lib/analytics/push-origin';
 import {openWhenNavigatorReady} from '@/navigations/open-when-ready.ts';
 import useDeepLink from '@/shared/hooks/useDeepLink.ts';
 import {queryClient} from '@/provider/ReactQueryProvider.tsx';
@@ -43,17 +47,30 @@ const isDuplicateOpen = (
 
 // 알림 클릭 추적 — 서버 notification_sent(발송)와 target/target_id/url 로 연결.
 // state: killed(종료) | background | foreground. push_history/GA4 발송과 퍼널.
+// nid = 서버가 기기별 발송마다 붙인 id. 같은 값을 상세 조회·구매 클릭 기록에도 실어(push-origin)
+// 발송 → 열람 → 구매를 한 키로 잇는다. 옛 서버 발송엔 없다(undefined 로 빠진다).
 const trackNotificationClick = (
-  data: {link?: unknown; target?: unknown; target_id?: unknown} | undefined,
+  data:
+    | {link?: unknown; target?: unknown; target_id?: unknown; nid?: unknown}
+    | undefined,
   state: 'killed' | 'background' | 'foreground',
 ) => {
+  const nid = typeof data?.nid === 'string' ? data.nid : undefined;
   Analytics.track('notification_clicked', {
     url: typeof data?.link === 'string' ? data.link : undefined,
     target: data?.target,
     target_id: data?.target_id,
+    nid,
     platform: 'app',
     state,
   });
+  if (data) {
+    rememberPushOpen({
+      nid,
+      productId: resolvePushProductId(data),
+      at: Date.now(),
+    });
+  }
 };
 
 const FcmHandler = ({children}: FcmHandlerProps) => {

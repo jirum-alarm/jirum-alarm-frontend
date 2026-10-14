@@ -80,8 +80,8 @@ type Documents = {
   '\n  query ProductAdditionalInfo($id: Int!) {\n    product(id: $id) {\n      id\n      url\n      provider {\n        id\n        nameKr\n      }\n      commentSummary {\n        additionalInfo\n        option\n        price\n        productId\n        purchaseMethod\n        satisfaction\n        summary\n      }\n    }\n  }\n': typeof types.ProductAdditionalInfoDocument;
   '\n  query CategorizedReactionKeywords($id: Int!) {\n    categorizedReactionKeywords(id: $id) {\n      items {\n        name\n        count\n        type\n        role\n        tag\n      }\n      lastUpdatedAt\n    }\n  }\n': typeof types.CategorizedReactionKeywordsDocument;
   '\n  query TogetherViewedProducts($productId: Int!, $limit: Int!) {\n    togetherViewedProducts(productId: $productId, limit: $limit) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n': typeof types.TogetherViewedProductsDocument;
-  '\n  mutation CollectProduct($productId: Int!, $source: String, $position: Int) {\n    collectProduct(productId: $productId, source: $source, position: $position)\n  }\n': typeof types.CollectProductDocument;
-  '\n  mutation CollectPurchaseClick(\n    $productId: Int!\n    $source: String\n    $entry: String\n  ) {\n    collectPurchaseClick(productId: $productId, source: $source, entry: $entry)\n  }\n': typeof types.CollectPurchaseClickDocument;
+  '\n  mutation CollectProduct(\n    $productId: Int!\n    $source: String\n    $position: Int\n    $nid: String\n  ) {\n    collectProduct(\n      productId: $productId\n      source: $source\n      position: $position\n      nid: $nid\n    )\n  }\n': typeof types.CollectProductDocument;
+  '\n  mutation CollectPurchaseClick(\n    $productId: Int!\n    $source: String\n    $entry: String\n    $nid: String\n  ) {\n    collectPurchaseClick(\n      productId: $productId\n      source: $source\n      entry: $entry\n      nid: $nid\n    )\n  }\n': typeof types.CollectPurchaseClickDocument;
   '\n  mutation CollectPriceContextImpression(\n    $productId: Int!\n    $source: String\n    $detail: String!\n  ) {\n    collectPriceContextImpression(\n      productId: $productId\n      source: $source\n      detail: $detail\n    )\n  }\n': typeof types.CollectPriceContextImpressionDocument;
   '\n  mutation CollectPriceContextClick(\n    $productId: Int!\n    $source: String\n    $detail: String!\n  ) {\n    collectPriceContextClick(\n      productId: $productId\n      source: $source\n      detail: $detail\n    )\n  }\n': typeof types.CollectPriceContextClickDocument;
   '\n  query SameProductDeals($id: Int!) {\n    sameProductDeals(id: $id) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n': typeof types.SameProductDealsDocument;
@@ -233,9 +233,9 @@ const documents: Documents = {
     types.CategorizedReactionKeywordsDocument,
   '\n  query TogetherViewedProducts($productId: Int!, $limit: Int!) {\n    togetherViewedProducts(productId: $productId, limit: $limit) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n':
     types.TogetherViewedProductsDocument,
-  '\n  mutation CollectProduct($productId: Int!, $source: String, $position: Int) {\n    collectProduct(productId: $productId, source: $source, position: $position)\n  }\n':
+  '\n  mutation CollectProduct(\n    $productId: Int!\n    $source: String\n    $position: Int\n    $nid: String\n  ) {\n    collectProduct(\n      productId: $productId\n      source: $source\n      position: $position\n      nid: $nid\n    )\n  }\n':
     types.CollectProductDocument,
-  '\n  mutation CollectPurchaseClick(\n    $productId: Int!\n    $source: String\n    $entry: String\n  ) {\n    collectPurchaseClick(productId: $productId, source: $source, entry: $entry)\n  }\n':
+  '\n  mutation CollectPurchaseClick(\n    $productId: Int!\n    $source: String\n    $entry: String\n    $nid: String\n  ) {\n    collectPurchaseClick(\n      productId: $productId\n      source: $source\n      entry: $entry\n      nid: $nid\n    )\n  }\n':
     types.CollectPurchaseClickDocument,
   '\n  mutation CollectPriceContextImpression(\n    $productId: Int!\n    $source: String\n    $detail: String!\n  ) {\n    collectPriceContextImpression(\n      productId: $productId\n      source: $source\n      detail: $detail\n    )\n  }\n':
     types.CollectPriceContextImpressionDocument,
@@ -675,13 +675,13 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation CollectProduct($productId: Int!, $source: String, $position: Int) {\n    collectProduct(productId: $productId, source: $source, position: $position)\n  }\n',
+  source: '\n  mutation CollectProduct(\n    $productId: Int!\n    $source: String\n    $position: Int\n    $nid: String\n  ) {\n    collectProduct(\n      productId: $productId\n      source: $source\n      position: $position\n      nid: $nid\n    )\n  }\n',
 ): typeof import('./graphql').CollectProductDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation CollectPurchaseClick(\n    $productId: Int!\n    $source: String\n    $entry: String\n  ) {\n    collectPurchaseClick(productId: $productId, source: $source, entry: $entry)\n  }\n',
+  source: '\n  mutation CollectPurchaseClick(\n    $productId: Int!\n    $source: String\n    $entry: String\n    $nid: String\n  ) {\n    collectPurchaseClick(\n      productId: $productId\n      source: $source\n      entry: $entry\n      nid: $nid\n    )\n  }\n',
 ): typeof import('./graphql').CollectPurchaseClickDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.

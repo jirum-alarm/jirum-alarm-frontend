@@ -224,11 +224,21 @@ export const QueryTogetherViewedProducts = graphql(`
 
 /**
  * 상세 조회 수집. 랭킹이 조회수를 먹으므로 네이티브가 대신 쏘지 않으면
- * 조용히 랭킹이 왜곡된다.
+ * 조용히 랭킹이 왜곡된다. nid = 이 상세를 연 푸시의 발송 id(push-origin, 없으면 생략).
  */
 export const MutationCollectProduct = graphql(`
-  mutation CollectProduct($productId: Int!, $source: String, $position: Int) {
-    collectProduct(productId: $productId, source: $source, position: $position)
+  mutation CollectProduct(
+    $productId: Int!
+    $source: String
+    $position: Int
+    $nid: String
+  ) {
+    collectProduct(
+      productId: $productId
+      source: $source
+      position: $position
+      nid: $nid
+    )
   }
 `);
 
@@ -241,8 +251,14 @@ export const MutationCollectPurchaseClick = graphql(`
     $productId: Int!
     $source: String
     $entry: String
+    $nid: String
   ) {
-    collectPurchaseClick(productId: $productId, source: $source, entry: $entry)
+    collectPurchaseClick(
+      productId: $productId
+      source: $source
+      entry: $entry
+      nid: $nid
+    )
   }
 `);
 

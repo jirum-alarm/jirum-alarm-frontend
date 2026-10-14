@@ -15,6 +15,7 @@ import {ProductService} from '@/shared/api/product/product.service';
 import Button from '@/shared/components/ui/Button';
 import Heart from '@/shared/components/icons/Heart';
 import {Analytics} from '@/shared/lib/analytics/ga4';
+import {peekPushOrigin} from '@/shared/lib/analytics/push-origin';
 import {showToast} from '@/shared/lib/feedback';
 import {openInAppBrowser} from '@/shared/lib/navigation';
 import {resolveEntryScreen} from '@/shared/lib/navigation/entry-screen';
@@ -117,6 +118,7 @@ export default function BottomCTA({
     });
 
     // 서버 user_history 에도 남긴다(상품별 수요·쿠팡 클릭 집계율 분모). 진입 직전 화면을 entry 로.
+    // 푸시로 들어온 상세면 그 nid 도 — 알림 → 구매 귀속(push-origin).
     void ProductService.collectPurchaseClick({
       productId: Number(product.id),
       source: 'app_detail',
@@ -124,6 +126,7 @@ export default function BottomCTA({
         navigation.getState(),
         navigation.getParent()?.getState(),
       ),
+      nid: peekPushOrigin(Number(product.id)),
     }).catch(() => {});
 
     // 브라우저를 먼저 연다 — 저장소 읽기(await)를 앞에 두면 구매 탭이 한 박자 늦게 반응했다.

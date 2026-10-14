@@ -10,6 +10,7 @@ import {Pressable, RefreshControl, ScrollView, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {HELP_PATH} from '@/constants/env';
 import {Analytics} from '@/shared/lib/analytics/ga4';
+import {peekPushOrigin} from '@/shared/lib/analytics/push-origin';
 import {SystemBars} from 'react-native-edge-to-edge';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
@@ -229,6 +230,7 @@ function NativeDetail({
   // 조회 수집. 웹은 CollectProductOnView 가 하던 일로, 네이티브가 안 쏘면
   // 랭킹이 조회수를 먹는 만큼 조용히 왜곡된다.
   // StrictMode 이중 마운트·리렌더 중복 호출은 ref 로 막는다(web 과 같은 방식).
+  // 이 상품 푸시를 막 눌러 들어왔으면 그 nid 를 싣는다 — 발송 → 열람을 한 키로 잇는다(push-origin).
   const collectedRef = useRef<number | null>(null);
   useEffect(() => {
     if (collectedRef.current === productId) return;
@@ -236,6 +238,7 @@ function NativeDetail({
     void ProductService.collectProduct({
       productId,
       source: 'app_detail',
+      nid: peekPushOrigin(productId),
     }).catch(() => {});
   }, [productId]);
 
