@@ -13,7 +13,7 @@ import type {
   MyNotificationKeywordsQueryVariables,
   ProductPriceHistoryQueryVariables,
   ProductDealEvidenceQueryVariables,
-  TogetherViewedProductsQueryVariables,
+  LiveAlternativeDealsQueryVariables,
 } from '@/shared/api/gql/graphql.ts';
 
 /**
@@ -46,8 +46,8 @@ export class ProductQueries {
       [...this.keys.detail(id), 'latestSimilarDeals', limit] as const,
     categoryPopular: (categoryId: number) =>
       [...this.keys.all, 'categoryPopular', categoryId] as const,
-    togetherViewed: (id: number) =>
-      [...this.keys.detail(id), 'togetherViewed'] as const,
+    liveAlternativeDeals: (id: number, limit: number) =>
+      [...this.keys.detail(id), 'liveAlternativeDeals', limit] as const,
   };
 
   static info(variables: ProductInfoQueryVariables) {
@@ -66,11 +66,10 @@ export class ProductQueries {
     });
   }
 
-  static togetherViewed(variables: TogetherViewedProductsQueryVariables) {
+  static liveAlternativeDeals(variables: LiveAlternativeDealsQueryVariables) {
     return queryOptions({
-      queryKey: this.keys.togetherViewed(variables.productId),
-      queryFn: () => ProductService.getTogetherViewedProducts(variables),
-      retry: RETRY,
+      queryKey: this.keys.liveAlternativeDeals(variables.id, variables.limit),
+      queryFn: () => ProductService.getLiveAlternativeDeals(variables),
     });
   }
 

@@ -23,7 +23,8 @@ export type ProductCardSource =
   | 'keyword_recommend' // 키워드 추천
   | 'together_viewed' // 함께 본 상품
   | 'category_popular' // 카테고리 인기
-  | 'notification_theme'; // 알림 묶음 상세 라이브딜
+  | 'notification_theme' // 알림 묶음 상세 라이브딜
+  | 'live_alternative'; // 진행 중 딜 상세의 '다른 곳 진행 중인 딜' 블록
 
 /**
  * source 가 없으면 아무것도 안 보낸다(web productCardTracking 이 빈 객체를 주는 것과 같다).

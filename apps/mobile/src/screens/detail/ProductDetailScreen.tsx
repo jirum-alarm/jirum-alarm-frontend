@@ -54,6 +54,7 @@ import ProductDetailSkeleton from './ui/ProductDetailSkeleton';
 import ProductInfo from './ui/ProductInfo';
 import AffiliateNotice from './ui/AffiliateNotice';
 import ExpiredProductWarning from './ui/ExpiredProductWarning';
+import LiveAlternativeDeals from './ui/LiveAlternativeDeals';
 import {
   DetailHeaderActions,
   DetailHeaderBackButton,
@@ -171,13 +172,6 @@ function NativeDetail({
 
   const {data: myUserId} = useQuery(UserQueries.me());
   const {isMember: isLogin} = useAuth();
-
-  const {
-    data: togetherViewed,
-    isPending: isTogetherViewedPending,
-    isError: isTogetherViewedError,
-    refetch: refetchTogetherViewed,
-  } = useQuery(ProductQueries.togetherViewed({productId, limit: 10}));
 
   const {
     data: categoryPopular,
@@ -392,6 +386,12 @@ function NativeDetail({
               })
             }
           />
+          {/* 막 올라온 딜(7일 미만)엔 위 종료 딜 블록 대신 같은 상품·같은 라인의 다른 진행 중 딜(둘은 겹치지 않는다). */}
+          <LiveAlternativeDeals
+            product={product}
+            seen={expiredSeen}
+            onPressProduct={pushProduct}
+          />
         </View>
         {!hidePrice ? (
           <PriceHistorySection
@@ -429,15 +429,6 @@ function NativeDetail({
           }
         />
         <Hr />
-        <ProductCarouselSection
-          title="다른 고객이 함께 본 상품"
-          products={togetherViewed}
-          isPending={isTogetherViewedPending}
-          isError={isTogetherViewedError}
-          onRetry={refetchTogetherViewed}
-          onPressProduct={pushProduct}
-          trackingSource="together_viewed"
-        />
         <ProductCarouselSection
           title={`${product.categoryName ?? '기타'} 인기 상품`}
           products={categoryPopular?.filter(
