@@ -1,7 +1,7 @@
 name: web-pr-check
 
 # apps/web 을 PR 단계에서 검증한다(타입·테스트·린트). 웹 배포 워크플로는 main push 에서만 돌아서,
-# 이게 없으면 Renovate 의 apps/web 자동 머지(renovate.json)가 «CI 통과» 조건 없이 들어간다.
+# 이게 없으면 PR(Dependabot 보안 PR 포함)이 타입·테스트 검사 없이 머지될 수 있다.
 on:
   pull_request:
     paths:
