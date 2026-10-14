@@ -60,7 +60,7 @@ function CarouselProductList({
         ref={listRef}
         onScroll={updateEdge}
         className={cn(
-          'pc:my-7 pc:gap-6 pc:px-0 scrollbar-hide -mx-5 flex gap-3 overflow-x-auto px-5',
+          'pc:my-7 pc:gap-6 pc:mx-0 pc:px-0 scrollbar-hide -mx-5 flex gap-3 overflow-x-auto px-5',
           nested && 'swiper-no-swiping',
         )}
       >
@@ -83,10 +83,10 @@ function ArrowButton({ dir, onClick }: { dir: 1 | -1; onClick: () => void }) {
       type="button"
       aria-label={dir === 1 ? '다음 상품' : '이전 상품'}
       onClick={onClick}
-      // 사진(192px) 세로 가운데 = my-7(28) + 96. 좌우는 안쪽으로 — 상세는 조상 overflow-x-hidden 이 바깥 20px 를 자른다
+      // 사진(192px) 세로 가운데 = my-7(28) + 96. 좌우는 목록 끝에서 8px 안쪽
       className={cn(
         'pc:flex shadow-card absolute top-[124px] hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white',
-        dir === 1 ? 'right-7' : 'left-7',
+        dir === 1 ? 'right-2' : 'left-2',
       )}
     >
       <Icon width={20} height={20} />

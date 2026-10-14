@@ -1,6 +1,5 @@
 import { ReactNode, Suspense } from 'react';
 
-import { cn } from '@/shared/lib/cn';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
 import { type ProductCardSource } from '@/entities/product-list/model/card-tracking';
@@ -14,7 +13,6 @@ export default function CarouselProductsSection({
   products,
   nested = false,
   shouldShowMobileHeader = true,
-  isFullWidth = false,
   priorityCount = 0,
   source,
   right,
@@ -23,7 +21,6 @@ export default function CarouselProductsSection({
   products: ProductCardType[];
   nested?: boolean;
   shouldShowMobileHeader?: boolean;
-  isFullWidth?: boolean;
   priorityCount?: number;
   source?: ProductCardSource;
   /** 제목 오른쪽(더보기 링크 등). */
@@ -34,9 +31,11 @@ export default function CarouselProductsSection({
       <div className="pc:px-0 px-5">
         <SectionHeader shouldShowMobileUI={shouldShowMobileHeader} title={title} right={right} />
       </div>
-      {/* 리스트가 -mx-5 로 양옆 20px 를 빼 쓰므로 모바일은 여기서 px-5 로 받아준다. 없으면 페이지가
-          20px 가로로 밀린다(상세·검색, 2026-10-08 실측 scrollWidth 380/360). */}
-      <div className={cn('pc:px-0 px-5', { 'pc:px-5': nested, 'pc:-px-5': isFullWidth })}>
+      {/* 모바일: 리스트가 -mx-5 로 양옆 20px 를 빼 쓰므로 여기서 px-5 로 받아준다. 없으면 페이지가
+          20px 가로로 밀린다(상세·검색, 2026-10-08 실측 scrollWidth 380/360).
+          PC: 둘 다 0 — 리스트가 제목과 같은 선에서 시작한다. 예전엔 PC 에도 -mx-5 가 남아 첫 카드가 제목보다
+          20px 왼쪽에서 시작했고, 상세는 조상 overflow-x-hidden 이 그 20px 를 잘라 첫 카드가 깨져 보였다(2026-10-14). */}
+      <div className="pc:px-0 px-5">
         <Suspense fallback={<CarouselProductListSkeleton />}>
           <CarouselProductList
             products={products}
