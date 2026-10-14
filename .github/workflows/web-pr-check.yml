@@ -1,0 +1,57 @@
+name: web-pr-check
+
+# apps/web 을 PR 단계에서 검증한다(타입·테스트·린트). 웹 배포 워크플로는 main push 에서만 돌아서,
+# 이게 없으면 Renovate 의 apps/web 자동 머지(renovate.json)가 «CI 통과» 조건 없이 들어간다.
+on:
+  pull_request:
+    paths:
+      - .github/workflows/web-pr-check.yml
+      - apps/web/**
+      - packages/**
+      - package.json
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 22.18.0
+  PNPM_VERSION: 10.30.3
+
+jobs:
+  web-check:
+    name: Web check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      # next-env.d.ts·라우트 타입은 생성물이라 커밋돼 있지 않다 — 없으면 이미지 import 가 TS2307 로 깨진다.
+      - name: Generate Next types
+        working-directory: apps/web
+        run: pnpm exec next typegen
+
+      - name: Type check
+        run: pnpm --filter web check-types
+
+      - name: Test
+        run: pnpm --filter web test
+
+      - name: Lint
+        run: pnpm --filter web lint:check
