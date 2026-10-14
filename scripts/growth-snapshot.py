@@ -14,6 +14,7 @@
 대시보드 https://claude.ai/artifact/BhUKjPYmSFP7WEzX6Vh7wp 반영은 Orca 정기 자동화(Claude 세션)가 이 파일들을 올린다
 — launchd 는 아티팩트에 못 올린다. 설치: install -m 0755 scripts/growth-snapshot.py ~/.local/bin/
 """
+import base64
 import datetime as dt
 import json
 import os
@@ -21,6 +22,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import urllib.parse
 import urllib.request
 
 import google.auth.transport.requests
@@ -201,6 +203,13 @@ const { MongoClient } = require(process.env.MONGO_DRIVER);
 """
 
 
+def mongo_root_password():
+    """root 비번은 코드에 두지 않고 매번 운영 시크릿(mongodb/mongodb)에서 읽는다 — 이 레포는 공개다."""
+    b64 = subprocess.check_output(["kubectl", "--context", "prod", "-n", "mongodb", "get", "secret", "mongodb",
+                                   "-o", "jsonpath={.data.mongodb-root-password}"], text=True, timeout=30)
+    return urllib.parse.quote(base64.b64decode(b64).decode(), safe="")
+
+
 def mongo():
     """구매클릭(주×상품)과 웹 카드 출처별 최근 7일 노출·진입. 맥에서 Mongo 직접 접속이 안 돼 port-forward 로 붙는다."""
     pf = subprocess.Popen(["kubectl", "--context", "prod", "-n", "mongodb", "port-forward", "pod/mongodb-0",
@@ -208,7 +217,7 @@ def mongo():
     try:
         time.sleep(3)
         env = {**os.environ, "MONGO_DRIVER": os.path.join(CRAWLING, "node_modules/mongodb"),
-               "MONGO_URI": f"mongodb://root:%21REDACTED@localhost:{MONGO_PORT}/jirum-alarm?authSource=admin"
+               "MONGO_URI": f"mongodb://root:{mongo_root_password()}@localhost:{MONGO_PORT}/jirum-alarm?authSource=admin"
                             "&readPreference=secondaryPreferred&directConnection=true"}
         return json.loads(subprocess.check_output(["node", "-e", MONGO_JS, f"{start}T00:00:00+09:00",
                                                    json.dumps(CARD_SOURCES)], env=env, text=True, timeout=600))
