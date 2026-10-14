@@ -5,6 +5,10 @@ import { useEffect, useRef } from 'react';
 import { ProductService } from '@/shared/api/product';
 
 import { takeCardOrigin } from '@/entities/product-list/model/card-click-origin';
+import {
+  captureNotificationOrigin,
+  peekNotificationOrigin,
+} from '@/entities/product-list/model/notification-origin';
 
 /**
  * 상세 진입 시 post_view 수집을 "클라이언트"에서 1회 호출한다.
@@ -18,6 +22,9 @@ import { takeCardOrigin } from '@/entities/product-list/model/card-click-origin'
  *
  * 목록 카드를 눌러 들어왔으면 그 목록·위치(source·position)를 싣는다 — 노출(post_impression)과
  * 이어 목록별 CTR 을 잰다(ProductCardTracker 가 클릭 순간에 적어 둔다).
+ *
+ * 푸시를 눌러 들어왔으면(주소 `?nid=`) 그 발송 id 도 싣는다 — 발송 → 열람을 한 키로 잇는다.
+ * 주소는 여기(클라이언트)서만 읽고 지운다(notification-origin).
  */
 export const CollectProductOnView = ({ productId }: { productId: number }) => {
   // StrictMode 이중 마운트 + 리렌더 중복 호출 방지.
@@ -26,8 +33,13 @@ export const CollectProductOnView = ({ productId }: { productId: number }) => {
   useEffect(() => {
     if (collectedRef.current) return;
     collectedRef.current = true;
+    captureNotificationOrigin(productId);
     // fire-and-forget. 실패해도 UX 영향 없음.
-    void ProductService.collectProduct({ productId, ...takeCardOrigin(productId) }).catch(() => {});
+    void ProductService.collectProduct({
+      productId,
+      ...takeCardOrigin(productId),
+      nid: peekNotificationOrigin(productId),
+    }).catch(() => {});
   }, [productId]);
 
   return null;

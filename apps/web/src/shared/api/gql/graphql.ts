@@ -1137,6 +1137,7 @@ export type MutationCollectPriceContextImpressionArgs = {
 
 export type MutationCollectProductArgs = {
   entry?: InputMaybe<Scalars['String']['input']>;
+  nid?: InputMaybe<Scalars['String']['input']>;
   position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
   source?: InputMaybe<Scalars['String']['input']>;
@@ -1144,6 +1145,7 @@ export type MutationCollectProductArgs = {
 
 export type MutationCollectPurchaseClickArgs = {
   entry?: InputMaybe<Scalars['String']['input']>;
+  nid?: InputMaybe<Scalars['String']['input']>;
   position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
   source?: InputMaybe<Scalars['String']['input']>;

@@ -8,6 +8,7 @@ import { cn } from '@/shared/lib/cn';
 import { getEntry } from '@/shared/lib/entry';
 
 import { ProductQueries } from '@/entities/product';
+import { peekNotificationOrigin } from '@/entities/product-list/model/notification-origin';
 
 const SOURCE = 'coupang_search_cta';
 
@@ -39,10 +40,13 @@ export default function CoupangSearchCta({
   if (!cta) return null;
 
   const handleClick = () => {
+    // 이것도 구매 클릭이다 — 푸시로 들어온 상세면 nid 를 같이(BottomCTA 와 같은 귀속).
+    const nid = peekNotificationOrigin(productId);
     void ProductService.collectPurchaseClick({
       productId,
       source: SOURCE,
       entry: getEntry(),
+      nid,
     }).catch(() => {});
     (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
       event: 'purchase_link_click',
@@ -51,6 +55,7 @@ export default function CoupangSearchCta({
       monetized: true,
       profit_provider: 'coupang',
       click_source: SOURCE,
+      nid,
     });
   };
 

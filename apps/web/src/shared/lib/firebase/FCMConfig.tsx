@@ -20,6 +20,8 @@ const FCMConfig = () => {
           event: 'push_notification_clicked',
           push_title: event.data.push_title,
           push_body: event.data.push_body,
+          // 발송 id — GA4 클릭을 서버 발송·상세 열람(notification-origin)과 같은 키로 잇는다.
+          nid: event.data.nid,
         });
         if (event.data.link) window.location.href = event.data.link;
       }
@@ -60,7 +62,12 @@ const FCMConfig = () => {
                 registration?.showNotification(title, {
                   body,
                   icon: '/icon.png',
-                  data: { title, body, link: payload.fcmOptions?.link ?? payload.data?.link },
+                  data: {
+                    title,
+                    body,
+                    link: payload.fcmOptions?.link ?? payload.data?.link,
+                    nid: payload.data?.nid,
+                  },
                 }),
               )
               .catch((e) => console.log('foreground notification error: ', e));
@@ -70,6 +77,7 @@ const FCMConfig = () => {
             push_title: payload.notification?.title,
             push_body: payload.notification?.body,
             push_state: 'foreground',
+            nid: payload.data?.nid,
           });
         });
       } catch (err) {

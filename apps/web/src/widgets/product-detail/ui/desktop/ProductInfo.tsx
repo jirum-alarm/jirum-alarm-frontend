@@ -28,6 +28,7 @@ import { formatFreeShipping } from '@/entities/product/model/toss-data';
 import NaverIcon from '@/entities/product/ui/NaverIcon';
 import TossBadges from '@/entities/product/ui/TossBadges';
 import TossIcon from '@/entities/product/ui/TossIcon';
+import { peekNotificationOrigin } from '@/entities/product-list/model/notification-origin';
 
 import { LikeButton, RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
@@ -295,10 +296,13 @@ export default function ProductInfo({
                   joined: hasJoinedOkachat(beautyRoom?.arm === 'b' ? 'beauty' : 'hotdeal'),
                 }),
               );
+              // 푸시로 들어온 상세면 그 발송 nid 도 — 알림 → 구매 귀속(notification-origin).
+              const nid = peekNotificationOrigin(productId);
               void ProductService.collectPurchaseClick({
                 productId,
                 source: 'detail_desktop',
                 entry: getEntry(),
+                nid,
               }).catch(() => {});
 
               if (typeof window === 'undefined') return;
@@ -308,6 +312,7 @@ export default function ProductInfo({
                 click_url: product.detailUrl ?? '',
                 monetized: product.isProfitUrl ?? false,
                 profit_provider: product.profitLinkProvider ?? null,
+                nid,
               });
             }}
             className="block flex-1"

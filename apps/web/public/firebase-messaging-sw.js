@@ -28,11 +28,13 @@ self.addEventListener('notificationclick', function (event) {
       });
       const target = focused || clients[0];
       if (target) {
+        // nid = 서버가 기기별 발송마다 붙인 id — 클릭 이벤트를 발송과 잇는다(링크에도 ?nid= 로 실려 상세가 따로 읽는다).
         target.postMessage({
           type: 'push_notification_clicked',
           push_title: data.title,
           push_body: data.body,
           link: data.link,
+          nid: data.nid,
         });
         return target.focus();
       }

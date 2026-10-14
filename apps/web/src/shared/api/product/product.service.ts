@@ -111,6 +111,7 @@ export class ProductService {
     productId: number;
     source?: string | null;
     position?: number | null;
+    nid?: string | null;
   }) {
     return execute(MutationCollectProduct, variables).then((res) => res.data);
   }
@@ -119,6 +120,7 @@ export class ProductService {
     productId: number;
     source?: string | null;
     entry?: string | null;
+    nid?: string | null;
   }) {
     return execute(MutationCollectPurchaseClick, variables, { keepalive: true }).then(
       (res) => res.data,
@@ -765,22 +767,28 @@ const QueryTogetherViewedProducts = graphql(`
 
 // CTR 측정용 source/position 추가. codegen 전까지 변수 타입을 손으로 명시한 TypedDocumentString
 // 으로 두고, codegen 후 graphql() 로 치환 가능(동작 동일).
+// nid = 이 상세를 연 푸시의 발송 id(notification-origin) — 서버가 user_history 에 같이 적어 발송 → 열람을 잇는다.
 const MutationCollectProduct = new TypedDocumentString<
   { collectProduct: boolean },
-  { productId: number; source?: string | null; position?: number | null }
+  { productId: number; source?: string | null; position?: number | null; nid?: string | null }
 >(`
-  mutation MutationCollectProduct($productId: Int!, $source: String, $position: Int) {
-    collectProduct(productId: $productId, source: $source, position: $position)
+  mutation MutationCollectProduct($productId: Int!, $source: String, $position: Int, $nid: String) {
+    collectProduct(productId: $productId, source: $source, position: $position, nid: $nid)
   }
 `);
 
 // 구매(수익링크) 버튼 클릭 — GA4 purchase_link_click 과 같은 순간 서버에도 남긴다(상품·그룹별 수요 신호).
 const MutationCollectPurchaseClick = new TypedDocumentString<
   { collectPurchaseClick: boolean },
-  { productId: number; source?: string | null; entry?: string | null }
+  { productId: number; source?: string | null; entry?: string | null; nid?: string | null }
 >(`
-  mutation MutationCollectPurchaseClick($productId: Int!, $source: String, $entry: String) {
-    collectPurchaseClick(productId: $productId, source: $source, entry: $entry)
+  mutation MutationCollectPurchaseClick(
+    $productId: Int!
+    $source: String
+    $entry: String
+    $nid: String
+  ) {
+    collectPurchaseClick(productId: $productId, source: $source, entry: $entry, nid: $nid)
   }
 `);
 

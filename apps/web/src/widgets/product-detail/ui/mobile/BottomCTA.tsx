@@ -14,6 +14,7 @@ import Button from '@/shared/ui/common/Button';
 import TopButton from '@/shared/ui/TopButton';
 
 import { ProductQueries } from '@/entities/product';
+import { peekNotificationOrigin } from '@/entities/product-list/model/notification-origin';
 
 import { LikeButton } from '@/features/product-actions/ui';
 import { useBeautyRoomAssignment } from '@/features/product-detail/lib/useBeautyRoomAssignment';
@@ -44,11 +45,14 @@ export default function BottomCTA({
         joined: hasJoinedOkachat(beautyRoom?.arm === 'b' ? 'beauty' : 'hotdeal'),
       }),
     );
+    // 푸시로 들어온 상세면 그 발송 nid 를 서버·GA4 양쪽에 — 알림 → 구매 귀속(notification-origin).
+    const nid = peekNotificationOrigin(productId);
     // fire-and-forget — 새 탭으로 나가도 이 페이지에 남아 요청이 끝난다.
     void ProductService.collectPurchaseClick({
       productId,
       source: 'detail_mobile',
       entry: getEntry(),
+      nid,
     }).catch(() => {});
 
     if (typeof window === 'undefined') return;
@@ -58,6 +62,7 @@ export default function BottomCTA({
       click_url: product?.detailUrl ?? '',
       monetized: product?.isProfitUrl ?? false,
       profit_provider: product?.profitLinkProvider ?? null,
+      nid,
     });
   };
 
