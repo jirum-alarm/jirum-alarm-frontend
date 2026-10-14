@@ -72,6 +72,8 @@ const nextConfig = {
     // staleTime 60s 로 마운트 후 스스로 갱신된다. 뒤로가기도 5분 안엔 캐시로 즉시.
     staleTimes: { dynamic: 300 },
   },
+  // @jirum/domain 은 TS 원본을 그대로 내보낸다(web·앱 공용 규칙).
+  transpilePackages: ['@jirum/domain'],
   poweredByHeader: false,
   reactStrictMode: true,
   compiler: {

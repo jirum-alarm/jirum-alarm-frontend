@@ -1,8 +1,6 @@
 export {};
 
-const {
-  deriveKeyword,
-} = require('../src/features/keyword-prompt/model/deriveKeyword');
+const {deriveKeyword} = require('@jirum/domain/derive-keyword');
 
 // 구매 클릭 직후 배너가 이 키워드로 알림을 등록한다. 키워드가 길면 매칭되는 신규 딜이
 // 없어져 알림이 영영 안 오고, 빈 문자열이면 배너 자체가 안 뜬다(둘 다 조용한 실패).

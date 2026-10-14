@@ -1,5 +1,6 @@
 'use client';
 
+import { deriveKeyword } from '@jirum/domain/derive-keyword';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
@@ -21,8 +22,6 @@ import { AuthQueries } from '@/entities/auth';
 
 import OpenInAppLink from '@/features/app-download/ui/OpenInAppLink';
 import { useUpdateKeyword } from '@/features/mypage/model';
-
-import { deriveKeyword } from '../lib/deriveKeyword';
 
 /**
  * 구매 링크를 누른 직후에만 뜨는 알림 등록 배너.

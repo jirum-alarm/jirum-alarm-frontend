@@ -1,0 +1,15 @@
+{
+  "name": "@jirum/domain",
+  "version": "0.0.0",
+  "private": true,
+  "description": "web·앱이 같은 결과를 내야 하는 순수 도메인 규칙(TS 원본). 한쪽 앱에 복사하지 말고 여기서 import 한다.",
+  "type": "module",
+  "exports": {
+    "./derive-keyword": "./src/derive-keyword.ts",
+    "./deal-status-reaction": "./src/deal-status-reaction.ts",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "node --test --experimental-strip-types src/*.test.ts"
+  }
+}

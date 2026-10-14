@@ -1,5 +1,6 @@
 'use client';
 
+import { deriveKeyword } from '@jirum/domain/derive-keyword';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
@@ -13,7 +14,6 @@ import { useToast } from '@/shared/ui/common/Toast';
 import { ProductQueries } from '@/entities/product';
 
 import { useUpdateKeyword } from '@/features/mypage/model';
-import { deriveKeyword } from '@/features/product-detail/lib/deriveKeyword';
 
 const MIN_KEYWORD_LENGTH = 2;
 const MAX_KEYWORD_LENGTH = 20;

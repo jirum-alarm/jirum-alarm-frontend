@@ -1,6 +1,7 @@
 'use client';
 
 import { emptyText } from '@jirum/design-system/recipes';
+import { buildDealStatusSummary, splitReactionKeywords } from '@jirum/domain/deal-status-reaction';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import * as m from 'motion/react-m';
 import { Suspense } from 'react';
@@ -14,10 +15,6 @@ import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 import { ProductQueries } from '@/entities/product';
 
 import ProductReport from '@/features/product-actions/ui/ProductReport';
-import {
-  buildDealStatusSummary,
-  splitReactionKeywords,
-} from '@/features/product-detail/lib/deal-status-reaction';
 import { Reactions } from '@/features/product-reaction/ui/Reactions';
 
 type ReactionItem = {

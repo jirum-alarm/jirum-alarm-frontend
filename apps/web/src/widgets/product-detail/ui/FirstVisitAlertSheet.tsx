@@ -1,5 +1,6 @@
 'use client';
 
+import { deriveKeyword } from '@jirum/domain/derive-keyword';
 import { useEffect, useState } from 'react';
 import { Drawer } from 'vaul';
 
@@ -33,7 +34,6 @@ import FirstVisitAppAlertModal, {
 } from '@/features/app-download/ui/FirstVisitAppAlertModal';
 import OpenInAppLink from '@/features/app-download/ui/OpenInAppLink';
 import { useUpdateKeyword } from '@/features/mypage/model/update-keyword';
-import { deriveKeyword } from '@/features/product-detail/lib/deriveKeyword';
 import {
   isFirstVisitHoldout,
   waitForDeviceId,

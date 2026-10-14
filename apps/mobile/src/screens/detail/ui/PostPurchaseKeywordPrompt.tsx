@@ -19,7 +19,7 @@ import {
 import {PendingActionType} from '@/shared/lib/pending-action';
 import {useAuth} from '@/shared/hooks/useAuth';
 
-import {deriveKeyword} from '@/features/keyword-prompt/model/deriveKeyword';
+import {deriveKeyword} from '@jirum/domain/derive-keyword';
 import {invalidateMyKeywords} from '@/features/keyword-prompt/model/myKeywords';
 
 /** 키워드 등록 최소 길이. web MIN_KEYWORD_LENGTH 와 맞춘다. */

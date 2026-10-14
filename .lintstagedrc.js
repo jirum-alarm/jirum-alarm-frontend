@@ -54,6 +54,8 @@ module.exports = {
   "*.{js,ts,tsx}": [buildEslintCommands, buildPrettierCommands],
   "packages/design-system/**": [buildDesignSystemCommands],
   "packages/design-system/eslint.js": [buildDesignSystemLintCommands],
+  // web·앱 공용 도메인 규칙. 두 앱이 그대로 import 하므로 고치면 두 앱 타입체크까지.
+  "packages/domain/**": [() => ["pnpm --filter @jirum/domain test", "pnpm check-types --filter=web --filter=mobile"]],
   "*.{ts,tsx}": [buildCheckTypesCommands, buildNodeTestCommands],
   "apps/web/src/**": [buildWebCoupledMobileTests],
 };

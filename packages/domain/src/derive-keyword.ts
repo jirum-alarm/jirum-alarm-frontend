@@ -2,8 +2,8 @@
  * 상품 제목에서 알림 키워드를 뽑는다. 대괄호 말머리와 괄호 뒷단을 떼어낸 앞부분.
  *
  * 키워드가 길수록 매칭되는 신규 딜이 사라지므로 앞 두 단어까지만 남긴다.
- * (web apps/web/src/features/product-detail/lib/deriveKeyword.ts 와 같은 규칙이다. 웹에서 등록한 키워드와
- *  앱에서 등록한 키워드가 같아야 하니 한쪽만 고치지 말 것 — deriveKeyword.test.ts 가 두 파일을 같은 입력으로 대 본다.)
+ * web·앱이 같은 함수를 쓴다(@jirum/domain) — 웹에서 등록한 키워드와 앱에서 등록한 키워드가 같아야 해서.
+ * (예전엔 두 앱에 복사본이 있고 대조 테스트가 둘을 맞춰 봤다.)
  *
  * ★특수문자는 "구분자"만 지우고 "토큰 내부" 문자는 남긴다.
  * 운영 알림 키워드 1,411개 중 17개가 특수문자를 의미 있게 쓴다: `m.2` `h.point` `qi2.2`
@@ -60,10 +60,7 @@ const PREFIXES: [RegExp, (match: string, bracket?: string) => string][] = [
 function stripPrefixes(title: string): string {
   let current = title.trim();
   for (let i = 0; i < 5; i++) {
-    const next = PREFIXES.reduce(
-      (acc, [re, to]) => acc.replace(re, to),
-      current,
-    );
+    const next = PREFIXES.reduce((acc, [re, to]) => acc.replace(re, to), current);
     if (next === current) break;
     current = next;
   }
@@ -88,7 +85,7 @@ export function deriveKeyword(title: string): string {
   const words = cleaned
     .split(' ')
     // 양끝 장식만 턴다. `1++` 처럼 뒤의 +가 의미인 경우가 있어 +는 끝에서 안 지운다.
-    .map(w => w.replace(EDGE_PUNCT, ''))
+    .map((w) => w.replace(EDGE_PUNCT, ''))
     .filter(Boolean);
 
   const picked = words.slice(0, 2);

@@ -22,7 +22,7 @@ import {
   buildDealStatusSummary,
   splitReactionKeywords,
   type ReactionKeywordItem,
-} from '../model/deal-status-reaction';
+} from '@jirum/domain/deal-status-reaction';
 
 const MIN_REACTIONS_FOR_PERCENT = 5;
 

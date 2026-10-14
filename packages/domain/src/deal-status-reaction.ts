@@ -1,4 +1,5 @@
 /**
+ * 커뮤니티 반응 키워드 → 품질(추천%)·딜 상태 문구. web·앱 상세가 같이 쓴다(@jirum/domain).
  * 서버 HotDealKeywordGroupRole 과 동일.
  * QUALITY → 추천%/칩, DEAL_STATUS → 품절·종료 등 상태 문구.
  */
