@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { test } from 'node:test';
 
 const require = createRequire(import.meta.url);
-const { matchMyKeyword, notificationSource } =
+const { matchMyKeyword, notificationSource, recentKeywordAlertCount } =
   require('./notificationSource.ts') as typeof import('./notificationSource');
 
 const mine = new Set(['햇반', '펩시']);
@@ -45,4 +45,21 @@ test('키워드 그대로·가격 하락 문구는 내 키워드로, 관심사 �
   assert.equal(matchMyKeyword('콜라겐', keywordSet), undefined);
   assert.equal(matchMyKeyword('노트북', keywordSet), undefined);
   assert.equal(matchMyKeyword(null, keywordSet), undefined);
+});
+
+const NOW = new Date('2026-10-14T12:00:00Z').getTime();
+const hoursAgo = (h: number): string => new Date(NOW - h * 3600_000).toISOString();
+
+test('최근 24시간의 내 키워드 알림만 센다(관심사·좋은 딜·지난 날은 빼고)', () => {
+  const mine: Set<string> = new Set(['콜라', '에어팟 프로']);
+  const notifications = [
+    { keyword: '콜라', createdAt: hoursAgo(1) },
+    { keyword: '콜라 최근 딜보다 싸게 떴어요 📉', createdAt: hoursAgo(2) },
+    { keyword: '에어팟 프로', createdAt: hoursAgo(23) },
+    { keyword: '콜라', createdAt: hoursAgo(25) },
+    { keyword: '🥤 [생수·음료 쟁이기] 펩시 핫딜', createdAt: hoursAgo(1) },
+    { keyword: '(광고) 🔥 지금 뜨는 좋은 딜', createdAt: hoursAgo(1) },
+    { keyword: null, createdAt: hoursAgo(1) },
+  ];
+  assert.equal(recentKeywordAlertCount(notifications, mine, NOW), 3);
 });

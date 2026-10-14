@@ -13,6 +13,7 @@ import {
   QueryMyPushSetting,
 } from '@/graphql/mypage';
 import type {MutationUpdateMyProfileMutationVariables} from '@/shared/api/gql/graphql';
+import {KeywordAlertLevel} from '@/shared/api/gql/graphql';
 import {HttpClient} from '@/shared/lib/client';
 
 export type MyProfile = {
@@ -42,6 +43,8 @@ export type PushSettingKey =
 export type MyPushSetting = Record<PushSettingKey, boolean> & {
   quietHoursStart: number | null;
   quietHoursEnd: number | null;
+  /** 키워드 알림 받는 기준 — All 올라오는 즉시 / Hot 핫딜·대박딜이 됐을 때만 */
+  keywordAlertLevel: KeywordAlertLevel;
 };
 
 /**

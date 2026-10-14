@@ -6,12 +6,20 @@ import { useEffect, useMemo } from 'react';
 
 import { PAGE } from '@/shared/config/page';
 import { getLastAlarmReadAt, setLastAlarmReadAt } from '@/shared/lib/alarmReadState';
+import { useToast } from '@/shared/ui/common/Toast';
 import Link from '@/shared/ui/Link';
 
 import { AuthQueries } from '@/entities/auth';
 import { ThemeQueries } from '@/entities/notification';
 
-import { normalizeKeyword, notificationSource } from '../lib/notificationSource';
+import { pushSettingQuery, useUpdatePushSetting } from '@/features/mypage/model/usePushSetting';
+
+import {
+  HEAVY_KEYWORD_ALERTS_PER_DAY,
+  normalizeKeyword,
+  notificationSource,
+  recentKeywordAlertCount,
+} from '../lib/notificationSource';
 import { alarmEditModeAtom } from '../model/alarmEditModeAtom';
 import { useNotificationsViewModel } from '../model/useNotificationsViewModel';
 
@@ -49,6 +57,19 @@ export default function AlarmList() {
     setLastAlarmReadAt();
   }, []);
 
+  // 키워드 알림을 많이 받은 사람에게 「핫딜이 되면만 받기」 — 설정 화면엔 아무도 안 온다(recentKeywordAlertCount 주석).
+  const { toast } = useToast();
+  const { data: pushSetting } = useQuery(pushSettingQuery);
+  const { update: updatePushSetting } = useUpdatePushSetting();
+  const keywordAlertsToday = useMemo(
+    () => recentKeywordAlertCount(notifications ?? [], watching),
+    [notifications, watching],
+  );
+  const suggestHotOnly =
+    pushSetting?.keywordAlert === true &&
+    pushSetting.keywordAlertLevel === 'ALL' &&
+    keywordAlertsToday > HEAVY_KEYWORD_ALERTS_PER_DAY;
+
   return (
     <>
       {/* PC 는 다른 내 메뉴 화면처럼 회색 띠 없이 흰 바탕 — 키워드 알림은 사이드바에 있어 안내 띠는 뺀다. */}
@@ -79,17 +100,35 @@ export default function AlarmList() {
       )}
       {!isEditMode && (
         <div className="pc:hidden sticky top-14 z-40 border-b border-gray-200 bg-gray-50">
-          <div className="flex h-11 items-center justify-between px-5">
-            <span className="text-sm font-medium text-gray-600">
-              지금 다양한 핫딜 알림을 받아보세요!
-            </span>
-            <Link
-              href={PAGE.MYPAGE_KEYWORD}
-              className="flex h-8 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-900"
-            >
-              키워드 알림
-            </Link>
-          </div>
+          {suggestHotOnly ? (
+            <div className="flex h-11 items-center justify-between px-5">
+              <span className="text-sm font-medium text-gray-600">
+                오늘 키워드 알림 {keywordAlertsToday}건 받았어요
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  updatePushSetting({ keywordAlertLevel: 'HOT' });
+                  toast('이제 핫딜이 된 딜만 알려드려요. 알림 설정에서 되돌릴 수 있어요');
+                }}
+                className="flex h-8 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-900"
+              >
+                핫딜만 받기
+              </button>
+            </div>
+          ) : (
+            <div className="flex h-11 items-center justify-between px-5">
+              <span className="text-sm font-medium text-gray-600">
+                지금 다양한 핫딜 알림을 받아보세요!
+              </span>
+              <Link
+                href={PAGE.MYPAGE_KEYWORD}
+                className="flex h-8 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-900"
+              >
+                키워드 알림
+              </Link>
+            </div>
+          )}
         </div>
       )}
       {!loading && noData ? (

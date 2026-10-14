@@ -568,6 +568,12 @@ type KakaoProfitLinkOutput {
   profitLink: String
 }
 
+"""키워드 알림 받는 기준 — ALL 올라오는 즉시 / HOT 핫딜·대박딜이 됐을 때만"""
+enum KeywordAlertLevel {
+  ALL
+  HOT
+}
+
 type KeywordCountOutput {
   count: Int!
   keyword: String!
@@ -1070,6 +1076,8 @@ type Mutation {
     info: Boolean
     """키워드 매칭 핫딜 알림"""
     keywordAlert: Boolean
+    """키워드 알림 받는 기준 — ALL 올라오는 즉시 / HOT 핫딜·대박딜이 됐을 때만"""
+    keywordAlertLevel: KeywordAlertLevel
     """마케팅 정보 수신 동의"""
     marketing: Boolean
     """야간(21~08시) 푸시 수신 허용"""
@@ -1093,6 +1101,8 @@ type Notification {
   groupId: Int!
   id: ID!
   keyword: String
+  """알림 종류. 2026-10-14 이전 알림엔 없다(그땐 제목으로 구분)"""
+  kind: NotificationKind
   message: String!
   product: ProductOutput
   readAt: DateTime
@@ -1154,6 +1164,17 @@ type NotificationKeyword {
   priceDropOnly: Boolean!
   updatedAt: DateTime!
   userId: Int!
+}
+
+"""알림 종류"""
+enum NotificationKind {
+  COMMUNITY
+  GOOD_DEAL
+  KEYWORD
+  KEYWORD_CONFIRM
+  KEYWORD_HOT
+  KEYWORD_PRICE_DROP
+  THEME
 }
 
 enum NotificationTarget {
@@ -2425,6 +2446,8 @@ type UserPushSetting {
   id: ID!
   info: Boolean!
   keywordAlert: Boolean!
+  """키워드 알림 받는 기준 — ALL 올라오는 즉시 / HOT 핫딜·대박딜이 됐을 때만"""
+  keywordAlertLevel: KeywordAlertLevel!
   marketing: Boolean!
   marketingAgreedAt: DateTime
   nightAlerts: Boolean!

@@ -1,6 +1,7 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, FlatList, RefreshControl, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {KeywordAlertLevel} from '@/shared/api/gql/graphql';
 import {useNavigation} from '@react-navigation/native';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -36,7 +37,14 @@ import {usePushPermissionStatus} from '@/shared/lib/fcm/usePushPermissionStatus'
 import {useColors} from '@/shared/theme/useColors';
 import {useMyKeywordSet} from '@/features/keyword-prompt/model/myKeywords';
 import {ThemeQueries} from '@/entities/theme';
-import {notificationSourceKey, parseSourceKey} from './lib/notification-source';
+import {
+  HEAVY_KEYWORD_ALERTS_PER_DAY,
+  notificationSourceKey,
+  parseSourceKey,
+  recentKeywordAlertCount,
+} from './lib/notification-source';
+import {MyPageQueries} from '@/entities/mypage';
+import {useUpdatePushSetting} from '@/features/mypage/model/mutations';
 
 /** web PageHeader 와 같은 높이(h-14)·색·경계선. */
 const HEADER_HEIGHT = 56;
@@ -206,6 +214,18 @@ export default function AlarmScreen() {
 
   const push = usePushPermissionStatus();
 
+  // 키워드 알림을 많이 받은 사람에게 「핫딜이 되면만 받기」 — 설정 화면엔 아무도 안 온다(recentKeywordAlertCount 주석).
+  const {data: pushSetting} = useQuery(MyPageQueries.pushSetting());
+  const {mutate: updatePushSetting} = useUpdatePushSetting();
+  const keywordAlertsToday = useMemo(
+    () => recentKeywordAlertCount(notifications ?? [], myKeywords),
+    [notifications, myKeywords],
+  );
+  const suggestHotOnly =
+    pushSetting?.keywordAlert === true &&
+    pushSetting.keywordAlertLevel === KeywordAlertLevel.All &&
+    keywordAlertsToday > HEAVY_KEYWORD_ALERTS_PER_DAY;
+
   // 당기면 첫 페이지부터 — 깊이 내린 뒤 당기면 페이지 수만큼 왕복을 차례로 기다렸다.
   const queryClient = useQueryClient();
   const pullRefresh = useCallback(
@@ -284,6 +304,27 @@ export default function AlarmScreen() {
                   onPress={push.enable}>
                   <Text className="text-sm font-semibold text-primary-500">
                     켜기
+                  </Text>
+                </PressableScale>
+              </>
+            ) : suggestHotOnly ? (
+              <>
+                <Text className="text-sm font-medium text-gray-600">
+                  오늘 키워드 알림 {keywordAlertsToday}건 받았어요
+                </Text>
+                <PressableScale
+                  accessibilityRole="button"
+                  className="h-8 justify-center rounded-md border border-gray-300 bg-white px-3"
+                  onPress={() => {
+                    updatePushSetting({
+                      keywordAlertLevel: KeywordAlertLevel.Hot,
+                    });
+                    showToast.success(
+                      '이제 핫딜이 된 딜만 알려드려요. 알림 설정에서 되돌릴 수 있어요',
+                    );
+                  }}>
+                  <Text className="text-sm font-medium text-gray-900">
+                    핫딜만 받기
                   </Text>
                 </PressableScale>
               </>

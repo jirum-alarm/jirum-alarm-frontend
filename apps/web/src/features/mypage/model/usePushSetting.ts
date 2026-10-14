@@ -8,7 +8,10 @@ import { useToast } from '@/shared/ui/common/Toast';
 export type PushSettingKey = 'keywordAlert' | 'marketing' | 'nightAlerts' | 'communityAlert';
 /** 방해금지 시간(KST 시 0~23). 둘 다 null = 꺼짐 — 서버는 둘을 함께 받는다(하나만 보내면 거부). */
 type QuietHoursSetting = { quietHoursStart: number | null; quietHoursEnd: number | null };
-type PushSetting = Record<PushSettingKey, boolean> & QuietHoursSetting;
+/** 키워드 알림 받는 기준 — ALL 올라오는 즉시 / HOT 핫딜·대박딜이 됐을 때만(서버 KeywordAlertLevel). */
+export type KeywordAlertLevel = 'ALL' | 'HOT';
+type PushSetting = Record<PushSettingKey, boolean> &
+  QuietHoursSetting & { keywordAlertLevel: KeywordAlertLevel };
 
 const QueryPushSetting = new TypedDocumentString<
   { pushSetting: PushSetting },
@@ -17,6 +20,7 @@ const QueryPushSetting = new TypedDocumentString<
   query QueryPushSetting {
     pushSetting {
       keywordAlert
+      keywordAlertLevel
       marketing
       nightAlerts
       communityAlert
@@ -32,6 +36,7 @@ const MutationUpdatePushSetting = new TypedDocumentString<
 >(`
   mutation MutationUpdatePushSetting(
     $keywordAlert: Boolean
+    $keywordAlertLevel: KeywordAlertLevel
     $marketing: Boolean
     $nightAlerts: Boolean
     $communityAlert: Boolean
@@ -40,6 +45,7 @@ const MutationUpdatePushSetting = new TypedDocumentString<
   ) {
     updatePushSetting(
       keywordAlert: $keywordAlert
+      keywordAlertLevel: $keywordAlertLevel
       marketing: $marketing
       nightAlerts: $nightAlerts
       communityAlert: $communityAlert
@@ -49,15 +55,21 @@ const MutationUpdatePushSetting = new TypedDocumentString<
   }
 `);
 
-const pushSettingQuery = queryOptions({
+export const pushSettingQuery = queryOptions({
   queryKey: ['auth', 'pushSetting'],
   queryFn: () => execute(QueryPushSetting).then((res) => res.data.pushSetting),
 });
 
 export const usePushSetting = () => {
+  const { data } = useSuspenseQuery(pushSettingQuery);
+  const { update, isPending } = useUpdatePushSetting();
+  return { setting: data, update, isPending };
+};
+
+/** 설정 바꾸기만(낙관적 갱신·실패 되돌림) — 설정 화면 밖(알림함 권유 등)에서도 쓴다. */
+export const useUpdatePushSetting = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { data } = useSuspenseQuery(pushSettingQuery);
 
   const { mutate, isPending } = useMutation({
     mutationFn: (variables: Partial<PushSetting>) => execute(MutationUpdatePushSetting, variables),
@@ -79,7 +91,7 @@ export const usePushSetting = () => {
     },
   });
 
-  return { setting: data, update: mutate, isPending };
+  return { update: mutate, isPending };
 };
 
 /** 광고성 정보 수신 동의·철회 처리 결과 안내 문구. */
