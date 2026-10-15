@@ -67,10 +67,7 @@ import ShareSheet from './ui/ShareSheet';
 import KakaoOpenChatPrompt from './ui/KakaoOpenChatPrompt';
 import TossDetailImages from './ui/TossDetailImages';
 import DetailBand from './ui/DetailBand';
-import ViewerCount, {
-  MIN_VIEWER_COUNT,
-  VIEWER_COUNT_HEIGHT,
-} from './ui/ViewerCount';
+import ViewerCount, {MIN_VIEWER_COUNT} from './ui/ViewerCount';
 import CommunityReaction from '@/features/community-reaction/ui/CommunityReaction';
 
 type Props = NativeStackScreenProps<
@@ -309,7 +306,6 @@ function NativeDetail({
         contentInsetAdjustmentBehavior="never"
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
-        stickyHeaderIndices={showViewerCount ? [0] : undefined}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -324,25 +320,20 @@ function NativeDetail({
           // (차트·댓글·캐러셀)가 다시 그려져 스크롤 직후 탭이 한 박자 늦었다.
           scrollFlags.set({
             showTopButton: y > 200 && y < lastScrollY.current,
-            // 조회수 띠가 꽉 찬 띠 → 떠 있는 알약으로(web 센티널 translate-y-7 = 28px).
-            viewerCollapsed: y > 28,
           });
           lastScrollY.current = y;
         }}>
-        {showViewerCount ? (
-          <ScrollAwareViewerCount
-            count={product.viewCount ?? 0}
-            flags={scrollFlags}
-          />
-        ) : null}
         {/* web ProductDetailImage 와 같이 webp → 원본 → 카테고리 대체 그림 순서.
             CDN 은 webp 만 갖고 있어 원본 확장자 URL 은 403 이다. */}
-        <View className="aspect-square w-full bg-gray-50">
+        <View className="relative aspect-square w-full bg-gray-50">
           <Thumbnail
             uri={product.thumbnail}
             categoryId={product.categoryId}
             resizeMode="cover"
           />
+          {showViewerCount ? (
+            <ViewerCount count={product.viewCount ?? 0} />
+          ) : null}
         </View>
         {/* web 처럼 카드가 이미지 아래쪽 24px 을 덮어 둥근 모서리 뒤로 이미지가 보인다. */}
         <View className="-mt-6 rounded-t-3xl border-t border-gray-100 bg-white pt-6">
@@ -359,11 +350,7 @@ function NativeDetail({
                   ? priceHistoryY.current
                   : communityY.current;
               if (y == null) return;
-              // sticky 조회수 띠가 섹션 제목을 덮지 않게 그 높이만큼 덜 내린다.
-              scrollRef.current?.scrollTo({
-                y: y - (showViewerCount ? VIEWER_COUNT_HEIGHT : 0),
-                animated: true,
-              });
+              scrollRef.current?.scrollTo({y, animated: true});
             }}
           />
           {/* web ProductPriceContext — 오래된 딜 안내. 모델 페이지 링크는 앱에서
@@ -495,21 +482,16 @@ function NativeDetail({
 
 export {parseProductId};
 
-type ScrollFlags = {showTopButton: boolean; viewerCollapsed: boolean};
+type ScrollFlags = {showTopButton: boolean};
 
 /** 상세 하나당 하나 — 스택에 상세가 여러 개 쌓여도 서로 섞이지 않게 인스턴스마다 만든다. */
 function createScrollFlags() {
-  let value: ScrollFlags = {showTopButton: false, viewerCollapsed: false};
+  let value: ScrollFlags = {showTopButton: false};
   const listeners = new Set<() => void>();
   return {
     get: () => value,
     set(next: ScrollFlags) {
-      if (
-        next.showTopButton === value.showTopButton &&
-        next.viewerCollapsed === value.viewerCollapsed
-      ) {
-        return;
-      }
+      if (next.showTopButton === value.showTopButton) return;
       value = next;
       listeners.forEach(listener => listener());
     },
@@ -525,17 +507,6 @@ type ScrollFlagsStore = ReturnType<typeof createScrollFlags>;
 
 function useScrollFlags(flags: ScrollFlagsStore) {
   return useSyncExternalStore(flags.subscribe, flags.get);
-}
-
-function ScrollAwareViewerCount({
-  flags,
-  ...props
-}: Omit<React.ComponentProps<typeof ViewerCount>, 'collapsed'> & {
-  flags: ScrollFlagsStore;
-}) {
-  return (
-    <ViewerCount {...props} collapsed={useScrollFlags(flags).viewerCollapsed} />
-  );
 }
 
 function ScrollAwareBottomCTA({
