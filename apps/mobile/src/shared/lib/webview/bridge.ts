@@ -23,6 +23,8 @@ export enum WebViewEventType {
   DEVICE_ID_SYNC = 'DEVICE_ID_SYNC',
   /** 웹뷰에서 상세 링크 클릭을 가로챈 결과. TabWebView 가 네이티브로 push 한다. */
   OPEN_PRODUCT_DETAIL = 'OPEN_PRODUCT_DETAIL',
+  /** 웹 글쓰기 폼에 쓰던 내용이 있나. 글쓰기 화면(CommunityWriteScreen)이 나가기 전 확인에 쓴다. */
+  WRITE_DRAFT_CHANGED = 'WRITE_DRAFT_CHANGED',
 }
 
 export type HapticStyle =
@@ -51,6 +53,7 @@ export type WebViewEventPayloads = {
   [WebViewEventType.CHANNEL_TALK_VISIBILITY]: {data: {isOpen: boolean}};
   [WebViewEventType.DEVICE_ID_SYNC]: {data: {deviceId: string}};
   [WebViewEventType.OPEN_PRODUCT_DETAIL]: {data: {path: string}};
+  [WebViewEventType.WRITE_DRAFT_CHANGED]: {data: {dirty: boolean}};
 };
 
 export interface WebViewEvent<T extends WebViewEventType> {
@@ -72,6 +75,8 @@ const eventHandlers: {
   [WebViewEventType.CHANNEL_TALK_VISIBILITY]: EventBridge.channelTalkVisibility,
   [WebViewEventType.DEVICE_ID_SYNC]: EventBridge.deviceIdSync,
   [WebViewEventType.OPEN_PRODUCT_DETAIL]: EventBridge.openProductDetail,
+  // 받는 쪽은 글쓰기 화면의 StackWebView(onDraftChange) — 다른 웹뷰에 오면 할 일이 없다.
+  [WebViewEventType.WRITE_DRAFT_CHANGED]: () => {},
 };
 
 export const parsedWebViewMessage = (event: WebViewMessageEvent) => {
