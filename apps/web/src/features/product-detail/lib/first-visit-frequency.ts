@@ -8,7 +8,14 @@
  */
 export const FIRST_VISIT_FREQUENCY_MIN_DEALS = 3;
 
-export type FirstVisitSheetCopy = { variant: string; dealCount: number | null; windowDays: number };
+export type FirstVisitSheetCopy = {
+  variant: string;
+  dealCount: number | null;
+  windowDays: number;
+  /** 시트가 걸 알림 키워드 — 제목 키워드가 드물면 서버가 브랜드로 넓힌다(obs_first_visit_brand_fallback). */
+  keyword?: string;
+  broadened?: boolean;
+};
 
 /** 새 문구를 띄울 횟수 — 띄우지 않으면 null */
 export function frequencyToShow(copy: FirstVisitSheetCopy | null): number | null {

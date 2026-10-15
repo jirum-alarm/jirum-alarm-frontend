@@ -135,8 +135,8 @@ export class ProductService {
   }
 
   /** 첫 방문 시트 문구 A/B(first_visit_sheet_frequency_v1) — 서버가 기기(X-Device-Id)로 배정한다. */
-  static async getFirstVisitSheetCopy(keyword: string) {
-    return execute(QueryFirstVisitSheetCopy, { keyword }).then(
+  static async getFirstVisitSheetCopy(keyword: string, productId?: number) {
+    return execute(QueryFirstVisitSheetCopy, { keyword, productId }).then(
       (res) => res.data?.firstVisitSheetCopy ?? null,
     );
   }
@@ -834,14 +834,24 @@ const MutationCollectPriceContextImpression = new TypedDocumentString<
 `);
 
 const QueryFirstVisitSheetCopy = new TypedDocumentString<
-  { firstVisitSheetCopy: { variant: string; dealCount: number | null; windowDays: number } },
-  { keyword: string }
+  {
+    firstVisitSheetCopy: {
+      variant: string;
+      dealCount: number | null;
+      windowDays: number;
+      keyword: string;
+      broadened: boolean;
+    };
+  },
+  { keyword: string; productId?: number }
 >(`
-  query QueryFirstVisitSheetCopy($keyword: String!) {
-    firstVisitSheetCopy(keyword: $keyword) {
+  query QueryFirstVisitSheetCopy($keyword: String!, $productId: Int) {
+    firstVisitSheetCopy(keyword: $keyword, productId: $productId) {
       variant
       dealCount
       windowDays
+      keyword
+      broadened
     }
   }
 `);

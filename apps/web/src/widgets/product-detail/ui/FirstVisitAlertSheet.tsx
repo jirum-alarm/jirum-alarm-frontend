@@ -98,9 +98,9 @@ type KeywordSheetMode = 'keyword' | 'handoff' | 'kakao_app';
 /** 문구 A/B 응답을 이만큼만 기다린다 — 늦으면 지금 문구로 시트를 띄운다(배정은 서버 해시라 판독엔 영향 없음). */
 const SHEET_COPY_WAIT_MS = 1500;
 
-function fetchSheetCopy(keyword: string): Promise<FirstVisitSheetCopy | null> {
+function fetchSheetCopy(keyword: string, productId?: number): Promise<FirstVisitSheetCopy | null> {
   return Promise.race([
-    ProductService.getFirstVisitSheetCopy(keyword).catch(() => null),
+    ProductService.getFirstVisitSheetCopy(keyword, productId).catch(() => null),
     new Promise<null>((resolve) => setTimeout(() => resolve(null), SHEET_COPY_WAIT_MS)),
   ]);
 }
@@ -121,6 +121,8 @@ export default function FirstVisitAlertSheet({
   const [mode, setMode] = useState<SheetMode>('none');
   const [beautyRoom, setBeautyRoom] = useState<BeautyRoomAssignment | null>(null);
   const [dealCount, setDealCount] = useState<number | null>(null);
+  // 서버가 브랜드로 넓힌 알림 키워드(obs_first_visit_brand_fallback). 없으면 제목에서 뽑은 키워드.
+  const [alertKeyword, setAlertKeyword] = useState<string | null>(null);
   const keyword = deriveKeyword(title ?? '');
   const { isLoggedIn } = useIsLoggedIn();
 
@@ -150,14 +152,20 @@ export default function FirstVisitAlertSheet({
     };
     // 키워드 시트를 띄울 수도 있는 사람만 묻는다 — 기기 id 를 기다리는 동안 같이 받는다.
     const hasKeyword = [...new Intl.Segmenter().segment(keyword)].length >= 2;
-    const sheetCopy = hasKeyword ? fetchSheetCopy(keyword) : Promise.resolve(null);
+    const sheetCopy = hasKeyword
+      ? fetchSheetCopy(keyword, Number(productId) || undefined)
+      : Promise.resolve(null);
     const showKeywordSheet = (next: KeywordSheetMode, pushStatus: string) => {
       void sheetCopy.then((copy) => {
         if (cancelled) return;
         recordArm(`${next}${sheetStratumSuffix(copy)}`);
         setDealCount(frequencyToShow(copy));
+        setAlertKeyword(copy?.keyword || null);
         setMode(next);
-        pushEvent('keyword_prompt_view', { keyword, push_status: pushStatus });
+        pushEvent('keyword_prompt_view', {
+          keyword: copy?.keyword || keyword,
+          push_status: pushStatus,
+        });
       });
     };
     void waitForDeviceId().then((deviceId) => {
@@ -239,7 +247,7 @@ export default function FirstVisitAlertSheet({
 
   return (
     <KeywordAlertSheet
-      keyword={keyword}
+      keyword={alertKeyword ?? keyword}
       isMobile={device.isMobile}
       handoff={mode === 'handoff'}
       appBridge={mode === 'kakao_app'}
