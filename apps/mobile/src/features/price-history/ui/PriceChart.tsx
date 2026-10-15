@@ -151,6 +151,10 @@ export default function PriceChart({
   const selected =
     selectedIndex != null ? geo.coords[selectedIndex] : undefined;
   // 이 상품 점은 전용 마커로만 그린다 — 골라도 큰 점을 겹쳐 그리지 않는다(예전과 같음).
+  // 「이 상품」 라벨 바로 아래 점(대개 오늘)을 고르면 위쪽 가격이 그 라벨에 붙고 가이드선이 글자를 관통했다(2026-10-15) —
+  // 그땐 가격을 점 왼쪽에 붙이고 선은 파란 점 아래부터 긋는다. 이 상품 점 자체를 고르면 그 라벨이 이미 가격을 보여 준다.
+  const nearSeed =
+    !!selected && !!seedCoord && Math.abs(selected.x - seedCoord.x) < 48;
   const selectedIsSeed =
     !!selected &&
     !!currentMarker &&
@@ -180,7 +184,11 @@ export default function PriceChart({
             <G>
               <Line
                 x1={selected.x}
-                y1={PAD.top}
+                y1={
+                  nearSeed && seedCoord && seedCoord.y < selected.y
+                    ? seedCoord.y + 10
+                    : PAD.top
+                }
                 x2={selected.x}
                 y2={PAD.top + geo.plotH}
                 stroke={LINE}
@@ -197,16 +205,18 @@ export default function PriceChart({
                   strokeWidth={2}
                 />
               )}
-              <SvgText
-                x={selected.x}
-                y={PAD.top - 12}
-                fontSize={12}
-                fontWeight="600"
-                fill={colors.gray[900]}
-                textAnchor="middle">
-                {/* web 점 라벨과 같은 전체 금액 — k 반올림이면 10,600원이 「11k」로 보였다(2026-10-12). */}
-                {won(selected.price, currency)}
-              </SvgText>
+              {selectedIsSeed ? null : (
+                <SvgText
+                  x={nearSeed ? selected.x - 10 : selected.x}
+                  y={nearSeed ? selected.y + 4 : PAD.top - 12}
+                  fontSize={12}
+                  fontWeight="600"
+                  fill={colors.gray[900]}
+                  textAnchor={nearSeed ? 'end' : 'middle'}>
+                  {/* web 점 라벨과 같은 전체 금액 — k 반올림이면 10,600원이 「11k」로 보였다(2026-10-12). */}
+                  {won(selected.price, currency)}
+                </SvgText>
+              )}
             </G>
           ) : null}
         </Svg>
