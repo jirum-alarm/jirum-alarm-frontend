@@ -83,7 +83,7 @@ def ga4():
             out.setdefault(w, {})[k] = int(r["metricValues"][0]["value"])
         return out
 
-    def retention(platforms):
+    def retention(platforms, flt=()):
         """첫 방문 주 코호트 → {코호트 월요일: {N주 뒤: (활성, 코호트 크기)}}. 아직 안 끝난 주의 칸은 버린다."""
         mondays = [start + dt.timedelta(days=7 * i) for i in range(WEEKS)]
         body = {"dimensions": [{"name": "cohort"}, {"name": "cohortNthWeek"}],
@@ -94,7 +94,7 @@ def ga4():
                                "cohortsRange": {"granularity": "WEEKLY", "startOffset": 0, "endOffset": max(RETENTION_WEEKS)}},
                 "dimensionFilter": {"andGroup": {"expressions": [
                     {"filter": {"fieldName": "country", "stringFilter": {"value": "South Korea"}}},
-                    {"filter": {"fieldName": "platform", "inListFilter": {"values": platforms}}}]}}, "limit": 1000}
+                    {"filter": {"fieldName": "platform", "inListFilter": {"values": platforms}}}, *flt]}}, "limit": 1000}
         req = urllib.request.Request(
             f"https://analyticsdata.googleapis.com/v1beta/{PROPERTY}:runReport", data=json.dumps(body).encode(),
             headers={"Authorization": "Bearer " + cred.token, "Content-Type": "application/json"})
@@ -124,6 +124,9 @@ def ga4():
         "app_install": week_metric("totalUsers", [APP, *ev(["first_open"])], "platform"),
         "ret_app": retention(APP_PLATFORMS),
         "ret_web": retention(["web"]),
+        # 첫 유입 채널별 — 웹 전체 리텐션은 검색 신규(85%)의 값이라 알림 통로(카톡방 = Organic Social)의 몫이 묻힌다.
+        "ret_search": retention(["web"], [src("firstUserDefaultChannelGroup", "Organic Search")]),
+        "ret_social": retention(["web"], [src("firstUserDefaultChannelGroup", "Organic Social")]),
     }
 
 
@@ -218,7 +221,9 @@ for w in weeks:
 
 lines += ["", "## 리텐션 (첫 방문 주 코호트 → N주 뒤에도 쓴 비율)", "",
           "GA4 firstSessionDate 코호트, 한국만. 앱은 W39~W41 코호트에 업데이트로 처음 잡힌 기존 사용자가 섞여 부풀어 있다 — "
-          "W42 코호트부터가 진짜 신규. 웹은 쿠키 기준이라 카톡 인앱 브라우저·시크릿 창 재방문이 새 사람으로 잡혀 낮게 나온다. "
+          "W42 코호트부터가 진짜 신규. 웹 재방문이 낮은 건 쿠키 착시가 아니다 — 2026-10-15 실측(W34~W40 코호트): "
+          "쿠키 제약 없는 크롬도 1주 뒤 1.5%·4주 뒤 0.6%, 카톡 인앱(Android Webview)은 오히려 28%·11%. "
+          "사파리는 ITP(스크립트 쿠키 7일)로 2주 뒤부터 낮게 잡힌다. "
           "아직 안 끝난 주는 «…».", "",
           "| 첫 방문 주 | 앱 신규 | " + " | ".join(f"{n}주 뒤" for n in RETENTION_WEEKS) + " | 웹 신규 | "
           + " | ".join(f"{n}주 뒤" for n in RETENTION_WEEKS) + " |",
@@ -227,6 +232,21 @@ for i, w in enumerate(weeks):
     mon = start + dt.timedelta(days=7 * i)
     cells = []
     for ret in (g["ret_app"], g["ret_web"]):
+        c = ret.get(mon, {})
+        size = c.get(0, (0, 0))[1]
+        cells.append(f"{size:,}")
+        cells += ["—" if not size else f"{c[n][0] / size:.1%}" if n in c else "…" for n in RETENTION_WEEKS]
+    lines.append(f"| {w[:4]}-W{w[4:]} | " + " | ".join(cells) + " |")
+
+lines += ["", "## 웹 리텐션 — 첫 유입 채널별", "",
+          "검색으로 처음 온 사람(웹 신규의 ~85%)과 카톡방(Organic Social)으로 처음 온 사람. 두 줄의 차이가 «알림 통로에 들어온 사람만 돌아온다»의 크기다.", "",
+          "| 첫 방문 주 | 검색 신규 | " + " | ".join(f"{n}주 뒤" for n in RETENTION_WEEKS) + " | 카톡 신규 | "
+          + " | ".join(f"{n}주 뒤" for n in RETENTION_WEEKS) + " |",
+          "|---|" + "---|" * (2 * len(RETENTION_WEEKS) + 2)]
+for i, w in enumerate(weeks):
+    mon = start + dt.timedelta(days=7 * i)
+    cells = []
+    for ret in (g["ret_search"], g["ret_social"]):
         c = ret.get(mon, {})
         size = c.get(0, (0, 0))[1]
         cells.append(f"{size:,}")
