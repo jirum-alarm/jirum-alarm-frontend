@@ -34,6 +34,7 @@ describe('섹션 구성 — web getPromotionSections 와 동일', () => {
     const ids = buildPromotionSections(empty).map((s: {id: string}) => s.id);
     expect(ids).toEqual([
       'toss',
+      'time-deal',
       'hotdeal',
       'guest-recommended',
       'under-10000',
@@ -50,6 +51,7 @@ describe('섹션 구성 — web getPromotionSections 와 동일', () => {
     );
     expect(byId).toMatchObject({
       toss: 'TOSS',
+      'time-deal': 'HORIZONTAL_SCROLL',
       hotdeal: 'PAGINATED_GRID',
       'guest-recommended': 'PAGINATED_GRID',
       'under-10000': 'HORIZONTAL_SCROLL',

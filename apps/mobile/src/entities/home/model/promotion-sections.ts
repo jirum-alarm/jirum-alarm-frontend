@@ -76,6 +76,25 @@ export function buildPromotionSections({
       viewMoreLink: '/toss',
     },
     {
+      // 정해진 시각에만 열리는 딜(토스 하루특가 = 토스 앱 「매일 밤 12시 선착순특가」 + 시각·선착순이 적힌
+      // 커뮤니티 글). 고르는 규칙은 crawling-server product/time-deal.logic.
+      id: 'time-deal',
+      title: '선착순·타임특가',
+      type: 'HORIZONTAL_SCROLL',
+      dataSource: {
+        type: 'GRAPHQL_QUERY',
+        queryName: 'productsByKeyword',
+        variables: {
+          keyword: '타임특가',
+          limit: 10,
+          orderBy: KeywordProductOrderType.PostedAt,
+          orderOption: OrderOptionType.Desc,
+        },
+      },
+      displayOrder: 0.5,
+      viewMoreLink: '/curation/time-deal',
+    },
+    {
       id: 'hotdeal',
       title: '놓치면 아까운 핫딜',
       type: 'PAGINATED_GRID',
