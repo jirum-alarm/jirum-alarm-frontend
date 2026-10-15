@@ -1,5 +1,6 @@
 import {prefetchProductDetail} from '@/entities/product/prefetch-detail';
 import React from 'react';
+import {getTossTimeDeal} from '@jirum/domain/toss-time-deal';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
@@ -19,6 +20,7 @@ import {
   CardTitle,
   DisplayListPrice,
   formatMMD,
+  TossTimeDealPrice,
 } from './HomeCardPrimitives';
 
 /**
@@ -93,15 +95,17 @@ export const GridCard = React.memo(function GridCard({
           providerName={product.provider?.nameKr}
           postedCommunityCount={product.postedCommunityCount}
           time={
-            showTime && product.postedAt
+            showTime && product.postedAt && !getTossTimeDeal(product.data)
               ? displayTime(product.postedAt)
               : undefined
           }
         />
-        <View className="pt-1">
-          {/* web: grid 만 text-base 로 덮는다 */}
-          <DisplayListPrice price={product.price} className="text-base" />
-        </View>
+        {/* web: grid 만 text-base 로 덮는다 */}
+        <TossTimeDealPrice
+          price={product.price}
+          data={product.data}
+          priceClassName="text-base"
+        />
       </View>
     </PressableScale>
   );
@@ -138,11 +142,14 @@ export const CarouselCard = React.memo(function CarouselCard({
           mallName={product.mallName}
           providerName={product.provider?.nameKr}
           postedCommunityCount={product.postedCommunityCount}
-          time={product.postedAt ? displayTime(product.postedAt) : undefined}
+          time={
+            // 토스 하루특가는 「2주 전」(첫 수집 시각)을 안 붙인다 — 오늘만 여는 딜이 오래된 딜처럼 읽힌다.
+            product.postedAt && !getTossTimeDeal(product.data)
+              ? displayTime(product.postedAt)
+              : undefined
+          }
         />
-        <View className="pt-1">
-          <DisplayListPrice price={product.price} />
-        </View>
+        <TossTimeDealPrice price={product.price} data={product.data} />
       </View>
     </PressableScale>
   );

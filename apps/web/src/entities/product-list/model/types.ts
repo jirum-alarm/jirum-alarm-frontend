@@ -20,4 +20,6 @@ export interface ProductCardType {
   postedCommunityCount?: number | null;
   /** 급상승 — 최근 2시간 댓글·추천이 크게 붙은 딜. 랭킹 목록에서만 채워진다(서버 ranking/rising.ts, 목록당 최대 5). */
   isRising?: boolean | null;
+  /** 상품 확장정보(JSON). 키워드 목록만 싣는다 — 토스 하루특가 배지(@jirum/domain toss-time-deal)가 읽는다. */
+  data?: unknown;
 }

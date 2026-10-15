@@ -1,6 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {cardThumb} from '@jirum/design-system/recipes';
+import {getTossTimeDeal} from '@jirum/domain/toss-time-deal';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import Thumbnail from '@/shared/components/product/Thumbnail';
@@ -103,5 +104,40 @@ export function CardTitle({
       numberOfLines={2}>
       {title}
     </Text>
+  );
+}
+
+/**
+ * 카드 가격 줄 — 토스 하루특가면 토스 앱처럼 「하루만 N원」과 「N명이 봤어요」를 붙인다.
+ * 그 밖의 상품은 DisplayListPrice 그대로. web entities/product-list/ui/card/TossTimeDealPrice 와 같다.
+ */
+export function TossTimeDealPrice({
+  price,
+  data,
+  priceClassName,
+}: {
+  price?: string | null;
+  data?: unknown;
+  priceClassName?: string;
+}) {
+  const timeDeal = getTossTimeDeal(data);
+  return (
+    <>
+      <View className="flex-row items-center gap-1 pt-1">
+        {timeDeal?.pricePrefix ? (
+          <Text className="text-xs font-semibold text-error-600">
+            {timeDeal.pricePrefix}
+          </Text>
+        ) : null}
+        <View className="min-w-0 flex-1">
+          <DisplayListPrice price={price} className={priceClassName} />
+        </View>
+      </View>
+      {timeDeal?.viewCountText ? (
+        <Text className="pt-0.5 text-xs text-gray-500" numberOfLines={1}>
+          {timeDeal.viewCountText}
+        </Text>
+      ) : null}
+    </>
   );
 }

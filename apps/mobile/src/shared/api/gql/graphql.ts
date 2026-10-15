@@ -268,6 +268,8 @@ export type CommentOutput = {
 
 export type CoupangSearchCtaOutput = {
   __typename?: 'CoupangSearchCtaOutput';
+  /** aged = 게시 7일+ 딜(coupang_search_cta_v1) · nolink = 게시 7일 안의 수익 링크 없는 딜(nolink_coupang_cta_v1) — 문구를 고른다 */
+  kind: Scalars['String']['output'];
   /** 쿠팡 검색어 */
   query: Scalars['String']['output'];
   /** 쿠팡 파트너스 링크(쿠팡 검색 결과로 간다) */
@@ -3617,6 +3619,7 @@ export type HomeProductsByKeywordQuery = {
     category?: string | null;
     thumbnail?: string | null;
     hotDealType?: HotDealType | null;
+    data?: any | null;
     searchAfter?: Array<string> | null;
     postedAt: any;
     provider: {__typename?: 'Provider'; nameKr: string};
@@ -5017,6 +5020,7 @@ export const HomeProductsByKeywordDocument = new TypedDocumentString(`
     provider {
       nameKr
     }
+    data
     searchAfter
     postedAt
   }

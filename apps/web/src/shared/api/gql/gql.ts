@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as types from './graphql';
 
 /**
@@ -57,7 +58,6 @@ type Documents = {
   '\n  query QueryCommunityRandomRankingProducts($count: Int!, $limit: Int!) {\n    communityRandomRankingProducts(count: $count, limit: $limit) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.QueryCommunityRandomRankingProductsDocument;
   '\n  query togetherViewedProducts($limit: Int!, $productId: Int!) {\n    togetherViewedProducts(limit: $limit, productId: $productId) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.TogetherViewedProductsDocument;
   '\n  query QueryProductKeywords {\n    productKeywords\n  }\n': typeof types.QueryProductKeywordsDocument;
-  '\n  query QueryProductsByKeyword(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.QueryProductsByKeywordDocument;
   '\n  mutation MutationCollectProduct($productId: Int!) {\n    collectProduct(productId: $productId)\n  }\n': typeof types.MutationCollectProductDocument;
   '\n  mutation CreateUserProduct(\n    $title: String!\n    $url: String!\n    $categoryId: Int!\n    $price: String\n    $thumbnail: String\n    $content: String\n  ) {\n    createUserProduct(\n      title: $title\n      url: $url\n      categoryId: $categoryId\n      price: $price\n      thumbnail: $thumbnail\n      content: $content\n    )\n  }\n': typeof types.CreateUserProductDocument;
   '\n  mutation CreateProductImageUploadUrl($contentType: String!) {\n    createProductImageUploadUrl(contentType: $contentType) {\n      uploadUrl\n      imageUrl\n    }\n  }\n': typeof types.CreateProductImageUploadUrlDocument;
@@ -75,6 +75,7 @@ type Documents = {
   '\n  query QueryRecommendedNotificationKeywords {\n    recommendedNotificationKeywords\n  }\n': typeof types.QueryRecommendedNotificationKeywordsDocument;
   '\n  query publishedModelPages {\n    publishedModelPages {\n      slug\n      brand\n      modelName\n      dealCount\n      heroImage\n      heroMinPrice\n      unitLabel\n      unitPrice\n      categoryId\n      categoryName\n      lastDealAt\n      activeDealCount\n      activePrice\n      activePostedAt\n      priceTone\n      savePct\n      buyLine\n      buyLineUnitLabel\n      trendPrices\n    }\n  }\n': typeof types.PublishedModelPagesDocument;
   '\n  query modelPage($slug: String!) {\n    modelPage(slug: $slug) {\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n': typeof types.ModelPageDocument;
+  '\n  query QueryProductsByKeyword(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      # 토스 하루특가 배지(data.toss.todayDeal*·dealStatus·pageViewCount) — 20개에 ~14KB.\n      data\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.QueryProductsByKeywordDocument;
 };
 const documents: Documents = {
   '\n  query activeAds($slotLocation: AdvertiseSlotLocation!) {\n    activeAds(slotLocation: $slotLocation) {\n      id\n      internalId\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayTitle\n      targetUrl\n      isActive\n    }\n  }\n':
@@ -166,8 +167,6 @@ const documents: Documents = {
     types.TogetherViewedProductsDocument,
   '\n  query QueryProductKeywords {\n    productKeywords\n  }\n':
     types.QueryProductKeywordsDocument,
-  '\n  query QueryProductsByKeyword(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n':
-    types.QueryProductsByKeywordDocument,
   '\n  mutation MutationCollectProduct($productId: Int!) {\n    collectProduct(productId: $productId)\n  }\n':
     types.MutationCollectProductDocument,
   '\n  mutation CreateUserProduct(\n    $title: String!\n    $url: String!\n    $categoryId: Int!\n    $price: String\n    $thumbnail: String\n    $content: String\n  ) {\n    createUserProduct(\n      title: $title\n      url: $url\n      categoryId: $categoryId\n      price: $price\n      thumbnail: $thumbnail\n      content: $content\n    )\n  }\n':
@@ -201,6 +200,8 @@ const documents: Documents = {
     types.PublishedModelPagesDocument,
   '\n  query modelPage($slug: String!) {\n    modelPage(slug: $slug) {\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n':
     types.ModelPageDocument,
+  '\n  query QueryProductsByKeyword(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      # 토스 하루특가 배지(data.toss.todayDeal*·dealStatus·pageViewCount) — 20개에 ~14KB.\n      data\n      searchAfter\n      postedAt\n    }\n  }\n':
+    types.QueryProductsByKeywordDocument,
 };
 
 /**
@@ -477,12 +478,6 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query QueryProductsByKeyword(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n',
-): typeof import('./graphql').QueryProductsByKeywordDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
   source: '\n  mutation MutationCollectProduct($productId: Int!) {\n    collectProduct(productId: $productId)\n  }\n',
 ): typeof import('./graphql').MutationCollectProductDocument;
 /**
@@ -581,6 +576,12 @@ export function graphql(
 export function graphql(
   source: '\n  query modelPage($slug: String!) {\n    modelPage(slug: $slug) {\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n',
 ): typeof import('./graphql').ModelPageDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryProductsByKeyword(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      # 토스 하루특가 배지(data.toss.todayDeal*·dealStatus·pageViewCount) — 20개에 ~14KB.\n      data\n      searchAfter\n      postedAt\n    }\n  }\n',
+): typeof import('./graphql').QueryProductsByKeywordDocument;
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

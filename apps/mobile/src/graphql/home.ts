@@ -99,6 +99,8 @@ export const QueryProductsByKeyword = graphql(`
       provider {
         nameKr
       }
+      # 토스 하루특가 배지(data.toss.todayDeal*·dealStatus·pageViewCount) — 20개에 ~14KB.
+      data
       searchAfter
       postedAt
     }

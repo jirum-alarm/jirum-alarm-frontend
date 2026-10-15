@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = T | null | undefined;
@@ -262,6 +263,8 @@ export type CommentOutput = {
 
 export type CoupangSearchCtaOutput = {
   __typename?: 'CoupangSearchCtaOutput';
+  /** aged = 게시 7일+ 딜(coupang_search_cta_v1) · nolink = 게시 7일 안의 수익 링크 없는 딜(nolink_coupang_cta_v1) — 문구를 고른다 */
+  kind: Scalars['String']['output'];
   /** 쿠팡 검색어 */
   query: Scalars['String']['output'];
   /** 쿠팡 파트너스 링크(쿠팡 검색 결과로 간다) */
@@ -3975,36 +3978,6 @@ export type QueryProductKeywordsQueryVariables = Exact<{ [key: string]: never }>
 
 export type QueryProductKeywordsQuery = { __typename?: 'Query'; productKeywords: Array<string> };
 
-export type QueryProductsByKeywordQueryVariables = Exact<{
-  limit: Scalars['Int']['input'];
-  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
-  keyword: Scalars['String']['input'];
-  orderBy: KeywordProductOrderType;
-  orderOption: OrderOptionType;
-}>;
-
-export type QueryProductsByKeywordQuery = {
-  __typename?: 'Query';
-  productsByKeyword: Array<{
-    __typename?: 'ProductOutput';
-    id: string;
-    title: string;
-    mallId?: number | null;
-    url?: string | null;
-    isHot?: boolean | null;
-    isEnd?: boolean | null;
-    price?: string | null;
-    providerId: number;
-    categoryId: number;
-    category?: string | null;
-    thumbnail?: string | null;
-    hotDealType?: HotDealType | null;
-    searchAfter?: Array<string> | null;
-    postedAt: any;
-    provider: { __typename?: 'Provider'; nameKr: string };
-  }>;
-};
-
 export type MutationCollectProductMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
 }>;
@@ -4275,6 +4248,37 @@ export type ModelPageQuery = {
     metaDescription?: string | null;
     payload?: any | null;
   } | null;
+};
+
+export type QueryProductsByKeywordQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  keyword: Scalars['String']['input'];
+  orderBy: KeywordProductOrderType;
+  orderOption: OrderOptionType;
+}>;
+
+export type QueryProductsByKeywordQuery = {
+  __typename?: 'Query';
+  productsByKeyword: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    mallId?: number | null;
+    url?: string | null;
+    isHot?: boolean | null;
+    isEnd?: boolean | null;
+    price?: string | null;
+    providerId: number;
+    categoryId: number;
+    category?: string | null;
+    thumbnail?: string | null;
+    hotDealType?: HotDealType | null;
+    data?: any | null;
+    searchAfter?: Array<string> | null;
+    postedAt: any;
+    provider: { __typename?: 'Provider'; nameKr: string };
+  }>;
 };
 
 export class TypedDocumentString<TResult, TVariables>
@@ -5095,38 +5099,6 @@ export const QueryProductKeywordsDocument = new TypedDocumentString(`
   QueryProductKeywordsQuery,
   QueryProductKeywordsQueryVariables
 >;
-export const QueryProductsByKeywordDocument = new TypedDocumentString(`
-    query QueryProductsByKeyword($limit: Int!, $searchAfter: [String!], $keyword: String!, $orderBy: KeywordProductOrderType!, $orderOption: OrderOptionType!) {
-  productsByKeyword(
-    limit: $limit
-    searchAfter: $searchAfter
-    keyword: $keyword
-    orderBy: $orderBy
-    orderOption: $orderOption
-  ) {
-    id
-    title
-    mallId
-    url
-    isHot
-    isEnd
-    price
-    providerId
-    categoryId
-    category
-    thumbnail
-    hotDealType
-    provider {
-      nameKr
-    }
-    searchAfter
-    postedAt
-  }
-}
-    `) as unknown as TypedDocumentString<
-  QueryProductsByKeywordQuery,
-  QueryProductsByKeywordQueryVariables
->;
 export const MutationCollectProductDocument = new TypedDocumentString(`
     mutation MutationCollectProduct($productId: Int!) {
   collectProduct(productId: $productId)
@@ -5388,3 +5360,36 @@ export const ModelPageDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<ModelPageQuery, ModelPageQueryVariables>;
+export const QueryProductsByKeywordDocument = new TypedDocumentString(`
+    query QueryProductsByKeyword($limit: Int!, $searchAfter: [String!], $keyword: String!, $orderBy: KeywordProductOrderType!, $orderOption: OrderOptionType!) {
+  productsByKeyword(
+    limit: $limit
+    searchAfter: $searchAfter
+    keyword: $keyword
+    orderBy: $orderBy
+    orderOption: $orderOption
+  ) {
+    id
+    title
+    mallId
+    url
+    isHot
+    isEnd
+    price
+    providerId
+    categoryId
+    category
+    thumbnail
+    hotDealType
+    provider {
+      nameKr
+    }
+    data
+    searchAfter
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryProductsByKeywordQuery,
+  QueryProductsByKeywordQueryVariables
+>;

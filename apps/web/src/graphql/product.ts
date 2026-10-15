@@ -296,42 +296,6 @@ export const QueryProductKeywords = gql`
   }
 `;
 
-export const QueryProductsByKeyword = gql`
-  query QueryProductsByKeyword(
-    $limit: Int!
-    $searchAfter: [String!]
-    $keyword: String!
-    $orderBy: KeywordProductOrderType!
-    $orderOption: OrderOptionType!
-  ) {
-    productsByKeyword(
-      limit: $limit
-      searchAfter: $searchAfter
-      keyword: $keyword
-      orderBy: $orderBy
-      orderOption: $orderOption
-    ) {
-      id
-      title
-      mallId
-      url
-      isHot
-      isEnd
-      price
-      providerId
-      categoryId
-      category
-      thumbnail
-      hotDealType
-      provider {
-        nameKr
-      }
-      searchAfter
-      postedAt
-    }
-  }
-`;
-
 export const MutationCollectProduct = gql`
   mutation MutationCollectProduct($productId: Int!) {
     collectProduct(productId: $productId)

@@ -18,6 +18,10 @@ const {
   buildPromotionSections,
 } = require('../src/entities/home/model/promotion-sections');
 const {
+  findPromotionSectionById,
+} = require('../src/entities/home/model/promotion-sections');
+const {mapHomePageSections} = require('../src/entities/home/lib/map-home-page');
+const {
   toTossDeal,
   TOSS_SECTION_KEYWORD,
   TOSS_HOME_SECTION_IDS,
@@ -286,5 +290,32 @@ describe('stripPriceFromTitle', () => {
     );
     expect(stripPriceFromTitle('원피스 블랙')).toBe('원피스 블랙');
     expect(stripPriceFromTitle('치약 9900원')).toBe('치약');
+  });
+});
+
+describe('더보기 — 서버에만 있는 섹션', () => {
+  it('★로컬 카탈로그에 없는 id 도 서버 homePage 섹션에서 찾는다', () => {
+    // 2026-10-15: 홈은 서버 섹션이라 「선착순·타임특가」가 보였는데, 더보기는 로컬 카탈로그만 봐서
+    // OTA 전 번들에선 「페이지를 찾을 수 없어요」였다. CurationScreen 이 이 순서로 찾는다.
+    const server = mapHomePageSections([
+      {
+        id: 'brand-new',
+        title: '새 섹션',
+        type: 'HORIZONTAL_SCROLL',
+        viewMoreLink: '/curation/brand-new',
+        dataSource: {
+          type: 'GRAPHQL_QUERY',
+          queryName: 'productsByKeyword',
+          variables: {keyword: '새키워드'},
+        },
+      },
+    ]);
+    const local = buildPromotionSections({
+      communityProviders: [],
+      mallGroups: [],
+    });
+    expect(findPromotionSectionById(local, 'brand-new')).toBeUndefined();
+    const found = findPromotionSectionById(server, 'brand-new');
+    expect(found?.dataSource.variables).toEqual({keyword: '새키워드'});
   });
 });

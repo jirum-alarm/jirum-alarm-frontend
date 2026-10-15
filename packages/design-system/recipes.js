@@ -237,6 +237,8 @@ const cardLabel = {
   tone: {
     light: {box: 'bg-white', text: 'text-gray-700'},
     dark: {box: 'bg-fixed-900/80', text: 'text-fixed-white font-medium'},
+    // 토스 하루특가 「선착순특가」 — 토스 앱 배지처럼 빨간 면(@jirum/domain toss-time-deal).
+    deal: {box: 'bg-error-500', text: 'text-fixed-white font-semibold'},
   },
   strip: {box: 'h-[22px] rounded-b-lg bg-fixed-700/80 px-2', text: 'text-xs text-fixed-white'},
 };
