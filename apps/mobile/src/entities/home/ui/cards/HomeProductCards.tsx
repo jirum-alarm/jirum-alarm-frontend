@@ -66,7 +66,11 @@ export const GridCard = React.memo(function GridCard({
     <PressableScale
       style={{width: '100%'}}
       onPressIn={() =>
-        prefetchProductDetail(Number(product.id), product.thumbnail)
+        prefetchProductDetail(
+          Number(product.id),
+          product.thumbnail,
+          product.title,
+        )
       }
       onPress={() => {
         // web ProductGridCard: 뱃지와 같은 rank 를 추적에도 싣는다.
@@ -119,7 +123,11 @@ export const CarouselCard = React.memo(function CarouselCard({
     <PressableScale
       style={{width: CAROUSEL_CARD_WIDTH}}
       onPressIn={() =>
-        prefetchProductDetail(Number(product.id), product.thumbnail)
+        prefetchProductDetail(
+          Number(product.id),
+          product.thumbnail,
+          product.title,
+        )
       }
       onPress={() => {
         trackProductCardClick(trackingSource, product.id);
@@ -163,7 +171,11 @@ export const ListCard = React.memo(function ListCard({
   return (
     <PressableScale
       onPressIn={() =>
-        prefetchProductDetail(Number(product.id), product.thumbnail)
+        prefetchProductDetail(
+          Number(product.id),
+          product.thumbnail,
+          product.title,
+        )
       }
       onPress={() => {
         trackProductCardClick(trackingSource, product.id);
@@ -224,7 +236,11 @@ export const DoubleRowCard = React.memo(function DoubleRowCard({
   return (
     <PressableScale
       onPressIn={() =>
-        prefetchProductDetail(Number(product.id), product.thumbnail)
+        prefetchProductDetail(
+          Number(product.id),
+          product.thumbnail,
+          product.title,
+        )
       }
       onPress={() => {
         trackProductCardClick(trackingSource, product.id);

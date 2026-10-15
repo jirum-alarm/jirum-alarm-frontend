@@ -21,18 +21,19 @@ const REFERRER_TIMEOUT_MS = 3000;
  * Play referrer 문자열에서 열 경로를 꺼낸다. 우리 넘기기 캠페인이고 우리 경로 모양일 때만 —
  * 남이 만든 Play 링크(광고 등)의 referrer 를 따라가지 않는다.
  */
+const HANDOFF_PATH =
+  /^\/[A-Za-z0-9/_-]+(\?(keyword|tab)=[A-Za-z0-9%._~-]+(&(keyword|tab)=[A-Za-z0-9%._~-]+)?)?$/;
+
 export function parseHandoffReferrer(
   referrer: string | null | undefined,
 ): string | null {
   const params = readHandoffParams(referrer);
   if (!params) return null;
   const path = params.get('jirum_path') ?? '';
-  // '/' 는 열 게 없다(앱은 원래 홈으로 뜬다). 경로 문자만 허용 — 호스트·스킴·쿼리를 못 싣게.
-  if (
-    path === '/' ||
-    !/^\/[A-Za-z0-9/_-]+$/.test(path) ||
-    path.startsWith('//')
-  )
+  // '/' 는 열 게 없다(앱은 원래 홈으로 뜬다). 경로 문자만 허용 — 호스트·스킴을 못 싣게.
+  // 쿼리는 화면이 읽는 검색어·탭(web normalizeHandoffPath 의 HANDOFF_QUERY_KEYS)만 — 검색 결과에서 넘어온
+  // 사람이 설치 뒤 빈 검색 화면을 보지 않게.
+  if (path === '/' || !HANDOFF_PATH.test(path) || path.startsWith('//'))
     return null;
   return path;
 }
