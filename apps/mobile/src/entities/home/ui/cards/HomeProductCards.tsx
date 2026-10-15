@@ -101,11 +101,7 @@ export const GridCard = React.memo(function GridCard({
           }
         />
         {/* web: grid 만 text-base 로 덮는다 */}
-        <TossTimeDealPrice
-          price={product.price}
-          data={product.data}
-          priceClassName="text-base"
-        />
+        <TossTimeDealPrice product={product} priceClassName="text-base" />
       </View>
     </PressableScale>
   );
@@ -149,7 +145,7 @@ export const CarouselCard = React.memo(function CarouselCard({
               : undefined
           }
         />
-        <TossTimeDealPrice price={product.price} data={product.data} />
+        <TossTimeDealPrice product={product} />
       </View>
     </PressableScale>
   );
