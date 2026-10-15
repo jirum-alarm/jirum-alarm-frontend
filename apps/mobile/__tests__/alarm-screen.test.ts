@@ -256,9 +256,9 @@ describe('터치 인터랙션 — web whileTap 대응', () => {
   const alarmItem = read('src/screens/alarm/ui/AlarmItem.tsx');
 
   it('버튼은 PressableScale(=web whileTap scale 0.95)', () => {
-    // 헤더 알림설정·휴지통·전체삭제·완료·키워드알림 + 알림 꺼짐일 때 켜기 + 핫딜만 받기 권유 = 7개
+    // 헤더 알림설정·휴지통·전체삭제·완료·키워드알림 + 알림 꺼짐일 때 켜기 + 핫딜만 받기 권유 + 좋은 가격만 권유 = 8개
     const scaled = screen.match(/<PressableScale/g) ?? [];
-    expect(scaled.length).toBe(7);
+    expect(scaled.length).toBe(8);
     // 맨 Pressable 이 남아 있으면 피드백 없는 버튼이다
     expect(screen).not.toMatch(/<Pressable[\s\n]/);
   });
