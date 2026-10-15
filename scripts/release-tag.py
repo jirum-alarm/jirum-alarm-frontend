@@ -211,6 +211,19 @@ def build_gate(target, timeout=1800):
 
 # ── ⑤ GraphQL 관문 ─────────────────────────────────────────────────────────
 
+def introspection_key():
+    # 운영 API 는 키 헤더가 있어야 스키마를 내준다(scripts/introspection_key.py). 한 번만 읽는다.
+    global _INTROSPECTION_KEY
+    if _INTROSPECTION_KEY is None:
+        sys.path.insert(0, HERE)
+        import introspection_key as ik
+        _INTROSPECTION_KEY = ik.introspection_key()
+    return _INTROSPECTION_KEY
+
+
+_INTROSPECTION_KEY = None
+
+
 def gql_errors(sha, work):
     root = os.path.join(work, sha[:12])
     os.makedirs(root, exist_ok=True)
@@ -218,7 +231,7 @@ def gql_errors(sha, work):
     archive = subprocess.run(['git', 'archive', sha, *srcs], cwd=TOP, capture_output=True, check=True).stdout
     subprocess.run(['tar', '-x', '-C', root], input=archive, check=True)
     p = subprocess.run(['node', os.path.join(HERE, 'gql-check.mjs'), '--schema', PROD_SCHEMA, '--root', root, *srcs],
-                       capture_output=True, text=True)
+                       capture_output=True, text=True, env={**os.environ, 'GRAPHQL_INTROSPECTION_KEY': introspection_key()})
     if p.returncode != 0:
         die(f'⑤ GraphQL  검사 실행 실패: {p.stderr.strip()[:400]}', 2)
     return json.loads(p.stdout)

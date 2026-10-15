@@ -71,9 +71,15 @@ for (const file of dirs.flatMap((d) => walk(join(root, d)))) {
   }
 }
 
+// 운영 API 는 x-introspection-key 가 맞을 때만 스키마를 내준다 — release-tag.py 가 scripts/introspection_key.py 로 넣어 준다.
 const res = await fetch(schemaUrl, {
   method: 'POST',
-  headers: { 'content-type': 'application/json' },
+  headers: {
+    'content-type': 'application/json',
+    ...(process.env.GRAPHQL_INTROSPECTION_KEY
+      ? { 'x-introspection-key': process.env.GRAPHQL_INTROSPECTION_KEY }
+      : {}),
+  },
   body: JSON.stringify({ query: getIntrospectionQuery({ inputValueDeprecation: true }) }), // deprecated 인자도 받으니 포함(빼면 오탐)
 });
 const intro = await res.json();
