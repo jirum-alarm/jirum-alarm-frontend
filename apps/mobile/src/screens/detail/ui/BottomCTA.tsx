@@ -209,7 +209,8 @@ export default function BottomCTA({
           disabled={!product.detailUrl}
           accessibilityRole="button"
           accessibilityLabel="구매하러 가기">
-          <Text className="text-base font-semibold text-gray-900">
+          {/* 라임 버튼 위 글자는 테마와 무관 — gray-900 은 다크에서 밝은 회색으로 뒤집혀 1.6:1 이었다. */}
+          <Text className="text-base font-semibold text-fixed-900">
             구매하러 가기
           </Text>
         </Button>

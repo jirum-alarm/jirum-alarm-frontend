@@ -21,8 +21,12 @@ import {
 import type {CurrentProductMarker} from '../model/seed-marker';
 import {useColors, type Colors} from '@/shared/theme/useColors';
 
+// 레이아웃을 재기 전 기본값. 실제로는 그려지는 폭을 viewBox 로 쓴다(1단위 = 1pt) — 640 고정이던 때는
+// 폰(약 350pt)에서 통째로 0.55배가 돼 축 글자가 6.6pt, 「이 상품」 라벨이 5.5pt 였다(2026-10-15 실측, web 과 같은 수정).
 const WIDTH = 640;
 const HEIGHT = 260;
+/** 폭이 좁은 화면(폰)의 차트 높이. 넓으면 HEIGHT. */
+const NARROW_HEIGHT = 200;
 // left: Y축 라벨(textAnchor=end, x=left-8)이 들어갈 폭. 44 면 "2,260k"(12px ≈ 39)의
 // 첫 글자가 0 밖으로 나가 잘렸다 — "12,260k" 까지 들어가게 56.
 const PAD = {top: 40, right: 20, bottom: 28, left: 56};
@@ -59,13 +63,15 @@ export default function PriceChart({
   // viewBox 는 640 고정이고 실제 폭은 화면마다 다르다. 제스처 x 를 뷰박스
   // 좌표로 되돌리려면 실측 폭이 필요하다(web 의 getBoundingClientRect 대응).
   const [layoutWidth, setLayoutWidth] = useState(0);
+  const width = layoutWidth || WIDTH;
+  const height = width < 480 ? NARROW_HEIGHT : HEIGHT;
 
   const geo = useMemo(
     () =>
       buildChartGeometry(
         points,
-        WIDTH,
-        HEIGHT,
+        width,
+        height,
         PAD,
         axisStartMs,
         axisEndMs,
@@ -75,6 +81,8 @@ export default function PriceChart({
       ),
     [
       points,
+      width,
+      height,
       axisStartMs,
       axisEndMs,
       contentStartMs,
@@ -91,7 +99,7 @@ export default function PriceChart({
 
   const nearestIndex = (gestureX: number) => {
     if (!layoutWidth || geo.coords.length === 0) return 0;
-    const x = (gestureX / layoutWidth) * WIDTH;
+    const x = (gestureX / layoutWidth) * width;
     let best = 0;
     let bestDist = Infinity;
     for (let i = 0; i < geo.coords.length; i++) {
@@ -143,6 +151,10 @@ export default function PriceChart({
   const selected =
     selectedIndex != null ? geo.coords[selectedIndex] : undefined;
   // 이 상품 점은 전용 마커로만 그린다 — 골라도 큰 점을 겹쳐 그리지 않는다(예전과 같음).
+  // 「이 상품」 라벨은 위 여백에 고정이라, 그 근처 점(대개 오늘)을 고르면 위쪽 가격이 라벨과 겹친다(2026-10-15) —
+  // 그땐 가격을 점 왼쪽에 붙인다. 이 상품 점 자체를 고르면 그 라벨이 이미 가격을 보여 준다.
+  const nearSeed =
+    !!selected && !!seedCoord && Math.abs(selected.x - seedCoord.x) < 48;
   const selectedIsSeed =
     !!selected &&
     !!currentMarker &&
@@ -154,12 +166,11 @@ export default function PriceChart({
       <View
         onLayout={e => setLayoutWidth(e.nativeEvent.layout.width)}
         accessibilityLabel="가격 추이 그래프">
-        {/* web 과 같은 viewBox 비율(640:260)을 유지한다. 고정 height 를 주면
-            세로로 눌려 선·라벨이 다 작아진다(그래프가 안 보이던 원인). */}
+        {/* viewBox 를 실제 폭·높이와 같게 둔다 — 비율이 어긋나면 선·라벨이 눌려 작아진다(그래프가 안 보이던 원인). */}
         <Svg
           width="100%"
-          height={layoutWidth ? (layoutWidth * HEIGHT) / WIDTH : 0}
-          viewBox={`0 0 ${WIDTH} ${HEIGHT}`}>
+          height={layoutWidth ? height : 0}
+          viewBox={`0 0 ${width} ${height}`}>
           <ChartBase
             geo={geo}
             currency={currency}
@@ -190,16 +201,18 @@ export default function PriceChart({
                   strokeWidth={2}
                 />
               )}
-              <SvgText
-                x={selected.x}
-                y={PAD.top - 12}
-                fontSize={13}
-                fontWeight="600"
-                fill={colors.gray[900]}
-                textAnchor="middle">
-                {/* web 점 라벨과 같은 전체 금액 — k 반올림이면 10,600원이 「11k」로 보였다(2026-10-12). */}
-                {won(selected.price, currency)}
-              </SvgText>
+              {selectedIsSeed ? null : (
+                <SvgText
+                  x={nearSeed ? selected.x - 10 : selected.x}
+                  y={nearSeed ? selected.y + 4 : PAD.top - 12}
+                  fontSize={12}
+                  fontWeight="600"
+                  fill={colors.gray[900]}
+                  textAnchor={nearSeed ? 'end' : 'middle'}>
+                  {/* web 점 라벨과 같은 전체 금액 — k 반올림이면 10,600원이 「11k」로 보였다(2026-10-12). */}
+                  {won(selected.price, currency)}
+                </SvgText>
+              )}
             </G>
           ) : null}
         </Svg>
@@ -249,7 +262,7 @@ const ChartBase = React.memo(function ChartBase({
           <Line
             x1={PAD.left}
             y1={t.y}
-            x2={WIDTH - PAD.right}
+            x2={geo.width - PAD.right}
             y2={t.y}
             stroke={colors.gray[200]}
             strokeWidth={1}
@@ -257,7 +270,7 @@ const ChartBase = React.memo(function ChartBase({
           <SvgText
             x={PAD.left - 8}
             y={t.y + 4}
-            fontSize={12}
+            fontSize={11}
             fill={colors.gray[500]}
             textAnchor="end">
             {shortWon(t.price, currency, geo.tickStep, geo.yMax)}
@@ -299,12 +312,24 @@ const ChartBase = React.memo(function ChartBase({
         );
       })}
 
+      {/* 「이 상품」 라벨은 위 여백(PAD.top 위)에 고정하고 점선으로 점과 잇는다 — 점 바로 위에 두면 이 상품이 최저가라
+          바닥에 있을 때 내려오는 선·점과 겹쳤다(2026-10-15). web 은 같은 자리 + 기본 가이드 점선. */}
       {seedCoord ? (
         <G>
+          <Line
+            x1={seedCoord.x}
+            y1={PAD.top}
+            x2={seedCoord.x}
+            y2={seedCoord.y - 8}
+            stroke={SEED}
+            strokeOpacity={0.5}
+            strokeWidth={1}
+            strokeDasharray="3 3"
+          />
           <SvgText
             x={seedCoord.x}
-            y={Math.max(PAD.top - 6, seedCoord.y - 28)}
-            fontSize={10}
+            y={PAD.top - 20}
+            fontSize={11}
             fontWeight="700"
             fill={SEED}
             textAnchor="middle">
@@ -312,8 +337,8 @@ const ChartBase = React.memo(function ChartBase({
           </SvgText>
           <SvgText
             x={seedCoord.x}
-            y={Math.max(PAD.top + 6, seedCoord.y - 14)}
-            fontSize={10}
+            y={PAD.top - 6}
+            fontSize={11}
             fontWeight="600"
             fill={SEED}
             textAnchor="middle">
@@ -327,8 +352,8 @@ const ChartBase = React.memo(function ChartBase({
         <SvgText
           key={`x-${i}`}
           x={l.x}
-          y={HEIGHT - 8}
-          fontSize={12}
+          y={geo.height - 8}
+          fontSize={11}
           fill={colors.gray[500]}
           textAnchor="middle">
           {l.label}
