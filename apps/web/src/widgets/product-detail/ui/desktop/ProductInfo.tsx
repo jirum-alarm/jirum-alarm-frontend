@@ -29,6 +29,7 @@ import NaverIcon from '@/entities/product/ui/NaverIcon';
 import TossBadges from '@/entities/product/ui/TossBadges';
 import TossIcon from '@/entities/product/ui/TossIcon';
 import { peekNotificationOrigin } from '@/entities/product-list/model/notification-origin';
+import TimeDealDetailTimer from '@/entities/promotion/ui/TimeDealDetailTimer';
 
 import { LikeButton, RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
@@ -182,6 +183,8 @@ export default function ProductInfo({
               <RecommendButton productId={productId} />
             </div>
           </div>
+          {/* 선착순·타임특가면 가격 바로 아래 종료/오픈 타이머(무신사 상세처럼 가격 곁에) */}
+          <TimeDealDetailTimer product={product} />
           {!hidePrice && (
             <>
               {/* 가격은 조건과 붙어 있어야 뜻이 선다 — 페이코 27.5% 할인가·배송비 2,500원 별도 */}

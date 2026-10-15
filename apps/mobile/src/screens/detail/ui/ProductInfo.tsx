@@ -12,6 +12,7 @@ import HotdealCriteriaBadge from './HotdealCriteriaBadge';
 import RecommendButton from './RecommendButton';
 import TossBadges from './TossBadges';
 import TossIcon from './TossIcon';
+import TimeDealDetailTimer from './TimeDealDetailTimer';
 import NaverIcon from './NaverIcon';
 import DealEvidenceBlock, {
   type DealEvidence,
@@ -132,7 +133,10 @@ export default function ProductInfo({
         ) : null}
       </View>
 
-      {/* web 순서: 추천 버튼 줄 → 가격 조건 줄 → 근거 블록 → 토스 뱃지. */}
+      {/* 선착순·타임특가면 가격 바로 아래 종료/오픈 타이머(web 과 같은 자리) */}
+      <TimeDealDetailTimer product={product} />
+
+      {/* web 순서: 추천 버튼 줄 → 타이머 → 가격 조건 줄 → 근거 블록 → 토스 뱃지. */}
       {!hidePrice ? (
         <>
           {/* 가격은 조건과 붙어 있어야 뜻이 선다 — 페이코 27.5% 할인가·배송비 2,500원 별도 */}
