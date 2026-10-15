@@ -279,7 +279,11 @@ const RankingCard = React.memo(function RankingCard({
           height: CARD_HEIGHT - border * 2,
         }}
         onPressIn={() =>
-          prefetchProductDetail(Number(product.id), product.thumbnail)
+          prefetchProductDetail(
+            Number(product.id),
+            product.thumbnail,
+            product.title,
+          )
         }
         onPress={() => {
           // web ProductRankingImageCard: source="home_ranking", rank 1-based.

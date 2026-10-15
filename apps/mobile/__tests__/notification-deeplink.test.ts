@@ -18,6 +18,7 @@ const TAB_STATE = {
 };
 const AUTH_STATE = {routeNames: ['AuthHome', 'AuthEmailLogin']};
 let mockRootState: unknown = TAB_STATE;
+let mockCurrentRoute: {name: string; params?: unknown} | undefined;
 
 jest.mock('@react-navigation/native', () => ({
   createNavigationContainerRef: () => ({
@@ -25,6 +26,7 @@ jest.mock('@react-navigation/native', () => ({
     navigate: mockNavigate,
     getRootState: () => mockRootState,
     dispatch: mockDispatch,
+    getCurrentRoute: () => mockCurrentRoute,
   }),
   // 하위 화면은 탭 바깥 루트 스택에 push 한다. 액션을 그대로 들여다볼 수 있게 얇게 통과시킨다.
   StackActions: {
@@ -40,6 +42,7 @@ jest.mock('../src/screens/trending/trending-view-store', () => ({
 
 const {
   areNativeTabsMounted,
+  openLoginModal,
   navigateToNativeRoute,
   navigateToTrending,
 } = require('../src/navigations/navigation-ref');
@@ -59,31 +62,29 @@ const expectTabRoot = (tab: string) => {
 };
 
 /**
- * 하위 화면으로 가는 이동 = 탭을 고른 뒤 **탭 바깥 루트 스택에 push**.
+ * 하위 화면으로 가는 이동 = **지금 화면 위에 push**(탭은 그대로).
  *
- * 🔴탭을 먼저 골라야 한다 — 뒤로 가면 그 탭이 드러난다. 예전엔 탭 안 스택을 [탭 루트, 화면] 으로
- * 지정했는데(없으면 뒤로가기가 사라졌다, iOS 26 실측), 화면이 탭 위에 쌓이니 그 지정이 필요 없다.
+ * 🔴탭을 먼저 고르면(예전 동작) 루트 스택이 비워진다 — 알림 탭에서 댓글 알림을 누르면 뒤로가 홈으로 갔고,
+ * 상세를 보다 푸시를 누르면 보던 상세가 사라졌다(2026-10-16). `tab` 은 URL 이 고르는 탭인데 이제 쓰지 않는다 —
+ * 표를 읽기 쉽게 인자로만 남긴다.
  */
-const expectScreen = (tab: string, screen: string, params?: unknown) => {
-  expectTabRoot(tab);
+const expectScreen = (_tab: string, screen: string, params?: unknown) => {
+  expect(mockNavigate).not.toHaveBeenCalled();
   expect(mockDispatch.mock.calls.at(-1)?.[0]).toEqual({
     type: 'PUSH',
     name: screen,
     params,
   });
-  expect(mockNavigate.mock.invocationCallOrder.at(-1)).toBeLessThan(
-    mockDispatch.mock.invocationCallOrder.at(-1) ?? 0,
-  );
 };
 
 /** 중첩 네비게이터(검색) 목적지. 부모 라우트 push 에 {screen, params} 로 자식까지 지정한다. */
 const expectNested = (
-  tab: string,
+  _tab: string,
   screen: string,
   child: string,
   childParams?: unknown,
 ) => {
-  expectTabRoot(tab);
+  expect(mockNavigate).not.toHaveBeenCalled();
   expect(mockDispatch.mock.calls.at(-1)?.[0]).toEqual({
     type: 'PUSH',
     name: screen,
@@ -98,13 +99,34 @@ const reset = () => {
   mockRequestTrendingCategory.mockClear();
   mockReady = true;
   mockRootState = TAB_STATE;
+  mockCurrentRoute = undefined;
 };
 
 describe('푸시·딥링크 → 네이티브 화면', () => {
   beforeEach(reset);
 
-  it('상품 상세는 URL 이 정한 탭의 스택에 쌓는다', () => {
+  it('상품 상세는 지금 화면 위에 쌓는다 — 보던 탭·화면을 지우지 않는다', () => {
+    mockCurrentRoute = {name: 'TabRoot'};
     expect(navigateToNativeRoute(url('/products/123'))).toBe(true);
+    expectScreen('HomeTab', 'ProductDetail', {path: '/products/123'});
+  });
+
+  it('이미 그 상세를 보고 있으면 또 쌓지 않는다(같은 푸시 두 번·쿼리만 다름)', () => {
+    mockCurrentRoute = {
+      name: 'ProductDetail',
+      params: {path: '/products/123'},
+    };
+    expect(navigateToNativeRoute(url('/products/123?utm=push'))).toBe(true);
+    expect(mockDispatch).not.toHaveBeenCalled();
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  it('다른 상세를 보고 있으면 그 위에 쌓는다 — 뒤로 가면 보던 상세', () => {
+    mockCurrentRoute = {
+      name: 'ProductDetail',
+      params: {path: '/products/999'},
+    };
+    navigateToNativeRoute(url('/products/123'));
     expectScreen('HomeTab', 'ProductDetail', {path: '/products/123'});
   });
 
@@ -436,5 +458,20 @@ describe('navigateToTrending — 웹뷰 안 링크 전용 입구', () => {
     expect(navigateToTrending(url('/'))).toBe(false);
     expect(mockNavigate).not.toHaveBeenCalled();
     expect(mockDispatch).not.toHaveBeenCalled();
+  });
+});
+
+describe('게스트 → 로그인 창', () => {
+  beforeEach(reset);
+
+  it('메인이 떠 있으면 지금 화면 위에 로그인 창을 띄운다(앱 전체를 바꾸지 않는다)', () => {
+    expect(openLoginModal()).toBe(true);
+    expect(mockNavigate).toHaveBeenCalledWith('LoginModal');
+  });
+
+  it('메인이 없으면(로그인 화면) false — 호출부가 예전 길로 간다', () => {
+    mockRootState = AUTH_STATE;
+    expect(openLoginModal()).toBe(false);
+    expect(mockNavigate).not.toHaveBeenCalled();
   });
 });

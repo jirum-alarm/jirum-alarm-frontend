@@ -36,10 +36,22 @@ describe('parseHandoffReferrer', () => {
     expect(parseHandoffReferrer(null)).toBeNull();
   });
 
+  it('검색어·탭 쿼리는 싣는다 — 검색 결과에서 넘어온 사람이 빈 검색을 보지 않게', () => {
+    expect(
+      parseHandoffReferrer(referrer('/search?keyword=%EC%97%90%EC%96%B4')),
+    ).toBe('/search?keyword=%EC%97%90%EC%96%B4');
+    expect(parseHandoffReferrer(referrer('/toss?tab=category'))).toBe(
+      '/toss?tab=category',
+    );
+  });
+
   it('경로 모양이 아니면 버린다 — 호스트·스킴·쿼리를 실어 보낼 수 없다', () => {
     expect(parseHandoffReferrer(referrer('//evil.com/x'))).toBeNull();
     expect(parseHandoffReferrer(referrer('https://evil.com'))).toBeNull();
     expect(parseHandoffReferrer(referrer('/products/1?x=1'))).toBeNull();
+    expect(
+      parseHandoffReferrer(referrer('/search?keyword=a&redirect=https://x')),
+    ).toBeNull();
     expect(
       parseHandoffReferrer('utm_campaign=app_handoff&jirum_path=%E0%A4%A'),
     ).toBeNull();

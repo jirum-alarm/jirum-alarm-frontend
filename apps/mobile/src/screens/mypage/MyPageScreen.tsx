@@ -43,7 +43,7 @@ import {
 } from '@/features/mypage/ui/icons';
 import {useColors} from '@/shared/theme/useColors';
 import {useAuth} from '@/shared/hooks/useAuth';
-import {useLeaveGuestSession} from '@/shared/hooks/useRequireLogin';
+import {useOpenLogin} from '@/shared/hooks/useRequireLogin';
 import {
   COLOR_SCHEME_LABEL,
   useColorSchemePreference,
@@ -68,7 +68,7 @@ export default function MyPageScreen() {
   const {data: me, isPending, isError, refetch} = useQuery(MyPageQueries.me());
   // 게스트(로그인 없이 알림만 받는 기기 계정) — 프로필 자리에 로그인 권유, 계정이 있어야 되는 메뉴는 로그인으로.
   const {isGuest} = useAuth();
-  const leaveGuest = useLeaveGuestSession();
+  const leaveGuest = useOpenLogin();
   const {refreshing, onRefresh} = usePullRefresh(refetch);
 
   // 탭 재탭 → 맨 위로. 웹뷰 시절 injectJavaScript 를 대체한다(런북 ② 경로).

@@ -7,9 +7,9 @@ import CurationGrid from '@/entities/home/ui/CurationGrid';
 import {ProductQueries} from '@/entities/product/product.queries';
 import type {ProductFlowParamList} from '@/navigations/tab/types';
 import ProductCard from '@/shared/components/product/ProductCard';
-import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import {openSearch} from '@/shared/lib/navigation/search-flow';
+import {pushProductDetail} from '@/shared/lib/navigation/detail-chain';
 
 import {
   DetailHeaderActions,
@@ -64,8 +64,7 @@ export default function RelatedProductsScreen({
   }, [navigation]);
 
   const pushProduct = useCallback(
-    (id: number) =>
-      navigation.push(tabStackNavigations.DETAIL, {path: `/products/${id}`}),
+    (id: number) => pushProductDetail(navigation, `/products/${id}`),
     [navigation],
   );
   // ★고정한다 — 인라인이면 그리드가 다시 그려질 때마다 보이는 카드가 전부 다시 그려진다.

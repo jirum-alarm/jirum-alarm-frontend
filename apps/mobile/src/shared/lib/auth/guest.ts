@@ -45,6 +45,11 @@ export async function setGuest(next: boolean) {
   else await removeAsyncStorage(StorageKey.IS_GUEST);
 }
 
+/** 지금 게스트 세션인가(훅 밖에서 — 로그인 실패 처리가 게스트 토큰을 지우지 않게). */
+export function isGuestSession(): boolean {
+  return guest;
+}
+
 export function useIsGuest(): boolean {
   readOnce();
   return useSyncExternalStore(

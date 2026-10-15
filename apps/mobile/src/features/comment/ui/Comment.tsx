@@ -31,6 +31,7 @@ import ThumbsupFill from '@/shared/components/icons/ThumbsupFill';
 
 import CommentMenu from './CommentMenu';
 import {useColors} from '@/shared/theme/useColors';
+import {useOpenLogin} from '@/shared/hooks/useRequireLogin';
 
 export default function Comment({
   comment,
@@ -44,6 +45,7 @@ export default function Comment({
   canReply: boolean;
 }) {
   const c = useColors();
+  const openLogin = useOpenLogin();
   const queryClient = useQueryClient();
   const [menuOpen, setMenuOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -111,7 +113,7 @@ export default function Comment({
 
   const handleLike = () => {
     if (!isLoggedIn) {
-      showToast.info('로그인 후 이용해주세요.');
+      openLogin();
       return;
     }
     tick();
