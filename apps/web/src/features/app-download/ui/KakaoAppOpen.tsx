@@ -163,11 +163,12 @@ export default function KakaoAppOpen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // 3 — 「앱에서 열기」를 누르고(가려졌다가) 돌아오면 묻는다. 이미 정한 기기는 묻지 않는다.
+  // 3 — 「앱에서 열기」를 누르고(가려졌다가) 돌아오면 묻는다. 이미 켠 기기만 묻지 않는다 — 꺼진 기기(아니요·앱 없음 판정)도
+  // 스스로 앱 열기를 눌렀으면 다시 묻는다. v1.110.0 은 카톡이 막은 자동 이동을 «앱 없음»으로 세어 꺼 버렸다(10/15 실기기).
   useEffect(() => {
     if (!platform) return;
     const onAttempt = () => {
-      if (readPref(storage()) !== null) return;
+      if (readPref(storage()) === 'on') return;
       track('attempt', platform);
       let hidden = false;
       const onVisibility = () => {
