@@ -50,6 +50,7 @@ PROMPT_CLICKS = ["okachat_prompt_click", "keyword_prompt_click", "click_btn_add_
 PUSH_OPENS = ["notification_open", "notification_clicked"]
 APP_PLATFORMS = ["iOS", "Android"]
 APP = {"filter": {"fieldName": "platform", "inListFilter": {"values": APP_PLATFORMS}}}
+RETENTION_WEEKS = [1, 2, 4]  # 리텐션 표 칸 = 첫 방문 주 기준 N주 뒤(1주 뒤 ≈ D7~D13)
 
 today = dt.date.today()
 last_sun = today - dt.timedelta(days=today.isoweekday() % 7 or 7)
@@ -82,19 +83,47 @@ def ga4():
             out.setdefault(w, {})[k] = int(r["metricValues"][0]["value"])
         return out
 
+    def retention(platforms):
+        """첫 방문 주 코호트 → {코호트 월요일: {N주 뒤: (활성, 코호트 크기)}}. 아직 안 끝난 주의 칸은 버린다."""
+        mondays = [start + dt.timedelta(days=7 * i) for i in range(WEEKS)]
+        body = {"dimensions": [{"name": "cohort"}, {"name": "cohortNthWeek"}],
+                "metrics": [{"name": "cohortActiveUsers"}, {"name": "cohortTotalUsers"}],
+                "cohortSpec": {"cohorts": [{"name": str(m), "dimension": "firstSessionDate",
+                                            "dateRange": {"startDate": str(m), "endDate": str(m + dt.timedelta(days=6))}}
+                                           for m in mondays],
+                               "cohortsRange": {"granularity": "WEEKLY", "startOffset": 0, "endOffset": max(RETENTION_WEEKS)}},
+                "dimensionFilter": {"andGroup": {"expressions": [
+                    {"filter": {"fieldName": "country", "stringFilter": {"value": "South Korea"}}},
+                    {"filter": {"fieldName": "platform", "inListFilter": {"values": platforms}}}]}}, "limit": 1000}
+        req = urllib.request.Request(
+            f"https://analyticsdata.googleapis.com/v1beta/{PROPERTY}:runReport", data=json.dumps(body).encode(),
+            headers={"Authorization": "Bearer " + cred.token, "Content-Type": "application/json"})
+        out = {}
+        for r in json.load(urllib.request.urlopen(req)).get("rows", []):
+            c, n = (v["value"] for v in r["dimensionValues"])
+            mon, n = dt.date.fromisoformat(c), int(n)
+            if mon + dt.timedelta(days=7 * (n + 1) - 1) <= last_sun:
+                out.setdefault(mon, {})[n] = tuple(int(v["value"]) for v in r["metricValues"])
+        return out
+
     ev = lambda names: [{"filter": {"fieldName": "eventName", "inListFilter": {"values": names}}}]
     src = lambda f, v: {"filter": {"fieldName": f, "stringFilter": {"value": v}}}
     # growth-snapshot.py 와 같은 정의 — 세 칸 다 totalUsers, ★ 은 따로 센 값의 합이 아니라 합집합.
     kakao = {"andGroup": {"expressions": [src("sessionSource", "kakao"), src("sessionMedium", "notification")]}}
     push = {"orGroup": {"expressions": [*ev(PUSH_OPENS), src("sessionSource", "notification")]}}
     return {
-        "detail": week_metric("totalUsers", ev(["view_item"])),
+        # 웹 view_item + 앱 ProductDetail 화면(growth-snapshot.py 와 같은 정의).
+        "detail": week_metric("totalUsers", [{"orGroup": {"expressions": [
+            *ev(["view_item"]),
+            {"andGroup": {"expressions": [*ev(["screen_view"]), src("unifiedScreenName", "ProductDetail")]}}]}}]),
         "prompt": week_metric("totalUsers", ev(PROMPT_CLICKS)),
         "kakao": week_metric("totalUsers", [kakao]),
         "pushopen": week_metric("totalUsers", [push]),
         "notified": week_metric("totalUsers", [{"orGroup": {"expressions": [kakao, push]}}]),
         "app_active": week_metric("activeUsers", [APP], "platform"),
         "app_install": week_metric("totalUsers", [APP, *ev(["first_open"])], "platform"),
+        "ret_app": retention(APP_PLATFORMS),
+        "ret_web": retention(["web"]),
     }
 
 
@@ -186,6 +215,23 @@ for w in weeks:
     act, ins = g["app_active"].get(w, {}), g["app_install"].get(w, {})
     a, n = (tuple(d.get(p, 0) for p in APP_PLATFORMS) for d in (act, ins))
     lines.append(f"| {w[:4]}-W{w[4:]} | **{sum(a):,}** | {a[0]:,} | {a[1]:,} | {sum(n):,} | {n[0]:,} | {n[1]:,} |")
+
+lines += ["", "## 리텐션 (첫 방문 주 코호트 → N주 뒤에도 쓴 비율)", "",
+          "GA4 firstSessionDate 코호트, 한국만. 앱은 W39~W41 코호트에 업데이트로 처음 잡힌 기존 사용자가 섞여 부풀어 있다 — "
+          "W42 코호트부터가 진짜 신규. 웹은 쿠키 기준이라 카톡 인앱 브라우저·시크릿 창 재방문이 새 사람으로 잡혀 낮게 나온다. "
+          "아직 안 끝난 주는 «…».", "",
+          "| 첫 방문 주 | 앱 신규 | " + " | ".join(f"{n}주 뒤" for n in RETENTION_WEEKS) + " | 웹 신규 | "
+          + " | ".join(f"{n}주 뒤" for n in RETENTION_WEEKS) + " |",
+          "|---|" + "---|" * (2 * len(RETENTION_WEEKS) + 2)]
+for i, w in enumerate(weeks):
+    mon = start + dt.timedelta(days=7 * i)
+    cells = []
+    for ret in (g["ret_app"], g["ret_web"]):
+        c = ret.get(mon, {})
+        size = c.get(0, (0, 0))[1]
+        cells.append(f"{size:,}")
+        cells += ["—" if not size else f"{c[n][0] / size:.1%}" if n in c else "…" for n in RETENTION_WEEKS]
+    lines.append(f"| {w[:4]}-W{w[4:]} | " + " | ".join(cells) + " |")
 
 
 NID_SINCE = dt.date(2026, 10, 15)  # push_history.nid·user_history.nid 수집 시작(crawling-server 5eb25c7c, 앱·웹 v1.105.0)

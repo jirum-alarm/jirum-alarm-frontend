@@ -22,7 +22,7 @@ export const useSocialLogin = () => {
   const {mutate: socialLoginMutate, isPending: isSocialLoginPending} =
     useMutation({
       mutationFn: AuthService.socialLogin,
-      onSuccess: async token => {
+      onSuccess: async (token, {oauthProvider}) => {
         await handleLoginSuccess(
           token.socialLogin.accessToken,
           token.socialLogin.refreshToken,
@@ -30,10 +30,12 @@ export const useSocialLogin = () => {
 
         // 신규 가입은 web 과 동일하게 type==='SIGNUP' 으로 구분된다. 네이티브 가입은
         // GTM 이 닿지 않아 영구 미측정이었던 공백을 여기서 직접 메운다.
+        // 이벤트명·method 는 웹 /signup/complete 와 같게(GA4 권장 sign_up) — 예전 앱 이름
+        // signup_complete 는 2026-10-15 까지만 있다(플랫폼 합산 시 둘 다 셀 것).
         // identify 는 가입/로그인 모두에서 호출해 익명↔회원 프로필을 병합한다.
         try {
           if (token.socialLogin.type === 'SIGNUP') {
-            Analytics.track('signup_complete');
+            Analytics.track('sign_up', {method: oauthProvider.toLowerCase()});
           }
           const userId = await UserService.fetchMyId();
           if (userId) {

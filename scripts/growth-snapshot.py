@@ -73,6 +73,7 @@ def ga4():
     app = {"filter": {"fieldName": "platform", "inListFilter": {"values": ["iOS", "Android"]}}}
     ev = lambda names: {"filter": {"fieldName": "eventName", "inListFilter": {"values": names}}}
     src = lambda f, v: {"filter": {"fieldName": f, "stringFilter": {"value": v}}}
+    APP_DETAIL = {"andGroup": {"expressions": [ev(["screen_view"]), src("unifiedScreenName", "ProductDetail")]}}
     KAKAO = {"andGroup": {"expressions": [src("sessionSource", "kakao"), src("sessionMedium", "notification")]}}
     # 앱은 이벤트로, 웹 푸시는 이벤트가 안 남아(백그라운드 알림은 SDK 가 직접 연다) 랜딩 utm_source=notification 으로 잡는다.
     PUSH = {"orGroup": {"expressions": [ev(PUSH_OPENS), src("sessionSource", "notification")]}}
@@ -101,7 +102,8 @@ def ga4():
         "buy_users": q("totalUsers", [web, bot, ev(["click_btn_buy"])]),
         "web_users": q("activeUsers", [web, bot]),
         "channel": q("activeUsers", [web, bot], "sessionDefaultChannelGroup"),
-        "detail": q("totalUsers", [ev(["view_item"])]),
+        # 상세 조회는 웹 view_item + 앱 ProductDetail 화면(앱은 view_item 을 안 쏜다 — 빼면 앱 사용자가 통째로 빠진다).
+        "detail": q("totalUsers", [{"orGroup": {"expressions": [ev(["view_item"]), APP_DETAIL]}}]),
         "prompt": q("totalUsers", [ev(PROMPT_CLICKS)]),
         # 북극성 세 칸은 전부 totalUsers — activeUsers 와 섞어 더하면 단위가 어긋난다.
         "kakao": q("totalUsers", [KAKAO]),
