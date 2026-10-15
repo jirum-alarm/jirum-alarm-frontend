@@ -1,0 +1,162 @@
+diff --git a/Libraries/Components/ScrollView/ScrollView.js b/Libraries/Components/ScrollView/ScrollView.js
+index 8f4f297..fc6f688 100644
+--- a/Libraries/Components/ScrollView/ScrollView.js
++++ b/Libraries/Components/ScrollView/ScrollView.js
+@@ -684,6 +684,10 @@ type ScrollViewState = {
+ };
+ 
+ const IS_ANIMATING_TOUCH_START_THRESHOLD_MS = 16;
++// [jirum patch] 관성 스크롤 중 탭을 «멈추기» 로만 쓰는 건 이 속도(px/ms) 이상으로 움직일 때뿐이다.
++// 원본은 관성 시작~끝 이벤트가 JS 에 도착할 때까지 전부 가로채, 눈으로는 멈춘 뒤에도(스냅 꼬리·
++// 안드로이드 정지 판정 3프레임·JS 밀림) 첫 탭이 버려졌다. 1px/ms ≈ 프레임당 16px — 확실히 날아가는 중.
++const FAST_SCROLL_PX_PER_MS = 1;
+ 
+ export type ScrollViewComponentStatics = $ReadOnly<{
+   Context: typeof ScrollViewContext,
+@@ -749,6 +753,13 @@ class ScrollView extends React.Component<ScrollViewProps, ScrollViewState> {
+   _isTouching: boolean = false;
+   _lastMomentumScrollBeginTime: number = 0;
+   _lastMomentumScrollEndTime: number = 0;
++  // [jirum patch] 탭 가로채기 판정용 — 관성 진행 여부(이벤트 순서)와 최근 속도(네이티브 타임스탬프).
++  _momentumActive: boolean = false;
++  _lastScrollOffset: ?number = null;
++  _lastScrollTimestamp: number = 0;
++  _scrollSpeed: number = 0;
++  _capturedWhileMoving: boolean = false;
++  _momentumBeganSinceCapture: boolean = false;
+ 
+   // Reset to false every time becomes responder. This is used to:
+   // - Determine if the scroll view has been scrolled and therefore should
+@@ -1135,9 +1146,40 @@ class ScrollView extends React.Component<ScrollViewProps, ScrollViewState> {
+ 
+   _handleScroll = (e: ScrollEvent) => {
+     this._observedScrollSinceBecomingResponder = true;
++    this._trackScrollSpeed(e);
+     this.props.onScroll && this.props.onScroll(e);
+   };
+ 
++  // [jirum patch] JS 처리 시각이 아니라 네이티브 타임스탬프로 잰다 — JS 가 밀리면 이벤트가 몰려 도착한다.
++  _trackScrollSpeed(e: ScrollEvent) {
++    const {contentOffset, timestamp} = e.nativeEvent;
++    if (contentOffset == null) {
++      return;
++    }
++    const offset =
++      this.props.horizontal === true ? contentOffset.x : contentOffset.y;
++    const t =
++      typeof timestamp === 'number' && timestamp > 0
++        ? timestamp
++        : global.performance.now();
++    const dt = t - this._lastScrollTimestamp;
++    this._scrollSpeed =
++      this._lastScrollOffset != null && dt > 0 && dt < 1000
++        ? Math.abs(offset - this._lastScrollOffset) / dt
++        : 0;
++    this._lastScrollOffset = offset;
++    this._lastScrollTimestamp = t;
++  }
++
++  _isMovingFast(): boolean {
++    return this._momentumActive && this._scrollSpeed >= FAST_SCROLL_PX_PER_MS;
++  }
++
++  // [jirum patch] 지정 안 한 곳은 'handled' — 키보드가 떠 있어도 버튼 첫 탭이 바로 눌린다(빈 곳 탭은 그대로 키보드를 내린다).
++  _keyboardShouldPersistTaps(): $PropertyType<ScrollViewProps, 'keyboardShouldPersistTaps'> {
++    return this.props.keyboardShouldPersistTaps ?? 'handled';
++  }
++
+   _handleLayout = (e: LayoutChangeEvent) => {
+     if (this.props.invertStickyHeaders === true) {
+       this.setState({layoutHeight: e.nativeEvent.layout.height});
+@@ -1252,6 +1294,8 @@ class ScrollView extends React.Component<ScrollViewProps, ScrollViewState> {
+    */
+   _handleMomentumScrollBegin: (e: ScrollEvent) => void = (e: ScrollEvent) => {
+     this._lastMomentumScrollBeginTime = global.performance.now();
++    this._momentumActive = true;
++    this._momentumBeganSinceCapture = true;
+     this.props.onMomentumScrollBegin && this.props.onMomentumScrollBegin(e);
+   };
+ 
+@@ -1261,6 +1305,8 @@ class ScrollView extends React.Component<ScrollViewProps, ScrollViewState> {
+   _handleMomentumScrollEnd: (e: ScrollEvent) => void = (e: ScrollEvent) => {
+     FrameRateLogger.endScroll();
+     this._lastMomentumScrollEndTime = global.performance.now();
++    this._momentumActive = false;
++    this._scrollSpeed = 0;
+     this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e);
+   };
+ 
+@@ -1273,6 +1319,8 @@ class ScrollView extends React.Component<ScrollViewProps, ScrollViewState> {
+    */
+   _handleScrollBeginDrag: (e: ScrollEvent) => void = (e: ScrollEvent) => {
+     FrameRateLogger.beginScroll(); // TODO: track all scrolls after implementing onScrollEndAnimation
++    // [jirum patch] 새 드래그 = 이전 관성은 끝났다(iOS 는 탭으로 멈추면 관성 끝 이벤트를 안 보낸다).
++    this._momentumActive = false;
+ 
+     if (
+       Platform.OS === 'android' &&
+@@ -1348,6 +1396,14 @@ class ScrollView extends React.Component<ScrollViewProps, ScrollViewState> {
+     e: GestureResponderEvent,
+   ) => {
+     this._isTouching = e.nativeEvent.touches.length !== 0;
++    // [jirum patch] 빠르게 움직이던 걸 탭으로 멈췄다 — 이제 멈춘 상태다. iOS 는 이때 관성 끝
++    // 이벤트를 안 보내서, 안 지우면 다음 탭들도 계속 가로챈다. 손을 떼며 새로 던졌다면 관성 시작
++    // 이벤트가 (이 처리 앞이든 뒤든) 다시 켠다.
++    if (this._capturedWhileMoving && !this._momentumBeganSinceCapture) {
++      this._momentumActive = false;
++      this._scrollSpeed = 0;
++    }
++    this._capturedWhileMoving = false;
+     this.props.onResponderRelease && this.props.onResponderRelease(e);
+ 
+     if (typeof e.target === 'number') {
+@@ -1365,8 +1421,8 @@ class ScrollView extends React.Component<ScrollViewProps, ScrollViewState> {
+     const currentlyFocusedTextInput = TextInputState.currentlyFocusedInput();
+     if (
+       currentlyFocusedTextInput != null &&
+-      this.props.keyboardShouldPersistTaps !== true &&
+-      this.props.keyboardShouldPersistTaps !== 'always' &&
++      this._keyboardShouldPersistTaps() !== true &&
++      this._keyboardShouldPersistTaps() !== 'always' &&
+       this._keyboardIsDismissible() &&
+       e.target !== currentlyFocusedTextInput &&
+       !this._observedScrollSinceBecomingResponder &&
+@@ -1441,7 +1497,7 @@ class ScrollView extends React.Component<ScrollViewProps, ScrollViewState> {
+ 
+     const currentlyFocusedInput = TextInputState.currentlyFocusedInput();
+     if (
+-      this.props.keyboardShouldPersistTaps === 'handled' &&
++      this._keyboardShouldPersistTaps() === 'handled' &&
+       this._keyboardIsDismissible() &&
+       e.target !== currentlyFocusedInput
+     ) {
+@@ -1465,7 +1521,10 @@ class ScrollView extends React.Component<ScrollViewProps, ScrollViewState> {
+     (e: GestureResponderEvent) => {
+       // The scroll view should receive taps instead of its descendants if:
+       // * it is already animating/decelerating
+-      if (this._isAnimating()) {
++      // [jirum patch] 눈에 보이게 빨리 움직일 때만. 감속 꼬리·멈춘 직후의 탭은 자식(버튼)에게 간다.
++      if (this._isMovingFast()) {
++        this._capturedWhileMoving = true;
++        this._momentumBeganSinceCapture = false;
+         return true;
+       }
+ 
+@@ -1478,7 +1537,7 @@ class ScrollView extends React.Component<ScrollViewProps, ScrollViewState> {
+       // and a new touch starts with a non-textinput target (in which case the
+       // first tap should be sent to the scroll view and dismiss the keyboard,
+       // then the second tap goes to the actual interior view)
+-      const {keyboardShouldPersistTaps} = this.props;
++      const keyboardShouldPersistTaps = this._keyboardShouldPersistTaps();
+       const keyboardNeverPersistTaps =
+         // $FlowFixMe[sketchy-null-bool]
+         !keyboardShouldPersistTaps || keyboardShouldPersistTaps === 'never';
+@@ -1561,7 +1620,7 @@ class ScrollView extends React.Component<ScrollViewProps, ScrollViewState> {
+     const nativeEvent = e.nativeEvent;
+     this._isTouching = nativeEvent.touches.length !== 0;
+ 
+-    const {keyboardShouldPersistTaps} = this.props;
++    const keyboardShouldPersistTaps = this._keyboardShouldPersistTaps();
+     const keyboardNeverPersistsTaps =
+       // $FlowFixMe[sketchy-null-bool]
+       !keyboardShouldPersistTaps || keyboardShouldPersistTaps === 'never';
