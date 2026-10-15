@@ -47,7 +47,7 @@ export default function Reactions({
   const hiddenCount = rows.length - shown.length;
 
   return (
-    <View className="gap-y-3 border-t border-gray-100 pt-3">
+    <View className="gap-y-3 border-t border-secondary-100 pt-3">
       {shown.map(item => {
         const Icon = item.Icon;
         return (
