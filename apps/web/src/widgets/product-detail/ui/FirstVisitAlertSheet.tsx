@@ -8,7 +8,7 @@ import { CheckDeviceResult } from '@/app/actions/agent.types';
 
 import { ProductService } from '@/shared/api/product';
 import { PAGE } from '@/shared/config/page';
-import { isAndroidUA, isInAppBrowserUA } from '@/shared/config/user-agent';
+import { isAndroidUA, isCrawlerBrowser, isInAppBrowserUA } from '@/shared/config/user-agent';
 import useAlertSession from '@/shared/hooks/useAlertSession';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
@@ -127,7 +127,8 @@ export default function FirstVisitAlertSheet({
   const { isLoggedIn } = useIsLoggedIn();
 
   useEffect(() => {
-    if (device.isJirumAlarmApp) return;
+    // 크롤러는 매 렌더가 첫 방문(빈 localStorage)이라 시트가 본문을 덮은 채 색인되고 실험 배정까지 남긴다.
+    if (device.isJirumAlarmApp || isCrawlerBrowser()) return;
     let seen: string | null;
     try {
       seen = localStorage.getItem(FIRST_VISIT_SEEN_KEY);

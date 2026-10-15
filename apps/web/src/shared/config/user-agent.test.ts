@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { describe, it } from 'node:test';
 
 const require = createRequire(import.meta.url);
-const { isAndroidUA, isLightSsrCrawlerUA, isLinkPreviewUA, isSafariUA } =
+const { isAndroidUA, isCrawlerUA, isLightSsrCrawlerUA, isLinkPreviewUA, isSafariUA } =
   require('./user-agent.ts') as typeof import('./user-agent');
 
 // 2026-10-02 운영 액세스 로그에서 뽑은 실제 UA.
@@ -88,6 +88,37 @@ describe('isSafariUA', () => {
       'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/28.0 Chrome/130.0.0.0 Mobile Safari/537.36',
     ]) {
       assert.equal(isSafariUA(ua), false, ua);
+    }
+  });
+});
+
+// 2026-10-16 운영 게이트웨이 로그 — crawling-server bot-user-agent.ts 와 같은 판정이어야 한다.
+describe('isCrawlerUA', () => {
+  it('렌더링 크롤러·광고·AI·미리보기 봇은 크롤러', () => {
+    for (const ua of [
+      'Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.8010.52 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+      'Mozilla/5.0 (compatible; Yeti/1.1; +https://naver.me/spd)',
+      'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm) Chrome/116.0.1938.76 Safari/537.36',
+      'Mozilla/5.0 (compatible; Daum/4.1; +http://cs.daum.net/faq/15/4118.html) Daumoa',
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36 (compatible; Google-InspectionTool/1.0)',
+      'Mediapartners-Google',
+      'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; OAI-SearchBot/1.0; +https://openai.com/searchbot',
+      'facebookexternalhit/1.1; kakaotalk-scrap/1.0; +https://devtalk.kakao.com/t/scrap/33984',
+    ]) {
+      assert.equal(isCrawlerUA(ua), true, ua);
+    }
+  });
+
+  it('사람 브라우저·인앱·우리 앱 웹뷰는 아님', () => {
+    for (const ua of [
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
+      'Mozilla/5.0 (Linux; Android 16; SM-S926N Build/BP4A.251205.006; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/140.0.0.0 Whale/1.0.0.0 Crosswalk/30.140.0.10 Mobile Safari/537.36 NAVER(inapp; search; 2100; 12.23.81)',
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 KAKAOTALK 26.8.3',
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 DaumApps/8.5.0',
+      'Mozilla/5.0 (Linux; Android 14) IOS ReactNative Webview Jirum Alarm',
+      '',
+    ]) {
+      assert.equal(isCrawlerUA(ua), false, ua);
     }
   });
 });

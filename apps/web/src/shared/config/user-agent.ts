@@ -60,3 +60,22 @@ export const LINK_PREVIEW_PATTERN =
   /kakaotalk-scrap|facebookexternalhit|Twitterbot|Slackbot|Discordbot|TelegramBot|WhatsApp\/|LinkedInBot/i;
 
 export const isLinkPreviewUA = (ua: string) => LINK_PREVIEW_PATTERN.test(ua);
+
+/**
+ * 모든 크롤러(검색엔진 포함) — crawling-server `src/common/lib/bot-user-agent.ts` 의 BOT_USER_AGENT 와 같은 식.
+ * 서버는 이 봇들의 조회·노출 기록을 버리고, 웹은 브라우저에서 그 기록 요청 자체를 보내지 않는다.
+ *
+ * ★왜(2026-10-16): Googlebot·Yeti 는 상세를 렌더링하며 조회·노출 기록 뮤테이션과 첫 방문 시트·쿠팡 버튼 조회를
+ * 부른다. 게이트웨이 로그에서 Googlebot 요청의 60%·Yeti 의 62% 가 상품 페이지가 아니라 이 POST /api/graphql 였다.
+ * 렌더링 중 XHR 도 크롤 예산을 쓴다(구글 크롤 예산 문서) — 그 사이 10/2 이후 올라온 딜은 표본 36개 전부
+ * 구글이 「아직 알지 못하는 URL」이었다. 사람이 아닌 걸 아는 화면 요소(시트·실험 버튼)도 같이 뺀다.
+ * ⚠️ 본문을 채우는 조회(관련 상품·댓글 등 내부 링크)는 막지 않는다 — 봇이 보는 화면은 사람과 같아야 한다.
+ */
+const CRAWLER_PATTERN =
+  /(?:bot|crawler|spider)(?![a-z])|Yeti\/|Daumoa|Mediapartners-Google|GoogleOther|Google-InspectionTool|Google-Read-Aloud|Storebot-Google|HeadlessChrome|Lighthouse|facebookexternalhit|meta-externalagent|kakaotalk-scrap|Slurp|Bytespider/i;
+
+export const isCrawlerUA = (ua: string) => CRAWLER_PATTERN.test(ua);
+
+/** 브라우저에서 지금 크롤러가 렌더링 중인가. 서버(navigator 없음)에선 false. */
+export const isCrawlerBrowser = () =>
+  typeof navigator !== 'undefined' && isCrawlerUA(navigator.userAgent);

@@ -1,3 +1,4 @@
+import { isCrawlerBrowser } from '@/shared/config/user-agent';
 import { execute, type ExecuteOptions, isNotFoundError } from '@/shared/lib/http-client';
 
 import { graphql, useFragment } from '../gql';
@@ -116,6 +117,8 @@ export class ProductService {
     position?: number | null;
     nid?: string | null;
   }) {
+    // 크롤러 렌더는 조회가 아니고(서버도 버린다) 요청 자체가 크롤 예산을 쓴다 — isCrawlerUA 주석.
+    if (isCrawlerBrowser()) return null;
     return execute(MutationCollectProduct, variables).then((res) => res.data);
   }
 
@@ -131,11 +134,13 @@ export class ProductService {
   }
 
   static async collectPriceContextImpression(variables: PriceContextEventVariables) {
+    if (isCrawlerBrowser()) return null;
     return execute(MutationCollectPriceContextImpression, variables).then((res) => res.data);
   }
 
   /** 첫 방문 시트 문구 A/B(first_visit_sheet_frequency_v1) — 서버가 기기(X-Device-Id)로 배정한다. */
   static async getFirstVisitSheetCopy(keyword: string, productId?: number) {
+    if (isCrawlerBrowser()) return null;
     return execute(QueryFirstVisitSheetCopy, { keyword, productId }).then(
       (res) => res.data?.firstVisitSheetCopy ?? null,
     );
@@ -149,6 +154,7 @@ export class ProductService {
     source: string;
     impressions: { productId: number; position: number }[];
   }) {
+    if (isCrawlerBrowser()) return null;
     return execute(MutationRecordProductImpressions, variables).then((res) => res.data);
   }
   static async reportExpiredProduct(variables: MutationReportExpiredProductMutationVariables) {
@@ -248,6 +254,8 @@ export class ProductService {
   // nolink_coupang_cta_v1). 대상이 아니거나 아직 링크가 없으면 null.
   // 부가 버튼이라 실패는 null.
   static async getCoupangSearchCta(variables: { productId: number }) {
+    // 실험 버튼(바깥 쇼핑몰 링크)이라 크롤러에겐 안 그린다 — 판독 표본도 사람만.
+    if (isCrawlerBrowser()) return null;
     return execute(QueryCoupangSearchCta, variables)
       .then((res) => res.data?.coupangSearchCta ?? null)
       .catch(() => null);
