@@ -95,6 +95,25 @@ export function buildPromotionSections({
       viewMoreLink: '/curation/time-deal',
     },
     {
+      // 블프~12.12 전(11/18~12/10 KST)에만 채워지는 해외직구 딜. 서버가 기간 밖엔 카탈로그에서 빼고 빈 배열을
+      // 주므로(crawling-server product/overseas-sale.logic) 여기 폴백 카탈로그에선 비면 숨긴다.
+      id: 'overseas-sale',
+      title: '해외직구 블프 세일',
+      type: 'HORIZONTAL_SCROLL',
+      dataSource: {
+        type: 'GRAPHQL_QUERY',
+        queryName: 'productsByKeyword',
+        variables: {
+          keyword: '해외직구세일',
+          limit: 10,
+          orderBy: KeywordProductOrderType.PostedAt,
+          orderOption: OrderOptionType.Desc,
+        },
+      },
+      displayOrder: 0.6,
+      viewMoreLink: '/curation/overseas-sale',
+    },
+    {
       id: 'hotdeal',
       title: '놓치면 아까운 핫딜',
       type: 'PAGINATED_GRID',

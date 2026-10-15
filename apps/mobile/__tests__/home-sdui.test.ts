@@ -39,6 +39,7 @@ describe('섹션 구성 — web getPromotionSections 와 동일', () => {
     expect(ids).toEqual([
       'toss',
       'time-deal',
+      'overseas-sale',
       'hotdeal',
       'guest-recommended',
       'under-10000',
@@ -56,6 +57,7 @@ describe('섹션 구성 — web getPromotionSections 와 동일', () => {
     expect(byId).toMatchObject({
       toss: 'TOSS',
       'time-deal': 'HORIZONTAL_SCROLL',
+      'overseas-sale': 'HORIZONTAL_SCROLL',
       hotdeal: 'PAGINATED_GRID',
       'guest-recommended': 'PAGINATED_GRID',
       'under-10000': 'HORIZONTAL_SCROLL',
