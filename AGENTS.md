@@ -224,7 +224,7 @@ pnpm build            # Production build
     발행 전 커밋본으로 되돌린다(안 하면 `native:check` 가 막는다). 마지막 OTA 커밋이 이미 다음 runtime 으로 올린 커밋이면 재현 불가 — 건너뛴다.
     **`ota/runtime-<버전>` 브랜치가 이미 있으면 한 줄로**: `bash apps/mobile/scripts/ota-backport.sh --runtime <버전> --app <그 버전 Release .app> <커밋…>`
     (브랜치 끝 워크트리 → cherry-pick → 설치·tsc·지문·jest(CI 조건) → 기동 확인 → 원격 끝 재확인 → `ota:publish` → push → 매니페스트 확인. `--dry-run` 은 발행 직전까지).
-    JS 수정은 스토어에 나가 있는 runtime **전부**(10/13 기준 1.5.1·1.5.0·1.4.8·1.4.7 — main 은 1.5.2)에 따로 낸다 — `--runtime all` 이 origin 의 `ota/runtime-*` 전부를 돈다.
+    JS 수정은 스토어에 나가 있는 runtime **전부**(10/15 기준 1.5.2·1.5.1·1.5.0·1.4.8·1.4.7 — main 은 1.5.3)에 따로 낸다 — `--runtime all` 이 origin 의 `ota/runtime-*` 전부를 돈다.
     **어느 runtime 까지?** 지난 7일 앱 활성 사용자(GA4 `appVersion` — 바이너리 버전이라 OTA 와 무관)의 **10% 이상**이면 낸다, 그 아래로 떨어지면 끊는다.
     2026-10-13 실측(7일): Android 1.4.7 114·1.5.0 72·1.4.8 65, iOS 1.4.8 53·1.5.0 40·1.4.7 36 → 1.4.7·1.4.8·1.5.0 셋 다 낸다.
     `ota/runtime-1.5.1` 은 1.5.1 마지막 자동 OTA 커밋(620b2b75)에서 시작(10/13 1.5.2 를 main 에 합치기 직전). `ota/runtime-1.4.7` 은 1.4.8 브랜치 JS 를 runtime 1.4.7 로 낸 것(10/13) — 기동 확인 .app 은 EAS 1.4.7 sim-check 빌드
