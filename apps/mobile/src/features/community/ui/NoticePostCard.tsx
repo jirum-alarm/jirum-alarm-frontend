@@ -4,6 +4,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 
 import {getPostDisplayContent} from '@/entities/community';
 import {displayTime} from '@/shared/lib/format/price';
+import {useNowMinute} from '@/shared/hooks/useNow';
 import type {CommunityPost} from '@/shared/api/community';
 
 import NoticeAuthor from './NoticeAuthor';
@@ -28,6 +29,7 @@ export default function NoticePostCard({
   isNew?: boolean;
   onPress: (postId: number) => void;
 }) {
+  const now = useNowMinute();
   const c = useColors();
   const displayContent = getPostDisplayContent(post.content);
 
@@ -42,7 +44,7 @@ export default function NoticePostCard({
       <View className="flex-row items-center" style={gaps.g8}>
         <NoticeAuthor />
         <Text className="text-xs text-gray-500">
-          {displayTime(post.createdAt)}
+          {displayTime(post.createdAt, now)}
         </Text>
         {isNew ? (
           <Badge size="md" variant="solid" tone="secondary">

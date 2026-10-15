@@ -77,4 +77,22 @@ describe('displayTime', () => {
   it('미래 시각도 깨지지 않는다', () => {
     expect(displayTime(new Date(Date.now() + 60_000))).toBe('방금 전');
   });
+
+  // 컴포넌트는 useNowMinute() 를 now 로 넘긴다 — 같은 createdAt 이어도 now 가 바뀌면 문구가 바뀐다.
+  it('now 를 넘기면 그 시각 기준으로 센다', () => {
+    const created = new Date('2026-10-15T10:00:00+09:00');
+    const at = (iso: string) => new Date(iso).getTime();
+    expect(displayTime(created, at('2026-10-15T10:05:00+09:00'))).toBe(
+      '방금 전',
+    );
+    expect(displayTime(created, at('2026-10-15T10:42:00+09:00'))).toBe(
+      '40분 전',
+    );
+    expect(displayTime(created, at('2026-10-15T13:00:00+09:00'))).toBe(
+      '3시간 전',
+    );
+    expect(displayTime(created, at('2027-01-20T10:00:00+09:00'))).toBe(
+      '3달 전',
+    );
+  });
 });

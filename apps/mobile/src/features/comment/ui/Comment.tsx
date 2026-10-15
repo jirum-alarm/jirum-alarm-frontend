@@ -22,6 +22,7 @@ import {
   useEditStatusOf,
 } from '@/entities/comment/editing-comment';
 import {displayTime} from '@/shared/lib/format/price';
+import {useNowMinute} from '@/shared/hooks/useNow';
 import {cn} from '@/shared/lib/styling';
 import {showToast, tick} from '@/shared/lib/feedback';
 import BubbleChat from '@/shared/components/icons/bubble_chat';
@@ -43,6 +44,7 @@ export default function Comment({
   myUserId?: string | null;
   canReply: boolean;
 }) {
+  const now = useNowMinute();
   const c = useColors();
   const queryClient = useQueryClient();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -149,7 +151,7 @@ export default function Comment({
           <Text className="text-sm text-gray-500">
             {editStatus === 'update'
               ? '수정 중'
-              : displayTime(comment.createdAt)}
+              : displayTime(comment.createdAt, now)}
           </Text>
         </View>
         {isMyComment ? (

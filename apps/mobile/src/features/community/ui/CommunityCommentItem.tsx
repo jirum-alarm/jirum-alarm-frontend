@@ -5,6 +5,7 @@ import {Text, TextInput} from '@/shared/components/ui/Text/AppText';
 import Dots from '@/shared/components/icons/Dots';
 import ThumbsupFill from '@/shared/components/icons/ThumbsupFill';
 import {displayTime} from '@/shared/lib/format/price';
+import {useNowMinute} from '@/shared/hooks/useNow';
 import {cn} from '@/shared/lib/styling';
 import type {CommunityComment} from '@/shared/api/community';
 import BottomSheet from '@/shared/components/BottomSheet';
@@ -47,6 +48,7 @@ export default function CommunityCommentItem({
   onRemove: () => void;
   onLike: () => void;
 }) {
+  const now = useNowMinute();
   const [menuOpen, setMenuOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [draft, setDraft] = useState(comment.content);
@@ -99,7 +101,7 @@ export default function CommunityCommentItem({
             {comment.author?.nickname ?? '알 수 없음'}
           </Text>
           <Text className="text-xs text-gray-500">
-            {displayTime(comment.createdAt)}
+            {displayTime(comment.createdAt, now)}
           </Text>
         </View>
         {isMyComment ? (

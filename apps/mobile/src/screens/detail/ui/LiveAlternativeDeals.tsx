@@ -16,6 +16,7 @@ import Thumbnail from '@/shared/components/product/Thumbnail';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {trackProductCardClick} from '@/shared/lib/analytics/card-tracking';
 import {displayTime, parsePrice} from '@/shared/lib/format/price';
+import {useNowMinute} from '@/shared/hooks/useNow';
 import {cn} from '@/shared/lib/styling/className';
 import DetailBand from './DetailBand';
 
@@ -41,6 +42,7 @@ export default function LiveAlternativeDeals({
   /** 블록 첫 줄이 화면에 들어왔나(상세 스크롤이 판정) — 노출 기록 시점. */
   seen?: boolean;
 }) {
+  const now = useNowMinute();
   const freshAt = dealFreshnessAt(product);
   const isTarget =
     !!freshAt &&
@@ -124,7 +126,7 @@ export default function LiveAlternativeDeals({
                       {[
                         liveAlternativeKindLabel(deal.kind),
                         where,
-                        item.postedAt ? displayTime(item.postedAt) : null,
+                        item.postedAt ? displayTime(item.postedAt, now) : null,
                       ]
                         .filter(Boolean)
                         .join(' · ')}

@@ -5,6 +5,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 import {parsePostContent} from '@/entities/community';
 import ThumbsupFill from '@/shared/components/icons/ThumbsupFill';
 import {displayTime} from '@/shared/lib/format/price';
+import {useNowMinute} from '@/shared/hooks/useNow';
 import {cn} from '@/shared/lib/styling';
 import type {CommunityPostDetail} from '@/shared/api/community';
 
@@ -32,6 +33,7 @@ export default function CommunityPostBody({
   onPressLike: () => void;
   onPressTaggedProduct: (productId: number) => void;
 }) {
+  const now = useNowMinute();
   const {content: displayContent, images} = parsePostContent(post.content);
   // 태그 없는 글도 서버가 id '0' 으로 채워 보낸다(목록 카드와 같은 판정).
   const hasTaggedProduct =
@@ -48,7 +50,7 @@ export default function CommunityPostBody({
           </Text>
         )}
         <Text className="text-xs text-gray-500">
-          {displayTime(post.createdAt)}
+          {displayTime(post.createdAt, now)}
         </Text>
       </View>
 

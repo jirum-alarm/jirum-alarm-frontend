@@ -9,6 +9,7 @@ import {cn} from '@/shared/lib/styling';
 import {firstKeyword, splitByKeyword} from '../lib/highlight';
 import {parseSourceKey, sourceLabel} from '../lib/notification-source';
 import {displayTime} from '@/shared/lib/format/price';
+import {useNowMinute} from '@/shared/hooks/useNow';
 import type {NotificationItem} from '@/shared/api/notification';
 
 import Thumbnail from '@/shared/components/product/Thumbnail';
@@ -70,6 +71,7 @@ const AlarmItem = React.memo(function AlarmItem({
   onPress: (notification: NotificationItem, productId: number | null) => void;
   onDelete: (id: number) => void;
 }) {
+  const now = useNowMinute();
   const c = useColors();
   const {id, message, createdAt, product, keyword, readAt, title} =
     notification;
@@ -183,7 +185,7 @@ const AlarmItem = React.memo(function AlarmItem({
                 </>
               ) : null}
               <Text className="text-xs text-gray-500">
-                {displayTime(createdAt)}
+                {displayTime(createdAt, now)}
               </Text>
             </View>
           </View>

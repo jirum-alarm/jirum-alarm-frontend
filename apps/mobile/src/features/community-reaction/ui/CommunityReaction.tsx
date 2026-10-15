@@ -13,6 +13,7 @@ import Thumbsdown from '@/shared/components/icons/Thumbsdown';
 import Thumbsup from '@/shared/components/icons/Thumbsup';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {displayTime} from '@/shared/lib/format/price';
+import {useNowMinute} from '@/shared/hooks/useNow';
 import {openInAppBrowser} from '@/shared/lib/navigation';
 import {cn} from '@/shared/lib/styling';
 
@@ -121,6 +122,7 @@ export default function CommunityReaction({
   productId: number;
   isUserLogin: boolean;
 }) {
+  const now = useNowMinute();
   const {data, isPending, isError, refetch} = useQuery(
     ProductQueries.reactionKeywords({id: productId}),
   );
@@ -158,7 +160,7 @@ export default function CommunityReaction({
       ? `반응 ${allCount}개`
       : `${dominantPercent}%`;
   const lastUpdatedAt = data?.lastUpdatedAt
-    ? `${displayTime(data.lastUpdatedAt)} 업데이트`
+    ? `${displayTime(data.lastUpdatedAt, now)} 업데이트`
     : null;
 
   return (

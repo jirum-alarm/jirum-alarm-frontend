@@ -4,6 +4,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 
 import Thumbnail from '@/shared/components/product/Thumbnail';
 import {displayTime} from '@/shared/lib/format/price';
+import {useNowMinute} from '@/shared/hooks/useNow';
 import type {CommunityPost} from '@/shared/api/community';
 
 import {getPostCardView} from '../lib/post-card';
@@ -30,6 +31,7 @@ export default function CommunityPostCard({
   post: CommunityPost;
   onPress: (postId: number) => void;
 }) {
+  const now = useNowMinute();
   const c = useColors();
   const view = getPostCardView(post);
 
@@ -59,7 +61,7 @@ export default function CommunityPostCard({
             </>
           )}
           <Text className="text-xs text-gray-500">
-            {displayTime(post.createdAt)}
+            {displayTime(post.createdAt, now)}
           </Text>
           {post.isNotice ? (
             <Badge size="md" variant="solid" tone="secondary">

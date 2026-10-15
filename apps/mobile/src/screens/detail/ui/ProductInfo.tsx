@@ -5,6 +5,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 import {HotDealType, UploaderType} from '@/shared/api/gql/graphql';
 import DisplayPrice from '@/shared/components/product/DisplayPrice';
 import {displayTime} from '@/shared/lib/format/price';
+import {useNowMinute} from '@/shared/hooks/useNow';
 
 import ProductGuideMetaRows, {DetailInfoRow} from './ProductGuideMetaRows';
 import HotdealCriteriaBadge from './HotdealCriteriaBadge';
@@ -46,6 +47,7 @@ export default function ProductInfo({
   evidence?: DealEvidence | null;
   onPressEvidenceMore?: (target: EvidenceTarget) => void;
 }) {
+  const now = useNowMinute();
   // 가격/할인율/평점/쿠폰은 소스 무관 공통 필드라 토스·오늘의집이 같은 블록을 쓴다.
   const display = source.toss ?? source.ohou;
   const displayTitle = hidePrice
@@ -68,7 +70,7 @@ export default function ProductInfo({
           />
         ) : null}
         <Text className="ml-auto shrink-0 text-sm text-gray-600">
-          {displayTime(dealFreshnessAt(product) ?? product.postedAt)}
+          {displayTime(dealFreshnessAt(product) ?? product.postedAt, now)}
           {isSeenBasedFreshness(product) ? ' 확인' : ''}
         </Text>
       </View>

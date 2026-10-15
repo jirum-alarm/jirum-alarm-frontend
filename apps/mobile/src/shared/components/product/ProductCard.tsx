@@ -14,6 +14,7 @@ import {
   type ProductCardSource,
 } from '@/shared/lib/analytics/card-tracking';
 import {displayTime, parsePrice} from '@/shared/lib/format/price';
+import {useNowMinute} from '@/shared/hooks/useNow';
 import ProductCardStatus from '@/shared/components/product/ProductCardStatus';
 
 export type ProductCardItem = {
@@ -48,6 +49,7 @@ const ProductCard = React.memo(function ProductCard({
   /** GA4 `product_card_click` 진입 경로(web 카드 `source`). 없으면 추적 안 함. */
   trackingSource?: ProductCardSource;
 }) {
+  const now = useNowMinute();
   const {hasWon, priceWithoutWon} = parsePrice(product.price);
   const priceText = hasWon ? `${priceWithoutWon}원` : priceWithoutWon;
   const isGrid = layout === 'grid';
@@ -93,7 +95,9 @@ const ProductCard = React.memo(function ProductCard({
           mallName={product.mallName}
           providerName={product.provider?.nameKr}
           postedCommunityCount={product.postedCommunityCount}
-          time={product.postedAt ? displayTime(product.postedAt) : undefined}
+          time={
+            product.postedAt ? displayTime(product.postedAt, now) : undefined
+          }
         />
         <Text
           className="pt-1 text-lg font-semibold text-gray-900"

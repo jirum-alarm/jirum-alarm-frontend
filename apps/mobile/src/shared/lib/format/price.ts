@@ -80,14 +80,18 @@ const WEEK = DAY * 7;
  * ponytail: web 은 dayjs 를 쓰지만 mobile 에는 dayjs 가 dependency 로 없다
  * (node_modules 에 hoisting 으로 올라와 있을 뿐이라 의존하면 부서진다).
  * 초 단위 뺄셈이면 충분해서 직접 계산한다.
+ * 컴포넌트에선 `now` 에 `useNowMinute()` 를 넘긴다 — 안 넘기면 React Compiler 가 결과를 캐시해 문구가 멈춘다.
  */
-export function displayTime(createdAt: string | Date | null | undefined) {
+export function displayTime(
+  createdAt: string | Date | null | undefined,
+  now: number = Date.now(),
+) {
   if (!createdAt) return '';
 
   const created = new Date(createdAt);
   if (Number.isNaN(created.getTime())) return '';
 
-  const seconds = Math.floor((Date.now() - created.getTime()) / 1000);
+  const seconds = Math.floor((now - created.getTime()) / 1000);
   if (seconds < 0) return '방금 전';
   if (seconds < MINUTE) return '방금 전';
 
@@ -105,9 +109,10 @@ export function displayTime(createdAt: string | Date | null | undefined) {
   if (weeks < 5) return `${weeks}주 전`;
 
   // 달·해는 길이가 일정하지 않아 초 나눗셈으로는 어긋난다. 달력 기준으로 센다.
+  const today = new Date(now);
   const months =
-    (new Date().getFullYear() - created.getFullYear()) * 12 +
-    (new Date().getMonth() - created.getMonth());
+    (today.getFullYear() - created.getFullYear()) * 12 +
+    (today.getMonth() - created.getMonth());
   if (months < 12) return `${Math.max(1, months)}달 전`;
 
   return `${Math.floor(months / 12)}년 전`;
