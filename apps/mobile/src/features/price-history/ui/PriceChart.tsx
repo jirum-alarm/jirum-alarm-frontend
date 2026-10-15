@@ -151,8 +151,8 @@ export default function PriceChart({
   const selected =
     selectedIndex != null ? geo.coords[selectedIndex] : undefined;
   // 이 상품 점은 전용 마커로만 그린다 — 골라도 큰 점을 겹쳐 그리지 않는다(예전과 같음).
-  // 「이 상품」 라벨 바로 아래 점(대개 오늘)을 고르면 위쪽 가격이 그 라벨에 붙고 가이드선이 글자를 관통했다(2026-10-15) —
-  // 그땐 가격을 점 왼쪽에 붙이고 선은 파란 점 아래부터 긋는다. 이 상품 점 자체를 고르면 그 라벨이 이미 가격을 보여 준다.
+  // 「이 상품」 라벨은 위 여백에 고정이라, 그 근처 점(대개 오늘)을 고르면 위쪽 가격이 라벨과 겹친다(2026-10-15) —
+  // 그땐 가격을 점 왼쪽에 붙인다. 이 상품 점 자체를 고르면 그 라벨이 이미 가격을 보여 준다.
   const nearSeed =
     !!selected && !!seedCoord && Math.abs(selected.x - seedCoord.x) < 48;
   const selectedIsSeed =
@@ -184,11 +184,7 @@ export default function PriceChart({
             <G>
               <Line
                 x1={selected.x}
-                y1={
-                  nearSeed && seedCoord && seedCoord.y < selected.y
-                    ? seedCoord.y + 10
-                    : PAD.top
-                }
+                y1={PAD.top}
                 x2={selected.x}
                 y2={PAD.top + geo.plotH}
                 stroke={LINE}
@@ -316,11 +312,23 @@ const ChartBase = React.memo(function ChartBase({
         );
       })}
 
+      {/* 「이 상품」 라벨은 위 여백(PAD.top 위)에 고정하고 점선으로 점과 잇는다 — 점 바로 위에 두면 이 상품이 최저가라
+          바닥에 있을 때 내려오는 선·점과 겹쳤다(2026-10-15). web 은 같은 자리 + 기본 가이드 점선. */}
       {seedCoord ? (
         <G>
+          <Line
+            x1={seedCoord.x}
+            y1={PAD.top}
+            x2={seedCoord.x}
+            y2={seedCoord.y - 8}
+            stroke={SEED}
+            strokeOpacity={0.5}
+            strokeWidth={1}
+            strokeDasharray="3 3"
+          />
           <SvgText
             x={seedCoord.x}
-            y={Math.max(PAD.top - 6, seedCoord.y - 28)}
+            y={PAD.top - 20}
             fontSize={11}
             fontWeight="700"
             fill={SEED}
@@ -329,7 +337,7 @@ const ChartBase = React.memo(function ChartBase({
           </SvgText>
           <SvgText
             x={seedCoord.x}
-            y={Math.max(PAD.top + 6, seedCoord.y - 14)}
+            y={PAD.top - 6}
             fontSize={11}
             fontWeight="600"
             fill={SEED}

@@ -903,12 +903,13 @@ function PriceLineChart({
           );
         })}
 
-        {/* 이 상품 — 채운 점 + 라벨 (한눈에 위치 파악) */}
+        {/* 이 상품 — 채운 점 + 라벨. 라벨은 위 여백(pad.top 위)에 고정 — 점 바로 위에 두면 이 상품이 최저가라 바닥에 있을 때
+            내려오는 선·점과 겹쳤다(2026-10-15, 앱과 같은 자리). 점과는 기본 가이드 점선이 잇는다. */}
         {seedCoord && (
           <g>
             <text
               x={seedCoord.x}
-              y={Math.max(pad.top - 6, seedCoord.y - 28)}
+              y={pad.top - 20}
               textAnchor="middle"
               fontSize={11}
               stroke="var(--color-white)"
@@ -921,7 +922,7 @@ function PriceLineChart({
             </text>
             <text
               x={seedCoord.x}
-              y={Math.max(pad.top + 6, seedCoord.y - 14)}
+              y={pad.top - 6}
               textAnchor="middle"
               fontSize={11}
               stroke="var(--color-white)"
