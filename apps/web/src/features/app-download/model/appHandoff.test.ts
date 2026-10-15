@@ -100,6 +100,29 @@ test('외부 주소·프로토콜 상대 주소는 홈으로 접는다(남의 �
   assert.equal(normalizeHandoffPath('/products/1?a=b'), '/products/1');
 });
 
+test('앱 화면이 읽는 쿼리(검색어·탭)는 싣고 나머지는 버린다', () => {
+  assert.equal(
+    normalizeHandoffPath('/search?keyword=%EC%97%90%EC%96%B4%ED%8C%9F&utm_source=x'),
+    '/search?keyword=%EC%97%90%EC%96%B4%ED%8C%9F',
+  );
+  assert.equal(normalizeHandoffPath('/toss?tab=category#x'), '/toss?tab=category');
+  const { data } = parseIntent(androidOpenAppUrl('/toss?tab=category', 'banner'));
+  assert.equal(data, '/toss?tab=category&handoff=banner');
+  assert.equal(
+    iosOpenAppUrl('/search?keyword=a', 'banner'),
+    'https://www.jirum-alarm.com/search?keyword=a#handoff=banner',
+  );
+});
+
+test('iOS: /toss·/trending 첫 화면도 유니버설 링크, /deals 는 앱이 안 여니 스토어로', () => {
+  assert.equal(iosOpenAppUrl('/toss', 'banner'), 'https://www.jirum-alarm.com/toss#handoff=banner');
+  assert.equal(
+    iosOpenAppUrl('/trending', 'banner'),
+    'https://www.jirum-alarm.com/trending#handoff=banner',
+  );
+  assert.equal(iosOpenAppUrl('/deals/airpods', 'banner'), null);
+});
+
 test('도착 해시 읽기 — 정확한 모양만', () => {
   assert.equal(readHandoffHash('#handoff=detail_header'), 'detail_header');
   assert.equal(readHandoffHash('#comments'), null);

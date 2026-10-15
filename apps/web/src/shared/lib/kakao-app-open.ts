@@ -38,7 +38,7 @@ export const KAKAO_APP_ATTEMPT_EVENT = 'jirum:kakao-app-attempt';
 const ANDROID_PACKAGE = 'com.solcode.jirmalam';
 
 /** 앱이 그리는 화면 — apps/web/public/.well-known/apple-app-site-association 의 components 와 같다. */
-const APP_PATH = /^\/(products|community|trending|curation|toss|deals)(\/|$)/;
+const APP_PATH = /^\/(products|community|trending|curation|toss|search)(\/|$)/;
 
 export type KakaoAppOpenPref = 'on' | 'off' | null;
 export type KakaoPlatform = 'ios' | 'android';

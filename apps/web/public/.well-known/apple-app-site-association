@@ -13,8 +13,16 @@
             "comment": "커뮤니티 글"
           },
           {
+            "/": "/community",
+            "comment": "커뮤니티 목록 — /community/* 는 하위 경로만 잡는다"
+          },
+          {
             "/": "/trending/*",
             "comment": "랭킹·실시간"
+          },
+          {
+            "/": "/trending",
+            "comment": "발견 탭 첫 화면"
           },
           {
             "/": "/curation/*",
@@ -25,8 +33,22 @@
             "comment": "토스 특가"
           },
           {
+            "/": "/toss",
+            "comment": "토스 특가 — 실제 페이지는 /toss 하나뿐이라 /toss/* 만으론 한 번도 안 맞았다"
+          },
+          {
+            "/": "/search",
+            "comment": "검색 결과(?keyword=) — 앱 검색 화면이 받는다"
+          },
+          {
             "/": "/deals/*",
-            "comment": "에버그린 모델 페이지"
+            "exclude": true,
+            "comment": "핫딜 최저가는 앱이 열지 않는다(tab-routing) — 웹에서 연다"
+          },
+          {
+            "/": "/deals",
+            "exclude": true,
+            "comment": "위와 같다"
           },
           {
             "/": "/api/*",

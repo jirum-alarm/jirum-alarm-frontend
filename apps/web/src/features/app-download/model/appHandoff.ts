@@ -37,8 +37,19 @@ const IOS_STORE_BASE = 'https://apps.apple.com/app/apple-store/id6474611420';
 const IOS_PROVIDER_TOKEN = '126805495';
 const WWW_ORIGIN = 'https://www.jirum-alarm.com';
 
-/** apps/web/public/.well-known/apple-app-site-association 의 components 와 맞춘다. */
-const UNIVERSAL_LINK_PATH = /^\/(products|community|trending|curation|toss|deals)(\/|$)/;
+/**
+ * apps/web/public/.well-known/apple-app-site-association 의 components 와 맞춘다.
+ * `/deals` 는 앱이 열지 않는 페이지라(tab-routing) AASA 에서 뺐다 — 여기 남기면 앱이 있는 사람도 웹에 떨어져
+ * #handoff 를 보고 App Store 로 간다.
+ */
+const UNIVERSAL_LINK_PATH = /^\/(products|community|trending|curation|toss|search)(\/|$)/;
+
+/**
+ * 앱 화면이 읽는 쿼리만 싣는다 — 검색어(`/search?keyword=`)·탭(`/toss?tab=`·`/trending/*?tab=`).
+ * 예전엔 쿼리를 통째로 떼서 검색 결과·토스 탭에서 「앱으로 보기」를 누르면 앱이 빈 검색·첫 탭으로 열렸다.
+ * 나머지(utm·from 등)는 버린다 — 앱 통계에 웹 캠페인이 섞이지 않게.
+ */
+const HANDOFF_QUERY_KEYS = ['keyword', 'tab'] as const;
 
 /** 버튼이 놓인 자리. GA4 app_download_click 의 source, Play referrer 의 utm_medium 으로 간다. */
 export type HandoffSource =
@@ -51,11 +62,23 @@ export type HandoffSource =
   | 'kakao_bridge' // 카톡 인앱에서 키워드를 건 뒤 「앱에서 받기」(shared/lib/kakao-bridge.ts)
   | 'kakao_invite'; // 카톡 인앱 「카톡 링크를 앱으로 바로 열기」 안내 띠(shared/lib/kakao-app-open.ts)
 
-/** 쿼리·해시를 뗀 '/'로 시작하는 경로만 남긴다 — 외부 주소를 실어 보내지 않는다. */
+/** '/'로 시작하는 경로 + 앱이 읽는 쿼리(HANDOFF_QUERY_KEYS)만 남긴다 — 외부 주소를 실어 보내지 않는다. */
 export const normalizeHandoffPath = (path: string): string => {
   const pathname = path.replace(/[?#].*$/, '');
-  return pathname.startsWith('/') && !pathname.startsWith('//') ? pathname : '/';
+  if (!pathname.startsWith('/') || pathname.startsWith('//')) return '/';
+  const query = path.match(/\?([^#]*)/)?.[1] ?? '';
+  const kept = new URLSearchParams();
+  const source = new URLSearchParams(query);
+  for (const key of HANDOFF_QUERY_KEYS) {
+    const value = source.get(key);
+    if (value) kept.set(key, value);
+  }
+  const keptQuery = kept.toString();
+  return keptQuery ? `${pathname}?${keptQuery}` : pathname;
 };
+
+/** 경로(쿼리가 있을 수도) 뒤에 쿼리 한 쌍을 잇는다. */
+const joinQuery = (path: string): string => (path.includes('?') ? '&' : '?');
 
 /** Play 스토어 주소. referrer 는 한 번 인코딩된 쿼리 문자열이어야 Play 가 앱에 그대로 넘긴다. */
 export const playStoreUrl = (
@@ -89,7 +112,7 @@ export const androidOpenAppUrl = (
   const fallback = encodeURIComponent(playStoreUrl(source, pathname, guestDeviceId));
   // `intent://` + `/경로` → 앱이 받는 주소는 `jirumalarm:///경로?handoff=…`(슬래시 3개 — 앱 normalizeDeepLink 가 받는 모양).
   return (
-    `intent://${pathname}?${HANDOFF_PARAM}=${source}${guestSuffix('&', guestDeviceId)}` +
+    `intent://${pathname}${joinQuery(pathname)}${HANDOFF_PARAM}=${source}${guestSuffix('&', guestDeviceId)}` +
     `#Intent;scheme=jirumalarm;package=${ANDROID_PACKAGE};` +
     `S.browser_fallback_url=${fallback};end`
   );
@@ -104,7 +127,7 @@ export const iosOpenAppUrl = (
   guestDeviceId?: string | null,
 ): string | null => {
   const pathname = normalizeHandoffPath(path);
-  if (!UNIVERSAL_LINK_PATH.test(pathname)) return null;
+  if (!UNIVERSAL_LINK_PATH.test(pathname.split('?')[0])) return null;
   return `${WWW_ORIGIN}${pathname}#${HANDOFF_PARAM}=${source}${guestSuffix('&', guestDeviceId)}`;
 };
 
