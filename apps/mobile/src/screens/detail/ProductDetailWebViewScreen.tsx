@@ -21,6 +21,7 @@ import {
   parsedWebViewMessage,
   WebViewEventType,
 } from '@/shared/lib/webview';
+import type {WebViewEventPayloads} from '@/shared/lib/webview/bridge';
 import {subscribeOpenDetail} from '@/shared/lib/webview/event';
 import {INTERCEPT_DETAIL_LINK_SCRIPT} from '@/shared/lib/webview/intercept-detail-link';
 import {openInAppBrowser, shouldOpenExternally} from '@/shared/lib/navigation';
@@ -61,11 +62,14 @@ export function StackWebView({
   navigation,
   hideWebNav,
   header,
+  onDraftChange,
 }: {
   path: string;
   navigation: StackNav;
   hideWebNav: boolean;
   header?: React.ReactNode;
+  /** 웹 폼이 「쓰던 내용 있음」을 알릴 때(WRITE_DRAFT_CHANGED). 글쓰기 화면만 쓴다. */
+  onDraftChange?: (dirty: boolean) => void;
 }) {
   const insets = useSafeAreaInsets();
   const chrome = useChromeColors();
@@ -130,12 +134,18 @@ export function StackWebView({
           navigation.goBack();
           return;
         }
+        if (parsed.type === WebViewEventType.WRITE_DRAFT_CHANGED) {
+          const payload =
+            parsed.payload as WebViewEventPayloads[WebViewEventType.WRITE_DRAFT_CHANGED];
+          onDraftChange?.(!!payload?.data?.dirty);
+          return;
+        }
       } catch {
         // 형식이 다른 메시지는 기존 브리지로.
       }
       handleWebViewMessage(event);
     },
-    [navigation],
+    [navigation, onDraftChange],
   );
 
   return (
