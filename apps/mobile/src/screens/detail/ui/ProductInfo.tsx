@@ -7,7 +7,7 @@ import DisplayPrice from '@/shared/components/product/DisplayPrice';
 import HotdealBadge from '@/shared/components/product/HotdealBadge';
 import {displayTime} from '@/shared/lib/format/price';
 
-import ProductGuideMetaRows from './ProductGuideMetaRows';
+import ProductGuideMetaRows, {DetailInfoRow} from './ProductGuideMetaRows';
 import HotdealGuideModal from './HotdealGuideModal';
 import PressableScale from '@/shared/components/PressableScale';
 import RecommendButton from './RecommendButton';
@@ -18,7 +18,7 @@ import PriceVerdictHero from './PriceVerdictHero';
 import PriceContextBadge, {type PriceContext} from './PriceContextBadge';
 
 import {
-  formatFreeShipping,
+  formatDeliveryText,
   type ProductDetail,
   type SourceData,
 } from '../model/types';
@@ -26,22 +26,8 @@ import type {PriceVerdict} from '../lib/price-signals';
 import {dealFreshnessAt, isSeenBasedFreshness} from '../lib/price-signals';
 import {stripPriceFromTitle} from '@/entities/home/lib/toss';
 import Badge from '@/shared/components/ui/Badge';
-
-/** 라벨/값 한 줄. 색은 web ProductInfo 와 동일하게 맞춘다(사용자 결정 2026-08-12). */
-function MetaRow({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <View className="flex-row justify-between">
-      <Text className="text-sm font-medium text-gray-500">{label}</Text>
-      <View className="flex-row items-center gap-x-1">{children}</View>
-    </View>
-  );
-}
+import {detailInfo} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling';
 
 export default function ProductInfo({
   product,
@@ -69,10 +55,12 @@ export default function ProductInfo({
     ? stripPriceFromTitle(product.title)
     : product.title;
   const [guideOpen, setGuideOpen] = useState(false);
+  const deliveryText = formatDeliveryText(source);
 
   return (
-    <View className="px-5 pb-9">
-      <View className="flex-row items-center gap-3 pb-2">
+    <View className="px-5 pb-6">
+      {/* 배지 줄 오른쪽에 게시 시각 — web 과 같은 자리. */}
+      <View className="min-h-[22px] flex-row items-center gap-3 pb-2">
         {product.isEnd ? (
           <Badge size="tag" variant="outline" tone="gray">
             판매종료
@@ -90,18 +78,15 @@ export default function ProductInfo({
             />
           </PressableScale>
         ) : null}
-      </View>
-
-      {/* web ProductInfo 순서: 제목 → 시간 → (가격+평점 | 추천버튼).
-          한때 가격을 제목 위로 올렸었지만 "웹과 동일" 방침으로 되돌렸다. */}
-      <Text className="font-medium text-gray-800">{displayTitle}</Text>
-
-      <View className="gap-y-1 pt-3">
-        <Text className="h-5 text-sm text-gray-600">
+        <Text className="ml-auto shrink-0 text-sm text-gray-600">
           {displayTime(dealFreshnessAt(product) ?? product.postedAt)}
           {isSeenBasedFreshness(product) ? ' 확인' : ''}
         </Text>
+      </View>
 
+      <Text className="font-medium text-gray-800">{displayTitle}</Text>
+
+      <View className="gap-y-1 pt-3">
         <View className="flex-row items-center justify-between gap-x-3">
           <View className="min-w-0 flex-1">
             {hidePrice ? (
@@ -175,59 +160,44 @@ export default function ProductInfo({
         <TossBadges toss={source.toss} hidePriceSignals={hidePrice} />
       ) : null}
 
-      <View className="gap-y-2 pt-4">
-        <MetaRow label="쇼핑몰">
+      {/* 구매 정보 — 가격 요약과는 선 하나로 나눈다(web 과 같다). */}
+      <View
+        className={cn('mt-5 border-t border-gray-100 pt-5', detailInfo.list)}>
+        <DetailInfoRow label="쇼핑몰">
           {source.toss ? <TossIcon size={20} /> : null}
           {!source.toss && source.naverbc ? <NaverIcon height={12} /> : null}
-          <Text className="text-sm font-medium text-gray-500">
+          <Text className={detailInfo.value}>
             {source.toss ? '토스' : source.ohou ? '오늘의집' : product.mallName}
           </Text>
-        </MetaRow>
+        </DetailInfoRow>
 
         <ProductGuideMetaRows productId={productId} hidePrice={hidePrice} />
 
         {product.uploaderType !== UploaderType.Crawled ? (
-          <MetaRow label="업로드">
+          <DetailInfoRow label="업로드">
             <Text
-              className={
-                product.uploaderType === UploaderType.Official
-                  ? 'text-sm font-medium text-primary-800'
-                  : 'text-sm font-medium text-gray-600'
-              }>
+              className={cn(
+                detailInfo.value,
+                product.uploaderType === UploaderType.Official &&
+                  'text-primary-800',
+              )}>
               {product.uploaderType === UploaderType.Official
                 ? '지름알림'
-                : product.author?.nickname ?? ''}
+                : (product.author?.nickname ?? '')}
             </Text>
-          </MetaRow>
+          </DetailInfoRow>
         ) : null}
 
         {display?.sellerName ? (
-          <MetaRow label="판매자">
-            <Text className="text-sm font-medium text-gray-500">
-              {display.sellerName}
-            </Text>
-          </MetaRow>
+          <DetailInfoRow label="판매자">
+            <Text className={detailInfo.value}>{display.sellerName}</Text>
+          </DetailInfoRow>
         ) : null}
 
-        {source.toss ? (
-          <MetaRow label="배송비">
-            <Text className="text-sm font-medium text-gray-500">
-              {source.toss.deliveryFee
-                ? `${source.toss.deliveryFee.toLocaleString()}원` +
-                  (source.toss.freeShippingThreshold
-                    ? ` (${formatFreeShipping(
-                        source.toss.freeShippingThreshold,
-                      )})`
-                    : '')
-                : '무료배송'}
-            </Text>
-          </MetaRow>
-        ) : source.ohou?.delivery ? (
-          <MetaRow label="배송비">
-            <Text className="text-sm font-medium text-gray-500">
-              {source.ohou.delivery}
-            </Text>
-          </MetaRow>
+        {deliveryText ? (
+          <DetailInfoRow label="배송비">
+            <Text className={detailInfo.value}>{deliveryText}</Text>
+          </DetailInfoRow>
         ) : null}
       </View>
 

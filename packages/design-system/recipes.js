@@ -104,6 +104,16 @@ const sectionTitle = {
   subtitle: 'text-sm text-gray-500',
 };
 
+/**
+ * 상세 정보 표(쇼핑몰·가격 조건·혜택·배송비) 한 줄 — 라벨 고정폭 왼쪽, 값은 그 옆에서 줄바꿈(main 6ba059d7 과 같다).
+ */
+const detailInfo = {
+  list: 'gap-y-2.5',
+  row: 'gap-x-3',
+  label: 'w-16 shrink-0 text-sm text-gray-500',
+  value: 'min-w-0 flex-1 text-sm text-gray-800',
+};
+
 /** 상품 카드 사진 틀 — 사진이 늦거나 투명 PNG 여도 카드 자리가 보이게 옅은 면 + 테두리. */
 const cardThumb = 'overflow-hidden rounded-lg border border-gray-200 bg-gray-50';
 
@@ -117,4 +127,4 @@ const cardLabel = {
   strip: {box: 'h-[22px] rounded-b-lg bg-fixed-700/80 px-2', text: 'text-xs text-fixed-white'},
 };
 
-module.exports = {badge, chip, tab, toggle, sectionTitle, cardThumb, cardLabel};
+module.exports = {badge, chip, tab, toggle, sectionTitle, cardThumb, cardLabel, detailInfo};
