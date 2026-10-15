@@ -99,9 +99,12 @@ function InfoTooltip() {
           onPress={() => setOpen(false)}
           className="absolute right-0 top-7 z-50"
           accessibilityRole="button">
-          <View className="rounded-lg bg-gray-600 px-4 py-2.5">
-            <Text className="text-13 text-white">
-              <Text className="font-semibold text-white">실제 커뮤니티</Text>
+          {/* 테마와 무관하게 어두운 면 + 흰 글씨(web Tooltip 과 같다) — gray-600·white 는 다크에서 뒤집힌다. */}
+          <View className="rounded-lg bg-fixed-600 px-4 py-2.5">
+            <Text className="text-13 text-fixed-white">
+              <Text className="font-semibold text-fixed-white">
+                실제 커뮤니티
+              </Text>
               {' 사용자들의\n핫딜 반응을 요약해 확인해요'}
             </Text>
           </View>
@@ -168,7 +171,8 @@ export default function CommunityReaction({
 
   return (
     <View className="px-5 pt-7">
-      <View className="flex-row items-start justify-between gap-3">
+      {/* z-10: 툴팁은 이 줄 안의 absolute 라, 줄 자체를 띄우지 않으면 뒤에 그려지는 반응 카드가 툴팁 아래쪽 글씨를 덮는다. */}
+      <View className="z-10 flex-row items-start justify-between gap-3">
         <Text className={cn('min-w-0', sectionTitle.detail)}>
           커뮤니티 반응
         </Text>
