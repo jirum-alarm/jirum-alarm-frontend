@@ -63,7 +63,7 @@ export default function CoupangSearchCta({productId}: {productId: number}) {
   };
 
   return (
-    <View className="px-5 pt-7">
+    <View className="px-5 pt-3">
       <PressableScale
         onPress={handlePress}
         accessibilityRole="link"

@@ -386,11 +386,15 @@ function NativeDetail({
         </View>
         {/* web 순서: 카톡방 → 쿠팡 고지 → (띠) 비교 → (띠) 가격추이 → (띠) 커뮤니티 반응. 광고는 앱에서 제거.
             띠는 조건부 섹션이 자기 안에 둔다(DetailBand) — 섹션이 없으면 띠도 없다. */}
-        <KakaoOpenChatPrompt
-          categoryId={product.categoryId}
-          productId={Number(product.id)}
-        />
-        <AffiliateNotice mallName={product.mallName} variant="coupang" />
+        {/* 요약 아래 안내 묶음(web 의 gap-3 묶음) — 카드 사이는 gap 이 주고 카드엔 바깥 margin 을 두지 않는다.
+            예전엔 카톡 카드 mb-4 + 띠 mt-7 로 띠 위가 44pt, 아래가 28pt 로 어긋났다(2026-10-15). */}
+        <View className="gap-3">
+          <KakaoOpenChatPrompt
+            categoryId={product.categoryId}
+            productId={Number(product.id)}
+          />
+          <AffiliateNotice mallName={product.mallName} variant="coupang" />
+        </View>
         <View
           onLayout={e => {
             expiredBlockY.current = e.nativeEvent.layout.y;
