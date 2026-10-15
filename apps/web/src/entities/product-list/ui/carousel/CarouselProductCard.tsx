@@ -36,11 +36,11 @@ export default function CarouselProductCard({
     <Link
       prefetch={!!priority}
       href={PAGE.DETAIL + '/' + product.id}
-      className="pc:w-[192px] inline-block w-[120px]"
+      className="pc:w-48 inline-block w-[120px]"
       {...productCardTracking(source, product.id)}
     >
       <m.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
-        <div className={cn('pc:h-[192px] relative aspect-square h-[120px]', cardThumb)}>
+        <div className={cn('pc:h-48 relative aspect-square h-[120px]', cardThumb)}>
           <ProductThumbnail
             src={product?.thumbnail ?? ''}
             title={product.title}

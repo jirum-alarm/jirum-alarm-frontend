@@ -41,7 +41,7 @@ export default function TopButton({
         // 40px 원이라 44pt 권장 터치 영역에 조금 모자라다.
         hitSlop={4}>
         <View
-          className="h-[40px] w-[40px] items-center justify-center rounded-full border border-gray-300 bg-white"
+          className="h-10 w-10 items-center justify-center rounded-full border border-gray-300 bg-white"
           style={{
             shadowColor: brand.black,
             shadowOpacity: 0.08,

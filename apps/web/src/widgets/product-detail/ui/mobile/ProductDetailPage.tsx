@@ -178,7 +178,7 @@ function ProductDetailPage({
 
           <NoticeProfitLink productId={productId} />
 
-          <div className="h-[64px] bg-gray-100" />
+          <div className="h-16 bg-gray-100" />
           <BottomCTA productId={productId} isUserLogin={isUserLogin} />
         </div>
       </main>

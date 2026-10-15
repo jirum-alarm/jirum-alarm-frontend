@@ -1,5 +1,6 @@
 'use client';
 
+import { adLabel } from '@jirum/design-system/recipes';
 import * as m from 'motion/react-m';
 import Image, { StaticImageData } from 'next/image';
 import { MouseEvent, ReactNode } from 'react';
@@ -45,7 +46,7 @@ const BannerItem = ({
     <Link
       onClick={handleClick}
       className={cn(
-        'pc:w-1/2 pc:grow pc:pl-[32px] pc:pr-6.5 relative flex h-full w-full items-center justify-between rounded-lg border py-3 pr-[6px] pl-4',
+        'pc:w-1/2 pc:grow pc:pl-8 pc:pr-6.5 relative flex h-full w-full items-center justify-between rounded-lg border py-3 pr-1.5 pl-4',
         isMobile && 'h-[92px]',
         className,
       )}
@@ -59,13 +60,13 @@ const BannerItem = ({
         transition={{ duration: 0.1 }}
       >
         <div>
-          <p className="pc:text-22 [&>strong]:text-primary-300 text-fixed-white mb-[4px] font-bold">
+          <p className="pc:text-22 [&>strong]:text-primary-300 text-fixed-white mb-1 font-bold">
             {title}
           </p>
           <p className="pc:text-base text-fixed-200 text-13">{description}</p>
         </div>
 
-        <div className="pc:h-[84px] pc:w-[120px] relative flex h-14 w-[80px] items-center justify-center">
+        <div className="pc:h-[84px] pc:w-[120px] relative flex h-14 w-20 items-center justify-center">
           <Image
             src={image}
             alt=""
@@ -78,7 +79,7 @@ const BannerItem = ({
       </m.div>
 
       {isAd && (
-        <div className="border-fixed-white text-fixed-white bg-fixed-400 absolute right-[8px] bottom-[8px] z-30 w-fit rounded-lg border px-[7px] py-[3px] text-xs leading-none font-medium">
+        <div className={cn(adLabel.box, adLabel.text, 'absolute right-2 bottom-2 z-30 w-fit')}>
           AD
         </div>
       )}

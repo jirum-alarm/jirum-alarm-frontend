@@ -325,7 +325,7 @@ function CommunityCommentInput({ postId, isUserLogin }: { postId: number; isUser
         e.preventDefault();
         if (content.trim()) addComment();
       }}
-      className="max-w-mobile-max pc:static pc:mx-0 pc:max-w-none pc:pb-3 fixed inset-x-0 bottom-[var(--bottom-nav-padding,0px)] z-40 mx-auto flex min-h-[64px] w-full items-end gap-x-3 border-t border-gray-300 bg-white px-5 pt-3 pb-[var(--bottom-chrome-padding)]"
+      className="max-w-mobile-max pc:static pc:mx-0 pc:max-w-none pc:pb-3 fixed inset-x-0 bottom-[var(--bottom-nav-padding,0px)] z-40 mx-auto flex min-h-16 w-full items-end gap-x-3 border-t border-gray-300 bg-white px-5 pt-3 pb-[var(--bottom-chrome-padding)]"
     >
       <div className="flex grow overflow-hidden rounded-lg border border-transparent bg-gray-50 focus-within:border-gray-500">
         <textarea
@@ -335,7 +335,7 @@ function CommunityCommentInput({ postId, isUserLogin }: { postId: number; isUser
           disabled={!isUserLogin}
           maxLength={300}
           rows={1}
-          className="max-h-[100px] min-h-[40px] w-full resize-none bg-transparent px-3 py-2 text-sm outline-none"
+          className="max-h-[100px] min-h-10 w-full resize-none bg-transparent px-3 py-2 text-sm outline-none"
           style={{ height: '40px' }}
           onInput={(e) => {
             const t = e.currentTarget;

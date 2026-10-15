@@ -44,7 +44,7 @@ const ProductLikeSkeleton = () => {
   return (
     <div>
       <Skeleton className="mb-3 h-[17px] w-1/3" />
-      <div className="pc:grid-cols-4 pc:gap-x-[25px] pc:gap-y-10 grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3">
+      <div className="pc:grid-cols-4 pc:gap-x-6 pc:gap-y-10 grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3">
         {Array.from({ length: 12 }).map((item, i) => (
           <div key={i} className="w-full">
             <Skeleton className="flex aspect-square items-center justify-center rounded-lg">

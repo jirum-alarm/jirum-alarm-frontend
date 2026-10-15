@@ -101,7 +101,7 @@ const Login = () => {
 
   return (
     <BasicLayout hasBackButton fullScreen={true}>
-      <div className="flex h-full flex-col px-8 pt-[10px] pb-[90px]">
+      <div className="flex h-full flex-col px-8 pt-2.5 pb-[90px]">
         <div className="flex flex-col items-center text-center">
           {/* Character Icon */}
           <div className="mb-3">
@@ -128,7 +128,7 @@ const Login = () => {
                   onClick={button.action}
                   disabled={isLoading}
                   className={cn(
-                    'flex h-[48px] w-[280px] items-center justify-center gap-2 rounded-full font-semibold transition-colors',
+                    'flex h-12 w-[280px] items-center justify-center gap-2 rounded-full font-semibold transition-colors',
                     button.style,
                     isLoading && 'cursor-not-allowed opacity-70',
                   )}

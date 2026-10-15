@@ -273,7 +273,7 @@ export default function ProductInfo({
       </div>
       <div>
         <div className="flex w-full gap-x-4">
-          <div className="flex h-[48px] items-center">
+          <div className="flex h-12 items-center">
             <Suspense>
               <LikeButton productId={productId} isUserLogin={isUserLogin} />
             </Suspense>
@@ -311,7 +311,7 @@ export default function ProductInfo({
             // 제휴 아웃바운드 — 크롤러가 따라가 봇클릭을 만들지 않게 nofollow/sponsored
             rel="nofollow sponsored noopener noreferrer"
           >
-            <Button className="h-[48px] w-full px-6 text-base font-semibold">구매하러 가기</Button>
+            <Button className="h-12 w-full px-6 text-base font-semibold">구매하러 가기</Button>
           </a>
         </div>
         {/* 데스크톱은 fixed 하단 바가 없어 모바일 BottomCTA 를 그대로 못 옮긴다.

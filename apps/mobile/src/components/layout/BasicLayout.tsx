@@ -19,7 +19,7 @@ const BasicLayout = ({children, hasBackButton, title}: Props) => {
   return (
     <View className="flex-1 bg-white">
       <View
-        className={cn('py-[12px] px-[20px] flex-row w-full items-center', {
+        className={cn('py-3 px-5 flex-row w-full items-center', {
           'justify-start': hasBackButton,
           'justify-center': !hasBackButton,
         })}
@@ -35,9 +35,7 @@ const BasicLayout = ({children, hasBackButton, title}: Props) => {
               <CaretLeft />
             </Pressable>
             {title && (
-              <Text className="pl-[20px] text-lg font-pretendard-bold">
-                {title}
-              </Text>
+              <Text className="pl-5 text-lg font-pretendard-bold">{title}</Text>
             )}
           </>
         )}

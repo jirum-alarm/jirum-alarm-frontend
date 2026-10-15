@@ -215,7 +215,7 @@ export default function BottomCTA({
         </PressableScale>
 
         <Button
-          className="h-[48px] flex-1"
+          className="h-12 flex-1"
           onPress={handlePurchase}
           disabled={!product.detailUrl}
           accessibilityRole="button"

@@ -22,7 +22,7 @@ const CategoriesCheckboxGroup = ({
   categories,
 }: CategoriesCheckboxGroupProps) => {
   return (
-    <ul className="grid grid-cols-3 gap-[10px]">
+    <ul className="grid grid-cols-3 gap-2.5">
       {categories.map((category) => (
         <li key={category.text}>
           <Checkbox

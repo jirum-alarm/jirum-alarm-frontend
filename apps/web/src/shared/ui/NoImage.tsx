@@ -2,9 +2,9 @@ import { CATEGORY_MAP } from '@/shared/config/categories';
 import { IllustEmpty } from '@/shared/ui/common/icons';
 
 const ICON_SIZE = {
-  product: 'size-[64px]',
+  product: 'size-16',
   hotDeal: 'size-[52px]',
-  'product-detail': 'size-[64px]',
+  'product-detail': 'size-16',
 };
 
 export default function NoImage({

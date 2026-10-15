@@ -127,7 +127,7 @@ const BottomNavComponent = () => {
                 transition={{ duration: 0.1 }}
               >
                 <div
-                  className="relative flex h-[36px] w-[48px] items-center justify-center"
+                  className="relative flex h-9 w-12 items-center justify-center"
                   aria-hidden="true"
                 >
                   {createElement(isActiveNav(nav) ? nav.activeIcon : nav.icon)}

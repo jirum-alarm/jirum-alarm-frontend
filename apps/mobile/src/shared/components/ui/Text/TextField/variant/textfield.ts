@@ -38,7 +38,7 @@ export const textfieldVariant = cva('flex-1 h-full', {
     },
     size: {
       // eslint-disable-next-line no-restricted-syntax -- TextInput 은 크기만(text-base 의 줄높이 24 를 주면 iOS 한 줄 입력칸 글자가 밀린다)
-      md: ['text-[16px]', 'px-[8px]', 'py-[10px]'],
+      md: ['text-[16px]', 'px-2', 'py-2.5'],
     },
     color: {
       black: ['text-gray-900'],

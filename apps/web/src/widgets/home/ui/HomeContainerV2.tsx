@@ -81,7 +81,7 @@ async function HomeContainerV2() {
     <div className="pc:max-w-none pc:pb-0 max-w-mobile-max mx-auto h-full w-full overflow-x-hidden bg-white pb-[var(--bottom-nav-padding)]">
       <HydrationBoundary state={dehydrate(queryClient)}>
         {!isMobile ? renderDesktop() : renderMobile()}
-        <main className="pc:mt-[770px] pc:w-full pc:max-w-none pc:rounded-t-3xl pc:pt-[72px] max-w-mobile-max rounded-t-sheet relative z-10 mt-[160px] bg-white pt-3">
+        <main className="pc:mt-[770px] pc:w-full pc:max-w-none pc:rounded-t-3xl pc:pt-[72px] max-w-mobile-max rounded-t-sheet relative z-10 mt-40 bg-white pt-3">
           <h1 className="sr-only">지름알림 · 실시간 초특가 핫딜 정보 모아보기</h1>
           <div className="pc:mx-auto pc:max-w-layout-max">
             {!isMobile ? null : renderMobileRanking()}
@@ -107,7 +107,7 @@ export default HomeContainerV2;
 
 // const AdPersilBanner = () => {
 //   return (
-//     <div className="px-[20px] pt-[8px] pb-[28px]" id="ad-pirsil-banner-20250917">
+//     <div className="px-5 pt-2 pb-7" id="ad-pirsil-banner-20250917">
 //       <Link
 //         className="relative block h-[100px] overflow-hidden rounded-lg bg-linear-180 from-[#d3e5ff] to-[#8cbbf7]"
 //         href={Advertisement.Persil.url}
@@ -139,7 +139,7 @@ export default HomeContainerV2;
 //             height={81}
 //           />
 //         </div>
-//         <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-lg border border-white bg-[#98A2B3] px-[8px] py-[4px] text-xs leading-none font-medium text-white">
+//         <div className="bg-opacity-90 absolute right-3 bottom-3 z-30 w-fit rounded-lg border border-white bg-[#98A2B3] px-2 py-1 text-xs leading-none font-medium text-white">
 //           AD
 //         </div>
 //       </Link>
@@ -149,7 +149,7 @@ export default HomeContainerV2;
 
 // const AdBeprocBanner = () => {
 //   return (
-//     <div className="px-[20px] pt-[8px] pb-[28px]" id="ad-pirsil-banner-20250917">
+//     <div className="px-5 pt-2 pb-7" id="ad-pirsil-banner-20250917">
 //       <Link
 //         className="relative block h-[100px] overflow-hidden rounded-lg bg-linear-90 from-[#ced4e0] to-[#E6ECF5]"
 //         href={Advertisement.Beproc.url}
@@ -176,7 +176,7 @@ export default HomeContainerV2;
 //             height={81}
 //           />
 //         </div>
-//         <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-lg border border-white bg-[#98A2B3] px-[8px] py-[4px] text-xs leading-none font-medium text-white">
+//         <div className="bg-opacity-90 absolute right-3 bottom-3 z-30 w-fit rounded-lg border border-white bg-[#98A2B3] px-2 py-1 text-xs leading-none font-medium text-white">
 //           AD
 //         </div>
 //       </Link>
@@ -186,7 +186,7 @@ export default HomeContainerV2;
 
 const AdPersilBanner20251124 = () => {
   return (
-    <div className="px-[20px] pt-[8px] pb-[28px]" id="ad-persil-banner-20251124">
+    <div className="px-5 pt-2 pb-7" id="ad-persil-banner-20251124">
       <Link
         className="relative block h-[100px] overflow-hidden rounded-lg bg-[url(/persil_2511_bg.svg)] bg-cover bg-center"
         href={Advertisement.Persil_20251124.url}
@@ -216,7 +216,7 @@ const AdPersilBanner20251124 = () => {
             height={81}
           />
         </div>
-        <div className="border-fixed-white text-fixed-white bg-fixed-400 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-lg border px-[8px] py-[4px] text-xs leading-none font-medium">
+        <div className="border-fixed-white text-fixed-white bg-fixed-400 absolute right-3 bottom-3 z-30 w-fit rounded-lg border px-2 py-1 text-xs leading-none font-medium">
           AD
         </div>
       </Link>

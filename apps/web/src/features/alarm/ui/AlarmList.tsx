@@ -231,7 +231,7 @@ export default function AlarmList() {
               />
             );
           })}
-          {hasNextData && <div ref={ref} className="h-[48px] w-full" />}
+          {hasNextData && <div ref={ref} className="h-12 w-full" />}
         </ul>
       )}
     </>

@@ -22,6 +22,15 @@ const DEFAULT_PALETTE =
 
 const GUIDE = ' (규칙·예외: packages/design-system/README.md)';
 
+// 간격·크기 유틸리티(max-w 는 v3·v4 눈금이 달라 뺀다).
+const SPACE_UTIL = '(?:p|px|py|pt|pb|pl|pr|ps|pe|m|mx|my|mt|mb|ml|mr|ms|me|gap|gap-x|gap-y|space-x|space-y)';
+const SIZE_UTIL = '(?:w|h|size|min-w|min-h|max-h|top|left|right|bottom|inset|inset-x|inset-y|translate-x|translate-y|basis)';
+// 두 플랫폼(web Tailwind v4·앱 NativeWind = v3) 모두 같은 이름이 있는 값 — Tailwind v3 기본 spacing 눈금 그대로.
+const SCALE_PX = '(?:2|4|6|8|10|12|14|16|20|24|28|32|36|40|44|48|56|64|80|96|112|128|144|160|176|192|208|224|240|256|288|320|384)px';
+const SCALE_REM =
+  '(?:0\\.125|0\\.25|0\\.375|0\\.5|0\\.625|0\\.75|0\\.875|1|1\\.25|1\\.5|1\\.75|2|2\\.25|2\\.5|2\\.75|3|3\\.5|4|5|6|7|8|9|10|11|12|13|14|15|16|18|20|24)rem';
+const START = '(?:^|[\\s:\'"`])-?';
+
 const banned = [
   {
     pattern: `${COLOR_UTIL}-\\[#[0-9a-fA-F]{3,8}`,
@@ -47,6 +56,17 @@ const banned = [
   {
     pattern: 'shadow-\\[',
     message: '임의 그림자 대신 토큰 — 카드 경계는 shadow-card, 형광펜 밑줄은 shadow-highlight, 그 밖엔 shadow-sm·shadow-md·shadow-lg.',
+  },
+  // ↓ 조립 규칙(layout.js)의 눈금. 이름이 있는 값을 숫자로 적으면 같은 값이 화면마다 다른 글자로 흩어진다.
+  {
+    pattern: `${START}(?:${SPACE_UTIL}|${SIZE_UTIL})-\\[-?(?:${SCALE_PX}|${SCALE_REM})\\]`,
+    message:
+      '눈금에 있는 값은 이름으로 — 4px→1, 8px→2, 12px→3, 16px→4, 20px→5, 24px→6, 32px→8, 40px→10, 48px→12 (예: w-[48px]→w-12, gap-[8px]→gap-2). 조립 규칙: @jirum/design-system/layout',
+  },
+  {
+    // 여백·간격은 2px 격자 안에서만. 레이아웃 고유 치수(w·h·max-w 의 120px·81px 등)는 막지 않는다.
+    pattern: `${START}${SPACE_UTIL}-\\[[0-9]*[13579]px\\]`,
+    message: '여백·간격은 4px 격자(최소 2px 단위) — 7px→px-2(8), 3px→py-1(4), 25px→gap-6(24). 조립 규칙: @jirum/design-system/layout',
   },
   // ↓ Tailwind 에 없는 클래스 — 아무 효과가 없어 "적용됐다"고 착각하게 만든다(실제로 web 에 12곳·7곳 있었다).
   {

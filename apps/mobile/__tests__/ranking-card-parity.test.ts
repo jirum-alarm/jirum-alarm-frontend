@@ -14,7 +14,7 @@ describe('랭킹 카드 — web 대조', () => {
     // 240(썸네일)+12(p-3)+40(제목2줄)+20(메타)+36(가격) = 348.
     // p-3 하단 대칭분 4px 만 남기고 352 로 줄였다(원래 364 는 16px 이 떴다).
     expect(w).toContain('h-[352px]');
-    expect(w).toContain('h-[240px]');
+    expect(w).toContain('h-60'); // 240px — 눈금 이름(린트가 h-[240px] 를 막는다)
     expect(n).toContain('CARD_HEIGHT = 352');
     expect(n).toContain('THUMB_HEIGHT = 240');
   });

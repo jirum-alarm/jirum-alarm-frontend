@@ -87,12 +87,12 @@ const EmailLoginScreen = () => {
         bottomOffset={120}
         extraKeyboardSpace={68}
         keyboardShouldPersistTaps="handled">
-        <View className="pt-[20px] px-[20px] mb-[44px]">
+        <View className="pt-5 px-5 mb-11">
           <Text className="text-2xl text-gray-900 font-pretendard-bold">
             {'이메일과 비밀번호를\n입력해주세요.'}
           </Text>
         </View>
-        <View className="flex-1 gap-[32px] px-[20px] pb-[32px]">
+        <View className="flex-1 gap-8 px-5 pb-8">
           <Controller
             control={control}
             name="email"
@@ -183,9 +183,9 @@ const EmailLoginScreen = () => {
         </View>
       </KeyboardAwareScrollView>
       <KeyboardStickyView offset={{closed: -insets.bottom, opened: 0}}>
-        <View className="px-[20px] pb-[20px] items-center bg-white">
+        <View className="px-5 pb-5 items-center bg-white">
           {isError && (
-            <Text className="text-error-500 text-sm font-pretendard pb-[16px]">
+            <Text className="text-error-500 text-sm font-pretendard pb-4">
               이메일 혹은 비밀번호가 올바르지 않아요.
             </Text>
           )}

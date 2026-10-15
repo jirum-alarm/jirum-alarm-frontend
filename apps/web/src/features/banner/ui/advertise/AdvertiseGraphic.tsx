@@ -1,5 +1,9 @@
 'use client';
 
+import { adLabel } from '@jirum/design-system/recipes';
+
+import { cn } from '@/shared/lib/cn';
+
 import {
   type AdvertiseElementAsset,
   type ElementConstraints,
@@ -147,7 +151,13 @@ export default function AdvertiseGraphic({
         })}
       </div>
 
-      <div className="border-fixed-white text-fixed-white bg-fixed-500/60 pointer-events-none absolute right-[8px] bottom-[8px] z-30 w-fit rounded-lg border px-[7px] py-[3px] text-xs leading-none font-medium">
+      <div
+        className={cn(
+          adLabel.box,
+          adLabel.text,
+          'pointer-events-none absolute right-2 bottom-2 z-30 w-fit',
+        )}
+      >
         AD
       </div>
     </div>

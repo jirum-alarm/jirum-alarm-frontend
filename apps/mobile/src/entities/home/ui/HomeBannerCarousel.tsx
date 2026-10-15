@@ -16,6 +16,8 @@ import {
   type NativeSyntheticEvent,
 } from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {adLabel} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -378,11 +380,9 @@ function BannerCard({
       </View>
 
       {isAd ? (
-        <View className="absolute right-2 bottom-2 rounded-lg border border-fixed-white bg-fixed-500 px-[7px] py-[3px]">
+        <View className={cn('absolute right-2 bottom-2', adLabel.box)}>
           {/* web `leading-none` — 기본 line-height 면 뱃지가 4~6px 커진다. */}
-          <Text
-            className="text-xs font-medium text-fixed-white"
-            style={{lineHeight: 12}}>
+          <Text className={adLabel.text} style={{lineHeight: 12}}>
             AD
           </Text>
         </View>

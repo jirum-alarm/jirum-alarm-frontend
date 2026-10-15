@@ -51,7 +51,7 @@ export default function CommentSection({
       {isError ? (
         <SectionErrorRow label="댓글" onRetry={refetch} />
       ) : isPending ? (
-        <View className="h-[80px] items-center justify-center">
+        <View className="h-20 items-center justify-center">
           <ActivityIndicator size="small" className="text-gray-500" />
         </View>
       ) : (

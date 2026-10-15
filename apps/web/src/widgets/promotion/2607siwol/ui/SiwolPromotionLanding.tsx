@@ -264,7 +264,7 @@ function EventCard({ planRows }: { planRows: (typeof pricePlans)[] }) {
           ))}
         </div>
         <div className="mt-6 flex justify-center">
-          <div className="text-fixed-white relative rounded-md bg-[#5545b7] px-7 py-3 text-center text-sm leading-6 font-extrabold shadow-sm before:absolute before:top-[-8px] before:left-1/2 before:size-0 before:-translate-x-1/2 before:border-x-[7px] before:border-b-[8px] before:border-x-transparent before:border-b-[#5545b7]">
+          <div className="text-fixed-white relative rounded-md bg-[#5545b7] px-7 py-3 text-center text-sm leading-6 font-extrabold shadow-sm before:absolute before:-top-2 before:left-1/2 before:size-0 before:-translate-x-1/2 before:border-x-[7px] before:border-b-[8px] before:border-x-transparent before:border-b-[#5545b7]">
             통신비 아끼는
             <br />
             알뜰폰 가격 궁금하다면?
@@ -344,7 +344,7 @@ function CodeCard({
           className="text-fixed-white ml-1 flex h-8 items-center gap-1.5 rounded-full bg-[#344054] px-3 text-xs font-bold transition-colors hover:bg-[#475467]"
           aria-label="비밀번호 복사하기"
         >
-          <span className="relative block size-4 before:absolute before:top-[2px] before:left-[2px] before:size-[10px] before:rounded-xs before:border before:border-white/80 after:absolute after:right-[1px] after:bottom-[1px] after:size-[10px] after:rounded-xs after:border after:border-white" />
+          <span className="relative block size-4 before:absolute before:top-0.5 before:left-0.5 before:size-2.5 before:rounded-xs before:border before:border-white/80 after:absolute after:right-[1px] after:bottom-[1px] after:size-2.5 after:rounded-xs after:border after:border-white" />
           {copyState === 'copied' ? '복사됨' : copyState === 'failed' ? '실패' : '복사하기'}
         </button>
       </div>

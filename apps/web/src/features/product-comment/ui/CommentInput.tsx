@@ -42,7 +42,7 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
   return (
     <form
       onSubmit={handleSubmit}
-      className="pc:min-h-[80px] flex min-h-[64px] w-full items-end gap-x-3 border-t border-gray-300 bg-white px-5 pt-3 pb-[var(--bottom-chrome-padding)]"
+      className="pc:min-h-20 flex min-h-16 w-full items-end gap-x-3 border-t border-gray-300 bg-white px-5 pt-3 pb-[var(--bottom-chrome-padding)]"
       onPointerDown={handlePointerDown}
     >
       <div className="flex grow flex-col items-center overflow-hidden rounded-lg border border-transparent bg-gray-50 focus-within:border-gray-500">
@@ -72,7 +72,7 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
         )}
         <textarea
           ref={ref}
-          className="pc:max-h-[300px] max-h-[100px] min-h-[40px] w-full resize-none border-none bg-transparent px-3 py-2 outline-hidden"
+          className="pc:max-h-[300px] max-h-[100px] min-h-10 w-full resize-none border-none bg-transparent px-3 py-2 outline-hidden"
           placeholder={placeholder}
           value={comment}
           onChange={handleInputChange}

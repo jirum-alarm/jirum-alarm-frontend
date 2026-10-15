@@ -40,7 +40,7 @@ const AppDownloadBanner = (props: AppDownloadBannerProps) => {
               platform={type}
               path="/"
               source="banner"
-              className="bg-secondary-600 text-fixed-white flex h-[32px] w-20 items-center justify-center rounded-xl text-sm font-semibold"
+              className="bg-secondary-600 text-fixed-white flex h-8 w-20 items-center justify-center rounded-xl text-sm font-semibold"
             >
               다운받기
             </OpenInAppLink>

@@ -77,7 +77,7 @@ export default function TossDailyContainer({
         {!isLoading && deals.length === 0 ? (
           <p className={cn('py-20 text-center', emptyText)}>아직 준비된 특가가 없어요.</p>
         ) : (
-          <div className="pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3">
+          <div className="pc:grid-cols-5 pc:gap-x-6 pc:gap-y-10 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3">
             {deals.map((deal, i) => (
               <TossDealCard key={deal.id} deal={deal} priority={i < 5} />
             ))}

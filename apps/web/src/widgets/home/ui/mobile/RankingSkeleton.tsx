@@ -40,7 +40,7 @@ interface PreviewCardProps {
 // 이미지도 같아야 한다 — 보이는 세 장 모두 eager(=스와이퍼 쪽과 같은 URL)라 한 번 받아 둘이 나눠 쓴다.
 // 다르면 갈아끼울 때 사진이 빈칸으로 돌아갔다 다시 뜬다. High(priority)는 가운데 1위만.
 const PreviewCard = ({ product, rank, isActive }: PreviewCardProps) => (
-  <div className="w-[240px] shrink-0 pb-5">
+  <div className="w-60 shrink-0 pb-5">
     <ProductRankingImageCard
       product={product}
       rank={rank}
@@ -67,13 +67,13 @@ export const RankingSkeleton = () => {
 };
 
 const SkeletonCard = ({ isActive }: { isActive: boolean }) => (
-  <div className="w-[240px] shrink-0 pb-5">
+  <div className="w-60 shrink-0 pb-5">
     <div
       className={`shadow-card h-[352px] w-full origin-center overflow-hidden rounded-lg bg-white transition-all duration-300 ${
         isActive ? 'scale-100' : 'scale-90'
       }`}
     >
-      <div className="relative h-[240px] w-full bg-gray-50">
+      <div className="relative h-60 w-full bg-gray-50">
         <div className="bg-fixed-900 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg">
           <Skeleton className="h-3 w-2 rounded-sm bg-gray-600" />
         </div>

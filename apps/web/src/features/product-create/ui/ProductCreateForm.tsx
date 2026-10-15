@@ -76,7 +76,7 @@ export default function ProductCreateForm() {
       </Field>
 
       <Field label="카테고리" required>
-        <ul className="grid grid-cols-3 gap-[10px]">
+        <ul className="grid grid-cols-3 gap-2.5">
           {CATEGORIES.map((category) => {
             const selected = categoryId === category.value;
             const Icon = selected ? category.iconComponent : category.offIconComponent;
@@ -127,7 +127,7 @@ export default function ProductCreateForm() {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="상품에 대한 설명을 자유롭게 적어 주세요"
-          className="min-h-[160px] w-full resize-none rounded-lg border border-gray-300 p-3 text-sm leading-relaxed text-gray-900 placeholder-gray-400 outline-none focus:border-gray-900"
+          className="min-h-40 w-full resize-none rounded-lg border border-gray-300 p-3 text-sm leading-relaxed text-gray-900 placeholder-gray-400 outline-none focus:border-gray-900"
           maxLength={5000}
         />
       </Field>

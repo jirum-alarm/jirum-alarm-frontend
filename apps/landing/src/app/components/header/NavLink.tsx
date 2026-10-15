@@ -19,7 +19,7 @@ export default function NavLink({ href, label, isActive }: NavLinkProps) {
       })}
     >
       {label}
-      {isActive && <div className="bg-primary-500 absolute right-0 bottom-0 left-0 h-[2px]" />}
+      {isActive && <div className="bg-primary-500 absolute right-0 bottom-0 left-0 h-0.5" />}
     </Link>
   );
 }

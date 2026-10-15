@@ -39,7 +39,7 @@ export default function ProductExpiredBanner({ productId }: { productId: number 
   }, [reportUserNames, currentIndex]);
 
   return visibleMessages.length > 0 ? (
-    <div className="relative flex h-[48px] items-center justify-center overflow-hidden bg-gray-100">
+    <div className="relative flex h-12 items-center justify-center overflow-hidden bg-gray-100">
       <div className="h-full w-full">
         {visibleMessages.map((item, idx) => {
           let translateY;
@@ -51,7 +51,7 @@ export default function ProductExpiredBanner({ productId }: { productId: number 
           return (
             <div
               key={item}
-              className="absolute top-0 left-0 flex h-[48px] w-full items-center justify-center"
+              className="absolute top-0 left-0 flex h-12 w-full items-center justify-center"
               style={{
                 transform: `translateY(${translateY}%)`,
                 width: '100%',

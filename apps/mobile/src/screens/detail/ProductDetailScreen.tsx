@@ -485,7 +485,7 @@ function NativeDetail({
           trackingSource="category_popular"
         />
         <AffiliateNotice mallName={product.mallName} variant="general" />
-        <View className="h-[24px] bg-gray-100" />
+        <View className="h-6 bg-gray-100" />
       </ScrollView>
       <ScrollAwareBottomCTA
         flags={scrollFlags}

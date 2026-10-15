@@ -1,4 +1,11 @@
-import { cardThumb, dealRow, detailInfo, emptyText, infoBox } from '@jirum/design-system/recipes';
+import {
+  adLabel,
+  cardThumb,
+  dealRow,
+  detailInfo,
+  emptyText,
+  infoBox,
+} from '@jirum/design-system/recipes';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
@@ -54,6 +61,12 @@ const Gallery = () => (
     <section className="flex flex-col gap-2">
       <h3 className="text-sm font-semibold text-gray-900">빈 목록 한 줄 안내</h3>
       <p className={`py-6 text-center ${emptyText}`}>아직 등록한 키워드가 없어요.</p>
+    </section>
+    <section className="flex flex-col gap-2">
+      <h3 className="text-sm font-semibold text-gray-900">배너 위 AD 표시</h3>
+      <div className="bg-secondary-100 relative h-24 w-64 rounded-lg">
+        <span className={`absolute right-2 bottom-2 ${adLabel.box} ${adLabel.text}`}>AD</span>
+      </div>
     </section>
   </div>
 );

@@ -73,9 +73,9 @@ const Tooltip = ({ content, children, align = 'left', polygonOffset = 28 }: Prop
           }}
         >
           {/* 말풍선은 테마와 무관하게 어두운 면 + 흰 글씨 — gray-600 은 다크에서 밝은 회색으로 뒤집혀 흰 글씨가 사라졌다. */}
-          <div className="bg-fixed-600 rounded-lg px-[16px] py-[10px]">{content}</div>
+          <div className="bg-fixed-600 rounded-lg px-4 py-2.5">{content}</div>
           <span
-            className={cn('text-fixed-600 absolute -top-[8px]')}
+            className={cn('text-fixed-600 absolute -top-2')}
             style={{
               [align]: polygonOffset,
             }}

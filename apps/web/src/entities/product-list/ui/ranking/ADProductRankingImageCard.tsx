@@ -30,7 +30,7 @@ export default function ProductRankingImageCard({
         )}
       >
         <m.div className="h-full w-full" whileTap={{ scale: 0.96 }} transition={{ duration: 0.1 }}>
-          <div className="pc:aspect-square pc:h-auto relative h-[240px] w-full bg-gray-50">
+          <div className="pc:aspect-square pc:h-auto relative h-60 w-full bg-gray-50">
             <div className="text-primary-500 pc:text-fixed-white pc:bg-fixed-600/80 bg-fixed-900 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg text-sm font-medium">
               AD
             </div>
@@ -48,7 +48,7 @@ export default function ProductRankingImageCard({
             <div className="xl:pc:text-base line-clamp-2 text-sm text-gray-700">
               {product.title}
             </div>
-            <div className="pc:h-[36px] pc:pt-0.5 xl:pc:text-22 pt-2 text-lg font-bold text-gray-900">
+            <div className="pc:h-9 pc:pt-0.5 xl:pc:text-22 pt-2 text-lg font-bold text-gray-900">
               <DisplayListPrice
                 price={product.price}
                 forceString

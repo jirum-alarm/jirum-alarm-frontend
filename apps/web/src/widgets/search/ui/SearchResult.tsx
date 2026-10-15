@@ -129,7 +129,7 @@ export default function SearchResult({ show }: { show: boolean }) {
         </div>
       )}
 
-      {hasNextPage && <div ref={nextDataRef} className="h-[48px] w-full" />}
+      {hasNextPage && <div ref={nextDataRef} className="h-12 w-full" />}
     </div>
   );
 }

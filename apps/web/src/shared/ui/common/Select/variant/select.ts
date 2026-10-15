@@ -29,7 +29,7 @@ export const selectListContainerVariant = cva(
   {
     variants: {
       size: {
-        md: ['max-h-[288px]', 'overflow-y-scroll'],
+        md: ['max-h-72', 'overflow-y-scroll'],
       },
       expanded: {
         true: ['animate-fade-in'],

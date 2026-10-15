@@ -20,9 +20,7 @@ const ProductReport = ({ productId }: { productId: number }) => {
   if (product.isEnd && !product.isMyReported) return null;
 
   return (
-    <div
-      className={cn(`flex h-14 items-center justify-between rounded-lg border bg-white p-[16px]`)}
-    >
+    <div className={cn(`flex h-14 items-center justify-between rounded-lg border bg-white p-4`)}>
       {product.isMyReported ? (
         <p className="flex items-center gap-2 text-sm text-gray-600">
           종료된 상품으로 제보해주셔서 감사해요 <span className="text-lg">😄</span>
@@ -76,7 +74,7 @@ const ProductReportModal = ({ productId }: { productId: number }) => {
       <BottomSheetContent>
         <div className="flex flex-col items-center">
           <Drawer.Title asChild>
-            <h2 className="pt-[32px] text-xl font-bold">판매가 종료된 상품인가요?</h2>
+            <h2 className="pt-8 text-xl font-bold">판매가 종료된 상품인가요?</h2>
           </Drawer.Title>
           <SoldOutIcon />
           <p className="py-3 text-center text-gray-700">
@@ -84,7 +82,7 @@ const ProductReportModal = ({ productId }: { productId: number }) => {
             <br />
             종료된 상품을 제보해 주세요!
           </p>
-          <div className="flex w-full gap-[12px] p-5">
+          <div className="flex w-full gap-3 p-5">
             <Drawer.Close asChild>
               <Button color={'secondary'}>취소</Button>
             </Drawer.Close>

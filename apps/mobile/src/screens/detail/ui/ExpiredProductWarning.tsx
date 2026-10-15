@@ -129,13 +129,14 @@ export default function ExpiredProductWarning({
             <ActivityIndicator size="small" className="text-gray-500" />
           </View>
         ) : (
-          <View className="flex-row flex-wrap px-[17px] pt-3">
+          <View className="flex-row flex-wrap px-4 pt-3">
+            {/* 바깥 20(gutter = px-4 + 칸 4) · 칸 사이 8(stack.base) — 예전 17+3 은 4px 격자 밖이었다. */}
             {similar.slice(0, DISPLAY_LIMIT).map((item, index) => (
               <View
                 key={String(item.id)}
                 style={{
                   width: '33.333%',
-                  paddingHorizontal: 3,
+                  paddingHorizontal: 4,
                   paddingBottom: 12,
                 }}>
                 <ProductCard

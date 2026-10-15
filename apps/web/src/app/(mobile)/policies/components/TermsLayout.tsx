@@ -63,7 +63,7 @@ const TermsLayout = ({
         }
       />
       <article className="max-w-mobile-max pc:max-w-none flex w-full flex-col gap-6 p-5">
-        <div className="text-13 flex w-full flex-col gap-[8px] text-gray-500">
+        <div className="text-13 flex w-full flex-col gap-2 text-gray-500">
           <p>공고일자 : {dates.announcedAt}</p>
           <p>시행일자 : {dates.effectiveAt}</p>
         </div>
@@ -86,7 +86,7 @@ const TermsLayout = ({
         <section className="flex flex-col gap-6">
           {termsContentData.map((data) => (
             <div className="text-gray-900" key={data.idx} id={String(data.idx)}>
-              <h2 className="mb-[12px] font-bold">{data.title}</h2>
+              <h2 className="mb-3 font-bold">{data.title}</h2>
               <div className="flex flex-col gap-5">
                 {data.content.map((content, idx) => (
                   <p

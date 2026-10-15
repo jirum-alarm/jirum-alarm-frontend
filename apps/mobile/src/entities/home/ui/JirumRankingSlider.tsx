@@ -58,7 +58,7 @@ import {brand} from '@jirum/design-system';
  */
 
 const CARD_HEIGHT = 352; // web h-[352px]
-const THUMB_HEIGHT = 240; // web h-[240px]
+const THUMB_HEIGHT = 240; // web h-60
 const CARD_WIDTH = 240; // web style width 240px (mobile)
 const GAP = 4; // web spaceBetween: 4
 const SNAP = CARD_WIDTH + GAP;

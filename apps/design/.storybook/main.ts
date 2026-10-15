@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+import { readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 import { mergeConfig } from 'vite';
@@ -8,6 +10,21 @@ import type { StorybookConfig } from '@storybook/nextjs-vite';
 // 기초(색·글자·조립 규칙)와 레시피 갤러리는 이 앱의 src 에 있다.
 const webSrc = fileURLToPath(new URL('../../web/src', import.meta.url));
 const repoRoot = fileURLToPath(new URL('../../..', import.meta.url));
+
+// 디자인 시스템 패키지는 CommonJS 라 Vite 가 미리 변환해 캐시한다(optimizeDeps). 그 캐시는 패키지 내용이 바뀌어도
+// 다시 안 만들어져 recipes.js 를 고쳐도 놀이터가 옛 값을 보였다(2026-10-16: 새 adLabel 이 undefined).
+// 캐시 폴더 이름에 패키지 내용 해시를 넣어, 고치면 새 캐시가 생기게 한다.
+const dsDir = fileURLToPath(new URL('../../../packages/design-system', import.meta.url));
+const dsHash = createHash('sha1')
+  .update(
+    readdirSync(dsDir)
+      .filter((f) => f.endsWith('.js'))
+      .sort()
+      .map((f) => readFileSync(`${dsDir}/${f}`, 'utf8'))
+      .join('\0'),
+  )
+  .digest('hex')
+  .slice(0, 10);
 
 const config: StorybookConfig = {
   stories: [
@@ -20,6 +37,7 @@ const config: StorybookConfig = {
   framework: { name: '@storybook/nextjs-vite', options: {} },
   viteFinal: (vite) =>
     mergeConfig(vite, {
+      cacheDir: `node_modules/.cache/vite-ds-${dsHash}`,
       resolve: {
         // web 소스의 `@/…` import. web tsconfig paths 와 같은 뜻.
         alias: { '@': webSrc },

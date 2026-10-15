@@ -37,7 +37,7 @@ const DESKTOP_BANNER_SWIPER_OPTIONS: SwiperOptions & AutoplayOptions = {
 };
 
 const DESKTOP_BANNER_SLIDE_CLASS = '!h-[120px] !w-[528px]';
-const DESKTOP_BANNER_ITEM_CLASS = 'pc:w-full pc:grow-0 pc:pl-[32px]';
+const DESKTOP_BANNER_ITEM_CLASS = 'pc:w-full pc:grow-0 pc:pl-8';
 const DESKTOP_BANNER_REPEAT_COUNT = 7;
 const DESKTOP_BANNER_MIDDLE_SET_INDEX = Math.floor(DESKTOP_BANNER_REPEAT_COUNT / 2);
 
@@ -123,8 +123,8 @@ const Banner = () => {
         className="relative mx-auto mt-8 mb-10 h-[120px] w-full max-w-[1208px] overflow-hidden"
         data-home-desktop-banner-carousel
       >
-        <div className="from-fixed-900 pointer-events-none absolute top-[-40px] left-0 z-10 h-[200px] w-[60px] bg-linear-to-r to-transparent" />
-        <div className="from-fixed-900 pointer-events-none absolute top-[-40px] right-0 z-10 h-[200px] w-[60px] bg-linear-to-l to-transparent" />
+        <div className="from-fixed-900 pointer-events-none absolute -top-10 left-0 z-10 h-[200px] w-[60px] bg-linear-to-r to-transparent" />
+        <div className="from-fixed-900 pointer-events-none absolute -top-10 right-0 z-10 h-[200px] w-[60px] bg-linear-to-l to-transparent" />
         <Swiper
           className="h-full w-full overflow-visible"
           modules={[Autoplay]}
@@ -162,7 +162,7 @@ const Banner = () => {
   }
 
   return (
-    <div className="max-w-slider-max mx-auto mt-8 mb-10 flex h-[120px] w-full gap-x-[25px]">
+    <div className="max-w-slider-max mx-auto mt-8 mb-10 flex h-[120px] w-full gap-x-6">
       {isPersilBanner ? (
         <AdBanner isMobile={false} />
       ) : (

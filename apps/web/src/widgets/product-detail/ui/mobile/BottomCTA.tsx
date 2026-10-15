@@ -82,7 +82,7 @@ export default function BottomCTA({
       />
       <div className="flex w-full items-center gap-x-4 px-5 py-2">
         <TopButton />
-        <div className="flex h-[48px] items-center">
+        <div className="flex h-12 items-center">
           <LikeButton productId={productId} isUserLogin={isUserLogin} />
         </div>
         <a
@@ -93,7 +93,7 @@ export default function BottomCTA({
           // 제휴 아웃바운드 — 크롤러가 따라가 봇클릭을 만들지 않게 nofollow/sponsored
           rel="nofollow sponsored noopener noreferrer"
         >
-          <Button className="h-[48px] w-full px-6 text-base font-semibold">구매하러 가기</Button>
+          <Button className="h-12 w-full px-6 text-base font-semibold">구매하러 가기</Button>
         </a>
       </div>
     </div>

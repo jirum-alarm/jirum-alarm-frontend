@@ -195,7 +195,7 @@ export default function PriceTrend({
 
                 {/* Visible dot on hover */}
                 <div
-                  className="border-secondary-600 absolute size-[10px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[2.5px] bg-white shadow-sm transition-all duration-75"
+                  className="border-secondary-600 absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-[2.5px] bg-white shadow-sm transition-all duration-75"
                   style={{
                     left: `${series.length === 1 ? 50 : (hoveredIdx / (series.length - 1)) * 100}%`,
                     top: `${(y(prices[hoveredIdx]) / H) * 100}%`,
@@ -215,7 +215,7 @@ export default function PriceTrend({
                       {series[hoveredIdx][0].slice(5).replace('-', '/')}
                     </div>
                     <div>{won(prices[hoveredIdx])}원</div>
-                    <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 border-t-[5px] border-r-[5px] border-l-[5px] border-t-gray-900 border-r-transparent border-l-transparent"></div>
+                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 border-t-[5px] border-r-[5px] border-l-[5px] border-t-gray-900 border-r-transparent border-l-transparent"></div>
                   </div>
                 </div>
               </>
@@ -224,7 +224,7 @@ export default function PriceTrend({
         </div>
       </div>
 
-      <div className="text-10 mt-2 flex justify-between pl-[56px] font-medium text-gray-400">
+      <div className="text-10 mt-2 flex justify-between pl-14 font-medium text-gray-400">
         <span>{series[0][0].slice(5).replace('-', '/')}</span>
         <span>{series[series.length - 1][0].slice(5).replace('-', '/')}</span>
       </div>

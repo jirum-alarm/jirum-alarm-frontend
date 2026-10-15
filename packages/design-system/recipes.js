@@ -231,7 +231,8 @@ const skeleton = 'bg-gray-200';
  * 앱 AppToast 의 모양이 기준. web 은 가운데 정렬 gray-600 상자(280px)라 같은 알림이 두 모양이었다.
  */
 const toast = {
-  box: 'rounded-xl bg-fixed-800 px-4 py-[13px]',
+  // py-3 = 글자 줄 20 + 24 → 44px(layout.control.touch). 예전 13px 은 4px 격자 밖이었다.
+  box: 'rounded-xl bg-fixed-800 px-4 py-3',
   text: 'text-sm text-fixed-white',
   action: 'text-sm font-semibold text-primary-500',
 };
@@ -242,6 +243,16 @@ const toast = {
  * 그림·큰 제목이 있는 빈 화면(검색 결과 없음·알림 없음)은 화면별이다.
  */
 const emptyText = 'text-sm text-gray-500';
+
+/**
+ * 배너·광고 소재 위 「AD」 표시(오른쪽 아래 배치는 자리마다). web 배너 2곳·앱 홈 배너가 손으로 세 번 적혀 있었고
+ * 바탕이 fixed-400·fixed-500/60·fixed-500 으로 갈렸다 — fixed-400 은 흰 글자 2.6:1(AA 미달)이라 fixed-500(4.8:1)으로.
+ * 여백 7·3px(4px 격자 밖) → 8·4px.
+ */
+const adLabel = {
+  box: 'rounded-lg border border-fixed-white bg-fixed-500 px-2 py-1',
+  text: 'text-xs leading-none font-medium text-fixed-white',
+};
 
 /** 상품 카드 사진 위 라벨 — 왼쪽 아래 모서리(판매종료·베스트판매자)와 아래 띠(유통기한). */
 const cardLabel = {
@@ -258,4 +269,4 @@ const cardLabel = {
   squareThumb: {corner: 'rounded-bl-none', strip: 'rounded-b-none'},
 };
 
-module.exports = {addChip, badge, button, buttonTone, chip, tab, toggle, sectionTitle, cardThumb, dealRow, detailInfo, infoBox, keywordChip, linkChip, wordTag, sheet, skeleton, toast, emptyText, cardLabel};
+module.exports = {adLabel, addChip, badge, button, buttonTone, chip, tab, toggle, sectionTitle, cardThumb, dealRow, detailInfo, infoBox, keywordChip, linkChip, wordTag, sheet, skeleton, toast, emptyText, cardLabel};

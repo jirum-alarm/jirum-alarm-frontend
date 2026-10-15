@@ -205,7 +205,7 @@ export function DealGrid({ items, className }: { items: ListItem[]; className?: 
   // 열수: 모바일 2 → sm 3 → PC 5 (랭킹 TrackedProductGridList와 동일).
   return (
     <ul
-      className={`pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 grid grid-cols-2 gap-3 sm:grid-cols-3 ${className ?? ''}`}
+      className={`pc:grid-cols-5 pc:gap-x-6 pc:gap-y-10 grid grid-cols-2 gap-3 sm:grid-cols-3 ${className ?? ''}`}
     >
       {items.map((p) => (
         <li key={p.slug}>

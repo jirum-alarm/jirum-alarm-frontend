@@ -25,7 +25,7 @@ const RecommendedProductList = () => {
 
   return (
     <>
-      <div className="mx-auto w-fit max-w-full pb-[16px]">
+      <div className="mx-auto w-fit max-w-full pb-4">
         <RecommendedProductTabs
           productKeywords={productKeywords}
           selectedKeyword={selectedKeyword}

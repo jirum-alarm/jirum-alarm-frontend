@@ -191,6 +191,15 @@ const catalog = [
     app: null,
     story: '레시피/면·상자',
   },
+  {
+    id: 'adLabel',
+    name: 'AD 표시',
+    use: '배너·광고 소재 위 「AD」(오른쪽 아래). 소재 색과 무관하게 짙은 판',
+    recipe: 'adLabel',
+    web: null,
+    app: null,
+    story: '레시피/면·상자',
+  },
   // ── 알림·겹침
   {
     id: 'toast',

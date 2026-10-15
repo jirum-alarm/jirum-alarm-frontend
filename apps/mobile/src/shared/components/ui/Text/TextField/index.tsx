@@ -46,7 +46,7 @@ const TextField = forwardRef<TextInput, Props>(
     return (
       <View>
         {label && (
-          <View className="mb-[8px]">
+          <View className="mb-2">
             <Text className="text-gray-500 text-sm font-semibold">{label}</Text>
           </View>
         )}
@@ -66,10 +66,10 @@ const TextField = forwardRef<TextInput, Props>(
             placeholderTextColor={c.gray[500]}
             className={cn(textfieldVariant({variant, size, color}), className)}
           />
-          {suffixIcon && <View className="pr-[8px]">{suffixIcon}</View>}
+          {suffixIcon && <View className="pr-2">{suffixIcon}</View>}
         </View>
         {helperText && (
-          <View className="mt-[8px]">
+          <View className="mt-2">
             {isValidElement(helperText) ? (
               helperText
             ) : (
