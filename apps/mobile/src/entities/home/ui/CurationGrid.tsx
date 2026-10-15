@@ -1,13 +1,7 @@
 import {emptyText as emptyTextClass} from '@jirum/design-system/recipes';
+import {FlashList, type ListRenderItemInfo} from '@shopify/flash-list';
 import React, {useCallback, useRef, useState} from 'react';
-import {
-  FlatList,
-  Platform,
-  RefreshControl,
-  ScrollView,
-  View,
-  type ListRenderItemInfo,
-} from 'react-native';
+import {RefreshControl, ScrollView, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
@@ -20,25 +14,36 @@ import {GridSkeleton} from '@/shared/components/Skeletons';
  * 쓰지만 **카드는 다르다** — 토스는 `data.toss` 전용 카드라 공유 필드가
  * title·price 뿐이다(curation-toss-theme-are-not-interchangeable).
  * 그래서 카드만 주입받고 나머지를 공통화한다.
+ *
+ * ★FlashList(v2) — 화면 밖으로 나간 칸을 **언마운트하지 않고 다음 상품으로 다시 쓴다**.
+ * 검색·큐레이션·토스·찜·관련 상품·발견 실시간 6화면 공용이라 여기서 바꿨다(2026-10-15 실측은 커밋 본문).
+ * ⚠️카드 안에 `useState` 를 두면 재사용된 칸에 이전 상품의 상태가 남는다 —
+ * 상품 id 를 `key` 로 주거나(찜 하트) uri 가 바뀌면 리셋한다(Thumbnail).
  */
 
 const GRID_GAP_X = 12; // web gap-x-3
 const GRID_GAP_Y = 20; // web gap-y-5
-const HORIZONTAL_PADDING = 20; // web px-5
+/**
+ * 화면 가장자리 ~ 카드 = 14. FlatList 시절(padding 14 + columnWrapper gap 12)과 같은 모양을
+ * 유지한다 — 칸마다 GAP_X/2 씩 안쪽 여백을 주므로 바깥 여백은 그만큼 뺀다.
+ */
+const EDGE_X = 14;
+const CONTENT_PADDING_X = EDGE_X - GRID_GAP_X / 2;
 
 /**
- * 가상화 설정 — FlatList 기본값은 한 줄 목록용이다(windowSize 21 = 위아래 10화면씩 그려 둠).
- * 사진 카드 그리드에 그대로 쓰면 스크롤할수록 화면 밖 카드 수백 장이 메모리에 남고, 새 줄을
- * 그릴 때 그만큼 JS 가 밀린다(검색·큐레이션·토스·찜·관련 상품·발견 실시간 6화면 공용).
- * 위아래 3화면이면 빠르게 넘겨도 빈칸이 안 보인다. 첫 화면은 4줄이면 채운다.
+ * 랭킹 목록(RankingList, 아직 FlatList)의 가상화 창. 위아래 3화면이면 빠르게 넘겨도 빈칸이 안 보인다.
+ * 이 그리드는 FlashList 라 창 설정이 없다(drawDistance 기본값 — 화면 밖 250pt 만 그리고 칸을 재사용).
  */
 export const GRID_WINDOW_SIZE = 7;
-const ROWS_PER_BATCH = 4;
-// iOS 는 clipped subviews 가 sticky·이미지와 얽혀 빈칸이 남는 버그가 있어 안드로이드만.
-const REMOVE_CLIPPED = Platform.OS === 'android';
 
 /** web 은 카드가 50% 보이면 노출로 셌다(useInView threshold 0.5). */
-const VIEWABILITY_CONFIG = {itemVisiblePercentThreshold: 50};
+// ★minimumViewTime 0 — FlashList 기본값은 250ms 라 빠르게 넘긴 카드가 노출에서 빠진다(실측: 8000pt/s 로
+// 400장 지나가는 동안 노출 12장, FlatList 는 400장). CTR 분모가 바뀌지 않게 FlatList 기본값(0)과 맞춘다.
+const VIEWABILITY_CONFIG = {
+  itemVisiblePercentThreshold: 50,
+  minimumViewTime: 0,
+};
+const MVCP_DISABLED = {disabled: true};
 
 // ★모듈 밖에 둔다 — 인라인 화살표면 렌더마다 새 컴포넌트 타입이라 구분자가
 // 전부 언마운트·재마운트된다.
@@ -125,13 +130,16 @@ export default function CurationGrid<T>({
   }, [onRetry]);
 
   // ★renderItem 을 고정한다 — 인라인이면 새로고침 스피너·페이지 추가처럼 이 그리드가
-  // 다시 그려질 때마다 FlatList 가 보이는 셀을 전부 다시 그린다.
+  // 다시 그려질 때마다 목록이 보이는 셀을 전부 다시 그린다.
   // renderCard 가 호출부에서 인라인이면 효과는 줄지만 동작은 같다.
+  // 칸 폭은 FlashList 가 (폭 / columns) 로 정한다 — 열 간격은 칸 안쪽 여백으로.
   const renderItem = useCallback(
     ({item, index}: ListRenderItemInfo<T>) => (
-      <View style={{flex: 1 / columns}}>{renderCard(item, index)}</View>
+      <View style={{paddingHorizontal: GRID_GAP_X / 2}}>
+        {renderCard(item, index)}
+      </View>
     ),
-    [renderCard, columns],
+    [renderCard],
   );
 
   // 화면 가운데 점 하나 대신 카드 골격 — 홈·상세처럼 "곧 이렇게 채워진다" 를 보여준다.
@@ -181,54 +189,51 @@ export default function CurationGrid<T>({
   }
 
   return (
-    <FlatList
-      className="flex-1 bg-white"
-      data={items}
-      keyExtractor={keyOf}
-      numColumns={columns}
-      contentContainerStyle={{
-        paddingHorizontal: HORIZONTAL_PADDING - GRID_GAP_X / 2,
-        paddingTop: topSpacing === 'tight' ? 0 : 16,
-        paddingBottom: 16 + bottomInset,
-      }}
-      columnWrapperStyle={{gap: GRID_GAP_X}}
-      // 검색 결과를 내려 보면 키보드가 내려간다(검색 화면이 이 그리드를 쓴다).
-      keyboardDismissMode="on-drag"
-      keyboardShouldPersistTaps="handled"
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-      }
-      ItemSeparatorComponent={RowGap}
-      initialNumToRender={columns * ROWS_PER_BATCH}
-      maxToRenderPerBatch={columns * ROWS_PER_BATCH}
-      windowSize={GRID_WINDOW_SIZE}
-      removeClippedSubviews={REMOVE_CLIPPED}
-      onEndReached={onEndReached}
-      onEndReachedThreshold={0.5}
-      // ★viewabilityConfig 는 ref 로 고정한다. 매 렌더 새 객체를 주면
-      // FlatList 가 "Changing viewabilityConfig on the fly is not supported" 로
-      // 죽는다(onViewableItemsChanged 도 같은 제약이라 ref 로 감싼다).
-      viewabilityConfig={VIEWABILITY_CONFIG}
-      onViewableItemsChanged={
-        onViewableIndexes ? handleViewableItemsChanged : undefined
-      }
-      ListHeaderComponent={
-        header ? (
-          // 콘텐츠 좌우 여백을 상쇄해 머리만 화면 폭을 쓴다.
-          <View
-            style={{marginHorizontal: -(HORIZONTAL_PADDING - GRID_GAP_X / 2)}}>
-            {header}
-          </View>
-        ) : null
-      }
-      ListFooterComponent={
-        isError ? (
-          <SectionErrorRow label={label} onRetry={onRetry} />
-        ) : (
-          (footer as React.ReactElement)
-        )
-      }
-      renderItem={renderItem}
-    />
+    // FlashList 는 NativeWind className 을 받지 않는다 — 바탕색은 감싸는 View 가.
+    <View className="flex-1 bg-white">
+      <FlashList
+        data={items}
+        keyExtractor={keyOf}
+        numColumns={columns}
+        contentContainerStyle={{
+          paddingHorizontal: CONTENT_PADDING_X,
+          paddingTop: topSpacing === 'tight' ? 0 : 16,
+          paddingBottom: 16 + bottomInset,
+        }}
+        // 검색 결과를 내려 보면 키보드가 내려간다(검색 화면이 이 그리드를 쓴다).
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+        // v2 는 칸마다 아래에 붙인다(마지막 줄 제외) — 줄 간격이 된다.
+        ItemSeparatorComponent={RowGap}
+        // ★v2 기본값(켜짐)은 위에 항목이 끼면 보던 카드를 붙잡는다 — 당겨서 새로고침으로
+        // 새 딜이 맨 위에 들어와도 화면이 옛 첫 카드에 머문다. FlatList 처럼 끈다.
+        maintainVisibleContentPosition={MVCP_DISABLED}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.5}
+        // ★viewabilityConfig 는 모듈 상수로 고정한다(FlatList 시절 "Changing
+        // viewabilityConfig on the fly is not supported" 제약 — 핸들러도 ref 로 고정).
+        viewabilityConfig={VIEWABILITY_CONFIG}
+        onViewableItemsChanged={
+          onViewableIndexes ? handleViewableItemsChanged : undefined
+        }
+        ListHeaderComponent={
+          header ? (
+            // 콘텐츠 좌우 여백을 상쇄해 머리만 화면 폭을 쓴다.
+            <View style={{marginHorizontal: -CONTENT_PADDING_X}}>{header}</View>
+          ) : null
+        }
+        ListFooterComponent={
+          isError ? (
+            <SectionErrorRow label={label} onRetry={onRetry} />
+          ) : (
+            (footer as React.ReactElement)
+          )
+        }
+        renderItem={renderItem}
+      />
+    </View>
   );
 }

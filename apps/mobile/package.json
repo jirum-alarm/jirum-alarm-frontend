@@ -45,6 +45,7 @@
     "@react-navigation/native": "7.5.0",
     "@react-navigation/native-stack": "7.20.0",
     "@sentry/react-native": "~7.11.0",
+    "@shopify/flash-list": "2.3.3",
     "@tanstack/react-query": "^5.104.1",
     "class-variance-authority": "^0.7.1",
     "expo": "~57.0.28",
@@ -119,6 +120,7 @@
     },
     "install": {
       "exclude": [
+        "@shopify/flash-list",
         "react-native-bootsplash"
       ]
     }

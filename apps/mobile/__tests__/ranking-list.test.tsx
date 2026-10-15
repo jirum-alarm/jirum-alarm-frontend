@@ -174,7 +174,8 @@ describe('RankingList — 첫 화면만 그리고, 보인 줄만 노출로 센�
 describe('CurationGrid 공용 그리드(6화면) — 가상화·고정된 카드 그리기', () => {
   const CurationGrid = require('../src/entities/home/ui/CurationGrid').default;
 
-  it('사진 그리드용 창 크기(위아래 3화면)·첫 화면 4줄', () => {
+  it('FlashList — 50장 중 화면에 드는 칸만 그리고, 위에 새 딜이 끼어도 보던 자리를 붙잡지 않는다', () => {
+    const {FlashList} = require('@shopify/flash-list');
     const renderCard = jest.fn(() => null);
     let renderer!: ReactTestRenderer.ReactTestRenderer;
     ReactTestRenderer.act(() => {
@@ -192,10 +193,27 @@ describe('CurationGrid 공용 그리드(6화면) — 가상화·고정된 카드
         ),
       );
     });
-    const list = renderer.root.findByType(FlatList);
-    expect(list.props.windowSize).toBe(7);
-    expect(list.props.initialNumToRender).toBe(8);
+    const list = renderer.root.findByType(FlashList);
+    expect(list.props.numColumns).toBe(2);
+    // 당겨서 새로고침으로 새 딜이 맨 위에 들어오면 그게 보여야 한다(v2 기본값은 옛 첫 카드를 붙잡는다).
+    expect(list.props.maintainVisibleContentPosition).toEqual({disabled: true});
+    // FlashList 기본 250ms 면 빠르게 넘긴 카드가 노출(CTR 분모)에서 빠진다 — FlatList 처럼 0.
+    expect(list.props.viewabilityConfig).toEqual({
+      itemVisiblePercentThreshold: 50,
+      minimumViewTime: 0,
+    });
+    expect(renderCard.mock.calls.length).toBeGreaterThan(0);
     expect(renderCard.mock.calls.length).toBeLessThan(50);
+  });
+
+  it('★재사용되는 칸 안의 state 는 상품 id 로 key 를 건다 — 안 걸면 다른 상품에 찜 해제 하트가 남는다', () => {
+    const fs = require('fs');
+    const path = require('path');
+    const src: string = fs.readFileSync(
+      path.join(__dirname, '..', 'src/screens/mypage/LikeScreen.tsx'),
+      'utf8',
+    );
+    expect(src).toMatch(/<WishlistHeart\s+key=\{item\.id\}/);
   });
 
   it('★호출부가 renderCard 를 인라인으로 넘기지 않는다 — 넘기면 페이지가 붙을 때마다 보이는 카드가 전부 다시 그려진다', () => {

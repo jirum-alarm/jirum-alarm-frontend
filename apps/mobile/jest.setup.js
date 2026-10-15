@@ -10,3 +10,5 @@ jest.mock('react-native-worklets', () =>
 jest.mock('react-native-reanimated', () =>
   require('react-native-reanimated/mock'),
 );
+// FlashList(CurationGrid)는 jest 에 레이아웃 측정이 없어 칸을 그리지 못한다 — 공식 목이 크기를 정해 준다.
+require('@shopify/flash-list/jestSetup');

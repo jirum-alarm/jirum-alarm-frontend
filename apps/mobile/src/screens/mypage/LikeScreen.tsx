@@ -67,7 +67,12 @@ export default function LikeScreen({navigation}: Props) {
         />
         {/* web 은 썸네일 우상단에 하트를 얹는다(ProductGridCard actionIcon). */}
         <View className="absolute top-0 right-0">
-          <WishlistHeart productId={Number(item.id)} onChange={setWishlist} />
+          {/* key — 그리드(FlashList)가 칸을 다른 상품에 다시 쓸 때 하트 state 를 새로 시작한다. */}
+          <WishlistHeart
+            key={item.id}
+            productId={Number(item.id)}
+            onChange={setWishlist}
+          />
         </View>
       </View>
     ),
