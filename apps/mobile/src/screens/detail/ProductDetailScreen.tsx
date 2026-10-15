@@ -23,6 +23,7 @@ import {
   UploaderType,
 } from '@/shared/api/gql/graphql';
 import {ProductQueries} from '@/entities/product/product.queries';
+import {peekDetailPreview} from '@/entities/product/prefetch-detail';
 import ProductCarouselSection from '@/shared/components/product/ProductCarouselSection';
 import Thumbnail from '@/shared/components/product/Thumbnail';
 import CommentSection from '@/features/comment/ui/CommentSection';
@@ -36,6 +37,7 @@ import {
 } from '@/shared/lib/device/recent-viewed';
 import type {ProductFlowParamList} from '@/navigations/tab/types';
 import WebViewErrorView from '@/shared/components/WebViewErrorView';
+import {isNotFoundError} from '@/shared/lib/client/http-client';
 import {isFromTossPath} from '@/entities/home/lib/toss';
 import {
   tabNavigations,
@@ -44,6 +46,7 @@ import {
 import {useAuth} from '@/shared/hooks/useAuth';
 import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import {goTabHome, openSearch} from '@/shared/lib/navigation/search-flow';
+import {pushProductDetail} from '@/shared/lib/navigation/detail-chain';
 import {buildProductShareDescription} from '@/shared/lib/share';
 import {hotdealTextMap} from '@/shared/components/product/HotdealBadge';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
@@ -57,6 +60,7 @@ import ProductDetailSkeleton from './ui/ProductDetailSkeleton';
 import ProductInfo from './ui/ProductInfo';
 import AffiliateNotice from './ui/AffiliateNotice';
 import ExpiredProductWarning from './ui/ExpiredProductWarning';
+import MissingDealView from './ui/MissingDealView';
 import LiveAlternativeDeals from './ui/LiveAlternativeDeals';
 import {
   DetailHeaderActions,
@@ -147,6 +151,7 @@ function NativeDetail({
     data: product,
     isPending,
     isError,
+    error,
     refetch,
   } = useQuery(ProductQueries.info({id: productId}));
 
@@ -191,11 +196,10 @@ function NativeDetail({
     enabled: !!product?.categoryId,
   });
 
-  // 카드를 누르면 같은 스택에 상세를 하나 더 쌓는다(웹 링크와 같은 동선).
+  // 카드를 누르면 같은 스택에 상세를 하나 더 쌓는다(웹 링크와 같은 동선). 이미 본 딜이면 되돌아가고,
+  // 너무 깊어지면 오래된 상세를 걷는다(detail-chain).
   const pushProduct = useCallback(
-    (id: number) => {
-      navigation.push(tabStackNavigations.DETAIL, {path: `/products/${id}`});
-    },
+    (id: number) => pushProductDetail(navigation, `/products/${id}`),
     [navigation],
   );
 
@@ -272,10 +276,20 @@ function NativeDetail({
     />
   );
 
+  // 지워진 딜 — 가이드·근거 쿼리가 재시도로 늦게 끝나도 기다리지 않고 바로 알린다.
+  if (isNotFoundError(error)) {
+    return (
+      <MissingDealView
+        onPressHome={() => goTabHome(navigation)}
+        onPressSearch={() => openSearch(navigation)}
+      />
+    );
+  }
+
   if (isPending || isGuidesPending || isEvidencePending) {
     return (
       <>
-        <ProductDetailSkeleton />
+        <ProductDetailSkeleton preview={peekDetailPreview(productId)} />
         {shareSheet}
       </>
     );

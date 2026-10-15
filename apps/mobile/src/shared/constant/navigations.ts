@@ -7,6 +7,8 @@ const mainNavigations = {
   JIRUM_ALARM_WEBVIEW: 'JirumAlarmWebView',
   /** 루트 스택의 첫 화면 = 하단 탭 전체. 상세 등은 이 위에 push 되어 탭바째 덮는다. */
   TABS: 'MainTabs',
+  /** 게스트가 회원 기능을 누르면 지금 화면 위에 뜨는 로그인 창(LoginModalScreen). */
+  LOGIN: 'LoginModal',
 } as const;
 
 const tabNavigations = {

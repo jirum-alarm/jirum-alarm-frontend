@@ -104,6 +104,33 @@ export function areNativeTabsMounted(): boolean {
   return canNavigateToTab(tabNavigations.HOME);
 }
 
+/** 같은 목적지인가 — 상세는 path(쿼리 제외), 그 밖은 params 전체. */
+function isSameDestination(a: unknown, b: unknown): boolean {
+  const pathOf = (p: unknown) =>
+    typeof (p as {path?: unknown})?.path === 'string'
+      ? (p as {path: string}).path.split(/[?#]/)[0]
+      : null;
+  const pa = pathOf(a);
+  if (pa !== null) return pa === pathOf(b);
+  return JSON.stringify(a ?? {}) === JSON.stringify(b ?? {});
+}
+
+/**
+ * 지금 화면 위에 로그인 창을 띄운다(게스트 → 회원). 메인이 떠 있을 때만 — 아니면 false.
+ *
+ * 예전엔 게스트 세션을 내려 앱 전체를 로그인 화면으로 바꿨다. 탭·스크롤·쌓아 둔 화면·쓰던 댓글이 전부 사라졌고,
+ * 로그인 뒤엔 상품 경로 하나만 되살렸다. 창으로 띄우면 뒤 화면이 그대로라 로그인 뒤 하던 일을 이어서 한다.
+ */
+export function openLoginModal(): boolean {
+  if (!navigationRef.isReady() || !areNativeTabsMounted()) return false;
+  try {
+    (navigationRef.navigate as (name: string) => void)(mainNavigations.LOGIN);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function navigateToRoute(route: NativeRoute): boolean {
   if (!canNavigateToTab(route.tab)) return false;
 
@@ -117,25 +144,36 @@ function navigateToRoute(route: NativeRoute): boolean {
       requestTrendingCategory(route.trendingCategoryId);
     }
 
-    // 아래에 깔 탭을 고른다. 루트 스택에 상세 등이 쌓여 있으면 navigate 가 탭까지 되돌린다.
-    (navigationRef.navigate as (name: string, params?: object) => void)(
-      mainNavigations.TABS,
-      {screen: route.tab, params: {screen: tabStackNavigations.ROOT}},
-    );
-    if (!route.screen) return true;
+    // 탭이 목적지면(알림·홈·발견…) 그 탭으로. 루트 스택에 상세 등이 쌓여 있으면 navigate 가 탭까지 걷는다 —
+    // 탭을 누른 것과 같은 결과라 괜찮다.
+    if (!route.screen) {
+      (navigationRef.navigate as (name: string, params?: object) => void)(
+        mainNavigations.TABS,
+        {screen: route.tab, params: {screen: tabStackNavigations.ROOT}},
+      );
+      return true;
+    }
 
-    // 하위 화면은 탭 **바깥** 루트 스택에 올린다(MainNavigator 주석). 탭 위에 쌓이니 뒤로 가면
-    // 위에서 고른 탭이 드러난다 — 예전처럼 탭 안 스택 상태를 [ROOT, 화면] 으로 지정할 필요가 없다.
+    // 하위 화면은 **지금 화면 위에** 올린다(탭을 바꾸지 않는다). 뒤로 가면 보던 곳으로 돌아간다.
+    // 예전엔 URL 이 정한 탭(상품·댓글이면 홈)으로 먼저 navigate 해서 루트 스택을 비웠다 — 알림 탭에서 댓글 알림을
+    // 누르면 뒤로가 홈으로 갔고, 상세를 보다 푸시를 누르면 보던 상세가 사라졌다(2026-10-16 수정).
+    // 이미 그 화면을 보고 있으면(같은 푸시를 두 번 누름 등) 또 쌓지 않는다.
+    const current = navigationRef.getCurrentRoute?.() as
+      | {name: string; params?: object}
+      | undefined;
+    const nextParams = route.nested
+      ? {screen: route.nested.screen, params: route.nested.params}
+      : route.params;
+    if (
+      current?.name === route.screen &&
+      !route.nested &&
+      isSameDestination(current.params, nextParams)
+    ) {
+      return true;
+    }
     // 중첩 네비게이터(검색)면 {screen, params} 로 자식 화면까지 지정한다 — params 만 얹으면
     // 부모가 들고만 있어 자식 화면엔 닿지 않는다.
-    navigationRef.dispatch(
-      StackActions.push(
-        route.screen,
-        route.nested
-          ? {screen: route.nested.screen, params: route.nested.params}
-          : route.params,
-      ),
-    );
+    navigationRef.dispatch(StackActions.push(route.screen, nextParams));
     return true;
   } catch {
     // 네비게이션 상태가 예상과 다르면 조용히 실패시키고 웹뷰 경로로 넘긴다.

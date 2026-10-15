@@ -84,7 +84,11 @@ export default function LiveAlternativeDeals({
               <PressableScale
                 key={String(item.id)}
                 onPressIn={() =>
-                  prefetchProductDetail(Number(item.id), item.thumbnail)
+                  prefetchProductDetail(
+                    Number(item.id),
+                    item.thumbnail,
+                    item.title,
+                  )
                 }
                 onPress={() => {
                   trackProductCardClick('live_alternative', item.id);

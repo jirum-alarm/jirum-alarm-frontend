@@ -19,6 +19,7 @@ export type ProductFlowParamList = {
  */
 export type TabStackParamList = ProductFlowParamList & {
   [mainNavigations.TABS]: undefined;
+  [mainNavigations.LOGIN]: undefined;
   [tabStackNavigations.ROOT]: undefined;
   [tabStackNavigations.SEARCH]: {keyword?: string} | undefined;
   [tabStackNavigations.CURATION]: {sectionId: string; title?: string};

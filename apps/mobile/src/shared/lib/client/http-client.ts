@@ -148,6 +148,14 @@ export function isAuthFailure(error: unknown): boolean {
   );
 }
 
+/**
+ * 서버가 "그런 건 없다"고 답한 실패인가(삭제·비공개 상품 등 — 운영은 originalError.statusCode 404).
+ * 다시 시도해도 안 생기니 재시도하지 말고, 화면은 「네트워크 확인」이 아니라 「없다」를 말해야 한다.
+ */
+export function isNotFoundError(error: unknown): boolean {
+  return error instanceof FetchError && error.code === 404;
+}
+
 async function rejectIfNeeded(response: GraphQLErrorResponse) {
   if (response.errors) {
     for (const error of response.errors) {

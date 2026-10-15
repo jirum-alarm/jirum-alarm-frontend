@@ -20,6 +20,7 @@ import {authNavigations} from '@/shared/constant/navigations.ts';
 import {useSocialLogin} from './useSocialLogin';
 import {useGuestLogin} from './useGuestLogin';
 import {AuthParamList} from '@/navigations/stack/AuthNavigator';
+import {useLoginModal} from './login-modal-context';
 
 const AuthHomeScreen = () => {
   const {
@@ -31,6 +32,8 @@ const AuthHomeScreen = () => {
   } = useSocialLogin();
 
   const {startGuest, isGuestPending} = useGuestLogin();
+  // 게스트가 회원 기능을 눌러 창으로 뜬 경우 — 둘러보기 대신 닫기(LoginModalScreen).
+  const loginModal = useLoginModal();
 
   const navigation = useNavigation<NavigationProp<AuthParamList>>();
   const c = useColors();
@@ -50,6 +53,11 @@ const AuthHomeScreen = () => {
             </Text>
             <Text style={[styles.title, {color: c.gray[900]}]}>지름알림</Text>
           </View>
+          {loginModal ? (
+            <Text style={[styles.hint, {color: c.gray[600]}]}>
+              로그인하면 하던 걸 이어서 할 수 있어요
+            </Text>
+          ) : null}
         </View>
         <View
           style={[
@@ -121,15 +129,16 @@ const AuthHomeScreen = () => {
           웹에서 쓰던 카카오·네이버 계정으로 로그인하면{'\n'}등록한 키워드
           알림이 그대로 이어져요
         </Text>
-        {/* 로그인 벽 대신 선택지 — 게스트도 키워드 알림을 받고, 나중에 로그인하면 계정으로 합쳐진다. */}
+        {/* 로그인 벽 대신 선택지 — 게스트도 키워드 알림을 받고, 나중에 로그인하면 계정으로 합쳐진다.
+            창으로 떴으면 이미 게스트라 닫기만 한다(하던 화면으로 돌아간다). */}
         <TouchableOpacity
           accessibilityRole="button"
           disabled={isSocialLoginPending || isGuestPending}
           hitSlop={12}
           style={styles.guestButton}
-          onPress={startGuest}>
+          onPress={loginModal ? loginModal.onClose : startGuest}>
           <Text style={[styles.guestButtonText, {color: c.gray[600]}]}>
-            로그인 없이 둘러보기
+            {loginModal ? '다음에 할게요' : '로그인 없이 둘러보기'}
           </Text>
         </TouchableOpacity>
       </View>
