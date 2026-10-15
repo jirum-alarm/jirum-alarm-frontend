@@ -132,9 +132,10 @@ export default function CommunityReaction({ productId }: { productId: number }) 
         }
       />
 
-      {/* 판정·키워드·AI 요약을 카드 하나에 — 예전엔 파란 상자 안 흰 상자 + 바깥 회색 상자로 세 겹이었다. */}
+      {/* 판정·키워드·AI 요약을 파란 카드 하나에 — 예전엔 파란 상자 안 흰 상자 + 바깥 회색 상자로 세 겹이었다.
+          바탕은 파랑으로 둔다: 흰 카드로 바꿨더니 아래 제보 카드와 똑같아져 섹션이 묻혔다(10/15). */}
       <div className="space-y-3">
-        <div className="space-y-3 rounded-xl border border-gray-200 bg-white p-4">
+        <div className="bg-secondary-50 space-y-3 rounded-xl p-4">
           {allCount > 0 ? (
             <div className="flex items-center gap-1.5">
               {isPositive ? (
@@ -164,7 +165,7 @@ export default function CommunityReaction({ productId }: { productId: number }) 
 
           {commentSummary && <Reactions commentSummary={commentSummary} />}
 
-          <div className="flex items-center justify-between gap-2 border-t border-gray-100 pt-3">
+          <div className="border-secondary-100 flex items-center justify-between gap-2 border-t pt-3">
             <span className="text-xs text-gray-500">{lastUpdatedAt ?? '\u00a0'}</span>
             {product.url && !MALL_SOURCED_PROVIDER_IDS.has(product.provider.id) ? (
               <CommunityLink url={product.url} provider={product.provider.nameKr} />

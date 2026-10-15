@@ -37,7 +37,7 @@ export function Reactions({ commentSummary }: { commentSummary: ProductCommentSu
   if (!rows.length) return null;
   const hiddenCount = expanded ? 0 : Math.max(0, rows.length - COLLAPSED_ROWS);
   return (
-    <section aria-label="댓글 AI 요약" className="border-t border-gray-100 pt-3">
+    <section aria-label="댓글 AI 요약" className="border-secondary-100 border-t pt-3">
       <ul className="space-y-3">
         {rows.map((item, index) => {
           const value = commentSummary[item.id];

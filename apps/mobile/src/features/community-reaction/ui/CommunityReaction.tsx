@@ -178,8 +178,9 @@ export default function CommunityReaction({
         실제 커뮤니티 반응을 AI로 요약한 내용이에요
       </Text>
 
-      {/* 판정·키워드·AI 요약을 카드 하나에(web 과 같다) — 예전엔 파란 상자 안 흰 상자·회색 상자·제보 줄까지 네 겹이었다. */}
-      <View className="gap-y-3 rounded-xl border border-gray-200 bg-white p-4">
+      {/* 판정·키워드·AI 요약을 파란 카드 하나에(web 과 같다) — 예전엔 파란 상자 안 흰 상자·회색 상자·제보 줄까지 네 겹이었다.
+          바탕은 파랑으로 둔다: 흰 카드로 바꿨더니 아래 제보 카드와 똑같아져 섹션이 묻혔다(10/15). */}
+      <View className="gap-y-3 rounded-xl bg-secondary-50 p-4">
         {allCount > 0 ? (
           <View className="flex-row items-center gap-1.5">
             {isPositive ? (
@@ -213,7 +214,7 @@ export default function CommunityReaction({
           <Reactions commentSummary={additional.commentSummary} />
         ) : null}
 
-        <View className="flex-row items-center justify-between gap-2 border-t border-gray-100 pt-3">
+        <View className="flex-row items-center justify-between gap-2 border-t border-secondary-100 pt-3">
           <Text className="text-xs text-gray-500">{lastUpdatedAt ?? ' '}</Text>
           {additional?.url && additional.provider?.nameKr ? (
             <CommunityLink
