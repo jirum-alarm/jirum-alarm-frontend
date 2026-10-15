@@ -28,6 +28,9 @@ const EMAIL_PATTERN =
 type LoginForm = {email: string; password: string};
 
 const EmailLoginScreen = () => {
+  // React Compiler 제외 — react-hook-form 의 formState 는 읽는 순간 구독하는 Proxy 라 자동 메모와 맞물리는지
+  // 보장이 없다(공식 호환 목록에 없음). 로그인 버튼 활성(isValid)이 막히면 이메일 로그인이 통째로 막히므로 보수적으로 뺀다.
+  'use no memo';
   const insets = useSafeAreaInsets();
 
   const passwordRef = useRef<TextInput>(null);

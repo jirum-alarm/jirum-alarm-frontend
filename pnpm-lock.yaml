@@ -511,6 +511,9 @@ importers:
       babel-plugin-module-resolver:
         specifier: ^5.0.3
         version: 5.0.3
+      babel-plugin-react-compiler:
+        specifier: 1.0.0
+        version: 1.0.0
       eas-cli:
         specifier: ^22.0.0
         version: 22.0.0(@types/node@26.6.4)(typescript@6.0.3)
