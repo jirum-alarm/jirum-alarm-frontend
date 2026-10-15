@@ -47,9 +47,9 @@ jirum-alarm-frontend/
 
 ### Development Environment
 - **Node.js**: `>=v20.x.x` required
-- **Package Manager**: `pnpm@10.15.0+`
-- **TypeScript**: `^5.8.3`
-- **Turbo**: `^2.0.1` for monorepo orchestration
+- **Package Manager**: `pnpm@10.30+`
+- **TypeScript**: `^6.0.3`
+- **Turbo**: `^2.11` for monorepo orchestration
 
 ## 🚀 Applications
 
@@ -57,8 +57,8 @@ jirum-alarm-frontend/
 **Main Application - Hot Deal Aggregation Platform**
 
 **Technology Stack:**
-- **Framework**: Next.js 15.4.10 with App Router
-- **UI**: React 19.1.2, Tailwind CSS 4.1.11
+- **Framework**: Next.js 16.4 with App Router
+- **UI**: React 19.3, Tailwind CSS 4.3
 - **State Management**: Jotai, React Query (TanStack Query)
 - **Data Fetching**: Apollo Client (GraphQL)
 - **Styling**: Tailwind CSS, Tailwind Merge, Class Variance Authority
@@ -148,8 +148,8 @@ pnpm --filter admin code-gen   # 운영 스키마로 타입 생성
 **Marketing Landing Page**
 
 **Technology Stack:**
-- **Framework**: Next.js 15.4.10
-- **UI**: React 19.1.2, Tailwind CSS 4.1.7
+- **Framework**: Next.js 16.4
+- **UI**: React 19.3, Tailwind CSS 4.3
 - **Styling**: Motion for animations, Tailwind Merge
 
 **Key Features:**
@@ -332,11 +332,11 @@ Code formatting standards:
 ## 🔧 Technology Stack
 
 ### Core Technologies
-- **Framework**: Next.js 15.4.10 (App Router)
-- **Language**: TypeScript 5.8.3
-- **Package Manager**: PNPM 10.15.0
-- **Monorepo**: Turborepo 2.0.1
-- **UI Library**: React 19.1.2
+- **Framework**: Next.js 16.4 (App Router)
+- **Language**: TypeScript 6.0
+- **Package Manager**: PNPM 10.30
+- **Monorepo**: Turborepo 2.11
+- **UI Library**: React 19.3
 
 ### Styling & UI
 - **CSS Framework**: Tailwind CSS 4.x
@@ -345,14 +345,14 @@ Code formatting standards:
 - **Styling Utils**: Tailwind Merge, Class Variance Authority, CLSX
 
 ### Data & State Management
-- **GraphQL**: Apollo Client 3.x
-- **State Management**: Jotai 2.x
+- **GraphQL**: Apollo Client 4.x
+- **State Management**: Jotai 3.x
 - **Server State**: TanStack React Query 5.x
-- **Real-time**: GraphQL WS, Firebase 10.x
+- **Real-time**: GraphQL WS, Firebase 13.x
 
 ### Development & Tooling
-- **Code Quality**: ESLint 9.x, Prettier 3.x, Husky, Lint-staged
-- **Testing**: Storybook 8.x, MSW 2.x for mocking
+- **Code Quality**: ESLint 10.x, Prettier 3.x, Husky, Lint-staged
+- **Testing**: Storybook 10.x, MSW 3.x for mocking
 - **Build Tools**: Next.js Bundle Analyzer, Sharp for image optimization
 - **Type Generation**: GraphQL Code Generator
 
