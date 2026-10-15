@@ -48,3 +48,15 @@ export const LIGHT_SSR_CRAWLER_PATTERN =
   /ClaudeBot|anthropic-ai|GPTBot|CCBot|Bytespider|meta-externalagent|ExaSearchBot|Amazonbot|AhrefsBot|SemrushBot|DataForSeoBot|MJ12bot|DotBot|BLEXBot/i;
 
 export const isLightSsrCrawlerUA = (ua: string) => LIGHT_SSR_CRAWLER_PATTERN.test(ua);
+
+/**
+ * 링크 미리보기 봇 — 카톡·페북·슬랙 등에 링크가 올라오면 카드(og 태그)만 읽어 간다(2026-10-15).
+ *
+ * ★왜: 하루 ~1.9만 건(대부분 우리 카톡 발송봇이 단톡방에 올린 딜을 kakaotalk-scrap 이 읽는 것)인데
+ * 본문 SSR 까지 사람과 똑같이 받아 p50 0.27s 였다. 카드에 쓰는 메타(설명의 근거 문장 포함)는 그대로 두고
+ * 본문용 730일 가격 차트만 SSR 에서 뺀다. 카톡 인앱 브라우저(UA 의 KAKAOTALK)는 사람이라 걸리지 않는다.
+ */
+export const LINK_PREVIEW_PATTERN =
+  /kakaotalk-scrap|facebookexternalhit|Twitterbot|Slackbot|Discordbot|TelegramBot|WhatsApp\/|LinkedInBot/i;
+
+export const isLinkPreviewUA = (ua: string) => LINK_PREVIEW_PATTERN.test(ua);

@@ -13,7 +13,7 @@ import { CATEGORY_MAP } from '@/shared/config/categories';
 import { categoryRankingPath } from '@/shared/config/category-ranking';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { robotsDirective } from '@/shared/config/metadata';
-import { isLightSsrCrawlerUA } from '@/shared/config/user-agent';
+import { isLightSsrCrawlerUA, isLinkPreviewUA } from '@/shared/config/user-agent';
 
 import { isFromToss, stripPriceFromTitle } from '@/entities/product/lib/from-toss';
 import { parseProductId } from '@/entities/product/lib/product-id';
@@ -476,7 +476,8 @@ export default async function ProductDetail({
 
   const device = await checkDevice();
   const { isMobile } = device;
-  const lightSsr = isLightSsrCrawlerUA((await headers()).get('user-agent') ?? '');
+  const userAgent = (await headers()).get('user-agent') ?? '';
+  const lightSsr = isLightSsrCrawlerUA(userAgent);
 
   const renderMobile = (
     productData?: any,
@@ -585,7 +586,7 @@ export default async function ProductDetail({
       <ProductPrefetch
         productId={productId}
         initial={{ product, productGuides, additionalInfo }}
-        skipPriceChart={lightSsr}
+        skipPriceChart={lightSsr || isLinkPreviewUA(userAgent)}
       >
         {!isMobile
           ? renderDesktop(

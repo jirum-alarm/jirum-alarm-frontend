@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { describe, it } from 'node:test';
 
 const require = createRequire(import.meta.url);
-const { isAndroidUA, isLightSsrCrawlerUA, isSafariUA } =
+const { isAndroidUA, isLightSsrCrawlerUA, isLinkPreviewUA, isSafariUA } =
   require('./user-agent.ts') as typeof import('./user-agent');
 
 // 2026-10-02 운영 액세스 로그에서 뽑은 실제 UA.
@@ -35,6 +35,30 @@ describe('isLightSsrCrawlerUA', () => {
       '',
     ]) {
       assert.equal(isLightSsrCrawlerUA(ua), false, ua);
+    }
+  });
+});
+
+// 2026-10-15 운영 게이트웨이 로그.
+describe('isLinkPreviewUA', () => {
+  it('카톡·페북 링크 미리보기는 차트 없이', () => {
+    for (const ua of [
+      'facebookexternalhit/1.1; kakaotalk-scrap/1.0; +https://devtalk.kakao.com/t/scrap/33984',
+      'facebookexternalhit/1.1;kakaotalk-scrap/1.0; +https://devtalk.kakao.com/t/scrap/33984',
+      'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+    ]) {
+      assert.equal(isLinkPreviewUA(ua), true, ua);
+    }
+  });
+
+  it('카톡 인앱 브라우저(사람)·검색엔진은 아님', () => {
+    for (const ua of [
+      'Mozilla/5.0 (Linux; Android 16; SM-S937N Build/BP4A.251205.006; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/155.0.0.0 Mobile Safari/537.36;KAKAOTALK 2611730',
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 KAKAOTALK 26.8.3',
+      'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+      '',
+    ]) {
+      assert.equal(isLinkPreviewUA(ua), false, ua);
     }
   });
 });
