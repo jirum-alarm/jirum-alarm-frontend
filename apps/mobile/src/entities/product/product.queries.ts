@@ -1,6 +1,7 @@
 import {queryOptions} from '@tanstack/react-query';
 
 import {ProductService} from '@/shared/api/product/product.service.ts';
+import {isNotFoundError} from '@/shared/lib/client/http-client';
 import type {
   ProductGuidesQueryVariables,
   ProductInfoQueryVariables,
@@ -51,7 +52,8 @@ export class ProductQueries {
     return queryOptions({
       queryKey: this.keys.info(variables.id),
       queryFn: () => ProductService.getProductInfo(variables),
-      retry: RETRY,
+      // 지워진 딜은 재시도해도 없다 — 재시도 2번 동안 스켈레톤만 보던 것을 바로 「내려간 딜」로.
+      retry: (count, error) => !isNotFoundError(error) && count < RETRY,
     });
   }
 

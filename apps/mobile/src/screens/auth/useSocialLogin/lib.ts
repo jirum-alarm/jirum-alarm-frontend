@@ -2,7 +2,7 @@ import {removeAsyncStorage, setAsyncStorage} from '@/shared/lib/persistence';
 import {showToast} from '@/shared/lib/feedback';
 import {StorageKey} from '@/shared/constant/storage-key';
 import {bindFcmTokenToUser} from '@/shared/lib/fcm/push-permission';
-import {setGuest} from '@/shared/lib/auth/guest';
+import {isGuestSession, setGuest} from '@/shared/lib/auth/guest';
 
 export const handleLoginSuccess = async (
   accessToken?: string,
@@ -37,8 +37,12 @@ export const handleLoginError = async (
   errorMessage: string | null = '로그인에 실패했어요.',
 ) => {
   try {
-    await removeAsyncStorage(StorageKey.ACCESS_TOKEN);
-    await removeAsyncStorage(StorageKey.REFRESH_TOKEN);
+    // 게스트가 로그인 창(LoginModalScreen)에서 실패한 거면 지금 토큰은 게스트 것이다 — 지우면 게스트 세션까지
+    // 끊겨 앱 전체가 로그인 화면으로 바뀐다. 새 토큰은 성공해야 저장되니 남길 게 없다.
+    if (!isGuestSession()) {
+      await removeAsyncStorage(StorageKey.ACCESS_TOKEN);
+      await removeAsyncStorage(StorageKey.REFRESH_TOKEN);
+    }
   } catch (storageError) {
     console.error('Error removing tokens:', storageError);
   } finally {

@@ -12,6 +12,7 @@ import {
 import {showToast} from '@/shared/lib/feedback';
 import Close from '@/shared/components/icons/Close';
 import {useColors} from '@/shared/theme/useColors';
+import {useOpenLogin} from '@/shared/hooks/useRequireLogin';
 
 const MAX_INPUT_HEIGHT = 120;
 const MAX_COMMENT_LENGTH = 300; // web textarea maxLength (커뮤니티 댓글과 같다)
@@ -24,6 +25,7 @@ export default function CommentInput({
   isUserLogin: boolean;
 }) {
   const c = useColors();
+  const openLogin = useOpenLogin();
   const queryClient = useQueryClient();
   const editing = useEditingComment();
   const inputRef = useRef<TextInput>(null);
@@ -67,7 +69,7 @@ export default function CommentInput({
     const content = value.trim();
     if (!content) return;
     if (!isUserLogin) {
-      showToast.info('로그인 후 이용해주세요.');
+      openLogin();
       return;
     }
 
@@ -105,11 +107,12 @@ export default function CommentInput({
       ) : null}
 
       <View className="flex-row items-end gap-x-2 px-5 py-2">
-        {/* 비로그인은 칸을 눌러도 아무 반응이 없었다 — 눌렀을 때 왜 막혔는지 알려준다(다른 로그인 게이트와 같은 토스트). */}
+        {/* 비로그인은 칸을 눌러도 아무 반응이 없었다 — 누르면 지금 화면 위에 로그인 창(useOpenLogin).
+            토스트만 띄우던 땐 로그인으로 갈 길이 없었다. */}
         <Pressable
           className="flex-1"
           disabled={isUserLogin}
-          onPress={() => showToast.info('로그인 후 이용해주세요.')}
+          onPress={openLogin}
           accessibilityRole={isUserLogin ? undefined : 'button'}
           accessibilityLabel={
             isUserLogin ? undefined : '댓글 쓰기, 로그인 필요'
@@ -126,7 +129,7 @@ export default function CommentInput({
             // 갇혀 윗줄이 잘렸다(iOS 26 시뮬 실측). 패딩도 두 번 더해 빈 칸이 52~56pt 로 떴다.)
             style={{minHeight: 40, maxHeight: MAX_INPUT_HEIGHT}}
             placeholder={
-              isUserLogin ? '댓글을 입력해주세요' : '로그인 후 이용해주세요'
+              isUserLogin ? '댓글을 입력해주세요' : '로그인하고 댓글 쓰기'
             }
             placeholderTextColor={c.gray[500]}
             editable={isUserLogin}

@@ -18,7 +18,9 @@ import {convertToWebp} from '@/shared/lib/format/image';
 export function prefetchProductDetail(
   id: number,
   thumbnail?: string | null,
+  title?: string | null,
 ): void {
+  rememberDetailPreview(id, {thumbnail, title});
   const {queryClient} =
     require('@/provider/ReactQueryProvider') as typeof import('@/provider/ReactQueryProvider');
   const {ProductQueries} =
@@ -30,4 +32,26 @@ export function prefetchProductDetail(
   const src = convertToWebp(thumbnail) ?? thumbnail;
   // expo-image 캐시에 데운다 — 상세의 Thumbnail(expo-image)이 같은 캐시를 읽는다(RN Image.prefetch 는 다른 캐시라 헛일이었다).
   if (src) Image.prefetch(src, 'memory-disk').catch(() => {});
+}
+
+export type DetailPreview = {thumbnail?: string | null; title?: string | null};
+
+/** 최근 누른 카드 몇 개만 — 상세가 열리는 동안만 쓰니 오래 들고 있을 이유가 없다. */
+const PREVIEW_LIMIT = 30;
+const previews = new Map<number, DetailPreview>();
+
+function rememberDetailPreview(id: number, preview: DetailPreview) {
+  previews.delete(id);
+  previews.set(id, preview);
+  if (previews.size > PREVIEW_LIMIT) {
+    previews.delete(previews.keys().next().value as number);
+  }
+}
+
+/**
+ * 카드가 이미 그리고 있던 사진·제목. 상세가 응답을 기다리는 동안 골격 대신 이걸 먼저 그린다 — 누른 카드가
+ * 그대로 커지는 것처럼 보여 "멈췄다"는 느낌이 줄어든다(사진은 위 prefetch 로 이미 캐시에 있다).
+ */
+export function peekDetailPreview(id: number): DetailPreview | null {
+  return previews.get(id) ?? null;
 }
