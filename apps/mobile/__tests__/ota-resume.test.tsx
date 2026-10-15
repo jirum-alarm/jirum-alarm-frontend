@@ -23,6 +23,14 @@ jest.mock('expo-updates', () => ({
   fetchUpdateAsync: () => mockUpdates.fetchUpdateAsync(),
 }));
 
+let mockRootRoutes: unknown[] = [{name: 'MainTabs'}];
+jest.mock('../src/navigations/navigation-ref', () => ({
+  navigationRef: {
+    isReady: () => true,
+    getRootState: () => ({routes: mockRootRoutes}),
+  },
+}));
+
 import useOtaUpdateOnResume, {
   RELOAD_AFTER_BACKGROUND_MS,
   decideOnResume,
@@ -34,6 +42,11 @@ describe('decideOnResume', () => {
   });
   it('잠깐 나갔다 온 거면 보던 화면을 지킨다', () => {
     expect(decideOnResume(RELOAD_AFTER_BACKGROUND_MS - 1, true)).toBe('check');
+  });
+  it('상세·구매 화면 위에 있으면 보던 화면을 지킨다(다음 기회로)', () => {
+    expect(decideOnResume(RELOAD_AFTER_BACKGROUND_MS, true, false)).toBe(
+      'check',
+    );
   });
   it('받아둔 게 없으면 확인만 한다', () => {
     expect(decideOnResume(RELOAD_AFTER_BACKGROUND_MS * 10, false)).toBe(
@@ -51,6 +64,7 @@ describe('useOtaUpdateOnResume', () => {
     jest.clearAllMocks();
     mockUpdates.isEnabled = true;
     mockUpdates.isUpdatePending = false;
+    mockRootRoutes = [{name: 'MainTabs'}];
     (globalThis as {__DEV__?: boolean}).__DEV__ = false;
     jest.spyOn(Date, 'now').mockImplementation(() => now);
     jest.spyOn(AppState, 'addEventListener').mockImplementation(((
@@ -95,6 +109,14 @@ describe('useOtaUpdateOnResume', () => {
     await mount();
     await goAwayFor(RELOAD_AFTER_BACKGROUND_MS);
     expect(mockUpdates.reloadAsync).toHaveBeenCalledTimes(1);
+  });
+
+  it('돌아와 보니 상세 등이 열려 있으면(결제 복귀·푸시 탭) 적용하지 않는다', async () => {
+    mockUpdates.isUpdatePending = true;
+    mockRootRoutes = [{name: 'MainTabs'}, {name: 'ProductDetail'}];
+    await mount();
+    await goAwayFor(RELOAD_AFTER_BACKGROUND_MS);
+    expect(mockUpdates.reloadAsync).not.toHaveBeenCalled();
   });
 
   it('dev 빌드에선 아무것도 안 한다(expo-updates 가 꺼져 있어 던진다)', async () => {

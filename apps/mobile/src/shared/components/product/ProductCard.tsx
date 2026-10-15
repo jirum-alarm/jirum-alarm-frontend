@@ -55,7 +55,11 @@ const ProductCard = React.memo(function ProductCard({
     <PressableScale
       style={isGrid ? {width: '100%'} : {width: CARD_WIDTH}}
       onPressIn={() =>
-        prefetchProductDetail(Number(product.id), product.thumbnail)
+        prefetchProductDetail(
+          Number(product.id),
+          product.thumbnail,
+          product.title,
+        )
       }
       onPress={() => {
         trackProductCardClick(trackingSource, product.id);
