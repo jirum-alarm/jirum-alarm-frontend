@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
-import {cardThumb} from '@jirum/design-system/recipes';
+import {cardThumb, sectionTitle} from '@jirum/design-system/recipes';
 import {
   formatPriceDiff,
   liveAlternativeKindLabel,
@@ -17,6 +17,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 import {trackProductCardClick} from '@/shared/lib/analytics/card-tracking';
 import {displayTime, parsePrice} from '@/shared/lib/format/price';
 import {cn} from '@/shared/lib/styling/className';
+import DetailBand from './DetailBand';
 
 import type {ProductDetail} from '../model/types';
 import {dealFreshnessAt} from '../lib/price-signals';
@@ -64,74 +65,77 @@ export default function LiveAlternativeDeals({
   const summary = summarizeLiveAlternatives(deals);
 
   return (
-    <View className="px-5 pt-7">
-      <Text className="text-lg font-semibold text-gray-900">
-        {summary.title}
-      </Text>
-      <Text className="pt-1 text-xs text-gray-500">{summary.subtitle}</Text>
-      <View className="gap-3 pt-3">
-        {deals.map((deal, index) => {
-          const item = deal.product;
-          const {hasWon, priceWithoutWon} = parsePrice(item.price);
-          const diff = formatPriceDiff(deal.priceDiff);
-          const where = item.mallName || item.provider?.nameKr;
-          return (
-            <PressableScale
-              key={String(item.id)}
-              onPressIn={() =>
-                prefetchProductDetail(Number(item.id), item.thumbnail)
-              }
-              onPress={() => {
-                trackProductCardClick('live_alternative', item.id);
-                recordClick(Number(item.id), index);
-                onPressProduct(Number(item.id));
-              }}
-              accessibilityRole="button"
-              accessibilityLabel={item.title}>
-              <View className="flex-row items-center gap-3">
-                <View className={cn('h-16 w-16', cardThumb)}>
-                  <Thumbnail
-                    uri={item.thumbnail}
-                    categoryId={item.categoryId}
-                    type="hotDeal"
-                  />
-                </View>
-                <View className="flex-1 gap-0.5">
-                  <Text className="text-sm text-gray-700" numberOfLines={1}>
-                    {item.title}
-                  </Text>
-                  <View className="flex-row items-baseline gap-2">
-                    <Text
-                      className="text-base font-semibold text-gray-900"
-                      numberOfLines={1}>
-                      {hasWon ? `${priceWithoutWon}원` : priceWithoutWon}
-                    </Text>
-                    {diff ? (
-                      <Text
-                        className={
-                          diff.cheaper
-                            ? 'text-xs font-semibold text-error-600'
-                            : 'text-xs font-semibold text-gray-500'
-                        }>
-                        {diff.text}
-                      </Text>
-                    ) : null}
+    <>
+      <DetailBand />
+      <View className="px-5 pt-7">
+        <Text className={sectionTitle.detail}>{summary.title}</Text>
+        <Text className={cn('pt-1', sectionTitle.subtitle)}>
+          {summary.subtitle}
+        </Text>
+        <View className="gap-3 pt-3">
+          {deals.map((deal, index) => {
+            const item = deal.product;
+            const {hasWon, priceWithoutWon} = parsePrice(item.price);
+            const diff = formatPriceDiff(deal.priceDiff);
+            const where = item.mallName || item.provider?.nameKr;
+            return (
+              <PressableScale
+                key={String(item.id)}
+                onPressIn={() =>
+                  prefetchProductDetail(Number(item.id), item.thumbnail)
+                }
+                onPress={() => {
+                  trackProductCardClick('live_alternative', item.id);
+                  recordClick(Number(item.id), index);
+                  onPressProduct(Number(item.id));
+                }}
+                accessibilityRole="button"
+                accessibilityLabel={item.title}>
+                <View className="flex-row items-center gap-3">
+                  <View className={cn('h-16 w-16', cardThumb)}>
+                    <Thumbnail
+                      uri={item.thumbnail}
+                      categoryId={item.categoryId}
+                      type="hotDeal"
+                    />
                   </View>
-                  <Text className="text-xs text-gray-500" numberOfLines={1}>
-                    {[
-                      liveAlternativeKindLabel(deal.kind),
-                      where,
-                      item.postedAt ? displayTime(item.postedAt) : null,
-                    ]
-                      .filter(Boolean)
-                      .join(' · ')}
-                  </Text>
+                  <View className="flex-1 gap-0.5">
+                    <Text className="text-sm text-gray-700" numberOfLines={1}>
+                      {item.title}
+                    </Text>
+                    <View className="flex-row items-baseline gap-2">
+                      <Text
+                        className="text-base font-semibold text-gray-900"
+                        numberOfLines={1}>
+                        {hasWon ? `${priceWithoutWon}원` : priceWithoutWon}
+                      </Text>
+                      {diff ? (
+                        <Text
+                          className={
+                            diff.cheaper
+                              ? 'text-xs font-semibold text-error-600'
+                              : 'text-xs font-semibold text-gray-500'
+                          }>
+                          {diff.text}
+                        </Text>
+                      ) : null}
+                    </View>
+                    <Text className="text-xs text-gray-500" numberOfLines={1}>
+                      {[
+                        liveAlternativeKindLabel(deal.kind),
+                        where,
+                        item.postedAt ? displayTime(item.postedAt) : null,
+                      ]
+                        .filter(Boolean)
+                        .join(' · ')}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            </PressableScale>
-          );
-        })}
+              </PressableScale>
+            );
+          })}
+        </View>
       </View>
-    </View>
+    </>
   );
 }
