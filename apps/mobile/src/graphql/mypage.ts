@@ -281,3 +281,29 @@ export const MutationUpdateMyPushSetting = graphql(`
     )
   }
 `);
+
+/** 알림함 「좋은 가격만 받기」 권유 — 내 키워드의 좋은 가격 판정 요약(crawling src/wait 「언제 사나」 엔진). */
+export const QueryGoodPriceSuggestion = graphql(`
+  query QueryGoodPriceSuggestion($keyword: String!) {
+    goodPriceSuggestion(keyword: $keyword) {
+      keyword
+      priced
+      watching
+      unit
+      goodPrice
+      goodDealCount
+      rawMatchCount
+      windowDays
+    }
+  }
+`);
+
+/** 내 키워드를 「좋은 가격만 받기」로 — 하락만 받기 + 단위 기준가(서버가 판정). */
+export const MutationApplyGoodPriceOnly = graphql(`
+  mutation MutationApplyGoodPriceOnly($keyword: String!) {
+    applyGoodPriceOnly(keyword: $keyword) {
+      keyword
+      priced
+    }
+  }
+`);

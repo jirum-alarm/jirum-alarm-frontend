@@ -3,8 +3,13 @@ import { createRequire } from 'node:module';
 import { test } from 'node:test';
 
 const require = createRequire(import.meta.url);
-const { matchMyKeyword, notificationSource, recentKeywordAlertCount } =
-  require('./notificationSource.ts') as typeof import('./notificationSource');
+const {
+  goodPriceText,
+  matchMyKeyword,
+  notificationSource,
+  recentKeywordAlertCount,
+  topKeywordToday,
+} = require('./notificationSource.ts') as typeof import('./notificationSource');
 
 const mine = new Set(['햇반', '펩시']);
 const themes = [{ id: '3', name: '생수·음료 쟁이기' }];
@@ -62,4 +67,28 @@ test('최근 24시간의 내 키워드 알림만 센다(관심사·좋은 딜·�
     { keyword: null, createdAt: hoursAgo(1) },
   ];
   assert.equal(recentKeywordAlertCount(notifications, mine, NOW), 3);
+});
+
+test('오늘 가장 많이 온 내 키워드 — 하락 문구도 그 키워드로, 24시간 밖·남의 키워드는 뺀다', () => {
+  const now = Date.parse('2026-10-15T12:00:00Z');
+  const at = (h: number) => new Date(now - h * 3600_000).toISOString();
+  const top = topKeywordToday(
+    [
+      { keyword: '펩시', createdAt: at(1) },
+      { keyword: '펩시 평소보다 12% 싸게 떴어요 📉', createdAt: at(2) },
+      { keyword: '햇반', createdAt: at(3) },
+      { keyword: '펩시', createdAt: at(30) },
+      { keyword: '🥤 [생수·음료 쟁이기] 펩시 핫딜', createdAt: at(1) },
+    ],
+    mine,
+    now,
+  );
+  assert.deepEqual(top, { keyword: '펩시', count: 2 });
+  assert.equal(topKeywordToday([], mine, now), undefined);
+});
+
+test('좋은 가격 문구', () => {
+  assert.equal(goodPriceText('LITER', 1400), '1L당 1,400원');
+  assert.equal(goodPriceText('FACE_VALUE', 0.923), '액면가의 92%');
+  assert.equal(goodPriceText('TOTAL', 289000), '289,000원');
 });

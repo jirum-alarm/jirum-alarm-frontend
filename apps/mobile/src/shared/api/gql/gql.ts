@@ -63,6 +63,8 @@ type Documents = {
   '\n  mutation MutationUpdateKeywordExcludeKeywords(\n    $id: Int!\n    $excludeKeywords: [String!]!\n  ) {\n    updateNotificationKeywordExcludeKeywords(\n      id: $id\n      excludeKeywords: $excludeKeywords\n    )\n  }\n': typeof types.MutationUpdateKeywordExcludeKeywordsDocument;
   '\n  query QueryMyPushSetting {\n    pushSetting {\n      keywordAlert\n      keywordAlertLevel\n      marketing\n      nightAlerts\n      communityAlert\n      quietHoursStart\n      quietHoursEnd\n    }\n  }\n': typeof types.QueryMyPushSettingDocument;
   '\n  mutation MutationUpdateMyPushSetting(\n    $keywordAlert: Boolean\n    $keywordAlertLevel: KeywordAlertLevel\n    $marketing: Boolean\n    $nightAlerts: Boolean\n    $communityAlert: Boolean\n    $quietHoursStart: Int\n    $quietHoursEnd: Int\n  ) {\n    updatePushSetting(\n      keywordAlert: $keywordAlert\n      keywordAlertLevel: $keywordAlertLevel\n      marketing: $marketing\n      nightAlerts: $nightAlerts\n      communityAlert: $communityAlert\n      quietHoursStart: $quietHoursStart\n      quietHoursEnd: $quietHoursEnd\n    )\n  }\n': typeof types.MutationUpdateMyPushSettingDocument;
+  '\n  query QueryGoodPriceSuggestion($keyword: String!) {\n    goodPriceSuggestion(keyword: $keyword) {\n      keyword\n      priced\n      watching\n      unit\n      goodPrice\n      goodDealCount\n      rawMatchCount\n      windowDays\n    }\n  }\n': typeof types.QueryGoodPriceSuggestionDocument;
+  '\n  mutation MutationApplyGoodPriceOnly($keyword: String!) {\n    applyGoodPriceOnly(keyword: $keyword) {\n      keyword\n      priced\n    }\n  }\n': typeof types.MutationApplyGoodPriceOnlyDocument;
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n': typeof types.MutationAddPushTokenDocument;
   '\n  mutation MutationRemoveTokenLinkage($token: String!) {\n    removeTokenLinkage(token: $token)\n  }\n': typeof types.MutationRemoveTokenLinkageDocument;
   '\n  query QueryNotifications($limit: Int!, $offset: Int!) {\n    notifications(limit: $limit, offset: $offset) {\n      id\n      message\n      title\n      url\n      createdAt\n      readAt\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n      }\n    }\n  }\n': typeof types.QueryNotificationsDocument;
@@ -199,6 +201,10 @@ const documents: Documents = {
     types.QueryMyPushSettingDocument,
   '\n  mutation MutationUpdateMyPushSetting(\n    $keywordAlert: Boolean\n    $keywordAlertLevel: KeywordAlertLevel\n    $marketing: Boolean\n    $nightAlerts: Boolean\n    $communityAlert: Boolean\n    $quietHoursStart: Int\n    $quietHoursEnd: Int\n  ) {\n    updatePushSetting(\n      keywordAlert: $keywordAlert\n      keywordAlertLevel: $keywordAlertLevel\n      marketing: $marketing\n      nightAlerts: $nightAlerts\n      communityAlert: $communityAlert\n      quietHoursStart: $quietHoursStart\n      quietHoursEnd: $quietHoursEnd\n    )\n  }\n':
     types.MutationUpdateMyPushSettingDocument,
+  '\n  query QueryGoodPriceSuggestion($keyword: String!) {\n    goodPriceSuggestion(keyword: $keyword) {\n      keyword\n      priced\n      watching\n      unit\n      goodPrice\n      goodDealCount\n      rawMatchCount\n      windowDays\n    }\n  }\n':
+    types.QueryGoodPriceSuggestionDocument,
+  '\n  mutation MutationApplyGoodPriceOnly($keyword: String!) {\n    applyGoodPriceOnly(keyword: $keyword) {\n      keyword\n      priced\n    }\n  }\n':
+    types.MutationApplyGoodPriceOnlyDocument,
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n':
     types.MutationAddPushTokenDocument,
   '\n  mutation MutationRemoveTokenLinkage($token: String!) {\n    removeTokenLinkage(token: $token)\n  }\n':
@@ -569,6 +575,18 @@ export function graphql(
 export function graphql(
   source: '\n  mutation MutationUpdateMyPushSetting(\n    $keywordAlert: Boolean\n    $keywordAlertLevel: KeywordAlertLevel\n    $marketing: Boolean\n    $nightAlerts: Boolean\n    $communityAlert: Boolean\n    $quietHoursStart: Int\n    $quietHoursEnd: Int\n  ) {\n    updatePushSetting(\n      keywordAlert: $keywordAlert\n      keywordAlertLevel: $keywordAlertLevel\n      marketing: $marketing\n      nightAlerts: $nightAlerts\n      communityAlert: $communityAlert\n      quietHoursStart: $quietHoursStart\n      quietHoursEnd: $quietHoursEnd\n    )\n  }\n',
 ): typeof import('./graphql').MutationUpdateMyPushSettingDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryGoodPriceSuggestion($keyword: String!) {\n    goodPriceSuggestion(keyword: $keyword) {\n      keyword\n      priced\n      watching\n      unit\n      goodPrice\n      goodDealCount\n      rawMatchCount\n      windowDays\n    }\n  }\n',
+): typeof import('./graphql').QueryGoodPriceSuggestionDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationApplyGoodPriceOnly($keyword: String!) {\n    applyGoodPriceOnly(keyword: $keyword) {\n      keyword\n      priced\n    }\n  }\n',
+): typeof import('./graphql').MutationApplyGoodPriceOnlyDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

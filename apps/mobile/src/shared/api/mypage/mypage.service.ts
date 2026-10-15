@@ -1,5 +1,6 @@
 import {
   MutationAddMyNotificationKeyword,
+  MutationApplyGoodPriceOnly,
   MutationRemoveMyNotificationKeyword,
   MutationUpdateKeywordExcludeKeywords,
   MutationUpdateKeywordPriceDropOnly,
@@ -8,6 +9,7 @@ import {
   MutationUpdateMyPassword,
   MutationUpdateMyProfile,
   MutationWithdraw,
+  QueryGoodPriceSuggestion,
   QueryMyNotificationKeywords,
   QueryMyProfile,
   QueryMyPushSetting,
@@ -81,6 +83,24 @@ export class MyPageService {
   static async withdraw() {
     const res = await HttpClient.withAccessToken().execute(MutationWithdraw);
     return res.data;
+  }
+
+  /** 알림함 「좋은 가격만 받기」 권유 — 내 키워드가 아니면 null. web GoodPriceService.suggestion 과 같다. */
+  static async getGoodPriceSuggestion(keyword: string) {
+    const res = await HttpClient.withAccessToken().execute(
+      QueryGoodPriceSuggestion,
+      {keyword},
+    );
+    return res.data?.goodPriceSuggestion ?? null;
+  }
+
+  /** 내 키워드를 「좋은 가격만 받기」로(하락만 받기 + 단위 기준가, 서버가 판정). */
+  static async applyGoodPriceOnly(keyword: string) {
+    const res = await HttpClient.withAccessToken().execute(
+      MutationApplyGoodPriceOnly,
+      {keyword},
+    );
+    return res.data?.applyGoodPriceOnly;
   }
 
   /** web 과 같은 상한 20개. 그 이상은 서버가 거절한다. */

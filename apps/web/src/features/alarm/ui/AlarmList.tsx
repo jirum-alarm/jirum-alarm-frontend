@@ -1,9 +1,10 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
+import { GoodPriceService } from '@/shared/api/keyword/good-price.service';
 import { PAGE } from '@/shared/config/page';
 import { getLastAlarmReadAt, setLastAlarmReadAt } from '@/shared/lib/alarmReadState';
 import { useToast } from '@/shared/ui/common/Toast';
@@ -14,11 +15,16 @@ import { ThemeQueries } from '@/entities/notification';
 
 import { pushSettingQuery, useUpdatePushSetting } from '@/features/mypage/model/usePushSetting';
 
+import { pushDataLayer } from '@/widgets/search/hooks/useSearchKeywordAlert';
+
 import {
+  GOOD_PRICE_NUDGE_MIN_ALERTS,
+  goodPriceText,
   HEAVY_KEYWORD_ALERTS_PER_DAY,
   normalizeKeyword,
   notificationSource,
   recentKeywordAlertCount,
+  topKeywordToday,
 } from '../lib/notificationSource';
 import { alarmEditModeAtom } from '../model/alarmEditModeAtom';
 import { useNotificationsViewModel } from '../model/useNotificationsViewModel';
@@ -70,6 +76,55 @@ export default function AlarmList() {
     pushSetting.keywordAlertLevel === 'ALL' &&
     keywordAlertsToday > HEAVY_KEYWORD_ALERTS_PER_DAY;
 
+  // 오늘 가장 시끄러운 키워드 하나를 「좋은 가격일 때만」으로 — 전체를 핫딜만으로 줄이는 것보다 좁은 처방이라 먼저 권한다.
+  // 서버(「언제 사나」 엔진)가 그 키워드의 좋은 가격을 말할 수 있을 때만(카테고리·섞인 키워드는 priced=false).
+  const queryClient = useQueryClient();
+  const topKeyword = useMemo(
+    () => topKeywordToday(notifications ?? [], watching),
+    [notifications, watching],
+  );
+  const nudgeKeyword =
+    pushSetting?.keywordAlert === true &&
+    topKeyword &&
+    topKeyword.count >= GOOD_PRICE_NUDGE_MIN_ALERTS
+      ? topKeyword.keyword
+      : null;
+  const { data: goodPrice } = useQuery({
+    queryKey: ['goodPriceSuggestion', nudgeKeyword],
+    queryFn: () => GoodPriceService.suggestion(nudgeKeyword!),
+    enabled: !!nudgeKeyword,
+    staleTime: 10 * 60_000,
+    retry: false,
+  });
+  const [goodPriceApplied, setGoodPriceApplied] = useState(false);
+  const suggestGoodPrice =
+    !goodPriceApplied &&
+    !!goodPrice?.priced &&
+    !goodPrice.watching &&
+    goodPrice.goodPrice != null &&
+    goodPrice.goodDealCount < goodPrice.rawMatchCount;
+  const { mutate: applyGoodPrice, isPending: applyingGoodPrice } = useMutation({
+    mutationFn: (keyword: string) => GoodPriceService.apply(keyword),
+    onSuccess: () => {
+      setGoodPriceApplied(true);
+      if (goodPrice?.goodPrice != null) {
+        toast(
+          `이제 「${goodPrice.keyword}」는 ${goodPriceText(goodPrice.unit, goodPrice.goodPrice)} 이하일 때만 알려드려요. 키워드 설정에서 되돌릴 수 있어요`,
+        );
+      }
+      queryClient.invalidateQueries({ queryKey: ['goodPriceSuggestion'] });
+    },
+    onError: () => toast('지금은 바꾸지 못했어요. 잠시 뒤 다시 시도해 주세요'),
+  });
+  useEffect(() => {
+    if (!suggestGoodPrice || !goodPrice) return;
+    pushDataLayer({
+      event: 'keyword_prompt_view',
+      placement: 'inbox_good_price',
+      keyword: goodPrice.keyword,
+    });
+  }, [suggestGoodPrice, goodPrice]);
+
   return (
     <>
       {/* PC 는 다른 내 메뉴 화면처럼 회색 띠 없이 흰 바탕 — 키워드 알림은 사이드바에 있어 안내 띠는 뺀다. */}
@@ -100,7 +155,34 @@ export default function AlarmList() {
       )}
       {!isEditMode && (
         <div className="pc:hidden sticky top-14 z-40 border-b border-gray-200 bg-gray-50">
-          {suggestHotOnly ? (
+          {suggestGoodPrice && goodPrice?.goodPrice != null ? (
+            <div className="flex items-center justify-between gap-3 px-5 py-2">
+              <span className="min-w-0">
+                <span className="block truncate text-sm font-medium text-gray-700">
+                  「{goodPrice.keyword}」 알림 오늘 {topKeyword?.count}건
+                </span>
+                <span className="block truncate text-xs text-gray-500">
+                  {goodPriceText(goodPrice.unit, goodPrice.goodPrice)} 이하만 받으면{' '}
+                  {goodPrice.windowDays}일에 {goodPrice.goodDealCount}번
+                </span>
+              </span>
+              <button
+                type="button"
+                disabled={applyingGoodPrice}
+                onClick={() => {
+                  pushDataLayer({
+                    event: 'keyword_prompt_click',
+                    placement: 'inbox_good_price',
+                    keyword: goodPrice.keyword,
+                  });
+                  applyGoodPrice(goodPrice.keyword);
+                }}
+                className="flex h-8 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-900 disabled:opacity-50"
+              >
+                좋은 가격만
+              </button>
+            </div>
+          ) : suggestHotOnly ? (
             <div className="flex h-11 items-center justify-between px-5">
               <span className="text-sm font-medium text-gray-600">
                 오늘 키워드 알림 {keywordAlertsToday}건 받았어요

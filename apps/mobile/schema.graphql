@@ -670,6 +670,14 @@ type ListSection implements BaseSection {
   viewMoreLink: String
 }
 
+type LiveAlternativeDealOutput {
+  """same=같은 상품(다른 곳·다른 값), related=같은 라인(용량·구성·색이 다름)"""
+  kind: String!
+  """이 딜 값 − 지금 보는 딜 값(원). 같은 상품이고 둘 다 원화일 때만, 아니면 null"""
+  priceDiff: Int
+  product: ProductOutput!
+}
+
 type MallGroup {
   createdAt: DateTime!
   id: Float!
@@ -821,10 +829,24 @@ type Mutation {
     target: UserReportTarget!
     targetId: Float!
   ): Boolean!
+  """
+  「이 가격 오면 알려줘」(허용 유저만) — 판정을 서버에서 다시 내 그 키워드 알림을 건다. 좋은 가격을 말할 수 있으면 하락만 받기 + 단위 기준가
+  """
+  addWaitWatch(
+    """
+    사려는 상품 한 줄. 예: "삼다수 2L", "에어팟 프로3", "햇반 싸게"
+    """
+    text: String!
+  ): WaitWatchOutput!
   """wishlist 추가"""
   addWishlist(productId: Int!): Boolean!
   """어드민) 로그인"""
   adminLogin(email: String!, password: String!): TokenOutput!
+  """내 키워드를 「좋은 가격만 받기」로 — 하락만 받기 + 단위 기준가(서버가 판정). 사용자 제외어는 그대로"""
+  applyGoodPriceOnly(
+    """내 알림 키워드(등록한 그대로)"""
+    keyword: String!
+  ): WaitWatchOutput!
   """어드민) 리액션 키워드 후보 승인 (synonym 으로 등록)"""
   approveHotDealKeywordCandidateByAdmin(hotDealKeywordId: Int!, id: Int!): Boolean!
   """어드민) 계정에 역할 지정(null = 해제)"""
@@ -861,7 +883,7 @@ type Mutation {
   collectProduct(
     """상세 진입 직전 화면 (예: path:/search)"""
     entry: String
-    """푸시 발송 id(12자) — 푸시로 들어온 상세면 그 발송의 nid"""
+    """이 진입을 만든 푸시의 nid (알림 귀속)"""
     nid: String
     """클릭 위치(랭크, 0-based)"""
     position: Int
@@ -873,7 +895,7 @@ type Mutation {
   collectPurchaseClick(
     """상세 진입 직전 화면 (예: path:/search)"""
     entry: String
-    """푸시 발송 id(12자) — 푸시로 들어온 상세면 그 발송의 nid"""
+    """이 진입을 만든 푸시의 nid (알림 귀속)"""
     nid: String
     """클릭 위치(랭크, 0-based)"""
     position: Int
@@ -881,10 +903,12 @@ type Mutation {
     """클릭 발생 화면 출처 (예: ranking_tab)"""
     source: String
   ): Boolean!
-  """썸네일 단건 수집"""
+  """어드민) 썸네일 단건 수집"""
   collectThumbnail(
     """상세 진입 직전 화면 (예: path:/search)"""
     entry: String
+    """이 진입을 만든 푸시의 nid (알림 귀속)"""
+    nid: String
     """클릭 위치(랭크, 0-based)"""
     position: Int
     productId: Int!
@@ -1029,6 +1053,10 @@ type Mutation {
   ): SignupOutput!
   """소셜 로그인"""
   socialLogin(
+    """
+    애플 로그인 authorization code. 서버가 refresh token 으로 바꿔 보관했다가 회원 탈퇴 때 revoke 한다(App Store 5.1.1(v))
+    """
+    authorizationCode: String
     birthYear: Float
     email: String
     favoriteCategories: [Int!]
@@ -1162,6 +1190,7 @@ type NotificationIntentSample {
 }
 
 type NotificationKeyword {
+  baseUnitPrice: Float
   createdAt: DateTime!
   excludeKeywords: [String!]
   id: ID!
@@ -1170,6 +1199,7 @@ type NotificationKeyword {
   maxPrice: Int
   minPrice: Int
   priceDropOnly: Boolean!
+  priceUnit: String
   updatedAt: DateTime!
   userId: Int!
 }
@@ -1448,14 +1478,6 @@ enum ProductMappingFeedbackType {
   CONFIRMED
   CORRECTED
   REJECTED
-}
-
-type LiveAlternativeDealOutput {
-  """same=같은 상품(다른 곳·다른 값), related=같은 라인(용량·구성·색이 다름)"""
-  kind: String!
-  """이 딜 값 − 지금 보는 딜 값(원). 같은 상품이고 둘 다 원화일 때만, 아니면 null"""
-  priceDiff: Int
-  product: ProductOutput!
 }
 
 type ProductMappingInfoOutput {
@@ -1900,15 +1922,16 @@ type Query {
   """상품 랭킹 랜덤 조회"""
   communityRandomRankingProducts(
     categoryId: Int
-    """상품 필터링시 고려할 아이템 개수(랭킹)"""
+    """상품 필터링시 고려할 아이템 개수(랭킹, 최대 100)"""
     count: Int!
     isApp: Boolean
     isGame: Boolean
     isReward: Boolean
+    """최대 50"""
     limit: Int!
   ): [ProductOutput!]!
   """
-  오래된 딜 상세의 「쿠팡에서 지금 가격 보기」 — 실험군(coupang_search_cta_v1)·게시 7일+ 딜이고 링크가 발급돼 있을 때만
+  딜 상세의 「쿠팡에서 지금 가격 보기」 — 실험군(게시 7일+ 딜: coupang_search_cta_v1 · 7일 안의 링크 없는 딜: nolink_coupang_cta_v1)이고 링크가 발급돼 있을 때만
   """
   coupangSearchCta(productId: Int!): CoupangSearchCtaOutput
   """어드민) 일별/주별/월별 서비스 조회수 합계"""
@@ -1943,6 +1966,11 @@ type Query {
     productTitle: String
     searchAfter: [String!]
   ): [ProductMappingOutput!]!
+  """알림함 「좋은 가격만 받기」 권유 — 내 키워드의 좋은 가격 판정 요약. 내 키워드가 아니면 null"""
+  goodPriceSuggestion(
+    """내 알림 키워드(등록한 그대로)"""
+    keyword: String!
+  ): WaitSuggestionOutput
   """게스트 카테고리 선호 기반 추천 핫딜 (비로그인 허용, 선호 없으면 인기순 폴백)"""
   guestRecommendedHotDeals(
     """한 페이지당 아이템 개수 (최대 20개)"""
@@ -1997,7 +2025,9 @@ type Query {
   keywordMapGroupsByAdmin(limit: Int!, orderBy: KeywordMapGroupOrderType!, orderOption: OrderOptionType!, searchAfter: [String!]): [KeywordMapGroupOutput!]!
   """종료됐을 수 있는 딜 상세의 '최신 핫딜' — 이 글보다 새 진행 중 딜(같은 상품 먼저, 같은 라인 뒤, 최대 20)"""
   latestSimilarDeals(id: Int!, limit: Int! = 10): [ProductOutput!]!
-  """진행 중 딜 상세의 '다른 곳 진행 중인 딜' — 최근 7일 진행 중 딜 중 같은 상품(싼 순) 먼저, 같은 라인 뒤(최대 10)"""
+  """
+  진행 중 딜 상세의 '다른 곳 진행 중인 딜' — 최근 7일 진행 중 딜 중 같은 상품(싼 순) 먼저, 같은 라인 뒤(최대 10)
+  """
   liveAlternativeDeals(id: Int!, limit: Int! = 3): [LiveAlternativeDealOutput!]!
   mallGroups: [MallGroup!]!
   """어드민) 매칭 실행 상세 조회 (스텝 포함)"""
@@ -2219,6 +2249,15 @@ type Query {
   verificationHistory(limit: Int!, matchStatus: [ProductMappingMatchStatus!], orderBy: OrderOptionType = DESC, productId: Int, searchAfter: [String!], target: ProductMappingTarget, verificationStatus: [ProductMappingVerificationStatus!], verifiedBy: Int): [ProductMappingOutput!]!
   """검증 통계 조회 (대기/완료/거부 개수)"""
   verificationStatistics: VerificationStatistics!
+  """
+  「언제 사나」(AI 홈 프로토타입, 허용 유저만) — 사려는 상품 한 줄 → 지난 90일 커뮤니티 핫딜로 본 좋은 가격·빈도·지금. 해석 못 하면 null
+  """
+  waitEstimate(
+    """
+    사려는 상품 한 줄. 예: "삼다수 2L", "에어팟 프로3", "햇반 싸게"
+    """
+    text: String!
+  ): WaitEstimateOutput
   """위시리스트 개수 조회"""
   wishlistCount: Int!
   """위시리스트 목록 조회"""
@@ -2511,6 +2550,132 @@ type VerificationStatistics {
   rejected: Int!
   total: Int!
   verified: Int!
+}
+
+"""「언제 사나」 판정에 쓴 딜"""
+type WaitDeal {
+  id: Int!
+  isEnd: Boolean!
+  postedAt: DateTime!
+  """원화 총액"""
+  price: Int!
+  title: String!
+  """비교 단위로 나눈 값(unit 참고)"""
+  unitPrice: Float!
+}
+
+"""「언제 사나」 — 사려는 상품 한 줄 → 지난 90일 커뮤니티 핫딜로 본 좋은 가격·빈도·지금"""
+type WaitEstimateOutput {
+  """키워드 후보(구체적인 것부터). keyword 가 첫 후보가 아니면 딜이 적어 넓혀 본 것"""
+  candidates: [WaitKeywordCandidate!]!
+  """같은 물건끼리 비교 중인가 — false 면 여러 상품이 섞였을 수 있음"""
+  confident: Boolean!
+  """지금 진행 중 가장 싼 딜"""
+  current: WaitDeal
+  """지금 가장 싼 딜의 90일 중 위치(0~1, 작을수록 쌈)"""
+  currentPercentile: Float
+  """판정에 쓴 딜 수(교차 게시 제거)"""
+  dealCount: Int!
+  excludeKeywords: [String!]!
+  """좋은 가격 이하가 뜬 날 수(windowDays 중)"""
+  goodDays: Int!
+  """좋은 가격 이하 딜 수 = 「이 가격 오면 알려줘」가 90일간 보냈을 알림"""
+  goodDealCount: Int!
+  """좋은 가격 이하 딜, 최신 5건"""
+  goodDeals: [WaitDeal!]!
+  """좋은 가격 = 하위 20% 를 두 자리로 올림(단위가)"""
+  goodPrice: Float
+  """판정에 쓴 키워드 — 「알려줘」 등록 키워드"""
+  keyword: String!
+  kind: WaitKind!
+  """화면 이름(LLM)"""
+  label: String!
+  lastGoodAt: DateTime
+  """지금 진행 중, 싼 순 3건"""
+  liveDeals: [WaitDeal!]!
+  median: Float
+  p10: Float
+  points: [WaitPoint!]!
+  priceCeiling: Int
+  priceFloor: Int
+  """키워드만 걸었다면 90일간 왔을 알림 수(대략)"""
+  rawMatchCount: Int!
+  """좋은 가격이 뜬 날 사이 간격(중앙값)"""
+  typicalGapDays: Int
+  unit: WaitUnit!
+  verdict: WaitVerdict!
+  """이 키워드 알림을 이미 「하락만 받기」로 켜 두었나 — 화면이 「알림 켜짐」으로 보여 준다"""
+  watching: Boolean!
+  windowDays: Int!
+}
+
+type WaitKeywordCandidate {
+  """90일·조건 통과·단위가 붙은 딜 수"""
+  dealCount: Int!
+  keyword: String!
+}
+
+"""PRODUCT(특정 상품)·CATEGORY(여러 상품군 — 가격 하나로 못 말함)·VOUCHER(상품권)·UNKNOWN"""
+enum WaitKind {
+  CATEGORY
+  PRODUCT
+  UNKNOWN
+  VOUCHER
+}
+
+"""차트 점(교차 게시 제거)"""
+type WaitPoint {
+  """최근 3일·안 끝남"""
+  live: Boolean!
+  postedAt: DateTime!
+  unitPrice: Float!
+}
+
+"""알림함 「좋은 가격만 받기」 권유 — 내 키워드 하나의 판정 요약"""
+type WaitSuggestionOutput {
+  """좋은 가격만 받으면 지난 windowDays 동안 왔을 알림"""
+  goodDealCount: Int!
+  goodPrice: Float
+  keyword: String!
+  """좋은 가격을 말할 수 있나(카테고리·섞임이면 false → 권유하지 않는다)"""
+  priced: Boolean!
+  """키워드만 걸면 지난 windowDays 동안 왔을 알림(대략)"""
+  rawMatchCount: Int!
+  unit: WaitUnit!
+  """이미 하락만 받기를 켜 두었나"""
+  watching: Boolean!
+  windowDays: Int!
+}
+
+"""
+가격 비교 단위 — LITER(1L당)·HUNDRED_GRAM(100g당)·COUNT(1개당)·FACE_VALUE(액면가 대비 비율)·TOTAL(총액)
+"""
+enum WaitUnit {
+  COUNT
+  FACE_VALUE
+  HUNDRED_GRAM
+  LITER
+  TOTAL
+}
+
+"""
+BUY_NOW(지금 좋은 가격이 떠 있음)·WAIT(자주 오니 기다림)·RARE(90일에 1~3일만)·NO_DATA(딜 8건 미만)
+"""
+enum WaitVerdict {
+  BUY_NOW
+  NO_DATA
+  RARE
+  WAIT
+}
+
+"""「이 가격 오면 알려줘」 결과"""
+type WaitWatchOutput {
+  """새로 등록했나 — false 면 이미 있던 키워드의 조건을 덮음"""
+  created: Boolean!
+  """등록(또는 조건을 덮은) 알림 키워드"""
+  keyword: String!
+  """좋은 가격 이하만 받게 걸었나 — false 면 가격 조건 없는 새 딜 알림(카테고리·섞임)"""
+  priced: Boolean!
 }
 
 enum WishlistOrderType {

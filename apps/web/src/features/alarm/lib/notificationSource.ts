@@ -76,3 +76,41 @@ export function recentKeywordAlertCount(
     (n) => new Date(n.createdAt).getTime() >= since && matchMyKeyword(n.keyword, mine),
   ).length;
 }
+
+/** 한 키워드로 하루 이만큼 받으면 그 키워드에 「좋은 가격만 받기」를 권한다(서버가 좋은 가격을 말할 수 있을 때만). */
+export const GOOD_PRICE_NUDGE_MIN_ALERTS = 2;
+
+/**
+ * 최근 24시간 동안 가장 많이 온 **내 키워드**와 건수. 동률이면 먼저 받은 순서.
+ * 「핫딜만 받기」(전체 설정)보다 좁은 처방 — 시끄러운 키워드 하나만 좋은 가격일 때로 줄인다(2026-10-15:
+ * 지난 7일 한 키워드로 7건+ 받은 58명 대부분이 펩시·삼다수 같은 생필품, 읽음 3.4%).
+ * 앱 `screens/alarm/lib/notification-source.ts` topKeywordToday 와 같은 규칙.
+ */
+export function topKeywordToday(
+  notifications: { keyword?: string | null; createdAt: string | number | Date }[],
+  mine: Set<string>,
+  now: number = Date.now(),
+): { keyword: string; count: number } | undefined {
+  const since = now - 24 * 3600_000;
+  const counts = new Map<string, number>();
+  for (const n of notifications) {
+    if (new Date(n.createdAt).getTime() < since) continue;
+    const k = matchMyKeyword(n.keyword, mine);
+    if (k) counts.set(k, (counts.get(k) ?? 0) + 1);
+  }
+  let top: { keyword: string; count: number } | undefined;
+  for (const [keyword, count] of counts) if (!top || count > top.count) top = { keyword, count };
+  return top;
+}
+
+export type GoodPriceUnit = 'LITER' | 'HUNDRED_GRAM' | 'COUNT' | 'FACE_VALUE' | 'TOTAL';
+
+/** 좋은 가격 한 줄: 「1L당 1,400원」·「액면가의 92%」·「289,000원」. ai 앱 features/wait/model/copy.ts unitPriceText 와 같은 문구. */
+export function goodPriceText(unit: GoodPriceUnit, value: number): string {
+  const won = `${Math.round(value).toLocaleString('ko-KR')}원`;
+  if (unit === 'LITER') return `1L당 ${won}`;
+  if (unit === 'HUNDRED_GRAM') return `100g당 ${won}`;
+  if (unit === 'COUNT') return `1개당 ${won}`;
+  if (unit === 'FACE_VALUE') return `액면가의 ${Math.round(value * 100)}%`;
+  return won;
+}
