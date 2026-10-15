@@ -7,6 +7,7 @@ import {MyPageService} from '@/shared/api/mypage';
 import ConfirmSheet from '@/shared/components/ConfirmSheet';
 import {StorageKey} from '@/shared/constant/storage-key';
 import {registerFcmToken} from '@/shared/lib/fcm/push-permission';
+import {isFirstAlertDue} from '@/shared/lib/first-alert';
 import {getAsyncStorage, setAsyncStorage} from '@/shared/lib/persistence';
 
 // 홈이 먼저 그려지고 숨 돌린 뒤 — 들어오자마자 시트가 덮으면 또 하나의 관문이 된다.
@@ -25,13 +26,19 @@ const SHOW_DELAY_MS = 1500;
  * 권한 조회 실패는 false(앱을 막지 않는다 — 키워드 등록 경로가 다시 묻는다).
  */
 export async function shouldShowPushPrePrompt(): Promise<boolean> {
+  // 첫 실행 알림 시트(FirstAlertSheet)도 이번 실행 몫이다 — 업데이트 권유가 그 위에 겹치지 않게 같이 본다.
+  return (await pushPrePromptDue()) || isFirstAlertDue();
+}
+
+/** 이 사전 안내 자체를 띄울 차례인가. */
+async function pushPrePromptDue(): Promise<boolean> {
   try {
     if (await getAsyncStorage(StorageKey.PUSH_PREPROMPT_SHOWN)) return false;
     const current = await Notifications.getPermissionsAsync();
     if (current.granted || !current.canAskAgain) return false;
     // 키워드 없는 게스트(첫 실행에 자동으로 들어온 사람 대부분)는 받을 알림이 아직 없다 — 좋은 딜
     // 푸시는 마케팅 동의 기반이라 게스트에겐 안 간다. 여기서 묻지 않고(본 것으로도 치지 않는다)
-    // 첫 키워드를 거는 순간 requestPushPermissionIfNeeded 가 묻는다.
+    // 첫 실행 알림 시트(FirstAlertSheet)나 첫 키워드를 거는 순간 requestPushPermissionIfNeeded 가 묻는다.
     if ((await getAsyncStorage(StorageKey.IS_GUEST)) === '1') {
       const mine = await MyPageService.getMyKeywords();
       return mine.length > 0;
@@ -80,7 +87,7 @@ export default function PushPermissionPrePrompt() {
   useEffect(() => {
     let cancelled = false;
     const check = async () => {
-      if (!(await shouldShowPushPrePrompt()) || cancelled) return;
+      if (!(await pushPrePromptDue()) || cancelled) return;
       // 키워드 조회가 실패해도 일반 문구로 띄운다 — 안내 자체를 막지 않는다.
       const mine = await MyPageService.getMyKeywords().catch(() => []);
       if (cancelled) return;
