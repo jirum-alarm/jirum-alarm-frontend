@@ -13,6 +13,7 @@ import {
   APP_MISSING_PARAM,
   appOpenUrl,
   closeKakaoBrowserUrl,
+  iosAutoOpenUrl,
   KAKAO_APP_ATTEMPT_EVENT,
   kakaoPlatform,
   type KakaoPlatform,
@@ -129,8 +130,9 @@ export default function KakaoAppOpen() {
         }
       };
       document.addEventListener('visibilitychange', onVisibility);
+      // 띠의 탭은 앱 스킴(탭이면 카톡이 넘긴다), 자동은 iOS 만 카톡 외부 열기 + 유니버설 링크(iosAutoOpenUrl).
       const href = appOpenUrl(os, pathname, 'kakao_auto', window.location.origin, gd);
-      window.location.href = href;
+      window.location.href = os === 'ios' ? iosAutoOpenUrl(pathname, 'kakao_auto', gd) : href;
       // 카톡 iOS 는 사용자 탭 없는 스킴 이동을 조용히 막는다(10/15 실기기 — 「앱에서 열기」 탭은 열리는데 자동은 안 열림).
       // 막혔으면 앱이 없는 게 아니다 — 끄지 말고 한 번 누르면 되는 띠를 띄운다. 누른 뒤에도 안 열려야 «없음».
       window.setTimeout(() => {

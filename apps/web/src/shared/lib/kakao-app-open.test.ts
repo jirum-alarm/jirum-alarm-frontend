@@ -88,6 +88,18 @@ describe('appOpenUrl', () => {
   });
 });
 
+describe('iosAutoOpenUrl', () => {
+  it('카톡 외부 열기 스킴에 www 유니버설 링크(#handoff·gd)를 싣는다', () => {
+    const url = m.iosAutoOpenUrl('/products/123?x=1', 'kakao_auto', 'abcdef01-2345-6789');
+    assert.ok(url.startsWith('kakaotalk://web/openExternal?url='));
+    const inner = decodeURIComponent(url.slice('kakaotalk://web/openExternal?url='.length));
+    assert.equal(
+      inner,
+      'https://www.jirum-alarm.com/products/123#handoff=kakao_auto&gd=abcdef01-2345-6789',
+    );
+  });
+});
+
 describe('iOS 실패 학습', () => {
   it('연속 두 번 안 열리면 끈다, 한 번 열리면 센 것을 지운다', () => {
     const storage = memory();

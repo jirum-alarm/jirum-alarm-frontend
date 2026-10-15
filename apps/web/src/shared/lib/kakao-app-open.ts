@@ -169,6 +169,24 @@ export const appOpenUrl = (
   );
 };
 
+/**
+ * iOS 자동 열기 주소 — 카톡의 「외부에서 열기」 스킴에 우리 유니버설 링크(www)를 실어 보낸다.
+ * 카톡 iOS 는 사용자 탭 없는 jirumalarm:// 이동을 막지만(10/15 실기기), 자기 스킴(kakaotalk://)은 카톡이 직접 처리해
+ * 페이지 로드 때도 돈다(인앱 탈출 스크립트들이 그렇게 쓴다). 카톡이 그 주소를 iOS 에 열어 달라고 넘기면, 유니버설
+ * 링크라 앱이 깔린 폰은 사파리 대신 앱이 열린다. 앱이 없으면 사파리 → apex 301 → #handoff 로 App Store(AppHandoffLanding).
+ * 이것도 막히면 페이지가 그대로라 호출부가 「앱에서 열기」 탭 띠를 띄운다.
+ */
+export const iosAutoOpenUrl = (
+  path: string,
+  source: string,
+  guestDeviceId?: string | null,
+): string => {
+  const gd =
+    guestDeviceId && /^[0-9a-z-]{16,64}$/i.test(guestDeviceId) ? `&gd=${guestDeviceId}` : '';
+  const universal = `https://www.jirum-alarm.com${onlyPath(path)}#handoff=${encodeURIComponent(source)}${gd}`;
+  return `kakaotalk://web/openExternal?url=${encodeURIComponent(universal)}`;
+};
+
 /** iOS 자동 열기가 안 열렸다. 연속 실패가 한도에 닿으면 끄고 true(꺼졌다). */
 export const recordIosFailure = (storage: Store): boolean => {
   const fails = Number(read(storage, FAIL_COUNT_KEY) ?? '0') + 1;
