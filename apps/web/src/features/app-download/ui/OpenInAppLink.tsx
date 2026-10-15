@@ -66,7 +66,8 @@ export default function OpenInAppLink({
     if (inKakao && platform === 'apple' && iosUniversalLink && isAppPath(path)) {
       event.preventDefault();
       window.location.href = appOpenUrl('ios', path, source, window.location.origin, guestDeviceId);
-      armStoreFallback(appStoreUrl(source));
+      // App Store 자동 폴백은 걸지 않는다 — 카톡 iPhone 은 앱이 열려도 «가려짐»을 안 알려서(10/15 실기기) 2초 뒤 이동이
+      // 앱을 보던 사람을 App Store 로 끌어낼 수 있다. 앱이 없는 사람은 돌아온 확인 띠의 「앱 받기」로(KakaoAppOpen).
     } else if (platform === 'android') {
       armStoreFallback(playStoreUrl(source, path, guestDeviceId));
     }

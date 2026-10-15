@@ -27,6 +27,7 @@ import {
 } from '@/shared/lib/kakao-app-open';
 
 import { watchAppSwitch } from '../lib/watchAppSwitch';
+import { appStoreUrl } from '../model/appHandoff';
 
 import OpenInAppLink from './OpenInAppLink';
 
@@ -49,12 +50,49 @@ type Bar =
   | { kind: 'off' }
   | { kind: 'missing' };
 
-const track = (action: string, platform: KakaoPlatform) =>
+/**
+ * 「앱에서 열기」를 누른 시각 — 돌아왔을 때 「다음부터 바로 열까요?」를 띄울 근거. 메모리가 아니라 저장소에 둔다:
+ * 카톡 iPhone 은 앱에서 돌아오면 페이지를 다시 불러올 수 있고(그러면 메모리의 대기가 사라진다), 가려짐 이벤트도 안 보낸다
+ * (10/15 실기기 — 두 번 고쳐도 확인 띠가 안 떴다). 그래서 «돌아옴»을 감지하지 않고, 누른 직후부터 띠를 깔아 두고 다시 불러와도
+ * 10분 안이면 다시 띄운다.
+ */
+const ASK_KEY = 'jirum:kakao-app-open-ask';
+const ASK_TTL_MS = 10 * 60_000;
+/** 진단: 주소 끝에 #kakao-debug 를 붙이면 판정 값과 최근 동작을 화면에 보여 준다(실기기 카톡에서 원인 찾기용). */
+const DEBUG_LOG_KEY = 'jirum:kakao-app-open-log';
+
+const track = (action: string, platform: KakaoPlatform) => {
   (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
     event: 'kakao_app_open',
     action,
     platform,
   });
+  try {
+    const log = JSON.parse(window.sessionStorage.getItem(DEBUG_LOG_KEY) ?? '[]') as string[];
+    log.push(`${new Date().toTimeString().slice(0, 8)} ${action}`);
+    window.sessionStorage.setItem(DEBUG_LOG_KEY, JSON.stringify(log.slice(-8)));
+  } catch {
+    // 진단 기록은 없어도 된다.
+  }
+};
+
+const askPending = (store: Storage | null): boolean => {
+  try {
+    const at = Number(store?.getItem(ASK_KEY) ?? 0);
+    return at > 0 && Date.now() - at < ASK_TTL_MS;
+  } catch {
+    return false;
+  }
+};
+
+const setAsk = (store: Storage | null, on: boolean) => {
+  try {
+    if (on) store?.setItem(ASK_KEY, String(Date.now()));
+    else store?.removeItem(ASK_KEY);
+  } catch {
+    // 저장소를 못 쓰면 이번 화면에서만 묻는다.
+  }
+};
 
 const hasItem = (store: Storage | null, key: string): boolean => {
   try {
@@ -118,6 +156,12 @@ export default function KakaoAppOpen() {
     }
 
     const pref = readPref(store);
+    // 「앱에서 열기」를 누르고 돌아왔는데 페이지가 다시 불렸다 — 묻던 것을 이어서 묻는다.
+    if (pref !== 'on' && askPending(store)) {
+      track('confirm_view', os);
+      setBar({ kind: 'confirm' });
+      return;
+    }
     if (shouldAutoOpen({ on, kakaoInApp, jirumApp, platform: os, path: pathname, pref, search })) {
       track('auto', os);
       const gd = guestDeviceId(isGuest && !isLoggedIn);
@@ -167,23 +211,23 @@ export default function KakaoAppOpen() {
     const onAttempt = () => {
       if (readPref(storage()) === 'on') return;
       track('attempt', platform);
-      // 앱(또는 스토어)으로 넘어갔다 돌아오면 묻는다. 3초 안에 안 넘어가면 기다리지 않는다.
-      watchAppSwitch({
-        windowMs: 3000,
-        onReturn: () => {
-          track('confirm_view', platform);
-          setBar({ kind: 'confirm' });
-        },
-      });
+      // 돌아옴을 감지하지 않는다(ASK_KEY 설명) — 누른 직후 띠를 깔아 두면 앱에서 돌아왔을 때 그대로 보인다.
+      // 앱이 없으면 스토어로 넘어가 이 띠를 볼 일이 거의 없다.
+      setAsk(storage(), true);
+      window.setTimeout(() => {
+        track('confirm_view', platform);
+        setBar({ kind: 'confirm' });
+      }, 800);
     };
     window.addEventListener(KAKAO_APP_ATTEMPT_EVENT, onAttempt);
     return () => window.removeEventListener(KAKAO_APP_ATTEMPT_EVENT, onAttempt);
   }, [platform]);
 
-  if (!bar || !platform) return null;
+  if (!bar || !platform) return <KakaoDebug />;
 
   const close = () => setBar(null);
   const setPref = (pref: 'on' | 'off', action: string) => {
+    setAsk(storage(), false);
     writePref(storage(), pref);
     track(action, platform);
     setBar(pref === 'off' ? { kind: 'off' } : null);
@@ -241,17 +285,31 @@ export default function KakaoAppOpen() {
         return (
           <>
             <p className={cn(toast.text, 'flex-1')}>
-              앱에서 잘 열렸나요? 다음부터 카톡 링크를 앱으로 바로 열어 드릴게요
+              앱이 열렸다면, 다음부터 카톡 링크를 앱으로 바로 열어 드릴게요
             </p>
             <button type="button" className={toast.action} onClick={() => setPref('on', 'opt_in')}>
               바로 열기
             </button>
+            {platform === 'ios' ? (
+              // 카톡 iPhone 「앱 열기」는 App Store 자동 폴백이 없다(OpenInAppLink) — 앱이 없던 사람은 여기서 받는다.
+              <a
+                href={appStoreUrl('kakao_invite')}
+                className={cn(toast.text, 'text-fixed-400 whitespace-nowrap')}
+                onClick={() => {
+                  setAsk(storage(), false);
+                  track('store', platform);
+                }}
+              >
+                앱 받기
+              </a>
+            ) : null}
             <button
               type="button"
-              className={cn(toast.text, 'text-fixed-400 whitespace-nowrap')}
+              aria-label="아니요"
+              className={cn(toast.text, 'text-fixed-400 -m-2 p-2')}
               onClick={() => setPref('off', 'opt_out')}
             >
-              아니요
+              ✕
             </button>
           </>
         );
@@ -295,15 +353,51 @@ export default function KakaoAppOpen() {
   })();
 
   return (
-    <div
-      role="status"
-      className={cn(
-        toast.box,
-        'fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+88px)] z-50 mx-auto flex max-w-[600px] items-center gap-3 break-keep',
-      )}
-    >
-      {content}
-    </div>
+    <>
+      <KakaoDebug />
+      <div
+        role="status"
+        className={cn(
+          toast.box,
+          'fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+88px)] z-50 mx-auto flex max-w-[600px] items-center gap-3 break-keep',
+        )}
+      >
+        {content}
+      </div>
+    </>
+  );
+}
+
+/** #kakao-debug 일 때만 — 카톡 실기기에서 판정 값과 최근 동작을 보여 준다(원인을 찾으려고 화면을 찍어 보내기). */
+function KakaoDebug() {
+  const [lines, setLines] = useState<string[] | null>(null);
+  useEffect(() => {
+    if (!window.location.hash.includes('kakao-debug')) return;
+    const read = () => {
+      const ua = navigator.userAgent;
+      const store = storage();
+      let log: string[] = [];
+      try {
+        log = JSON.parse(window.sessionStorage.getItem(DEBUG_LOG_KEY) ?? '[]') as string[];
+      } catch {
+        // 비어도 된다.
+      }
+      setLines([
+        `kakao=${isKakaoInAppUA(ua)} os=${kakaoPlatform(ua)} jirumApp=${isJirumAlarmAppUA(ua)}`,
+        `env=${env('NEXT_PUBLIC_KAKAO_APP_OPEN') ?? '(empty)'} pref=${readPref(store)} ask=${askPending(store)}`,
+        `vis=${document.visibilityState} ua=${ua.slice(-60)}`,
+        ...log,
+      ]);
+    };
+    read();
+    const timer = window.setInterval(read, 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+  if (!lines) return null;
+  return (
+    <pre className="bg-fixed-900 text-fixed-white pointer-events-none fixed inset-x-0 top-24 z-50 overflow-hidden p-2 text-xs whitespace-pre-wrap opacity-90">
+      {lines.join('\n')}
+    </pre>
   );
 }
 
