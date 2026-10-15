@@ -151,6 +151,7 @@ UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·
 - **섹션 제목**(`sectionTitle`) — page = 홈·목록 섹션(bold, web `SectionHeader`·앱 `SectionHeader` h-14 + 더보기),
   detail = 상세 안 섹션(semibold, web `DetailSectionHeader`, 앱은 자리마다 여백이 달라 Text 에 레시피를 바로 쓴다), subtitle.
 - **카드 사진 틀**(`cardThumb`) — 상품 카드 사진 자리의 옅은 면 + 테두리. web 5종·앱 3종 카드가 같은 문자열을 읽는다.
+- **상세 정보 표**(`detailInfo`) — 상품 상세 쇼핑몰·가격 조건·혜택·배송비 줄. 라벨 고정폭(64px) 왼쪽 + 값 옆에서 줄바꿈 한 모양만 쓴다(web `ProductGuideMetaRows`·`DetailInfoRow`, 앱 `ProductInfo` MetaRow).
 - **정보 상자**(`infoBox`) — 본문 안 옅은 면 + 테두리 상자(가격 판정 요약·공유 미리보기). 여백은 자리마다.
 - **바텀시트 겉**(`sheet`) — 가림막 40% 검정·판 위 모서리 `rounded-t-sheet`(20px)·손잡이 40x4 gray-300.
   다크에선 판 위 테두리 한 줄(gray-100) — 판이 바탕색이라 가림막과의 경계가 안 보였다(앱은 `useSheetPanelStyle`).

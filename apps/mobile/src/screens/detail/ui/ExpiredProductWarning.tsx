@@ -11,6 +11,9 @@ import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import type {ProductDetail} from '../model/types';
 import {dealFreshnessAt} from '../lib/price-signals';
 import CoupangSearchCta from './CoupangSearchCta';
+import DetailBand from './DetailBand';
+import {sectionTitle} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling';
 
 /** 7일 지나면 품절·종료됐을 수 있다고 본다(web 과 같은 기준). */
 const EXPIRE_DAYS = 7;
@@ -101,11 +104,10 @@ export default function ExpiredProductWarning({
   return (
     <>
       {coupangCta}
+      <DetailBand />
       <View className="pt-7">
         <View className="flex-row items-center justify-between px-5">
-          <Text className="text-lg font-semibold text-gray-900">
-            최신 핫딜을 확인해 보세요
-          </Text>
+          <Text className={sectionTitle.detail}>최신 핫딜을 확인해 보세요</Text>
           {hasMore && onPressMore ? (
             <Pressable
               onPress={onPressMore}
@@ -117,7 +119,7 @@ export default function ExpiredProductWarning({
             </Pressable>
           ) : null}
         </View>
-        <Text className="px-5 pt-1 text-xs text-gray-500">
+        <Text className={cn('px-5 pt-1', sectionTitle.subtitle)}>
           이 상품은 올라온 지 며칠 지나 품절·종료됐을 수 있어요
         </Text>
         {isError ? (
