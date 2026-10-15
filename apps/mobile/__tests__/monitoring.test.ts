@@ -14,6 +14,10 @@ jest.mock('@sentry/react-native', () => ({
   captureException: jest.fn(),
   captureMessage: jest.fn(),
   wrap: (c: unknown) => c,
+  reactNavigationIntegration: jest.fn(() => ({
+    name: 'ReactNavigation',
+    registerNavigationContainer: jest.fn(),
+  })),
 }));
 
 const mockUpdates: {
@@ -182,6 +186,22 @@ describe('Sentry 보고 (DSN 있음·릴리스)', () => {
     expect(Sentry.setTag).toHaveBeenCalledWith('embedded_launch', 'false');
   });
 
+  // 성능 추적(10/15 켬) — 화면 전환 트랜잭션은 NavigationContainer 를 이어야 생긴다.
+  it('init 은 성능 추적을 5% 로 켜고, 화면 전환을 내비게이션 컨테이너에 잇는다', () => {
+    const mod = loadEnabledSentry();
+    mod.initSentry();
+    const options = (Sentry.init as jest.Mock).mock.calls[0][0];
+    expect(options.tracesSampleRate).toBe(0.05);
+    expect(options.enableAutoPerformanceTracing).toBe(true);
+
+    const integration = (Sentry.reactNavigationIntegration as jest.Mock).mock
+      .results[0].value as {registerNavigationContainer: jest.Mock};
+    expect(options.integrations).toContain(integration);
+    const ref = {current: null};
+    mod.registerSentryNavigation(ref);
+    expect(integration.registerNavigationContainer).toHaveBeenCalledWith(ref);
+  });
+
   it('OTA 비상 실행이면 GA4·Sentry 에 이유와 함께 남긴다', () => {
     mockUpdates.isEmergencyLaunch = true;
     mockUpdates.emergencyLaunchReason = 'launch failed: SIGABRT';
@@ -218,5 +238,19 @@ describe('DSN 없음 — Sentry 는 조용하고 GA4 만 남는다', () => {
     expect(mockTrack).toHaveBeenCalledTimes(1);
     expect(Sentry.captureMessage).not.toHaveBeenCalled();
     expect(Sentry.captureException).not.toHaveBeenCalled();
+  });
+
+  it('init 이 안 돌았으면 내비게이션 연결도 하지 않는다', () => {
+    let mod: SentryModule | undefined;
+    jest.isolateModules(() => {
+      mod = require('../src/shared/lib/monitoring/sentry');
+      Sentry = require('@sentry/react-native');
+    });
+    (mod as SentryModule).initSentry();
+    expect(() =>
+      (mod as SentryModule).registerSentryNavigation({current: null}),
+    ).not.toThrow();
+    expect(Sentry.init).not.toHaveBeenCalled();
+    expect(Sentry.reactNavigationIntegration).not.toHaveBeenCalled();
   });
 });

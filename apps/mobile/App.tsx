@@ -29,6 +29,7 @@ import {
   Sentry,
   initSentry,
   reportEmergencyLaunch,
+  registerSentryNavigation,
   setSentryScreen,
   wrapApp,
 } from '@/shared/lib/monitoring/sentry.ts';
@@ -102,7 +103,10 @@ function App(): React.JSX.Element {
               <NavigationContainer
                 ref={navigationRef}
                 theme={navigationTheme}
-                onReady={trackScreen}
+                onReady={() => {
+                  registerSentryNavigation(navigationRef);
+                  trackScreen();
+                }}
                 onStateChange={trackScreen}>
                 <ReactQueryProvider>
                   <WebviewRefContext.Provider value={webViewRefManager}>

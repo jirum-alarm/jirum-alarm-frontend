@@ -15,6 +15,18 @@ const SENTRY_DSN = process.env.EXPO_PUBLIC_SENTRY_DSN ?? '';
 
 const isEnabled = () => SENTRY_DSN.length > 0 && !__DEV__;
 
+/**
+ * 성능 추적 샘플 비율(2026-10-15 켬). 화면 전환마다 트랜잭션 하나 + 느린·멈춘 프레임·첫 화면 표시 시간이 붙는다.
+ * 그 전엔 0 이라 FlashList·React Compiler 를 넣고도 실기기 체감 전후를 잴 방법이 없었다.
+ * 오류와 성능(스팬)은 Sentry 쿼터가 따로라 크래시 수집을 깎지 않는다 — 성능 쿼터가 차면 성능만 버려진다.
+ * 앱 WAU ~330 × 화면 전환 하루 수십 번 → 5% 면 하루 수백 건.
+ */
+const TRACES_SAMPLE_RATE = 0.05;
+
+let navigationIntegration:
+  | ReturnType<typeof Sentry.reactNavigationIntegration>
+  | undefined;
+
 export function initSentry() {
   if (!isEnabled()) {
     if (__DEV__ && SENTRY_DSN.length === 0) {
@@ -25,6 +37,11 @@ export function initSentry() {
     return;
   }
 
+  // 화면 이름으로 트랜잭션을 나눈다 — NavigationContainer onReady 에서 registerSentryNavigation 으로 잇는다.
+  navigationIntegration = Sentry.reactNavigationIntegration({
+    enableTimeToInitialDisplay: true,
+  });
+
   Sentry.init({
     dsn: SENTRY_DSN,
 
@@ -32,14 +49,14 @@ export function initSentry() {
     // 하나에 여러 OTA 릴리즈의 에러가 뭉쳐서 "어느 릴리즈가 깨뜨렸나"를 못 가린다.
     dist: Updates.updateId ?? undefined,
 
-    // 성능 추적은 일단 끈다(무료 티어 쿼터를 크래시에 쓴다).
-    // ponytail: tracesSampleRate 0, 실제로 성능 데이터가 필요해지면 올린다.
-    tracesSampleRate: 0,
+    tracesSampleRate: TRACES_SAMPLE_RATE,
+    integrations: [navigationIntegration],
 
     // 이메일·소셜 로그인을 쓰므로 IP/유저 식별자는 보내지 않는다.
     sendDefaultPii: false,
 
-    enableAutoPerformanceTracing: false,
+    // 앱 시작 시간·느린/멈춘 프레임(네이티브 측정) — 샘플된 트랜잭션에 붙는다.
+    enableAutoPerformanceTracing: true,
   });
 
   // 어느 배포 채널(production/preview/test-*)에서 난 에러인지 가른다.
@@ -67,6 +84,11 @@ export function wrapApp<T>(app: T): T {
   return Sentry.wrap(app as never) as T;
 }
 
+/** 화면 전환 트랜잭션을 켠다 — NavigationContainer 가 준비되면 한 번. init 이 안 돌았으면 아무것도 안 한다. */
+export function registerSentryNavigation(navigationRef: unknown) {
+  navigationIntegration?.registerNavigationContainer(navigationRef);
+}
+
 /** 로그인 유저를 에러에 붙인다 — 특정 유저만 겪는 버그를 가리기 위함. */
 export function setSentryUser(userId: string | null) {
   if (!isEnabled()) return;
@@ -74,8 +96,8 @@ export function setSentryUser(userId: string | null) {
 }
 
 /**
- * 지금 보고 있는 화면을 에러에 붙인다. 화면 전환 추적(tracing)은 쿼터 때문에 꺼 둬서
- * 그동안 에러가 **어느 화면에서** 났는지 스택으로만 짐작했다. 이동 흔적은 breadcrumb 로.
+ * 지금 보고 있는 화면을 에러에 붙인다. 화면 전환 추적(tracing)은 5% 만 샘플하므로
+ * 나머지 에러도 **어느 화면에서** 났는지 알 수 있게 태그로 남긴다. 이동 흔적은 breadcrumb 로.
  */
 export function setSentryScreen(name: string) {
   if (!isEnabled()) return;
