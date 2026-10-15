@@ -7,8 +7,10 @@ const {
   buildPostPurchasePromptQueue,
   OKACHAT_ANDROID_INTENT,
   OKACHAT_LINK,
+  OKACHAT_IOS_DIRECT_FROM,
   okachatAndroidIntent,
-  shouldOpenOkachatDirect,
+  okachatDirectPlatform,
+  okachatJoinScheme,
   shouldShowOkachatSoftPrompt,
 } = require('./okachat.ts') as typeof import('./okachat');
 
@@ -54,7 +56,7 @@ describe('buildPostPurchasePromptQueue', () => {
   });
 });
 
-describe('shouldOpenOkachatDirect', () => {
+describe('okachatDirectPlatform', () => {
   const NAVER_APP =
     'Mozilla/5.0 (Linux; Android 16; SM-S926N Build/BP2A; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/140.0.0.0 Whale/1.0.0.0 Crosswalk/28.140.0.0 Mobile Safari/537.36 NAVER(inapp; search; 2100; 12.16.2)';
   const SAMSUNG =
@@ -63,22 +65,44 @@ describe('shouldOpenOkachatDirect', () => {
     'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1';
   const DESKTOP =
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36';
+  const BEFORE_IOS: number = OKACHAT_IOS_DIRECT_FROM - 1;
+  const AFTER_IOS: number = OKACHAT_IOS_DIRECT_FROM;
 
-  it('안드로이드 브라우저·네이버 앱 인앱은 카톡을 바로 연다', () => {
-    assert.equal(shouldOpenOkachatDirect(SAMSUNG), true);
-    assert.equal(shouldOpenOkachatDirect(NAVER_APP), true);
+  it('안드로이드 브라우저·네이버 앱 인앱은 intent 로 바로 연다', () => {
+    assert.equal(okachatDirectPlatform(SAMSUNG, BEFORE_IOS), 'android');
+    assert.equal(okachatDirectPlatform(NAVER_APP, BEFORE_IOS), 'android');
   });
 
-  it('iOS·PC 는 기존 링크 그대로', () => {
-    assert.equal(shouldOpenOkachatDirect(IOS_SAFARI), false);
-    assert.equal(shouldOpenOkachatDirect(DESKTOP), false);
+  it('iPhone 은 안드로이드 실험 판정 다음 날(10/27 KST)부터 스킴으로 연다', () => {
+    assert.equal(OKACHAT_IOS_DIRECT_FROM, Date.parse('2026-10-26T15:00:00Z'));
+    assert.equal(okachatDirectPlatform(IOS_SAFARI, BEFORE_IOS), null);
+    assert.equal(okachatDirectPlatform(IOS_SAFARI, AFTER_IOS), 'ios');
+  });
+
+  it('PC 는 기존 링크 그대로', () => {
+    assert.equal(okachatDirectPlatform(DESKTOP, AFTER_IOS), null);
   });
 
   it('지름알림 앱 웹뷰는 제외', () => {
     assert.equal(
-      shouldOpenOkachatDirect(`${SAMSUNG} Android ReactNative Webview Jirum Alarm`),
-      false,
+      okachatDirectPlatform(`${SAMSUNG} Android ReactNative Webview Jirum Alarm`, AFTER_IOS),
+      null,
     );
+    assert.equal(
+      okachatDirectPlatform(`${IOS_SAFARI} IOS ReactNative Webview Jirum Alarm`, AFTER_IOS),
+      null,
+    );
+  });
+});
+
+describe('okachatJoinScheme', () => {
+  it('중간 페이지 「참여하기」와 같은 스킴', () => {
+    assert.equal(okachatJoinScheme(OKACHAT_LINK), 'kakaoopen://join?l=gJZTWAAg&r=EW');
+  });
+
+  it('오픈채팅 방 링크가 아니면 null — 그냥 링크로 보낸다', () => {
+    assert.equal(okachatJoinScheme('https://example.com/o/abc'), null);
+    assert.equal(okachatJoinScheme(''), null);
   });
 });
 

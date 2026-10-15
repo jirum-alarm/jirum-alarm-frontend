@@ -68,22 +68,45 @@ export function okachatAndroidIntent(link: string): string | null {
   return `intent://join?l=${code}&r=EW#Intent;scheme=kakaoopen;package=com.kakao.talk;S.browser_fallback_url=${encodeURIComponent(link.trim())};end`;
 }
 
-/** 카톡으로 넘어갔는지 판정하는 대기 시간. 넘어가면 이 안에 화면이 가려진다. */
-const OKACHAT_HANDOFF_WAIT_MS = 2500;
-
 /**
- * 카톡을 바로 열 대상인가. 안드로이드 브라우저(네이버 앱 인앱 포함)만 — iOS 는 open.kakao.com 이
- * 유니버설 링크라 그대로 두고, 지름알림 앱 웹뷰는 intent 를 처리하지 않을 수 있어 뺀다.
- * user-agent.ts 의 isAndroidUA·isJirumAlarmAppUA 와 같은 판정(이 파일은 import 없이 맨 node 테스트로 돈다).
+ * iOS 용 — 중간 페이지 「참여하기」가 쓰는 data-join-scheme 그대로. open.kakao.com 은 유니버설 링크가
+ * 아니어서(/.well-known/apple-app-site-association 이 kakaocorp.com 으로 302, 2026-10-16 확인)
+ * iOS 도 링크를 누르면 중간 페이지를 거친다. 코드를 못 읽으면 null.
  */
-export function shouldOpenOkachatDirect(ua: string): boolean {
-  return (
-    /Android/i.test(ua) && !/(IOS|Android) (ReactNative|Flutter) Webview Jirum Alarm/i.test(ua)
-  );
+export function okachatJoinScheme(link: string): string | null {
+  const code = /^https:\/\/open\.kakao\.com\/o\/([A-Za-z0-9]+)\/?$/.exec(link.trim())?.[1];
+  return code ? `kakaoopen://join?l=${code}&r=EW` : null;
 }
 
 /**
- * 안드로이드면 카톡을 바로 연다. true 를 돌려주면 직접 처리한 것이니 호출자는 기본 이동을 막는다.
+ * iOS 직행을 켜는 시각. 안드로이드 직행 실험(obs_web_kakao_room_direct)의 주 지표가 방 인원 순증이라
+ * 판정일(10/26)까지 iOS 를 같이 바꾸면 효과를 가를 수 없다 — 판정 다음 날 0시(KST)부터 켠다.
+ */
+export const OKACHAT_IOS_DIRECT_FROM = Date.parse('2026-10-27T00:00:00+09:00');
+
+/**
+ * 카톡으로 넘어갔는지 판정하는 대기 시간. 넘어가면 이 안에 화면이 가려진다.
+ * iOS 사파리는 「카카오톡에서 열겠습니까?」를 한 번 더 묻기 때문에 누를 시간을 더 준다.
+ */
+const OKACHAT_HANDOFF_WAIT_MS = { android: 2500, ios: 4000 } as const;
+
+export type OkachatDirectPlatform = keyof typeof OKACHAT_HANDOFF_WAIT_MS;
+
+/**
+ * 카톡을 바로 열 플랫폼. 안드로이드 브라우저(네이버 앱 인앱 포함)는 intent, iPhone 은 OKACHAT_IOS_DIRECT_FROM
+ * 부터 kakaoopen 스킴. PC 는 null — 카카오 PC 페이지가 이미 PC 카톡 참여·QR 을 준다. 지름알림 앱 웹뷰는
+ * 스킴을 처리하지 않을 수 있어 뺀다(앱은 apps/mobile openOkachat 이 직접 연다).
+ * user-agent.ts 의 isAndroidUA·isJirumAlarmAppUA 와 같은 판정(이 파일은 import 없이 맨 node 테스트로 돈다).
+ */
+export function okachatDirectPlatform(ua: string, now = Date.now()): OkachatDirectPlatform | null {
+  if (/(IOS|Android) (ReactNative|Flutter) Webview Jirum Alarm/i.test(ua)) return null;
+  if (/Android/i.test(ua)) return 'android';
+  if (/iPhone|iPod/i.test(ua) && now >= OKACHAT_IOS_DIRECT_FROM) return 'ios';
+  return null;
+}
+
+/**
+ * 안드로이드·iPhone 이면 카톡을 바로 연다. true 를 돌려주면 직접 처리한 것이니 호출자는 기본 이동을 막는다.
  *
  * 결과를 okachat_handoff(result=app|fallback) 로 남긴다 — 이전엔 클릭 뒤를 알 수 없었다.
  * - 카톡이 열리면 화면만 가려지고 페이지는 남는다 → 대기 후 app.
@@ -98,11 +121,16 @@ export function openOkachatDirect(
     exp,
   }: { room?: OkachatRoom; link?: string; exp?: string } = {},
 ): boolean {
-  if (typeof window === 'undefined' || !shouldOpenOkachatDirect(window.navigator.userAgent)) {
-    return false;
-  }
-  const intent = room === 'hotdeal' ? OKACHAT_ANDROID_INTENT : okachatAndroidIntent(link);
-  if (!intent) return false;
+  if (typeof window === 'undefined') return false;
+  const platform = okachatDirectPlatform(window.navigator.userAgent);
+  if (!platform) return false;
+  const target =
+    platform === 'ios'
+      ? okachatJoinScheme(link)
+      : room === 'hotdeal'
+        ? OKACHAT_ANDROID_INTENT
+        : okachatAndroidIntent(link);
+  if (!target) return false;
 
   let hidden = false;
   let settled = false;
@@ -120,7 +148,7 @@ export function openOkachatDirect(
 
   document.addEventListener('visibilitychange', onVisibility);
   window.addEventListener('pagehide', onPageHide);
-  window.location.href = intent;
+  window.location.href = target;
 
   window.setTimeout(() => {
     if (settled) return;
@@ -130,7 +158,7 @@ export function openOkachatDirect(
     }
     settle('fallback');
     window.location.href = link;
-  }, OKACHAT_HANDOFF_WAIT_MS);
+  }, OKACHAT_HANDOFF_WAIT_MS[platform]);
 
   return true;
 }
