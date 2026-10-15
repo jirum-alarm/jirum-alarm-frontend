@@ -7,11 +7,15 @@
   "exports": {
     "./deal-status-reaction": "./src/deal-status-reaction.ts",
     "./derive-keyword": "./src/derive-keyword.ts",
+    "./hangul-search": "./src/hangul-search.ts",
     "./keyword-options": "./src/keyword-options.ts",
     "./live-alternatives": "./src/live-alternatives.ts",
     "./quiet-hours": "./src/quiet-hours.ts",
     "./toss-time-deal": "./src/toss-time-deal.ts",
     "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "es-hangul": "2.4.0"
   },
   "scripts": {
     "test": "node --test --experimental-strip-types src/*.test.ts"
