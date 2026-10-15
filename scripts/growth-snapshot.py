@@ -173,6 +173,36 @@ def room():
     return readings
 
 
+def room_flow():
+    """핫딜 온리방 10분 표본(2026-10-16~, scripts/kakao-room/record-10m.sh)으로 주별 입장·퇴장 하한을 센다.
+    이웃 표본이 20분 안이면 늘어난 수 = 입장, 줄어든 수 = 퇴장(같은 10분에 겹치면 덜 센다). 간격이 더 벌어진 구간
+    (맥북이 잠든 동안)은 순증만 알 수 있어 세지 않고, 대신 그 주에 표본으로 덮은 시간(cover_h)을 같이 남긴다."""
+    try:
+        rows = subprocess.check_output(["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=15", "user@192.168.99.71",
+                                        "cat ~/jirum-kakao-room/counts-10m.csv"], text=True, timeout=60).splitlines()[1:]
+    except Exception:
+        return {}
+    pts = []
+    for row in rows:
+        at, name, members = (row.split(",") + ["", "", ""])[:3]
+        if name == "핫딜 온리방" and members.isdigit():
+            pts.append((dt.datetime.strptime(at, "%Y-%m-%dT%H:%M:%S%z"), int(members)))
+    pts.sort()
+    out = {}
+    for (t0, m0), (t1, m1) in zip(pts, pts[1:]):
+        iso = t1.date().isocalendar()
+        w = out.setdefault(f"{iso[0]}{iso[1]:02d}", {"joins": 0, "leaves": 0, "cover_h": 0.0, "members": m1})
+        w["members"] = m1
+        gap = (t1 - t0).total_seconds()
+        if gap <= 20 * 60:
+            w["joins"] += max(0, m1 - m0)
+            w["leaves"] += max(0, m0 - m1)
+            w["cover_h"] += gap / 3600
+    for w in out.values():
+        w["cover_h"] = round(w["cover_h"], 1)
+    return out
+
+
 EXP_JS = r"""
 const { EXPERIMENTS } = require('./src/experiment/experiment-registry');
 console.log(JSON.stringify(EXPERIMENTS.map(e => ({ id: e.id, kind: e.kind, status: e.status, lever: e.lever ?? '', title: e.title,
@@ -270,6 +300,7 @@ def link_of(pids):
 
 log = lambda m: print(f"[{dt.datetime.now():%H:%M:%S}] {m}", file=sys.stderr, flush=True)
 log("GA4"); g = ga4()
+log("카톡방 10분 표본"); flow = room_flow()
 log("DB"); d = db()
 log("카톡방"); readings = room()
 members = {}
@@ -327,6 +358,9 @@ for k, mon, m in zip(keys, mondays, money):
         # 2026-W31 은 7/27 일괄 이관으로 커뮤니티 딜 64만 건의 createdAt 이 몰려 있다 — 재고 증가로 읽으면 안 되니 비운다.
         "pages_community": None if community and community > 100000 else community,
         "pages_mall": pages.get("mall"),
+        # 핫딜 온리방 실측 입장·퇴장(10분 표본, 2026-W42~) — 단골 이탈률을 쿠키 대신 방 인원으로 잰다.
+        "room_joins": flow.get(k, {}).get("joins"), "room_leaves": flow.get(k, {}).get("leaves"),
+        "room_cover_h": flow.get(k, {}).get("cover_h"), "room_members": flow.get(k, {}).get("members"),
     })
 
 log("Mongo"); mg = mongo()
