@@ -8,6 +8,7 @@ const {
   formatOpenAt,
   formatTossViewCount,
   getTimeDealOpening,
+  getTimeDealTimer,
   getTossTimeDeal,
   kstLocalNow,
   nextKstMidnight,
@@ -207,5 +208,54 @@ describe('getTimeDealOpening', () => {
       null,
     );
     assert.equal(getTimeDealOpening({ title: '오늘 17시 오픈', postedAt: posted, data: toss() }, NOON), null);
+  });
+});
+
+describe('getTimeDealTimer — 상세 타이머', () => {
+  it('판매 중인 토스 하루특가는 끝나는 시각까지(오늘 밤 12시 종료)', () => {
+    assert.deepEqual(getTimeDealTimer({ data: toss() }, NOON), {
+      kind: 'closing',
+      endAt: kst('2026-10-16T00:00:00'),
+      endLabel: '오늘 밤 12시 종료',
+    });
+  });
+
+  it('마감·일시품절은 타이머 없이 상태만', () => {
+    assert.deepEqual(getTimeDealTimer({ data: toss({ dealStatus: 'SOLD_OUT' }) }, NOON), {
+      kind: 'soldOut',
+      label: '선착순 마감',
+    });
+    assert.deepEqual(
+      getTimeDealTimer({ data: toss({ dealStatus: 'TEMPORARILY_SOLD_OUT' }) }, NOON),
+      { kind: 'soldOut', label: '일시품절' },
+    );
+  });
+
+  it('오픈 전(토스 다음 날 특가·커뮤니티 예고 글)은 여는 시각까지', () => {
+    assert.deepEqual(
+      getTimeDealTimer(
+        {
+          data: toss({
+            todayDealStartAt: '2026-10-16T00:00:00',
+            todayDealEndAt: '2026-10-17T00:00:00',
+          }),
+        },
+        NOON,
+      ),
+      { kind: 'opening', openAt: kst('2026-10-16T00:00:00'), label: '오늘 밤 12시 오픈' },
+    );
+    assert.deepEqual(
+      getTimeDealTimer(
+        { title: '오늘 17시 네이버 LIVE', postedAt: new Date(kst('2026-10-15T11:20:00')).toISOString() },
+        NOON,
+      ),
+      { kind: 'opening', openAt: kst('2026-10-15T17:00:00'), label: '오늘 17:00 오픈' },
+    );
+  });
+
+  it('끝난 딜·지난 하루특가·일반 상품은 null(종료 시각을 모르면 타이머를 내지 않는다)', () => {
+    assert.equal(getTimeDealTimer({ data: toss(), isEnd: true }, NOON), null);
+    assert.equal(getTimeDealTimer({ data: toss() }, kst('2026-10-16T00:00:01')), null);
+    assert.equal(getTimeDealTimer({ title: '맛밤 42g 10개 9,900원', postedAt: NOON }, NOON), null);
   });
 });

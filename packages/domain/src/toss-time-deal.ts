@@ -281,3 +281,38 @@ export function getTimeDealOpening(
   if (openAt == null || openAt <= now) return null;
   return { openAt, label: `${formatOpenAt(openAt, now)} 오픈` };
 }
+
+/**
+ * 상세 화면 타이머 — 무엇을 셀지(web·앱 상세가 같이 쓴다).
+ *  - closing: 판매 중인 토스 하루특가 → 끝나는 시각까지(「오늘 밤 12시 종료 · 3:12:45 남음」)
+ *  - opening: 오픈 전(토스 다음 날 특가·커뮤니티 예고 글) → 여는 시각까지
+ *  - soldOut: 선착순 마감·일시품절 → 타이머 없이 상태만(수량은 모르니 막대·「N개 남음」은 만들지 않는다)
+ * ★상세를 연 시각에 한 번 정하고, 0이 되면 화면이 「끝났어요」/「지금 오픈」으로 바꾼다 — 다시 세지 않는다
+ *   (새로고침·0에서 다시 도는 타이머는 가짜 긴급성: 영국 CMA Emma Sleep·FTC 2022, 2026-10-15 조사).
+ * 종료 시각을 모르는 딜엔 타이머를 내지 않는다.
+ */
+export type TimeDealTimer =
+  | { kind: 'closing'; endAt: number; endLabel: string }
+  | { kind: 'opening'; openAt: number; label: string }
+  | { kind: 'soldOut'; label: string };
+
+export function getTimeDealTimer(
+  product: {
+    title?: string | null;
+    postedAt?: string | number | Date | null;
+    data?: unknown;
+    isEnd?: boolean | null;
+  },
+  now: number = Date.now(),
+): TimeDealTimer | null {
+  if (product.isEnd) return null;
+  const toss = getTossTimeDeal(product.data, now);
+  if (toss?.status === 'ON_SALE') {
+    return { kind: 'closing', endAt: toss.endAt, endLabel: `${formatOpenAt(toss.endAt, now)} 종료` };
+  }
+  if (toss?.status === 'SOLD_OUT' || toss?.status === 'TEMPORARILY_SOLD_OUT') {
+    return { kind: 'soldOut', label: toss.label };
+  }
+  const opening = getTimeDealOpening(product, now);
+  return opening ? { kind: 'opening', openAt: opening.openAt, label: opening.label } : null;
+}
