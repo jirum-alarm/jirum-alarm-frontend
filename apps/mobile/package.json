@@ -27,7 +27,7 @@
     "start": "expo start",
     "test": "jest",
     "eas-build-pre-install": "node scripts/eas-restore-build-files.mjs",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package && node scripts/apply-js-patches.mjs"
   },
   "dependencies": {
     "@jirum/design-system": "workspace:*",
