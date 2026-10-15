@@ -35,6 +35,11 @@ import FirstVisitAppAlertModal, {
 import OpenInAppLink from '@/features/app-download/ui/OpenInAppLink';
 import { useUpdateKeyword } from '@/features/mypage/model/update-keyword';
 import {
+  type FirstVisitSheetCopy,
+  formatDealCount,
+  frequencyToShow,
+} from '@/features/product-detail/lib/first-visit-frequency';
+import {
   isFirstVisitHoldout,
   waitForDeviceId,
 } from '@/features/product-detail/lib/first-visit-holdout';
@@ -87,6 +92,17 @@ function pushEvent(event: string, props: Record<string, unknown>) {
  * 태그 없이는 GA4 에 안 들어간다. 등록 자체는 keyword_register(source=first_visit).
  */
 type SheetMode = 'none' | 'keyword' | 'handoff' | 'okachat' | 'app' | 'kakao_app';
+type KeywordSheetMode = 'keyword' | 'handoff' | 'kakao_app';
+
+/** 문구 A/B 응답을 이만큼만 기다린다 — 늦으면 지금 문구로 시트를 띄운다(배정은 서버 해시라 판독엔 영향 없음). */
+const SHEET_COPY_WAIT_MS = 1500;
+
+function fetchSheetCopy(keyword: string): Promise<FirstVisitSheetCopy | null> {
+  return Promise.race([
+    ProductService.getFirstVisitSheetCopy(keyword).catch(() => null),
+    new Promise<null>((resolve) => setTimeout(() => resolve(null), SHEET_COPY_WAIT_MS)),
+  ]);
+}
 
 export default function FirstVisitAlertSheet({
   device,
@@ -103,6 +119,7 @@ export default function FirstVisitAlertSheet({
 }) {
   const [mode, setMode] = useState<SheetMode>('none');
   const [beautyRoom, setBeautyRoom] = useState<BeautyRoomAssignment | null>(null);
+  const [dealCount, setDealCount] = useState<number | null>(null);
   const keyword = deriveKeyword(title ?? '');
   const { isLoggedIn } = useIsLoggedIn();
 
@@ -130,6 +147,19 @@ export default function FirstVisitAlertSheet({
       recordArm(next);
       setMode(next);
     };
+    // 키워드 시트를 띄울 수도 있는 사람만 묻는다 — 기기 id 를 기다리는 동안 같이 받는다.
+    const hasKeyword = [...new Intl.Segmenter().segment(keyword)].length >= 2;
+    const sheetCopy = hasKeyword ? fetchSheetCopy(keyword) : Promise.resolve(null);
+    const showKeywordSheet = (next: KeywordSheetMode, pushStatus: string) => {
+      void sheetCopy.then((copy) => {
+        if (cancelled) return;
+        const count = frequencyToShow(copy);
+        recordArm(count == null ? next : `${next}_freq`);
+        setDealCount(count);
+        setMode(next);
+        pushEvent('keyword_prompt_view', { keyword, push_status: pushStatus });
+      });
+    };
     void waitForDeviceId().then((deviceId) => {
       if (cancelled) return;
       if (deviceId && isFirstVisitHoldout(deviceId)) {
@@ -152,7 +182,6 @@ export default function FirstVisitAlertSheet({
     function decide(beauty: BeautyRoomAssignment | null) {
       const status = readPushStatus();
       const canPush = status === 'default' || status === 'ok';
-      const hasKeyword = [...new Intl.Segmenter().segment(keyword)].length >= 2;
       // 뷰티방 실험 b 군은 뷰티방 입장 기록으로 거른다(대조·비화장품은 핫딜방 그대로).
       const room = beauty?.arm === 'b' ? 'beauty' : 'hotdeal';
       // 웹 푸시를 못 받는 사람(이미 카톡방에 있는 사람 제외)은 절반에게 카톡방 시트.
@@ -172,8 +201,7 @@ export default function FirstVisitAlertSheet({
       // 카톡 인앱 — 크롬 넘기기(웹 푸시, 앱의 1/10 열기율)·앱 설치 시트 대신 「키워드 걸고 → 앱에서 받기」 두 탭(shared/lib/kakao-bridge.ts).
       if (hasKeyword && shouldUseKakaoBridge(ua)) {
         localStorage.setItem(FIRST_VISIT_SEEN_KEY, '1');
-        show('kakao_app');
-        pushEvent('keyword_prompt_view', { keyword, push_status: 'kakao_bridge' });
+        showKeywordSheet('kakao_app', 'kakao_bridge');
         return;
       }
       const handoff =
@@ -185,8 +213,7 @@ export default function FirstVisitAlertSheet({
         });
       if (hasKeyword && handoff) {
         localStorage.setItem(FIRST_VISIT_SEEN_KEY, '1');
-        show('handoff');
-        pushEvent('keyword_prompt_view', { keyword, push_status: 'handoff' });
+        showKeywordSheet('handoff', 'handoff');
         return;
       }
       if (!canPush || !hasKeyword) {
@@ -194,8 +221,7 @@ export default function FirstVisitAlertSheet({
         return;
       }
       localStorage.setItem(FIRST_VISIT_SEEN_KEY, '1');
-      show('keyword');
-      pushEvent('keyword_prompt_view', { keyword, push_status: status });
+      showKeywordSheet('keyword', status);
     }
   }, [device.isJirumAlarmApp, device.isMobile, keyword, isLoggedIn, productId, categoryId]);
 
@@ -217,6 +243,7 @@ export default function FirstVisitAlertSheet({
       isMobile={device.isMobile}
       handoff={mode === 'handoff'}
       appBridge={mode === 'kakao_app'}
+      dealCount={dealCount}
       platform={isAndroidUA(navigator.userAgent) ? 'android' : 'apple'}
       onClose={() => setMode('none')}
     />
@@ -228,6 +255,7 @@ function KeywordAlertSheet({
   isMobile,
   handoff,
   appBridge,
+  dealCount,
   platform,
   onClose,
 }: {
@@ -237,6 +265,8 @@ function KeywordAlertSheet({
   handoff: boolean;
   /** 카톡 인앱 → 키워드를 건 뒤 「앱에서 받기」(실제 <a>)로 앱을 연다. 두 번째 탭이어야 intent·유니버설 링크가 열린다. */
   appBridge: boolean;
+  /** 문구 A/B frequency 군 — 키워드가 지난 90일 뜬 횟수. null 이면 지금 문구. */
+  dealCount: number | null;
   platform: 'android' | 'apple';
   onClose: () => void;
 }) {
@@ -320,6 +350,12 @@ function KeywordAlertSheet({
       등록했어요,
       <br />
       앱에서 받기만 남았어요
+    </>
+  ) : dealCount != null ? (
+    <>
+      ‘{keyword}’ 핫딜, 지난 90일에 {formatDealCount(dealCount)} 떴어요.
+      <br />
+      다음 건 바로 알려드릴까요?
     </>
   ) : (
     <>
