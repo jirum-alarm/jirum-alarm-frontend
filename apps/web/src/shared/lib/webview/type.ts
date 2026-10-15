@@ -9,6 +9,8 @@ export enum WebViewEventType {
   SHARE_REQUEST = 'SHARE_REQUEST',
   ALARM_DOT_CHANGED = 'ALARM_DOT_CHANGED',
   CHANNEL_TALK_VISIBILITY = 'CHANNEL_TALK_VISIBILITY',
+  /** 글쓰기 폼에 쓰던 내용이 있나 — 앱 글쓰기 화면이 나가기 전에 묻는다(apps/mobile CommunityWriteScreen). */
+  WRITE_DRAFT_CHANGED = 'WRITE_DRAFT_CHANGED',
 }
 
 export type HapticStyle = 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error';
@@ -26,6 +28,7 @@ export type WebViewEventPayloads = {
   [WebViewEventType.SHARE_REQUEST]: { data: { title: string; url: string; message?: string } };
   [WebViewEventType.ALARM_DOT_CHANGED]: { data: { hasNewAlarm: boolean } };
   [WebViewEventType.CHANNEL_TALK_VISIBILITY]: { data: { isOpen: boolean } };
+  [WebViewEventType.WRITE_DRAFT_CHANGED]: { data: { dirty: boolean } };
 };
 export interface WebViewEvent<T extends WebViewEventType> {
   type: T;

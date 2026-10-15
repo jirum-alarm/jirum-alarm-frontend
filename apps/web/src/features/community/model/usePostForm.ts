@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { CommunityService } from '@/shared/api/community/community.service';
 import { ProductService } from '@/shared/api/product/product.service';
@@ -46,6 +46,20 @@ export default function usePostForm(
   const [taggedProduct, setTaggedProduct] = useState<TaggedProduct | null>(null);
   const [isUploadingImages, setIsUploadingImages] = useState(false);
   const [isNotice, setIsNotice] = useState(false);
+
+  // 앱 글쓰기 화면(네이티브 껍데기)에 「쓰던 내용 있음」을 알린다 — 나가기 전에 묻게(apps/mobile CommunityWriteScreen).
+  // 바뀔 때만 보낸다. 웹 브라우저에선 아무것도 안 한다.
+  const dirty =
+    title !== (initialTitle ?? '') ||
+    content !== initial.content ||
+    images.join('\n') !== initial.images.join('\n') ||
+    taggedProduct !== null;
+  const sentDirty = useRef(false);
+  useEffect(() => {
+    if (dirty === sentDirty.current || !isInApp()) return;
+    sentDirty.current = dirty;
+    WebViewBridge.sendMessage(WebViewEventType.WRITE_DRAFT_CHANGED, { data: { dirty } });
+  }, [dirty]);
 
   const uploadImages = async (files: FileList | null) => {
     if (!files?.length) return;
@@ -125,6 +139,9 @@ export default function usePostForm(
         document.documentElement.dataset.nativeStack === 'true' &&
         isInApp()
       ) {
+        // 올렸으니 쓰던 내용은 없다 — 앱이 「나가면 사라져요」를 묻지 않게 먼저 알린다(메시지는 보낸 순서대로 간다).
+        sentDirty.current = false;
+        WebViewBridge.sendMessage(WebViewEventType.WRITE_DRAFT_CHANGED, { data: { dirty: false } });
         WebViewBridge.sendMessage(WebViewEventType.PRESS_BACKBUTTON, null);
         return;
       }
