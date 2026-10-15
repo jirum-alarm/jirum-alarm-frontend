@@ -38,6 +38,7 @@ import {
   type FirstVisitSheetCopy,
   formatDealCount,
   frequencyToShow,
+  sheetStratumSuffix,
 } from '@/features/product-detail/lib/first-visit-frequency';
 import {
   isFirstVisitHoldout,
@@ -153,9 +154,8 @@ export default function FirstVisitAlertSheet({
     const showKeywordSheet = (next: KeywordSheetMode, pushStatus: string) => {
       void sheetCopy.then((copy) => {
         if (cancelled) return;
-        const count = frequencyToShow(copy);
-        recordArm(count == null ? next : `${next}_freq`);
-        setDealCount(count);
+        recordArm(`${next}${sheetStratumSuffix(copy)}`);
+        setDealCount(frequencyToShow(copy));
         setMode(next);
         pushEvent('keyword_prompt_view', { keyword, push_status: pushStatus });
       });
