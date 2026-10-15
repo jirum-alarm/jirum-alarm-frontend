@@ -33,6 +33,7 @@ const base: WaitEstimate = {
   goodDeals: [],
   liveDeals: [],
   points: [],
+  watching: false,
 };
 
 test('단위가 문구', () => {

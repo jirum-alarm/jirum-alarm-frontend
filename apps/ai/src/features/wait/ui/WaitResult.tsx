@@ -81,6 +81,15 @@ export default function WaitResult({
         </span>
         <h1 className="text-22 mt-2 leading-snug font-bold text-gray-900">{h.title}</h1>
         <p className="text-13 mt-1.5 leading-relaxed text-gray-600">{h.sub}</p>
+        {h.tone === 'buy' && e.current && (
+          <a
+            href={`${WEB_ORIGIN}/products/${e.current.id}`}
+            className="tappable bg-success-50 text-13 text-success-700 mt-3 flex items-center gap-2 rounded-xl px-3 py-2.5 font-semibold active:opacity-70"
+          >
+            <span className="min-w-0 flex-1 truncate">{e.current.title}</span>
+            <span className="shrink-0">보러 가기 ›</span>
+          </a>
+        )}
 
         {e.points.length >= 2 && (
           <div className="mt-5">
@@ -96,7 +105,7 @@ export default function WaitResult({
       </section>
 
       <section className="flex flex-col gap-2">
-        <WatchButton text={query} keyword={e.keyword} label={e.label} priced={priced} />
+        <WatchButton text={query} keyword={e.keyword} priced={priced} watching={e.watching} />
         <p className="text-11 text-center leading-relaxed text-gray-500">{watchNote(e)}</p>
       </section>
 

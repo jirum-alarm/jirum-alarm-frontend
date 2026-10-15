@@ -278,3 +278,12 @@ body {
     animation: none !important;
   }
 }
+
+/* 「언제 사나」 다른 상품으로 이동 중 — 옛 답을 흐리고 못 누르게(WaitComposer 가 html 에 속성을 켠다) */
+[data-wait-result] {
+  transition: opacity 150ms ease;
+}
+[data-wait-pending] [data-wait-result] {
+  opacity: 0.35;
+  pointer-events: none;
+}

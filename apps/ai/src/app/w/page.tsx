@@ -61,28 +61,30 @@ export default async function WaitPage({ searchParams }: Search) {
         </header>
 
         <div className="mb-5">
-          <WaitComposer key={q} initial={q} />
+          <WaitComposer key={q} initial={q} examples={false} />
         </div>
 
-        {session.tier === 'anon' || (result && !result.ok && result.reason === 'login') ? (
-          <Notice>
-            로그인하면 알려 드려요.{' '}
-            <a
-              href="https://jirum-alarm.com/login"
-              className="font-semibold text-gray-900 underline"
-            >
-              로그인
-            </a>
-          </Notice>
-        ) : result && !result.ok && result.reason === 'forbidden' ? (
-          <RestrictedNotice />
-        ) : result && result.ok && result.data ? (
-          <WaitResult estimate={result.data} query={q} now={clock()} />
-        ) : result && result.ok ? (
-          <Notice>어떤 상품인지 알아보지 못했어요. 상품 이름으로 다시 적어 주세요.</Notice>
-        ) : (
-          <Notice>지금은 답을 만들 수 없어요. 잠시 뒤 다시 시도해 주세요.</Notice>
-        )}
+        <div data-wait-result>
+          {session.tier === 'anon' || (result && !result.ok && result.reason === 'login') ? (
+            <Notice>
+              로그인하면 알려 드려요.{' '}
+              <a
+                href="https://jirum-alarm.com/login"
+                className="font-semibold text-gray-900 underline"
+              >
+                로그인
+              </a>
+            </Notice>
+          ) : result && !result.ok && result.reason === 'forbidden' ? (
+            <RestrictedNotice />
+          ) : result && result.ok && result.data ? (
+            <WaitResult key={q} estimate={result.data} query={q} now={clock()} />
+          ) : result && result.ok ? (
+            <Notice>어떤 상품인지 알아보지 못했어요. 상품 이름으로 다시 적어 주세요.</Notice>
+          ) : (
+            <Notice>지금은 답을 만들 수 없어요. 잠시 뒤 다시 시도해 주세요.</Notice>
+          )}
+        </div>
       </main>
     </>
   );

@@ -43,4 +43,6 @@ export type WaitEstimate = {
   goodDeals: WaitDeal[];
   liveDeals: WaitDeal[];
   points: WaitPoint[];
+  /** 이 키워드 알림을 이미 「하락만 받기」로 켜 두었나 */
+  watching: boolean;
 };

@@ -16,6 +16,7 @@ const WAIT_QUERY = `
       verdict confident dealCount rawMatchCount windowDays p10 median goodPrice goodDays typicalGapDays lastGoodAt
       current { ${DEAL} } currentPercentile goodDealCount goodDeals { ${DEAL} } liveDeals { ${DEAL} }
       points { postedAt unitPrice live }
+      watching
     }
   }
 `;
