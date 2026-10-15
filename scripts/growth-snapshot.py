@@ -175,7 +175,7 @@ def room():
 
 EXP_JS = r"""
 const { EXPERIMENTS } = require('./src/experiment/experiment-registry');
-console.log(JSON.stringify(EXPERIMENTS.map(e => ({ id: e.id, kind: e.kind, status: e.status, title: e.title,
+console.log(JSON.stringify(EXPERIMENTS.map(e => ({ id: e.id, kind: e.kind, status: e.status, lever: e.lever ?? '', title: e.title,
   question: e.question, primaryMetric: e.primaryMetric, startedAt: e.startedAt ?? '', checkAt: e.checkAt ?? '',
   endedAt: e.endedAt ?? '', results: e.results.length,
   lastDecision: [...e.results].reverse().find(r => r.decision)?.decision ?? '' }))));
