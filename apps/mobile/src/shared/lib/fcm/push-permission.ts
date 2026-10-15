@@ -95,7 +95,9 @@ export async function unbindFcmTokenFromUser(): Promise<void> {
  *
  * 실패는 삼킨다 — 키워드 등록은 이미 성공했고, 권한 요청 실패로 흐름을 막지 않는다.
  */
-export async function requestPushPermissionIfNeeded(): Promise<void> {
+export async function requestPushPermissionIfNeeded(
+  source: 'keyword' | 'first_alert' = 'keyword',
+): Promise<void> {
   try {
     const current = await Notifications.getPermissionsAsync();
     if (current.granted) return;
@@ -109,7 +111,7 @@ export async function requestPushPermissionIfNeeded(): Promise<void> {
     // 권유 클릭 뒤 실제로 켰는지 — 클릭만 재면 받는 사람이 몇 명 늘었는지 모른다.
     Analytics.track('push_permission_result', {
       result: next.granted ? 'granted' : 'denied',
-      source: 'keyword',
+      source,
     });
     if (next.granted) await registerFcmToken();
   } catch (error) {

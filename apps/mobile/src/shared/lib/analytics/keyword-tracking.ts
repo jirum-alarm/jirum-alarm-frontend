@@ -11,7 +11,8 @@ export type KeywordRegisterSource =
   | 'home_recommend' // 홈 추천 키워드
   | 'post_purchase' // 상세 구매 후 권유 카드
   | 'search_bar' // 검색 결과 위 한 줄
-  | 'search_no_result'; // 검색 결과 없음 버튼
+  | 'search_no_result' // 검색 결과 없음 버튼
+  | 'first_alert'; // 첫 실행 「이런 거 싸게 뜨면 알려드릴까요?」 시트(FirstAlertSheet)
 
 export function trackKeywordRegister(
   source: KeywordRegisterSource,
