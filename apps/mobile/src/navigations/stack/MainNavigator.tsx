@@ -40,6 +40,7 @@ import {
   tabStackNavigations,
 } from '@/shared/constant/navigations';
 import PushPermissionPrePrompt from '@/shared/components/PushPermissionPrePrompt';
+import FirstAlertSheet from '@/features/keyword-prompt/ui/FirstAlertSheet';
 import UpdateAvailableSheet from '@/shared/components/UpdateAvailableSheet';
 
 /** @deprecated 기존 단일 WebView 화면에서 사용하던 타입. 호환성 유지용. */
@@ -215,6 +216,7 @@ function MainStackNavigator() {
         />
       </RootStack.Navigator>
       <PushPermissionPrePrompt />
+      <FirstAlertSheet />
       <UpdateAvailableSheet />
     </>
   );

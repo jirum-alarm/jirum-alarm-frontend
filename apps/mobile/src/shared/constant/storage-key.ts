@@ -24,6 +24,8 @@ export const StorageKey = {
   ALARM_LAST_READ_AT: 'alarmLastReadAt',
   /** 로그인 뒤 알림 권한 안내 시트를 이미 보여줬는지. 한 번만 — 다음부터는 키워드 등록 때 묻는다. */
   PUSH_PREPROMPT_SHOWN: 'pushPrePromptShown',
+  /** 첫 실행 「이런 거 싸게 뜨면 알려드릴까요?」 시트를 이미 보여줬는지(FirstAlertSheet). 한 번만. */
+  FIRST_ALERT_SHOWN: 'firstAlertShown',
   /** 마지막으로 "새 버전이 나왔어요" 를 권한 latestVersion. 버전당 한 번만 권한다. */
   UPDATE_OFFERED_VERSION: 'updateOfferedVersion',
   /** 내정보 > 화면 모드('system' | 'light' | 'dark'). 없으면 시스템 설정. */
