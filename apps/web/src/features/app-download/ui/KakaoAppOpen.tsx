@@ -26,6 +26,8 @@ import {
   writePref,
 } from '@/shared/lib/kakao-app-open';
 
+import { watchAppSwitch } from '../lib/watchAppSwitch';
+
 import OpenInAppLink from './OpenInAppLink';
 
 /**
@@ -119,27 +121,22 @@ export default function KakaoAppOpen() {
     if (shouldAutoOpen({ on, kakaoInApp, jirumApp, platform: os, path: pathname, pref, search })) {
       track('auto', os);
       const gd = guestDeviceId(isGuest && !isLoggedIn);
-      let hidden = false;
-      const onVisibility = () => {
-        if (document.visibilityState === 'hidden') {
-          hidden = true;
-          recordOpenSuccess(store);
-        } else if (hidden) {
-          setBar({ kind: 'opened' });
-          document.removeEventListener('visibilitychange', onVisibility);
-        }
-      };
-      document.addEventListener('visibilitychange', onVisibility);
       // 띠의 탭은 앱 스킴(탭이면 카톡이 넘긴다), 자동은 iOS 만 카톡 외부 열기 + 유니버설 링크(iosAutoOpenUrl).
       const href = appOpenUrl(os, pathname, 'kakao_auto', window.location.origin, gd);
-      window.location.href = os === 'ios' ? iosAutoOpenUrl(pathname, 'kakao_auto', gd) : href;
       // 카톡 iOS 는 사용자 탭 없는 스킴 이동을 조용히 막는다(10/15 실기기 — 「앱에서 열기」 탭은 열리는데 자동은 안 열림).
       // 막혔으면 앱이 없는 게 아니다 — 끄지 말고 한 번 누르면 되는 띠를 띄운다. 누른 뒤에도 안 열려야 «없음».
-      window.setTimeout(() => {
-        if (hidden || document.visibilityState !== 'visible') return;
-        track('auto_blocked', os);
-        setBar({ kind: 'tap', href });
-      }, AUTO_BLOCKED_MS);
+      watchAppSwitch({
+        windowMs: AUTO_BLOCKED_MS,
+        onReturn: () => {
+          recordOpenSuccess(store);
+          setBar({ kind: 'opened' });
+        },
+        onStay: () => {
+          track('auto_blocked', os);
+          setBar({ kind: 'tap', href });
+        },
+      });
+      window.location.href = os === 'ios' ? iosAutoOpenUrl(pathname, 'kakao_auto', gd) : href;
       return;
     }
 
@@ -170,21 +167,14 @@ export default function KakaoAppOpen() {
     const onAttempt = () => {
       if (readPref(storage()) === 'on') return;
       track('attempt', platform);
-      let hidden = false;
-      const onVisibility = () => {
-        if (document.visibilityState === 'hidden') {
-          hidden = true;
-          return;
-        }
-        if (!hidden) return;
-        document.removeEventListener('visibilitychange', onVisibility);
-        setBar({ kind: 'confirm' });
-      };
-      document.addEventListener('visibilitychange', onVisibility);
-      // 앱도 스토어도 안 열렸으면 기다리지 않는다.
-      window.setTimeout(() => {
-        if (!hidden) document.removeEventListener('visibilitychange', onVisibility);
-      }, 10_000);
+      // 앱(또는 스토어)으로 넘어갔다 돌아오면 묻는다. 3초 안에 안 넘어가면 기다리지 않는다.
+      watchAppSwitch({
+        windowMs: 3000,
+        onReturn: () => {
+          track('confirm_view', platform);
+          setBar({ kind: 'confirm' });
+        },
+      });
     };
     window.addEventListener(KAKAO_APP_ATTEMPT_EVENT, onAttempt);
     return () => window.removeEventListener(KAKAO_APP_ATTEMPT_EVENT, onAttempt);
@@ -203,20 +193,17 @@ export default function KakaoAppOpen() {
     track('tap', platform);
     if (platform !== 'ios') return; // 안드로이드는 intent fallback(kakao_app=missing)이 판정한다.
     const store = storage();
-    let hidden = false;
-    const onVisibility = () => {
-      if (document.visibilityState === 'hidden') hidden = true;
-    };
-    document.addEventListener('visibilitychange', onVisibility);
-    window.setTimeout(() => {
-      document.removeEventListener('visibilitychange', onVisibility);
-      if (hidden) {
+    watchAppSwitch({
+      windowMs: IOS_OPEN_TIMEOUT_MS,
+      onReturn: () => {
         recordOpenSuccess(store);
-        return;
-      }
-      track('ios_fail', platform);
-      if (recordIosFailure(store)) setBar({ kind: 'missing' });
-    }, IOS_OPEN_TIMEOUT_MS);
+        setBar({ kind: 'opened' });
+      },
+      onStay: () => {
+        track('ios_fail', platform);
+        if (recordIosFailure(store)) setBar({ kind: 'missing' });
+      },
+    });
   };
 
   const content = (() => {

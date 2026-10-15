@@ -7,6 +7,7 @@ import { isJirumAlarmAppUA, isKakaoInAppUA } from '@/shared/config/user-agent';
 import { isGuestAtom, isLoggedInAtom } from '@/shared/hooks/useIsLoggedIn';
 import { appOpenUrl, isAppPath, KAKAO_APP_ATTEMPT_EVENT } from '@/shared/lib/kakao-app-open';
 
+import { wasSuspended } from '../lib/watchAppSwitch';
 import {
   appHandoffHref,
   appStoreUrl,
@@ -100,8 +101,11 @@ function useWebGuestDeviceId(): string | null {
 }
 
 function armStoreFallback(storeUrl: string) {
+  const startedAt = Date.now();
   const timer = window.setTimeout(() => {
     cleanup();
+    // 카톡 iPhone 은 앱이 열려도 가려짐 이벤트를 안 보낸다 — 타이머가 늦게 깼으면 그 사이 앱이 앞에 있었던 것(10/15 실기기).
+    if (wasSuspended(startedAt, STORE_FALLBACK_MS)) return;
     if (document.visibilityState === 'visible') window.location.href = storeUrl;
   }, STORE_FALLBACK_MS);
   const cancel = () => {
