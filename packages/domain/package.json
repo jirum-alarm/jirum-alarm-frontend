@@ -5,11 +5,12 @@
   "description": "web·앱이 같은 결과를 내야 하는 순수 도메인 규칙(TS 원본). 한쪽 앱에 복사하지 말고 여기서 import 한다.",
   "type": "module",
   "exports": {
-    "./derive-keyword": "./src/derive-keyword.ts",
     "./deal-status-reaction": "./src/deal-status-reaction.ts",
+    "./derive-keyword": "./src/derive-keyword.ts",
     "./keyword-options": "./src/keyword-options.ts",
     "./live-alternatives": "./src/live-alternatives.ts",
     "./quiet-hours": "./src/quiet-hours.ts",
+    "./toss-time-deal": "./src/toss-time-deal.ts",
     "./package.json": "./package.json"
   },
   "scripts": {
