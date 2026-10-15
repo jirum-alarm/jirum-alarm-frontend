@@ -7,7 +7,8 @@ const HotdealBadge = ({
   badgeVariant,
 }: {
   hotdealType: HotDealType;
-  badgeVariant: 'page' | 'card';
+  /** card = 둥근 사진 틀의 왼쪽 아래 모서리용(우상단·좌하단 둥금). cardSquare = 각진 사진(랭킹)용 — 우상단만. */
+  badgeVariant: 'page' | 'card' | 'cardSquare';
 }) => {
   return (
     <div
@@ -16,6 +17,7 @@ const HotdealBadge = ({
         {
           'rounded-lg': badgeVariant === 'page',
           'rounded-tr-lg rounded-bl-lg': badgeVariant === 'card',
+          'rounded-tr-lg': badgeVariant === 'cardSquare',
           /* eslint-disable no-restricted-syntax -- 핫딜 배지 그라데이션 정지점(앱 HotdealBadge 와 같은 값) */
           'bg-linear-to-r from-[#F19824] from-0% via-[#E15A00] via-51% to-[#E68B13] to-100%':
             hotdealType === HotDealType.HotDeal,

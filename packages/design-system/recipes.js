@@ -253,6 +253,9 @@ const cardLabel = {
     deal: {box: 'bg-error-500', text: 'text-fixed-white font-semibold'},
   },
   strip: {box: 'h-[22px] rounded-b-lg bg-fixed-700/80 px-2', text: 'text-xs text-fixed-white'},
+  // 사진 틀 아래 모서리가 각진 카드(랭킹 — 사진 밑에 글자 칸이 바로 붙는다)는 아래쪽 둥금을 뺀다.
+  // 그대로 두면 라벨 왼쪽 아래 귀퉁이로 사진이 삐져나와 「이상하게 붙은」 것처럼 보였다. 위 corner·strip 에 덧대 쓴다.
+  squareThumb: {corner: 'rounded-bl-none', strip: 'rounded-b-none'},
 };
 
 module.exports = {addChip, badge, button, buttonTone, chip, tab, toggle, sectionTitle, cardThumb, dealRow, detailInfo, infoBox, keywordChip, linkChip, wordTag, sheet, skeleton, toast, emptyText, cardLabel};

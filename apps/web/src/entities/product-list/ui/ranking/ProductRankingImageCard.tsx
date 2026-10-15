@@ -67,7 +67,7 @@ export default function ProductRankingImageCard({
               loading={eager && !priority ? 'eager' : undefined}
             />
             {/* 랭킹 1~10위는 홈에서 가장 많이 보이는데 「왜 좋은 딜인지」가 없었다 — 다른 카드와 같은 배지(핫딜·대박딜·초대박딜). */}
-            <ProductCardStatus product={product} />
+            <ProductCardStatus product={product} squareThumb />
           </div>
           <div className="pc:h-[132px] p-3 pb-0">
             <div className="xl:pc:text-base line-clamp-2 text-sm text-gray-700">

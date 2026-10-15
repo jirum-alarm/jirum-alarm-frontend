@@ -68,8 +68,8 @@ const GRADIENTS: Record<HotDealType, Array<[string, string]>> = {
 
 type Props = {
   hotdealType: HotDealType;
-  /** page = 4면 둥근 모서리 / card = 우상단·좌하단만 (web 과 동일) */
-  badgeVariant: 'page' | 'card';
+  /** page = 4면 둥근 모서리 / card = 우상단·좌하단만 / cardSquare = 각진 사진(랭킹)용 우상단만 (web 과 동일) */
+  badgeVariant: 'page' | 'card' | 'cardSquare';
 };
 
 export default function HotdealBadge({hotdealType, badgeVariant}: Props) {
@@ -80,6 +80,8 @@ export default function HotdealBadge({hotdealType, badgeVariant}: Props) {
   const radius =
     badgeVariant === 'page'
       ? {borderRadius: 8}
+      : badgeVariant === 'cardSquare'
+      ? {borderTopRightRadius: 8}
       : {borderTopRightRadius: 8, borderBottomLeftRadius: 8};
 
   return (

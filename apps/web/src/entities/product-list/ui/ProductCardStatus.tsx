@@ -13,9 +13,11 @@ import type { ReactNode } from 'react';
 /** 사진 왼쪽 아래 모서리 라벨(판매종료·베스트판매자). light = 흰 면, dark = 사진 위 어두운 면. */
 export const CardCornerLabel = ({
   tone,
+  squareThumb,
   children,
 }: {
   tone: keyof typeof cardLabel.tone;
+  squareThumb?: boolean;
   children: ReactNode;
 }) => (
   <div
@@ -25,6 +27,7 @@ export const CardCornerLabel = ({
       cardLabel.tone[tone].box,
       cardLabel.corner.text,
       cardLabel.tone[tone].text,
+      squareThumb && cardLabel.squareThumb.corner,
     )}
   >
     {children}
@@ -39,6 +42,7 @@ export const CardCornerLabel = ({
 export const ProductCardStatus = ({
   product,
   showHotdealBadge = true,
+  squareThumb = false,
 }: {
   product: Pick<
     ProductCardType,
@@ -46,6 +50,8 @@ export const ProductCardStatus = ({
   >;
   /** 2단·리스트 카드는 핫딜 배지를 사진 대신 글자 줄에 둔다. */
   showHotdealBadge?: boolean;
+  /** 사진 틀 아래 모서리가 각진 카드(랭킹) — 라벨이 둥근 모서리를 가정하면 사진 귀퉁이가 삐져나온다. */
+  squareThumb?: boolean;
 }) => {
   const { isEnd, hotDealType, earliestExpiryDate, isRising } = product;
   // 토스 하루특가는 핫딜 배지 자리에 토스 앱 배지를 그대로 단다(앱 ProductCardStatus 와 같다).
@@ -64,6 +70,7 @@ export const ProductCardStatus = ({
       ) : null}
       {showTimeDeal ? (
         <CardCornerLabel
+          squareThumb={squareThumb}
           tone={
             timeDeal.status === 'ON_SALE'
               ? 'deal'
@@ -75,12 +82,19 @@ export const ProductCardStatus = ({
           {timeDeal.label}
         </CardCornerLabel>
       ) : isEnd ? (
-        <CardCornerLabel tone="light">판매종료</CardCornerLabel>
+        <CardCornerLabel squareThumb={squareThumb} tone="light">
+          판매종료
+        </CardCornerLabel>
       ) : opening ? (
-        <CardCornerLabel tone="dark">{opening.label}</CardCornerLabel>
+        <CardCornerLabel squareThumb={squareThumb} tone="dark">
+          {opening.label}
+        </CardCornerLabel>
       ) : showHotdealBadge && hotDealType && !earliestExpiryDate ? (
         <div className="absolute bottom-0 left-0 z-10">
-          <HotdealBadge badgeVariant="card" hotdealType={hotDealType} />
+          <HotdealBadge
+            badgeVariant={squareThumb ? 'cardSquare' : 'card'}
+            hotdealType={hotDealType}
+          />
         </div>
       ) : null}
       {earliestExpiryDate && !isEnd ? (
@@ -89,6 +103,7 @@ export const ProductCardStatus = ({
             'absolute inset-x-0 bottom-0 flex items-center justify-center',
             cardLabel.strip.box,
             cardLabel.strip.text,
+            squareThumb && cardLabel.squareThumb.strip,
           )}
         >
           유통기한 {formatDateToMMD(earliestExpiryDate)}

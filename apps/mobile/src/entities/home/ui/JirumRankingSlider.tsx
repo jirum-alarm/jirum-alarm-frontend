@@ -303,7 +303,7 @@ const RankingCard = React.memo(function RankingCard({
             type="product"
           />
           {/* 랭킹 1~10위에 「왜 좋은 딜인지」가 없었다 — 다른 카드와 같은 배지(web ProductRankingImageCard 와 같음). */}
-          <ProductCardStatus product={product} />
+          <ProductCardStatus product={product} squareThumb />
         </View>
         {/* web `p-3 pb-0` — 위에서부터 쌓고 하단 패딩은 없다.
             ★앞서 justify-between + pb-3 을 넣었더니 제목·메타·가격 사이가
