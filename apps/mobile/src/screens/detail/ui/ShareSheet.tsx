@@ -205,33 +205,40 @@ export default function ShareSheet({
 
   if (!mounted) return null;
 
+  // a11y = 화면 읽기 이름(web ShareSheet 와 같은 문구). 예전엔 라벨 뒤에 괄호 조사 「(으)로」를 붙여
+  // VoiceOver 가 「카카오톡 으 로 공유」로 읽었다 → 조사까지 적는다.
   const apps: {
     c: Exclude<ShareChannel, 'copy'>;
     label: string;
+    a11y: string;
     icon: React.ReactNode;
     bg: string;
   }[] = [
     {
       c: 'kakao',
       label: '카카오톡',
+      a11y: '카카오톡으로 공유',
       icon: <KaKaoIcon width={28} height={28} />,
       bg: '#FEE500',
     },
     {
       c: 'x',
       label: 'X',
+      a11y: 'X로 공유',
       icon: <ShareX width={22} height={22} />,
       bg: brandDark,
     },
     {
       c: 'threads',
       label: '스레드',
+      a11y: '스레드로 공유',
       icon: <ShareThreads width={24} height={24} />,
       bg: brandDark,
     },
     {
       c: 'native',
       label: '더보기',
+      a11y: '다른 앱으로 공유',
       icon: <ShareIcon width={22} height={22} color={c.gray[700]} />,
       bg: c.gray[100],
     },
@@ -333,6 +340,7 @@ export default function ShareSheet({
               <AppButton
                 key={app.c}
                 label={app.label}
+                a11y={app.a11y}
                 bg={app.bg}
                 disabled={!!pending}
                 onPress={() => share(app.c)}>
@@ -373,12 +381,14 @@ export default function ShareSheet({
 
 function AppButton({
   label,
+  a11y,
   bg,
   disabled,
   onPress,
   children,
 }: {
   label: string;
+  a11y: string;
   bg: string;
   disabled: boolean;
   onPress: () => void;
@@ -391,7 +401,7 @@ function AppButton({
       className="flex-1 items-center"
       style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}
       accessibilityRole="button"
-      accessibilityLabel={`${label}(으)로 공유`}>
+      accessibilityLabel={a11y}>
       <View
         className="h-16 w-16 items-center justify-center rounded-full"
         style={{backgroundColor: bg}}>

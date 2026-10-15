@@ -22,10 +22,11 @@ const LOGIN_BUTTON_STYLE: Record<LoginMethod, string> = {
   email: 'hover:bg-gray-200 border-[1px] border-gray-200 text-gray-900',
 };
 
-const RECENT_METHOD_LABEL: Record<LoginMethod, string> = {
-  kakao: '카카오',
-  naver: '네이버',
-  email: '이메일',
+/** 「최근에 ○○ 로그인했어요」 — 조사까지 적는다(예전 `{라벨}으로` 는 셋 다 틀렸다: 카카오으로·네이버으로·이메일으로). */
+const RECENT_METHOD_PHRASE: Record<LoginMethod, string> = {
+  kakao: '카카오로',
+  naver: '네이버로',
+  email: '이메일로',
 };
 
 /**
@@ -89,7 +90,7 @@ export default function LoginModal() {
           </AlertDialog.Description>
           {recentMethod && (
             <p className="shrink-0 text-xs whitespace-nowrap text-gray-400">
-              최근에 {RECENT_METHOD_LABEL[recentMethod]}으로 로그인했어요
+              최근에 {RECENT_METHOD_PHRASE[recentMethod]} 로그인했어요
             </p>
           )}
         </AlertDialog.Header>

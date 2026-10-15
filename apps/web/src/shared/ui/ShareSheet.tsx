@@ -106,22 +106,32 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
 
   // 브랜드 배경색 원형 + 흰 로고. X·Threads 공식 배경은 검정, 링크 복사는 브랜드가 아니라 회색.
   // 다크에선 검은 원이 시트 바탕에 묻혀 앱 ShareSheet 처럼 회색 원(gray-100)으로 둔다.
-  const channels: { c: ShareChannel; label: string; icon: React.ReactNode; badge: string }[] = [
+  // a11y = 화면 읽기 이름. 예전엔 라벨 뒤에 괄호 조사 「(으)로」를 붙여 「스레드 으 로 공유」로 읽혔다 → 조사까지 적는다.
+  const channels: {
+    c: ShareChannel;
+    label: string;
+    a11y: string;
+    icon: React.ReactNode;
+    badge: string;
+  }[] = [
     {
       c: 'x',
       label: 'X',
+      a11y: 'X로 공유',
       icon: <ShareX width={20} height={20} className="text-fixed-white" />,
       badge: 'bg-black dark:bg-gray-100',
     },
     {
       c: 'threads',
       label: '스레드',
+      a11y: '스레드로 공유',
       icon: <ShareThreads width={22} height={22} className="text-fixed-white" />,
       badge: 'bg-black dark:bg-gray-100',
     },
     {
       c: 'copy',
       label: '링크 복사',
+      a11y: '링크 복사',
       icon: <ShareLink width={20} height={20} className="text-gray-600" />,
       badge: 'bg-gray-100',
     },
@@ -132,6 +142,7 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
           {
             c: 'native' as const,
             label: '기타',
+            a11y: '다른 앱으로 공유',
             icon: <Share width={20} height={20} className="text-gray-600" />,
             badge: 'bg-gray-100',
           },
@@ -176,13 +187,13 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
         {pending === 'kakao' ? '카카오톡 여는 중…' : '카카오톡으로 공유'}
       </button>
       <div className="mt-2 flex gap-2">
-        {channels.map(({ c, label, icon, badge }) => (
+        {channels.map(({ c, label, a11y, icon, badge }) => (
           <button
             key={c}
             type="button"
             onClick={() => share(c)}
             disabled={!!pending}
-            aria-label={`${label}(으)로 공유`}
+            aria-label={a11y}
             className="group flex flex-1 flex-col items-center gap-1.5 rounded-xl py-1 disabled:opacity-60"
           >
             <span
