@@ -13,6 +13,7 @@ import {
 } from '@/navigations/tab/native-headers';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import JirumAlarmWebViewScreen from '@/screens/jirumalarmwebview/JirumAlarmWebViewScreen';
+import LoginModalScreen from '@/screens/auth/LoginModalScreen';
 import CurationScreen from '@/screens/curation/CurationScreen';
 import TossCurationScreen from '@/screens/curation/TossCurationScreen';
 import ProductDetailScreen from '@/screens/detail/ProductDetailScreen';
@@ -107,6 +108,12 @@ function MainStackNavigator() {
         <RootStack.Screen
           name={mainNavigations.TABS}
           component={MainTabNavigator}
+        />
+        {/* 게스트의 회원 기능 → 지금 화면 위 로그인 창(openLoginModal). 아래로 쓸어 닫는다. */}
+        <RootStack.Screen
+          name={mainNavigations.LOGIN}
+          component={LoginModalScreen}
+          options={{presentation: 'modal'}}
         />
         <RootStack.Screen
           name={tabStackNavigations.DETAIL}

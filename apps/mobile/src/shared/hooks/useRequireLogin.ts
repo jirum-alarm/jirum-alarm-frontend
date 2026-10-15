@@ -4,6 +4,7 @@ import {Platform} from 'react-native';
 import {useQueryClient} from '@tanstack/react-query';
 
 import {AuthQueries} from '@/entities/auth';
+import {openLoginModal} from '@/navigations/navigation-ref';
 import {UserQueries} from '@/entities/user/user.queries';
 import {StorageKey} from '@/shared/constant/storage-key';
 import {useAuth} from '@/shared/hooks/useAuth';
@@ -28,14 +29,21 @@ export function useRequireLogin(returnPath?: string) {
   const requireLogin = (type: string, payload?: unknown) => {
     if (isLoading) return true;
     if (isMember) return false;
-    savePendingAction(type, payload, returnPath).catch(() => {});
     if (isGuest) {
-      // 게스트는 메인 안에 있어서 로그인 화면이 안 보인다 → 게스트 세션만 내려 로그인 화면으로.
-      // 푸시 토큰은 떼지 않는다 — 로그인하면 백엔드가 기기 기준으로 키워드·토큰을 계정에 합치고,
-      // 그냥 돌아와 다시 둘러보면 같은 게스트를 받는다.
+      // 게스트는 지금 화면 위에 로그인 창을 띄운다 — 뒤 화면이 그대로라 로그인되면 이 화면의
+      // usePendingAction 이 이어서 실행한다. 그래서 돌아갈 경로(returnPath)는 남기지 않는다(남기면
+      // PendingLoginRestore 가 같은 화면을 하나 더 연다).
+      // 창을 못 띄우면(메인이 아직 안 뜸) 예전처럼 게스트 세션을 내려 로그인 화면으로. 푸시 토큰은 떼지 않는다 —
+      // 로그인하면 백엔드가 기기 기준으로 키워드·토큰을 계정에 합친다.
+      if (openLoginModal()) {
+        savePendingAction(type, payload).catch(() => {});
+        return true;
+      }
+      savePendingAction(type, payload, returnPath).catch(() => {});
       showToast.info('로그인하면 이어서 할 수 있어요.');
       void leaveGuestSession(queryClient);
     } else {
+      savePendingAction(type, payload, returnPath).catch(() => {});
       showToast.info('로그인 후 이용해주세요.');
     }
     return true;
@@ -55,10 +63,15 @@ export function useRequireLogin(returnPath?: string) {
   return {requireLogin, requireAlertSession, isLogin: isMember};
 }
 
-/** 게스트가 직접 「로그인」을 누를 때(내정보) — 게스트 세션만 내려 로그인 화면으로. */
-export function useLeaveGuestSession() {
+/**
+ * 게스트가 직접 「로그인」을 누를 때(내정보·댓글) — 지금 화면 위 로그인 창. 못 띄우면 게스트 세션을 내려 로그인 화면으로.
+ */
+export function useOpenLogin() {
   const queryClient = useQueryClient();
-  return () => leaveGuestSession(queryClient);
+  return () => {
+    if (openLoginModal()) return;
+    void leaveGuestSession(queryClient);
+  };
 }
 
 async function leaveGuestSession(
