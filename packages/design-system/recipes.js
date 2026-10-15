@@ -193,6 +193,18 @@ const wordTag = {
 /** 딜 목록 한 줄(사진·제목·가격) — 옅은 테두리, 누르는 줄이라 hover 에 옅은 면. web /deals 상세·같은 상품 다른 가격. */
 const dealRow = 'rounded-lg border border-gray-100 p-3 hover:bg-gray-50';
 
+/**
+ * 상세 정보 표(쇼핑몰·가격 조건·혜택·배송비) 한 줄 — 라벨 고정폭 왼쪽, 값은 그 옆에서 줄바꿈.
+ * 예전엔 짧은 값은 좌우 끝 정렬·긴 값은 라벨 아래로 쌓아 한 표에 두 모양이 섞였고, 라벨 gray-400·값 gray-500 이라
+ * 가장 중요한 가격 조건 글이 흐렸다(AA 미달). 배치(flex·flex-row)는 플랫폼마다 붙인다.
+ */
+const detailInfo = {
+  list: 'gap-y-2.5',
+  row: 'gap-x-3',
+  label: 'w-16 shrink-0 text-sm text-gray-500',
+  value: 'min-w-0 flex-1 text-sm text-gray-800',
+};
+
 /** 본문 안 정보 상자(가격 판정 요약·공유 미리보기 등) — 옅은 면 + 테두리. 여백은 내용마다 다르다. */
 const infoBox = 'rounded-xl border border-gray-200 bg-gray-50';
 
@@ -241,4 +253,4 @@ const cardLabel = {
   strip: {box: 'h-[22px] rounded-b-lg bg-fixed-700/80 px-2', text: 'text-xs text-fixed-white'},
 };
 
-module.exports = {addChip, badge, button, buttonTone, chip, tab, toggle, sectionTitle, cardThumb, dealRow, infoBox, keywordChip, linkChip, wordTag, sheet, skeleton, toast, emptyText, cardLabel};
+module.exports = {addChip, badge, button, buttonTone, chip, tab, toggle, sectionTitle, cardThumb, dealRow, detailInfo, infoBox, keywordChip, linkChip, wordTag, sheet, skeleton, toast, emptyText, cardLabel};

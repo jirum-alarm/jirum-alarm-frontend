@@ -55,3 +55,16 @@ export const formatFreeShipping = (threshold: number | string) =>
   typeof threshold === 'number'
     ? `${threshold.toLocaleString()}원 이상 무료배송`
     : threshold;
+
+/** 상세 정보 표 「배송비」 값(web delivery-text.ts 와 같은 규칙). 토스는 배송비·무료배송 기준, 오늘의집은 받은 문구 그대로. 없으면 null. */
+export function formatDeliveryText(source: SourceData): string | null {
+  const {toss, ohou} = source;
+  if (toss) {
+    if (!toss.deliveryFee) return '무료배송';
+    const threshold = toss.freeShippingThreshold
+      ? ` (${formatFreeShipping(toss.freeShippingThreshold)})`
+      : '';
+    return `${toss.deliveryFee.toLocaleString()}원${threshold}`;
+  }
+  return ohou?.delivery || null;
+}
