@@ -52,11 +52,12 @@ export function Reactions({ commentSummary }: { commentSummary: ProductCommentSu
           );
         })}
       </ul>
+      {/* 위 간격은 마지막으로 보이는 줄의 space-y 여백(12px)이 준다 — 뒤 줄이 hidden 이라 그 줄은 :last-child 가 아니다. */}
       {hiddenCount > 0 ? (
         <button
           type="button"
           onClick={() => setExpanded(true)}
-          className="mt-3 text-sm font-medium text-gray-600 hover:text-gray-800"
+          className="text-sm font-medium text-gray-600 hover:text-gray-800"
         >
           요약 {hiddenCount}개 더 보기
         </button>
