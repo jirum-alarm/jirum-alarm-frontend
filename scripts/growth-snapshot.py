@@ -9,6 +9,7 @@
 - linkmix.json  구매클릭(서버 purchase_link_click, W40~)을 상품의 지금 수익링크 제휴사로 나눈 주간 수 — Mongo + MySQL product
 - nolink_source.json 마지막 완료 주 구매클릭을 딜 출처별로 — 그중 링크 없는 클릭 수·비율
 - list_ctr.json 웹 카드 출처별 최근 7일 화면 노출(post_impression)·출처 붙은 상세 진입(post_view)
+- formula.json 성장 공식(jirum vault domain/growth-loop-formula.md)의 주간 입력 — 검색 신규·검색 구매클릭·카톡 신규·카톡 구매클릭·새 딜 페이지
 
 수동: python3 scripts/growth-snapshot.py [주 수=16]  → ~/.local/share/jirum/growth/*.json
 대시보드 https://claude.ai/artifact/QajT8bE1EooG2jHKeujbCj 반영은 Orca 정기 자동화(Claude 세션)가 이 파일들을 올린다
@@ -111,6 +112,12 @@ def ga4():
         # 북극성 = 한 사람이 카톡·푸시를 둘 다 타도 한 번만 세는 합집합(따로 센 값을 더하지 않는다).
         "notified": q("totalUsers", [{"orGroup": {"expressions": [KAKAO, PUSH]}}]),
         "app_active": q("activeUsers", [app]),
+        # 성장 공식 입력. 채널은 traffic 의 channel 과 같은 sessionDefaultChannelGroup(Organic Search = 검색).
+        "new_by_ch": q("newUsers", [web, bot], "sessionDefaultChannelGroup"),
+        "buy_by_ch": q("eventCount", [web, bot, ev(["click_btn_buy"])], "sessionDefaultChannelGroup"),
+        # 카톡 신규 = 카톡방 링크로 처음 잡힌 사람. 카톡 인앱 브라우저 쿠키가 바뀌면 기존 사람도 신규로 잡혀 이탈과 함께 부푼다.
+        "kakao_new": q("newUsers", [KAKAO]),
+        "kakao_clicks": q("eventCount", [KAKAO, ev(["click_btn_buy"])]),
     }
 
 
@@ -130,6 +137,9 @@ DB_SQL = {
     "signup": """SELECT CAST(YEARWEEK(u.createdAt,3) AS CHAR) wk, COUNT(*) signup,
   SUM(EXISTS(SELECT 1 FROM user_token t WHERE t.userId=u.id AND t.deletedAt IS NULL)) tok
   FROM user u WHERE u.id>1682 AND u.isGuest=0 AND u.createdAt>='{s}' AND u.createdAt<'{e}' GROUP BY wk""",
+    # 새 딜 페이지(상품 상세) — 검색 입구 재고가 느는 속도. provider.type 은 community·mall.
+    "pages": """SELECT /*+ MAX_EXECUTION_TIME(60000) */ CAST(YEARWEEK(p.createdAt,3) AS CHAR) wk, pr.type, COUNT(*) n
+  FROM product p JOIN provider pr ON pr.id=p.providerId WHERE p.createdAt>='{s}' AND p.createdAt<'{e}' GROUP BY wk, pr.type""",
     "recv": """SELECT CAST(YEARWEEK(createdAt,3) AS CHAR) wk, COUNT(DISTINCT userId) recv
   FROM push_history WHERE userId IS NOT NULL AND errorCode IS NULL AND createdAt>='{s}' AND createdAt<'{e}' GROUP BY wk""",
 }
@@ -299,6 +309,26 @@ for k, mon in zip(keys, mondays):
                  "kakao_inflow": kakao, "push_opens": opens, "notified_returns": g["notified"].get(k, 0),
                  "room_members": members.get(k), "app_active": g["app_active"].get(k, 0)})
 
+# 성장 공식 입력. 검색 손님(V_s·k_s)과 단골(카톡 U·J·k_k)을 같은 주에 나란히 둔다 — 파라미터 계산은 대시보드가 한다.
+formula = []
+for k, mon, m in zip(keys, mondays, money):
+    pages = {r["type"]: int(r["n"]) for r in d["pages"] if r["wk"] == k}
+    community = pages.get("community")
+    formula.append({
+        "week": label(k), "week_start": str(mon),
+        "search_new": g["new_by_ch"].get(k, {}).get("Organic Search", 0),
+        "search_users": g["channel"].get(k, {}).get("Organic Search", 0),
+        "search_clicks": g["buy_by_ch"].get(k, {}).get("Organic Search", 0),
+        "web_clicks": g["buy_clicks"].get(k, 0),
+        "kakao_users": g["kakao"].get(k, 0), "kakao_new": g["kakao_new"].get(k, 0),
+        "kakao_clicks": g["kakao_clicks"].get(k, 0),
+        "notified_returns": g["notified"].get(k, 0),
+        "revenue": m["revenue"], "provisional": m["provisional"],
+        # 2026-W31 은 7/27 일괄 이관으로 커뮤니티 딜 64만 건의 createdAt 이 몰려 있다 — 재고 증가로 읽으면 안 되니 비운다.
+        "pages_community": None if community and community > 100000 else community,
+        "pages_mall": pages.get("mall"),
+    })
+
 log("Mongo"); mg = mongo()
 log("상품 링크"); links = link_of(sorted({pid for _, pid, _ in mg["clicks"]}))
 LINKS = ["none", "toss", "link_price", "adpick", "coupang", "ali_express", "naver"]
@@ -341,7 +371,8 @@ os.makedirs(OUT, exist_ok=True)
 meta = {"generated": dt.datetime.now().astimezone().isoformat(timespec="seconds"), "from": str(start), "to": str(last_sun)}
 log("실험 등록부"); exps = experiments()
 for name, rows in (("money", money), ("traffic", traffic), ("loop", loop), ("room", readings), ("experiments", exps),
-                   ("linkmix", linkmix), ("list_ctr", list_ctr), ("nolink_source", nolink_source)):
+                   ("linkmix", linkmix), ("list_ctr", list_ctr), ("nolink_source", nolink_source),
+                   ("formula", formula)):
     with open(os.path.join(OUT, f"{name}.json"), "w") as f:
         json.dump({"meta": meta, "rows": rows}, f, ensure_ascii=False, indent=1)
 print(f"{OUT} — {meta['from']} ~ {meta['to']} ({WEEKS}주)")
