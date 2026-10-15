@@ -36,8 +36,8 @@ function KeywordChip({item}: {item: ReactionKeywordItem}) {
         positive
           ? 'border-secondary-300'
           : negative
-          ? 'border-error-200'
-          : 'border-gray-300',
+            ? 'border-error-200'
+            : 'border-gray-300',
       )}>
       {item.tag ? (
         <Text className="text-xs font-medium text-gray-500">{item.tag}</Text>
@@ -49,36 +49,11 @@ function KeywordChip({item}: {item: ReactionKeywordItem}) {
           positive
             ? 'text-secondary-700'
             : negative
-            ? 'text-error-400'
-            : 'text-gray-500',
+              ? 'text-error-400'
+              : 'text-gray-500',
         )}>
         {item.count}
       </Text>
-    </View>
-  );
-}
-
-function KeywordRow({
-  label,
-  labelClassName,
-  items,
-}: {
-  label: string;
-  labelClassName: string;
-  items: ReactionKeywordItem[];
-}) {
-  if (!items.length) return null;
-
-  return (
-    <View className="flex-row items-start gap-2">
-      <Text className={cn('mt-1.5 w-8 text-xs font-semibold', labelClassName)}>
-        {label}
-      </Text>
-      <View className="min-w-0 flex-1 flex-row flex-wrap gap-1.5">
-        {items.map(item => (
-          <KeywordChip key={`${item.type}-${item.name}`} item={item} />
-        ))}
-      </View>
     </View>
   );
 }
@@ -187,73 +162,57 @@ export default function CommunityReaction({
         </Text>
         <InfoTooltip />
       </View>
-      <Text className="pt-1 pb-3 text-xs text-gray-500">
+      <Text className={cn('pt-1 pb-3', sectionTitle.subtitle)}>
         실제 커뮤니티 반응을 AI로 요약한 내용이에요
       </Text>
 
-      <View className="rounded-xl bg-secondary-50 p-4">
-        <View className="gap-y-3 rounded-xl bg-white px-3 py-3">
-          {allCount > 0 ? (
-            <View className="flex-row items-center gap-1.5">
-              {isPositive ? (
-                <Thumbsup width={18} height={18} active />
-              ) : (
-                <Thumbsdown width={18} height={18} active />
-              )}
-              <Text className="text-base font-semibold text-gray-800">
-                {isPositive ? '추천해요' : '아쉬워요'}
-              </Text>
-              <Text className="text-sm text-gray-500">
-                · {dominantPercent}%
-              </Text>
-            </View>
-          ) : (
-            <Text className="text-sm text-gray-500">
-              아직 모은 반응이 없어요
+      {/* 판정·키워드·AI 요약을 카드 하나에(web 과 같다). */}
+      <View className="gap-y-3 rounded-xl border border-gray-200 bg-white p-4">
+        {allCount > 0 ? (
+          <View className="flex-row items-center gap-1.5">
+            {isPositive ? (
+              <Thumbsup width={18} height={18} active />
+            ) : (
+              <Thumbsdown width={18} height={18} active />
+            )}
+            <Text className="text-base font-semibold text-gray-800">
+              {isPositive ? '추천해요' : '아쉬워요'}
             </Text>
-          )}
-
-          {positiveItems.length > 0 || negativeItems.length > 0 ? (
-            <View className="gap-y-2">
-              <KeywordRow
-                label="긍정"
-                labelClassName="text-secondary-600"
-                items={positiveItems}
-              />
-              <KeywordRow
-                label="부정"
-                labelClassName="text-error-400"
-                items={negativeItems}
-              />
-            </View>
-          ) : null}
-
-          {statusSummary ? (
-            <Text className="text-xs text-gray-500">
-              {statusSummary.message}
-            </Text>
-          ) : null}
-
-          <View className="flex-row items-center justify-between gap-2 border-t border-gray-100 pt-2.5">
-            <Text className="text-xs text-gray-500">
-              {lastUpdatedAt ?? ' '}
-            </Text>
-            {additional?.url && additional.provider?.nameKr ? (
-              <CommunityLink
-                url={additional.url}
-                provider={additional.provider.nameKr}
-              />
-            ) : null}
+            <Text className="text-sm text-gray-500">· {dominantPercent}%</Text>
           </View>
-        </View>
-        {additional?.commentSummary ? (
-          <View className="pt-3">
-            <Reactions commentSummary={additional.commentSummary} />
+        ) : (
+          <Text className="text-sm text-gray-500">아직 모은 반응이 없어요</Text>
+        )}
+
+        {/* 긍정 먼저, 부정 뒤 — 칩 테두리·숫자 색이 긍·부정을 말한다. */}
+        {positiveItems.length > 0 || negativeItems.length > 0 ? (
+          <View className="flex-row flex-wrap gap-1.5">
+            {[...positiveItems, ...negativeItems].map(item => (
+              <KeywordChip key={`${item.type}-${item.name}`} item={item} />
+            ))}
           </View>
         ) : null}
-        <View className="pt-3">
-          <ProductReport productId={productId} isUserLogin={isUserLogin} />
+
+        {statusSummary ? (
+          <Text className="text-xs text-gray-500">{statusSummary.message}</Text>
+        ) : null}
+
+        {additional?.commentSummary ? (
+          <Reactions commentSummary={additional.commentSummary} />
+        ) : null}
+
+        <View className="flex-row items-center justify-between gap-2 border-t border-gray-100 pt-3">
+          <Text className="text-xs text-gray-500">{lastUpdatedAt ?? ' '}</Text>
+          {additional?.url && additional.provider?.nameKr ? (
+            <CommunityLink
+              url={additional.url}
+              provider={additional.provider.nameKr}
+            />
+          ) : null}
         </View>
+      </View>
+      <View className="pt-3">
+        <ProductReport productId={productId} isUserLogin={isUserLogin} />
       </View>
     </View>
   );

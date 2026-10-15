@@ -54,6 +54,7 @@ export default function PriceHistorySection({
   productThumbnail,
   onPressProduct,
   onLayout,
+  topDivider,
 }: {
   productId: number;
   /** 상세의 현재가. web 은 요약 카드 가운데에 이걸 띄운다. */
@@ -67,6 +68,8 @@ export default function PriceHistorySection({
   onPressProduct?: (id: number) => void;
   /** 판정 카드의 "기준 보기"가 여기로 스크롤하려고 위치를 잰다(web `#price-history`). */
   onLayout?: (e: LayoutChangeEvent) => void;
+  /** 섹션 위 구분 띠(상세 DetailBand 와 같은 8px 회색). 섹션이 그려질 때만 같이 그린다. */
+  topDivider?: boolean;
 }) {
   const {data, isPending, isError, refetch} = useQuery(
     ProductQueries.priceHistory({id: productId, days: MAX_DAYS}),
@@ -174,16 +177,26 @@ export default function PriceHistorySection({
     }).catch(() => {});
   };
 
+  const divider = topDivider ? <View className="mt-7 h-2 bg-gray-100" /> : null;
+
   if (isPending) {
     return (
-      <View className="h-[220px] items-center justify-center">
-        <ActivityIndicator size="small" className="text-gray-500" />
-      </View>
+      <>
+        {divider}
+        <View className="h-[220px] items-center justify-center">
+          <ActivityIndicator size="small" className="text-gray-500" />
+        </View>
+      </>
     );
   }
 
   if (isError) {
-    return <SectionErrorRow label="가격 추이" onRetry={refetch} />;
+    return (
+      <>
+        {divider}
+        <SectionErrorRow label="가격 추이" onRetry={refetch} />
+      </>
+    );
   }
 
   // 가격 이력은 매핑된 상품에만 있다. 대부분은 null 이므로 조용히 숨긴다.
@@ -198,7 +211,7 @@ export default function PriceHistorySection({
   const shownCurrentPrice =
     typeof currentPrice === 'number' && currentPrice > 0
       ? currentPrice
-      : currentMarker?.price ?? points[points.length - 1]?.price;
+      : (currentMarker?.price ?? points[points.length - 1]?.price);
   const currentBadge =
     shownCurrentPrice != null
       ? resolveCurrentPriceBadge(
@@ -256,117 +269,120 @@ export default function PriceHistorySection({
   }
 
   return (
-    <View className="pt-7" onLayout={onLayout}>
-      <Text className={cn('px-5', sectionTitle.detail)}>가격 추이</Text>
-      <Text className={cn('px-5 pt-1', sectionTitle.subtitle)}>
-        {resolveSubtitle(data)}
-      </Text>
+    <>
+      {divider}
+      <View className="pt-7" onLayout={onLayout}>
+        <Text className={cn('px-5', sectionTitle.detail)}>가격 추이</Text>
+        <Text className={cn('px-5 pt-1', sectionTitle.subtitle)}>
+          {resolveSubtitle(data)}
+        </Text>
 
-      {/* web 처럼 쓸 수 있는 기간만 보이고, 하나뿐이면 탭 줄 자체를 숨긴다. */}
-      {visiblePeriods.length > 1 ? (
-        <View className="flex-row flex-wrap gap-1.5 px-5 pt-4">
-          {visiblePeriods.map(period => {
-            const active = resolvedDays === period.days;
-            const t = active ? tab.segment.selected : tab.segment.idle;
-            return (
-              <Pressable
-                key={period.days}
-                onPress={() => {
-                  setDays(period.days);
-                  setSelectedIndex(null);
-                  trackClick('period');
-                }}
-                accessibilityRole="button"
-                accessibilityState={{selected: active}}
-                accessibilityLabel={`${period.label} 기간`}
-                // ★함수형 style 엔 opacity 만 — 칩 모양 className 은 안쪽 View 가 받는다
-                // (섞으면 NativeWind 가 레이아웃을 떨군다).
-                style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-                <View
-                  // iOS HIG 최소 44px.
-                  style={{minHeight: 44}}
-                  className={cn('justify-center', t.box)}>
-                  <Text className={t.text}>{period.label}</Text>
-                </View>
-              </Pressable>
-            );
-          })}
-        </View>
-      ) : null}
+        {/* web 처럼 쓸 수 있는 기간만 보이고, 하나뿐이면 탭 줄 자체를 숨긴다. */}
+        {visiblePeriods.length > 1 ? (
+          <View className="flex-row flex-wrap gap-1.5 px-5 pt-4">
+            {visiblePeriods.map(period => {
+              const active = resolvedDays === period.days;
+              const t = active ? tab.segment.selected : tab.segment.idle;
+              return (
+                <Pressable
+                  key={period.days}
+                  onPress={() => {
+                    setDays(period.days);
+                    setSelectedIndex(null);
+                    trackClick('period');
+                  }}
+                  accessibilityRole="button"
+                  accessibilityState={{selected: active}}
+                  accessibilityLabel={`${period.label} 기간`}
+                  // ★함수형 style 엔 opacity 만 — 칩 모양 className 은 안쪽 View 가 받는다
+                  // (섞으면 NativeWind 가 레이아웃을 떨군다).
+                  style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+                  <View
+                    // iOS HIG 최소 44px.
+                    style={{minHeight: 44}}
+                    className={cn('justify-center', t.box)}>
+                    <Text className={t.text}>{period.label}</Text>
+                  </View>
+                </Pressable>
+              );
+            })}
+          </View>
+        ) : null}
 
-      <Text className="px-5 pt-2 text-xs text-gray-500">
-        이 기간 핫딜 {points.length}건 · {rangeLabel}
-      </Text>
+        <Text className="px-5 pt-2 text-xs text-gray-500">
+          이 기간 핫딜 {points.length}건 · {rangeLabel}
+        </Text>
 
-      {/* web 과 같은 3열 요약 카드. 최저=error, 최고=secondary 로 색을 나눈다. */}
-      <View className="mx-5 mt-3 rounded-xl bg-gray-50 px-4 py-3.5">
-        <View className="flex-row">
-          <View className="flex-1 gap-y-0.5">
-            <Text className="text-xs text-gray-500">최저</Text>
-            <Text className="text-sm font-bold text-error-500">
-              {won(minPrice, currency)}
-            </Text>
+        {/* web 과 같은 3열 요약 카드. 최저=error, 최고=secondary 로 색을 나눈다. */}
+        <View className="mx-5 mt-3 rounded-xl bg-gray-50 px-4 py-3.5">
+          <View className="flex-row">
+            <View className="flex-1 gap-y-0.5">
+              <Text className="text-xs text-gray-500">최저</Text>
+              <Text className="text-sm font-bold text-error-500">
+                {won(minPrice, currency)}
+              </Text>
+            </View>
+            <View className="flex-1 items-center gap-y-0.5">
+              <Text className="text-xs text-gray-500">현재가</Text>
+              <Text className="text-sm font-bold text-gray-900">
+                {shownCurrentPrice != null
+                  ? won(shownCurrentPrice, currency)
+                  : '-'}
+              </Text>
+            </View>
+            <View className="flex-1 items-end gap-y-0.5">
+              <Text className="text-xs text-gray-500">최고</Text>
+              <Text className="text-sm font-bold text-secondary-600">
+                {won(maxPrice, currency)}
+              </Text>
+            </View>
           </View>
-          <View className="flex-1 items-center gap-y-0.5">
-            <Text className="text-xs text-gray-500">현재가</Text>
-            <Text className="text-sm font-bold text-gray-900">
-              {shownCurrentPrice != null
-                ? won(shownCurrentPrice, currency)
-                : '-'}
-            </Text>
-          </View>
-          <View className="flex-1 items-end gap-y-0.5">
-            <Text className="text-xs text-gray-500">최고</Text>
-            <Text className="text-sm font-bold text-secondary-600">
-              {won(maxPrice, currency)}
-            </Text>
-          </View>
-        </View>
-        {/* 가운데 칸(≈100px)엔 "최고 대비 N원 절약"(≈103px)이 안 들어가 두 줄로 꺾였다(web 은 v1.22.16 에서 수정).
+          {/* 가운데 칸(≈100px)엔 "최고 대비 N원 절약"(≈103px)이 안 들어가 두 줄로 꺾였다(web 은 v1.22.16 에서 수정).
             RN Text 는 칸 밖으로 넘칠 수 없어 카드 폭 전체에 가운데 정렬로 뺀다 — 가운데 칸도 가운데 정렬이라 위치는 같다. */}
-        {currentBadge ? (
-          <Text className="mt-0.5 text-center text-11 font-medium text-success-600">
-            {currentBadge}
-          </Text>
+          {currentBadge ? (
+            <Text className="mt-0.5 text-center text-11 font-medium text-success-600">
+              {currentBadge}
+            </Text>
+          ) : null}
+        </View>
+
+        <View className="px-2 pt-2">
+          <PriceChart
+            points={points}
+            currency={currency}
+            axisStartMs={axis.axisStartMs}
+            axisEndMs={axis.axisEndMs}
+            contentStartMs={content.contentStartMs}
+            contentEndMs={content.contentEndMs}
+            selectedIndex={selectedIndex}
+            onSelectIndex={setSelectedIndex}
+            onInteract={() => trackClick('point')}
+            currentMarker={currentMarker}
+          />
+        </View>
+
+        {preview ? (
+          <DealPreview
+            date={preview.date}
+            deal={preview.deal}
+            isCurrent={preview.isCurrent}
+            onPress={
+              // 지금 보는 상품이면 같은 화면을 또 쌓지 않는다.
+              onPressProduct && preview.deal.id !== productId
+                ? () => {
+                    Analytics.track('product_card_click', {
+                      source: 'price_history',
+                      product_id: String(preview.deal.id),
+                    });
+                    trackClick('deal');
+                    onPressProduct(preview.deal.id);
+                  }
+                : undefined
+            }
+          />
         ) : null}
       </View>
-
-      <View className="px-2 pt-2">
-        <PriceChart
-          points={points}
-          currency={currency}
-          axisStartMs={axis.axisStartMs}
-          axisEndMs={axis.axisEndMs}
-          contentStartMs={content.contentStartMs}
-          contentEndMs={content.contentEndMs}
-          selectedIndex={selectedIndex}
-          onSelectIndex={setSelectedIndex}
-          onInteract={() => trackClick('point')}
-          currentMarker={currentMarker}
-        />
-      </View>
-
-      {preview ? (
-        <DealPreview
-          date={preview.date}
-          deal={preview.deal}
-          isCurrent={preview.isCurrent}
-          onPress={
-            // 지금 보는 상품이면 같은 화면을 또 쌓지 않는다.
-            onPressProduct && preview.deal.id !== productId
-              ? () => {
-                  Analytics.track('product_card_click', {
-                    source: 'price_history',
-                    product_id: String(preview.deal.id),
-                  });
-                  trackClick('deal');
-                  onPressProduct(preview.deal.id);
-                }
-              : undefined
-          }
-        />
-      ) : null}
-    </View>
+    </>
   );
 }
 
