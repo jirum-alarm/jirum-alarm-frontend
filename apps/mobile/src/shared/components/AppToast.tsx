@@ -4,15 +4,17 @@ import Svg, {Circle, Path} from 'react-native-svg';
 import Toast, {type ToastConfig} from 'react-native-toast-message';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {toast} from '@jirum/design-system/recipes';
+// 토스트 판(fixed-800)은 테마 무관 — 아이콘 색도 라이트 토큰 고정값.
+import {fixed, light} from '@jirum/design-system';
 import {cn} from '@/shared/lib/styling';
 import type {ToastAction} from '@/shared/lib/feedback/toast';
 
 const SuccessIcon = () => (
   <Svg width={20} height={20} viewBox="0 0 20 20">
-    <Circle cx={10} cy={10} r={10} fill="#9EF22E" /* primary-500 */ />
+    <Circle cx={10} cy={10} r={10} fill={light.primary[500]} />
     <Path
       d="M6 10.2l2.6 2.6L14 7.4"
-      stroke="#101828" /* gray-900 */
+      stroke={fixed[900]}
       strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -23,14 +25,14 @@ const SuccessIcon = () => (
 
 const ErrorIcon = () => (
   <Svg width={20} height={20} viewBox="0 0 20 20">
-    <Circle cx={10} cy={10} r={10} fill="#EF334A" /* error-400 */ />
+    <Circle cx={10} cy={10} r={10} fill={light.error[400]} />
     <Path
       d="M10 5.5v5.5"
-      stroke="#FFFFFF"
+      stroke={fixed.white}
       strokeWidth={2}
       strokeLinecap="round"
     />
-    <Circle cx={10} cy={14.3} r={1.2} fill="#FFFFFF" />
+    <Circle cx={10} cy={14.3} r={1.2} fill={fixed.white} />
   </Svg>
 );
 

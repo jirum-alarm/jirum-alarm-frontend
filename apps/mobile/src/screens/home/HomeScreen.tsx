@@ -37,6 +37,7 @@ import {BannerSkeleton, RankingSkeleton} from '@/screens/home/ui/HomeSkeletons';
 import PressableScale from '@/shared/components/PressableScale';
 import SectionHeader from '@/shared/components/ui/SectionHeader';
 import {ArrowRightIcon} from '@/shared/components/icons';
+import {fixed} from '@jirum/design-system';
 import {
   MAIN_TABS_ID,
   tabNavigations,
@@ -306,7 +307,7 @@ export default function HomeScreen() {
             pointerEvents="none">
             <ActivityIndicator
               size="small"
-              color="#FFFFFF"
+              color={fixed.white}
               animating={refreshing}
               hidesWhenStopped={false}
               style={{marginTop: 4}}
@@ -411,7 +412,7 @@ function HomeEndCta({onPress}: {onPress: () => void}) {
         <Text className="text-sm font-semibold text-fixed-white">
           실시간 특가 더보기
         </Text>
-        <ArrowRightIcon color="#ffffff" width={16} height={16} />
+        <ArrowRightIcon color={fixed.white} width={16} height={16} />
       </PressableScale>
     </View>
   );

@@ -1,5 +1,6 @@
 import * as WebBrowser from 'expo-web-browser';
-import {Linking, Platform} from 'react-native';
+import {dark, light} from '@jirum/design-system';
+import {Appearance, Linking, Platform} from 'react-native';
 import {SERVICE_URL} from '@/constants/env';
 import {showToast} from '@/shared/lib/feedback/toast';
 import type {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
@@ -153,8 +154,8 @@ export async function openInAppBrowser(url: string) {
     }
 
     await WebBrowser.openBrowserAsync(url, {
-      ...inAppAndroidConfig,
-      ...inAppIosConfig,
+      ...inAppAndroidConfig(),
+      ...inAppIosConfig(),
     });
   } catch {
     try {
@@ -165,19 +166,23 @@ export async function openInAppBrowser(url: string) {
   }
 }
 
-const inAppIosConfig = {
+// 브라우저 틀 색은 여는 순간의 테마로 — 고정 #101828·흰색이면 다크에서 어두운 툴바 위 버튼이 안 보이고(iOS)
+// 다크 화면에서 흰 툴바가 튀었다(Android). Appearance 는 내정보 > 화면 모드 고정값도 반영한다.
+const palette = () => (Appearance.getColorScheme() === 'dark' ? dark : light);
+
+const inAppIosConfig = () => ({
   dismissButtonStyle: 'close' as const,
-  controlsColor: '#101828',
+  controlsColor: palette().gray[900],
   readerMode: false,
   presentationStyle: WebBrowser.WebBrowserPresentationStyle.PAGE_SHEET,
   enableBarCollapsing: true,
-};
+});
 
-const inAppAndroidConfig = {
+const inAppAndroidConfig = () => ({
   showTitle: true,
-  toolbarColor: '#ffffff',
-  secondaryToolbarColor: '#101828',
+  toolbarColor: palette().white,
+  secondaryToolbarColor: palette().gray[900],
   enableUrlBarHiding: true,
   enableDefaultShareMenuItem: true,
   showInRecents: true,
-};
+});

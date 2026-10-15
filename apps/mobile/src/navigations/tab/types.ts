@@ -50,6 +50,8 @@ export type TabStackParamList = ProductFlowParamList & {
   [tabStackNavigations.COMMUNITY_POST]: {postId: number};
   /** postId 가 있으면 수정, 없으면 새 글. */
   [tabStackNavigations.COMMUNITY_WRITE]: {postId?: number};
+
+  [tabStackNavigations.DESIGN_SYSTEM]: undefined;
 };
 
 /** 검색 한 판 + 그 검색에서 연 상세. */

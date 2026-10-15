@@ -43,6 +43,7 @@ const STACKED = [
   'THEME_DETAIL',
   'COMMUNITY_POST',
   'COMMUNITY_WRITE',
+  'DESIGN_SYSTEM',
 ];
 
 describe('탭바는 탭 루트에서만 보인다 — 하위 화면은 루트 스택이 덮는다', () => {

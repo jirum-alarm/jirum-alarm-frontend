@@ -1,6 +1,10 @@
+import { chartVar } from '@jirum/design-system';
 import React, { useState } from 'react';
 
 import { MIN_POINTS_FOR_TREND, type PriceConfidence, type PricePoint } from '../model/types';
+
+// 가격 선 색 — 디자인 시스템 차트 역할(web·앱 가격 그래프와 같은 파랑, 다크 자동).
+const LINE = chartVar('line');
 
 const won = (n: number) => n.toLocaleString('ko-KR');
 
@@ -121,8 +125,8 @@ export default function PriceTrend({
           >
             <defs>
               <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.25" />
-                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+                <stop offset="0%" stopColor={LINE} stopOpacity="0.25" />
+                <stop offset="100%" stopColor={LINE} stopOpacity="0" />
               </linearGradient>
               <style>
                 {`
@@ -152,7 +156,7 @@ export default function PriceTrend({
             <path
               d={d}
               fill="none"
-              stroke="#3b82f6"
+              stroke={LINE}
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"

@@ -92,7 +92,8 @@ export default function MyPageScreen() {
         | typeof tabStackNavigations.MYPAGE_KEYWORD
         | typeof tabStackNavigations.MYPAGE_NOTIFICATION
         | typeof tabStackNavigations.MYPAGE_TERMS
-        | typeof tabStackNavigations.LIKE,
+        | typeof tabStackNavigations.LIKE
+        | typeof tabStackNavigations.DESIGN_SYSTEM,
     ) => {
       navigation.push(screen);
     },
@@ -244,6 +245,14 @@ export default function MyPageScreen() {
               title="앱 평가하기"
               onPress={() => Linking.openURL(reviewUrl()).catch(() => {})}
             />
+            {/* 개발 빌드에서만 — 운영은 딥링크 jirumalarm://design-system 으로 연다. */}
+            {__DEV__ ? (
+              <MenuRow
+                icon={<GridMenuIcon />}
+                title="디자인 시스템(개발)"
+                onPress={() => push(tabStackNavigations.DESIGN_SYSTEM)}
+              />
+            ) : null}
           </MenuGroup>
           <Text className="text-xs text-gray-500">
             앱 버전 {Constants.expoConfig?.version}

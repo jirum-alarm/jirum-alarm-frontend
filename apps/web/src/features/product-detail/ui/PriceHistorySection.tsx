@@ -1,5 +1,6 @@
 'use client';
 
+import { chartVar } from '@jirum/design-system';
 import { tab } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -633,14 +634,14 @@ export default function PriceHistorySection({
   );
 }
 
-/** 라인/점은 동일 블루, 현재 상품만 채운 점으로 구분 */
+/** 라인/점은 같은 파랑, 현재 상품만 채운 점으로 구분. 색은 디자인 시스템 차트 역할(앱·AI 그래프와 같은 값, 다크 자동). */
 const CHART = {
-  line: '#3B82F6',
-  current: '#467DFB',
-  guide: '#93C5FD',
-  currentGuide: '#91B1FB',
-  low: '#EF4444',
-  high: '#2563EB',
+  line: chartVar('line'),
+  current: chartVar('current'),
+  guide: chartVar('guide'),
+  currentGuide: chartVar('guide'),
+  low: chartVar('low'),
+  high: chartVar('high'),
 } as const;
 
 function PriceLineChart({
@@ -872,7 +873,7 @@ function PriceLineChart({
             isHovered ||
             isSelected;
           const stroke = isLow ? CHART.low : CHART.line;
-          const labelFill = isLow ? CHART.low : isHigh ? CHART.high : 'var(--color-gray-500)';
+          const labelFill = isLow ? CHART.low : isHigh ? CHART.high : chartVar('axis');
 
           return (
             <g key={`${c.date}-${i}`}>

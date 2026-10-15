@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
+import {fixed, light} from '@jirum/design-system';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useNetworkStatus from '@/shared/hooks/useNetworkStatus';
@@ -24,14 +25,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    backgroundColor: '#EB001C', // error-500
+    backgroundColor: light.error[500], // 테마 무관 빨간 띠
     paddingVertical: 8,
     alignItems: 'center',
     pointerEvents: 'none',
     zIndex: 9999,
   },
   text: {
-    color: '#ffffff',
+    color: fixed.white,
     fontSize: 13,
     fontWeight: '600',
   },

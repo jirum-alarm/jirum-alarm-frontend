@@ -1,5 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {Animated, View} from 'react-native';
+import {brand} from '@jirum/design-system';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import PressableScale from '@/shared/components/PressableScale';
@@ -42,7 +43,7 @@ export default function TopButton({
         <View
           className="h-[40px] w-[40px] items-center justify-center rounded-full border border-gray-300 bg-white"
           style={{
-            shadowColor: '#000',
+            shadowColor: brand.black,
             shadowOpacity: 0.08,
             shadowRadius: 12,
             shadowOffset: {width: 0, height: 2},

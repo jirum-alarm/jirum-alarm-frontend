@@ -44,7 +44,7 @@ function CommunityLink({ url, provider }: { url: string; provider: string }) {
     >
       <span>{provider} 반응 보기</span>
       <span className="bg-secondary-500 flex size-4 items-center justify-center rounded-full">
-        <ArrowRight color="#FFFFFF" width={12} height={12} strokeWidth={1.5} />
+        <ArrowRight color="var(--color-fixed-white)" width={12} height={12} strokeWidth={1.5} />
       </span>
     </m.a>
   );

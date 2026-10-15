@@ -1,4 +1,5 @@
 import {emptyText} from '@jirum/design-system/recipes';
+import {fixed} from '@jirum/design-system';
 import React, {useCallback, useRef, useState} from 'react';
 import {
   ActivityIndicator,
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   fabShadow: {
-    shadowColor: '#101828',
+    shadowColor: fixed[900],
     shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.18,
     shadowRadius: 12,

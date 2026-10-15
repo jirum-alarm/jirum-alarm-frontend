@@ -107,7 +107,7 @@ const TabBarV2 = ({
   styles = {},
   animationConfig = {},
   settingsHref = '/mypage/categories',
-  settingsIcon = <Setting color="#467DFB" />,
+  settingsIcon = <Setting color="var(--color-secondary-500)" />,
   settingsAriaLabel = '카테고리 설정 페이지로 이동',
   showSettings = false,
   disabledIds = [],

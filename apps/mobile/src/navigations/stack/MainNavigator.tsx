@@ -30,6 +30,7 @@ import TermsPoliciesScreen from '@/screens/mypage/TermsPoliciesScreen';
 import PolicyScreen from '@/screens/mypage/PolicyScreen';
 import LikeScreen from '@/screens/mypage/LikeScreen';
 import ThemesScreen from '@/screens/mypage/ThemesScreen';
+import DesignSystemScreen from '@/screens/design-system/DesignSystemScreen';
 import ThemeDetailScreen from '@/screens/mypage/ThemeDetailScreen';
 import CommunityPostScreen from '@/screens/community/CommunityPostScreen';
 import CommunityWriteScreen from '@/screens/community/CommunityWriteScreen';
@@ -213,6 +214,12 @@ function MainStackNavigator() {
         <RootStack.Screen
           name={tabStackNavigations.COMMUNITY_WRITE}
           component={CommunityWriteScreen}
+        />
+
+        {/* 앱 부품 놀이터 — 메뉴 없이 딥링크·개발 빌드로만. */}
+        <RootStack.Screen
+          name={tabStackNavigations.DESIGN_SYSTEM}
+          component={DesignSystemScreen}
         />
       </RootStack.Navigator>
       <PushPermissionPrePrompt />

@@ -340,9 +340,9 @@ const TabWebViewAndroid = ({tabName, baseUrl}: TabWebViewProps) => {
           backgroundColor: isHomeTab
             ? bgAnimation.interpolate({
                 inputRange: [0, 1],
-                outputRange: ['#101828', '#ffffff'],
+                outputRange: [fixed[900], fixed.white],
               })
-            : '#ffffff',
+            : fixed.white,
         }}
       />
       <ScrollView
@@ -431,9 +431,9 @@ const TabWebViewIOS = ({tabName, baseUrl}: TabWebViewProps) => {
           backgroundColor: isHomeTab
             ? bgAnimation.interpolate({
                 inputRange: [0, 1],
-                outputRange: ['#101828', '#ffffff'],
+                outputRange: [fixed[900], fixed.white],
               })
-            : '#ffffff',
+            : fixed.white,
         }}
       />
       <WebView

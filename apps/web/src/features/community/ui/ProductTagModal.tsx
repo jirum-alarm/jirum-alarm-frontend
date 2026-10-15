@@ -157,7 +157,7 @@ export default function ProductTagModal({
                 height="16"
                 viewBox="0 0 16 16"
                 fill="none"
-                stroke="#9CA3AF"
+                stroke="var(--color-gray-400)"
                 strokeWidth="1.5"
               >
                 <circle cx="7" cy="7" r="4.5" />

@@ -1,10 +1,14 @@
 import React from 'react';
 import {ActivityIndicator, View, StyleSheet} from 'react-native';
 
+import {useColors} from '@/shared/theme/useColors';
+
 const WebViewLoadingIndicator = () => {
+  // 바탕·스피너는 테마 값 — 흰 판 고정이면 다크 웹뷰가 뜰 때마다 흰 화면이 번쩍였다.
+  const c = useColors();
   return (
-    <View style={styles.container}>
-      <ActivityIndicator size="large" color="#101828" />
+    <View style={[styles.container, {backgroundColor: c.white}]}>
+      <ActivityIndicator size="large" color={c.gray[900]} />
     </View>
   );
 };
@@ -18,7 +22,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
   },

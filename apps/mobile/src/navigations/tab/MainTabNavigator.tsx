@@ -13,6 +13,7 @@ import {
 } from '@/navigations/tab/tab-press';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
+import {light} from '@jirum/design-system';
 
 import {tabNavigations, MAIN_TABS_ID} from '@/shared/constant/navigations';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
@@ -475,6 +476,6 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#EB001C',
+    backgroundColor: light.error[500],
   },
 });

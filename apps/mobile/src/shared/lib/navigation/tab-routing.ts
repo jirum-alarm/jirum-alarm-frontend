@@ -167,6 +167,11 @@ const EXACT_ROUTES: ReadonlyMap<
   ],
   ['/like', {tab: tabNavigations.MYPAGE, screen: tabStackNavigations.LIKE}],
   ['/themes', {tab: tabNavigations.MYPAGE, screen: tabStackNavigations.THEMES}],
+  // 앱 부품 놀이터(숨은 화면) — web 페이지는 없다. 딥링크 jirumalarm://design-system 으로만 연다.
+  [
+    '/design-system',
+    {tab: tabNavigations.MYPAGE, screen: tabStackNavigations.DESIGN_SYSTEM},
+  ],
   [
     '/policies/privacy',
     {

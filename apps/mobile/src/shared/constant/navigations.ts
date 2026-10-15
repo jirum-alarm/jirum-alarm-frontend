@@ -59,6 +59,9 @@ const tabStackNavigations = {
   // ── 커뮤니티 탭 (web /community/**) ──
   COMMUNITY_POST: 'CommunityPost',
   COMMUNITY_WRITE: 'CommunityWrite',
+
+  /** 앱 부품 놀이터(숨은 화면) — 딥링크 `/design-system`·개발 빌드 내정보 메뉴로만 들어간다. */
+  DESIGN_SYSTEM: 'DesignSystem',
 } as const;
 
 /**

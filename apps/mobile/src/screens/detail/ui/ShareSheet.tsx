@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {sheet as sheetRecipe} from '@jirum/design-system/recipes';
+import {brand, fixed} from '@jirum/design-system';
 import {
   SHEET_RADIUS,
   useSheetPanelStyle,
@@ -87,7 +88,7 @@ export default function ShareSheet({
   const c = useColors();
   const panelStyle = useSheetPanelStyle();
   // X·스레드의 검은 원이 다크 시트 바탕에 묻힌다 → 다크에선 '더보기' 와 같은 회색 원(로고는 흰색 그대로).
-  const brandDark = useColorScheme() === 'dark' ? c.gray[100] : '#000000';
+  const brandDark = useColorScheme() === 'dark' ? c.gray[100] : brand.black;
   const insets = useSafeAreaInsets();
   const overlay = useRef(new Animated.Value(0)).current;
   const sheet = useRef(new Animated.Value(0)).current;
@@ -219,7 +220,7 @@ export default function ShareSheet({
       label: '카카오톡',
       a11y: '카카오톡으로 공유',
       icon: <KaKaoIcon width={28} height={28} />,
-      bg: '#FEE500',
+      bg: brand.kakao,
     },
     {
       c: 'x',
@@ -439,7 +440,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: SHEET_RADIUS,
     // overlay 위에 떠 있어야 백드롭 Pressable 이 시트를 먹지 않는다.
     zIndex: 1,
-    shadowColor: '#101828',
+    shadowColor: fixed[900],
     shadowOffset: {width: 0, height: -8},
     shadowOpacity: 0.12,
     shadowRadius: 24,

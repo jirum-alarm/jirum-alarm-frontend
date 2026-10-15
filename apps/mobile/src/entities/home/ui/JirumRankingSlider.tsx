@@ -32,6 +32,7 @@ import {HomeQueries} from '../api/home.queries';
 import type {ProductCardType} from '../model/types';
 import {DisplayListPrice} from './cards/HomeCardPrimitives';
 import {useColors} from '@/shared/theme/useColors';
+import {brand} from '@jirum/design-system';
 
 /**
  * 지름알림 랭킹 슬라이더. web: widgets/home/ui/JirumRankingSlider.tsx
@@ -266,7 +267,7 @@ const RankingCard = React.memo(function RankingCard({
           backgroundColor: isDark ? c.gray[50] : c.white,
           borderWidth: border,
           borderColor: c.gray[100],
-          shadowColor: '#000',
+          shadowColor: brand.black,
           shadowOffset: {width: 0, height: 2},
           shadowRadius: 12,
           elevation: 3,

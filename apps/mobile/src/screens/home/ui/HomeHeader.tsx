@@ -15,14 +15,14 @@ import {navigateToNativeRoute} from '@/navigations/navigation-ref';
 import {useHasNewAlarm} from '@/shared/hooks/useHasNewAlarm';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {useColors} from '@/shared/theme/useColors';
-import {fixed} from '@jirum/design-system';
+import {fixed, light} from '@jirum/design-system';
 import {useColorSchemePreference} from '@/shared/theme/color-scheme-preference';
 
 /** 로고 아래 붙는 서비스 한 줄 설명. web LOGO_SUBTITLE 과 같은 문구. */
 const LOGO_SUBTITLE = '커뮤니티 핫딜 모아보기';
 
 /** 새 알림 점 — 탭바·web BottomNav 와 같은 빨강. 테마와 무관하게 같은 색. */
-const ALARM_DOT = '#EB001C';
+const ALARM_DOT = light.error[500];
 
 /** web `transition-all duration-300` 과 같은 전환 시간. */
 const TRANSITION_MS = 300;
@@ -139,7 +139,7 @@ function HeaderRow({
           <SearchIcon
             width={24}
             height={24}
-            color={inverted ? '#FFFFFF' : c.gray[900]}
+            color={inverted ? fixed.white : c.gray[900]}
           />
         </Pressable>
 
@@ -160,7 +160,7 @@ function HeaderRow({
           <AlertIcon
             width={26}
             height={26}
-            color={inverted ? '#FFFFFF' : c.gray[900]}
+            color={inverted ? fixed.white : c.gray[900]}
           />
           {hasNewAlarm ? (
             <View

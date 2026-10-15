@@ -27,9 +27,9 @@ const BackgroundHeader = async () => {
         <header className="flex h-14 w-full items-center justify-between px-5 py-3">
           <LogoLink inverted />
           <div className="flex items-center gap-x-5">
-            <ColorSchemeButton color="#FFF" />
-            <SearchLinkButton color="#FFF" />
-            <AlarmLinkButton color="#FFF" />
+            <ColorSchemeButton color="var(--color-fixed-white)" />
+            <SearchLinkButton color="var(--color-fixed-white)" />
+            <AlarmLinkButton color="var(--color-fixed-white)" />
           </div>
         </header>
         <BannerSwiper />

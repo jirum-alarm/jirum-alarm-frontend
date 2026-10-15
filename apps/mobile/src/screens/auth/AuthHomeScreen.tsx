@@ -7,7 +7,7 @@ import {
   useColorScheme,
 } from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
-import {fixed} from '@jirum/design-system';
+import {brand, fixed} from '@jirum/design-system';
 import {useColors} from '@/shared/theme/useColors';
 import {
   AppleIcon,
@@ -192,17 +192,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   kakaoButton: {
-    backgroundColor: '#FEE500', // tailwind kakao
+    backgroundColor: brand.kakao,
   },
   naverButton: {
-    backgroundColor: '#02C75A',
+    backgroundColor: brand.naver,
   },
   // 라이트는 어두운 버튼에 흰 로고. 다크는 위에서 흰 버튼에 검은 로고로 뒤집는다.
   appleButton: {
     backgroundColor: fixed[800],
   },
   kakaoButtonText: {
-    color: '#101828',
+    color: fixed[900],
     fontSize: 16,
     fontFamily: 'Pretendard-SemiBold',
   },

@@ -19,6 +19,7 @@ import {SERVICE_URL} from '@/constants/env';
 
 import {SystemBars} from 'react-native-edge-to-edge';
 import {useColors} from '@/shared/theme/useColors';
+import {fixed} from '@jirum/design-system';
 import {useCommonWebViewLogic} from './hooks/useCommonWebViewLogic';
 import WebViewErrorView from '@/shared/components/WebViewErrorView';
 import {MainParamList} from '@/navigations/stack/MainNavigator';
@@ -120,7 +121,7 @@ const JirumAlarmWebViewAndroid = ({
           height: insets.top,
           backgroundColor: bgAnimation.interpolate({
             inputRange: [0, 1],
-            outputRange: ['#101828', c.white],
+            outputRange: [fixed[900], c.white],
           }),
         }}
       />
@@ -236,7 +237,7 @@ const JirumAlarmWebViewIOS = ({route}: JirumAlarmWebViewScreenRouteProp) => {
           height: insets.top,
           backgroundColor: bgAnimation.interpolate({
             inputRange: [0, 1],
-            outputRange: ['#101828', c.white],
+            outputRange: [fixed[900], c.white],
           }),
         }}
       />
