@@ -3,10 +3,13 @@
 import { useAtomValue } from 'jotai';
 import { type AnchorHTMLAttributes, type MouseEvent, useEffect, useState } from 'react';
 
+import { isJirumAlarmAppUA, isKakaoInAppUA } from '@/shared/config/user-agent';
 import { isGuestAtom, isLoggedInAtom } from '@/shared/hooks/useIsLoggedIn';
+import { appOpenUrl, isAppPath, KAKAO_APP_ATTEMPT_EVENT } from '@/shared/lib/kakao-app-open';
 
 import {
   appHandoffHref,
+  appStoreUrl,
   type HandoffPlatform,
   type HandoffSource,
   playStoreUrl,
@@ -15,8 +18,8 @@ import {
 /** 웹 기기 id 저장 키(useAlertSession·BrowserHandoffArrival 과 같다). */
 const DEVICE_ID_KEY = 'jirum-alarm-device-id';
 
-/** 앱도 Play 도 안 열리고 이 페이지가 그대로 보이면 Play 로 직접 보낸다. */
-const ANDROID_STORE_FALLBACK_MS = 2000;
+/** 앱도 스토어도 안 열리고 이 페이지가 그대로 보이면 스토어로 직접 보낸다. */
+const STORE_FALLBACK_MS = 2000;
 
 type OpenInAppLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> & {
   platform: HandoffPlatform;
@@ -32,7 +35,7 @@ type OpenInAppLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> 
  * 규칙은 model/appHandoff.ts. 반드시 진짜 <a> 로 둔다: 유니버설 링크·intent 는 사용자 탭으로만 앱을 연다.
  *
  * 안드로이드는 intent 를 못 다루는 인앱 브라우저가 있을 수 있어(네이버 앱 인앱은 실기기 미확인) 2초 뒤에도
- * 이 페이지가 앞에 있으면 Play 로 보낸다. 앱이나 Play 가 열리면 페이지가 가려져(visibilitychange/pagehide/blur)
+ * 이 페이지가 앞에 있으면 Play 로 보낸다. 카톡 인앱 iOS 는 앱 스킴으로 열어 보고 같은 식으로 App Store 로. 앱이나 Play 가 열리면 페이지가 가려져(visibilitychange/pagehide/blur)
  * 타이머를 지운다.
  */
 export default function OpenInAppLink({
@@ -55,7 +58,18 @@ export default function OpenInAppLink({
       source,
       link: href,
     });
-    if (platform === 'android') armStoreFallback(playStoreUrl(source, path, guestDeviceId));
+    const ua = navigator.userAgent;
+    const inKakao = isKakaoInAppUA(ua) && !isJirumAlarmAppUA(ua);
+    // 카톡 인앱 iOS 는 유니버설 링크(www)가 앱을 안 열고 웹 → App Store 로 떨어진다. 앱 스킴으로 열어 보고
+    // 안 열리면 App Store — 카톡이 스킴은 다른 앱으로 넘긴다(shared/lib/kakao-app-open.ts).
+    if (inKakao && platform === 'apple' && iosUniversalLink && isAppPath(path)) {
+      event.preventDefault();
+      window.location.href = appOpenUrl('ios', path, source, window.location.origin, guestDeviceId);
+      armStoreFallback(appStoreUrl(source));
+    } else if (platform === 'android') {
+      armStoreFallback(playStoreUrl(source, path, guestDeviceId));
+    }
+    if (inKakao) window.dispatchEvent(new Event(KAKAO_APP_ATTEMPT_EVENT));
   };
 
   return (
@@ -89,7 +103,7 @@ function armStoreFallback(storeUrl: string) {
   const timer = window.setTimeout(() => {
     cleanup();
     if (document.visibilityState === 'visible') window.location.href = storeUrl;
-  }, ANDROID_STORE_FALLBACK_MS);
+  }, STORE_FALLBACK_MS);
   const cancel = () => {
     window.clearTimeout(timer);
     cleanup();

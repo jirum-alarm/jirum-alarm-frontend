@@ -48,7 +48,8 @@ export type HandoffSource =
   | 'alarm_tab'
   | 'push_channel'
   | 'app_page'
-  | 'kakao_bridge'; // 카톡 인앱에서 키워드를 건 뒤 「앱에서 받기」(shared/lib/kakao-bridge.ts)
+  | 'kakao_bridge' // 카톡 인앱에서 키워드를 건 뒤 「앱에서 받기」(shared/lib/kakao-bridge.ts)
+  | 'kakao_invite'; // 카톡 인앱 「카톡 링크를 앱으로 바로 열기」 안내 띠(shared/lib/kakao-app-open.ts)
 
 /** 쿼리·해시를 뗀 '/'로 시작하는 경로만 남긴다 — 외부 주소를 실어 보내지 않는다. */
 export const normalizeHandoffPath = (path: string): string => {

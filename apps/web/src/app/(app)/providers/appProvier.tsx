@@ -12,6 +12,7 @@ import FCMConfig from '@/shared/lib/firebase/FCMConfig';
 
 import AppHandoffLanding from '@/features/app-download/ui/AppHandoffLanding';
 import BrowserHandoffArrival from '@/features/app-download/ui/BrowserHandoffArrival';
+import KakaoAppOpen from '@/features/app-download/ui/KakaoAppOpen';
 
 import { ClarityProvider } from './clarityProvider';
 import { DeviceId } from './deviceId';
@@ -73,6 +74,7 @@ export const AppProvider = ({ children, device, isLoggedIn, isGuest }: Props) =>
               <LazyPushChannelSheet />
               <BrowserHandoffArrival />
               <AppHandoffLanding />
+              <KakaoAppOpen />
             </ReactQueryProviders>
           </ServerStateProvider>
         </JotaiProvider>
