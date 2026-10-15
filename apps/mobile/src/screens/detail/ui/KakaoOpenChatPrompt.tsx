@@ -67,7 +67,7 @@ export default function KakaoOpenChatPrompt({
       className={
         beauty
           ? 'flex-row items-center gap-x-3 rounded-lg border border-secondary-200 bg-secondary-50 px-4 py-3'
-          : 'mx-5 mb-4 flex-row items-center gap-x-3 rounded-lg border border-secondary-200 bg-secondary-50 px-4 py-3'
+          : 'mx-5 flex-row items-center gap-x-3 rounded-lg border border-secondary-200 bg-secondary-50 px-4 py-3'
       }
       accessibilityRole="button"
       accessibilityLabel={
@@ -96,7 +96,7 @@ export default function KakaoOpenChatPrompt({
 
   if (beauty && assignment) {
     return (
-      <View className="mx-5 mb-4">
+      <View className="mx-5">
         {card}
         <BeautyVerticalLink
           exp={assignment.exp}
