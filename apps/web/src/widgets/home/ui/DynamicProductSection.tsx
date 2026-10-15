@@ -9,7 +9,9 @@ import {
   fetchPromotionProducts,
   getPromotionQueryOptions,
 } from '@/entities/promotion/lib/getPromotionQueryOptions';
+import { TIME_DEAL_SECTION_ID } from '@/entities/promotion/model/time-deal';
 import { ContentPromotionSection } from '@/entities/promotion/model/types';
+import TimeDealTimerBar from '@/entities/promotion/ui/TimeDealTimerBar';
 
 import DynamicProductList from './DynamicProductList';
 import TabbedDynamicProductSection from './TabbedDynamicProductSection';
@@ -75,6 +77,9 @@ const DynamicProductSection = async ({
             ) : undefined
           }
         />
+        {section.id === TIME_DEAL_SECTION_ID && (
+          <TimeDealTimerBar className="pc:justify-center pt-1" />
+        )}
       </div>
       <DynamicProductList
         type={section.type}

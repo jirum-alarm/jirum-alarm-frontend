@@ -21,6 +21,9 @@ import type {
   ProductCardType,
 } from '@/entities/home/model/types';
 import CurationGrid from '@/entities/home/ui/CurationGrid';
+import TimeDealTimerBar, {
+  TIME_DEAL_SECTION_ID,
+} from '@/entities/home/ui/TimeDealTimerBar';
 import {ChipRow} from '@/entities/home/ui/TossHomeSection';
 import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
 import {tabStackNavigations} from '@/shared/constant/navigations';
@@ -174,7 +177,8 @@ export default function CurationScreen({
   // 탭을 바꾸면 목록을 갈아끼운다(스크롤 위치가 이전 탭에서 넘어오지 않게).
   const listKey = `${activeSection.id}-${activeTab?.id ?? ''}`;
   // 칩 줄이 있으면 컨테이너 gap 이 간격을 잡는다(토스 더보기와 같은 규칙).
-  const topSpacing = section.tabs?.length ? 'tight' : 'normal';
+  const isTimeDeal = section.id === TIME_DEAL_SECTION_ID;
+  const topSpacing = section.tabs?.length || isTimeDeal ? 'tight' : 'normal';
   const list = supportsInfinite(activeSection.dataSource.queryName) ? (
     <InfiniteList
       key={listKey}
@@ -190,6 +194,17 @@ export default function CurationScreen({
       topSpacing={topSpacing}
     />
   );
+
+  // 「선착순·타임특가」는 맨 위에 종료·새 특가 오픈 타이머(web 더보기와 같다).
+  if (isTimeDeal && !section.tabs?.length) {
+    return (
+      <View className="flex-1 gap-2 bg-white pt-2">
+        <TimeDealTimerBar className="px-5" />
+        {list}
+        {shareSheet}
+      </View>
+    );
+  }
 
   if (!section.tabs?.length) {
     return (

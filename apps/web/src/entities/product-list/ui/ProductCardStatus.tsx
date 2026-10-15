@@ -1,5 +1,5 @@
 import { cardLabel } from '@jirum/design-system/recipes';
-import { getTossTimeDeal } from '@jirum/domain/toss-time-deal';
+import { getTimeDealOpening, getTossTimeDeal } from '@jirum/domain/toss-time-deal';
 
 import { cn } from '@/shared/lib/cn';
 import { formatDateToMMD } from '@/shared/lib/utils/date';
@@ -42,7 +42,7 @@ export const ProductCardStatus = ({
 }: {
   product: Pick<
     ProductCardType,
-    'isEnd' | 'hotDealType' | 'earliestExpiryDate' | 'isRising' | 'data'
+    'isEnd' | 'hotDealType' | 'earliestExpiryDate' | 'isRising' | 'data' | 'title' | 'postedAt'
   >;
   /** 2단·리스트 카드는 핫딜 배지를 사진 대신 글자 줄에 둔다. */
   showHotdealBadge?: boolean;
@@ -52,6 +52,8 @@ export const ProductCardStatus = ({
   // 선착순이 끝나면 crawler 가 isEnd 도 켠다 — 「판매종료」보다 「선착순 마감」이 무슨 일인지 말해 주므로 먼저 본다.
   const timeDeal = getTossTimeDeal(product.data);
   const showTimeDeal = timeDeal != null && (!isEnd || timeDeal.status !== 'ON_SALE');
+  // 커뮤니티 예고 글(「오늘 17시 오픈」)이 아직 안 열렸으면 「오늘 17:00 오픈」.
+  const opening = showTimeDeal ? null : getTimeDealOpening(product);
   return (
     <>
       {/* 급상승(랭킹 목록만) — 오른쪽 위. 왼쪽 위는 순위 숫자, 아래는 핫딜 배지·유통기한 띠 자리. 앱 ProductCardStatus 와 같다. */}
@@ -61,11 +63,21 @@ export const ProductCardStatus = ({
         </Badge>
       ) : null}
       {showTimeDeal ? (
-        <CardCornerLabel tone={timeDeal.status === 'ON_SALE' ? 'deal' : 'light'}>
+        <CardCornerLabel
+          tone={
+            timeDeal.status === 'ON_SALE'
+              ? 'deal'
+              : timeDeal.status === 'UPCOMING'
+                ? 'dark'
+                : 'light'
+          }
+        >
           {timeDeal.label}
         </CardCornerLabel>
       ) : isEnd ? (
         <CardCornerLabel tone="light">판매종료</CardCornerLabel>
+      ) : opening ? (
+        <CardCornerLabel tone="dark">{opening.label}</CardCornerLabel>
       ) : showHotdealBadge && hotDealType && !earliestExpiryDate ? (
         <div className="absolute bottom-0 left-0 z-10">
           <HotdealBadge badgeVariant="card" hotdealType={hotDealType} />

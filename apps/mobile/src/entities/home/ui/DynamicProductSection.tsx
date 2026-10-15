@@ -7,6 +7,7 @@ import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {HomeQueries} from '../api/home.queries';
 import type {ContentPromotionSection, PromotionTab} from '../model/types';
 import DynamicProductList from './DynamicProductList';
+import TimeDealTimerBar, {TIME_DEAL_SECTION_ID} from './TimeDealTimerBar';
 import Chip from '@/shared/components/ui/Chip';
 import SectionHeader from '@/shared/components/ui/SectionHeader';
 
@@ -79,6 +80,9 @@ function PlainSection({section, onPressProduct, onPressViewMore}: Props) {
           onPressViewMore,
         )}
       />
+      {section.id === TIME_DEAL_SECTION_ID ? (
+        <TimeDealTimerBar className="-mt-3 px-5" />
+      ) : null}
       <SectionBody
         label={section.title}
         isPending={isPending}

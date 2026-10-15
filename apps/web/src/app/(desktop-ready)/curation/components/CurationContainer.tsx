@@ -6,7 +6,9 @@ import { Suspense, useState } from 'react';
 import { cn } from '@/shared/lib/cn';
 
 import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
+import { TIME_DEAL_SECTION_ID } from '@/entities/promotion/model/time-deal';
 import { ContentPromotionSection } from '@/entities/promotion/model/types';
+import TimeDealTimerBar from '@/entities/promotion/ui/TimeDealTimerBar';
 
 import CurationProductList from './CurationProductList';
 
@@ -34,6 +36,9 @@ const CurationContainer = ({ section }: CurationContainerProps) => {
 
   return (
     <>
+      {section.id === TIME_DEAL_SECTION_ID && (
+        <TimeDealTimerBar className="pc:justify-center px-5 pt-3" />
+      )}
       {section.tabs && (
         <div className="pc:flex pc:justify-center pc:py-3 sticky top-14 z-40 w-full bg-white px-5 py-2">
           <div className="no-scrollbar flex gap-x-2 overflow-x-auto">

@@ -89,7 +89,7 @@ export default function ProductGridCard({
             time={showTime ? <DisplayTime time={product.postedAt} /> : undefined}
             className="pt-1"
           />
-          <TossTimeDealPrice price={product.price} data={product.data} priceClassName="text-base" />
+          <TossTimeDealPrice product={product} priceClassName="text-base" />
         </div>
       </m.div>
     </Link>

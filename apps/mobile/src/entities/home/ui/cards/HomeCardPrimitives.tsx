@@ -1,10 +1,15 @@
 import React from 'react';
 import {View} from 'react-native';
 import {cardThumb} from '@jirum/design-system/recipes';
-import {getTossTimeDeal} from '@jirum/domain/toss-time-deal';
+import {
+  formatCountdown,
+  getTimeDealOpening,
+  getTossTimeDeal,
+} from '@jirum/domain/toss-time-deal';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import Thumbnail from '@/shared/components/product/Thumbnail';
+import {useNow} from '@/shared/hooks/useNow';
 import {parsePrice} from '@/shared/lib/format/price';
 import {cn} from '@/shared/lib/styling';
 
@@ -107,20 +112,37 @@ export function CardTitle({
   );
 }
 
+/** 카드 한 줄 「오픈까지 2:10:33」 — 오픈 시각이 지나면 「지금 오픈」. web TimeDealCountdown 과 같다. */
+function TimeDealCountdown({openAt}: {openAt: number}) {
+  const now = useNow();
+  const left = openAt - now;
+  return (
+    <Text
+      className="pt-0.5 text-xs font-semibold text-error-600"
+      style={{fontVariant: ['tabular-nums']}}
+      numberOfLines={1}>
+      {left > 0 ? `오픈까지 ${formatCountdown(left)}` : '지금 오픈'}
+    </Text>
+  );
+}
+
 /**
- * 카드 가격 줄 — 토스 하루특가면 토스 앱처럼 「하루만 N원」과 「N명이 봤어요」를 붙인다.
+ * 카드 가격 줄 — 토스 하루특가면 토스 앱처럼 「하루만 N원」과 「N명이 봤어요」를 붙이고,
+ * 아직 안 연 시간 한정 딜(토스 다음 날 특가·커뮤니티 예고 글)이면 「오픈까지 H:MM:SS」를 단다.
  * 그 밖의 상품은 DisplayListPrice 그대로. web entities/product-list/ui/card/TossTimeDealPrice 와 같다.
  */
 export function TossTimeDealPrice({
-  price,
-  data,
+  product,
   priceClassName,
 }: {
-  price?: string | null;
-  data?: unknown;
+  product: Pick<
+    ProductCardType,
+    'price' | 'data' | 'title' | 'postedAt' | 'isEnd'
+  >;
   priceClassName?: string;
 }) {
-  const timeDeal = getTossTimeDeal(data);
+  const timeDeal = getTossTimeDeal(product.data);
+  const opening = getTimeDealOpening(product);
   return (
     <>
       <View className="flex-row items-center gap-1 pt-1">
@@ -130,10 +152,12 @@ export function TossTimeDealPrice({
           </Text>
         ) : null}
         <View className="min-w-0 flex-1">
-          <DisplayListPrice price={price} className={priceClassName} />
+          <DisplayListPrice price={product.price} className={priceClassName} />
         </View>
       </View>
-      {timeDeal?.viewCountText ? (
+      {opening ? (
+        <TimeDealCountdown openAt={opening.openAt} />
+      ) : timeDeal?.viewCountText ? (
         <Text className="pt-0.5 text-xs text-gray-500" numberOfLines={1}>
           {timeDeal.viewCountText}
         </Text>

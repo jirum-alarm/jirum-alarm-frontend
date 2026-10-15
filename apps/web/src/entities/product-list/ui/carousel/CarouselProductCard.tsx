@@ -63,7 +63,7 @@ export default function CarouselProductCard({
             time={isTimeDeal ? undefined : <DisplayTime time={product.postedAt} />}
             className="pt-1"
           />
-          <TossTimeDealPrice price={product.price} data={product.data} />
+          <TossTimeDealPrice product={product} />
         </div>
       </m.div>
     </Link>

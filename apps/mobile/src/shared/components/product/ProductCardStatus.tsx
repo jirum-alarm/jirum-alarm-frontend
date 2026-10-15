@@ -1,7 +1,10 @@
 import React from 'react';
 import {View} from 'react-native';
 import {cardLabel} from '@jirum/design-system/recipes';
-import {getTossTimeDeal} from '@jirum/domain/toss-time-deal';
+import {
+  getTimeDealOpening,
+  getTossTimeDeal,
+} from '@jirum/domain/toss-time-deal';
 import HotdealBadge from '@/shared/components/product/HotdealBadge';
 import Badge from '@/shared/components/ui/Badge';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -47,6 +50,8 @@ export default function ProductCardStatus({
     earliestExpiryDate?: string | null;
     isRising?: boolean | null;
     data?: unknown;
+    title?: string | null;
+    postedAt?: string | null;
   };
   showHotdealBadge?: boolean;
 }) {
@@ -56,6 +61,8 @@ export default function ProductCardStatus({
   const timeDeal = getTossTimeDeal(product.data);
   const showTimeDeal =
     timeDeal != null && (!isEnd || timeDeal.status !== 'ON_SALE');
+  // 커뮤니티 예고 글(「오늘 17시 오픈」)이 아직 안 열렸으면 「오늘 17:00 오픈」.
+  const opening = showTimeDeal ? null : getTimeDealOpening(product);
   return (
     <>
       {/* 급상승(랭킹 목록만) — 오른쪽 위. 왼쪽 위는 순위 숫자, 아래는 핫딜 배지·유통기한 띠 자리. web 과 같다. */}
@@ -70,11 +77,19 @@ export default function ProductCardStatus({
       ) : null}
       {showTimeDeal ? (
         <CardCornerLabel
-          tone={timeDeal.status === 'ON_SALE' ? 'deal' : 'light'}>
+          tone={
+            timeDeal.status === 'ON_SALE'
+              ? 'deal'
+              : timeDeal.status === 'UPCOMING'
+              ? 'dark'
+              : 'light'
+          }>
           {timeDeal.label}
         </CardCornerLabel>
       ) : isEnd ? (
         <CardCornerLabel tone="light">판매종료</CardCornerLabel>
+      ) : opening ? (
+        <CardCornerLabel tone="dark">{opening.label}</CardCornerLabel>
       ) : showHotdealBadge && hotDealType && !earliestExpiryDate ? (
         <View className="absolute bottom-0 left-0">
           <HotdealBadge
