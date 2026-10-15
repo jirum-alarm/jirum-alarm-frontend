@@ -62,6 +62,7 @@ export default function CarouselProductCard({
             postedCommunityCount={product.postedCommunityCount}
             time={isTimeDeal ? undefined : <DisplayTime time={product.postedAt} />}
             className="pt-1"
+            narrow
           />
           <TossTimeDealPrice product={product} />
         </div>

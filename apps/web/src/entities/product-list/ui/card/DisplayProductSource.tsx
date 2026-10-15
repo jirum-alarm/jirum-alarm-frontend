@@ -21,9 +21,16 @@ export default function DisplayProductSource({
   postedCommunityCount,
   time,
   className,
+  narrow = false,
 }: Pick<ProductCardType, 'mallName' | 'provider' | 'postedCommunityCount'> & {
   time?: React.ReactNode;
   className?: string;
+  /**
+   * 폭이 좁은 카드(가로 캐러셀 120px·3열 그리드)용. 줄이 170px 보다 좁으면 판매처가 있을 때 커뮤니티를 접는다 —
+   * 셋을 다 넣으면 판매처·커뮤니티가 둘 다 「롯…」「에…」 한 글자로 잘려 아무것도 못 읽었다(2026-10-15 상세 실측).
+   * 줄이 부모 폭을 그대로 받는 카드(flex-col)에서만 켠다 — 컨테이너 쿼리라 내용 폭으로 크기를 정하는 자리에선 0 폭이 된다.
+   */
+  narrow?: boolean;
 }) {
   const mall = mallName?.trim();
   const rawCommunity = provider?.nameKr?.trim();
@@ -35,9 +42,16 @@ export default function DisplayProductSource({
 
   if (!mall && !community && !time) return null;
 
+  // 좁은 줄에서 판매처가 있으면 커뮤니티(와 그 앞 점·「외 N곳」)를 숨긴다.
+  const foldable = narrow && mall ? '@max-[170px]:hidden' : undefined;
+
   return (
     <div
-      className={cn('flex min-w-0 items-center gap-1 text-xs text-gray-500', className)}
+      className={cn(
+        'flex min-w-0 items-center gap-1 text-xs text-gray-500',
+        narrow && '@container',
+        className,
+      )}
       // 스크린리더는 "쿠팡 맘이베베"를 연속된 고유명사로 읽는다. 짧은 라벨로 역할만 구분.
       aria-label={[
         mall && `판매처 ${mall}`,
@@ -50,10 +64,10 @@ export default function DisplayProductSource({
         .join(', ')}
     >
       {mall && <span className="truncate font-medium text-gray-600">{mall}</span>}
-      {mall && community && <span className="shrink-0 text-gray-300">·</span>}
-      {community && <span className="truncate">{community}</span>}
+      {mall && community && <span className={cn('shrink-0 text-gray-300', foldable)}>·</span>}
+      {community && <span className={cn('truncate', foldable)}>{community}</span>}
       {otherCommunities > 0 && (
-        <span className="shrink-0 font-medium whitespace-nowrap text-gray-600">
+        <span className={cn('shrink-0 font-medium whitespace-nowrap text-gray-600', foldable)}>
           외 {otherCommunities}곳
         </span>
       )}

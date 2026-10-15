@@ -3,7 +3,15 @@
 import { tab } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import {
+  type RefObject,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import { ProductService } from '@/shared/api/product';
 import type {
@@ -580,7 +588,7 @@ export default function PriceHistorySection({
         </div>
       )}
 
-      <p className="mt-2 text-xs text-gray-400">
+      <p className="mt-2 text-xs text-gray-500">
         이 기간 핫딜 {points.length}건{` · ${formatRangeLabel(rangeFromLabel, rangeToLabel)}`}
       </p>
 
@@ -660,9 +668,12 @@ function PriceLineChart({
   contentEndMs: number;
   onTrackClick: (element: 'point' | 'deal') => void;
 }) {
-  const width = 640;
-  const height = 260;
-  const pad = { top: 40, right: 20, bottom: 28, left: 44 };
+  // viewBox 를 그려지는 폭과 같게 둔다(1단위 = 1px). 640 고정이던 때는 폰(약 350px)에서 통째로 0.55배가 돼
+  // 축·가격 글자가 5.5px, 점이 2px 로 그려졌다(2026-10-15 실측).
+  const boxRef = useRef<HTMLDivElement>(null);
+  const width = useRenderedWidth(boxRef, 640);
+  const height = width < 480 ? 200 : 260;
+  const pad = { top: 40, right: 24, bottom: 28, left: 44 };
   const svgRef = useRef<SVGSVGElement>(null);
 
   // hover: 가이드만 / click: 아래 카드 고정
@@ -773,7 +784,7 @@ function PriceLineChart({
       : highLabelIdxRaw;
 
   return (
-    <div className="mt-4 w-full">
+    <div ref={boxRef} className="mt-4 w-full">
       <svg
         ref={svgRef}
         viewBox={`0 0 ${width} ${height}`}
@@ -798,15 +809,15 @@ function PriceLineChart({
               x2={width - pad.right}
               y1={t.y}
               y2={t.y}
-              stroke="#E5E7EB"
+              stroke="var(--color-gray-200)"
               strokeWidth={1}
             />
             <text
               x={pad.left - 8}
               y={t.y + 3}
               textAnchor="end"
-              className="fill-gray-400"
-              fontSize={10}
+              className="fill-gray-500"
+              fontSize={11}
             >
               {shortWon(t.price, currency, geo.tickStep, geo.yMax)}
             </text>
@@ -861,7 +872,7 @@ function PriceLineChart({
             isHovered ||
             isSelected;
           const stroke = isLow ? CHART.low : CHART.line;
-          const labelFill = isLow ? CHART.low : isHigh ? CHART.high : '#6B7280';
+          const labelFill = isLow ? CHART.low : isHigh ? CHART.high : 'var(--color-gray-500)';
 
           return (
             <g key={`${c.date}-${i}`}>
@@ -870,7 +881,7 @@ function PriceLineChart({
                   x={c.x}
                   y={c.y - 12}
                   textAnchor="middle"
-                  fontSize={10}
+                  fontSize={11}
                   stroke="var(--color-white)"
                   strokeWidth={3}
                   paintOrder="stroke"
@@ -899,7 +910,7 @@ function PriceLineChart({
               x={seedCoord.x}
               y={Math.max(pad.top - 6, seedCoord.y - 28)}
               textAnchor="middle"
-              fontSize={10}
+              fontSize={11}
               stroke="var(--color-white)"
               strokeWidth={3}
               paintOrder="stroke"
@@ -912,7 +923,7 @@ function PriceLineChart({
               x={seedCoord.x}
               y={Math.max(pad.top + 6, seedCoord.y - 14)}
               textAnchor="middle"
-              fontSize={10}
+              fontSize={11}
               stroke="var(--color-white)"
               strokeWidth={3}
               paintOrder="stroke"
@@ -940,9 +951,9 @@ function PriceLineChart({
               x={label.x}
               y={height - 8}
               textAnchor={i === 0 ? 'start' : isToday ? 'end' : 'middle'}
-              fontSize={10}
+              fontSize={11}
               fontWeight={isToday ? 600 : 400}
-              className={isToday ? 'fill-gray-600' : 'fill-gray-400'}
+              className={isToday ? 'fill-gray-600' : 'fill-gray-500'}
             >
               {label.label}
             </text>
@@ -977,7 +988,7 @@ function DealPreview({
 
   return (
     <div className="mt-3 rounded-xl border border-gray-200 bg-white p-2.5">
-      <div className="text-11 mb-1.5 flex h-4 items-center gap-2 text-gray-400">
+      <div className="text-11 mb-1.5 flex h-4 items-center gap-2 text-gray-500">
         {isCurrent ? (
           <span
             className="inline-block size-1.5 shrink-0 rounded-full"
@@ -1017,7 +1028,7 @@ function DealPreview({
         <div className="min-w-0 flex-1">
           <div className="truncate text-xs text-gray-900">{dealTitle(deal)}</div>
           {deal.providerName && (
-            <div className="text-11 mt-0.5 truncate text-gray-400">{deal.providerName}</div>
+            <div className="text-11 mt-0.5 truncate text-gray-500">{deal.providerName}</div>
           )}
         </div>
         <span className="text-error-500 shrink-0 text-xs font-semibold tabular-nums">
@@ -1026,4 +1037,23 @@ function DealPreview({
       </Link>
     </div>
   );
+}
+
+/** 요소가 실제로 그려지는 폭(px). 첫 그림 전에 한 번 읽고, 이후 크기 변화(회전·창 크기)를 따른다. */
+function useRenderedWidth(ref: RefObject<HTMLElement | null>, fallback: number) {
+  const [width, setWidth] = useState(fallback);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const read = () => {
+      const next = Math.round(el.clientWidth);
+      if (next > 0) setWidth(next);
+    };
+    // 그리기 전에 실제 폭으로 맞춘다 — 안 그러면 640 폭(작은 글자)이 한 프레임 비친다.
+    read();
+    const observer = new ResizeObserver(read);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [ref]);
+  return width;
 }

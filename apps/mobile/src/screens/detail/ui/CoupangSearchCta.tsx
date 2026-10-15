@@ -83,7 +83,7 @@ export default function CoupangSearchCta({productId}: {productId: number}) {
           </Text>
         </View>
       </PressableScale>
-      <Text className="mt-1.5 px-1 text-11 text-gray-400">
+      <Text className="mt-1.5 px-1 text-11 text-gray-500">
         쿠팡 파트너스 활동으로 지름알림이 일정 수수료를 받아요.
       </Text>
     </View>

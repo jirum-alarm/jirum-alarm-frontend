@@ -88,6 +88,7 @@ export default function ProductGridCard({
             postedCommunityCount={product.postedCommunityCount}
             time={showTime ? <DisplayTime time={product.postedAt} /> : undefined}
             className="pt-1"
+            narrow
           />
           <TossTimeDealPrice product={product} priceClassName="text-base" />
         </div>

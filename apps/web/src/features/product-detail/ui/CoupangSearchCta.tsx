@@ -92,7 +92,7 @@ export default function CoupangSearchCta({
           {copy.action}
         </span>
       </a>
-      <p className="text-11 mt-1.5 px-1 text-gray-400">
+      <p className="text-11 mt-1.5 px-1 text-gray-500">
         쿠팡 파트너스 활동으로 지름알림이 일정 수수료를 받아요.
       </p>
     </div>

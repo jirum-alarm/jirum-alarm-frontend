@@ -16,6 +16,9 @@ import { ProductQueries } from '@/entities/product';
 const ProductReport = ({ productId }: { productId: number }) => {
   const { data: product } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
 
+  // 이미 판매종료로 표시된 딜에 「판매가 종료된 상품인가요?」를 묻지 않는다 — 제목 옆 판매종료 배지와 어긋난다.
+  if (product.isEnd && !product.isMyReported) return null;
+
   return (
     <div
       className={cn(`flex h-14 items-center justify-between rounded-lg border bg-white p-[16px]`)}

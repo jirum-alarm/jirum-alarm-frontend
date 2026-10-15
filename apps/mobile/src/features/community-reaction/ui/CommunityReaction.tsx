@@ -129,6 +129,9 @@ export default function CommunityReaction({
   const {data: additional} = useQuery(
     ProductQueries.additionalInfo({id: productId}),
   );
+  // 같은 키라 ProductReport 와 한 번만 받는다. 이미 판매종료로 표시된 딜엔 종료 제보를 묻지 않는다(web 과 같은 규칙).
+  const {data: stats} = useQuery(ProductQueries.stats({id: productId}));
+  const showReport = !(stats?.isEnd && !stats.isMyReported);
 
   if (isError) {
     return <SectionErrorRow label="커뮤니티 반응" onRetry={refetch} />;
@@ -220,9 +223,11 @@ export default function CommunityReaction({
           ) : null}
         </View>
       </View>
-      <View className="pt-3">
-        <ProductReport productId={productId} isUserLogin={isUserLogin} />
-      </View>
+      {showReport ? (
+        <View className="pt-3">
+          <ProductReport productId={productId} isUserLogin={isUserLogin} />
+        </View>
+      ) : null}
     </View>
   );
 }
