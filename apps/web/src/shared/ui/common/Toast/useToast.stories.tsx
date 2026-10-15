@@ -1,3 +1,5 @@
+import { expect, screen, userEvent, within } from 'storybook/test';
+
 import Button from '../Button';
 
 import Toaster from './Toaster';
@@ -75,4 +77,11 @@ export const LongMessage: Story = {
 
 export const Types: Story = {
   render: () => <ToastTypesDisplay />,
+  // 띄우면 스크린리더가 읽는 자리(role=status)에 문구가 뜨고, 동작 버튼이 같이 나온다.
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole('button', { name: '성공' }));
+    const status = await screen.findByRole('status');
+    await expect(status).toHaveTextContent('키워드를 등록했어요.');
+    await expect(within(status).getByRole('button', { name: '보기' })).toBeVisible();
+  },
 };

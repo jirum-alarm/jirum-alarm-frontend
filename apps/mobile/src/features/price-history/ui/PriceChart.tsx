@@ -12,6 +12,8 @@ import Svg, {
   Text as SvgText,
 } from 'react-native-svg';
 
+import {chartColor} from '@jirum/design-system';
+
 import {
   buildChartGeometry,
   type ChartPoint,
@@ -30,10 +32,6 @@ const NARROW_HEIGHT = 200;
 // left: Y축 라벨(textAnchor=end, x=left-8)이 들어갈 폭. 44 면 "2,260k"(12px ≈ 39)의
 // 첫 글자가 0 밖으로 나가 잘렸다 — "12,260k" 까지 들어가게 56.
 const PAD = {top: 40, right: 20, bottom: 28, left: 56};
-
-const LINE = '#7FC125';
-/** web PriceHistorySection CHART.current — 이 상품 마커. */
-const SEED = '#467DFB';
 
 export default function PriceChart({
   points,
@@ -60,6 +58,8 @@ export default function PriceChart({
   currentMarker?: CurrentProductMarker | null;
 }) {
   const colors = useColors();
+  // 차트 색은 디자인 시스템 차트 역할 — web·AI 그래프와 같은 파랑(예전 앱만 라임이었다).
+  const line = chartColor('line', colors);
   // viewBox 는 640 고정이고 실제 폭은 화면마다 다르다. 제스처 x 를 뷰박스
   // 좌표로 되돌리려면 실측 폭이 필요하다(web 의 getBoundingClientRect 대응).
   const [layoutWidth, setLayoutWidth] = useState(0);
@@ -187,7 +187,7 @@ export default function PriceChart({
                 y1={PAD.top}
                 x2={selected.x}
                 y2={PAD.top + geo.plotH}
-                stroke={LINE}
+                stroke={line}
                 strokeWidth={1}
                 strokeDasharray="4 4"
               />
@@ -196,8 +196,8 @@ export default function PriceChart({
                   cx={selected.x}
                   cy={selected.y}
                   r={5}
-                  fill={LINE}
-                  stroke={LINE}
+                  fill={line}
+                  stroke={line}
                   strokeWidth={2}
                 />
               )}
@@ -242,6 +242,8 @@ const ChartBase = React.memo(function ChartBase({
   currentMarker?: CurrentProductMarker | null;
   seedCoord: (CurrentProductMarker & {x: number; y: number}) | null;
 }) {
+  const line = chartColor('line', colors);
+  const seed = chartColor('current', colors);
   const areaPath = geo.d
     ? `${geo.d} L ${geo.coords.at(-1)?.x ?? 0} ${PAD.top + geo.plotH} L ${
         geo.coords[0]?.x ?? 0
@@ -252,8 +254,8 @@ const ChartBase = React.memo(function ChartBase({
     <G>
       <Defs>
         <LinearGradient id="priceFill" x1="0" y1="0" x2="0" y2="1">
-          <Stop offset="0" stopColor={LINE} stopOpacity="0.16" />
-          <Stop offset="1" stopColor={LINE} stopOpacity="0" />
+          <Stop offset="0" stopColor={line} stopOpacity="0.16" />
+          <Stop offset="1" stopColor={line} stopOpacity="0" />
         </LinearGradient>
       </Defs>
 
@@ -282,7 +284,7 @@ const ChartBase = React.memo(function ChartBase({
       {geo.d ? (
         <Path
           d={geo.d}
-          stroke={LINE}
+          stroke={line}
           strokeWidth={2}
           fill="none"
           strokeLinecap="round"
@@ -306,7 +308,7 @@ const ChartBase = React.memo(function ChartBase({
             cy={c.y}
             r={3}
             fill={colors.white}
-            stroke={LINE}
+            stroke={line}
             strokeWidth={2}
           />
         );
@@ -321,7 +323,7 @@ const ChartBase = React.memo(function ChartBase({
             y1={PAD.top}
             x2={seedCoord.x}
             y2={seedCoord.y - 8}
-            stroke={SEED}
+            stroke={seed}
             strokeOpacity={0.5}
             strokeWidth={1}
             strokeDasharray="3 3"
@@ -331,7 +333,7 @@ const ChartBase = React.memo(function ChartBase({
             y={PAD.top - 20}
             fontSize={11}
             fontWeight="700"
-            fill={SEED}
+            fill={seed}
             textAnchor="middle">
             이 상품
           </SvgText>
@@ -340,11 +342,11 @@ const ChartBase = React.memo(function ChartBase({
             y={PAD.top - 6}
             fontSize={11}
             fontWeight="600"
-            fill={SEED}
+            fill={seed}
             textAnchor="middle">
             {won(seedCoord.price, currency)}
           </SvgText>
-          <Circle cx={seedCoord.x} cy={seedCoord.y} r={6.5} fill={SEED} />
+          <Circle cx={seedCoord.x} cy={seedCoord.y} r={6.5} fill={seed} />
         </G>
       ) : null}
 

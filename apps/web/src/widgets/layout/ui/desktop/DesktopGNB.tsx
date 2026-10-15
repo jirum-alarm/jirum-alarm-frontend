@@ -101,7 +101,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             <Search
               width={18}
               height={18}
-              color={isInHomeHero ? '#FFFFFF' : 'var(--color-gray-500)'}
+              color={isInHomeHero ? 'var(--color-fixed-white)' : 'var(--color-gray-500)'}
             />
             {/* GNB 최소폭(min-w-5xl)에서 한 줄에 들어가게 w-48 — 더 넓히면 1024px 에서 넘친다. */}
             핫딜 검색
@@ -136,7 +136,9 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                 <Alert
                   width={28}
                   height={28}
-                  style={{ color: isInHomeHero ? '#FFFFFF' : 'var(--color-gray-900)' }}
+                  style={{
+                    color: isInHomeHero ? 'var(--color-fixed-white)' : 'var(--color-gray-900)',
+                  }}
                 />
                 {hasNewAlarm && (
                   <span className="bg-error-500 absolute top-0.5 right-0.5 h-2 w-2 rounded-full" />
@@ -145,7 +147,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             </Link>
           )}
           {isLoggedIn ? (
-            <UserMenu color={isInHomeHero ? '#FFFFFF' : 'var(--color-gray-900)'} />
+            <UserMenu color={isInHomeHero ? 'var(--color-fixed-white)' : 'var(--color-gray-900)'} />
           ) : (
             <Link
               href={PAGE.LOGIN}

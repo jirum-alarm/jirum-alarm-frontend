@@ -5,6 +5,9 @@ type AlertDialogContextValue = {
   triggerRef: React.RefObject<HTMLButtonElement | null>;
   onOpenChange: (open: boolean) => void;
   onOpenToggle: () => void;
+  /** 대화상자의 이름·설명 — Content 의 aria-labelledby·describedby 가 Title·Description 을 가리킨다. */
+  titleId: string;
+  descriptionId: string;
 };
 
 export const AlertDialogContext = createContext<AlertDialogContextValue | null>(null);

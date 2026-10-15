@@ -1,3 +1,5 @@
+import { expect, fn, userEvent, within } from 'storybook/test';
+
 import { Button } from './Button';
 
 import type { Meta, StoryObj } from '@storybook/react';
@@ -36,6 +38,26 @@ export const Filled: Story = {
     children: <div>다음</div>,
   },
 };
+/** 비활성 버튼은 눌러도 onClick 이 불리지 않는다. */
+export const Disabled: Story = {
+  args: { disabled: true, onClick: fn(), children: '다음' },
+  play: async ({ args, canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole('button', { name: '다음' }), {
+      pointerEventsCheck: 0,
+    });
+    await expect(args.onClick).not.toHaveBeenCalled();
+  },
+};
+
+/** 눌리면 onClick 이 한 번 불린다. */
+export const Clickable: Story = {
+  args: { onClick: fn(), children: '다음' },
+  play: async ({ args, canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole('button', { name: '다음' }));
+    await expect(args.onClick).toHaveBeenCalledTimes(1);
+  },
+};
+
 export const Outlined: Story = {
   args: {
     variant: 'outlined',

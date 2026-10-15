@@ -1,0 +1,173 @@
+name: design-system
+
+# 디자인 시스템 놀이터(apps/design) — 검증하고, main 이면 design.jirum-alarm.com 으로 낸다.
+#   검증: 토큰·카탈로그 테스트(packages/design-system) → 놀이터 타입 → 모든 스토리를 라이트·다크로 렌더 +
+#         조작 시나리오(play) + 접근성(axe, 대비 AA·이름 없는 버튼 등) → 정적 빌드.
+#   배포: 검증한 정적 빌드를 그대로 nginx 이미지에 담아 Harbor → gitops apps/frontend-design 태그 → ArgoCD.
+#         https://design.jirum-alarm.com (공개 — 레포가 공개라 담긴 것도 같다. GitHub Pages 는 조직 설정이 막아 둠)
+# 놀이터는 web 컴포넌트 스토리를 모아 보여 주므로 web 공용 UI 가 바뀌어도 돈다.
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/design-system.yml
+      - packages/design-system/**
+      - apps/design/**
+      - apps/web/src/**
+      - pnpm-lock.yaml
+  pull_request:
+    paths:
+      - .github/workflows/design-system.yml
+      - packages/design-system/**
+      - apps/design/**
+      - apps/web/src/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: design-system-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 22.18.0
+  PNPM_VERSION: 10.30.3
+
+jobs:
+  verify:
+    name: Verify & build playground
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Tokens · recipes · catalog
+        run: pnpm --filter @jirum/design-system test
+
+      - name: Playground types
+        run: pnpm --filter design check-types
+
+      - name: Playground lint
+        run: pnpm --filter design lint:check
+
+      - name: Install Chromium
+        working-directory: apps/design
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Stories (render · play · a11y, light + dark)
+        run: pnpm --filter design test:stories
+
+      - name: Build playground
+        run: pnpm --filter design build-storybook
+
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        with:
+          name: storybook-static
+          path: apps/design/storybook-static
+          retention-days: 3
+
+  build-and-push:
+    name: Build and push image
+    needs: verify
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: production
+    outputs:
+      image-tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v6
+
+      # 검증을 통과한 바로 그 빌드를 담는다(여기서 다시 빌드하지 않는다).
+      - uses: actions/download-artifact@v4
+        with:
+          name: storybook-static
+          path: apps/design/storybook-static
+
+      - name: Resolve tag
+        id: tag
+        run: echo "tag=v-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: apps/design
+          file: apps/design/deploy/Dockerfile
+          platforms: linux/amd64
+          # Harbor 가 provenance 첨부물을 이중 등록해 보존 정책이 막힌다(deploy-ai-prod.yml 과 같은 이유).
+          provenance: false
+          push: true
+          tags: ${{ secrets.DOCKER_REGISTRY }}/tjsry0466/jirum-alarm-frontend-design:${{ steps.tag.outputs.tag }}
+
+  deploy:
+    name: Deploy to Kubernetes
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: production
+    steps:
+      - name: Checkout infrastructure repository
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ secrets.INFRA_GITHUB_REPOSITORY }}
+          ref: main
+          ssh-key: ${{ secrets.GITOPS_DEPLOY_KEY }}
+          path: infra
+
+      - name: Install yq
+        run: |
+          set -euo pipefail
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Update Kubernetes manifest
+        working-directory: infra
+        env:
+          NEW_TAG: ${{ needs.build-and-push.outputs.image-tag }}
+        run: |
+          set -euo pipefail
+          KUSTOMIZATION="apps/frontend-design/overlays/prod/kustomization.yaml"
+          # 첫 배포 땐 gitops 앱(apps/frontend-design)을 이미지가 올라간 뒤 사람이 만든다 — 그 전엔 건너뛴다.
+          if [ ! -f "$KUSTOMIZATION" ]; then echo "::warning::$KUSTOMIZATION 없음 — gitops 앱 등록 전이라 태그 갱신을 건너뛴다"; exit 0; fi
+          IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/tjsry0466/jirum-alarm-frontend-design"
+          export IMAGE_NAME NEW_TAG
+          yq eval -i '(.images[] | select(.name == strenv(IMAGE_NAME)) | .newTag) = strenv(NEW_TAG)' "$KUSTOMIZATION"
+          yq eval '.' "$KUSTOMIZATION" > /dev/null
+
+      - name: Commit files
+        working-directory: infra
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
+          git add .
+          git diff --staged --quiet || git commit -m "chore(design-prod): image tag ${{ needs.build-and-push.outputs.image-tag }}"
+          # 여러 앱 배포가 같은 gitops main 에 동시에 민다 — 뒤처지면 따라잡고 다시 민다(deploy-ai-prod.yml 과 같다).
+          for i in 1 2 3 4 5; do
+            if git push origin main; then exit 0; fi
+            git pull --rebase origin main || { git rebase --abort; exit 1; }
+            sleep $((i * 2))
+          done
+          exit 1

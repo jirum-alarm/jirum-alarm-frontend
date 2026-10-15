@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {ActivityIndicator, Pressable, View} from 'react-native';
 import {emptyText, sectionTitle} from '@jirum/design-system/recipes';
+import {fixed} from '@jirum/design-system';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import PressableScale from '@/shared/components/PressableScale';
@@ -73,7 +74,12 @@ function CommunityLink({url, provider}: {url: string; provider: string}) {
         {provider} 반응 보기
       </Text>
       <View className="h-4 w-4 items-center justify-center rounded-full bg-secondary-500">
-        <ArrowRight color="#FFFFFF" width={12} height={12} strokeWidth={1.5} />
+        <ArrowRight
+          color={fixed.white}
+          width={12}
+          height={12}
+          strokeWidth={1.5}
+        />
       </View>
     </PressableScale>
   );

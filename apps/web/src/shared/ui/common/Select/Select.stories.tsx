@@ -1,3 +1,5 @@
+import { expect, userEvent, within } from 'storybook/test';
+
 import Select from '.';
 
 import type { Meta, StoryObj } from '@storybook/react';
@@ -28,6 +30,26 @@ export const Placeholder: Story = {
         <Select.Option>1990</Select.Option>
       </Select>
     );
+  },
+};
+
+/** 열고 옵션을 고르면 닫히고, 버튼의 이름이 「출생년도 1998」로 바뀐다. */
+export const Choose: Story = {
+  render: () => (
+    <Select placeholder="출생년도">
+      <Select.Option value="2000">2000</Select.Option>
+      <Select.Option value="1999">1999</Select.Option>
+      <Select.Option value="1998">1998</Select.Option>
+    </Select>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const combo = canvas.getByRole('combobox', { name: '출생년도' });
+    await userEvent.click(combo);
+    await expect(combo).toHaveAttribute('aria-expanded', 'true');
+    await userEvent.click(canvas.getByRole('option', { name: '1998' }));
+    await expect(combo).toHaveAttribute('aria-expanded', 'false');
+    await expect(canvas.getByRole('combobox', { name: '출생년도 1998' })).toBeVisible();
   },
 };
 

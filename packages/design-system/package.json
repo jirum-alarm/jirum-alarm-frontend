@@ -7,6 +7,8 @@
   "exports": {
     ".": "./tokens.js",
     "./recipes": "./recipes.js",
+    "./layout": "./layout.js",
+    "./catalog": "./catalog.js",
     "./theme.css": "./theme.css",
     "./eslint": "./eslint.js",
     "./package.json": "./package.json"

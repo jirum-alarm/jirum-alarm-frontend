@@ -75,8 +75,10 @@ export const helperVariant = cva('', {
       md: ['pt-2', 'text-xs'],
     },
     error: {
-      true: ['text-error-500'],
-      false: ['text-gray-400'],
+      // error-500 은 다크 바탕에서 4.1:1(AA 미달) — 600 은 다크에서 밝게 뒤집혀 두 테마 모두 AA.
+      true: ['text-error-600'],
+      // gray-400 은 흰 바탕 2.58:1(AA 미달) — 보조 글자의 최저선은 gray-500(design-system README 「색」).
+      false: ['text-gray-500'],
     },
   },
   defaultVariants: {

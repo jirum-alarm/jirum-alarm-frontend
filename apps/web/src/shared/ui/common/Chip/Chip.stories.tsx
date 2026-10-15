@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { expect, userEvent, within } from 'storybook/test';
 
 import { Chip } from './Chip';
 
@@ -42,5 +43,17 @@ export const Row: Story = {
       );
     };
     return <Demo />;
+  },
+  // 고르면 aria-pressed 가 옮겨 가고, 굵어져도 너비는 그대로다(옆 칩이 밀리지 않는다).
+  play: async ({ canvasElement }) => {
+    const [food] = within(canvasElement).getAllByRole('button', { name: '식품' });
+    const before = food.getBoundingClientRect().width;
+    await userEvent.click(food);
+    await expect(food).toHaveAttribute('aria-pressed', 'true');
+    await expect(within(canvasElement).getAllByRole('button', { name: '전체' })[0]).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+    await expect(food.getBoundingClientRect().width).toBe(before);
   },
 };

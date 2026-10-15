@@ -216,3 +216,7 @@ test('레시피도 린트 규칙을 지킨다(hex·기본 팔레트·임의 크�
   const all = JSON.stringify(recipes).match(/"[^"{}:,]+"/g).map((s) => s.slice(1, -1));
   for (const cls of all) assert.ok(!rx.some((r) => r.test(cls)), `레시피에 우회 클래스: ${cls}`);
 });
+
+test('theme.css 는 토큰 변수를 전부 남긴다(@theme static) — var(--color-…) 로 읽는 차트·SVG 가 투명해지지 않게', () => {
+  assert.match(readFileSync(new URL('./theme.css', import.meta.url), 'utf8'), /@theme static \{/);
+});

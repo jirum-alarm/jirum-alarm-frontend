@@ -1,3 +1,5 @@
+import { expect, fn, screen, userEvent, within } from 'storybook/test';
+
 import Button from '../Button';
 
 import AlertDialog from '.';
@@ -22,13 +24,15 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof AlertDialog>;
 
+const onLogout = fn();
+
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Default: Story = {
   render: () => {
     return (
       <AlertDialog>
         <AlertDialog.Trigger asChild>
-          <button>열기</button>
+          <button type="button">열기</button>
         </AlertDialog.Trigger>
         <AlertDialog.Content>
           <AlertDialog.Header>
@@ -48,8 +52,8 @@ export const Default: Story = {
             <AlertDialog.Cancel asChild onClick={() => console.log('취소')}>
               <Button color="secondary">취소</Button>
             </AlertDialog.Cancel>
-            <AlertDialog.Action asChild onClick={() => console.log('2.로그아웃')}>
-              <Button color="error" onClick={() => console.log('1.로그아웃')}>
+            <AlertDialog.Action asChild>
+              <Button color="error" onClick={onLogout}>
                 로그아웃
               </Button>
             </AlertDialog.Action>
@@ -57,5 +61,14 @@ export const Default: Story = {
         </AlertDialog.Content>
       </AlertDialog>
     );
+  },
+  // 열면 대화상자가 뜨고, 확인을 누르면 동작이 한 번 불리고 닫힌다.
+  play: async ({ canvasElement }) => {
+    onLogout.mockClear();
+    await userEvent.click(within(canvasElement).getByRole('button', { name: '열기' }));
+    const dialog = await screen.findByRole('alertdialog', { name: '로그아웃' });
+    await expect(dialog).toHaveAccessibleDescription(/알림을 받을 수 없어요/);
+    await userEvent.click(within(dialog).getByRole('button', { name: '로그아웃' }));
+    await expect(onLogout).toHaveBeenCalledTimes(1);
   },
 };

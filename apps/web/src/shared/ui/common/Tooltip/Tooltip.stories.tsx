@@ -25,7 +25,7 @@ export const Default: Story = {
             </p>
           }
         >
-          <button>
+          <button type="button" aria-label="핫딜 정도 계산 방법">
             <Info />
           </button>
         </Tooltip>

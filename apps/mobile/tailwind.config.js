@@ -47,6 +47,7 @@ module.exports = {
     './App.tsx',
     './src/**/*.{js,jsx,ts,tsx}',
     '../../packages/design-system/recipes.js',
+    '../../packages/design-system/layout.js',
   ],
   presets: [require('nativewind/preset')],
   theme: {

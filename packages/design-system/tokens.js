@@ -194,6 +194,40 @@ const brand = {
 };
 
 /**
+ * 차트 색 — 역할 → 팔레트 이름(`secondary-500`). 값이 아니라 이름이라 두 테마에서 각자 뒤집힌 값이 된다.
+ *   web  SVG 속성에 `chartVar('line')` → `var(--color-secondary-500)` (theme.css 변수라 다크 자동)
+ *   앱   `chartColor('line', useColors())` → 지금 테마의 hex
+ * 규칙(README 「색」): 정상·좋음 = secondary, 강조·나쁨·최저가 = error, 중립(격자·축) = gray.
+ * 예전엔 같은 가격 추이 그래프가 web 파랑(Tailwind blue-500)·앱 라임·AI 파랑(#3b82f6)으로 세 가지였다.
+ */
+const chart = {
+  /** 가격 선·면(면은 같은 색을 옅게). */
+  line: 'secondary-500',
+  /** 지금 보는 상품 점·안내선. */
+  current: 'secondary-500',
+  /** 기준선(평균·가이드). */
+  guide: 'secondary-300',
+  /** 최저가 점·값. */
+  low: 'error-500',
+  /** 최고가 점·값. */
+  high: 'secondary-700',
+  /** 격자·축선. */
+  grid: 'gray-200',
+  /** 축 글자. */
+  axis: 'gray-500',
+};
+
+/** web: 차트 역할 → CSS 변수 문자열. */
+const chartVar = (role) => `var(--color-${chart[role]})`;
+
+/** 앱(또는 JS 로 hex 가 필요한 곳): 차트 역할 → 주어진 팔레트(light·dark·useColors())의 hex. */
+const chartColor = (role, palette) => {
+  const ref = chart[role];
+  const cut = ref.lastIndexOf('-');
+  return palette[ref.slice(0, cut)][ref.slice(cut + 1)];
+};
+
+/**
  * 글자 크기 — Tailwind 기본(xs 12·sm 14·base 16·lg 18·xl 20·2xl 24·3xl 30…)에 **사이 크기만** 더한다.
  * 이름이 곧 px 다(text-13 = 13px). 줄높이는 일부러 비운다 — 부모·leading-* 를 따르므로 예전 `text-[13px]` 와 같게 그려진다.
  * 30px 이상(히어로·캠페인)은 화면마다 달라 토큰으로 묶지 않는다.
@@ -245,4 +279,4 @@ const twMergeConfig = {
   },
 };
 
-module.exports = {light, dark, fixed, brand, fontSize, radius, shadow, twMergeConfig};
+module.exports = {light, dark, fixed, brand, chart, chartVar, chartColor, fontSize, radius, shadow, twMergeConfig};

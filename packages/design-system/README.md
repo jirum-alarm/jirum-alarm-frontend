@@ -6,16 +6,32 @@
 **디자인의 정본은 이 패키지다.** Figma 는 2026-10 기준 더 업데이트되지 않는다 — 옛 Figma 의 글자 스타일 14종에 없는
 크기(10·11·15·22px)도 여기 토큰이면 정상이다. 색·크기를 바꾸려면 Figma 가 아니라 `tokens.js` 를 고친다.
 
-## 한눈에
+## 한눈에 — 다섯 층
 
-값은 한 파일에만 있고, 각 앱은 그 값을 **자기 방식으로 읽기만** 한다. 그리고 린트가 "값을 직접 적는 것"을 막는다.
+새 화면은 **이미 있는 조각을 골라, 정해진 규칙대로 조립**한다. 숫자·색을 새로 고르지 않는다.
+값은 아래층에서 위층으로만 흐르고, 위층은 아래층의 **이름**만 쓴다.
+
+| 층 | 무엇 | 원본 | 놀이터 |
+| --- | --- | --- | --- |
+| 1. 토큰 | 색·글자 크기·모서리·그림자·차트 색 | `tokens.js` | 기초 |
+| 2. 레시피 | 부품 모양(클래스 문자열) — web·앱이 같은 값을 읽는다 | `recipes.js` | 레시피 |
+| 3. 부품 | 플랫폼별 컴포넌트(web DOM·앱 RN)와 「언제 쓰나」 | `catalog.js` (목록) | 소개/부품 지도 · components |
+| 4. 조립 규칙 | 화면 여백·섹션 간격·묶음 간격·조작 높이·아이콘 크기 | `layout.js` | 조립 규칙 |
+| 5. 화면 | 부품을 규칙대로 놓은 것 | 각 앱 | 조립 규칙/조립 예시 |
 
 ```
 packages/design-system/tokens.js        ← 값은 여기서만 고친다
   ├─ build.mjs → theme.css ───────────→ web · landing · ai   (globals.css 에서 @import, Tailwind v4)
   ├─ require ──────────────────────────→ mobile tailwind.config.js (NativeWind) · useColors()
   └─ eslint.js ────────────────────────→ 네 앱의 린트: hex·기본 팔레트·임의 크기를 쓰면 커밋이 막힌다
+recipes.js · layout.js ────────────────→ web·앱 컴포넌트와 화면이 클래스 이름으로 읽는다
+catalog.js ────────────────────────────→ 놀이터 「부품 지도」 + catalog.test.mjs(경로·레시피·스토리가 실제로 있는지)
+apps/design ───────────────────────────→ 놀이터(Storybook): 만지기 + 스토리마다 라이트·다크 렌더·조작·접근성 자동 검사
 ```
+
+**화면을 만들 때 순서**: ① 놀이터 「부품 지도」(또는 `catalog.js`)에서 조각을 찾는다 → ② 놓을 때 간격·높이는 `layout` 이름으로 →
+③ 없으면 web↔앱 짝을 먼저 grep 하고, 새로 만들면 모양은 `recipes.js`, 목록은 `catalog.js`, web 부품 옆에 스토리.
+등록이나 스토리를 빼먹으면 `catalog.test.mjs` 가 커밋을 막는다.
 
 이렇게 나눈 이유는 예전 모습 때문이다. 같은 팔레트가 네 앱에 복사돼 있었고(다크 값은 web 과 앱에 따로), 화면마다
 `bg-[#FBE84C]`·`text-[13px]`·`text-emerald-700` 처럼 토큰을 건너뛴 값이 380곳 넘게 흩어져 있었다. 그러다 보니
@@ -100,6 +116,29 @@ web 을 그대로 옮긴 `rounded-sm` 이 앱에서만 2px 였다. 알약·원�
 
 그림자는 카드 경계 `shadow-card`(카드엔 테두리가 없어 이게 유일한 경계), 브랜드명 형광펜 밑줄 `shadow-highlight shadow-primary-500`,
 그 밖엔 Tailwind `shadow-sm`·`md`·`lg`. 앱(iOS)은 그림자와 `overflow-hidden` 이 같은 View 에서 공존하지 못한다 — 그림자 View 와 자르는 View 를 나눈다.
+
+## 조립 규칙 — 간격 · 크기 (`layout.js`)
+
+부품끼리 얼마나 떨어지고 얼마나 큰가. 값은 2026-10-16 web·앱 화면의 다수 값을 실측해 고정했다(지어낸 값이 아니다).
+Tailwind 기본 간격이라 web·앱이 같은 클래스로 같은 값이 된다. `import {layout} from '@jirum/design-system/layout'`.
+
+| 이름 | 값 | 쓰는 곳 |
+| --- | --- | --- |
+| `gutter` | `px-5` 20 | 화면 좌우 여백(web 165·앱 95곳 — 다수) |
+| `sectionHeader` | `h-14` 56 | 섹션 제목 줄 |
+| `sectionGap` | `gap-y-8` 32 | 화면 안 섹션 사이(web 홈) |
+| `sectionPadding` | `py-6` 24 | 제목 줄 없는 섹션 위아래 |
+| `stack.tight·base·loose` | `gap-1`·`gap-2`·`gap-3` | 붙는 글자 줄 · 항목 사이 · 묶음 사이 |
+| `inline.chip·icon` | `gap-2`·`gap-1` | 칩 줄 · 아이콘과 글자 |
+| `control.primary·touch·tab·compact` | `h-12`·`h-11`·`h-9`·`h-8` | 주 버튼 · 글자 버튼/눌리는 행(44) · 탭 · 작은 칩 |
+| `icon.nav·action·row·inline` | 28·24·20·16 | 헤더·하단 탭 · 줄 끝 동작 · 목록 행/버튼 안 · 글자 옆 |
+| `minTouch` | 44 | 누르는 것의 최소 크기(작은 아이콘은 패딩·hitSlop 으로 채운다) |
+
+## 차트 색 (`chart`)
+
+차트는 역할 이름으로 칠한다 — web `chartVar('line')`(→ `var(--color-secondary-500)`, 다크 자동), 앱 `chartColor('line', useColors())`.
+역할: `line`·`current`(secondary-500) · `guide`(secondary-300) · `low`(error-500) · `high`(secondary-700) · `grid`(gray-200) · `axis`(gray-500).
+예전엔 같은 가격 추이 그래프가 web 파랑(Tailwind blue)·앱 라임·AI 파랑 세 가지였다.
 
 ## 린트 — 막는 것과 예외
 
@@ -199,7 +238,15 @@ UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·
 체크박스는 web 1곳(네이티브 input, `accent-secondary-500`)·앱 1곳이라 부품 없이 앱 체크 표시만 `CheckIcon` 으로 바꿨다.
 묶을 때도 값은 이 토큰만 쓰고, 모양은 recipes 에 둔다.
 
-Storybook(web 공용 컴포넌트): `pnpm --filter web storybook`.
+## 놀이터 (`apps/design`)
+
+Storybook 서브 앱. 기초(색·글자·모서리)·조립 규칙·레시피 갤러리·부품 지도는 이 앱에, web 컴포넌트 스토리는 **컴포넌트 옆**(`apps/web/src/**/*.stories.tsx`)에 두고 놀이터가 모아 보여 준다.
+앱(RN) 부품은 실기기 렌더가 진짜라 앱 안 숨은 화면 「디자인 시스템」(딥링크 `jirumalarm://design-system`)에서 본다.
+
+- 만지기: `pnpm --filter design storybook` (툴바 「테마」로 다크, 오른쪽 아래 Controls 로 props)
+- 검증: `pnpm --filter design test:stories` — 모든 스토리를 **라이트·다크 두 번** 렌더 + play 함수(조작 시나리오) + axe 접근성(대비 AA·이름 없는 버튼·라벨 없는 입력칸)을 `error` 로. 처음 돌렸을 때 입력칸 도움말 gray-400(AA 미달)·이름 없이 읽히는 Select 를 찾았다.
+- CI·배포: `.github/workflows/design-system.yml` — main 푸시면 같은 검증 후 배포.
+- 새 스토리 규칙: 인터랙티브 부품은 play 함수로 "눌러서 바뀌는지"를 적는다. a11y 규칙을 끄는 건 테스트 환경 탓(포털·애니메이션)일 때만, 이유 주석과 함께.
 
 ## 검증
 

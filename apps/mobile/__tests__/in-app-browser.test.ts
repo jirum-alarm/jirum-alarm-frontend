@@ -1,5 +1,5 @@
 import * as WebBrowser from 'expo-web-browser';
-import {Linking, Platform} from 'react-native';
+import {Appearance, Linking, Platform} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {
   openInAppBrowser,
@@ -94,9 +94,27 @@ describe('openInAppBrowser', () => {
       expect.objectContaining({
         dismissButtonStyle: 'close',
         presentationStyle: 'pageSheet',
-        toolbarColor: '#ffffff',
+        toolbarColor: '#FFFFFF',
       }),
     );
+  });
+
+  it('다크 테마면 브라우저 틀도 다크 값(흰 툴바·안 보이는 버튼 방지)', async () => {
+    Object.defineProperty(Platform, 'OS', {value: 'ios'});
+    const spy = jest
+      .spyOn(Appearance, 'getColorScheme')
+      .mockReturnValue('dark');
+
+    await openInAppBrowser('https://example.com');
+
+    expect(WebBrowser.openBrowserAsync).toHaveBeenCalledWith(
+      'https://example.com',
+      expect.objectContaining({
+        toolbarColor: '#0C111D',
+        controlsColor: '#E4E7EC',
+      }),
+    );
+    spy.mockRestore();
   });
 
   it('falls back to Linking when expo web browser fails', async () => {

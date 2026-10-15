@@ -1,0 +1,17 @@
+/* web 의 전역 스타일 그대로(토큰 theme.css·pc/dark 변형 포함) + 놀이터가 훑을 소스 경로. */
+@import '../../web/src/shared/style/globals.css';
+
+@source '../../web/src';
+@source '../src';
+@source '../../../packages/design-system';
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('../../web/src/shared/fonts/PretendardVariable.woff2') format('woff2');
+  font-weight: 45 920;
+  font-display: swap;
+}
+
+body {
+  font-family: 'Pretendard', system-ui, sans-serif;
+}

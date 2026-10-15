@@ -4,6 +4,7 @@ import {
   isValidElement,
   ReactNode,
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -34,6 +35,8 @@ const AlertDialog = (props: DialogProps) => {
   const { children, defaultOpen = false, onOpenChange } = props;
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(defaultOpen);
+  const titleId = useId();
+  const descriptionId = useId();
 
   useEffect(() => {
     onOpenChange?.(open);
@@ -45,8 +48,10 @@ const AlertDialog = (props: DialogProps) => {
       triggerRef,
       onOpenChange: (open: boolean) => setOpen(open),
       onOpenToggle: () => setOpen((prev) => !prev),
+      titleId,
+      descriptionId,
     }),
-    [open],
+    [open, titleId, descriptionId],
   );
   return (
     <AlertDialogContext.Provider value={alertDialogContextValue}>
@@ -164,7 +169,7 @@ OverlayImpl.displayName = 'OverlayImpl';
 const ContentImpl = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   (props, ref) => {
     const { className, ...others } = props;
-    const { open, onOpenChange, triggerRef } = useAlertDialogContext();
+    const { open, onOpenChange, triggerRef, titleId, descriptionId } = useAlertDialogContext();
     return (
       <Presence present={open}>
         <FocusTrap
@@ -175,6 +180,11 @@ const ContentImpl = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEleme
         >
           <div
             ref={ref}
+            // 역할·이름이 없으면 스크린리더는 확인 창이 떴는지도, 무엇을 묻는지도 모른다(놀이터 스토리 검사가 찾음).
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby={titleId}
+            aria-describedby={descriptionId}
             data-state={getState(open)}
             className={cn(
               'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[335px] -translate-x-1/2 -translate-y-1/2 gap-8 rounded-lg border bg-white px-4 py-5 shadow-lg',
@@ -217,7 +227,8 @@ Header.displayName = 'Header';
  * AlertDialogTitle
  * -----------------------------------------------------------------------------------------------*/
 const Title = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
-  return <div ref={ref} {...props} />;
+  const { titleId } = useAlertDialogContext();
+  return <div ref={ref} id={titleId} {...props} />;
 });
 Title.displayName = 'Title';
 /* -------------------------------------------------------------------------------------------------
@@ -225,7 +236,8 @@ Title.displayName = 'Title';
  * -----------------------------------------------------------------------------------------------*/
 const Description = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   (props, ref) => {
-    return <div ref={ref} {...props} />;
+    const { descriptionId } = useAlertDialogContext();
+    return <div ref={ref} id={descriptionId} {...props} />;
   },
 );
 Description.displayName = 'Description';

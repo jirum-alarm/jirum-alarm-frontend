@@ -29,18 +29,21 @@ export const Error: Story = {
   args: {
     error: true,
     helperText: '올바른 이메일 주소를 입력해주세요',
-    value: 'useremail |',
+    defaultValue: 'useremail |',
+    'aria-label': '이메일',
   },
 };
 
 export const HelperText: Story = {
   args: {
     helperText: '공백없이 2~12자로 입력해주세요.',
+    placeholder: '닉네임',
   },
 };
 
 export const Icon: Story = {
   args: {
     icon: <Cancel />,
+    placeholder: '검색어',
   },
 };

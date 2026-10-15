@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { expect, fn, userEvent, within } from 'storybook/test';
 
 import { Switch } from './Switch';
 
@@ -23,8 +24,22 @@ export const Default: Story = {
     };
     return <Demo />;
   },
+  // 누르면 켜짐↔꺼짐이 바뀌고, 스크린리더가 읽는 상태(aria-checked)도 같이 바뀐다.
+  play: async ({ canvasElement }) => {
+    const toggle = within(canvasElement).getByRole('switch', { name: '키워드 알림' });
+    await expect(toggle).toHaveAttribute('aria-checked', 'true');
+    await userEvent.click(toggle);
+    await expect(toggle).toHaveAttribute('aria-checked', 'false');
+  },
 };
 
 export const Disabled: Story = {
-  args: { checked: false, disabled: true, onCheckedChange: () => {}, 'aria-label': '야간 알림' },
+  args: { checked: false, disabled: true, onCheckedChange: fn(), 'aria-label': '야간 알림' },
+  // 비활성이면 눌러도 바뀌지 않는다.
+  play: async ({ args, canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole('switch', { name: '야간 알림' }), {
+      pointerEventsCheck: 0,
+    });
+    await expect(args.onCheckedChange).not.toHaveBeenCalled();
+  },
 };
