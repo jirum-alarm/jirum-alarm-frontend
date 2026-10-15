@@ -1,5 +1,6 @@
 'use client';
 
+import { detailInfo } from '@jirum/design-system/recipes';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense, useEffect } from 'react';
 
@@ -14,17 +15,18 @@ import DisplayTime from '@/shared/ui/DisplayTime';
 
 import { ProductQueries } from '@/entities/product';
 import { stripPriceFromTitle } from '@/entities/product/lib/from-toss';
-import { formatFreeShipping } from '@/entities/product/model/toss-data';
 import NaverIcon from '@/entities/product/ui/NaverIcon';
 import TossBadges from '@/entities/product/ui/TossBadges';
 import TossIcon from '@/entities/product/ui/TossIcon';
 
 import { RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
+import { formatDeliveryText } from '@/features/product-detail/lib/delivery-text';
 import { dealFreshnessAt, isSeenBasedFreshness } from '@/features/product-detail/lib/product-seo';
 import DealEvidenceBlock from '@/features/product-detail/ui/DealEvidenceBlock';
 import HotdealCriteriaBadge from '@/features/product-detail/ui/HotdealCriteriaBadge';
 import ProductGuideMetaRows, {
+  DetailInfoRow,
   type GuideRow as ProductGuideRow,
 } from '@/features/product-detail/ui/ProductGuideMetaRows';
 
@@ -66,8 +68,10 @@ export default function ProductInfo({
     isEnd: product.isEnd,
   });
 
+  const deliveryText = formatDeliveryText(tossData, ohouData);
+
   return (
-    <section className="px-5 pb-9">
+    <section className="px-5 pb-6">
       <div>
         {/* 게시 시각은 배지 줄 오른쪽에 — 가격 위에 줄을 하나 더 두면 375×667 첫 화면에서 가격이 밀려난다. */}
         <div className="flex items-center gap-3 pb-2">
@@ -151,91 +155,73 @@ export default function ProductInfo({
           {tossData && <TossBadges toss={tossData} hidePriceSignals={hidePrice} />}
         </div>
       </div>
-      <div className="pt-4">
-        <div className="flex flex-col gap-[8px]">
-          <div className="flex justify-between text-sm font-medium">
-            <span className="text-gray-400">쇼핑몰</span>
-            <span className="flex items-center gap-x-1 text-gray-500">
-              {tossData && <TossIcon size={20} />}
-              {!tossData && naverbcData && <NaverIcon height={12} />}
-              {tossData ? '토스' : ohouData ? '오늘의집' : product.mallName}
-            </span>
-          </div>
-          {/* 서버가 가이드를 넘겨줬으면 Suspense 없이 첫 렌더에 그린다(깜빡임·CLS 제거).
-              못 받았을 때만 기존 쿼리 경로로 폴백. */}
-          {initialGuides ? (
+      {/* 구매 정보 — 라벨 왼쪽·값 옆 줄바꿈 한 모양(detailInfo). 가격 요약과는 선 하나로 나눈다. */}
+      <dl
+        className={cn('mt-5 flex flex-col border-t border-gray-100 pt-5', detailInfo.list)}
+        aria-label="구매 정보"
+      >
+        <DetailInfoRow label="쇼핑몰" variant="mobile" valueClassName="flex items-center gap-x-1">
+          {tossData && <TossIcon size={20} />}
+          {!tossData && naverbcData && <NaverIcon height={12} />}
+          {tossData ? '토스' : ohouData ? '오늘의집' : product.mallName}
+        </DetailInfoRow>
+        {/* 서버가 가이드를 넘겨줬으면 Suspense 없이 첫 렌더에 그린다(깜빡임·CLS 제거).
+            못 받았을 때만 기존 쿼리 경로로 폴백. */}
+        {initialGuides ? (
+          <ProductGuideMetaRows
+            productId={productId}
+            variant="mobile"
+            initialGuides={initialGuides}
+            hiddenIds={initialEvidence?.hiddenGuideIds}
+            hidePrice={hidePrice}
+          />
+        ) : (
+          <Suspense fallback={null}>
             <ProductGuideMetaRows
               productId={productId}
               variant="mobile"
-              initialGuides={initialGuides}
               hiddenIds={initialEvidence?.hiddenGuideIds}
               hidePrice={hidePrice}
             />
-          ) : (
-            <Suspense fallback={null}>
-              <ProductGuideMetaRows
-                productId={productId}
-                variant="mobile"
-                hiddenIds={initialEvidence?.hiddenGuideIds}
-                hidePrice={hidePrice}
-              />
-            </Suspense>
-          )}
-          {product.uploaderType !== UploaderType.Crawled && (
-            <div className="flex justify-between text-sm font-medium">
-              <span className="text-gray-400">업로드</span>
-              <span
-                className={cn('flex items-center gap-1 text-gray-600', {
-                  'text-primary-800': product.uploaderType === UploaderType.Official,
-                })}
-              >
-                {product.uploaderType === UploaderType.Official ? (
-                  <>
-                    <Jirume width={18} height={18} />
-                    지름알림
-                  </>
-                ) : (
-                  product.author?.nickname
-                )}
-              </span>
-            </div>
-          )}
-
-          {displayData?.sellerName && (
-            <div className="flex justify-between text-sm font-medium">
-              <span className="text-gray-400">판매자</span>
-              <span className="text-gray-500">{displayData.sellerName}</span>
-            </div>
-          )}
-          {tossData && (
-            <div className="flex justify-between text-sm font-medium">
-              <span className="text-gray-400">배송비</span>
-              <span className="text-gray-500">
-                {tossData.deliveryFee
-                  ? `${tossData.deliveryFee.toLocaleString()}원` +
-                    (tossData.freeShippingThreshold
-                      ? ` (${formatFreeShipping(tossData.freeShippingThreshold)})`
-                      : '')
-                  : '무료배송'}
-              </span>
-            </div>
-          )}
-          {!tossData && ohouData?.delivery && (
-            <div className="flex justify-between text-sm font-medium">
-              <span className="text-gray-400">배송비</span>
-              <span className="text-gray-500">{ohouData.delivery}</span>
-            </div>
-          )}
-        </div>
-        {product.uploaderType === UploaderType.User && product.content && (
-          <div className="mt-6">
-            <h2 className="mb-2 text-sm font-medium text-gray-400">상품 설명</h2>
-            <p className="text-sm leading-relaxed whitespace-pre-wrap text-gray-700">
-              {product.content}
-            </p>
-          </div>
+          </Suspense>
         )}
-      </div>
+        {product.uploaderType !== UploaderType.Crawled && (
+          <DetailInfoRow
+            label="업로드"
+            variant="mobile"
+            valueClassName={cn('flex items-center gap-1', {
+              'text-primary-800': product.uploaderType === UploaderType.Official,
+            })}
+          >
+            {product.uploaderType === UploaderType.Official ? (
+              <>
+                <Jirume width={18} height={18} />
+                지름알림
+              </>
+            ) : (
+              product.author?.nickname
+            )}
+          </DetailInfoRow>
+        )}
+        {displayData?.sellerName && (
+          <DetailInfoRow label="판매자" variant="mobile">
+            {displayData.sellerName}
+          </DetailInfoRow>
+        )}
+        {deliveryText && (
+          <DetailInfoRow label="배송비" variant="mobile">
+            {deliveryText}
+          </DetailInfoRow>
+        )}
+      </dl>
+      {product.uploaderType === UploaderType.User && product.content && (
+        <div className="mt-6">
+          <h2 className="mb-2 text-sm font-medium text-gray-500">상품 설명</h2>
+          <p className="text-sm leading-relaxed whitespace-pre-wrap text-gray-700">
+            {product.content}
+          </p>
+        </div>
+      )}
     </section>
   );
 }

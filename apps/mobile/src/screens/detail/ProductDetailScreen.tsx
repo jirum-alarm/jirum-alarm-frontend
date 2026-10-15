@@ -66,6 +66,7 @@ import {
 import ShareSheet from './ui/ShareSheet';
 import KakaoOpenChatPrompt from './ui/KakaoOpenChatPrompt';
 import TossDetailImages from './ui/TossDetailImages';
+import DetailBand from './ui/DetailBand';
 import ViewerCount, {
   MIN_VIEWER_COUNT,
   VIEWER_COUNT_HEIGHT,
@@ -396,7 +397,8 @@ function NativeDetail({
             </Pressable>
           ) : null}
         </View>
-        {/* web 순서: 카톡방 → 쿠팡 고지 → 만료 경고 → 가격추이. 광고는 앱에서 제거. */}
+        {/* web 순서: 카톡방 → 쿠팡 고지 → (띠) 비교 → (띠) 가격추이 → (띠) 커뮤니티 반응. 광고는 앱에서 제거.
+            띠는 조건부 섹션이 자기 안에 둔다(DetailBand) — 섹션이 없으면 띠도 없다. */}
         <KakaoOpenChatPrompt
           categoryId={product.categoryId}
           productId={Number(product.id)}
@@ -433,6 +435,7 @@ function NativeDetail({
             productTitle={product.title}
             productThumbnail={product.thumbnail}
             onPressProduct={pushProduct}
+            topDivider
             onLayout={e => {
               priceHistoryY.current = e.nativeEvent.layout.y;
             }}
@@ -445,14 +448,17 @@ function NativeDetail({
         ) : null}
         {/* 유저 직접 등록 상품은 크롤링 출처가 없어 커뮤니티 반응도 없다(web 과 동일). */}
         {product.uploaderType !== UploaderType.User ? (
-          <View
-            onLayout={e => {
-              communityY.current = e.nativeEvent.layout.y;
-            }}>
-            <CommunityReaction productId={productId} isUserLogin={isLogin} />
-          </View>
+          <>
+            <DetailBand />
+            <View
+              onLayout={e => {
+                communityY.current = e.nativeEvent.layout.y;
+              }}>
+              <CommunityReaction productId={productId} isUserLogin={isLogin} />
+            </View>
+          </>
         ) : null}
-        <Hr />
+        <DetailBand />
         <TossDetailImages images={source.toss?.images} />
         <CommentSection
           productId={productId}
@@ -461,7 +467,7 @@ function NativeDetail({
             navigation.navigate(tabStackNavigations.COMMENTS, {productId})
           }
         />
-        <Hr />
+        <DetailBand />
         <ProductCarouselSection
           title={`${product.categoryName ?? '기타'} 인기 상품`}
           products={categoryPopular?.filter(
@@ -485,15 +491,6 @@ function NativeDetail({
       {shareSheet}
     </View>
   );
-}
-
-/**
- * 섹션 구분선. web 의 Hr 과 같은 8px 회색 바.
- * web 은 바 앞 섹션이 자기 아래 여백(mb)을 갖는데 내 섹션들은 위 여백(pt)만
- * 있어 바 위쪽이 붙어 보였다. 바에 위 여백을 줘서 양쪽을 띄운다.
- */
-function Hr() {
-  return <View className="mt-7 h-[8px] bg-gray-100" />;
 }
 
 export {parseProductId};

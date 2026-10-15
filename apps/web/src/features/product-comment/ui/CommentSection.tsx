@@ -51,7 +51,7 @@ export default function CommentSection({
   };
 
   return (
-    <section className="pc:my-0 mt-4 mb-10 flex flex-col">
+    <section className="flex flex-col">
       <div className="pc:px-0 px-5">
         <DetailSectionHeader
           title={

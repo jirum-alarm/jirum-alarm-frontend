@@ -74,31 +74,6 @@ function KeywordChip({ item }: { item: ReactionItem }) {
   );
 }
 
-function KeywordRow({
-  label,
-  labelClassName,
-  items,
-}: {
-  label: string;
-  labelClassName: string;
-  items: ReactionItem[];
-}) {
-  if (!items.length) return null;
-
-  return (
-    <div className="flex items-start gap-2">
-      <span className={cn('mt-1.5 w-8 shrink-0 text-xs font-semibold', labelClassName)}>
-        {label}
-      </span>
-      <ul className="flex min-w-0 flex-1 flex-wrap gap-1.5">
-        {items.map((item) => (
-          <KeywordChip key={`${item.type}-${item.name}`} item={item} />
-        ))}
-      </ul>
-    </div>
-  );
-}
-
 /**
  * 커뮤니티 반응 — 품질 반응만 (품절·종료·가격변동 등 상태 신호 제외).
  */
@@ -157,48 +132,45 @@ export default function CommunityReaction({ productId }: { productId: number }) 
         }
       />
 
-      <div className="space-y-4">
-        <div className="bg-secondary-50 space-y-3 rounded-xl p-4">
-          <div className="space-y-3 rounded-xl bg-white px-3 py-3">
-            {allCount > 0 ? (
-              <div className="flex items-center gap-1.5">
-                {isPositive ? (
-                  <Thumbsup className="size-4.5" active />
-                ) : (
-                  <Thumbsdown className="size-4.5" active />
-                )}
-                <span className="text-base font-semibold text-gray-800">
-                  {isPositive ? '추천해요' : '아쉬워요'}
-                </span>
-                <span className="text-sm text-gray-500 tabular-nums">· {share}</span>
-              </div>
-            ) : (
-              <p className={emptyText}>아직 모은 반응이 없어요</p>
-            )}
-
-            {(positiveItems.length > 0 || negativeItems.length > 0) && (
-              <div className="space-y-2">
-                <KeywordRow
-                  label="긍정"
-                  labelClassName="text-secondary-600"
-                  items={positiveItems}
-                />
-                <KeywordRow label="부정" labelClassName="text-error-400" items={negativeItems} />
-              </div>
-            )}
-
-            {statusSummary && <p className="text-xs text-gray-500">{statusSummary.message}</p>}
-
-            <div className="flex items-center justify-between gap-2 border-t border-gray-100 pt-2.5">
-              <span className="text-xs text-gray-400">{lastUpdatedAt ?? '\u00a0'}</span>
-              {product.url && !MALL_SOURCED_PROVIDER_IDS.has(product.provider.id) ? (
-                <CommunityLink url={product.url} provider={product.provider.nameKr} />
-              ) : null}
+      {/* 판정·키워드·AI 요약을 카드 하나에 — 예전엔 파란 상자 안 흰 상자 + 바깥 회색 상자로 세 겹이었다. */}
+      <div className="space-y-3">
+        <div className="space-y-3 rounded-xl border border-gray-200 bg-white p-4">
+          {allCount > 0 ? (
+            <div className="flex items-center gap-1.5">
+              {isPositive ? (
+                <Thumbsup className="size-4.5" active />
+              ) : (
+                <Thumbsdown className="size-4.5" active />
+              )}
+              <span className="text-base font-semibold text-gray-800">
+                {isPositive ? '추천해요' : '아쉬워요'}
+              </span>
+              <span className="text-sm text-gray-500 tabular-nums">· {share}</span>
             </div>
+          ) : (
+            <p className={emptyText}>아직 모은 반응이 없어요</p>
+          )}
+
+          {/* 긍정 먼저, 부정 뒤 — 칩 테두리·숫자 색이 긍·부정을 말한다(줄 앞 「긍정」 라벨은 칩 머리말과 겹쳤다). */}
+          {(positiveItems.length > 0 || negativeItems.length > 0) && (
+            <ul className="flex flex-wrap gap-1.5">
+              {[...positiveItems, ...negativeItems].map((item) => (
+                <KeywordChip key={`${item.type}-${item.name}`} item={item} />
+              ))}
+            </ul>
+          )}
+
+          {statusSummary && <p className="text-xs text-gray-500">{statusSummary.message}</p>}
+
+          {commentSummary && <Reactions commentSummary={commentSummary} />}
+
+          <div className="flex items-center justify-between gap-2 border-t border-gray-100 pt-3">
+            <span className="text-xs text-gray-500">{lastUpdatedAt ?? '\u00a0'}</span>
+            {product.url && !MALL_SOURCED_PROVIDER_IDS.has(product.provider.id) ? (
+              <CommunityLink url={product.url} provider={product.provider.nameKr} />
+            ) : null}
           </div>
         </div>
-
-        {commentSummary && <Reactions commentSummary={commentSummary} />}
 
         <Suspense>
           <ProductReport productId={productId} />

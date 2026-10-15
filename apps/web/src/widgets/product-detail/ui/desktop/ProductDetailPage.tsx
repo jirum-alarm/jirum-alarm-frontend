@@ -23,6 +23,7 @@ import PriceHistorySection from '@/features/product-detail/ui/PriceHistorySectio
 import type { GuideRow as ProductGuideRow } from '@/features/product-detail/ui/ProductGuideMetaRows';
 import ProductPriceContext from '@/features/product-detail/ui/ProductPriceContext';
 import SoftKakaoOpenChatPrompt from '@/features/product-detail/ui/SoftKakaoOpenChatPrompt';
+import ViewerCount from '@/features/product-detail/ui/ViewerCount';
 import {
   CategoryPopularByProductSection,
   TossInternalLinksSection,
@@ -76,12 +77,14 @@ export default async function DesktopProductDetailPage({
           className="col-span-10 col-start-2 grid grid-cols-2 gap-x-12 gap-y-10"
           style={{ gridTemplateRows: 'min-content 1fr' }}
         >
-          <div className="col-span-1 space-y-10">
-            <div className="space-y-4">
+          <div className="col-span-1 flex flex-col gap-12">
+            <div className="flex flex-col gap-4">
               <div className="relative aspect-square overflow-hidden rounded-xl border border-gray-200">
                 {initialProduct ? (
                   <ProductDetailImage product={initialProduct} fill={false} />
                 ) : null}
+                {/* 모바일과 같은 이미지 위 알약 — 오른쪽 가격 칸 한가운데 띠로 두면 가격 판단과 구매 정보를 갈라놓았다. */}
+                <ViewerCount productId={productId} />
               </div>
               <AdvertiseSlotBanner
                 slotLocation={AdvertiseSlotLocation.ProductMainBanner}
@@ -95,31 +98,29 @@ export default async function DesktopProductDetailPage({
               <CoupangPartnerGuide productId={productId} />
             </div>
 
+            {/* 비교 → 가격 추이 → 커뮤니티 반응. 간격은 이 묶음의 gap 하나로만 준다(각 블록은 바깥 여백이 없다). */}
             {initialProduct && <ExpiredProductWarning product={initialProduct} isMobile={false} />}
-            {initialProduct && <LiveAlternativeDeals product={initialProduct} className="mb-10" />}
-
-            <div className="space-y-12">
+            {initialProduct && <LiveAlternativeDeals product={initialProduct} />}
+            {!hidePrice && (
               <Suspense fallback={null}>
-                {!hidePrice && (
-                  <PriceHistorySection
-                    productId={productId}
-                    source="detail_desktop"
-                    currentPrice={
-                      initialProduct?.price
-                        ? Number(String(initialProduct.price).replace(/[^0-9.]/g, ''))
-                        : null
-                    }
-                    postedAt={initialProduct?.postedAt}
-                  />
-                )}
+                <PriceHistorySection
+                  productId={productId}
+                  source="detail_desktop"
+                  currentPrice={
+                    initialProduct?.price
+                      ? Number(String(initialProduct.price).replace(/[^0-9.]/g, ''))
+                      : null
+                  }
+                  postedAt={initialProduct?.postedAt}
+                />
               </Suspense>
-              {/* 유저 직접 등록 상품은 크롤링 출처(커뮤니티 반응)가 없으므로 숨김.
-                  ProductPrefetch 가 서버에서 데이터를 다 받아두므로 Suspense 로 감싸지 않는다.
-                  감싸면 React 가 별도 스트리밍 단위로 떼어내 첫 페인트에 "없다가 생긴다". */}
-              {initialProduct?.uploaderType !== UploaderType.User && (
-                <CommunityReaction productId={productId} />
-              )}
-            </div>
+            )}
+            {/* 유저 직접 등록 상품은 크롤링 출처(커뮤니티 반응)가 없으므로 숨김.
+                ProductPrefetch 가 서버에서 데이터를 다 받아두므로 Suspense 로 감싸지 않는다.
+                감싸면 React 가 별도 스트리밍 단위로 떼어내 첫 페인트에 "없다가 생긴다". */}
+            {initialProduct?.uploaderType !== UploaderType.User && (
+              <CommunityReaction productId={productId} />
+            )}
           </div>
 
           <div className="col-span-1">

@@ -1,5 +1,6 @@
 'use client';
 
+import { detailInfo } from '@jirum/design-system/recipes';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { cn } from '@/shared/lib/cn';
@@ -7,11 +8,13 @@ import { cn } from '@/shared/lib/cn';
 import { ProductQueries } from '@/entities/product';
 import { isPriceGuideTitle } from '@/entities/product/lib/from-toss';
 
+import type { ReactNode } from 'react';
+
 export type GuideRow = { id: string; title?: string | null; content?: string | null };
 
 type Props = {
   productId: number;
-  /** desktop: 라벨 고정폭 / mobile: 좌우 정렬 */
+  /** desktop 은 라벨 칸이 넓다(110px). 모양은 둘 다 라벨 왼쪽·값 옆 줄바꿈(detailInfo). */
   variant: 'desktop' | 'mobile';
   /**
    * 서버(page.tsx)가 이미 받아둔 가이드. 넘어오면 쿼리를 타지 않아 Suspense 로 안 빠지고
@@ -23,9 +26,6 @@ type Props = {
   /** 토스 특가 코너 유입 — 가격·할인가 행을 숨긴다. */
   hidePrice?: boolean;
 };
-
-/** 이보다 긴 글은 라벨 위·글 아래로 쌓는다 — 오른쪽 정렬 70% 폭 문단이 표를 지저분하게 만들었다. */
-const STACK_AFTER_CHARS = 40;
 
 function plainGuideContent(content: string): string {
   return content
@@ -113,39 +113,35 @@ function GuideRows({
 
   return (
     <>
-      {visible.map((row) => {
-        const stacked = variant === 'mobile' && row.content.length > STACK_AFTER_CHARS;
-        return (
-          <div
-            key={row.id}
-            className={cn(
-              'text-sm font-medium',
-              stacked
-                ? 'flex flex-col gap-y-1'
-                : variant === 'desktop'
-                  ? 'flex'
-                  : 'flex justify-between gap-x-4',
-            )}
-          >
-            <span
-              className={cn(
-                'shrink-0 text-gray-400',
-                variant === 'desktop' && 'inline-block w-[110px]',
-              )}
-            >
-              {row.title}
-            </span>
-            <span
-              className={cn(
-                'text-gray-500',
-                variant === 'mobile' && !stacked && 'max-w-[70%] text-right',
-              )}
-            >
-              {row.content}
-            </span>
-          </div>
-        );
-      })}
+      {visible.map((row) => (
+        <DetailInfoRow key={row.id} label={row.title} variant={variant}>
+          {row.content}
+        </DetailInfoRow>
+      ))}
     </>
+  );
+}
+
+/**
+ * 상세 정보 표 한 줄 — 쇼핑몰·가이드·판매자·배송비가 모두 이 모양 하나를 쓴다.
+ * 예전엔 짧은 값은 좌우 끝 정렬, 40자 넘는 값은 라벨 아래로 쌓아 한 표에 두 모양이 섞였다.
+ */
+export function DetailInfoRow({
+  label,
+  variant,
+  children,
+  valueClassName,
+}: {
+  label: string;
+  variant: Props['variant'];
+  children: ReactNode;
+  valueClassName?: string;
+}) {
+  return (
+    <div className={cn('flex', detailInfo.row)}>
+      <dt className={cn(detailInfo.label, variant === 'desktop' && 'w-[110px]')}>{label}</dt>
+      {/* break-keep — 한국어 낱말 중간에서 줄이 꺾이지 않게(「경/유」). */}
+      <dd className={cn(detailInfo.value, 'break-keep', valueClassName)}>{children}</dd>
+    </div>
   );
 }

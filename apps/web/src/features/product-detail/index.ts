@@ -9,10 +9,7 @@ export { default as CoupangPartnerGuide } from './ui/CoupangPartnerGuide';
 export { default as NoticeProfitUrl } from './ui/NoticeProfitUrl';
 export { default as ProductShareButton } from './ui/ProductShareButton';
 
-// ui/desktop
-export { default as DesktopViewerCount } from './ui/desktop/ViewerCount';
-
-// ui/mobile
-export { default as MobileViewerCount } from './ui/mobile/ViewerCount';
+// 조회수 알약(이미지 위) — 모바일·데스크톱 공용
+export { default as ViewerCount } from './ui/ViewerCount';
 
 export { default as PriceHistorySection } from './ui/PriceHistorySection';

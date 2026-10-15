@@ -1,5 +1,6 @@
 'use client';
 
+import { detailInfo } from '@jirum/design-system/recipes';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense, useEffect, useState } from 'react';
 
@@ -24,7 +25,6 @@ import ShareButton from '@/shared/ui/ShareButton';
 
 import { ProductQueries } from '@/entities/product';
 import { stripPriceFromTitle } from '@/entities/product/lib/from-toss';
-import { formatFreeShipping } from '@/entities/product/model/toss-data';
 import NaverIcon from '@/entities/product/ui/NaverIcon';
 import TossBadges from '@/entities/product/ui/TossBadges';
 import TossIcon from '@/entities/product/ui/TossIcon';
@@ -32,15 +32,16 @@ import { peekNotificationOrigin } from '@/entities/product-list/model/notificati
 
 import { LikeButton, RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
+import { formatDeliveryText } from '@/features/product-detail/lib/delivery-text';
 import { dealFreshnessAt, isSeenBasedFreshness } from '@/features/product-detail/lib/product-seo';
 import { buildProductShareDescription } from '@/features/product-detail/lib/share-card';
 import { useBeautyRoomAssignment } from '@/features/product-detail/lib/useBeautyRoomAssignment';
 import DealEvidenceBlock from '@/features/product-detail/ui/DealEvidenceBlock';
-import ViewerCount from '@/features/product-detail/ui/desktop/ViewerCount';
 import HotdealCriteriaBadge from '@/features/product-detail/ui/HotdealCriteriaBadge';
 import PostPurchaseKakaoPrompt from '@/features/product-detail/ui/PostPurchaseKakaoPrompt';
 import PostPurchaseKeywordPrompt from '@/features/product-detail/ui/PostPurchaseKeywordPrompt';
 import ProductGuideMetaRows, {
+  DetailInfoRow,
   type GuideRow as ProductGuideRow,
 } from '@/features/product-detail/ui/ProductGuideMetaRows';
 
@@ -90,25 +91,29 @@ export default function ProductInfo({
   });
 
   const shareTitle = `${displayTitle} | 지름알림`;
+  const deliveryText = formatDeliveryText(tossData, ohouData);
 
   return (
     <section className="flex h-full flex-col justify-between">
       <div>
         <div className="h-0.5 w-full bg-gray-600" />
         <div className="space-y-4 pt-6 pb-4">
-          {(product.isEnd || (!product.isEnd && product.hotDealType)) && (
-            <div className="flex gap-x-2">
-              {product.isEnd && (
-                <Badge size="tag" variant="outline" tone="gray">
-                  판매종료
-                </Badge>
-              )}
-              {/* 배지 뜻 한 줄 + 누르면 기준 시트. 이 딜의 구체적 근거는 가격 아래 근거 블록이 말한다. */}
-              {!product.isEnd && product.hotDealType && (
-                <HotdealCriteriaBadge hotdealType={product.hotDealType} />
-              )}
+          {/* 배지 줄 오른쪽에 게시 시각 — 모바일과 같은 자리. 가격 위에 시각 줄을 따로 두지 않는다. */}
+          <div className="flex min-h-[22px] items-center gap-x-2">
+            {product.isEnd && (
+              <Badge size="tag" variant="outline" tone="gray">
+                판매종료
+              </Badge>
+            )}
+            {/* 배지 뜻 한 줄 + 누르면 기준 시트. 이 딜의 구체적 근거는 가격 아래 근거 블록이 말한다. */}
+            {!product.isEnd && product.hotDealType && (
+              <HotdealCriteriaBadge hotdealType={product.hotDealType} />
+            )}
+            <div className="ml-auto shrink-0 text-sm text-gray-500">
+              <DisplayTime time={dealFreshnessAt(product) ?? product.postedAt} />
+              {isSeenBasedFreshness(product) && ' 확인'}
             </div>
-          )}
+          </div>
 
           <div className="flex items-start justify-between gap-x-5">
             <h1 className="min-w-0 flex-1 text-xl font-medium text-gray-800">{displayTitle}</h1>
@@ -127,11 +132,7 @@ export default function ProductInfo({
             </div>
           </div>
         </div>
-        <div className="space-y-1 pt-3 pb-8">
-          <div className="h-5 text-sm text-gray-500">
-            <DisplayTime time={dealFreshnessAt(product) ?? product.postedAt} />
-            {isSeenBasedFreshness(product) && ' 확인'}
-          </div>
+        <div className="space-y-1 pb-6">
           <div className="flex justify-between">
             <div>
               {hidePrice ? (
@@ -196,16 +197,20 @@ export default function ProductInfo({
           )}
           {tossData && <TossBadges toss={tossData} hidePriceSignals={hidePrice} />}
         </div>
-        {product.viewCount >= 10 && <ViewerCount count={product.viewCount} />}
-        <div className="my-6 space-y-2">
-          <div className="flex text-sm font-medium">
-            <span className="inline-block w-[110px] text-gray-400">쇼핑몰</span>
-            <span className="flex items-center gap-x-1 text-gray-500">
-              {tossData && <TossIcon size={20} />}
-              {!tossData && naverbcData && <NaverIcon height={12} />}
-              {tossData ? '토스' : ohouData ? '오늘의집' : product.mallName}
-            </span>
-          </div>
+        {/* 구매 정보 — 라벨 왼쪽·값 옆 줄바꿈 한 모양(detailInfo). 가격 요약과는 선 하나로 나눈다. */}
+        <dl
+          className={cn('mb-6 flex flex-col border-t border-gray-100 pt-6', detailInfo.list)}
+          aria-label="구매 정보"
+        >
+          <DetailInfoRow
+            label="쇼핑몰"
+            variant="desktop"
+            valueClassName="flex items-center gap-x-1"
+          >
+            {tossData && <TossIcon size={20} />}
+            {!tossData && naverbcData && <NaverIcon height={12} />}
+            {tossData ? '토스' : ohouData ? '오늘의집' : product.mallName}
+          </DetailInfoRow>
           {/* 서버가 가이드를 넘겨줬으면 Suspense 없이 첫 렌더에 그린다(깜빡임·CLS 제거). */}
           {initialGuides ? (
             <ProductGuideMetaRows
@@ -226,54 +231,37 @@ export default function ProductInfo({
             </Suspense>
           )}
           {product.uploaderType !== UploaderType.Crawled && (
-            <div className="flex text-sm font-medium">
-              <span className="inline-block w-[110px] text-gray-400">업로드</span>
-              <span
-                className={cn('flex items-center gap-1 text-gray-600', {
-                  'text-primary-800': product.uploaderType === UploaderType.Official,
-                })}
-              >
-                {product.uploaderType === UploaderType.Official ? (
-                  <>
-                    <Jirume width={18} height={18} />
-                    지름알림
-                  </>
-                ) : (
-                  product.author?.nickname
-                )}
-              </span>
-            </div>
+            <DetailInfoRow
+              label="업로드"
+              variant="desktop"
+              valueClassName={cn('flex items-center gap-1', {
+                'text-primary-800': product.uploaderType === UploaderType.Official,
+              })}
+            >
+              {product.uploaderType === UploaderType.Official ? (
+                <>
+                  <Jirume width={18} height={18} />
+                  지름알림
+                </>
+              ) : (
+                product.author?.nickname
+              )}
+            </DetailInfoRow>
           )}
-
           {displayData?.sellerName && (
-            <div className="flex text-sm font-medium">
-              <span className="inline-block w-[110px] text-gray-400">판매자</span>
-              <span className="text-gray-500">{displayData.sellerName}</span>
-            </div>
+            <DetailInfoRow label="판매자" variant="desktop">
+              {displayData.sellerName}
+            </DetailInfoRow>
           )}
-          {tossData && (
-            <div className="flex text-sm font-medium">
-              <span className="inline-block w-[110px] text-gray-400">배송비</span>
-              <span className="text-gray-500">
-                {tossData.deliveryFee
-                  ? `${tossData.deliveryFee.toLocaleString()}원` +
-                    (tossData.freeShippingThreshold
-                      ? ` (${formatFreeShipping(tossData.freeShippingThreshold)})`
-                      : '')
-                  : '무료배송'}
-              </span>
-            </div>
+          {deliveryText && (
+            <DetailInfoRow label="배송비" variant="desktop">
+              {deliveryText}
+            </DetailInfoRow>
           )}
-          {!tossData && ohouData?.delivery && (
-            <div className="flex text-sm font-medium">
-              <span className="inline-block w-[110px] text-gray-400">배송비</span>
-              <span className="text-gray-500">{ohouData.delivery}</span>
-            </div>
-          )}
-        </div>
+        </dl>
         {product.uploaderType === UploaderType.User && product.content && (
-          <div className="my-6">
-            <h2 className="mb-2 text-sm font-medium text-gray-400">상품 설명</h2>
+          <div className="mb-6">
+            <h2 className="mb-2 text-sm font-medium text-gray-500">상품 설명</h2>
             <p className="text-sm leading-relaxed whitespace-pre-wrap text-gray-700">
               {product.content}
             </p>

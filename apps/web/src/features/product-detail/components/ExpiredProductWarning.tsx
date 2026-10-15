@@ -27,12 +27,12 @@ export default function ExpiredProductWarning({ product, isMobile }: Props) {
 
   // 새 딜은 오래된 딜 블록 대신 링크 없는 딜의 쿠팡 버튼만(nolink_coupang_cta_v1) — 대상·실험군만 서버가 링크를 준다.
   if (!isExpired)
-    return <CoupangSearchCta productId={Number(product.id)} className="pc:px-0 mb-6 px-5" />;
+    return <CoupangSearchCta productId={Number(product.id)} className="pc:px-0 px-5" />;
 
   return (
     <>
       {/* 오래된 딜에 검색으로 들어온 사람에게 지금 살 곳 — 실험군·대상 딜만 서버가 링크를 준다. */}
-      <CoupangSearchCta productId={Number(product.id)} className="pc:px-0 mb-6 px-5" />
+      <CoupangSearchCta productId={Number(product.id)} className="pc:px-0 px-5" />
       <Suspense>
         <ExpiredProductRecommendations product={product} isMobile={isMobile} />
       </Suspense>
@@ -79,7 +79,7 @@ function ExpiredProductRecommendations({
   if (displayProducts.length === 0) return null;
 
   return (
-    <div className="mb-10">
+    <div>
       <div className="pc:space-y-4 pc:px-0 space-y-3 px-4">
         <DetailSectionHeader
           className="px-1"
