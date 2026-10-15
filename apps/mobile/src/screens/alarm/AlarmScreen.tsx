@@ -38,11 +38,17 @@ import {useColors} from '@/shared/theme/useColors';
 import {useMyKeywordSet} from '@/features/keyword-prompt/model/myKeywords';
 import {ThemeQueries} from '@/entities/theme';
 import {
+  GOOD_PRICE_NUDGE_MIN_ALERTS,
+  type GoodPriceUnit,
   HEAVY_KEYWORD_ALERTS_PER_DAY,
+  goodPriceText,
   notificationSourceKey,
   parseSourceKey,
   recentKeywordAlertCount,
+  topKeywordToday,
 } from './lib/notification-source';
+import {MyPageService} from '@/shared/api/mypage';
+import {cn} from '@/shared/lib/styling/className';
 import {MyPageQueries} from '@/entities/mypage';
 import {useUpdatePushSetting} from '@/features/mypage/model/mutations';
 
@@ -226,6 +232,63 @@ export default function AlarmScreen() {
     pushSetting.keywordAlertLevel === KeywordAlertLevel.All &&
     keywordAlertsToday > HEAVY_KEYWORD_ALERTS_PER_DAY;
 
+  // 오늘 가장 시끄러운 키워드 하나를 「좋은 가격일 때만」으로 — 전체를 핫딜만으로 줄이는 것보다 좁은 처방이라 먼저 권한다.
+  // 서버(「언제 사나」 엔진)가 그 키워드의 좋은 가격을 말할 수 있을 때만. web AlarmList 와 같은 규칙.
+  const topKeyword = useMemo(
+    () => topKeywordToday(notifications ?? [], myKeywords),
+    [notifications, myKeywords],
+  );
+  const nudgeKeyword =
+    pushSetting?.keywordAlert === true &&
+    topKeyword &&
+    topKeyword.count >= GOOD_PRICE_NUDGE_MIN_ALERTS
+      ? topKeyword.keyword
+      : null;
+  const {data: goodPrice} = useQuery({
+    queryKey: ['goodPriceSuggestion', nudgeKeyword],
+    queryFn: () => MyPageService.getGoodPriceSuggestion(nudgeKeyword!),
+    enabled: !!nudgeKeyword,
+    staleTime: 10 * 60_000,
+    retry: false,
+  });
+  const [goodPriceApplied, setGoodPriceApplied] = useState(false);
+  const [applyingGoodPrice, setApplyingGoodPrice] = useState(false);
+  const suggestGoodPrice =
+    !goodPriceApplied &&
+    !!goodPrice?.priced &&
+    !goodPrice.watching &&
+    goodPrice.goodPrice != null &&
+    goodPrice.goodDealCount < goodPrice.rawMatchCount;
+  useEffect(() => {
+    if (!suggestGoodPrice || !goodPrice) return;
+    Analytics.track('keyword_prompt_view', {
+      placement: 'inbox_good_price',
+      keyword: goodPrice.keyword,
+    });
+  }, [suggestGoodPrice, goodPrice]);
+  const applyGoodPrice = useCallback(async () => {
+    if (!goodPrice || goodPrice.goodPrice == null) return;
+    Analytics.track('keyword_prompt_click', {
+      placement: 'inbox_good_price',
+      keyword: goodPrice.keyword,
+    });
+    setApplyingGoodPrice(true);
+    try {
+      await MyPageService.applyGoodPriceOnly(goodPrice.keyword);
+      setGoodPriceApplied(true);
+      showToast.success(
+        `이제 「${goodPrice.keyword}」는 ${goodPriceText(
+          goodPrice.unit as GoodPriceUnit,
+          goodPrice.goodPrice,
+        )} 이하일 때만 알려드려요. 키워드 설정에서 되돌릴 수 있어요`,
+      );
+    } catch {
+      showToast.error('지금은 바꾸지 못했어요. 잠시 뒤 다시 시도해 주세요');
+    } finally {
+      setApplyingGoodPrice(false);
+    }
+  }, [goodPrice]);
+
   // 당기면 첫 페이지부터 — 깊이 내린 뒤 당기면 페이지 수만큼 왕복을 차례로 기다렸다.
   const queryClient = useQueryClient();
   const pullRefresh = useCallback(
@@ -290,7 +353,11 @@ export default function AlarmScreen() {
             </PressableScale>
           </View>
         ) : (
-          <View className="h-11 flex-row items-center justify-between px-5">
+          <View
+            className={cn(
+              'flex-row items-center justify-between px-5',
+              suggestGoodPrice ? 'min-h-11 gap-3 py-2' : 'h-11',
+            )}>
             {/* 권한이 꺼져 있으면 무엇보다 그게 먼저다 — 키워드를 등록해도 알림이 안 온다. */}
             {push.granted === false ? (
               <>
@@ -304,6 +371,33 @@ export default function AlarmScreen() {
                   onPress={push.enable}>
                   <Text className="text-sm font-semibold text-primary-500">
                     켜기
+                  </Text>
+                </PressableScale>
+              </>
+            ) : suggestGoodPrice && goodPrice?.goodPrice != null ? (
+              <>
+                <View className="min-w-0 flex-1">
+                  <Text
+                    numberOfLines={1}
+                    className="text-sm font-medium text-gray-700">
+                    「{goodPrice.keyword}」 알림 오늘 {topKeyword?.count}건
+                  </Text>
+                  <Text numberOfLines={1} className="text-xs text-gray-500">
+                    {goodPriceText(
+                      goodPrice.unit as GoodPriceUnit,
+                      goodPrice.goodPrice,
+                    )}{' '}
+                    이하만 받으면 {goodPrice.windowDays}일에{' '}
+                    {goodPrice.goodDealCount}번
+                  </Text>
+                </View>
+                <PressableScale
+                  accessibilityRole="button"
+                  disabled={applyingGoodPrice}
+                  className="h-8 justify-center rounded-md border border-gray-300 bg-white px-3"
+                  onPress={applyGoodPrice}>
+                  <Text className="text-sm font-medium text-gray-900">
+                    좋은 가격만
                   </Text>
                 </PressableScale>
               </>

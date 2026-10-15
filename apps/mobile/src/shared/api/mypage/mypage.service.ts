@@ -15,6 +15,50 @@ import {
 import type {MutationUpdateMyProfileMutationVariables} from '@/shared/api/gql/graphql';
 import {KeywordAlertLevel} from '@/shared/api/gql/graphql';
 import {HttpClient} from '@/shared/lib/client';
+import {TypedDocumentString} from '@/shared/api/gql/graphql';
+
+/**
+ * 알림함 「좋은 가격만 받기」(crawling src/wait 「언제 사나」 엔진) — 옛 runtime 백포트용 수기 문서.
+ * 생성 파일(gql.ts·schema.graphql)은 runtime 마다 달라 그대로 옮기면 충돌한다. main 은 graphql/mypage.ts 코드젠으로 같은 문서.
+ */
+type GoodPriceSuggestion = {
+  keyword: string;
+  priced: boolean;
+  watching: boolean;
+  unit: string;
+  goodPrice: number | null;
+  goodDealCount: number;
+  rawMatchCount: number;
+  windowDays: number;
+};
+const QueryGoodPriceSuggestion = new TypedDocumentString<
+  {goodPriceSuggestion: GoodPriceSuggestion | null},
+  {keyword: string}
+>(`
+  query QueryGoodPriceSuggestion($keyword: String!) {
+    goodPriceSuggestion(keyword: $keyword) {
+      keyword
+      priced
+      watching
+      unit
+      goodPrice
+      goodDealCount
+      rawMatchCount
+      windowDays
+    }
+  }
+`);
+const MutationApplyGoodPriceOnly = new TypedDocumentString<
+  {applyGoodPriceOnly: {keyword: string; priced: boolean}},
+  {keyword: string}
+>(`
+  mutation MutationApplyGoodPriceOnly($keyword: String!) {
+    applyGoodPriceOnly(keyword: $keyword) {
+      keyword
+      priced
+    }
+  }
+`);
 
 export type MyProfile = {
   id: string;
@@ -81,6 +125,24 @@ export class MyPageService {
   static async withdraw() {
     const res = await HttpClient.withAccessToken().execute(MutationWithdraw);
     return res.data;
+  }
+
+  /** 알림함 「좋은 가격만 받기」 권유 — 내 키워드가 아니면 null. web GoodPriceService.suggestion 과 같다. */
+  static async getGoodPriceSuggestion(keyword: string) {
+    const res = await HttpClient.withAccessToken().execute(
+      QueryGoodPriceSuggestion,
+      {keyword},
+    );
+    return res.data?.goodPriceSuggestion ?? null;
+  }
+
+  /** 내 키워드를 「좋은 가격만 받기」로(하락만 받기 + 단위 기준가, 서버가 판정). */
+  static async applyGoodPriceOnly(keyword: string) {
+    const res = await HttpClient.withAccessToken().execute(
+      MutationApplyGoodPriceOnly,
+      {keyword},
+    );
+    return res.data?.applyGoodPriceOnly;
   }
 
   /** web 과 같은 상한 20개. 그 이상은 서버가 거절한다. */
