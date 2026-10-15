@@ -33,11 +33,14 @@ import OpenInAppLink from './OpenInAppLink';
  */
 const FIRST_VISIT_DONE_KEYS = ['jirum:app-alert-hook-seen', 'jirum:fv-holdout-recorded'];
 
-/** iOS 자동 열기: 이만큼 지나도 페이지가 보이면 앱이 안 열린 것. */
+/** 페이지가 뜨자마자 앱 이동을 걸고 이만큼 지나도 페이지가 보이면 카톡이 막은 것 → 누르는 띠로. */
+const AUTO_BLOCKED_MS = 1200;
+/** 띠를 누르고(사용자 탭) 이만큼 지나도 페이지가 보이면 iOS 는 앱이 없는 것. */
 const IOS_OPEN_TIMEOUT_MS = 2500;
 
 type Bar =
   | { kind: 'invite' }
+  | { kind: 'tap'; href: string }
   | { kind: 'confirm' }
   | { kind: 'opened' }
   | { kind: 'off' }
@@ -126,15 +129,15 @@ export default function KakaoAppOpen() {
         }
       };
       document.addEventListener('visibilitychange', onVisibility);
-      window.location.href = appOpenUrl(os, pathname, 'kakao_auto', window.location.origin, gd);
-      if (os === 'ios') {
-        window.setTimeout(() => {
-          if (hidden || document.visibilityState !== 'visible') return;
-          document.removeEventListener('visibilitychange', onVisibility);
-          track('ios_fail', os);
-          if (recordIosFailure(store)) setBar({ kind: 'missing' });
-        }, IOS_OPEN_TIMEOUT_MS);
-      }
+      const href = appOpenUrl(os, pathname, 'kakao_auto', window.location.origin, gd);
+      window.location.href = href;
+      // 카톡 iOS 는 사용자 탭 없는 스킴 이동을 조용히 막는다(10/15 실기기 — 「앱에서 열기」 탭은 열리는데 자동은 안 열림).
+      // 막혔으면 앱이 없는 게 아니다 — 끄지 말고 한 번 누르면 되는 띠를 띄운다. 누른 뒤에도 안 열려야 «없음».
+      window.setTimeout(() => {
+        if (hidden || document.visibilityState !== 'visible') return;
+        track('auto_blocked', os);
+        setBar({ kind: 'tap', href });
+      }, AUTO_BLOCKED_MS);
       return;
     }
 
@@ -193,8 +196,38 @@ export default function KakaoAppOpen() {
     setBar(pref === 'off' ? { kind: 'off' } : null);
   };
 
+  const onTap = () => {
+    track('tap', platform);
+    if (platform !== 'ios') return; // 안드로이드는 intent fallback(kakao_app=missing)이 판정한다.
+    const store = storage();
+    let hidden = false;
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') hidden = true;
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    window.setTimeout(() => {
+      document.removeEventListener('visibilitychange', onVisibility);
+      if (hidden) {
+        recordOpenSuccess(store);
+        return;
+      }
+      track('ios_fail', platform);
+      if (recordIosFailure(store)) setBar({ kind: 'missing' });
+    }, IOS_OPEN_TIMEOUT_MS);
+  };
+
   const content = (() => {
     switch (bar.kind) {
+      case 'tap':
+        return (
+          <>
+            <p className={cn(toast.text, 'flex-1')}>이 상품을 앱에서 볼까요?</p>
+            <a href={bar.href} className={cn(toast.action, 'whitespace-nowrap')} onClick={onTap}>
+              앱에서 열기
+            </a>
+            <CloseButton onClick={close} />
+          </>
+        );
       case 'invite':
         return (
           <>
