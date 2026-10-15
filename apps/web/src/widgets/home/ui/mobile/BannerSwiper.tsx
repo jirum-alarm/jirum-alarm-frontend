@@ -1,5 +1,8 @@
 'use client';
 
+// Swiper 레이아웃 CSS 는 쓰는 파일이 직접 싣는다 — 같은 화면의 다른 섹션에 기대면 그 섹션이 빠질 때 깨진다.
+import 'swiper/css';
+
 import { useQuery } from '@tanstack/react-query';
 import { atom, useAtom } from 'jotai';
 import dynamic from 'next/dynamic';

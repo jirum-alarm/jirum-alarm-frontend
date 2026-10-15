@@ -1,5 +1,8 @@
 'use client';
 
+// Swiper 레이아웃(가로 flex) CSS — 예전엔 carousel barrel 이 우연히 실어 줬다(10/15 518a0134 에서 빠져 탭이 빈 화면).
+import 'swiper/css';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useQueryState } from 'nuqs';
 import { Tabs } from 'radix-ui';
