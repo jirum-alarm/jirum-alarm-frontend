@@ -11,6 +11,7 @@ import {
   HomeQueries,
 } from '@/entities/home/api/home.queries';
 import {supportsInfinite} from '@/entities/home/lib/curation';
+import {mapHomePageSections} from '@/entities/home/lib/map-home-page';
 import {
   buildPromotionSections,
   findPromotionSectionById,
@@ -57,13 +58,30 @@ export default function CurationScreen({
   const {data: tabSources, isPending: isTabSourcesPending} = useQuery(
     HomeQueries.tabSources(),
   );
+  /**
+   * ★홈은 서버 homePage 가 섹션을 내려주는데 더보기가 로컬 카탈로그만 보면, 서버에 새 섹션이
+   * 생긴 날 앱 번들이 그 id 를 몰라 「페이지를 찾을 수 없어요」가 뜬다(2026-10-15 「선착순·타임특가」 —
+   * 홈엔 보이는데 더보기만 안 열렸다). 로컬에 없으면 홈과 같은 서버 섹션에서 찾는다.
+   */
+  const {data: homePage, isPending: isHomePagePending} = useQuery(
+    HomeQueries.homePage(),
+  );
   const section = useMemo(() => {
-    const sections = buildPromotionSections({
-      communityProviders: tabSources?.communityProviders ?? [],
-      mallGroups: tabSources?.mallGroups ?? [],
-    });
-    return findPromotionSectionById(sections, sectionId);
-  }, [tabSources, sectionId]);
+    const local = findPromotionSectionById(
+      buildPromotionSections({
+        communityProviders: tabSources?.communityProviders ?? [],
+        mallGroups: tabSources?.mallGroups ?? [],
+      }),
+      sectionId,
+    );
+    return (
+      local ??
+      findPromotionSectionById(
+        mapHomePageSections(homePage?.sections),
+        sectionId,
+      )
+    );
+  }, [tabSources, homePage, sectionId]);
 
   /**
    * 섹션 탭 칩. web CurationContainer 와 같다 — 첫 탭이 기본이고, 탭의
@@ -118,8 +136,8 @@ export default function CurationScreen({
   );
 
   if (!section || !activeSection) {
-    // 탭 소스(커뮤니티·쇼핑몰 id)가 아직 오는 중이면 기다린다.
-    if (isTabSourcesPending) {
+    // 탭 소스(커뮤니티·쇼핑몰 id)나 서버 섹션이 아직 오는 중이면 기다린다.
+    if (isTabSourcesPending || isHomePagePending) {
       return (
         <View className="flex-1 items-center justify-center bg-white">
           <ActivityIndicator size="small" className="text-gray-500" />
