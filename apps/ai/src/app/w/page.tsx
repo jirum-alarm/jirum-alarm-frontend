@@ -77,7 +77,7 @@ export default async function WaitPage({ searchParams }: Search) {
         ) : result && !result.ok && result.reason === 'forbidden' ? (
           <RestrictedNotice />
         ) : result && result.ok && result.data ? (
-          <WaitResult estimate={result.data} now={clock()} />
+          <WaitResult estimate={result.data} query={q} now={clock()} />
         ) : result && result.ok ? (
           <Notice>어떤 상품인지 알아보지 못했어요. 상품 이름으로 다시 적어 주세요.</Notice>
         ) : (

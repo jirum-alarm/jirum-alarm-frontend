@@ -1,4 +1,4 @@
-import { hasPriceVerdict, headline, unitPriceText, watchCondition } from '../model/copy';
+import { hasPriceVerdict, headline, unitPriceText, watchNote } from '../model/copy';
 
 import WaitChart from './WaitChart';
 import WatchButton from './WatchButton';
@@ -59,10 +59,18 @@ function DealRow({ deal, unit, now }: { deal: WaitDeal; unit: WaitEstimate['unit
  * 「언제 사나」 답. 순서 = 판정 한 줄 → 근거(점 차트) → 할 일(알림) → 증거(딜 목록) → 조건(어떻게 골랐나).
  * 조건을 맨 아래에 숨기지 않고 보여 주는 이유: 키워드·제외어·단위가 틀리면 답 전체가 틀린다 — 사용자가 확인할 수 있어야 한다.
  */
-export default function WaitResult({ estimate: e, now }: { estimate: WaitEstimate; now: number }) {
+export default function WaitResult({
+  estimate: e,
+  query,
+  now,
+}: {
+  estimate: WaitEstimate;
+  /** 사용자가 넣은 원문 — 알림 등록 때 서버가 같은 판정을 다시 낸다(캐시라 같은 답) */
+  query: string;
+  now: number;
+}) {
   const h = headline(e, now);
   const widened = e.candidates[0] && e.candidates[0].keyword !== e.keyword;
-  const watch = watchCondition(e);
   const priced = hasPriceVerdict(e);
 
   return (
@@ -88,14 +96,8 @@ export default function WaitResult({ estimate: e, now }: { estimate: WaitEstimat
       </section>
 
       <section className="flex flex-col gap-2">
-        <WatchButton condition={watch} label={e.label} priced={priced} />
-        <p className="text-11 text-center leading-relaxed text-gray-500">
-          {watch.maxPrice != null
-            ? `${watch.maxPrice.toLocaleString('ko-KR')}원 이하 「${e.keyword}」 딜만 알려 드려요 — 지난 ${e.windowDays}일이면 ${e.goodDealCount}번`
-            : priced
-              ? `지금은 「${e.keyword}」 새 딜마다 알려 드려요(지난 ${e.windowDays}일 약 ${e.rawMatchCount}번). 단위가 조건이 붙으면 ${e.goodDealCount}번으로 줄어요 — 준비 중`
-              : `「${e.keyword}」 새 딜마다 알려 드려요(지난 ${e.windowDays}일 약 ${e.rawMatchCount}번)`}
-        </p>
+        <WatchButton text={query} keyword={e.keyword} label={e.label} priced={priced} />
+        <p className="text-11 text-center leading-relaxed text-gray-500">{watchNote(e)}</p>
       </section>
 
       {e.liveDeals.length > 0 && (

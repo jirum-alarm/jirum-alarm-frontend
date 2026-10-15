@@ -20,9 +20,9 @@ const WAIT_QUERY = `
   }
 `;
 
-const ADD_KEYWORD = `
-  mutation AiWaitWatch($keyword: String!, $excludeKeywords: [String!], $minPrice: Int, $maxPrice: Int) {
-    addNotificationKeyword(keyword: $keyword, excludeKeywords: $excludeKeywords, minPrice: $minPrice, maxPrice: $maxPrice)
+const ADD_WATCH = `
+  mutation AiWaitWatch($text: String!) {
+    addWaitWatch(text: $text) { keyword priced created }
   }
 `;
 
@@ -71,11 +71,9 @@ export async function fetchWaitEstimate(text: string) {
   return r.ok ? ({ ok: true, data: r.data.waitEstimate } as const) : r;
 }
 
-export async function addWatch(input: {
-  keyword: string;
-  excludeKeywords: string[];
-  minPrice: number | null;
-  maxPrice: number | null;
-}) {
-  return gql<{ addNotificationKeyword: boolean }>(ADD_KEYWORD, input);
+/** 「이 가격 오면 알려줘」 — 서버가 같은 판정을 다시 내 조건을 건다(기준가를 클라이언트가 보내지 않는다). */
+export async function addWatch(text: string) {
+  return gql<{ addWaitWatch: { keyword: string; priced: boolean; created: boolean } }>(ADD_WATCH, {
+    text,
+  });
 }

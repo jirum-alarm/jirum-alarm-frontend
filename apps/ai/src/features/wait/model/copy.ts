@@ -96,19 +96,13 @@ export const headline = (e: WaitEstimate, now = Date.now()): Headline => {
 };
 
 /**
- * 「이 가격 오면 알려줘」로 등록할 조건. 알림 매칭은 총액만 비교하므로 단위가 조건은 아직 못 건다 —
- * 총액(TOTAL)이면 좋은 가격을 상한으로, 그 밖엔 키워드·제외어·본품 하한까지만(화면이 그 차이를 말한다).
+ * 「이 가격 오면 알려줘」 아래 한 줄 — 무엇이 오고 무엇이 안 오는지. 조건 자체는 서버(addWaitWatch)가 판정을 다시 내 건다:
+ * 좋은 가격을 말할 수 있으면 「하락만 받기」 + 단위 기준가(그 이하 딜만), 아니면 가격 조건 없는 새 딜 알림.
  */
-export const watchCondition = (e: WaitEstimate) => ({
-  keyword: e.keyword,
-  excludeKeywords: e.excludeKeywords,
-  minPrice: e.priceFloor,
-  // 카테고리·섞인 비교의 「좋은 가격」은 여러 상품의 하위 20% 라 상한으로 걸면 비싼 상품 딜이 영영 안 온다.
-  maxPrice:
-    e.unit === 'TOTAL' && e.goodPrice != null && hasPriceVerdict(e)
-      ? Math.round(e.goodPrice)
-      : null,
-});
+export const watchNote = (e: WaitEstimate): string =>
+  hasPriceVerdict(e)
+    ? `${unitPriceText(e.unit, e.goodPrice!)} 이하 「${e.keyword}」 딜만 알려 드려요 — 지난 ${e.windowDays}일이면 ${e.goodDealCount}번(키워드만 걸면 약 ${e.rawMatchCount}번)`
+    : `「${e.keyword}」 새 딜마다 알려 드려요(지난 ${e.windowDays}일 약 ${e.rawMatchCount}번)`;
 
 /** 「좋은 가격」을 말해도 되는가 — 카테고리가 아니고 같은 물건끼리 비교 중일 때만. */
 export const hasPriceVerdict = (e: WaitEstimate) =>

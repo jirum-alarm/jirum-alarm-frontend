@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { headline, unitPriceShort, unitPriceText, watchCondition } from './copy.ts';
+import { headline, unitPriceShort, unitPriceText, watchNote } from './copy.ts';
 
 import type { WaitEstimate } from './types.ts';
 
@@ -76,10 +76,11 @@ test('WAIT — 마지막 뒤 보통 간격이 지났으면 「올 때가 됐어�
   );
 });
 
-test('알림 조건 — 총액·같은 물건 비교일 때만 좋은 가격을 상한으로', () => {
-  assert.equal(watchCondition(base).maxPrice, null);
-  const total = { ...base, unit: 'TOTAL' as const, goodPrice: 290_000, priceFloor: 150_000 };
-  assert.equal(watchCondition(total).maxPrice, 290_000);
-  assert.equal(watchCondition({ ...total, kind: 'CATEGORY' }).maxPrice, null);
-  assert.equal(watchCondition({ ...total, confident: false }).maxPrice, null);
+test('알림 안내 — 좋은 가격을 말할 수 있을 때만 단위가 조건, 아니면 새 딜마다', () => {
+  assert.match(
+    watchNote(base),
+    /1L당 410원 이하 「삼다수」 딜만 알려 드려요 — 지난 90일이면 19번\(키워드만 걸면 약 289번\)/,
+  );
+  assert.match(watchNote({ ...base, kind: 'CATEGORY' }), /새 딜마다/);
+  assert.match(watchNote({ ...base, confident: false }), /새 딜마다/);
 });
