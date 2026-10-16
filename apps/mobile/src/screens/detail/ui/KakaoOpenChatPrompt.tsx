@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {promptCard} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 import PressableScale from '@/shared/components/PressableScale';
 import TalkLight from '@/shared/components/icons/TalkLight';
@@ -64,11 +66,12 @@ export default function KakaoOpenChatPrompt({
         await openOkachat(link, room);
       }}
       // ponytail: web 과 같은 문법 — 면은 그대로, 테두리+채운 알약으로만 눈에 띄게.
-      className={
-        beauty
-          ? 'flex-row items-center gap-x-3 rounded-lg border border-secondary-200 bg-secondary-50 px-4 py-3'
-          : 'mx-5 flex-row items-center gap-x-3 rounded-lg border border-secondary-200 bg-secondary-50 px-4 py-3'
-      }
+      className={cn(
+        'flex-row',
+        !beauty && 'mx-5',
+        promptCard.box,
+        promptCard.tone.brand.box,
+      )}
       accessibilityRole="button"
       accessibilityLabel={
         beauty ? '뷰티 핫딜 카톡방 입장' : '핫딜 오픈 채팅방 입장'
@@ -78,18 +81,25 @@ export default function KakaoOpenChatPrompt({
       </View>
       <View className="min-w-0 flex-1">
         {/* "핫딜 Only"는 UTM 캠페인명·봇 설정값이 새어 나온 내부 용어. web 과 같이 간다. */}
-        <Text className="text-sm font-semibold text-gray-800">
+        <Text className={promptCard.title}>
           {beauty ? '뷰티 핫딜만 받는 카톡방' : '핫딜 오픈 채팅방 입장하기'}
         </Text>
         {/* 좁은 폰(360dp)에선 한 줄에 안 들어가 말줄임됐다 — 두 줄까지 허용. */}
-        <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={2}>
+        <Text className={promptCard.description} numberOfLines={2}>
           {beauty
             ? '화장품·스킨케어 핫딜만 모아 보내드려요'
             : '지름알림이 엄선한 핫딜만 골라 받아보세요!'}
         </Text>
       </View>
-      <View className="shrink-0 rounded-full border border-secondary-300 bg-white px-3 py-1.5">
-        <Text className="text-xs font-semibold text-secondary-600">입장</Text>
+      <View
+        className={cn(promptCard.action.box, promptCard.tone.brand.action.box)}>
+        <Text
+          className={cn(
+            promptCard.action.text,
+            promptCard.tone.brand.action.text,
+          )}>
+          입장
+        </Text>
       </View>
     </PressableScale>
   ) : null;

@@ -4,13 +4,19 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 
+import {MenuGroup, MenuRow, MovePageRow} from '@/features/mypage/ui/Rows';
 import StackHeader from '@/features/mypage/ui/StackHeader';
+import ShareSheet from '@/screens/detail/ui/ShareSheet';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {HotDealType} from '@/shared/api/gql/graphql';
 import BottomSheet from '@/shared/components/BottomSheet';
 import ConfirmSheet from '@/shared/components/ConfirmSheet';
+import DisplayPrice from '@/shared/components/product/DisplayPrice';
 import HotdealBadge from '@/shared/components/product/HotdealBadge';
+import ProductCard from '@/shared/components/product/ProductCard';
 import ProductCardStatus from '@/shared/components/product/ProductCardStatus';
+import Thumbnail from '@/shared/components/product/Thumbnail';
+import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {SkeletonBox, ListRowsSkeleton} from '@/shared/components/Skeletons';
 import Badge from '@/shared/components/ui/Badge';
 import Button from '@/shared/components/ui/Button';
@@ -395,6 +401,118 @@ function SkeletonDemo() {
   );
 }
 
+function PageHeaderDemo() {
+  return (
+    <View className="gap-y-3">
+      {/* 놀이터 안이라 safe area 여백이 0 — 실제 화면에선 위쪽 상태바 높이가 더해진다. */}
+      <StackHeader title="알림 설정" onBack={() => {}} />
+      <StackHeader title="이용약관" variant="close" onBack={() => {}} />
+    </View>
+  );
+}
+
+function ListRowDemo() {
+  return (
+    <MenuGroup label="맞춤 설정">
+      <MenuRow
+        icon={null}
+        title="화면 모드"
+        value="시스템 설정"
+        onPress={() => {}}
+      />
+      <MovePageRow title="닉네임" subtitle="지름이" onPress={() => {}} />
+    </MenuGroup>
+  );
+}
+
+const DEMO_PRODUCTS = [
+  {
+    id: 1,
+    title: '제주 삼다수 2L 12병 무료배송',
+    price: '9,900원',
+    mallName: '쿠팡',
+    provider: {nameKr: '뽐뿌'},
+  },
+  {
+    id: 2,
+    title: '에어팟 프로 2 USB-C',
+    price: '259,000원',
+    hotDealType: HotDealType.SuperDeal,
+  },
+  {id: 3, title: '햇반 210g 36개', price: '29,800원', isEnd: true},
+];
+
+function ProductCardDemo() {
+  return (
+    <View className="gap-y-4">
+      <Text className="text-xs text-gray-500">캐러셀(120px · 가격 18)</Text>
+      <Row>
+        {DEMO_PRODUCTS.map(p => (
+          <ProductCard key={p.id} product={p} onPress={() => {}} />
+        ))}
+      </Row>
+      <Text className="text-xs text-gray-500">
+        그리드(3열 · 가격 16 — web 그리드와 같다)
+      </Text>
+      <View className="flex-row gap-x-2">
+        {DEMO_PRODUCTS.map(p => (
+          <View key={p.id} className="flex-1">
+            <ProductCard product={p} layout="grid" onPress={() => {}} />
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function ThumbnailDemo() {
+  return (
+    <Row>
+      {[1, 7].map(categoryId => (
+        <View key={categoryId} className={cardThumb} style={styles.thumb}>
+          <Thumbnail uri={null} categoryId={categoryId} type="hotDeal" />
+        </View>
+      ))}
+    </Row>
+  );
+}
+
+function DisplayPriceDemo() {
+  return (
+    <View className="gap-y-2">
+      <DisplayPrice price="129,000원" />
+      <DisplayPrice price="가격 미정" />
+    </View>
+  );
+}
+
+function ShareSheetDemo() {
+  const [open, setOpen] = useState(false);
+  return (
+    <View>
+      <Button size="sm" color="secondary" onPress={() => setOpen(true)}>
+        공유 시트 열기
+      </Button>
+      <ShareSheet
+        visible={open}
+        onClose={() => setOpen(false)}
+        sharePath="/"
+        title="제주 삼다수 2L 12병"
+        description="9,900원 · 쿠팡"
+      />
+    </View>
+  );
+}
+
+function ErrorStateDemo() {
+  return (
+    <SectionErrorRow
+      label="가격 추이"
+      onRetry={() => showToast.info('다시 불러와요')}
+    />
+  );
+}
+
 /** 카탈로그 id → 데모. 카탈로그에 app 부품이 생기면 여기에도 한 줄(테스트가 막는다). */
 export const DEMOS: Record<string, React.ComponentType> = {
   button: ButtonDemo,
@@ -410,6 +528,13 @@ export const DEMOS: Record<string, React.ComponentType> = {
   confirm: ConfirmDemo,
   sheet: SheetDemo,
   skeleton: SkeletonDemo,
+  pageHeader: PageHeaderDemo,
+  listRow: ListRowDemo,
+  productCard: ProductCardDemo,
+  thumbnail: ThumbnailDemo,
+  displayPrice: DisplayPriceDemo,
+  shareSheet: ShareSheetDemo,
+  errorState: ErrorStateDemo,
 };
 
 // 조립 규칙(@jirum/design-system/layout): 좌우 gutter 20 · 섹션 사이 32.
@@ -420,4 +545,5 @@ const styles = StyleSheet.create({
     paddingBottom: 64,
     rowGap: 32,
   },
+  thumb: {width: 96, height: 96},
 });

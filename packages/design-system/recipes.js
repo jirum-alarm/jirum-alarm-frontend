@@ -57,6 +57,9 @@ const button = {
     lg: {box: 'h-12 w-full rounded-lg px-3', text: 'text-base'},
     md: {box: 'rounded-lg px-5 py-1.5', text: 'text-base'},
     sm: {box: 'rounded-lg px-3 py-1', text: 'text-base'},
+    // 줄 끝 작은 동작(알림함 「완료」·「핫딜만 받기」·「키워드 알림」) — 32px(layout.control.compact).
+    // Link·PressableScale 에도 걸려야 해서 Button 컴포넌트 밖에서 레시피를 바로 읽는다.
+    xs: {box: 'h-8 rounded-md px-3', text: 'text-sm'},
   },
   tone: {
     primary: {
@@ -73,6 +76,9 @@ const button = {
     },
     secondary: {box: 'bg-gray-100 active:bg-gray-200', text: 'font-semibold text-gray-700'},
     error: {box: 'bg-error-50 active:bg-error-100', text: 'font-semibold text-error-600'},
+    // 회색 테두리 작은 버튼 — web AlarmList·앱 AlarmScreen 에 같은 문자열이 8번 손으로 적혀 있었다.
+    // outline(라임 테두리)은 주 동작용이라 이 모양을 못 냈다.
+    neutralOutline: {box: 'border border-gray-300 bg-white', text: 'font-medium text-gray-900'},
     outline: {
       box: 'border border-primary-500 bg-transparent',
       text: 'text-gray-900',
@@ -277,4 +283,77 @@ const cardLabel = {
   squareThumb: {corner: 'rounded-bl-none', strip: 'rounded-b-none'},
 };
 
-module.exports = {adLabel, addChip, badge, button, buttonTone, chip, tab, toggle, sectionTitle, cardThumb, dealRow, detailInfo, infoBox, keywordChip, linkChip, wordTag, sheet, skeleton, toast, emptyText, cardLabel};
+/**
+ * 글자 역할 — 크기·굵기·색을 한 이름으로. 2026-10-16 web·앱 className 의 (크기, 굵기, 색) 조합을 세어 다수값으로 고정했다
+ * (괄호 = web·앱 사용 횟수). 새 글자는 여기서 고르고, 맞는 역할이 없을 때만 직접 조합한다.
+ * 섹션 제목(홈·목록 섹션, bold)은 sectionTitle 이 따로 있다 — title(semibold)은 화면·시트 제목.
+ */
+const text = {
+  /** 빈 화면·완료 화면의 큰 제목 (14·6) */
+  display: 'text-2xl font-semibold text-gray-900',
+  /** 화면·시트 제목 — 헤더 h1 (16·8) */
+  title: 'text-lg font-semibold text-gray-900',
+  /** 카드·묶음 제목 (15·12) */
+  subtitle: 'text-base font-semibold text-gray-900',
+  /** 목록 항목·행·권유 카드 제목 (24·18) */
+  label: 'text-sm font-semibold text-gray-900',
+  /** 본문 (24·16) */
+  body: 'text-sm text-gray-700',
+  /** 보조 설명 (68·39) */
+  muted: 'text-sm text-gray-500',
+  /** 시간·출처·건수 같은 메타 (77·55) */
+  caption: 'text-xs text-gray-500',
+};
+
+/**
+ * 화면 상단 헤더(56px) — web PageHeader·앱 StackHeader·내정보 탭 헤더. 제목은 왼쪽(web 이 기준).
+ * 배치(fixed·safe area·flex 방향)는 플랫폼마다 붙인다.
+ */
+const pageHeader = {
+  bar: 'bg-white px-5',
+  /** 56px — 앱은 safe area 위쪽 여백이 바깥에 붙어 높이를 안쪽 줄에 따로 건다. */
+  height: 'h-14',
+  /** 히어로 위 투명 헤더만 뺀다. */
+  border: 'border-b border-gray-100',
+  title: text.title,
+};
+
+/**
+ * 상품 카드(그리드·캐러셀·목록) 글자. 제목은 2줄 고정 높이(web line-clamp-2 h-12 · 앱 height 48)를 각자 붙인다.
+ * 가격: list = 캐러셀·목록 18px, grid = 2·3열 그리드 16px. 같은 「종료 딜 대안」 그리드가 web 16·앱 18 로 갈려 있었다.
+ */
+const productCard = {
+  title: 'pt-2 text-sm text-gray-700',
+  price: {
+    list: 'text-lg font-semibold text-gray-900',
+    grid: 'text-base font-semibold text-gray-900',
+  },
+};
+
+/**
+ * 상세의 권유 카드(쿠팡 검색·카톡방 입장 등) — 옅은 면 + 테두리, 제목·한 줄 설명, 오른쪽 알약 동작.
+ * neutral = 제휴·외부 이동(회색), brand = 지름알림 채널(파랑). 배치(flex 방향)·hover 는 플랫폼마다.
+ */
+const promptCard = {
+  box: 'items-center gap-x-3 rounded-lg border px-4 py-3',
+  title: text.label,
+  description: 'mt-0.5 ' + text.caption,
+  action: {box: 'shrink-0 rounded-full border bg-white px-3 py-1.5', text: 'text-xs font-semibold'},
+  tone: {
+    neutral: {box: 'border-gray-200 bg-gray-50', action: {box: 'border-gray-300', text: 'text-gray-700'}},
+    brand: {box: 'border-secondary-200 bg-secondary-50', action: {box: 'border-secondary-300', text: 'text-secondary-600'}},
+  },
+};
+
+/**
+ * 설정·메뉴 목록 행(내정보 메뉴·가입 정보·약관) — 작은 회색 묶음 제목 + 아이콘·제목·값·화살표 행.
+ * web MenuList 와 앱 Rows 가 같은 값을 손으로 적고 있었다. 눌림(앱 opacity·ripple)·배치는 플랫폼마다.
+ */
+const listRow = {
+  group: 'pb-1 text-xs font-medium text-gray-500',
+  row: 'items-center gap-3 py-3',
+  title: 'text-gray-900',
+  value: 'text-sm text-gray-500',
+};
+
+module.exports = {adLabel, addChip, badge, button, buttonTone, chip, tab, toggle, sectionTitle, cardThumb, dealRow, detailInfo, infoBox, keywordChip, linkChip, wordTag, sheet, skeleton, toast, emptyText, cardLabel, text, pageHeader, productCard, promptCard, listRow};

@@ -1,5 +1,6 @@
 'use client';
 
+import { promptCard } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
@@ -76,18 +77,25 @@ export default function CoupangSearchCta({
         rel="nofollow sponsored noopener noreferrer"
         onClick={handleClick}
         className={cn(
-          'flex items-center gap-x-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 transition-colors hover:bg-gray-100',
+          'flex transition-colors hover:bg-gray-100',
+          promptCard.box,
+          promptCard.tone.neutral.box,
         )}
       >
         <span className="min-w-0 flex-1">
-          <span className="block text-sm font-semibold text-gray-800">{copy.title}</span>
-          <span className="mt-0.5 block truncate text-xs text-gray-500">
+          <span className={cn('block', promptCard.title)}>{copy.title}</span>
+          <span className={cn('block truncate', promptCard.description)}>
             쿠팡에서 ‘{cta.query}’ 검색 결과 보기
           </span>
         </span>
         <span
           aria-hidden
-          className="shrink-0 rounded-full border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700"
+          className={cn(
+            promptCard.action.box,
+            promptCard.action.text,
+            promptCard.tone.neutral.action.box,
+            promptCard.tone.neutral.action.text,
+          )}
         >
           {copy.action}
         </span>

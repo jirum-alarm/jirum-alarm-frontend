@@ -9,6 +9,8 @@ import {
   View,
 } from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {pageHeader} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 import {useNavigation} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useQuery} from '@tanstack/react-query';
@@ -29,7 +31,6 @@ import {
   tabNavigations,
   tabStackNavigations,
 } from '@/shared/constant/navigations';
-import {HEADER_HEIGHT} from '@/features/mypage/ui/StackHeader';
 import {MenuGroup, MenuRow} from '@/features/mypage/ui/Rows';
 import CustomerServiceSheet from '@/features/mypage/ui/CustomerServiceSheet';
 import ColorSchemeSheet from '@/features/mypage/ui/ColorSchemeSheet';
@@ -102,11 +103,15 @@ export default function MyPageScreen() {
 
   return (
     <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>
-      {/* 헤더 — web BasicLayout title="마이페이지"(뒤로가기 없음) */}
+      {/* 헤더 — web BasicLayout title="마이페이지"(뒤로가기 없음). web 처럼 제목 왼쪽 — 예전엔 앱만 가운데였다. */}
       <View
-        className="items-center justify-center border-b border-gray-100 bg-white px-5"
-        style={{height: HEADER_HEIGHT}}>
-        <Text className="text-lg font-semibold text-gray-900">마이페이지</Text>
+        className={cn(
+          'justify-center',
+          pageHeader.bar,
+          pageHeader.height,
+          pageHeader.border,
+        )}>
+        <Text className={pageHeader.title}>마이페이지</Text>
       </View>
 
       <ScrollView

@@ -1,3 +1,5 @@
+import { pageHeader } from '@jirum/design-system/recipes';
+
 import { cn } from '@/shared/lib/cn';
 
 /**
@@ -36,8 +38,10 @@ export default function PageHeader({
   return (
     <header
       className={cn(
-        'max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center justify-between gap-2 bg-white px-5',
-        bordered && 'border-b border-gray-100',
+        'max-w-mobile-max fixed top-0 z-50 flex w-full items-center justify-between gap-2',
+        pageHeader.bar,
+        pageHeader.height,
+        bordered && pageHeader.border,
         className,
       )}
     >
@@ -48,7 +52,7 @@ export default function PageHeader({
             {logo}
             {title != null &&
               (typeof title === 'string' ? (
-                <h1 className="truncate text-lg font-semibold text-gray-900">{title}</h1>
+                <h1 className={cn('truncate', pageHeader.title)}>{title}</h1>
               ) : (
                 title
               ))}

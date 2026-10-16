@@ -59,8 +59,11 @@ describe('랭킹 카드 — web 대조', () => {
   it('★가격 실렌더는 semibold — 래퍼 font-bold 는 span 이 이긴다', () => {
     // web 래퍼가 font-bold 지만 DisplayListPrice 의 span 이 font-semibold 라
     // 더 안쪽 규칙이 적용된다. 네이티브도 semibold(DisplayListPrice 기본).
+    // 값은 이제 recipes productCard.price.list 한 곳 — 두 플랫폼 DisplayListPrice 가 그걸 읽는다.
+    const {productCard} = require('@jirum/design-system/recipes');
+    expect(productCard.price.list).toBe('text-lg font-semibold text-gray-900');
     expect(web('entities/product-list/ui/card/DisplayListPrice.tsx')).toContain(
-      'text-lg font-semibold text-gray-900',
+      'productCard.price.list',
     );
     expect(n).not.toContain('className="font-bold"');
   });

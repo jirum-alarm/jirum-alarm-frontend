@@ -1,3 +1,5 @@
+import { text } from '@jirum/design-system/recipes';
+
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 // 클래스는 문자열 그대로 적는다 — Tailwind 가 소스 글자를 훑어 CSS 를 만들기 때문(조합해 만들면 안 생긴다).
@@ -51,6 +53,37 @@ const Type = () => (
   </div>
 );
 
+const ROLE_USE: Record<keyof typeof text, string> = {
+  display: '빈 화면·완료 화면의 큰 제목',
+  title: '화면·시트 제목(헤더 h1)',
+  subtitle: '카드·묶음 제목',
+  label: '목록 항목·행·권유 카드 제목',
+  body: '본문',
+  muted: '보조 설명',
+  caption: '시간·출처·건수 같은 메타',
+};
+
+/** 글자 역할(recipes `text`) — 크기·굵기·색을 이름 하나로. 새 글자는 여기서 고른다. */
+const Roles = () => (
+  <div className="max-w-3xl">
+    <h1 className="mb-1 text-2xl font-bold">글자 역할</h1>
+    <p className="mb-6 text-sm text-gray-600">
+      web·앱 className 의 (크기, 굵기, 색) 조합을 세어 다수값으로 고정했다. 홈·목록 섹션
+      제목(굵게)은 sectionTitle, 상품 카드 가격은 productCard.price 가 따로 있다.
+    </p>
+    <div className="flex flex-col">
+      {(Object.keys(text) as (keyof typeof text)[]).map((role) => (
+        <div key={role} className="flex items-baseline gap-4 border-t border-gray-200 py-3">
+          <code className="w-20 shrink-0 text-xs text-gray-700">{role}</code>
+          <span className={`${text[role]} flex-1`}>지금 사도 좋은 핫딜</span>
+          <span className="w-44 shrink-0 text-xs text-gray-600">{ROLE_USE[role]}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
 const meta = { title: '기초/글자', parameters: { layout: 'fullscreen' } } satisfies Meta;
 export default meta;
 export const SizeAndWeight: StoryObj = { name: '크기와 굵기', render: () => <Type /> };
+export const RolesStory: StoryObj = { name: '역할', render: () => <Roles /> };

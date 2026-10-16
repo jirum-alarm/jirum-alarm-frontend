@@ -1,6 +1,6 @@
 'use client';
 
-import { cardThumb } from '@jirum/design-system/recipes';
+import { cardThumb, productCard } from '@jirum/design-system/recipes';
 import { getTossTimeDeal } from '@jirum/domain/toss-time-deal';
 import * as m from 'motion/react-m';
 
@@ -53,7 +53,7 @@ export default function CarouselProductCard({
           <ProductCardStatus product={product} />
         </div>
         <div className="flex flex-col">
-          <span className="line-clamp-2 h-12 w-full pt-2 text-sm break-words text-gray-700">
+          <span className={cn('line-clamp-2 h-12 w-full break-words', productCard.title)}>
             {product.title}
           </span>
           <DisplayProductSource

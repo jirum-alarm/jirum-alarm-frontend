@@ -14,11 +14,13 @@
  *   web     apps/web 의 구현 경로(폴더 또는 파일). 없으면 null
  *   app     apps/mobile 의 구현 경로. 없으면 null
  *   story   놀이터 스토리 제목(`components/Badge`). web 이 null 이면 레시피 갤러리 제목
+ *   related  (선택) 같은 부품의 보조 파일 — 뒤로 버튼·사진 없음 그림 등. 「공용 폴더의 파일은 지도에 있다」 검사가 본다
+ *   examples (선택) 컴포넌트로 묶지 않는 패턴(빈 화면)의 참고 예시 경로
  *
  * 경로는 레포 루트 기준. 레시피만 있고 컴포넌트가 없는 것(사진 틀·정보 상자 등)은 자리마다 클래스를 직접 읽는다.
  */
 
-/** @typedef {{id: string, name: string, use: string, recipe: string | null, web: string | null, app: string | null, story: string}} CatalogEntry */
+/** @typedef {{id: string, name: string, use: string, recipe: string | null, web: string | null, app: string | null, story: string, related?: string[], examples?: string[]}} CatalogEntry */
 
 const W = 'apps/web/src/';
 const A = 'apps/mobile/src/';
@@ -163,6 +165,7 @@ const catalog = [
     web: `${W}shared/ui/SectionHeader.tsx`,
     app: `${A}shared/components/ui/SectionHeader`,
     story: 'components/SectionHeader',
+    related: [`${W}shared/ui/DetailSectionHeader.tsx`],
   },
   {
     id: 'infoBox',
@@ -199,6 +202,94 @@ const catalog = [
     web: null,
     app: null,
     story: '레시피/면·상자',
+  },
+  // ── 글자
+  {
+    id: 'text',
+    name: '글자 역할',
+    use: '글자 크기·굵기·색을 이름 하나로(display·title·subtitle·label·body·muted·caption). 섹션 제목은 sectionTitle',
+    recipe: 'text',
+    web: null,
+    app: null,
+    story: '기초/글자',
+  },
+  // ── 화면 틀
+  {
+    id: 'pageHeader',
+    name: '화면 헤더',
+    use: '화면 맨 위 56px 줄(제목 왼쪽, 뒤로·동작 슬롯). 홈 히어로 위 투명 헤더만 경계선 없음',
+    recipe: 'pageHeader',
+    web: `${W}shared/ui/layout/PageHeader.tsx`,
+    app: `${A}features/mypage/ui/StackHeader.tsx`,
+    story: 'components/PageHeader',
+    related: [`${W}shared/ui/layout/BackButton.tsx`, `${A}navigations/tab/AppStackHeader.tsx`],
+  },
+  {
+    id: 'listRow',
+    name: '목록 행',
+    use: '설정·메뉴 목록(내정보 메뉴·가입 정보·약관) — 작은 회색 묶음 제목 + 아이콘·제목·값·화살표',
+    recipe: 'listRow',
+    web: `${W}features/mypage/ui/MenuList.tsx`,
+    app: `${A}features/mypage/ui/Rows.tsx`,
+    story: 'components/MenuList',
+    related: [`${A}shared/components/SheetMenuRow.tsx`],
+  },
+  // ── 상품
+  {
+    id: 'productCard',
+    name: '상품 카드',
+    use: '딜 하나를 사진·제목·출처·가격으로. 그리드(2·3열, 가격 16px)·캐러셀(120px, 18px)·목록',
+    recipe: 'productCard',
+    web: `${W}entities/product-list/ui/grid/ProductGridCard.tsx`,
+    app: `${A}shared/components/product/ProductCard.tsx`,
+    story: 'components/ProductCard',
+    related: [
+      `${W}entities/product-list/ui/carousel/CarouselProductCard.tsx`,
+      `${W}entities/product-list/ui/list/ListProductCard.tsx`,
+      `${W}entities/product-list/ui/card/DisplayListPrice.tsx`,
+      `${W}entities/product-list/ui/card/DisplayProductSource.tsx`,
+      `${A}entities/home/ui/cards/HomeCardPrimitives.tsx`,
+      `${A}shared/components/product/DisplayProductSource.tsx`,
+      `${A}shared/components/product/ProductCarouselSection.tsx`,
+    ],
+  },
+  {
+    id: 'thumbnail',
+    name: '상품 사진',
+    use: '상품 사진 칸 — 사진이 없거나 깨지면 카테고리 그림. 부모가 크기를 정한다(틀은 cardThumb)',
+    recipe: null,
+    web: `${W}entities/product-list/ui/card/ProductThumbnail.tsx`,
+    app: `${A}shared/components/product/Thumbnail.tsx`,
+    story: 'components/ProductThumbnail',
+    related: [`${W}shared/ui/NoImage.tsx`, `${A}shared/components/product/NoImage.tsx`],
+  },
+  {
+    id: 'displayPrice',
+    name: '상세 가격',
+    use: '상품 상세의 큰 가격(숫자 24 + 원 18). 목록 카드 가격은 productCard.price',
+    recipe: null,
+    web: `${W}shared/ui/DisplayPrice.tsx`,
+    app: `${A}shared/components/product/DisplayPrice.tsx`,
+    story: 'components/DisplayPrice',
+  },
+  {
+    id: 'promptCard',
+    name: '권유 카드',
+    use: '상세 안에서 다음 행동을 권하는 카드(쿠팡 검색·카톡방 입장) — neutral(외부)·brand(지름알림 채널)',
+    recipe: 'promptCard',
+    web: null,
+    app: null,
+    story: '레시피/면·상자',
+  },
+  {
+    id: 'shareSheet',
+    name: '공유 시트',
+    use: '카카오톡·링크 복사·X·스레드로 공유. 겉은 바텀시트(PC 는 가운데 카드)',
+    recipe: null,
+    web: `${W}shared/ui/ShareSheet.tsx`,
+    app: `${A}screens/detail/ui/ShareSheet.tsx`,
+    story: 'components/ShareSheet',
+    related: [`${W}shared/ui/ShareButton.tsx`],
   },
   // ── 알림·겹침
   {
@@ -255,6 +346,31 @@ const catalog = [
     web: null,
     app: null,
     story: '레시피/면·상자',
+  },
+  {
+    id: 'emptyState',
+    name: '빈 화면',
+    use: '화면이 비었을 때 — 그림 + 큰 제목(text.display) + 설명 + 다음 동작. 문구·그림이 화면마다 달라 컴포넌트로 묶지 않는 패턴',
+    recipe: null,
+    web: null,
+    app: null,
+    story: '패턴/빈·오류 상태',
+    examples: [
+      `${W}widgets/search/ui/ProductNotFound.tsx`,
+      `${A}screens/search/ui/SearchNotFound.tsx`,
+      `${A}features/comment/ui/CommentEmpty.tsx`,
+      `${W}shared/ui/common/icons/IllustEmpty.tsx`,
+    ],
+  },
+  {
+    id: 'errorState',
+    name: '불러오기 실패',
+    use: '앱 = 섹션 한 줄 + 「다시 시도」(SectionErrorRow), web = 화면 전체 ServerError(ApiErrorBoundary). web 섹션 단위 짝은 아직 없다(섹션을 숨긴다)',
+    recipe: null,
+    web: `${W}shared/ui/ApiErrorBoundary.tsx`,
+    app: `${A}shared/components/SectionErrorRow.tsx`,
+    story: 'components/ApiErrorBoundary',
+    related: [`${W}shared/ui/ServerError.tsx`, `${A}shared/components/AppErrorFallback.tsx`],
   },
 ];
 

@@ -209,6 +209,21 @@ const recipePairs = () => [
   ...Object.entries(recipes.wordTag.tone).map(([k, r]) => [`wordTag ${k}`, r]),
   ...Object.entries(recipes.cardLabel.tone).map(([tone, r]) => [`cardLabel ${tone}`, r]),
   ['cardLabel strip', recipes.cardLabel.strip],
+  // 글자 역할은 바탕(white)·카드 면(gray-50) 둘 다에서 잰다 — 목록 카드 안에도 쓰인다.
+  ...Object.entries(recipes.text).flatMap(([k, text]) => [
+    [`text ${k}`, {box: '', text}],
+    [`text ${k} on gray-50`, {box: 'bg-gray-50', text}],
+  ]),
+  ['pageHeader title', {box: recipes.pageHeader.bar, text: recipes.pageHeader.title}],
+  ['productCard title', {box: '', text: recipes.productCard.title}],
+  ...Object.entries(recipes.productCard.price).map(([k, text]) => [`productCard price ${k}`, {box: '', text}]),
+  ...Object.entries(recipes.promptCard.tone).flatMap(([k, t]) => [
+    [`promptCard ${k} title`, {box: t.box, text: recipes.promptCard.title}],
+    [`promptCard ${k} description`, {box: t.box, text: recipes.promptCard.description}],
+    [`promptCard ${k} action`, {box: t.action.box + ' bg-white', text: t.action.text}],
+  ]),
+  ['listRow group', {box: '', text: recipes.listRow.group}],
+  ['listRow value', {box: '', text: recipes.listRow.value}],
 ];
 
 for (const [name, theme] of [
