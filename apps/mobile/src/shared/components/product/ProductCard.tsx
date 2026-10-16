@@ -31,6 +31,7 @@ export type ProductCardItem = {
   earliestExpiryDate?: string | null;
   provider?: {nameKr?: string | null} | null;
   postedCommunityCount?: number | null;
+  isYearLowest?: boolean | null;
 };
 
 const CARD_WIDTH = 120;

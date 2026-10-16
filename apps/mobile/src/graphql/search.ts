@@ -45,6 +45,7 @@ export const QuerySearchProducts = graphql(`
       thumbnail
       mallName
       hotDealType
+      isYearLowest
       provider {
         nameKr
       }

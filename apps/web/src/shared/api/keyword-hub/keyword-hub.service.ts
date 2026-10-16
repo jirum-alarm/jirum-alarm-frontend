@@ -103,6 +103,7 @@ const KeywordHubDocument = new TypedDocumentString<
         isEnd
         isHot
         hotDealType
+        isYearLowest
         mallName
         provider {
           nameKr

@@ -550,6 +550,7 @@ const QueryProduct = graphql(`
         createdAt
       }
       hotDealType
+      isYearLowest
       hotDealIndex {
         id
         message
@@ -620,6 +621,7 @@ const QueryProducts = new TypedDocumentString<ProductListResult, ProductListQuer
       thumbnail
       mallName
       hotDealType
+      isYearLowest
       provider {
         nameKr
       }
@@ -651,6 +653,7 @@ const QuerySameProductDeals = new TypedDocumentString<
       thumbnail
       mallName
       hotDealType
+      isYearLowest
       provider {
         nameKr
       }
@@ -693,6 +696,7 @@ const QueryTossInternalLinks = new TypedDocumentString<
       thumbnail
       mallName
       hotDealType
+      isYearLowest
       provider {
         nameKr
       }
@@ -725,6 +729,7 @@ const QueryLiveAlternativeDeals = new TypedDocumentString<
         thumbnail
         mallName
         hotDealType
+        isYearLowest
         provider {
           nameKr
         }
@@ -753,6 +758,7 @@ const QueryLatestSimilarDeals = new TypedDocumentString<
       thumbnail
       mallName
       hotDealType
+      isYearLowest
       provider {
         nameKr
       }
@@ -954,6 +960,7 @@ const QueryProductsByKeyword = graphql(`
       category
       thumbnail
       hotDealType
+      isYearLowest
       provider {
         nameKr
       }
@@ -995,6 +1002,7 @@ const QueryHotDealRankingProducts = graphql(`
       category
       thumbnail
       hotDealType
+      isYearLowest
       provider {
         nameKr
       }
@@ -1040,6 +1048,7 @@ const QueryExpiringSoonHotDealProducts = new TypedDocumentString<
       category
       thumbnail
       hotDealType
+      isYearLowest
       provider {
         nameKr
       }

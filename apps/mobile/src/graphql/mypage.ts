@@ -132,6 +132,7 @@ export const QueryMyWishlists = graphql(`
         isPrivate
         postedAt
         hotDealType
+        isYearLowest
         thumbnail
         isMyWishlist
         categoryId
@@ -197,6 +198,7 @@ export const QueryNotificationThemeLiveDeals = graphql(`
       isEnd
       isHot
       hotDealType
+      isYearLowest
       mallName
       provider {
         nameKr

@@ -436,6 +436,20 @@ export type FiringAlertOutput = {
   target?: Maybe<Scalars['String']['output']>;
 };
 
+/** 웹 상세 첫 방문 시트 문구 A/B(first_visit_sheet_frequency_v1) */
+export type FirstVisitSheetCopyOutput = {
+  __typename?: 'FirstVisitSheetCopyOutput';
+  /** 제목 키워드가 90일에 3번도 안 떠서 상품 브랜드로 넓혔나 */
+  broadened: Scalars['Boolean']['output'];
+  /** 실험이 켜져 있으면 두 군 다 — 키워드가 지난 windowDays 일 뜬 횟수(같은 날 같은 가격은 한 번). 문구는 frequency 군만 바꾼다 */
+  dealCount?: Maybe<Scalars['Int']['output']>;
+  /** 시트가 걸 알림 키워드 — 넓히기가 꺼져 있거나 넓힐 필요가 없으면 받은 키워드 그대로 */
+  keyword: Scalars['String']['output'];
+  /** control(지금 문구) | frequency(「지난 90일에 N번 떴어요」) */
+  variant: Scalars['String']['output'];
+  windowDays: Scalars['Int']['output'];
+};
+
 export type GatedMappingRematchOutput = {
   __typename?: 'GatedMappingRematchOutput';
   productId?: Maybe<Scalars['Int']['output']>;
@@ -718,6 +732,15 @@ export type ListSection = BaseSection & {
   viewMoreLink?: Maybe<Scalars['String']['output']>;
 };
 
+export type LiveAlternativeDealOutput = {
+  __typename?: 'LiveAlternativeDealOutput';
+  /** same=같은 상품(다른 곳·다른 값), related=같은 라인(용량·구성·색이 다름) */
+  kind: Scalars['String']['output'];
+  /** 이 딜 값 − 지금 보는 딜 값(원). 같은 상품이고 둘 다 원화일 때만, 아니면 null */
+  priceDiff?: Maybe<Scalars['Int']['output']>;
+  product: ProductOutput;
+};
+
 export type MallGroup = {
   __typename?: 'MallGroup';
   createdAt: Scalars['DateTime']['output'];
@@ -851,10 +874,14 @@ export type Mutation = {
   addUserLikeOrDislike: Scalars['Boolean']['output'];
   /** 사용자 신고 */
   addUserReport: Scalars['Boolean']['output'];
+  /** 「이 가격 오면 알려줘」(허용 유저만) — 판정을 서버에서 다시 내 그 키워드 알림을 건다. 좋은 가격을 말할 수 있으면 하락만 받기 + 단위 기준가 */
+  addWaitWatch: WaitWatchOutput;
   /** wishlist 추가 */
   addWishlist: Scalars['Boolean']['output'];
   /** 어드민) 로그인 */
   adminLogin: TokenOutput;
+  /** 내 키워드를 「좋은 가격만 받기」로 — 하락만 받기 + 단위 기준가(서버가 판정). 사용자 제외어는 그대로 */
+  applyGoodPriceOnly: WaitWatchOutput;
   /** 어드민) 리액션 키워드 후보 승인 (synonym 으로 등록) */
   approveHotDealKeywordCandidateByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 계정에 역할 지정(null = 해제) */
@@ -871,7 +898,7 @@ export type Mutation = {
   collectProduct: Scalars['Boolean']['output'];
   /** 구매(수익링크) 버튼 클릭 기록 — source 에 화면(예: detail_mobile) */
   collectPurchaseClick: Scalars['Boolean']['output'];
-  /** 썸네일 단건 수집 */
+  /** 어드민) 썸네일 단건 수집 */
   collectThumbnail: Scalars['Boolean']['output'];
   /** 어드민) 광고 생성 (생성된 id 반환) */
   createAd: Scalars['Int']['output'];
@@ -1095,6 +1122,10 @@ export type MutationAddUserReportArgs = {
   targetId: Scalars['Float']['input'];
 };
 
+export type MutationAddWaitWatchArgs = {
+  text: Scalars['String']['input'];
+};
+
 export type MutationAddWishlistArgs = {
   productId: Scalars['Int']['input'];
 };
@@ -1102,6 +1133,10 @@ export type MutationAddWishlistArgs = {
 export type MutationAdminLoginArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+export type MutationApplyGoodPriceOnlyArgs = {
+  keyword: Scalars['String']['input'];
 };
 
 export type MutationApproveHotDealKeywordCandidateByAdminArgs = {
@@ -1155,6 +1190,7 @@ export type MutationCollectPurchaseClickArgs = {
 
 export type MutationCollectThumbnailArgs = {
   entry?: InputMaybe<Scalars['String']['input']>;
+  nid?: InputMaybe<Scalars['String']['input']>;
   position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
   source?: InputMaybe<Scalars['String']['input']>;
@@ -1341,6 +1377,7 @@ export type MutationSignupArgs = {
 };
 
 export type MutationSocialLoginArgs = {
+  authorizationCode?: InputMaybe<Scalars['String']['input']>;
   birthYear?: InputMaybe<Scalars['Float']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   favoriteCategories?: InputMaybe<Array<Scalars['Int']['input']>>;
@@ -1505,6 +1542,7 @@ export type NotificationIntentSample = {
 
 export type NotificationKeyword = {
   __typename?: 'NotificationKeyword';
+  baseUnitPrice?: Maybe<Scalars['Float']['output']>;
   createdAt: Scalars['DateTime']['output'];
   excludeKeywords?: Maybe<Array<Scalars['String']['output']>>;
   id: Scalars['ID']['output'];
@@ -1513,6 +1551,7 @@ export type NotificationKeyword = {
   maxPrice?: Maybe<Scalars['Int']['output']>;
   minPrice?: Maybe<Scalars['Int']['output']>;
   priceDropOnly: Scalars['Boolean']['output'];
+  priceUnit?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['DateTime']['output'];
   userId: Scalars['Int']['output'];
 };
@@ -1927,6 +1966,8 @@ export type ProductOutput = {
   isProfitUrl: Scalars['Boolean']['output'];
   /** 급상승 — 커뮤니티 랭킹 목록(홈 지름 랭킹·랭킹 탭)에서 최근 2시간 동안 붙은 댓글·추천이 큰 딜(목록당 최대 5개). 다른 목록에선 비어 있다. */
   isRising?: Maybe<Scalars['Boolean']['output']>;
+  /** 지난 1년 같은 상품 딜 중 가장 싼 신기록(조건 없는 가격) — 카드 「1년 최저가」 라벨. 끝난 딜은 false */
+  isYearLowest: Scalars['Boolean']['output'];
   likeCount: Scalars['Int']['output'];
   mallId?: Maybe<Scalars['Int']['output']>;
   mallName?: Maybe<Scalars['String']['output']>;
@@ -2211,7 +2252,7 @@ export type Query = {
   communityProviders: Array<Provider>;
   /** 상품 랭킹 랜덤 조회 */
   communityRandomRankingProducts: Array<ProductOutput>;
-  /** 오래된 딜 상세의 「쿠팡에서 지금 가격 보기」 — 실험군(coupang_search_cta_v1)·게시 7일+ 딜이고 링크가 발급돼 있을 때만 */
+  /** 딜 상세의 「쿠팡에서 지금 가격 보기」 — 실험군(게시 7일+ 딜: coupang_search_cta_v1 · 7일 안의 링크 없는 딜: nolink_coupang_cta_v1)이고 링크가 발급돼 있을 때만 */
   coupangSearchCta?: Maybe<CoupangSearchCtaOutput>;
   /** 어드민) 일별/주별/월별 서비스 조회수 합계 */
   dailyServiceViewStats: Array<DateCountOutput>;
@@ -2228,8 +2269,12 @@ export type Query = {
   expireProductReports: Array<ProductExpireReport>;
   /** 유통기한 임박 특가 상품 조회 */
   expiringSoonHotDealProducts: Array<ProductOutput>;
+  /** 웹 상세 첫 방문 시트 — 문구 A/B(first_visit_sheet_frequency_v1) 기기 배정, 알림 키워드(드물면 브랜드로 넓힘)와 90일 딜 횟수. 둘 다 꺼져 있으면 control·받은 키워드 그대로 */
+  firstVisitSheetCopy: FirstVisitSheetCopyOutput;
   /** 게이트 차단 매핑 목록 조회 (추출오염/묶음글 등, not_matchable) */
   gatedMappings: Array<ProductMappingOutput>;
+  /** 알림함 「좋은 가격만 받기」 권유 — 내 키워드의 좋은 가격 판정 요약. 내 키워드가 아니면 null */
+  goodPriceSuggestion?: Maybe<WaitSuggestionOutput>;
   /** 게스트 카테고리 선호 기반 추천 핫딜 (비로그인 허용, 선호 없으면 인기순 폴백) */
   guestRecommendedHotDeals: Array<ProductOutput>;
   /** 어드민) 카카오쇼핑 추천리워드 세션 저장 여부(true면 발급 가동중) */
@@ -2270,6 +2315,8 @@ export type Query = {
   keywordMapGroupsByAdmin: Array<KeywordMapGroupOutput>;
   /** 종료됐을 수 있는 딜 상세의 '최신 핫딜' — 이 글보다 새 진행 중 딜(같은 상품 먼저, 같은 라인 뒤, 최대 20) */
   latestSimilarDeals: Array<ProductOutput>;
+  /** 진행 중 딜 상세의 '다른 곳 진행 중인 딜' — 최근 7일 진행 중 딜 중 같은 상품(싼 순) 먼저, 같은 라인 뒤(최대 10) */
+  liveAlternativeDeals: Array<LiveAlternativeDealOutput>;
   mallGroups: Array<MallGroup>;
   /** 어드민) 매칭 실행 상세 조회 (스텝 포함) */
   matchRunByAdmin?: Maybe<MatchRun>;
@@ -2395,6 +2442,8 @@ export type Query = {
   verificationHistory: Array<ProductMappingOutput>;
   /** 검증 통계 조회 (대기/완료/거부 개수) */
   verificationStatistics: VerificationStatistics;
+  /** 「언제 사나」(AI 홈 프로토타입, 허용 유저만) — 사려는 상품 한 줄 → 지난 90일 커뮤니티 핫딜로 본 좋은 가격·빈도·지금. 해석 못 하면 null */
+  waitEstimate?: Maybe<WaitEstimateOutput>;
   /** 위시리스트 개수 조회 */
   wishlistCount: Scalars['Int']['output'];
   /** 위시리스트 목록 조회 */
@@ -2523,12 +2572,21 @@ export type QueryExpiringSoonHotDealProductsArgs = {
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type QueryFirstVisitSheetCopyArgs = {
+  keyword: Scalars['String']['input'];
+  productId?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type QueryGatedMappingsArgs = {
   limit: Scalars['Int']['input'];
   matchingSource?: InputMaybe<Array<Scalars['String']['input']>>;
   orderBy?: InputMaybe<OrderOptionType>;
   productTitle?: InputMaybe<Scalars['String']['input']>;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type QueryGoodPriceSuggestionArgs = {
+  keyword: Scalars['String']['input'];
 };
 
 export type QueryGuestRecommendedHotDealsArgs = {
@@ -2605,6 +2663,11 @@ export type QueryKeywordMapGroupsByAdminArgs = {
 };
 
 export type QueryLatestSimilarDealsArgs = {
+  id: Scalars['Int']['input'];
+  limit?: Scalars['Int']['input'];
+};
+
+export type QueryLiveAlternativeDealsArgs = {
   id: Scalars['Int']['input'];
   limit?: Scalars['Int']['input'];
 };
@@ -2893,6 +2956,10 @@ export type QueryVerificationHistoryArgs = {
   target?: InputMaybe<ProductMappingTarget>;
   verificationStatus?: InputMaybe<Array<ProductMappingVerificationStatus>>;
   verifiedBy?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type QueryWaitEstimateArgs = {
+  text: Scalars['String']['input'];
 };
 
 export type QueryWishlistsArgs = {
@@ -3207,6 +3274,134 @@ export type VerificationStatistics = {
   rejected: Scalars['Int']['output'];
   total: Scalars['Int']['output'];
   verified: Scalars['Int']['output'];
+};
+
+/** 「언제 사나」 판정에 쓴 딜 */
+export type WaitDeal = {
+  __typename?: 'WaitDeal';
+  id: Scalars['Int']['output'];
+  isEnd: Scalars['Boolean']['output'];
+  postedAt: Scalars['DateTime']['output'];
+  /** 원화 총액 */
+  price: Scalars['Int']['output'];
+  title: Scalars['String']['output'];
+  /** 비교 단위로 나눈 값(unit 참고) */
+  unitPrice: Scalars['Float']['output'];
+};
+
+/** 「언제 사나」 — 사려는 상품 한 줄 → 지난 90일 커뮤니티 핫딜로 본 좋은 가격·빈도·지금 */
+export type WaitEstimateOutput = {
+  __typename?: 'WaitEstimateOutput';
+  /** 키워드 후보(구체적인 것부터). keyword 가 첫 후보가 아니면 딜이 적어 넓혀 본 것 */
+  candidates: Array<WaitKeywordCandidate>;
+  /** 같은 물건끼리 비교 중인가 — false 면 여러 상품이 섞였을 수 있음 */
+  confident: Scalars['Boolean']['output'];
+  /** 지금 진행 중 가장 싼 딜 */
+  current?: Maybe<WaitDeal>;
+  /** 지금 가장 싼 딜의 90일 중 위치(0~1, 작을수록 쌈) */
+  currentPercentile?: Maybe<Scalars['Float']['output']>;
+  /** 판정에 쓴 딜 수(교차 게시 제거) */
+  dealCount: Scalars['Int']['output'];
+  excludeKeywords: Array<Scalars['String']['output']>;
+  /** 좋은 가격 이하가 뜬 날 수(windowDays 중) */
+  goodDays: Scalars['Int']['output'];
+  /** 좋은 가격 이하 딜 수 = 「이 가격 오면 알려줘」가 90일간 보냈을 알림 */
+  goodDealCount: Scalars['Int']['output'];
+  /** 좋은 가격 이하 딜, 최신 5건 */
+  goodDeals: Array<WaitDeal>;
+  /** 좋은 가격 = 하위 20% 를 두 자리로 올림(단위가) */
+  goodPrice?: Maybe<Scalars['Float']['output']>;
+  /** 판정에 쓴 키워드 — 「알려줘」 등록 키워드 */
+  keyword: Scalars['String']['output'];
+  kind: WaitKind;
+  /** 화면 이름(LLM) */
+  label: Scalars['String']['output'];
+  lastGoodAt?: Maybe<Scalars['DateTime']['output']>;
+  /** 지금 진행 중, 싼 순 3건 */
+  liveDeals: Array<WaitDeal>;
+  median?: Maybe<Scalars['Float']['output']>;
+  p10?: Maybe<Scalars['Float']['output']>;
+  points: Array<WaitPoint>;
+  priceCeiling?: Maybe<Scalars['Int']['output']>;
+  priceFloor?: Maybe<Scalars['Int']['output']>;
+  /** 키워드만 걸었다면 90일간 왔을 알림 수(대략) */
+  rawMatchCount: Scalars['Int']['output'];
+  /** 좋은 가격이 뜬 날 사이 간격(중앙값) */
+  typicalGapDays?: Maybe<Scalars['Int']['output']>;
+  unit: WaitUnit;
+  verdict: WaitVerdict;
+  /** 이 키워드 알림을 이미 「하락만 받기」로 켜 두었나 — 화면이 「알림 켜짐」으로 보여 준다 */
+  watching: Scalars['Boolean']['output'];
+  windowDays: Scalars['Int']['output'];
+};
+
+export type WaitKeywordCandidate = {
+  __typename?: 'WaitKeywordCandidate';
+  /** 90일·조건 통과·단위가 붙은 딜 수 */
+  dealCount: Scalars['Int']['output'];
+  keyword: Scalars['String']['output'];
+};
+
+/** PRODUCT(특정 상품)·CATEGORY(여러 상품군 — 가격 하나로 못 말함)·VOUCHER(상품권)·UNKNOWN */
+export enum WaitKind {
+  Category = 'CATEGORY',
+  Product = 'PRODUCT',
+  Unknown = 'UNKNOWN',
+  Voucher = 'VOUCHER',
+}
+
+/** 차트 점(교차 게시 제거) */
+export type WaitPoint = {
+  __typename?: 'WaitPoint';
+  /** 최근 3일·안 끝남 */
+  live: Scalars['Boolean']['output'];
+  postedAt: Scalars['DateTime']['output'];
+  unitPrice: Scalars['Float']['output'];
+};
+
+/** 알림함 「좋은 가격만 받기」 권유 — 내 키워드 하나의 판정 요약 */
+export type WaitSuggestionOutput = {
+  __typename?: 'WaitSuggestionOutput';
+  /** 좋은 가격만 받으면 지난 windowDays 동안 왔을 알림 */
+  goodDealCount: Scalars['Int']['output'];
+  goodPrice?: Maybe<Scalars['Float']['output']>;
+  keyword: Scalars['String']['output'];
+  /** 좋은 가격을 말할 수 있나(카테고리·섞임이면 false → 권유하지 않는다) */
+  priced: Scalars['Boolean']['output'];
+  /** 키워드만 걸면 지난 windowDays 동안 왔을 알림(대략) */
+  rawMatchCount: Scalars['Int']['output'];
+  unit: WaitUnit;
+  /** 이미 하락만 받기를 켜 두었나 */
+  watching: Scalars['Boolean']['output'];
+  windowDays: Scalars['Int']['output'];
+};
+
+/** 가격 비교 단위 — LITER(1L당)·HUNDRED_GRAM(100g당)·COUNT(1개당)·FACE_VALUE(액면가 대비 비율)·TOTAL(총액) */
+export enum WaitUnit {
+  Count = 'COUNT',
+  FaceValue = 'FACE_VALUE',
+  HundredGram = 'HUNDRED_GRAM',
+  Liter = 'LITER',
+  Total = 'TOTAL',
+}
+
+/** BUY_NOW(지금 좋은 가격이 떠 있음)·WAIT(자주 오니 기다림)·RARE(90일에 1~3일만)·NO_DATA(딜 8건 미만) */
+export enum WaitVerdict {
+  BuyNow = 'BUY_NOW',
+  NoData = 'NO_DATA',
+  Rare = 'RARE',
+  Wait = 'WAIT',
+}
+
+/** 「이 가격 오면 알려줘」 결과 */
+export type WaitWatchOutput = {
+  __typename?: 'WaitWatchOutput';
+  /** 새로 등록했나 — false 면 이미 있던 키워드의 조건을 덮음 */
+  created: Scalars['Boolean']['output'];
+  /** 등록(또는 조건을 덮은) 알림 키워드 */
+  keyword: Scalars['String']['output'];
+  /** 좋은 가격 이하만 받게 걸었나 — false 면 가격 조건 없는 새 딜 알림(카테고리·섞임) */
+  priced: Scalars['Boolean']['output'];
 };
 
 export enum WishlistOrderType {
@@ -3681,6 +3876,7 @@ export type ProductQuery = {
     viewCount: number;
     mallName?: string | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     isMyLike?: boolean | null;
     isMyReported: boolean;
     likeCount: number;
@@ -3729,6 +3925,7 @@ export type ProductAdditionalInfoFragment = {
   positiveCommunityReactionCount: number;
   negativeCommunityReactionCount: number;
   hotDealType?: HotDealType | null;
+  isYearLowest: boolean;
   provider: {
     __typename?: 'Provider';
     id: string;
@@ -3815,6 +4012,7 @@ export type ProductInfoFragment = {
   uploaderType: UploaderType;
   content?: string | null;
   hotDealType?: HotDealType | null;
+  isYearLowest: boolean;
   viewCount: number;
   mallName?: string | null;
   data?: any | null;
@@ -3915,6 +4113,7 @@ export type QueryProductsQuery = {
     category?: string | null;
     thumbnail?: string | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     searchAfter?: Array<string> | null;
     postedAt: any;
     provider: { __typename?: 'Provider'; nameKr: string };
@@ -4057,6 +4256,7 @@ export type QueryHotDealRankingProductsQuery = {
     category?: string | null;
     thumbnail?: string | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     searchAfter?: Array<string> | null;
     postedAt: any;
     provider: { __typename?: 'Provider'; nameKr: string };
@@ -4084,6 +4284,7 @@ export type QueryGuestRecommendedHotDealsQuery = {
     category?: string | null;
     thumbnail?: string | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     searchAfter?: Array<string> | null;
     postedAt: any;
     provider: { __typename?: 'Provider'; nameKr: string };
@@ -4112,6 +4313,7 @@ export type QueryExpiringSoonHotDealProductsQuery = {
     category?: string | null;
     thumbnail?: string | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     searchAfter?: Array<string> | null;
     postedAt: any;
     earliestExpiryDate?: any | null;
@@ -4185,6 +4387,7 @@ export type QueryWishlistsQuery = {
       isPrivate: boolean;
       postedAt: any;
       hotDealType?: HotDealType | null;
+      isYearLowest: boolean;
       thumbnail?: string | null;
       isMyWishlist?: boolean | null;
       categoryId: number;
@@ -4273,6 +4476,7 @@ export type QueryProductsByKeywordQuery = {
     category?: string | null;
     thumbnail?: string | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     data?: any | null;
     searchAfter?: Array<string> | null;
     postedAt: any;
@@ -4330,6 +4534,7 @@ export const ProductAdditionalInfoFragmentDoc = new TypedDocumentString(
     shippingIncluded
   }
   hotDealType
+  isYearLowest
   hotDealIndex {
     id
     message
@@ -4386,6 +4591,7 @@ export const ProductInfoFragmentDoc = new TypedDocumentString(
     host
   }
   hotDealType
+  isYearLowest
   viewCount
   mallName
   data
@@ -4850,6 +5056,7 @@ export const ProductDocument = new TypedDocumentString(`
       createdAt
     }
     hotDealType
+    isYearLowest
     hotDealIndex {
       id
       message
@@ -4909,6 +5116,7 @@ export const ProductAdditionalInfoDocument = new TypedDocumentString(`
     shippingIncluded
   }
   hotDealType
+  isYearLowest
   hotDealIndex {
     id
     message
@@ -4969,6 +5177,7 @@ export const ProductInfoDocument = new TypedDocumentString(`
     host
   }
   hotDealType
+  isYearLowest
   viewCount
   mallName
   data
@@ -5032,6 +5241,7 @@ export const QueryProductsDocument = new TypedDocumentString(`
     category
     thumbnail
     hotDealType
+    isYearLowest
     provider {
       nameKr
     }
@@ -5172,6 +5382,7 @@ export const QueryHotDealRankingProductsDocument = new TypedDocumentString(`
     category
     thumbnail
     hotDealType
+    isYearLowest
     provider {
       nameKr
     }
@@ -5198,6 +5409,7 @@ export const QueryGuestRecommendedHotDealsDocument = new TypedDocumentString(`
     category
     thumbnail
     hotDealType
+    isYearLowest
     provider {
       nameKr
     }
@@ -5228,6 +5440,7 @@ export const QueryExpiringSoonHotDealProductsDocument = new TypedDocumentString(
     category
     thumbnail
     hotDealType
+    isYearLowest
     provider {
       nameKr
     }
@@ -5298,6 +5511,7 @@ export const QueryWishlistsDocument = new TypedDocumentString(`
       isPrivate
       postedAt
       hotDealType
+      isYearLowest
       thumbnail
       isMyWishlist
       categoryId
@@ -5380,6 +5594,7 @@ export const QueryProductsByKeywordDocument = new TypedDocumentString(`
     category
     thumbnail
     hotDealType
+    isYearLowest
     provider {
       nameKr
     }

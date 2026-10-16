@@ -39,6 +39,7 @@ export const QueryProduct = gql`
         createdAt
       }
       hotDealType
+      isYearLowest
       hotDealIndex {
         id
         message
@@ -94,6 +95,7 @@ export const QueryProductAdditionalInfo = gql`
       shippingIncluded
     }
     hotDealType
+    isYearLowest
     hotDealIndex {
       id
       message
@@ -153,6 +155,7 @@ export const QueryProductInfo = gql`
       host
     }
     hotDealType
+    isYearLowest
     viewCount
     mallName
     data
@@ -235,6 +238,7 @@ export const QueryProducts = gql`
       category
       thumbnail
       hotDealType
+      isYearLowest
       provider {
         nameKr
       }
@@ -367,6 +371,7 @@ export const QueryHotDealRankingProducts = gql`
       category
       thumbnail
       hotDealType
+      isYearLowest
       provider {
         nameKr
       }
@@ -391,6 +396,7 @@ export const QueryGuestRecommendedHotDeals = gql`
       category
       thumbnail
       hotDealType
+      isYearLowest
       provider {
         nameKr
       }
@@ -423,6 +429,7 @@ export const QueryExpiringSoonHotDealProducts = gql`
       category
       thumbnail
       hotDealType
+      isYearLowest
       provider {
         nameKr
       }

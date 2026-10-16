@@ -25,7 +25,7 @@ const SCHEMA_VERSION = 1;
  * GraphQL 문서(코드젠 gql.ts + 손으로 쓴 TypedDocumentString) 지문 — 쿼리 필드가 바뀌면 결과 모양도 바뀌므로 캐시를 버린다.
  * 손으로 맞출 필요 없다: 문서가 바뀌면 query-cache 테스트가 실패하며 새 값을 알려 준다(CI 가 OTA 전에 막는다).
  */
-export const QUERY_DOCS_FINGERPRINT = '45a7710b5434';
+export const QUERY_DOCS_FINGERPRINT = 'f3f4e056319f';
 const MAX_AGE_MS = 24 * 60 * 60 * 1000;
 // Android AsyncStorage 한 항목은 ~2MB 에서 읽기가 깨진다 — 넉넉히 아래에서 포기한다.
 const MAX_BYTES = 1_000_000;

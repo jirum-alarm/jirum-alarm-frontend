@@ -59,6 +59,7 @@ const QueryWishlists = graphql(`
         isPrivate
         postedAt
         hotDealType
+        isYearLowest
         thumbnail
         isMyWishlist
         categoryId

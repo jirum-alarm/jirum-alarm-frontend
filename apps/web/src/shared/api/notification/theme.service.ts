@@ -72,6 +72,7 @@ const QueryNotificationThemeDeals = new TypedDocumentString<
       isEnd
       isHot
       hotDealType
+      isYearLowest
       mallName
       provider {
         nameKr

@@ -35,7 +35,7 @@ export const CardCornerLabel = ({
 );
 
 /**
- * 상품 카드 사진 위 상태 — 판매종료 / 토스 하루특가(선착순특가·선착순 마감) / 핫딜 배지 / 유통기한 띠 / 급상승. 카드 4종(그리드·2단·리스트·캐러셀)이 같이 쓴다.
+ * 상품 카드 사진 위 상태 — 판매종료 / 토스 하루특가(선착순특가·선착순 마감) / 핫딜 배지 / 유통기한 띠 / 1년 최저가·급상승. 카드 4종(그리드·2단·리스트·캐러셀)이 같이 쓴다.
  * ★같은 상품을 홈·검색·상세를 오가며 다시 보므로 카드마다 다르게 그리면 버그로 읽힌다 — 여기서만 그린다.
  * 유통기한 띠가 있으면 핫딜 배지는 숨긴다(같은 자리라 배지가 띠를 덮었다 — 앱 ProductCardStatus 와 같은 규칙).
  */
@@ -46,14 +46,21 @@ export const ProductCardStatus = ({
 }: {
   product: Pick<
     ProductCardType,
-    'isEnd' | 'hotDealType' | 'earliestExpiryDate' | 'isRising' | 'data' | 'title' | 'postedAt'
+    | 'isEnd'
+    | 'hotDealType'
+    | 'earliestExpiryDate'
+    | 'isRising'
+    | 'isYearLowest'
+    | 'data'
+    | 'title'
+    | 'postedAt'
   >;
   /** 2단·리스트 카드는 핫딜 배지를 사진 대신 글자 줄에 둔다. */
   showHotdealBadge?: boolean;
   /** 사진 틀 아래 모서리가 각진 카드(랭킹) — 라벨이 둥근 모서리를 가정하면 사진 귀퉁이가 삐져나온다. */
   squareThumb?: boolean;
 }) => {
-  const { isEnd, hotDealType, earliestExpiryDate, isRising } = product;
+  const { isEnd, hotDealType, earliestExpiryDate, isRising, isYearLowest } = product;
   // 토스 하루특가는 핫딜 배지 자리에 토스 앱 배지를 그대로 단다(앱 ProductCardStatus 와 같다).
   // 선착순이 끝나면 crawler 가 isEnd 도 켠다 — 「판매종료」보다 「선착순 마감」이 무슨 일인지 말해 주므로 먼저 본다.
   const timeDeal = getTossTimeDeal(product.data);
@@ -62,11 +69,20 @@ export const ProductCardStatus = ({
   const opening = showTimeDeal ? null : getTimeDealOpening(product);
   return (
     <>
-      {/* 급상승(랭킹 목록만) — 오른쪽 위. 왼쪽 위는 순위 숫자, 아래는 핫딜 배지·유통기한 띠 자리. 앱 ProductCardStatus 와 같다. */}
-      {isRising && !isEnd ? (
-        <Badge variant="solid" tone="error" size="xs" className="absolute top-1.5 right-1.5 z-10">
-          급상승
-        </Badge>
+      {/* 1년 최저가·급상승(랭킹 목록만) — 오른쪽 위에 세로로. 왼쪽 위는 순위 숫자, 아래는 핫딜 배지·유통기한 띠 자리. 앱 ProductCardStatus 와 같다. */}
+      {(isYearLowest || isRising) && !isEnd ? (
+        <div className="absolute top-1.5 right-1.5 z-10 flex flex-col items-end gap-1">
+          {isYearLowest ? (
+            <Badge variant="solid" tone="secondary" size="xs">
+              1년 최저가
+            </Badge>
+          ) : null}
+          {isRising ? (
+            <Badge variant="solid" tone="error" size="xs">
+              급상승
+            </Badge>
+          ) : null}
+        </div>
       ) : null}
       {showTimeDeal ? (
         <CardCornerLabel

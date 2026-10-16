@@ -37,6 +37,7 @@ export const QueryProductInfo = graphql(`
         host
       }
       hotDealType
+      isYearLowest
       viewCount
       mallName
       data
@@ -279,6 +280,7 @@ export const QuerySameProductDeals = graphql(`
       thumbnail
       isEnd
       hotDealType
+      isYearLowest
       categoryId
       mallName
       postedAt
@@ -301,6 +303,7 @@ export const QueryLatestSimilarDeals = graphql(`
       thumbnail
       isEnd
       hotDealType
+      isYearLowest
       categoryId
       mallName
       postedAt
@@ -326,6 +329,7 @@ export const QueryLiveAlternativeDeals = graphql(`
         thumbnail
         isEnd
         hotDealType
+        isYearLowest
         categoryId
         mallName
         postedAt
@@ -358,6 +362,7 @@ export const QueryCategoryProducts = graphql(`
       thumbnail
       isEnd
       hotDealType
+      isYearLowest
       categoryId
       mallName
       postedAt

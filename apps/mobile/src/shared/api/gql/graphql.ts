@@ -442,6 +442,20 @@ export type FiringAlertOutput = {
   target?: Maybe<Scalars['String']['output']>;
 };
 
+/** 웹 상세 첫 방문 시트 문구 A/B(first_visit_sheet_frequency_v1) */
+export type FirstVisitSheetCopyOutput = {
+  __typename?: 'FirstVisitSheetCopyOutput';
+  /** 제목 키워드가 90일에 3번도 안 떠서 상품 브랜드로 넓혔나 */
+  broadened: Scalars['Boolean']['output'];
+  /** 실험이 켜져 있으면 두 군 다 — 키워드가 지난 windowDays 일 뜬 횟수(같은 날 같은 가격은 한 번). 문구는 frequency 군만 바꾼다 */
+  dealCount?: Maybe<Scalars['Int']['output']>;
+  /** 시트가 걸 알림 키워드 — 넓히기가 꺼져 있거나 넓힐 필요가 없으면 받은 키워드 그대로 */
+  keyword: Scalars['String']['output'];
+  /** control(지금 문구) | frequency(「지난 90일에 N번 떴어요」) */
+  variant: Scalars['String']['output'];
+  windowDays: Scalars['Int']['output'];
+};
+
 export type GatedMappingRematchOutput = {
   __typename?: 'GatedMappingRematchOutput';
   productId?: Maybe<Scalars['Int']['output']>;
@@ -1958,6 +1972,8 @@ export type ProductOutput = {
   isProfitUrl: Scalars['Boolean']['output'];
   /** 급상승 — 커뮤니티 랭킹 목록(홈 지름 랭킹·랭킹 탭)에서 최근 2시간 동안 붙은 댓글·추천이 큰 딜(목록당 최대 5개). 다른 목록에선 비어 있다. */
   isRising?: Maybe<Scalars['Boolean']['output']>;
+  /** 지난 1년 같은 상품 딜 중 가장 싼 신기록(조건 없는 가격) — 카드 「1년 최저가」 라벨. 끝난 딜은 false */
+  isYearLowest: Scalars['Boolean']['output'];
   likeCount: Scalars['Int']['output'];
   mallId?: Maybe<Scalars['Int']['output']>;
   mallName?: Maybe<Scalars['String']['output']>;
@@ -2259,6 +2275,8 @@ export type Query = {
   expireProductReports: Array<ProductExpireReport>;
   /** 유통기한 임박 특가 상품 조회 */
   expiringSoonHotDealProducts: Array<ProductOutput>;
+  /** 웹 상세 첫 방문 시트 — 문구 A/B(first_visit_sheet_frequency_v1) 기기 배정, 알림 키워드(드물면 브랜드로 넓힘)와 90일 딜 횟수. 둘 다 꺼져 있으면 control·받은 키워드 그대로 */
+  firstVisitSheetCopy: FirstVisitSheetCopyOutput;
   /** 게이트 차단 매핑 목록 조회 (추출오염/묶음글 등, not_matchable) */
   gatedMappings: Array<ProductMappingOutput>;
   /** 알림함 「좋은 가격만 받기」 권유 — 내 키워드의 좋은 가격 판정 요약. 내 키워드가 아니면 null */
@@ -2558,6 +2576,11 @@ export type QueryExpiringSoonHotDealProductsArgs = {
   daysUntilExpiry: Scalars['Int']['input'];
   limit: Scalars['Int']['input'];
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type QueryFirstVisitSheetCopyArgs = {
+  keyword: Scalars['String']['input'];
+  productId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryGatedMappingsArgs = {
@@ -3716,6 +3739,7 @@ export type HotDealRankingProductsQuery = {
     category?: string | null;
     thumbnail?: string | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     searchAfter?: Array<string> | null;
     postedAt: any;
     provider: {__typename?: 'Provider'; nameKr: string};
@@ -3743,6 +3767,7 @@ export type GuestRecommendedHotDealsQuery = {
     category?: string | null;
     thumbnail?: string | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     searchAfter?: Array<string> | null;
     postedAt: any;
     provider: {__typename?: 'Provider'; nameKr: string};
@@ -3775,6 +3800,7 @@ export type HomeProductsByKeywordQuery = {
     category?: string | null;
     thumbnail?: string | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     data?: any | null;
     searchAfter?: Array<string> | null;
     postedAt: any;
@@ -3820,6 +3846,7 @@ export type HomeProductsQuery = {
     thumbnail?: string | null;
     mallName?: string | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     searchAfter?: Array<string> | null;
     postedCommunityCount?: number | null;
     isRising?: boolean | null;
@@ -3853,6 +3880,7 @@ export type ExpiringSoonHotDealProductsQuery = {
     category?: string | null;
     thumbnail?: string | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     searchAfter?: Array<string> | null;
     postedAt: any;
     earliestExpiryDate?: any | null;
@@ -3948,6 +3976,7 @@ export type CommunityRandomRankingProductsQuery = {
     category?: string | null;
     thumbnail?: string | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     postedAt: any;
     provider: {__typename?: 'Provider'; nameKr: string};
   }>;
@@ -4071,6 +4100,7 @@ export type QueryMyWishlistsQuery = {
       isPrivate: boolean;
       postedAt: any;
       hotDealType?: HotDealType | null;
+      isYearLowest: boolean;
       thumbnail?: string | null;
       isMyWishlist?: boolean | null;
       categoryId: number;
@@ -4150,6 +4180,7 @@ export type QueryNotificationThemeLiveDealsQuery = {
     isEnd?: boolean | null;
     isHot?: boolean | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     mallName?: string | null;
     provider: {__typename?: 'Provider'; nameKr: string};
   }>;
@@ -4374,6 +4405,7 @@ export type ProductInfoQuery = {
     uploaderType: UploaderType;
     content?: string | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     viewCount: number;
     mallName?: string | null;
     data?: any | null;
@@ -4610,6 +4642,7 @@ export type SameProductDealsQuery = {
     thumbnail?: string | null;
     isEnd?: boolean | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     categoryId: number;
     mallName?: string | null;
     postedAt: any;
@@ -4633,6 +4666,7 @@ export type LatestSimilarDealsQuery = {
     thumbnail?: string | null;
     isEnd?: boolean | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     categoryId: number;
     mallName?: string | null;
     postedAt: any;
@@ -4660,6 +4694,7 @@ export type LiveAlternativeDealsQuery = {
       thumbnail?: string | null;
       isEnd?: boolean | null;
       hotDealType?: HotDealType | null;
+      isYearLowest: boolean;
       categoryId: number;
       mallName?: string | null;
       postedAt: any;
@@ -4687,6 +4722,7 @@ export type CategoryProductsQuery = {
     thumbnail?: string | null;
     isEnd?: boolean | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     categoryId: number;
     mallName?: string | null;
     postedAt: any;
@@ -4790,6 +4826,7 @@ export type SearchProductsQuery = {
     thumbnail?: string | null;
     mallName?: string | null;
     hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
     searchAfter?: Array<string> | null;
     estimatedTotal?: number | null;
     postedAt: any;
@@ -5147,6 +5184,7 @@ export const HotDealRankingProductsDocument = new TypedDocumentString(`
     category
     thumbnail
     hotDealType
+    isYearLowest
     provider {
       nameKr
     }
@@ -5173,6 +5211,7 @@ export const GuestRecommendedHotDealsDocument = new TypedDocumentString(`
     category
     thumbnail
     hotDealType
+    isYearLowest
     provider {
       nameKr
     }
@@ -5205,6 +5244,7 @@ export const HomeProductsByKeywordDocument = new TypedDocumentString(`
     category
     thumbnail
     hotDealType
+    isYearLowest
     provider {
       nameKr
     }
@@ -5246,6 +5286,7 @@ export const HomeProductsDocument = new TypedDocumentString(`
     thumbnail
     mallName
     hotDealType
+    isYearLowest
     provider {
       nameKr
     }
@@ -5279,6 +5320,7 @@ export const ExpiringSoonHotDealProductsDocument = new TypedDocumentString(`
     category
     thumbnail
     hotDealType
+    isYearLowest
     provider {
       nameKr
     }
@@ -5371,6 +5413,7 @@ export const CommunityRandomRankingProductsDocument = new TypedDocumentString(`
     category
     thumbnail
     hotDealType
+    isYearLowest
     provider {
       nameKr
     }
@@ -5491,6 +5534,7 @@ export const QueryMyWishlistsDocument = new TypedDocumentString(`
       isPrivate
       postedAt
       hotDealType
+      isYearLowest
       thumbnail
       isMyWishlist
       categoryId
@@ -5566,6 +5610,7 @@ export const QueryNotificationThemeLiveDealsDocument = new TypedDocumentString(`
     isEnd
     isHot
     hotDealType
+    isYearLowest
     mallName
     provider {
       nameKr
@@ -5786,6 +5831,7 @@ export const ProductInfoDocument = new TypedDocumentString(`
       host
     }
     hotDealType
+    isYearLowest
     viewCount
     mallName
     data
@@ -5996,6 +6042,7 @@ export const SameProductDealsDocument = new TypedDocumentString(`
     thumbnail
     isEnd
     hotDealType
+    isYearLowest
     categoryId
     mallName
     postedAt
@@ -6019,6 +6066,7 @@ export const LatestSimilarDealsDocument = new TypedDocumentString(`
     thumbnail
     isEnd
     hotDealType
+    isYearLowest
     categoryId
     mallName
     postedAt
@@ -6045,6 +6093,7 @@ export const LiveAlternativeDealsDocument = new TypedDocumentString(`
       thumbnail
       isEnd
       hotDealType
+      isYearLowest
       categoryId
       mallName
       postedAt
@@ -6073,6 +6122,7 @@ export const CategoryProductsDocument = new TypedDocumentString(`
     thumbnail
     isEnd
     hotDealType
+    isYearLowest
     categoryId
     mallName
     postedAt
@@ -6167,6 +6217,7 @@ export const SearchProductsDocument = new TypedDocumentString(`
     thumbnail
     mallName
     hotDealType
+    isYearLowest
     provider {
       nameKr
     }
