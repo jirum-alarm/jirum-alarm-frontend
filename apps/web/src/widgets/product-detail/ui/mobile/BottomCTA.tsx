@@ -1,7 +1,7 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { ProductService } from '@/shared/api/product';
 import { getEntry } from '@/shared/lib/entry';
@@ -21,6 +21,8 @@ import { useBeautyRoomAssignment } from '@/features/product-detail/lib/useBeauty
 import PostPurchaseKakaoPrompt from '@/features/product-detail/ui/PostPurchaseKakaoPrompt';
 import PostPurchaseKeywordPrompt from '@/features/product-detail/ui/PostPurchaseKeywordPrompt';
 
+import { reportCtaVisibility } from '../../lib/cta-visibility';
+
 export default function BottomCTA({
   productId,
   isUserLogin,
@@ -35,6 +37,16 @@ export default function BottomCTA({
   const advancePrompt = () => setPromptQueue((q) => q.slice(1));
   // 화장품 상세 실험 beauty_detail_room_v1 — b 군은 구매 후 권유도 뷰티방(입장 기록도 뷰티방 것으로 본다).
   const beautyRoom = useBeautyRoomAssignment(product?.categoryId);
+
+  // 구매 버튼이 화면 안에 보이는지 한 번 잰다(삼성 인터넷 30 구매 클릭 급감 판정용, cta-visibility.ts).
+  // 첫 화면 시트·주소창 애니메이션이 가라앉은 뒤에 잰다.
+  const buyRef = useRef<HTMLAnchorElement>(null);
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      if (buyRef.current) reportCtaVisibility(buyRef.current);
+    }, 3000);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   // GTM Click URL 변수는 클릭된 안쪽 <button>(href 없음)을 읽어 click_url 이 99.7% 빈값이었다.
   // href·수익화 여부를 dataLayer 로 명시 전송 — GTM 태그를 customEvent 트리거로 전환해야 반영됨 (2026-07-20).
@@ -86,6 +98,7 @@ export default function BottomCTA({
           <LikeButton productId={productId} isUserLogin={isUserLogin} />
         </div>
         <a
+          ref={buyRef}
           href={product?.detailUrl ?? ''}
           onClick={handlePurchaseClick}
           className="block flex-1"

@@ -53,7 +53,8 @@
     "swiper": "^14.3.0",
     "tailwind-merge": "^3.7.0",
     "uuid": "^14.0.2",
-    "vaul": "^1.1.2"
+    "vaul": "^1.1.2",
+    "web-vitals": "^6.2.2"
   },
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.17.5",

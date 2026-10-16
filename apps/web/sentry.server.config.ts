@@ -4,6 +4,12 @@
 
 import * as Sentry from '@sentry/nextjs';
 
+import {
+  createBurstLimiter,
+  SENTRY_DENY_URLS,
+  SENTRY_IGNORE_ERRORS,
+} from './src/shared/lib/sentry-filter';
+
 import { tempoSpanProcessors, enableW3CTracePropagation } from './otel-tempo';
 
 // development 환경(NODE_ENV=test)에서는 센트리 비활성화
@@ -20,11 +26,16 @@ Sentry.init({
   // span_usage_exceeded), 클라이언트 트랜잭션까지 버려졌다. 에러 수집과는 무관. 클라이언트(0.1)와 맞춘다.
   tracesSampleRate: 0.1,
 
-  // Enable logs to be sent to Sentry
-  enableLogs: true,
+  // 로그는 끈다 — 하루 수백만 건이 할당량 밖이라 전부 버려지면서 직렬화 비용만 들었다(2026-10-16 stats_v2 client_discard).
+  enableLogs: false,
 
   // Enable sending user PII (Personally Identifiable Information)
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/#sendDefaultPii
+  // 소음·폭주 거르기 — 이유는 sentry-filter.ts.
+  ignoreErrors: SENTRY_IGNORE_ERRORS,
+  denyUrls: SENTRY_DENY_URLS,
+  beforeSend: createBurstLimiter(),
+
   sendDefaultPii: true,
 
   // 같은 span 을 사내 Tempo 로도(OTEL_EXPORTER_OTLP_ENDPOINT 있을 때만). 자세한 건 otel-tempo.ts.

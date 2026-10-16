@@ -21,6 +21,7 @@ import { LazyLoginModal, LazyPushChannelSheet } from './lazyOverlays';
 import { ProductCardTracker } from './productCardTracker';
 import { ReactQueryProviders } from './ReactQueryProviders';
 import ServerStateProvider from './ServerStateProvider';
+import { WebVitalsReporter } from './webVitalsReporter';
 
 import type { CheckDeviceResult } from '@/app/actions/agent.types';
 
@@ -68,6 +69,7 @@ export const AppProvider = ({ children, device, isLoggedIn, isGuest }: Props) =>
               {IS_PRD ? <DeviceId /> : null}
               <ClarityProvider />
               <EntryTracker />
+              <WebVitalsReporter />
               <ProductCardTracker />
               <NuqsAdapter>{children}</NuqsAdapter>
               <LazyLoginModal />

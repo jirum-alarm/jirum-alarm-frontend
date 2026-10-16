@@ -4,6 +4,12 @@
 
 import * as Sentry from '@sentry/nextjs';
 
+import {
+  createBurstLimiter,
+  SENTRY_DENY_URLS,
+  SENTRY_IGNORE_ERRORS,
+} from '@/shared/lib/sentry-filter';
+
 // development 환경(NODE_ENV=test)에서는 센트리 비활성화
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -21,6 +27,11 @@ Sentry.init({
 
   // Enable sending user PII (Personally Identifiable Information)
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/#sendDefaultPii
+  // 소음·폭주 거르기 — 이유는 sentry-filter.ts.
+  ignoreErrors: SENTRY_IGNORE_ERRORS,
+  denyUrls: SENTRY_DENY_URLS,
+  beforeSend: createBurstLimiter(),
+
   sendDefaultPii: false,
 });
 
