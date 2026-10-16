@@ -387,4 +387,49 @@ describe('최근 검색어 칩·단어 태그 — web·앱이 같은 레시피(k
   });
 });
 
+/**
+ * 카탈로그(@jirum/design-system/catalog)에서 web·앱 구현이 둘 다 있고 레시피가 있는 부품 전부 — 손으로 고른
+ * 위 PAIRS 4쌍만 보던 것을 자동으로 넓힌다. 새 짝을 카탈로그에 등록하면 따로 적지 않아도 여기서 검사된다.
+ * 경로가 폴더면 안의 소스(.ts·.tsx, 스토리·테스트 제외)를 모두 읽는다.
+ */
+const {catalog} = require('@jirum/design-system/catalog') as {
+  catalog: {
+    id: string;
+    recipe: string | null;
+    web: string | null;
+    app: string | null;
+  }[];
+};
+const repoRoot = path.join(__dirname, '../../..');
+const readPart = (rel: string): string => {
+  const abs = path.join(repoRoot, rel);
+  if (!fs.statSync(abs).isDirectory()) return fs.readFileSync(abs, 'utf8');
+  return (fs.readdirSync(abs, {recursive: true}) as string[])
+    .filter(f => /\.tsx?$/.test(f) && !/\.(stories|test)\.tsx?$/.test(f))
+    .map(f => fs.readFileSync(path.join(abs, f), 'utf8'))
+    .join('\n');
+};
+const catalogPairs = catalog
+  .filter(e => e.web && e.app && e.recipe)
+  .map(e => [e.id, e.web as string, e.app as string, e.recipe as string]);
+// 레시피 대신 같은 값을 다른 길로 넣는 앱 부품(이유 필수).
+const APP_RECIPE_EXCEPTIONS: Record<string, string> = {
+  // Animated.View 깜빡임 판이라 색을 style 로 준다 — c.gray[200] = 레시피 skeleton 의 bg-gray-200 과 같은 값.
+  skeleton: 'shared/components/Skeletons.tsx',
+};
+
+describe('카탈로그 짝 전부 — web·앱이 둘 다 레시피를 읽는다', () => {
+  it('짝이 있다(카탈로그를 못 읽으면 이 검사가 조용히 비지 않게)', () => {
+    expect(catalogPairs.length).toBeGreaterThanOrEqual(8);
+  });
+  it.each(catalogPairs)('%s', (id, webPath, appPath, recipe) => {
+    expect(importsRecipe(readPart(webPath), recipe)).toBe(true);
+    if (APP_RECIPE_EXCEPTIONS[id]) {
+      expect(native(APP_RECIPE_EXCEPTIONS[id])).toMatch(/c\.gray\[200\]/);
+      return;
+    }
+    expect(importsRecipe(readPart(appPath), recipe)).toBe(true);
+  });
+});
+
 export {};
