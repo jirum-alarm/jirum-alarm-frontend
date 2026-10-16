@@ -271,7 +271,7 @@ importers:
         specifier: 10.6.1
         version: 10.6.1(storybook@10.6.1(@types/react@19.3.0)(prettier@3.9.9)(react@19.3.0))
       '@storybook/addon-docs':
-        specifier: ^10.6.1
+        specifier: 10.6.1
         version: 10.6.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(storybook@10.6.1(@types/react@19.3.0)(prettier@3.9.9)(react@19.3.0))
       '@storybook/addon-vitest':
         specifier: 10.6.1
@@ -313,7 +313,7 @@ importers:
         specifier: ^0.8.1
         version: 0.8.1(prettier@3.9.9)
       storybook:
-        specifier: ^10.6.1
+        specifier: 10.6.1
         version: 10.6.1(@types/react@19.3.0)(prettier@3.9.9)(react@19.3.0)
       tailwindcss:
         specifier: ^4.3.3

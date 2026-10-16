@@ -46,7 +46,8 @@ const buildWebCoupledMobileTests = () => {
 
 // 디자인 시스템(packages/design-system): theme.css 가 tokens.js 와 맞는지·대비·린트 정규식을 테스트로 본다.
 // 린트 규칙(eslint.js)을 바꿨으면 그 규칙을 쓰는 앱을 전부 다시 린트한다 — 안 그러면 다음에 앱을 고친 사람의 커밋이 막힌다.
-const DESIGN_SYSTEM_APPS = ["web", "mobile", "ai", "landing"];
+// beauty-web·design 도 같은 규칙을 쓴다(각 eslint.config.mjs) — 빠지면 규칙을 바꾼 뒤 그 앱의 다음 커밋이 막힌다.
+const DESIGN_SYSTEM_APPS = ["web", "mobile", "ai", "landing", "beauty-web", "design"];
 const buildDesignSystemCommands = () => ["pnpm --filter @jirum/design-system test"];
 const buildDesignSystemLintCommands = () => DESIGN_SYSTEM_APPS.map((app) => `pnpm lint --filter=${app} -- --fix`);
 
@@ -54,6 +55,9 @@ module.exports = {
   "*.{js,ts,tsx}": [buildEslintCommands, buildPrettierCommands],
   "packages/design-system/**": [buildDesignSystemCommands],
   "packages/design-system/eslint.js": [buildDesignSystemLintCommands],
+  // 카탈로그(catalog.js)가 가리키는 부품 경로·스토리 — 옮기거나 지우면 catalog.test 가 깨진다. 깨뜨린 커밋에서 막는다.
+  "{apps/web/src/shared,apps/web/src/entities/product-list/ui,apps/mobile/src/shared/components}/**": [buildDesignSystemCommands],
+  "apps/web/src/**/*.stories.tsx": [buildDesignSystemCommands],
   // web·앱 공용 도메인 규칙. 두 앱이 그대로 import 하므로 고치면 두 앱 타입체크까지.
   "packages/domain/**": [() => ["pnpm --filter @jirum/domain test", "pnpm check-types --filter=web --filter=mobile"]],
   "*.{ts,tsx}": [buildCheckTypesCommands, buildNodeTestCommands],
