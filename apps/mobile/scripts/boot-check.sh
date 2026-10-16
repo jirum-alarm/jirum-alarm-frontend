@@ -39,6 +39,10 @@ APP="$WORK/jirumAlarmMobile.app"
 cp -R "$APP_SRC" "$APP"
 cp "$WORK"/export/_expo/static/js/ios/*.hbc "$APP/main.jsbundle"
 /usr/libexec/PlistBuddy -c 'Set :EXUpdatesEnabled false' "$APP/Expo.plist"
+# GA4 에 시뮬레이터가 실사용자로 섞이지 않게(2026-10-16 실측: iOS 「사용자」 438명 중 323명이 기동 확인 시뮬레이터 —
+# runtime 백포트 기준인 appVersion 비율까지 흐렸다). 사본 앱에서만 Firebase 분석 수집을 끈다.
+/usr/libexec/PlistBuddy -c 'Delete :FIREBASE_ANALYTICS_COLLECTION_ENABLED' "$APP/Info.plist" 2>/dev/null || true
+/usr/libexec/PlistBuddy -c 'Add :FIREBASE_ANALYTICS_COLLECTION_ENABLED bool false' "$APP/Info.plist"
 codesign --force --deep --sign - "$APP" 2>/dev/null
 
 # 깨끗한 전용 기기 — 옛 OTA·권한 상태가 남은 기기는 판정을 흐린다(AGENTS.md §Mobile App).

@@ -55,11 +55,11 @@ describe('convertToWebp — web shared/lib/utils/image.ts 와 같은 규칙', ()
 });
 
 describe('★원격 이미지를 그리는 곳은 변환을 거친다', () => {
-  it('Thumbnail 은 webp 먼저, 실패하면 원본, 그다음 대체 그림', () => {
+  it('Thumbnail 은 (목록이면 축소본 →) webp → 원본 → 대체 그림', () => {
     // 변환만 하고 폴백이 없으면 webp 가 아닌 외부 이미지를 깨뜨린다.
     const src = read('src/shared/components/product/Thumbnail.tsx');
     expect(src).toContain('convertToWebp');
-    expect(src).toContain('[webp, uri]');
+    expect(src).toContain('[small, webp, uri]');
     expect(src).toContain('onError');
   });
 
@@ -115,3 +115,28 @@ describe('★원격 이미지를 그리는 곳은 변환을 거친다', () => {
 });
 
 export {};
+
+describe('optimizedThumbnailUrl — 목록 썸네일 축소본', () => {
+  const {optimizedThumbnailUrl} = require('../src/shared/lib/format/image');
+  it('cdn 이미지는 web 이미지 최적화 주소로', () => {
+    expect(
+      optimizedThumbnailUrl(
+        'https://cdn.jirum-alarm.com/a/1.webp',
+        'https://jirum-alarm.com',
+      ),
+    ).toBe(
+      'https://jirum-alarm.com/_next/image?url=https%3A%2F%2Fcdn.jirum-alarm.com%2Fa%2F1.webp&w=384&q=75',
+    );
+  });
+  it('다른 호스트(쿠팡 등)는 web 이 허용하지 않으니 건드리지 않는다', () => {
+    expect(
+      optimizedThumbnailUrl(
+        'https://thumbnail.coupangcdn.com/a.jpg',
+        'https://jirum-alarm.com',
+      ),
+    ).toBeUndefined();
+    expect(
+      optimizedThumbnailUrl(undefined, 'https://jirum-alarm.com'),
+    ).toBeUndefined();
+  });
+});

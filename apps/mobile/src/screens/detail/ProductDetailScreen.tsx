@@ -344,6 +344,7 @@ function NativeDetail({
             uri={product.thumbnail}
             categoryId={product.categoryId}
             resizeMode="cover"
+            full
           />
           {showViewerCount ? (
             <ViewerCount count={product.viewCount ?? 0} />

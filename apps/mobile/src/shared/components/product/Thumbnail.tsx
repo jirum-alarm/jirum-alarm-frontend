@@ -7,7 +7,8 @@ import {
   type StyleProp,
 } from 'react-native';
 
-import {convertToWebp} from '@/shared/lib/format/image';
+import {SERVICE_URL} from '@/constants/env';
+import {convertToWebp, optimizedThumbnailUrl} from '@/shared/lib/format/image';
 
 import NoImage from './NoImage';
 
@@ -41,6 +42,7 @@ export default function Thumbnail({
   style,
   resizeMode = 'cover',
   fallback,
+  full = false,
 }: {
   uri?: string | null;
   categoryId?: number | null;
@@ -49,6 +51,8 @@ export default function Thumbnail({
   resizeMode?: ImageResizeMode;
   /** NoImage 대신 쓸 대체 그림(알림 카드처럼 자체 폴백이 있는 곳). */
   fallback?: React.ReactNode;
+  /** 상세 대표 이미지처럼 화면 폭을 채울 때 — 축소본 대신 원본을 받는다. */
+  full?: boolean;
 }) {
   // 어느 후보까지 실패했는지. uri 가 바뀌면 리셋한다 — 안 하면 목록
   // 재사용(FlatList)에서 한 번 실패한 자리가 다음 상품에도 폴백을 그린다.
@@ -63,8 +67,12 @@ export default function Thumbnail({
   // 순서다. CDN 이 webp 만 갖고 있어 원본 확장자는 403 이 온다(convertToWebp
   // 주석 참조). 변환만 하고 폴백이 없으면 webp 가 아닌 외부 이미지
   // (쿠팡·알리 썸네일)를 되레 깨뜨린다.
+  // 목록은 축소본부터(optimizedThumbnailUrl 주석) → 원본 webp → 원본.
   const webp = convertToWebp(uri);
-  const candidates = !uri ? [] : webp && webp !== uri ? [webp, uri] : [uri];
+  const small = full ? undefined : optimizedThumbnailUrl(webp, SERVICE_URL);
+  const candidates = !uri
+    ? []
+    : [...new Set([small, webp, uri].filter((u): u is string => !!u))];
   const current = candidates[step];
 
   if (!current) {

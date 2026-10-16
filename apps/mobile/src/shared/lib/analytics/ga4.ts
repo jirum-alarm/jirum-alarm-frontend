@@ -1,4 +1,5 @@
 import analytics from '@react-native-firebase/analytics';
+import {Platform} from 'react-native';
 
 // 앱(RN) 사용자 행동 분석 — GA4 앱 스트림(Firebase Analytics).
 // 웹은 GTM → GA4 웹 스트림으로 보내고, 앱은 여기서 같은 GA4 속성(394356262)의
@@ -54,6 +55,23 @@ const safely = (label: string, run: () => Promise<unknown>) => {
     logOnce(`sync:${label}`, `[GA4] ${label} 불가:`, e);
   }
 };
+
+// 안드로이드 에뮬레이터(CI 기동 확인·로컬 검증)는 GA4 에 보내지 않는다 — 실사용자 수·버전 비율을 흐린다(2026-10-16).
+// iOS 시뮬레이터는 JS 로 못 가려 boot-check.sh 가 사본 앱 Info.plist 로 끈다.
+const androidConstants = Platform.constants as {
+  Fingerprint?: string;
+  Model?: string;
+};
+export const isAndroidEmulator =
+  Platform.OS === 'android' &&
+  /generic|sdk_gphone|emulator|ranchu/i.test(
+    `${androidConstants.Fingerprint ?? ''} ${androidConstants.Model ?? ''}`,
+  );
+if (isAndroidEmulator) {
+  safely('disable(emulator)', () =>
+    analytics().setAnalyticsCollectionEnabled(false),
+  );
+}
 
 export const Analytics = {
   // 로그인 유저 식별 — 웹의 user_id 와 같은 키로 크로스 플랫폼 유저 병합.

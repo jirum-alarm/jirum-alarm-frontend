@@ -31,7 +31,7 @@ export default function ProductDetailSkeleton({
       <View className="flex-1 overflow-hidden">
         {preview?.thumbnail ? (
           <View className="aspect-square w-full bg-gray-50">
-            <Thumbnail uri={preview.thumbnail} resizeMode="cover" />
+            <Thumbnail uri={preview.thumbnail} resizeMode="cover" full />
           </View>
         ) : (
           <SkeletonBox style={{width: '100%', aspectRatio: 1}} />
