@@ -1,8 +1,9 @@
 import {prefetchProductDetail} from '@/entities/product/prefetch-detail';
 import React from 'react';
 import {View} from 'react-native';
-import {cardThumb} from '@jirum/design-system/recipes';
+import {cardThumb, productCard} from '@jirum/design-system/recipes';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {cn} from '@/shared/lib/styling/className';
 
 import PressableScale from '@/shared/components/PressableScale';
 
@@ -89,7 +90,7 @@ const ProductCard = React.memo(function ProductCard({
 
         {/* 제목은 2줄 고정 — 높이를 안 잡으면 아래 가격 줄이 카드마다 어긋난다. */}
         <Text
-          className="pt-2 text-sm text-gray-700"
+          className={productCard.title}
           // pt-2(8) + 2줄(20×2). HomeCardPrimitives CardTitle 과 같은 값.
           style={{height: 48}}
           numberOfLines={2}>
@@ -103,8 +104,12 @@ const ProductCard = React.memo(function ProductCard({
             product.postedAt ? displayTime(product.postedAt, now) : undefined
           }
         />
+        {/* 그리드(3열)는 16px — web ProductGridCard 와 같다. 캐러셀(120px)은 18px. */}
         <Text
-          className="pt-1 text-lg font-semibold text-gray-900"
+          className={cn(
+            'pt-1',
+            isGrid ? productCard.price.grid : productCard.price.list,
+          )}
           numberOfLines={1}>
           {priceText}
         </Text>

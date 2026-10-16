@@ -49,11 +49,11 @@ import {
 } from './lib/notification-source';
 import {MyPageService} from '@/shared/api/mypage';
 import {cn} from '@/shared/lib/styling/className';
+import {button, pageHeader} from '@jirum/design-system/recipes';
 import {MyPageQueries} from '@/entities/mypage';
 import {useUpdatePushSetting} from '@/features/mypage/model/mutations';
 
 /** web PageHeader 와 같은 높이(h-14)·색·경계선. */
-const HEADER_HEIGHT = 56;
 
 type Navigation = {
   push: (name: string, params?: object) => void;
@@ -305,9 +305,13 @@ export default function AlarmScreen() {
     <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>
       {/* 헤더 — web PageHeader(title="알림", actions=휴지통) */}
       <View
-        className="flex-row items-center justify-between border-b border-gray-100 bg-white px-5"
-        style={{height: HEADER_HEIGHT}}>
-        <Text className="text-lg font-semibold text-gray-900">알림</Text>
+        className={cn(
+          'flex-row items-center justify-between',
+          pageHeader.bar,
+          pageHeader.height,
+          pageHeader.border,
+        )}>
+        <Text className={pageHeader.title}>알림</Text>
         <View className="flex-row items-center gap-x-2">
           {/* 알림 설정 — 알림을 보다가 "그만 받고 싶다" 할 때 바로. 예전엔 마이페이지 안쪽에만 있었다. */}
           {!isEditMode ? (
@@ -348,9 +352,19 @@ export default function AlarmScreen() {
             <PressableScale
               accessibilityRole="button"
               hitSlop={6}
-              className="h-8 justify-center rounded-md border border-gray-300 bg-white px-3"
+              className={cn(
+                'justify-center',
+                button.size.xs.box,
+                button.tone.neutralOutline.box,
+              )}
               onPress={() => setEditMode(false)}>
-              <Text className="text-sm font-medium text-gray-900">완료</Text>
+              <Text
+                className={cn(
+                  button.size.xs.text,
+                  button.tone.neutralOutline.text,
+                )}>
+                완료
+              </Text>
             </PressableScale>
           </View>
         ) : (
@@ -369,9 +383,14 @@ export default function AlarmScreen() {
                   accessibilityRole="button"
                   accessibilityLabel="알림 켜기"
                   hitSlop={6}
-                  className="h-8 justify-center rounded-md bg-fixed-800 px-3"
+                  className={cn(
+                    'justify-center',
+                    button.size.xs.box,
+                    button.tone.dark.box,
+                  )}
                   onPress={push.enable}>
-                  <Text className="text-sm font-semibold text-primary-500">
+                  <Text
+                    className={cn(button.size.xs.text, button.tone.dark.text)}>
                     켜기
                   </Text>
                 </PressableScale>
@@ -397,9 +416,17 @@ export default function AlarmScreen() {
                   accessibilityRole="button"
                   disabled={applyingGoodPrice}
                   hitSlop={6}
-                  className="h-8 justify-center rounded-md border border-gray-300 bg-white px-3"
+                  className={cn(
+                    'justify-center',
+                    button.size.xs.box,
+                    button.tone.neutralOutline.box,
+                  )}
                   onPress={applyGoodPrice}>
-                  <Text className="text-sm font-medium text-gray-900">
+                  <Text
+                    className={cn(
+                      button.size.xs.text,
+                      button.tone.neutralOutline.text,
+                    )}>
                     좋은 가격만
                   </Text>
                 </PressableScale>
@@ -412,7 +439,11 @@ export default function AlarmScreen() {
                 <PressableScale
                   accessibilityRole="button"
                   hitSlop={6}
-                  className="h-8 justify-center rounded-md border border-gray-300 bg-white px-3"
+                  className={cn(
+                    'justify-center',
+                    button.size.xs.box,
+                    button.tone.neutralOutline.box,
+                  )}
                   onPress={() => {
                     updatePushSetting({
                       keywordAlertLevel: KeywordAlertLevel.Hot,
@@ -421,7 +452,11 @@ export default function AlarmScreen() {
                       '이제 핫딜이 된 딜만 알려드려요. 알림 설정에서 되돌릴 수 있어요',
                     );
                   }}>
-                  <Text className="text-sm font-medium text-gray-900">
+                  <Text
+                    className={cn(
+                      button.size.xs.text,
+                      button.tone.neutralOutline.text,
+                    )}>
                     핫딜만 받기
                   </Text>
                 </PressableScale>
@@ -434,9 +469,17 @@ export default function AlarmScreen() {
                 <PressableScale
                   accessibilityRole="button"
                   hitSlop={6}
-                  className="h-8 justify-center rounded-md border border-gray-300 bg-white px-3"
+                  className={cn(
+                    'justify-center',
+                    button.size.xs.box,
+                    button.tone.neutralOutline.box,
+                  )}
                   onPress={goKeywordSettings}>
-                  <Text className="text-sm font-medium text-gray-900">
+                  <Text
+                    className={cn(
+                      button.size.xs.text,
+                      button.tone.neutralOutline.text,
+                    )}>
                     키워드 알림
                   </Text>
                 </PressableScale>

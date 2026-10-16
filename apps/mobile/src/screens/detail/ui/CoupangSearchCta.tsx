@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {promptCard} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 import {useQuery} from '@tanstack/react-query';
 import {useNavigation} from '@react-navigation/native';
 
@@ -68,17 +70,23 @@ export default function CoupangSearchCta({productId}: {productId: number}) {
         onPress={handlePress}
         accessibilityRole="link"
         accessibilityLabel={`쿠팡에서 ${cta.query} 가격 보기`}
-        className="flex-row items-center gap-x-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
+        className={cn('flex-row', promptCard.box, promptCard.tone.neutral.box)}>
         <View className="min-w-0 flex-1">
-          <Text className="text-sm font-semibold text-gray-800">
-            {copy.title}
-          </Text>
-          <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
+          <Text className={promptCard.title}>{copy.title}</Text>
+          <Text className={promptCard.description} numberOfLines={1}>
             쿠팡에서 ‘{cta.query}’ 검색 결과 보기
           </Text>
         </View>
-        <View className="shrink-0 rounded-full border border-gray-300 bg-white px-3 py-1.5">
-          <Text className="text-xs font-semibold text-gray-700">
+        <View
+          className={cn(
+            promptCard.action.box,
+            promptCard.tone.neutral.action.box,
+          )}>
+          <Text
+            className={cn(
+              promptCard.action.text,
+              promptCard.tone.neutral.action.text,
+            )}>
             {copy.action}
           </Text>
         </View>

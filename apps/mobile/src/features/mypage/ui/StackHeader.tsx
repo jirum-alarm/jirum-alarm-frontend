@@ -1,6 +1,8 @@
 import React from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {pageHeader} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import CaretLeft from '@/shared/components/icons/caret_left';
@@ -32,7 +34,7 @@ export default function StackHeader({
 
   return (
     <View
-      className="border-b border-gray-100 bg-white px-5"
+      className={cn(pageHeader.bar, pageHeader.border)}
       style={{paddingTop: insets.top}}>
       <View className="flex-row items-center" style={{height: HEADER_HEIGHT}}>
         {variant === 'back' ? (
@@ -50,7 +52,7 @@ export default function StackHeader({
               <CaretLeft />
             </Pressable>
             <Text
-              className="pl-5 text-lg font-semibold text-gray-900"
+              className={cn('pl-5', pageHeader.title)}
               numberOfLines={1}
               style={styles.title}>
               {title}
@@ -59,7 +61,7 @@ export default function StackHeader({
         ) : (
           <>
             <Text
-              className="text-lg font-semibold text-gray-900"
+              className={pageHeader.title}
               numberOfLines={1}
               style={styles.title}>
               {title}

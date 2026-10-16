@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import {cardThumb} from '@jirum/design-system/recipes';
+import {cardThumb, productCard} from '@jirum/design-system/recipes';
 import {
   formatCountdown,
   getTimeDealOpening,
@@ -80,9 +80,7 @@ export function DisplayListPrice({
   const text = hasWon ? `${priceWithoutWon}원` : priceWithoutWon;
 
   return (
-    <Text
-      className={cn('text-lg font-semibold text-gray-900', className)}
-      numberOfLines={1}>
+    <Text className={cn(productCard.price.list, className)} numberOfLines={1}>
       {text}
     </Text>
   );
@@ -104,7 +102,7 @@ export function CardTitle({
 }) {
   return (
     <Text
-      className={cn('pt-2 text-sm text-gray-700', className)}
+      className={cn(productCard.title, className)}
       style={fixedHeight ? {height: 48} : undefined}
       numberOfLines={2}>
       {title}

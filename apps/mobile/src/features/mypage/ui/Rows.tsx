@@ -1,6 +1,8 @@
 import React from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {listRow} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 import ArrowRight from '@/shared/components/icons/ArrowRight';
 import {useColors} from '@/shared/theme/useColors';
@@ -46,7 +48,7 @@ export function MenuGroup({
 }) {
   return (
     <View>
-      <Text className="pb-1 text-xs font-medium text-gray-500">{label}</Text>
+      <Text className={listRow.group}>{label}</Text>
       {children}
     </View>
   );
@@ -69,14 +71,14 @@ export function MenuRow({
     <Row
       onPress={onPress}
       accessibilityLabel={value ? `${title}, ${value}` : title}>
-      <View className="flex-row items-center gap-3 py-3">
+      <View className={cn('flex-row', listRow.row)}>
         <View className="h-7 w-7 items-center justify-center">{icon}</View>
         {/* ★이동하는 행은 chevron 을 준다 — 같은 화면에서 프로필 행만 있고
             메뉴 행엔 없어서 어디를 누를 수 있는지가 행마다 달라 보였다. */}
-        <Text className="text-gray-900" style={styles.grow}>
+        <Text className={listRow.title} style={styles.grow}>
           {title}
         </Text>
-        {value ? <Text className="text-sm text-gray-500">{value}</Text> : null}
+        {value ? <Text className={listRow.value}>{value}</Text> : null}
         <ArrowRight />
       </View>
     </Row>
@@ -96,10 +98,10 @@ export function MovePageRow({
   return (
     <Row onPress={onPress} accessibilityLabel={title}>
       <View className="flex-row items-center justify-between py-3">
-        <Text className="text-gray-900">{title}</Text>
+        <Text className={listRow.title}>{title}</Text>
         <View className="flex-row items-center gap-2">
           {subtitle ? (
-            <Text className="text-sm text-gray-500" numberOfLines={1}>
+            <Text className={listRow.value} numberOfLines={1}>
               {subtitle}
             </Text>
           ) : null}
@@ -122,7 +124,7 @@ export function TextRow({
     <Row onPress={onPress} accessibilityLabel={title}>
       {/* MenuRow 와 같은 이유로 chevron. 아이콘이 없어 제목이 왼쪽 끝이다. */}
       <View className="flex-row items-center px-5 py-3">
-        <Text className="text-gray-900" style={styles.grow}>
+        <Text className={listRow.title} style={styles.grow}>
           {title}
         </Text>
         <ArrowRight />

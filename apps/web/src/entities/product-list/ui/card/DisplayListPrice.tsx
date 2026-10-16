@@ -1,9 +1,12 @@
+import { productCard } from '@jirum/design-system/recipes';
+
 import { cn } from '@/shared/lib/cn';
 import { parsePrice } from '@/shared/lib/utils/price';
 
 type DisplayListPriceProps = {
   price?: string | null;
   forceString?: boolean;
+  /** 예전 두 분기가 같은 클래스였다 — 지금은 모양에 영향 없음(호출부 호환용). */
   widthType?: 'default' | 'wide';
   beforePrice?: string;
   className?: string;
@@ -12,7 +15,6 @@ type DisplayListPriceProps = {
 export default function DisplayListPrice({
   price,
   forceString,
-  widthType = 'default',
   beforePrice,
   className,
 }: DisplayListPriceProps) {
@@ -36,15 +38,7 @@ export default function DisplayListPrice({
           {beforePrice}
         </span>
       )}
-      <span
-        className={
-          widthType === 'wide'
-            ? cn('truncate text-lg font-semibold text-gray-900', className)
-            : cn('truncate text-lg font-semibold text-gray-900', className)
-        }
-      >
-        {displayString}
-      </span>
+      <span className={cn('truncate', productCard.price.list, className)}>{displayString}</span>
     </div>
   );
 }

@@ -8,7 +8,7 @@ const preview: Preview = {
     // 접근성 검사 위반은 경고가 아니라 실패 — 대비(AA)·이름 없는 버튼을 스토리 단계에서 막는다.
     a11y: { test: 'error' },
     options: {
-      storySort: { order: ['소개', '기초', '조립 규칙', '레시피', 'components', '*'] },
+      storySort: { order: ['소개', '기초', '조립 규칙', '레시피', '패턴', 'components', '*'] },
     },
   },
   // 웹 다크는 <html class="dark"> 에서만 켜진다(globals.css) — 툴바 「테마」나 URL `&globals=theme:dark` 로 본다.

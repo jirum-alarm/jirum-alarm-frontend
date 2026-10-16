@@ -1,5 +1,6 @@
 'use client';
 
+import { button } from '@jirum/design-system/recipes';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
@@ -7,6 +8,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { GoodPriceService } from '@/shared/api/keyword/good-price.service';
 import { PAGE } from '@/shared/config/page';
 import { getLastAlarmReadAt, setLastAlarmReadAt } from '@/shared/lib/alarmReadState';
+import { cn } from '@/shared/lib/cn';
 import { useToast } from '@/shared/ui/common/Toast';
 import Link from '@/shared/ui/Link';
 
@@ -146,7 +148,12 @@ export default function AlarmList() {
             <button
               type="button"
               onClick={() => setEditMode(false)}
-              className="h-8 rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-900"
+              className={cn(
+                button.size.xs.box,
+                button.size.xs.text,
+                button.tone.neutralOutline.box,
+                button.tone.neutralOutline.text,
+              )}
             >
               완료
             </button>
@@ -177,7 +184,13 @@ export default function AlarmList() {
                   });
                   applyGoodPrice(goodPrice.keyword);
                 }}
-                className="flex h-8 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-900 disabled:opacity-50"
+                className={cn(
+                  'flex shrink-0 items-center justify-center disabled:opacity-50',
+                  button.size.xs.box,
+                  button.size.xs.text,
+                  button.tone.neutralOutline.box,
+                  button.tone.neutralOutline.text,
+                )}
               >
                 좋은 가격만
               </button>
@@ -193,7 +206,13 @@ export default function AlarmList() {
                   updatePushSetting({ keywordAlertLevel: 'HOT' });
                   toast('이제 핫딜이 된 딜만 알려드려요. 알림 설정에서 되돌릴 수 있어요');
                 }}
-                className="flex h-8 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-900"
+                className={cn(
+                  'flex items-center justify-center',
+                  button.size.xs.box,
+                  button.size.xs.text,
+                  button.tone.neutralOutline.box,
+                  button.tone.neutralOutline.text,
+                )}
               >
                 핫딜만 받기
               </button>
@@ -205,7 +224,13 @@ export default function AlarmList() {
               </span>
               <Link
                 href={PAGE.MYPAGE_KEYWORD}
-                className="flex h-8 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-900"
+                className={cn(
+                  'flex items-center justify-center',
+                  button.size.xs.box,
+                  button.size.xs.text,
+                  button.tone.neutralOutline.box,
+                  button.tone.neutralOutline.text,
+                )}
               >
                 키워드 알림
               </Link>

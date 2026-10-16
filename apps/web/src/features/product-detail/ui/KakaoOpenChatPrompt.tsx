@@ -1,3 +1,5 @@
+import { promptCard } from '@jirum/design-system/recipes';
+
 import { cn } from '@/shared/lib/cn';
 import TalkLight from '@/shared/ui/common/icons/TalkLight';
 import Link from '@/shared/ui/Link';
@@ -39,7 +41,9 @@ export default function KakaoOpenChatPrompt({
       className={cn(
         // ponytail: 면 색은 그대로 두고 테두리+채운 버튼으로만 눈에 띄게 한다.
         // 진한 면으로 올리면 상세에서 가장 강한 요소가 되어 구매 CTA와 경합한다.
-        'border-secondary-200 bg-secondary-50 hover:bg-secondary-100 flex items-center gap-x-3 rounded-lg border px-4 py-3 transition-colors',
+        'hover:bg-secondary-100 flex transition-colors',
+        promptCard.box,
+        promptCard.tone.brand.box,
         className,
       )}
     >
@@ -55,15 +59,20 @@ export default function KakaoOpenChatPrompt({
       <span className="min-w-0 flex-1">
         {/* "핫딜 Only"는 UTM 캠페인명(hotdeal_only)·봇 설정값이 새어 나온 내부 용어라
             유저에겐 정체불명 고유명사로 읽힌다. 방 성격은 아래 줄이 이미 말한다. */}
-        <span className="block text-sm font-semibold text-gray-800">{title}</span>
-        <span className="mt-0.5 block truncate text-xs text-gray-500">{description}</span>
+        <span className={cn('block', promptCard.title)}>{title}</span>
+        <span className={cn('block truncate', promptCard.description)}>{description}</span>
       </span>
       {/* 이 줄이 클릭 가능하다는 유일한 신호였는데 평문이라 그냥 라벨로 읽혔다.
           다만 카드 전체가 이미 링크라 알약이 "카드 안의 또 다른 버튼"으로 읽히면
           어색하다 — 그래서 채우지 않고 테두리만 준다(secondary-600 글씨 5.11:1). */}
       <span
         aria-hidden
-        className="border-secondary-300 text-secondary-600 shrink-0 rounded-full border bg-white px-3 py-1.5 text-xs font-semibold"
+        className={cn(
+          promptCard.action.box,
+          promptCard.action.text,
+          promptCard.tone.brand.action.box,
+          promptCard.tone.brand.action.text,
+        )}
       >
         입장
       </span>

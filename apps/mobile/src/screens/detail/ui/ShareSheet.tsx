@@ -87,7 +87,7 @@ export default function ShareSheet({
 }: Props) {
   const c = useColors();
   const panelStyle = useSheetPanelStyle();
-  // X·스레드의 검은 원이 다크 시트 바탕에 묻힌다 → 다크에선 '더보기' 와 같은 회색 원(로고는 흰색 그대로).
+  // X·스레드의 검은 원이 다크 시트 바탕에 묻힌다 → 다크에선 「다른 앱」 칸과 같은 회색 원(로고는 흰색 그대로).
   const brandDark = useColorScheme() === 'dark' ? c.gray[100] : brand.black;
   const insets = useSafeAreaInsets();
   const overlay = useRef(new Animated.Value(0)).current;
@@ -238,7 +238,7 @@ export default function ShareSheet({
     },
     {
       c: 'native',
-      label: '더보기',
+      label: '다른 앱',
       a11y: '다른 앱으로 공유',
       icon: <ShareIcon width={22} height={22} color={c.gray[700]} />,
       bg: c.gray[100],

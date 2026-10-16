@@ -1,7 +1,9 @@
 'use client';
 
+import { listRow } from '@jirum/design-system/recipes';
 import * as m from 'motion/react-m';
 
+import { cn } from '@/shared/lib/cn';
 import customerService from '@/shared/lib/customerservice/customer-service';
 import { ArrowRight, Headset } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
@@ -20,7 +22,7 @@ const MenuList = () => {
       <div className="flex flex-col gap-4 py-4">
         {MYPAGE_GROUPS.map((group) => (
           <section key={group.key}>
-            <h2 className="pb-1 text-xs font-medium text-gray-500">{group.label}</h2>
+            <h2 className={listRow.group}>{group.label}</h2>
             <ul>
               {MYPAGE_MENU.filter((menu) => menu.group === group.key && !menu.pcOnly).map(
                 (menu) => (
@@ -28,9 +30,9 @@ const MenuList = () => {
                     <Link href={menu.url}>
                       {/* 이동하는 행은 chevron 을 준다 — 같은 화면에서 프로필 행만
                           갖고 있어 어디를 누를 수 있는지가 행마다 달라 보였다. */}
-                      <div className="flex items-center gap-3 py-3">
+                      <div className={cn('flex', listRow.row)}>
                         {menu.icon}
-                        <span className="flex-1 text-left text-gray-900">{menu.title}</span>
+                        <span className={cn('flex-1 text-left', listRow.title)}>{menu.title}</span>
                         <ArrowRight />
                       </div>
                     </Link>
@@ -45,12 +47,9 @@ const MenuList = () => {
                     transition={{ duration: 0.1 }}
                   >
                     {/* 위 Link 행들은 px 이 없다 — px-2 를 두면 고객센터만 8px 들여써진다. */}
-                    <div
-                      className="flex items-center gap-3 py-3"
-                      onClick={handleShowChannelTalkClick}
-                    >
+                    <div className={cn('flex', listRow.row)} onClick={handleShowChannelTalkClick}>
                       {<Headset />}
-                      <span className="flex-1 text-left text-gray-900">고객센터</span>
+                      <span className={cn('flex-1 text-left', listRow.title)}>고객센터</span>
                     </div>
                   </m.button>
                 </li>

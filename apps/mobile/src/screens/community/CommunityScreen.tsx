@@ -1,4 +1,5 @@
-import {emptyText} from '@jirum/design-system/recipes';
+import {emptyText, pageHeader} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 import {fixed} from '@jirum/design-system';
 import React, {useCallback, useRef, useState} from 'react';
 import {
@@ -39,7 +40,6 @@ import {
 import {useColors} from '@/shared/theme/useColors';
 
 /** web PageHeader 와 같은 높이(h-14). */
-const HEADER_HEIGHT = 56;
 
 type Nav = NativeStackNavigationProp<TabStackParamList>;
 
@@ -125,9 +125,13 @@ export default function CommunityScreen() {
 
       {/* 헤더 — web PageHeader(title="커뮤니티") */}
       <View
-        className="flex-row items-center border-b border-gray-100 bg-white px-5"
-        style={{height: HEADER_HEIGHT}}>
-        <Text className="text-lg font-semibold text-gray-900">커뮤니티</Text>
+        className={cn(
+          'flex-row items-center',
+          pageHeader.bar,
+          pageHeader.height,
+          pageHeader.border,
+        )}>
+        <Text className={pageHeader.title}>커뮤니티</Text>
       </View>
 
       <CommunityTabBar activeTab={tab} onChange={setTab} />

@@ -141,7 +141,7 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
       ? ([
           {
             c: 'native' as const,
-            label: '기타',
+            label: '다른 앱',
             a11y: '다른 앱으로 공유',
             icon: <Share width={20} height={20} className="text-gray-600" />,
             badge: 'bg-gray-100',

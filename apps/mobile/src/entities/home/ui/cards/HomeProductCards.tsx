@@ -1,5 +1,6 @@
 import {prefetchProductDetail} from '@/entities/product/prefetch-detail';
 import React from 'react';
+import {productCard} from '@jirum/design-system/recipes';
 import {getTossTimeDeal} from '@jirum/domain/toss-time-deal';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -105,7 +106,10 @@ export const GridCard = React.memo(function GridCard({
           }
         />
         {/* web: grid 만 text-base 로 덮는다 */}
-        <TossTimeDealPrice product={product} priceClassName="text-base" />
+        <TossTimeDealPrice
+          product={product}
+          priceClassName={productCard.price.grid}
+        />
       </View>
     </PressableScale>
   );
