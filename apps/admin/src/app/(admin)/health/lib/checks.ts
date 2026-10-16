@@ -41,8 +41,10 @@ export type Signals = {
   kakao?: boolean;
   profit?: ProviderRow[];
   queue?: { eligibleNow: number; parked: number };
-  /** 그저께까지 7일 수익(세후). 어제·오늘은 집계 중이라 뺀다 */
+  /** 오늘까지 7일 수익(세후) — 덜 찬 날 포함 */
   revenue7d?: number;
+  /** 7일 중 아직 집계 중인 날 */
+  revenuePartial?: '오늘' | '어제·오늘';
   community?: ProviderHealthOutput[];
   mall?: ProviderHealthOutput[];
   danawa?: ProviderHealthOutput[];
@@ -367,9 +369,14 @@ const baseSections = (s: Signals): Section[] => [
         id: 'revenue',
         title: '최근 7일 수익',
         level: s.revenue7d === undefined ? undefined : s.revenue7d > 0 ? 'ok' : 'danger',
-        now: s.revenue7d === undefined ? undefined : `그저께까지 7일 ${shortWon(s.revenue7d)}`,
+        now:
+          s.revenue7d === undefined
+            ? undefined
+            : `${shortWon(s.revenue7d)} (${s.revenuePartial} 집계 중)`,
         symptom: '위 칸이 전부 초록인데 이게 0원이면 집계 쪽(정산 배치·수익 계산) 문제다.',
-        check: ['홈의 수익 차트에서 출처별로 어디가 빠졌는지 본다. 어제·오늘은 원래 덜 찬 값.'],
+        check: [
+          '홈의 수익 차트에서 출처별로 어디가 빠졌는지 본다. 오늘(애드센스가 들어오는 다음 날 15:30 전엔 어제도)은 원래 덜 찬 값.',
+        ],
         fix: ['빠진 출처의 「판매·정산 수신」 칸 절차를 따른다.'],
         href: '/',
       },

@@ -30,6 +30,7 @@ import {
 } from '@/hooks/graphql/profitLink';
 import { useProviderHealthStatus } from '@/hooks/graphql/stats';
 import { useGetPendingVerificationsTotalCount } from '@/hooks/graphql/verification';
+import { partialRevenueStart } from '@/lib/revenue';
 import { ProviderType } from '@/types/stats';
 import { kstDaysAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
 
@@ -139,8 +140,9 @@ const ServiceHealth = () => {
     target: ProductMappingTarget.BrandProduct,
   });
 
-  // 어제·오늘은 정산이 덜 찬 값이라(쿠팡·네이버 하루 뒤, 애드센스 이틀 뒤) 그저께까지 7일
-  const revenue = useRevenueTrend(toStatsDateRange(kstDaysAgo(8), kstDaysAgo(2)));
+  // 오늘까지 7일 — 덜 찬 날(오늘, 애드센스 들어오기 전엔 어제도)은 빼지 않고 「집계 중」으로 표시
+  const revenue = useRevenueTrend(toStatsDateRange(kstDaysAgo(6), toKstDateString()));
+  const revenuePartialStart = partialRevenueStart(revenue.data?.revenueTrend);
   const thumbRange = toStatsDateRange(kstDaysAgo(1), toKstDateString());
   const thumb = useQuery<QueryThumbnailStatsQuery, QueryThumbnailStatsQueryVariables>(
     QueryThumbnailStats,
@@ -172,6 +174,7 @@ const ServiceHealth = () => {
     profit: profit.data?.profitLinkProviderHealth,
     queue: queue.data?.profitLinkQueueHealth,
     revenue7d: revenue.data?.revenueTrend.reduce((acc, r) => acc + r.revenue, 0),
+    revenuePartial: revenuePartialStart === kstDaysAgo(1) ? '어제·오늘' : '오늘',
     community: community.data?.providerHealthStatus,
     mall: mall.data?.providerHealthStatus,
     danawa: danawa.data?.providerHealthStatus,

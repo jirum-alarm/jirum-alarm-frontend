@@ -18,6 +18,7 @@ import {
 } from '@/hooks/graphql/profitLink';
 import { formatAgo, monthDay, shortWon, won } from '@/lib/format';
 import { sourceColor, sourceName } from '@/lib/labels';
+import { partialRevenueStart } from '@/lib/revenue';
 import { kstDaysAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
 
 // 수익 90%가 고가전자 (노트북/GPU/TV/가전) — 작업 큐 기본 필터
@@ -42,6 +43,7 @@ const toSeries = <T,>(
   });
   const keys = [...totals.keys()].sort((a, b) => (totals.get(b) ?? 0) - (totals.get(a) ?? 0));
   return {
+    dates,
     categories: dates.map(monthDay),
     keys,
     totals: keys.map((k) => ({ key: k, value: totals.get(k) ?? 0 })),
@@ -350,6 +352,11 @@ const RevenueTrendSection = () => {
     [data],
   );
   const grandTotal = view.totals.reduce((acc, t) => acc + t.value, 0);
+  const partialStart = partialRevenueStart(data?.revenueTrend);
+  // 덜 찬 날은 축 이름에 * — 막대 색은 출처별이라 색으로는 못 가른다
+  const categories = view.dates.map((d, i) =>
+    d >= partialStart ? `${view.categories[i]}*` : view.categories[i],
+  );
 
   return (
     <ChartCard title="수익 추이 30일 — 세후, 제휴 + 애드센스" loading={loading}>
@@ -366,7 +373,7 @@ const RevenueTrendSection = () => {
         <Chart
           type="bar"
           stacked
-          categories={view.categories}
+          categories={categories}
           series={view.series}
           colors={view.keys.map(sourceColor)}
           format={(v) => won(v)}
@@ -375,7 +382,8 @@ const RevenueTrendSection = () => {
       </div>
       <p className="mt-2 text-xs text-bodydark2">
         결제일 기준·취소 제외. 토스는 원천징수 3.3% 뺀 금액이고 실제 지급은 구매확정월이라 날짜가
-        밀린다. 애드센스는 GA4 추정치. 쿠팡·네이버는 하루, 애드센스는 이틀 늦게 들어온다.
+        밀린다. 애드센스는 GA4 추정치. * 는 집계 중 — 쿠팡·네이버·애드픽·애드센스는 다음 날 오후 3시
+        반쯤 들어와 더 오른다.
       </p>
     </ChartCard>
   );

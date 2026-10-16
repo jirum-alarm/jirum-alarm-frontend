@@ -11,6 +11,7 @@ import { useRevenueTrend } from '@/hooks/graphql/profitLink';
 import { canAccessPath } from '@/lib/adminSection';
 import { monthDay as md, shortWon, won } from '@/lib/format';
 import { sourceColor, sourceName } from '@/lib/labels';
+import { partialRevenueStart } from '@/lib/revenue';
 import { kstDaysAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -55,12 +56,7 @@ const RevenueSummary = () => {
   );
   const { data } = useRevenueTrend(range, { skip: !canProfit });
   const rows = data?.revenueTrend;
-  // 애드센스가 다음 날 배치 중 마지막이라, 어제 애드센스 행이 있으면 어제는 다 들어온 것 — 오늘만 덜 찬 값
-  const partialStart = rows?.some(
-    (r) => r.source === 'adsense' && r.date.slice(0, 10) === yesterday,
-  )
-    ? today
-    : yesterday;
+  const partialStart = partialRevenueStart(rows);
 
   const periodStart = { today, month: monthStart, last30: last30Start }[period];
   const view = useMemo(() => {
