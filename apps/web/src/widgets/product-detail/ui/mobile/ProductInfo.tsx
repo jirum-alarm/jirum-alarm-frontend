@@ -31,6 +31,8 @@ import ProductGuideMetaRows, {
   type GuideRow as ProductGuideRow,
 } from '@/features/product-detail/ui/ProductGuideMetaRows';
 
+import InlineBuyFallback from './InlineBuyFallback';
+
 export default function ProductInfo({
   productId,
   tossData,
@@ -156,6 +158,7 @@ export default function ProductInfo({
             </>
           )}
           {tossData && <TossBadges toss={tossData} hidePriceSignals={hidePrice} />}
+          <InlineBuyFallback productId={productId} />
         </div>
       </div>
       {/* 구매 정보 — 라벨 왼쪽·값 옆 줄바꿈 한 모양(detailInfo). 가격 요약과는 선 하나로 나눈다. */}
