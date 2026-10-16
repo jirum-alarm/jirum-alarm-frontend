@@ -108,7 +108,7 @@ export default function ProductTagModal({
           <button
             type="button"
             onClick={onClear}
-            className="flex-shrink-0 p-1 text-gray-400 transition-transform active:scale-95"
+            className="flex-shrink-0 p-1 text-gray-500 transition-transform active:scale-95"
             aria-label="태그 제거"
           >
             <Close width={16} height={16} />
@@ -120,7 +120,7 @@ export default function ProductTagModal({
           onClick={() => handleOpenChange(true)}
           className="flex items-center gap-x-2 text-sm text-gray-500 transition-transform active:scale-95"
         >
-          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 text-gray-400">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 text-gray-500">
             <svg
               width="12"
               height="12"
@@ -143,7 +143,7 @@ export default function ProductTagModal({
             <h2 className="text-base font-semibold text-gray-900">상품 태그</h2>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1 text-gray-400 transition-transform active:scale-95"
+              className="p-1 text-gray-500 transition-transform active:scale-95"
             >
               <Close width={20} height={20} />
             </button>
@@ -174,7 +174,7 @@ export default function ProductTagModal({
                   }
                 }}
                 placeholder="핫딜 상품을 검색해주세요"
-                className="flex-1 bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none"
+                className="flex-1 bg-transparent text-sm text-gray-900 placeholder-gray-500 outline-none"
               />
               {inputValue && (
                 <button
@@ -182,7 +182,7 @@ export default function ProductTagModal({
                     setInputValue('');
                     setKeyword('');
                   }}
-                  className="text-gray-400 transition-transform active:scale-95"
+                  className="text-gray-500 transition-transform active:scale-95"
                 >
                   <Close width={14} height={14} />
                 </button>
@@ -270,7 +270,7 @@ export default function ProductTagModal({
                     </div>
                   </>
                 ) : (
-                  <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+                  <div className="flex flex-col items-center justify-center py-16 text-gray-500">
                     <p className="text-sm">검색어를 입력해 상품을 찾아보세요</p>
                   </div>
                 )}

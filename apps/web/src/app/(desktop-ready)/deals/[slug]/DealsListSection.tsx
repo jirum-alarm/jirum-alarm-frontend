@@ -134,7 +134,7 @@ export default function DealsListSection({
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="line-clamp-2 text-sm">{title}</div>
-                  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-400">
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-500">
                     {deal.mallName && <span className="text-gray-500">{deal.mallName}</span>}
                     {deal.postedAt && (
                       <span>{new Date(deal.postedAt).toLocaleDateString('ko-KR')}</span>
@@ -159,12 +159,12 @@ export default function DealsListSection({
                     </Badge>
                   )}
                   <span
-                    className={`text-sm font-medium ${deal.isEnd ? 'text-gray-400 line-through' : 'text-gray-700'}`}
+                    className={`text-sm font-medium ${deal.isEnd ? 'text-gray-500 line-through' : 'text-gray-700'}`}
                   >
                     {dealPrice(deal, currency)}
                   </span>
                   {deal.unitPrice != null && deal.unitLabel && (
-                    <span className="text-11 text-gray-400">
+                    <span className="text-11 text-gray-500">
                       {deal.unitLabel} {won(deal.unitPrice)}
                     </span>
                   )}

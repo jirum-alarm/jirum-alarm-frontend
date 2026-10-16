@@ -8,10 +8,10 @@ const HomeEndCta = () => {
       <p className="text-sm font-medium text-gray-500">추천 핫딜을 모두 확인했어요</p>
       <Link
         href="/trending/live"
-        className="bg-secondary-600 hover:bg-secondary-700 text-fixed-white flex items-center gap-x-1 rounded-full px-6 py-3 text-sm font-semibold"
+        className="bg-secondary-600 hover:bg-secondary-700 flex items-center gap-x-1 rounded-full px-6 py-3 text-sm font-semibold text-white"
       >
         실시간 특가 더 보기
-        <ArrowRight color="var(--color-fixed-white)" className="size-4" />
+        <ArrowRight color="var(--color-white)" className="size-4" />
       </Link>
     </div>
   );

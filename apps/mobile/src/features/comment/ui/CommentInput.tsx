@@ -149,7 +149,7 @@ export default function CommentInput({
             className={
               canSubmit
                 ? 'text-base font-semibold text-primary-800'
-                : 'text-base font-semibold text-gray-400'
+                : 'text-base font-semibold text-gray-500'
             }>
             등록
           </Text>

@@ -347,6 +347,7 @@ export default function AlarmScreen() {
             </PressableScale>
             <PressableScale
               accessibilityRole="button"
+              hitSlop={6}
               className="h-8 justify-center rounded-md border border-gray-300 bg-white px-3"
               onPress={() => setEditMode(false)}>
               <Text className="text-sm font-medium text-gray-900">완료</Text>
@@ -367,6 +368,7 @@ export default function AlarmScreen() {
                 <PressableScale
                   accessibilityRole="button"
                   accessibilityLabel="알림 켜기"
+                  hitSlop={6}
                   className="h-8 justify-center rounded-md bg-fixed-800 px-3"
                   onPress={push.enable}>
                   <Text className="text-sm font-semibold text-primary-500">
@@ -394,6 +396,7 @@ export default function AlarmScreen() {
                 <PressableScale
                   accessibilityRole="button"
                   disabled={applyingGoodPrice}
+                  hitSlop={6}
                   className="h-8 justify-center rounded-md border border-gray-300 bg-white px-3"
                   onPress={applyGoodPrice}>
                   <Text className="text-sm font-medium text-gray-900">
@@ -408,6 +411,7 @@ export default function AlarmScreen() {
                 </Text>
                 <PressableScale
                   accessibilityRole="button"
+                  hitSlop={6}
                   className="h-8 justify-center rounded-md border border-gray-300 bg-white px-3"
                   onPress={() => {
                     updatePushSetting({
@@ -429,6 +433,7 @@ export default function AlarmScreen() {
                 </Text>
                 <PressableScale
                   accessibilityRole="button"
+                  hitSlop={6}
                   className="h-8 justify-center rounded-md border border-gray-300 bg-white px-3"
                   onPress={goKeywordSettings}>
                   <Text className="text-sm font-medium text-gray-900">

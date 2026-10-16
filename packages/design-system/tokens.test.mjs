@@ -70,6 +70,15 @@ const TEXT_ON_SURFACE = [
   ['warning.700', 'white'],
   ['warning.800', 'warning.50'],
   ['fixed.900', 'primary.500'], // 라임 버튼 위 글자는 짙게(흰 글자는 1.4:1)
+  // ↓ 2026-10-16 접근성 리뷰가 화면에서 찾은 조합 — 토큰만 재던 테스트가 놓쳤다.
+  ['gray.500', 'gray.100'], // 칩·탭 위 보조 글자(라이트 4.51 경계값)
+  ['error.600', 'gray.50'], // 카드 위 할인율·오류 문구(예전 다크 600=#EF334A 는 3.65)
+  ['error.600', 'error.50'], // 빨강 옅은 면 위 배지 글자
+  ['primary.800', 'white'], // 밝은 면 위 라임 글자(500 은 1.4, 700 은 4.2)
+  ['primary.800', 'primary.50'],
+  ['primary.800', 'gray.100'],
+  ['secondary.700', 'secondary.100'], // 태그한 상품 알약(500 은 3.0)
+  ['white', 'secondary.600'], // 파란 CTA 위 글자 — white 는 다크에서 함께 뒤집힌다(fixed-white 는 다크 2.9)
 ];
 const pick = (theme, path) => {
   const [group, step] = path.split('.');
@@ -120,6 +129,10 @@ test('린트 정규식은 우회한 클래스만 잡는다', () => {
     'fixed z-[9999]',
     'z-999 absolute',
     'pc:z-[60]',
+    'mt-1 text-xs text-gray-400',
+    'text-sm font-medium hover:text-gray-300',
+    'placeholder-gray-400',
+    'w-full placeholder:text-gray-300',
   ])
     assert.ok(flagged(bad), `잡혀야 함: ${bad}`);
   for (const good of [
@@ -130,6 +143,9 @@ test('린트 정규식은 우회한 클래스만 잡는다', () => {
     'font-semibold bg-black/50 text-fixed-900 text-gray-900',
     'w-[120px] max-w-[600px] h-[81px] pt-[88px] h-[calc(100%-8px)] w-12 gap-2',
     'z-10 z-50 z-80 z-90 -z-10 drop-shadow-[0_1px_2px_rgba(0,0,0,0.1)]',
+    'size-4 text-gray-400',
+    'text-sm disabled:text-gray-400',
+    'border-gray-400 text-sm text-gray-700 placeholder-gray-500',
   ])
     assert.ok(!flagged(good), `잡히면 안 됨: ${good}`);
 });

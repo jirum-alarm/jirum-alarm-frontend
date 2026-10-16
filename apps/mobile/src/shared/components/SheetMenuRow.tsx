@@ -28,7 +28,7 @@ export default function SheetMenuRow({
       <Text
         className={
           tone === 'danger'
-            ? 'text-error-500 text-lg font-medium'
+            ? 'text-error-600 text-lg font-medium'
             : 'text-lg font-medium text-gray-800'
         }>
         {label}

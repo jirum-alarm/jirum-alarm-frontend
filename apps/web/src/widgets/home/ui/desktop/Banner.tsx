@@ -105,9 +105,9 @@ const Banner = () => {
 
       return (
         <div className="pointer-events-none absolute top-2 right-2 z-20 h-1 w-16">
-          <div className="h-full w-full overflow-hidden rounded-full bg-white/20">
+          <div className="bg-fixed-white/20 h-full w-full overflow-hidden rounded-full">
             <div
-              className="h-full bg-white"
+              className="bg-fixed-white h-full"
               style={{
                 width: `calc(100% * var(--progress))`,
               }}

@@ -55,7 +55,13 @@ const ProductLikeAction = ({ productId }: { productId: string }) => {
   };
 
   return (
-    <button className="p-3" onClick={handleClickWishlist}>
+    <button
+      type="button"
+      className="p-3"
+      onClick={handleClickWishlist}
+      aria-label={isLiked ? '찜 해제' : '찜하기'}
+      aria-pressed={isLiked}
+    >
       <Heart isLiked={isLiked} />
     </button>
   );

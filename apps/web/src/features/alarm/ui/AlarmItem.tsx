@@ -131,7 +131,7 @@ const AlarmItem = ({
                 <span className="inline-block h-2.5 border-l border-gray-400"></span>
               </>
             )}
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-gray-500">
               <DisplayTime time={createdAt} />
             </span>
           </div>

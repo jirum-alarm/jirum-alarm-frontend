@@ -73,9 +73,9 @@ const COMMUNITIES =
 /** 다른 핫딜 커뮤니티·사이트와 다른 점. 순서 = 사람들이 오는 이유(싸게 사기) 순. tone = 아이콘 칸 색(싸다=빨강 관례). */
 type Tone = 'error' | 'secondary' | 'primary' | 'success';
 const TONE: Record<Tone, string> = {
-  error: 'bg-error-50 text-error-500',
+  error: 'bg-error-50 text-error-600',
   secondary: 'bg-secondary-50 text-secondary-600',
-  primary: 'bg-primary-100 text-primary-700',
+  primary: 'bg-primary-100 text-primary-800',
   success: 'bg-success-50 text-success-700',
 };
 
@@ -393,7 +393,7 @@ function SectionHeading({
 }) {
   return (
     <div className="pc:mb-6 mb-5">
-      <p className="text-primary-700 text-sm font-semibold">{eyebrow}</p>
+      <p className="text-primary-800 text-sm font-semibold">{eyebrow}</p>
       <h2 id={`${id}-title`} className="pc:text-2xl mt-1 text-xl font-bold text-gray-900">
         {title}
       </h2>
@@ -412,15 +412,15 @@ function EvidenceExample() {
       <div className="shadow-card rounded-2xl bg-white p-4">
         <p className="text-sm text-gray-500">제주 삼다수 2L 24병</p>
         <p className="mt-0.5 text-xl font-bold text-gray-900">
-          <span className="text-error-500 mr-1.5">19%</span>12,900원
+          <span className="text-error-600 mr-1.5">19%</span>12,900원
         </p>
         <div className={cn('mt-3 flex gap-2.5 px-4 py-3', infoBox)}>
-          <span className="bg-error-50 text-error-500 flex size-7 shrink-0 items-center justify-center rounded-full">
+          <span className="bg-error-50 text-error-600 flex size-7 shrink-0 items-center justify-center rounded-full">
             <HelpIcon name="tag" className="size-4" />
           </span>
           <div className="min-w-0 pt-0.5">
             <p className="text-sm font-semibold text-gray-900">
-              보통가보다 <b className="text-error-500 font-bold">3,100원</b> 싸요 (19%)
+              보통가보다 <b className="text-error-600 font-bold">3,100원</b> 싸요 (19%)
             </p>
             <p className="mt-0.5 text-xs text-gray-500">
               좋은 딜 · 지난 1년 핫딜 14건 중 85%보다 싸요
@@ -487,7 +487,7 @@ export default async function HelpPage() {
           <div>
             <IconLogo width={44} height={44} className="pc:size-14" />
             <h1 className="pc:mt-5 mt-4 font-bold text-gray-900">
-              <span className="text-primary-700 block text-sm font-semibold">지름알림이란?</span>
+              <span className="text-primary-800 block text-sm font-semibold">지름알림이란?</span>
               <span className="text-28 pc:text-4xl mt-1.5 block leading-tight">
                 흩어진 핫딜을 모아
                 <br />
@@ -711,7 +711,7 @@ export default async function HelpPage() {
                         // 접힌 답도 HTML 에 있다(details) — 크롤러·AI 가 본문으로 읽는다.
                         <details key={f.id} id={f.id} className="group scroll-mt-20">
                           <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 px-4 py-3.5 font-medium text-gray-900 group-open:font-semibold hover:bg-gray-100 focus-visible:bg-gray-100 focus-visible:outline-none [&::-webkit-details-marker]:hidden">
-                            <span aria-hidden className="text-primary-700 shrink-0 font-bold">
+                            <span aria-hidden className="text-primary-800 shrink-0 font-bold">
                               Q
                             </span>
                             <span className="flex-1">{f.q}</span>

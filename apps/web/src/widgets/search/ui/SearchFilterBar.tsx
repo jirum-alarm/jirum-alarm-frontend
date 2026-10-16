@@ -27,7 +27,7 @@ const PERIOD_LABELS: Record<(typeof SEARCH_PERIODS)[number], string> = {
 function FilterRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-2">
-      <span className="w-11 shrink-0 text-xs text-gray-400">{label}</span>
+      <span className="w-11 shrink-0 text-xs text-gray-500">{label}</span>
       <div className="scrollbar-hide pc:mr-0 pc:pr-0 -mr-5 flex min-w-0 flex-1 gap-1.5 overflow-x-auto py-0.5 pr-5">
         {children}
       </div>
@@ -86,7 +86,7 @@ export default function SearchFilterBar({ controller }: { controller: SearchFilt
                 onClick={() => setFilters({ sort })}
                 className={cn(
                   'relative py-2 text-sm transition-colors',
-                  filters.sort === sort ? 'font-semibold text-gray-900' : 'text-gray-400',
+                  filters.sort === sort ? 'font-semibold text-gray-900' : 'text-gray-500',
                 )}
               >
                 {SORT_LABELS[sort]}

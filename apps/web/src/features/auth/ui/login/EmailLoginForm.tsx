@@ -18,7 +18,7 @@ const EmailLoginForm = () => {
       <PasswordInput password={password} hideHelperText={true} />
       <div className="bg-white py-9">
         {error && (
-          <p className="text-error-500 pb-4 text-center text-sm">
+          <p className="text-error-600 pb-4 text-center text-sm">
             이메일 혹은 비밀번호가 올바르지 않아요.
           </p>
         )}
@@ -53,6 +53,7 @@ const EmailInput = ({
           email.focus && (
             <button
               type="button"
+              aria-label="이메일 지우기"
               onMouseDown={email.reset}
               className="absolute top-[-5px] left-[-5px] cursor-pointer p-2"
             >
@@ -96,11 +97,14 @@ const PasswordInput = ({
         required
         value={password.value}
         icon={
-          masking ? (
-            <EyeOff onClick={toggleMasking} className="cursor-pointer" />
-          ) : (
-            <Eye onClick={toggleMasking} className="cursor-pointer text-gray-400" />
-          )
+          <button
+            type="button"
+            onClick={toggleMasking}
+            aria-label={masking ? '비밀번호 보기' : '비밀번호 숨기기'}
+            className="block cursor-pointer text-gray-500"
+          >
+            {masking ? <EyeOff /> : <Eye />}
+          </button>
         }
         helperText={
           password.value &&
@@ -132,8 +136,8 @@ const HelperText = ({
       <li
         className={cn(
           'transition-colors',
-          value && !isInvalidLength && 'text-primary-600',
-          isInvalidLength && 'text-error-500',
+          value && !isInvalidLength && 'text-primary-800',
+          isInvalidLength && 'text-error-600',
         )}
       >
         8자 이상 30자 이하 입력
@@ -141,8 +145,8 @@ const HelperText = ({
       <li
         className={cn(
           'transition-colors',
-          value && !isInvalidType && 'text-primary-600',
-          isInvalidType && 'text-error-500',
+          value && !isInvalidType && 'text-primary-800',
+          isInvalidType && 'text-error-600',
         )}
       >
         영어, 숫자, 특수문자 중 2가지 이상 조합

@@ -57,7 +57,7 @@ export default function CommentSection({
           title={
             <span>
               지름알림 댓글
-              {hasComments && <span className="text-secondary-500"> {comments.length}개</span>}
+              {hasComments && <span className="text-secondary-600"> {comments.length}개</span>}
             </span>
           }
         />

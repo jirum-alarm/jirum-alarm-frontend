@@ -185,7 +185,7 @@ const EmailLoginScreen = () => {
       <KeyboardStickyView offset={{closed: -insets.bottom, opened: 0}}>
         <View className="px-5 pb-5 items-center bg-white">
           {isError && (
-            <Text className="text-error-500 text-sm font-pretendard pb-4">
+            <Text className="text-error-600 text-sm font-pretendard pb-4">
               이메일 혹은 비밀번호가 올바르지 않아요.
             </Text>
           )}

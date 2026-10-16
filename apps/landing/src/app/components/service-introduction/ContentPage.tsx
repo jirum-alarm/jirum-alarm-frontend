@@ -30,7 +30,7 @@ const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
 };
 
 const ContentKeyword = ({ children }: { children: React.ReactNode }) => {
-  return <p className="text-primary-700 pb-1 text-sm font-bold lg:pb-2 lg:text-base">{children}</p>;
+  return <p className="text-primary-800 pb-1 text-sm font-bold lg:pb-2 lg:text-base">{children}</p>;
 };
 
 const ContentTitle = ({ children }: { children: React.ReactNode }) => {

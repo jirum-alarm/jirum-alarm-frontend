@@ -117,7 +117,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
       ) : (
         <div className="fixed right-0 bottom-[var(--bottom-nav-padding,0px)] left-0 m-auto w-full max-w-[600px] bg-white px-5 pt-4 pb-8">
           <div className="flex flex-col items-center pb-6">
-            <p className="pb-3 text-center text-sm text-gray-400">
+            <p className="pb-3 text-center text-sm text-gray-500">
               키워드를 등록하고
               <br />
               누구보다 빠르게 받아보세요
@@ -191,7 +191,7 @@ function LoginGuide() {
         </Button>
         <p className="pt-6 text-sm">
           이미 지름알림 회원이신가요?
-          <Link href={PAGE.LOGIN_BY_EMAIL} className="text-primary-700 pl-3">
+          <Link href={PAGE.LOGIN_BY_EMAIL} className="text-primary-800 pl-3">
             로그인
           </Link>
         </p>

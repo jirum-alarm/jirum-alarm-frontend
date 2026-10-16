@@ -66,7 +66,7 @@ export default function RelatedProductsView({ productId, isMobile }: RelatedProd
       />
       {hasMore && (
         <div ref={ref} className="flex h-20 items-center justify-center">
-          <div className="text-gray-400">로딩중...</div>
+          <div className="text-gray-500">로딩중...</div>
         </div>
       )}
     </div>

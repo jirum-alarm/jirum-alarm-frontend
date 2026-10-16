@@ -131,7 +131,8 @@ export default function QuietHoursRow({
                       isSelected
                         ? 'text-primary-800 text-base font-semibold'
                         : isBlocked
-                        ? 'text-base text-gray-300'
+                        ? // eslint-disable-next-line no-restricted-syntax -- 고를 수 없는 시간(비활성) — WCAG 대비 예외
+                          'text-base text-gray-300'
                         : 'text-base text-gray-700'
                     }>
                     {formatHour(hour)}

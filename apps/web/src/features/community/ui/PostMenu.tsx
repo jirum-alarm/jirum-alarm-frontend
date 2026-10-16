@@ -61,7 +61,7 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
             {isMyPost ? (
               <>
                 <button
-                  className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
+                  className="text-error-600 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
                   onClick={() => {
                     setIsOpen(false);
                     setIsDeleteConfirmOpen(true);
@@ -82,7 +82,7 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
               </>
             ) : (
               <button
-                className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
+                className="text-error-600 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
                 onClick={() => {
                   setIsOpen(false);
                   setIsReportOpen(true);

@@ -92,7 +92,7 @@ export default function ReportModal({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="신고 내용을 입력해주세요"
-              className="mt-3 h-24 w-full resize-none rounded-lg border border-gray-200 p-3 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-gray-400"
+              className="mt-3 h-24 w-full resize-none rounded-lg border border-gray-200 p-3 text-sm text-gray-900 placeholder-gray-500 outline-none focus:border-gray-400"
             />
           )}
 

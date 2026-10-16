@@ -30,7 +30,7 @@ export default function KeywordHubAlertButton({ keyword }: { keyword: string }) 
     return (
       <span
         role="status"
-        className="text-primary-700 mt-3 inline-flex items-center rounded-full bg-gray-100 px-4 py-2 text-sm font-semibold"
+        className="text-primary-800 mt-3 inline-flex items-center rounded-full bg-gray-100 px-4 py-2 text-sm font-semibold"
       >
         ‘{trimmed}’ 알림 받는 중
       </span>

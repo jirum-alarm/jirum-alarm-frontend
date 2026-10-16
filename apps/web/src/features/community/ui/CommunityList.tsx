@@ -97,7 +97,7 @@ export default function CommunityList({ tab, insertAfterIndex, insertContent }: 
       {/* 무한 스크롤 트리거 */}
       <div ref={ref} className="h-1" />
       {isFetchingNextPage && (
-        <div className="flex items-center justify-center py-4 text-sm text-gray-400">
+        <div className="flex items-center justify-center py-4 text-sm text-gray-500">
           불러오는 중...
         </div>
       )}

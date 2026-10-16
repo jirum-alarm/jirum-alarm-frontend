@@ -64,6 +64,7 @@ function Countdown({
       <Text className="text-sm text-gray-700">
         {closing ? timer.endLabel : timer.label}
       </Text>
+      {/* eslint-disable-next-line no-restricted-syntax -- 구분점(글자 아님) */}
       <Text className="text-sm text-gray-400">·</Text>
       {left <= 0 ? (
         <Text className="text-sm text-gray-500">

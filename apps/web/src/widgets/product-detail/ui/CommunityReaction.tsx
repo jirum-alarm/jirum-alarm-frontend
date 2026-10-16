@@ -35,7 +35,7 @@ const MALL_SOURCED_PROVIDER_IDS = new Set(['21', '101', '102']);
 function CommunityLink({ url, provider }: { url: string; provider: string }) {
   return (
     <m.a
-      className="text-secondary-500 flex items-center gap-x-1 text-xs font-semibold"
+      className="text-secondary-600 flex items-center gap-x-1 text-xs font-semibold"
       href={url}
       target="_blank"
       rel="noopener noreferrer"

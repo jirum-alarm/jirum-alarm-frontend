@@ -75,7 +75,7 @@ const TextField = forwardRef<TextInput, Props>(
             ) : (
               <Text
                 className={cn('text-xs font-pretendard', {
-                  'text-error-500': error,
+                  'text-error-600': error,
                   'text-gray-500': !error,
                 })}>
                 {helperText}

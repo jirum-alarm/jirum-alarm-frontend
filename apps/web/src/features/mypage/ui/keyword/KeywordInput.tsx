@@ -31,7 +31,7 @@ const KeywordInput = ({ autoFocus = true }: { autoFocus?: boolean }) => {
           onKeyDown={handleKeyDown}
           icon={
             !!keyword.value && (
-              <button type="reset" onClick={reset}>
+              <button type="reset" onClick={reset} aria-label="키워드 지우기">
                 <Cancel />
               </button>
             )

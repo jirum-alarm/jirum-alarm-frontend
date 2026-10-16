@@ -40,7 +40,7 @@ const KeyVisual = () => (
             득템의 시작
           </p>
           {/* ponytail: "9개" 는 운영 communityProviders API 실측(2026-09-26). 커뮤니티를 추가·제거하면 같이 고친다. */}
-          <p className="mt-3 px-4 text-center text-base font-medium text-gray-300 md:text-lg lg:mt-5 lg:text-xl">
+          <p className="text-fixed-300 mt-3 px-4 text-center text-base font-medium md:text-lg lg:mt-5 lg:text-xl">
             뽐뿌·루리웹·퀘이사존 등 9개 커뮤니티 <br className="md:hidden" />
             핫딜을 한곳에
             <br />
@@ -49,7 +49,7 @@ const KeyVisual = () => (
           <AppDownload type="key-visual" />
           <a
             href={PAGE.BASE}
-            className="mt-4 text-sm font-medium text-gray-300 underline underline-offset-4 lg:hidden"
+            className="text-fixed-300 mt-4 text-sm font-medium underline underline-offset-4 lg:hidden"
           >
             설치 없이 웹에서 먼저 보기
           </a>

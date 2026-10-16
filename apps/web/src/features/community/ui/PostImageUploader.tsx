@@ -25,7 +25,7 @@ export default function PostImageUploader({
     <div className="border-t border-gray-100 px-5 py-4">
       <div className="mb-2 flex items-center justify-between">
         <span className="text-sm font-medium text-gray-700">사진</span>
-        <span className="text-xs text-gray-400">
+        <span className="text-xs text-gray-500">
           {images.length}/{MAX_POST_IMAGES}
         </span>
       </div>
@@ -77,7 +77,7 @@ export default function PostImageUploader({
         )}
 
         {isUploading && (
-          <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-xs text-gray-400">
+          <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-xs text-gray-500">
             업로드 중
           </div>
         )}

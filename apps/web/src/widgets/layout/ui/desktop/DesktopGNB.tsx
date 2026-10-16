@@ -94,7 +94,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               'flex h-9 w-48 items-center gap-2 rounded-full px-3.5 text-sm transition-colors duration-300',
               {
                 'bg-fixed-white/10 text-fixed-white/60 hover:bg-fixed-white/15': isInHomeHero,
-                'bg-gray-100 text-gray-400 hover:bg-gray-200': !isInHomeHero,
+                'bg-gray-100 text-gray-500 hover:bg-gray-200': !isInHomeHero,
               },
             )}
           >

@@ -61,12 +61,12 @@ function CommentItem({
           <span className="text-sm font-medium text-gray-700">
             {comment.author?.nickname ?? '알 수 없음'}
           </span>
-          <span className="text-xs text-gray-400">{displayTime(comment.createdAt)}</span>
+          <span className="text-xs text-gray-500">{displayTime(comment.createdAt)}</span>
         </div>
         {isMyComment && (
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="-m-2 box-content flex h-6 w-6 items-center justify-center p-2 text-gray-400 transition-transform active:scale-95"
+            className="-m-2 box-content flex h-6 w-6 items-center justify-center p-2 text-gray-500 transition-transform active:scale-95"
             aria-label="댓글 메뉴"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
@@ -82,7 +82,7 @@ function CommentItem({
         <button
           type="button"
           onClick={() => isUserLogin && onLike(comment.id, !!comment.isMyLike)}
-          className={`flex items-center gap-x-1 transition-transform active:scale-95 ${comment.isMyLike ? 'text-primary-500' : 'text-gray-400'} ${!isUserLogin ? 'opacity-40' : ''}`}
+          className={`flex items-center gap-x-1 transition-transform active:scale-95 ${comment.isMyLike ? 'text-primary-800' : 'text-gray-500'} ${!isUserLogin ? 'opacity-40' : ''}`}
         >
           <svg
             width="12"
@@ -113,7 +113,7 @@ function CommentItem({
             </button>
             <div className="mx-5 h-px w-full bg-gray-200" />
             <button
-              className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
+              className="text-error-600 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
               onClick={() => {
                 setIsMenuOpen(false);
                 setIsDeleteConfirmOpen(true);
@@ -241,7 +241,7 @@ function CommunityCommentList({
   const comments = pages.flatMap((page) => page?.comments ?? []);
 
   if (comments.length === 0) {
-    return <div className="py-8 text-center text-sm text-gray-400">첫 번째 댓글을 남겨보세요</div>;
+    return <div className="py-8 text-center text-sm text-gray-500">첫 번째 댓글을 남겨보세요</div>;
   }
 
   return (
@@ -297,7 +297,7 @@ function CommunityCommentList({
       })}
       <div ref={ref} className="h-1" />
       {isFetchingNextPage && (
-        <div className="flex items-center justify-center py-4 text-sm text-gray-400">
+        <div className="flex items-center justify-center py-4 text-sm text-gray-500">
           불러오는 중...
         </div>
       )}

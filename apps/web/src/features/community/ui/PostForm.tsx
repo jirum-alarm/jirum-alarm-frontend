@@ -62,14 +62,16 @@ export default function PostForm({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력해 주세요"
-          className="mb-3 w-full border-b border-gray-100 pb-3 text-base font-semibold text-gray-900 placeholder-gray-300 outline-none"
+          aria-label="제목"
+          className="mb-3 w-full border-b border-gray-100 pb-3 text-base font-semibold text-gray-900 placeholder-gray-500 outline-none"
         />
 
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="내용을 입력해주세요"
-          className="min-h-[200px] flex-1 resize-none text-sm leading-relaxed text-gray-900 placeholder-gray-400 outline-none"
+          aria-label="내용"
+          className="min-h-[200px] flex-1 resize-none text-sm leading-relaxed text-gray-900 placeholder-gray-500 outline-none"
         />
       </div>
 
@@ -123,8 +125,8 @@ export default function PostForm({
               </div>
             </div>
           ) : (
-            <span className="flex items-center gap-x-2 text-sm text-gray-300">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 text-gray-300">
+            <span className="flex items-center gap-x-2 text-sm text-gray-500">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 text-gray-500">
                 <svg
                   width="12"
                   height="12"

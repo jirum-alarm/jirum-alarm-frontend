@@ -23,7 +23,7 @@ const NickNameForm = () => {
         autoFocus
         icon={
           !!nickname.value && (
-            <button type="reset" onClick={reset}>
+            <button type="reset" onClick={reset} aria-label="닉네임 지우기">
               <Cancel />
             </button>
           )

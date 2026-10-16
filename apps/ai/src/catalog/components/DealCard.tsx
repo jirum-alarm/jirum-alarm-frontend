@@ -24,7 +24,7 @@ export function DealCard({ props }: { props: DealCardProps }) {
         </div>
       ) : (
         <div className="relative flex aspect-[4/3] w-full shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-100 bg-gray-50 [.hero-deal-wrapper_&]:aspect-square [.hero-deal-wrapper_&]:h-20 [.hero-deal-wrapper_&]:w-20">
-          <span className="text-xl text-gray-300">No Image</span>
+          <span className="text-xl text-gray-500">No Image</span>
         </div>
       )}
       <div className="flex flex-1 flex-col justify-between overflow-hidden px-1 py-0.5">

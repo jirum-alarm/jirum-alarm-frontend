@@ -30,6 +30,7 @@ import HomeBannerCarousel from '@/entities/home/ui/HomeBannerCarousel';
 import JirumRankingSlider from '@/entities/home/ui/JirumRankingSlider';
 import RecommendedKeywordSection from '@/entities/home/ui/RecommendedKeywordSection';
 import ThemeHomeSection from '@/entities/home/ui/ThemeHomeSection';
+import {useColors} from '@/shared/theme/useColors';
 import TossHomeSection from '@/entities/home/ui/TossHomeSection';
 import {tossDetailPath} from '@/entities/home/lib/toss';
 import HomeHeader from '@/screens/home/ui/HomeHeader';
@@ -399,6 +400,8 @@ export default function HomeScreen() {
  * 웹뷰를 새로 띄우면 탭 구조 밖으로 나가버린다.
  */
 function HomeEndCta({onPress}: {onPress: () => void}) {
+  // secondary-600 은 다크에서 밝은 파랑 — 글자·아이콘도 함께 뒤집히는 white 여야 AA(흰 고정 글자는 다크 2.9:1).
+  const c = useColors();
   return (
     <View className="items-center gap-y-3 border-t border-gray-100 py-12">
       <Text className="text-sm font-medium text-gray-500">
@@ -409,10 +412,10 @@ function HomeEndCta({onPress}: {onPress: () => void}) {
         accessibilityRole="button"
         accessibilityLabel="실시간 특가 더보기"
         className="bg-secondary-600 flex-row items-center gap-x-1 rounded-full px-6 py-3">
-        <Text className="text-sm font-semibold text-fixed-white">
+        <Text className="text-sm font-semibold text-white">
           실시간 특가 더보기
         </Text>
-        <ArrowRightIcon color={fixed.white} width={16} height={16} />
+        <ArrowRightIcon color={c.white} width={16} height={16} />
       </PressableScale>
     </View>
   );

@@ -25,7 +25,7 @@ export default function ViewerCount({ productId }: ViewerCountProps) {
     <div className="absolute inset-x-0 top-0 z-10">
       <div className="flex justify-center pt-3">
         <span className="bg-secondary-50 border-secondary-200 flex h-9 items-center rounded-full border px-4 text-sm whitespace-nowrap text-gray-700">
-          <strong className="text-secondary-500 font-semibold" suppressHydrationWarning>
+          <strong className="text-secondary-600 font-semibold" suppressHydrationWarning>
             {count.toLocaleString('ko-kr')}명
           </strong>
           이 살펴본 상품

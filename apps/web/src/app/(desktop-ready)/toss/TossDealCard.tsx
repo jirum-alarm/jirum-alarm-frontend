@@ -78,7 +78,7 @@ export default function TossDealCard({
             </span>
           )}
           {deal.delivery && (
-            <span className="whitespace-nowrap text-gray-400">· {deal.delivery}</span>
+            <span className="whitespace-nowrap text-gray-500">· {deal.delivery}</span>
           )}
         </div>
       </div>

@@ -514,7 +514,7 @@ export default function PriceHistorySection({
     return (
       <section className="py-0">
         <DetailSectionHeader title="가격 추이" />
-        <p className="text-error-500 mt-2 text-xs">
+        <p className="text-error-600 mt-2 text-xs">
           priceHistory 조회 실패: {error instanceof Error ? error.message : 'unknown'}
         </p>
       </section>
@@ -596,7 +596,7 @@ export default function PriceHistorySection({
       <div className="mt-3 grid grid-cols-3 gap-2 rounded-xl bg-gray-50 px-4 py-3.5">
         <div className="flex flex-col gap-0.5">
           <span className="text-xs text-gray-500">최저</span>
-          <span className="text-error-500 text-sm font-bold sm:text-base">
+          <span className="text-error-600 text-sm font-bold sm:text-base">
             {won(minPrice, currency)}
           </span>
         </div>
@@ -1033,7 +1033,7 @@ function DealPreview({
             <div className="text-11 mt-0.5 truncate text-gray-500">{deal.providerName}</div>
           )}
         </div>
-        <span className="text-error-500 shrink-0 text-xs font-semibold tabular-nums">
+        <span className="text-error-600 shrink-0 text-xs font-semibold tabular-nums">
           {won(deal.parsedPrice, deal.priceCurrency ?? currency)}
         </span>
       </Link>

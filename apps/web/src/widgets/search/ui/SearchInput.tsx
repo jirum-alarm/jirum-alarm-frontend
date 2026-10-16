@@ -175,7 +175,7 @@ export default SearchInput;
 function ResetButton({ handleReset }: { handleReset: () => void }) {
   return (
     <button
-      className="-m-2 grid h-full w-14 cursor-pointer place-items-center p-2 text-gray-300"
+      className="-m-2 grid h-full w-14 cursor-pointer place-items-center p-2 text-gray-500"
       type="button"
       aria-label="검색어 지우기"
       onClick={handleReset}

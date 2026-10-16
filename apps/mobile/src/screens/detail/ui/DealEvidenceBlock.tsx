@@ -133,7 +133,7 @@ export default function DealEvidenceBlock({
             {part && at >= 0 ? (
               <>
                 {headline.title.slice(0, at)}
-                <Text className="text-sm font-bold text-error-500">{part}</Text>
+                <Text className="text-sm font-bold text-error-600">{part}</Text>
                 {headline.title.slice(at + part.length)}
               </>
             ) : (
