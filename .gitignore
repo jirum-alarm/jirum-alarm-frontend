@@ -63,3 +63,6 @@
 
 # release-tag.py 가 scripts/ 의 파이썬 모듈을 import 하며 만든다
 __pycache__/
+
+# Next 빌드 산출물 — 앱별 .gitignore 가 없는 디렉터리에서도 막는다
+.next/
