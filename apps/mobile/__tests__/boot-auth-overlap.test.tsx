@@ -1,10 +1,11 @@
 /**
- * 콜드 스타트 — 토큰 갱신이 디스크 캐시 복원을 **기다리지 않고** 같이 출발하는지.
+ * 콜드 스타트 — 디스크 캐시 복원이 화면을 막지 않고, 토큰 갱신은 마운트 즉시 출발하는지.
  *
- * 예전엔 복원(최대 800ms)이 끝나 화면이 마운트된 뒤에야 useAuth 가 갱신을 걸었고,
- * 홈 쿼리(access token)는 그 왕복을 또 기다렸다. 알림 → 상세도 그만큼 늦게 그려졌다.
+ * 예전엔 AsyncStorage 복원(최대 800ms)이 끝나야 화면이 마운트됐고, 그 뒤에야 useAuth 가 갱신을 걸어
+ * 홈 쿼리(access token)는 그 왕복을 또 기다렸다. 1.5.5 부터 복원은 MMKV 동기 — 첫 렌더 전에 끝난다.
  */
 import * as React from 'react';
+import {Text} from 'react-native';
 import * as ReactTestRenderer from 'react-test-renderer';
 
 jest.mock('@react-native-community/netinfo', () => ({
@@ -18,10 +19,11 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   removeItem: jest.fn(async () => {}),
 }));
 
-// 복원은 끝나지 않은 채로 둔다 — 그 사이에 갱신이 나가야 한다.
+// 복원은 import 시점에 불린다 — 목 함수는 팩토리 안에서 만든다(바깥 const 는 아직 초기화 전).
 jest.mock('../src/shared/lib/persistence/query-cache', () => ({
-  restoreQueryCache: jest.fn(() => new Promise<void>(() => {})),
-  saveQueryCache: jest.fn(async () => {}),
+  restoreQueryCache: jest.fn((): boolean => false),
+  saveQueryCache: jest.fn(),
+  dropLegacyAsyncCache: jest.fn(async () => {}),
 }));
 
 const mockGetAsyncStorage = jest.fn(
@@ -36,12 +38,15 @@ import ReactQueryProvider, {
 } from '../src/provider/ReactQueryProvider';
 import {AuthQueries} from '../src/entities/auth';
 import {StorageKey} from '../src/shared/constant/storage-key';
+import {restoreQueryCache} from '../src/shared/lib/persistence/query-cache';
+
+const mockRestore = restoreQueryCache as jest.Mock;
 
 const flush = async () => {
   for (let i = 0; i < 5; i += 1) await Promise.resolve();
 };
 
-describe('ReactQueryProvider — 갱신과 복원을 겹친다', () => {
+describe('ReactQueryProvider — 복원은 동기, 갱신은 즉시', () => {
   let prefetch: jest.SpyInstance;
   let renderer: ReactTestRenderer.ReactTestRenderer | undefined;
 
@@ -67,7 +72,23 @@ describe('ReactQueryProvider — 갱신과 복원을 겹친다', () => {
     });
   };
 
-  it('refresh token 이 있으면 복원이 안 끝났어도 갱신을 시작한다', async () => {
+  it('복원은 모듈 로드 때 동기로 한 번 끝나고, children 은 기다림 없이 첫 렌더에 그려진다', async () => {
+    // 복원은 import 시점(첫 렌더 전)에 이미 불렸다.
+    expect(mockRestore).toHaveBeenCalledTimes(1);
+    expect(mockRestore.mock.calls[0][0]).toBe(queryClient);
+    await ReactTestRenderer.act(async () => {
+      renderer = ReactTestRenderer.create(
+        <ReactQueryProvider>
+          <Text>home</Text>
+        </ReactQueryProvider>,
+      );
+    });
+    // 타이머를 하나도 돌리지 않았는데 보인다(예전엔 800ms 대기 게이트).
+    expect(renderer?.root.findByType(Text).props.children).toBe('home');
+    expect(mockRestore).toHaveBeenCalledTimes(1);
+  });
+
+  it('refresh token 이 있으면 마운트 즉시 갱신을 시작한다', async () => {
     mockGetAsyncStorage.mockImplementation(async key =>
       key === StorageKey.REFRESH_TOKEN ? 'r' : null,
     );

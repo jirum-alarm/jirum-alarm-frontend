@@ -5,6 +5,7 @@ import {
   type DehydratedState,
   type QueryClient,
 } from '@tanstack/react-query';
+import type {MMKV} from 'react-native-mmkv';
 
 /**
  * 화면 데이터 캐시를 디스크에 남겨, 다음 콜드 스타트에 **마지막으로 보던 목록을 바로** 그린다
@@ -15,10 +16,17 @@ import {
  * - 무한 스크롤은 첫 페이지만 — 깊이 내린 페이지까지 남기면 용량만 커지고 복원 후 순서도 낡는다.
  * - 복원 데이터는 옛 시각을 달고 들어오므로 마운트 때 한 번 다시 받는다(refetchOnMount 참고).
  *
- * ponytail: persist-client 패키지 대신 내장 dehydrate/hydrate + AsyncStorage(둘 다 이미 있음).
- * 쓰기 throttle 이 필요해지면(백그라운드 저장만으로 부족하면) 그때 패키지로.
+ * ★저장소 = MMKV(1.5.5~). 예전 AsyncStorage 는 비동기라 복원이 끝날 때까지 첫 화면을 막았다
+ * (ReactQueryProvider 가 최대 800ms 기다림 — 스플래시가 그만큼 길었다). MMKV 는 동기로 읽어
+ * 첫 렌더 전에 hydrate 가 끝나므로 기다릴 게 없다.
+ * 네이티브 모듈이 없거나 깨지면(getStore 가 null) 캐시 없이 뜬다 — 캐시 때문에 앱이 안 뜨면 안 된다.
  */
 const STORAGE_KEY = 'rq-cache';
+// 다른 MMKV 쓰임(있다면)과 섞이지 않게 전용 인스턴스. 앱 비밀(토큰 등)은 여기 두지 않는다.
+const MMKV_ID = 'query-cache';
+// 1.5.4 까지 AsyncStorage 에 쓰던 같은 이름의 키 — 옮기지 않고 한 번 지운다(캐시일 뿐).
+const LEGACY_ASYNC_KEY = 'rq-cache';
+const LEGACY_DROPPED_FLAG = 'legacy-async-dropped';
 // queryFn 이 서버 응답을 **가공하는 모양**을 바꿀 때 올린다 — 옛 모양 캐시가 새 화면을 깨지 않게.
 const SCHEMA_VERSION = 1;
 /**
@@ -27,7 +35,7 @@ const SCHEMA_VERSION = 1;
  */
 export const QUERY_DOCS_FINGERPRINT = 'f3f4e056319f';
 const MAX_AGE_MS = 24 * 60 * 60 * 1000;
-// Android AsyncStorage 한 항목은 ~2MB 에서 읽기가 깨진다 — 넉넉히 아래에서 포기한다.
+// 복원은 첫 렌더 전에 **동기로** JSON.parse 한다 — 너무 크면 그만큼 첫 화면이 늦으니 상한을 둔다.
 const MAX_BYTES = 1_000_000;
 
 const PERSISTED_ROOTS = new Set([
@@ -51,6 +59,27 @@ type Snapshot = {
  * 거의 매번 캐시가 버려져 스켈레톤부터 봤다(알림 → 상세 → 뒤로 가기도 빈 홈).
  */
 const buster = () => `${SCHEMA_VERSION}:${QUERY_DOCS_FINGERPRINT}`;
+
+// undefined = 아직 안 열어 봄, null = 열 수 없음(네이티브 모듈 없음 등) → 캐시 없이 동작.
+let store: MMKV | null | undefined;
+function getStore(): MMKV | null {
+  if (store !== undefined) return store;
+  try {
+    // 지연 require — react-native-mmkv 는 import 만 해도 Nitro 네이티브 모듈을 찾아 없으면 던진다.
+    const {createMMKV} =
+      require('react-native-mmkv') as typeof import('react-native-mmkv');
+    store = createMMKV({id: MMKV_ID});
+  } catch (error) {
+    console.log('query cache store unavailable:', error);
+    store = null;
+  }
+  return store;
+}
+
+/** 테스트 전용 — 다음 getStore 가 저장소를 다시 열게 한다. */
+export function resetQueryCacheStoreForTest(): void {
+  store = undefined;
+}
 
 type InfiniteData = {pages: unknown[]; pageParams: unknown[]};
 const isInfinite = (data: unknown): data is InfiniteData =>
@@ -84,7 +113,9 @@ export function toSnapshotState(client: QueryClient): DehydratedState {
   };
 }
 
-export async function saveQueryCache(client: QueryClient): Promise<void> {
+export function saveQueryCache(client: QueryClient): void {
+  const mmkv = getStore();
+  if (!mmkv) return;
   try {
     const snapshot: Snapshot = {
       buster: buster(),
@@ -93,38 +124,66 @@ export async function saveQueryCache(client: QueryClient): Promise<void> {
     };
     const json = JSON.stringify(snapshot);
     if (json.length > MAX_BYTES) {
-      await AsyncStorage.removeItem(STORAGE_KEY);
+      mmkv.remove(STORAGE_KEY);
       return;
     }
-    await AsyncStorage.setItem(STORAGE_KEY, json);
+    mmkv.set(STORAGE_KEY, json);
   } catch (error) {
     console.log('query cache save error:', error);
   }
 }
 
-export async function restoreQueryCache(client: QueryClient): Promise<void> {
+/**
+ * **동기** 복원 — 첫 렌더 전에 부른다. 복원했으면 true.
+ * 지문이 다르거나(옛 문서로 저장) 오래됐거나 깨진 캐시는 지우고 빈 채로 시작한다.
+ */
+export function restoreQueryCache(client: QueryClient): boolean {
+  const mmkv = getStore();
+  if (!mmkv) return false;
   try {
-    const json = await AsyncStorage.getItem(STORAGE_KEY);
-    if (!json) return;
+    const json = mmkv.getString(STORAGE_KEY);
+    if (!json) return false;
     const snapshot: Snapshot = JSON.parse(json);
     if (
       snapshot.buster !== buster() ||
       Date.now() - snapshot.savedAt > MAX_AGE_MS
     ) {
-      await AsyncStorage.removeItem(STORAGE_KEY);
-      return;
+      mmkv.remove(STORAGE_KEY);
+      return false;
     }
     hydrate(client, snapshot.state);
+    return true;
   } catch (error) {
     // 깨진 캐시는 버리고 빈 채로 시작한다 — 캐시 때문에 앱이 안 뜨면 안 된다.
     console.log('query cache restore error:', error);
-    await AsyncStorage.removeItem(STORAGE_KEY).catch(() => {});
+    try {
+      mmkv.remove(STORAGE_KEY);
+    } catch {}
+    return false;
+  }
+}
+
+/**
+ * 1.5.4 까지 AsyncStorage 에 남긴 캐시(최대 1MB)를 한 번 지운다. **이 키 하나만** —
+ * 토큰·deviceId·설정 등 AsyncStorage 의 다른 키는 건드리지 않는다. 지웠으면 MMKV 에 표시해 다음부턴 안 부른다.
+ */
+export async function dropLegacyAsyncCache(): Promise<void> {
+  const mmkv = getStore();
+  try {
+    if (mmkv?.getBoolean(LEGACY_DROPPED_FLAG)) return;
+    await AsyncStorage.removeItem(LEGACY_ASYNC_KEY);
+    mmkv?.set(LEGACY_DROPPED_FLAG, true);
+  } catch (error) {
+    console.log('legacy query cache drop error:', error);
   }
 }
 
 /** 로그아웃 — 다음 사람에게 이전 계정의 알림·키워드가 한 프레임도 보이지 않게. */
-export const clearQueryCache = () =>
-  AsyncStorage.removeItem(STORAGE_KEY).catch(() => {});
+export const clearQueryCache = async (): Promise<void> => {
+  try {
+    getStore()?.remove(STORAGE_KEY);
+  } catch {}
+};
 
 /**
  * 로그아웃·세션 거절 — **메모리** 캐시에서 계정 데이터를 버린다(auth 만 남긴다).

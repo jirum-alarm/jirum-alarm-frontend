@@ -1,19 +1,35 @@
 /**
  * 디스크 화면 캐시 — 목록 루트만, 무한 스크롤은 첫 페이지만, auth(토큰)는 절대 안 남긴다.
  * 복원하면 마지막 목록이 바로 보이고, 깨진 캐시는 버린다.
+ * 저장소는 MMKV(동기) — 복원이 첫 렌더 전에 끝나야 한다(예전 AsyncStorage 는 최대 800ms 화면을 막았다).
  */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {QueryClient} from '@tanstack/react-query';
+import {createMMKV, type MMKV} from 'react-native-mmkv';
 import {
   QUERY_DOCS_FINGERPRINT,
+  clearQueryCache,
+  dropLegacyAsyncCache,
+  resetQueryCacheStoreForTest,
   restoreQueryCache,
   saveQueryCache,
   toSnapshotState,
 } from '../src/shared/lib/persistence/query-cache';
 
 // gcTime Infinity — 가비지 수집 타이머가 jest 를 붙잡지 않게.
-const makeClient = () =>
+const makeClient = (): QueryClient =>
   new QueryClient({defaultOptions: {queries: {gcTime: Infinity}}});
+
+// query-cache 가 여는 것과 같은 id — 목(__mocks__/react-native-mmkv)은 같은 id 끼리 저장소를 공유한다.
+const raw = (): MMKV => createMMKV({id: 'query-cache'});
+
+beforeEach(async () => {
+  (
+    require('react-native-mmkv') as {__resetAllMMKV: () => void}
+  ).__resetAllMMKV();
+  resetQueryCacheStoreForTest();
+  await AsyncStorage.clear();
+});
 
 it('목록 루트만 남기고 auth·상품 상세는 뺀다', () => {
   const client = makeClient();
@@ -36,18 +52,100 @@ it('무한 스크롤은 첫 페이지만 남긴다', () => {
   expect(q.state.data).toEqual({pages: [['a']], pageParams: [undefined]});
 });
 
-it('저장한 것을 새 클라이언트에 복원하고, 깨진 캐시는 지운다', async () => {
+it('저장한 것을 새 클라이언트에 **동기로** 복원하고, 깨진 캐시는 지운다', () => {
   const a = makeClient();
   a.setQueryData(['notification', 'list'], {items: ['n1']});
-  await saveQueryCache(a);
+  saveQueryCache(a);
 
   const b = makeClient();
-  await restoreQueryCache(b);
+  // await 없이 — 반환 직후 데이터가 있어야 첫 렌더가 복원본을 그린다.
+  const restored: boolean = restoreQueryCache(b);
+  expect(restored).toBe(true);
   expect(b.getQueryData(['notification', 'list'])).toEqual({items: ['n1']});
 
-  await AsyncStorage.setItem('rq-cache', '{broken');
-  await restoreQueryCache(makeClient());
+  raw().set('rq-cache', '{broken');
+  expect(restoreQueryCache(makeClient())).toBe(false);
+  expect(raw().getString('rq-cache')).toBeUndefined();
+});
+
+it('하루 지난 캐시는 복원하지 않고 지운다', () => {
+  const a = makeClient();
+  a.setQueryData(['home', 'curation'], {items: [1]});
+  saveQueryCache(a);
+  const saved = JSON.parse(raw().getString('rq-cache') ?? '{}');
+  raw().set(
+    'rq-cache',
+    JSON.stringify({...saved, savedAt: Date.now() - 25 * 60 * 60 * 1000}),
+  );
+
+  const b = makeClient();
+  expect(restoreQueryCache(b)).toBe(false);
+  expect(b.getQueryData(['home', 'curation'])).toBeUndefined();
+  expect(raw().getString('rq-cache')).toBeUndefined();
+});
+
+it('1MB 를 넘으면 저장하지 않고 이전 캐시도 지운다 — 동기 복원이 첫 화면을 늦추지 않게', () => {
+  const small = makeClient();
+  small.setQueryData(['home', 'curation'], {items: [1]});
+  saveQueryCache(small);
+  expect(raw().getString('rq-cache')).toBeDefined();
+
+  const big = makeClient();
+  big.setQueryData(['home', 'curation'], {blob: 'x'.repeat(1_100_000)});
+  saveQueryCache(big);
+  expect(raw().getString('rq-cache')).toBeUndefined();
+});
+
+it('로그아웃 clearQueryCache 는 디스크 캐시를 지운다', async () => {
+  const a = makeClient();
+  a.setQueryData(['mypage', 'me'], {id: 1});
+  saveQueryCache(a);
+  await clearQueryCache();
+  expect(restoreQueryCache(makeClient())).toBe(false);
+});
+
+it('옛 AsyncStorage 캐시 키 하나만 지우고 다른 키(토큰·기기 id 등)는 그대로 둔다 — 한 번만', async () => {
+  await AsyncStorage.multiSet([
+    ['rq-cache', '{"old":1}'],
+    ['refreshToken', '"r"'],
+    ['deviceId', '"d"'],
+  ]);
+  await dropLegacyAsyncCache();
   expect(await AsyncStorage.getItem('rq-cache')).toBeNull();
+  expect(await AsyncStorage.getItem('refreshToken')).toBe('"r"');
+  expect(await AsyncStorage.getItem('deviceId')).toBe('"d"');
+
+  // 두 번째 실행부터는 AsyncStorage 를 건드리지 않는다(공식 목의 removeItem 은 jest.fn — 호출 수 차이로 본다).
+  const remove = AsyncStorage.removeItem as jest.Mock;
+  const before: number = remove.mock.calls.length;
+  await dropLegacyAsyncCache();
+  expect(remove.mock.calls.length).toBe(before);
+});
+
+it('MMKV 를 못 열면(네이티브 모듈 없음) 캐시 없이 조용히 동작한다', async () => {
+  const mmkvModule = require('react-native-mmkv') as {
+    createMMKV: () => MMKV;
+  };
+  const create = jest.spyOn(mmkvModule, 'createMMKV').mockImplementation(() => {
+    throw new Error('NitroModules not found');
+  });
+  const log = jest.spyOn(console, 'log').mockImplementation(() => {});
+  try {
+    const client = makeClient();
+    client.setQueryData(['home', 'curation'], {items: [1]});
+
+    expect(() => saveQueryCache(client)).not.toThrow();
+    expect(restoreQueryCache(makeClient())).toBe(false);
+    await expect(clearQueryCache()).resolves.toBeUndefined();
+    // 옛 AsyncStorage 캐시 정리는 MMKV 없이도 된다.
+    await AsyncStorage.setItem('rq-cache', 'old');
+    await dropLegacyAsyncCache();
+    expect(await AsyncStorage.getItem('rq-cache')).toBeNull();
+    expect(create).toHaveBeenCalledTimes(1); // 한 번 실패하면 다시 열려 하지 않는다
+  } finally {
+    create.mockRestore();
+    log.mockRestore();
+  }
 });
 
 /**
@@ -89,18 +187,16 @@ it('GraphQL 문서 지문이 지금 문서와 맞는다 — 쿼리가 바뀌면 
   expect(QUERY_DOCS_FINGERPRINT).toBe(actual);
 });
 
-it('지문이 다른(옛 문서로 저장한) 캐시는 복원하지 않고 지운다', async () => {
+it('지문이 다른(옛 문서로 저장한) 캐시는 복원하지 않고 지운다', () => {
   const a = makeClient();
   a.setQueryData(['home', 'curation'], {items: [1]});
-  await saveQueryCache(a);
-  const saved = JSON.parse((await AsyncStorage.getItem('rq-cache')) ?? '{}');
-  await AsyncStorage.setItem(
-    'rq-cache',
-    JSON.stringify({...saved, buster: '1:old-docs'}),
-  );
+  saveQueryCache(a);
+  const saved = JSON.parse(raw().getString('rq-cache') ?? '{}');
+  expect(saved.buster).toBe(`1:${QUERY_DOCS_FINGERPRINT}`);
+  raw().set('rq-cache', JSON.stringify({...saved, buster: '1:old-docs'}));
 
   const b = makeClient();
-  await restoreQueryCache(b);
+  expect(restoreQueryCache(b)).toBe(false);
   expect(b.getQueryData(['home', 'curation'])).toBeUndefined();
-  expect(await AsyncStorage.getItem('rq-cache')).toBeNull();
+  expect(raw().getString('rq-cache')).toBeUndefined();
 });
