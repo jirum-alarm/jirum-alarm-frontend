@@ -21,7 +21,7 @@ const TabRow = ({ tone, size, items }: { tone: Tone; size: Size; items: string[]
             role="tab"
             aria-selected={item === selected}
             onClick={() => setSelected(item)}
-            className={`flex items-center ${tab.size[size]} ${state.box} ${state.text}`}
+            className={`flex items-center ${tab.size[size]} ${state.box} ${state.text} ${state.hover}`}
           >
             {item}
           </button>

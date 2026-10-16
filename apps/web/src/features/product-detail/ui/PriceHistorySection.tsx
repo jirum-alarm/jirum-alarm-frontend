@@ -580,7 +580,7 @@ export default function PriceHistorySection({
                   trackClick('period');
                 }}
                 aria-pressed={active}
-                className={cn('transition-colors', tab.size.sm, t.box, t.text)}
+                className={cn('transition-colors', tab.size.sm, t.box, t.text, t.hover)}
               >
                 {p.label}
               </button>

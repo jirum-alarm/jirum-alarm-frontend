@@ -39,6 +39,7 @@ export default function TossCategoryTabs({
               tab.size.sm,
               t.box,
               t.text,
+              t.hover,
             )}
           >
             {label}

@@ -41,6 +41,16 @@ const layout = {
   icon: {nav: 28, action: 24, row: 20, inline: 16},
   /** 손가락으로 누르는 것의 최소 크기(px). 아이콘이 작으면 겉 영역(hitSlop·패딩)으로 채운다. */
   minTouch: 44,
+  /**
+   * 겹침 층(z-index). 화면 위에 뜨는 것은 이 여섯 층 중 하나에 놓는다 — 콘텐츠 안의 작은 겹침(z-10~30)은 자유.
+   *   sticky   붙어 있는 하위 헤더·하단 입력줄       header   상단 헤더·GNB·하단 구매 버튼·떠 있는 버튼
+   *   nav      하단 탭바                              dropdown 메뉴·자동완성·고르기 목록(헤더·탭바 위)
+   *   overlay  바텀시트·확인 창·공유 창(가림막 포함)   toast    잠깐 뜨는 알림 — 시트 위에서 띄워도 보이게 맨 위
+   * 예전엔 9999·999·100·60 이 섞여 토스트(40)가 시트(9999) 아래에 깔렸고, 확인 창(50)이 하단 탭바(100)를 못 덮었다.
+   * web 은 layerClass(Tailwind v4 는 정수 z-* 를 다 만든다), 앱은 style zIndex 에 layer 숫자(NativeWind v3 는 z-50 까지만).
+   */
+  layer: {sticky: 40, header: 50, nav: 60, dropdown: 70, overlay: 80, toast: 90},
+  layerClass: {sticky: 'z-40', header: 'z-50', nav: 'z-60', dropdown: 'z-70', overlay: 'z-80', toast: 'z-90'},
 };
 
 module.exports = {layout};

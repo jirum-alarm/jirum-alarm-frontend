@@ -56,6 +56,7 @@ const CurationContainer = ({ section }: CurationContainerProps) => {
                     tab.size.md,
                     t.box,
                     t.text,
+                    t.hover,
                   )}
                 >
                   {item.label}

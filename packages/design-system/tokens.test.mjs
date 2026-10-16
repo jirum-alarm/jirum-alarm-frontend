@@ -117,6 +117,9 @@ test('린트 정규식은 우회한 클래스만 잡는다', () => {
     'h-[2.5rem]',
     'px-[7px]',
     'pc:gap-x-[25px]',
+    'fixed z-[9999]',
+    'z-999 absolute',
+    'pc:z-[60]',
   ])
     assert.ok(flagged(bad), `잡혀야 함: ${bad}`);
   for (const good of [
@@ -126,6 +129,7 @@ test('린트 정규식은 우회한 클래스만 잡는다', () => {
     'shadow-card shadow-highlight shadow-primary-500 shadow-lg',
     'font-semibold bg-black/50 text-fixed-900 text-gray-900',
     'w-[120px] max-w-[600px] h-[81px] pt-[88px] h-[calc(100%-8px)] w-12 gap-2',
+    'z-10 z-50 z-80 z-90 -z-10 drop-shadow-[0_1px_2px_rgba(0,0,0,0.1)]',
   ])
     assert.ok(!flagged(good), `잡히면 안 됨: ${good}`);
 });
@@ -226,4 +230,31 @@ test('레시피도 린트 규칙을 지킨다(hex·기본 팔레트·임의 크�
 
 test('theme.css 는 토큰 변수를 전부 남긴다(@theme static) — var(--color-…) 로 읽는 차트·SVG 가 투명해지지 않게', () => {
   assert.match(readFileSync(new URL('./theme.css', import.meta.url), 'utf8'), /@theme static \{/);
+});
+
+test('겹침 층은 아래에서 위로 커지고, web 클래스가 숫자와 같다(토스트 > 시트·대화창 > 드롭다운 > 탭바 > 헤더)', () => {
+  const {layout} = require('./layout.js');
+  const order = ['sticky', 'header', 'nav', 'dropdown', 'overlay', 'toast'];
+  assert.deepEqual(Object.keys(layout.layer), order);
+  const values = order.map((k) => layout.layer[k]);
+  assert.deepEqual(values, [...values].sort((a, b) => a - b));
+  for (const k of order) assert.equal(layout.layerClass[k], `z-${layout.layer[k]}`);
+});
+
+test('앱이 읽는 레시피 문자열엔 hover:·focus: 가 없고, active: 는 버튼 겉(Pressable 자신)에만 있다', () => {
+  // NativeWind 는 hover:·focus:·active: 가 붙은 View 를 Pressable 로 바꿔 터치를 삼킨다(2026-10-11 앱 비선택 탭 전부 안 눌림).
+  // web 전용 상태는 `hover` 키에 따로 둔다. linkChip·dealRow 는 앱에 없는 web 전용 부품.
+  const recipes = require('./recipes.js');
+  const WEB_ONLY = new Set(['linkChip', 'dealRow']);
+  const bad = [];
+  const walk = (v, path) => {
+    if (typeof v === 'string') {
+      if (path.at(-1) === 'hover') return;
+      if (/(?:^|\s)(?:hover|focus|focus-visible):/.test(v)) bad.push(`${path.join('.')}: ${v}`);
+      const activeOk = path[0] === 'button' && path[1] === 'tone' && path.at(-1) === 'box';
+      if (/(?:^|\s)active:/.test(v) && !activeOk) bad.push(`${path.join('.')}: ${v}`);
+    } else if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) walk(x, [...path, k]);
+  };
+  for (const [name, v] of Object.entries(recipes)) if (!WEB_ONLY.has(name) && typeof v !== 'function') walk(v, [name]);
+  assert.deepEqual(bad, []);
 });

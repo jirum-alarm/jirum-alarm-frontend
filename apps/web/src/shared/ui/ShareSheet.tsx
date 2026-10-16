@@ -214,8 +214,8 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
       <Dialog.Root open={open} onOpenChange={setOpen}>
         <Dialog.Trigger asChild>{children}</Dialog.Trigger>
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 z-[9999] bg-black/30" />
-          <Dialog.Content className="fixed top-1/2 left-1/2 z-[9999] w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-5 shadow-xl outline-hidden">
+          <Dialog.Overlay className="fixed inset-0 z-80 bg-black/30" />
+          <Dialog.Content className="fixed top-1/2 left-1/2 z-80 w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-5 shadow-xl outline-hidden">
             <div className="mb-3 flex items-center justify-between">
               <Dialog.Title asChild>
                 <h3 className="text-base font-bold">공유하기</h3>
