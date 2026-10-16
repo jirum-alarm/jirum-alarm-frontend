@@ -67,7 +67,7 @@ const banned = [
   {
     // 여백·간격은 2px 격자 안에서만. 레이아웃 고유 치수(w·h·max-w 의 120px·81px 등)는 막지 않는다.
     pattern: `${START}${SPACE_UTIL}-\\[[0-9]*[13579]px\\]`,
-    message: '여백·간격은 4px 격자(최소 2px 단위) — 7px→px-2(8), 3px→py-1(4), 25px→gap-6(24). 조립 규칙: @jirum/design-system/layout',
+    message: '여백·간격은 2px 단위(홀수 px 금지, 가능하면 4px 눈금 이름) — 7px→px-2(8), 3px→py-1(4), 25px→gap-6(24). 조립 규칙: @jirum/design-system/layout',
   },
   // ↓ 겹침 층(layout.js layer). 9999·999·100 이 섞여 토스트가 시트 아래에 깔렸다(2026-10-16).
   {

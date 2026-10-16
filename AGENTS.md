@@ -314,12 +314,12 @@ Code formatting standards:
 ### 4. **Design System** (`packages/design-system/`)
 **`@jirum/design-system`** — 쓰는 법·색의 의미·예외는 [README](packages/design-system/README.md)
 
-- `tokens.js` 가 색(라이트·다크·fixed·브랜드)·사이 글자 크기·모서리·그림자의 **유일한 원본**. web·landing·ai 는 생성된 `theme.css` 를 `@import`, 앱은 `tailwind.config.js` 가 require.
+- `tokens.js` 가 색(라이트·다크·fixed·브랜드)·사이 글자 크기·모서리·그림자·차트 색의 **유일한 원본**. web·landing·ai·beauty-web·design 은 생성된 `theme.css` 를 `@import`, 앱은 `tailwind.config.js` 가 require.
 - 토큰을 고치면 `pnpm --filter @jirum/design-system build` 로 theme.css 를 다시 만들어 같이 커밋(커밋 훅이 확인).
-- `eslint.js` 가 네 앱에서 hex·Tailwind 기본 팔레트·임의 글자 크기·모서리·그림자·효과 없는 클래스(`text-semibold`)를 막는다.
-- 컴포넌트 코드는 플랫폼별(web DOM / 앱 RN)이지만 **모양은 `recipes.js` 한 곳** — Badge·Chip·ProductCardStatus·Switch·탭(앱 TabPill)·섹션 제목(SectionHeader)·바텀시트 겉(web BottomSheetContent)·스켈레톤(Skeleton)·카드 사진 틀(`cardThumb`)·정보 상자(`infoBox`)를 두 플랫폼이 같은 클래스 문자열로 읽는다. 배지·칩·탭·스위치·섹션 제목·시트 가림막·`animate-pulse` 판을 손으로 다시 만들지 말 것(테스트가 막는다)(목록은 패키지 README 「컴포넌트」). 어드민은 범위 밖(TailAdmin).
+- `eslint.js` 가 web·앱·landing·ai·beauty-web·design 에서 hex·Tailwind 기본 팔레트·`text-black`·임의 글자 크기·모서리·그림자·눈금에 이름이 있는 임의 간격(`w-[48px]`)·홀수 px 여백·효과 없는 클래스(`text-semibold`)를 막는다.
+- 컴포넌트 코드는 플랫폼별(web DOM / 앱 RN)이지만 **모양은 `recipes.js` 한 곳** — 두 플랫폼이 같은 클래스 문자열을 읽는다. 배지·칩·탭·스위치·섹션 제목·시트 가림막·`animate-pulse` 판·헤더·목록 행·카드 글자를 손으로 다시 만들지 말 것(테스트가 막는다). 글자는 `text` 역할(display·title·subtitle·label·body·muted·caption)부터. 어드민은 범위 밖(TailAdmin).
 - **조립 규칙 `layout.js`**: 화면 좌우 여백(`gutter` px-5)·섹션 간격·묶음 간격(`stack`)·조작 높이(`control`)·아이콘 크기(`icon`)는 여기 이름으로. 차트 색은 tokens 의 `chart` 역할(`chartVar`·`chartColor`).
-- **부품 카탈로그 `catalog.js`**: 새 화면은 여기(놀이터 「부품 지도」)서 조각을 고른다. 새 부품을 만들면 한 줄 등록 + web 부품 옆 스토리 — 빠지면 `catalog.test.mjs` 가 막는다.
+- **부품 카탈로그 `catalog.js`** = 부품 목록의 정본(README·여기엔 목록을 다시 적지 않는다): 새 화면은 여기(놀이터 「부품 지도」)서 조각을 고른다. 공용 폴더(web `shared/ui`·앱 `shared/components`)에 부품을 만들면 한 줄 등록 + web 부품 옆 스토리, 올리지 않을 거면 `catalog.test.mjs` 의 `NOT_PARTS` 에 이유 — 빠지면 테스트가 막는다. 고르는 규칙(칩·탭·링크 칩, 토스트·확인 창)은 README 「컴포넌트」.
 - **놀이터 `apps/design`**: web 스토리(컴포넌트 옆 `*.stories.tsx`)를 모아 보여 주고, `test:stories` 가 모든 스토리를 라이트·다크로 렌더 + play(조작) + axe 접근성으로 검사한다(CI `design-system.yml`, main 푸시면 배포). 앱 RN 부품은 앱 숨은 화면 「디자인 시스템」(딥링크 `design-system`).
 
 ## 🛠️ Development Guidelines for AI Agents

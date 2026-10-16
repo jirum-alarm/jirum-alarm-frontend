@@ -1,6 +1,7 @@
 # 지름알림 디자인 시스템
 
-웹(`apps/web`)·앱(`apps/mobile`)·소개 페이지(`apps/landing`)·AI(`apps/ai`)가 **같은 색·글자·모서리·그림자**를 쓰게 하는 곳이다.
+웹(`apps/web`)·앱(`apps/mobile`)·소개 페이지(`apps/landing`)·AI(`apps/ai`)·뷰티(`apps/beauty-web`)와 놀이터(`apps/design`)가
+**같은 색·글자·모서리·그림자**를 쓰게 하는 곳이다.
 어드민(`apps/admin`)은 운영 도구라 자체 TailAdmin 팔레트를 그대로 쓴다(범위 밖).
 
 **디자인의 정본은 이 패키지다.** Figma 는 2026-10 기준 더 업데이트되지 않는다 — 옛 Figma 의 글자 스타일 14종에 없는
@@ -17,19 +18,20 @@
 | 2. 레시피 | 부품 모양(클래스 문자열) — web·앱이 같은 값을 읽는다 | `recipes.js` | 레시피 |
 | 3. 부품 | 플랫폼별 컴포넌트(web DOM·앱 RN)와 「언제 쓰나」 | `catalog.js` (목록) | 소개/부품 지도 · components |
 | 4. 조립 규칙 | 화면 여백·섹션 간격·묶음 간격·조작 높이·아이콘 크기 | `layout.js` | 조립 규칙 |
-| 5. 화면 | 부품을 규칙대로 놓은 것 | 각 앱 | 조립 규칙/조립 예시 |
+| 5. 화면 | 부품을 규칙대로 놓은 것 | 각 앱 | 조립 규칙/간격·크기 › 조립 예시 |
 
 ```
 packages/design-system/tokens.js        ← 값은 여기서만 고친다
   ├─ build.mjs → theme.css ───────────→ web · landing · ai   (globals.css 에서 @import, Tailwind v4)
   ├─ require ──────────────────────────→ mobile tailwind.config.js (NativeWind) · useColors()
-  └─ eslint.js ────────────────────────→ 네 앱의 린트: hex·기본 팔레트·임의 크기를 쓰면 커밋이 막힌다
+  └─ eslint.js ────────────────────────→ 위 여섯 앱의 린트: hex·기본 팔레트·임의 크기를 쓰면 커밋이 막힌다
 recipes.js · layout.js ────────────────→ web·앱 컴포넌트와 화면이 클래스 이름으로 읽는다
 catalog.js ────────────────────────────→ 놀이터 「부품 지도」 + catalog.test.mjs(경로·레시피·스토리가 실제로 있는지)
 apps/design ───────────────────────────→ 놀이터(Storybook): 만지기 + 스토리마다 라이트·다크 렌더·조작·접근성 자동 검사
 ```
 
-**화면을 만들 때 순서**: ① 놀이터 「부품 지도」(또는 `catalog.js`)에서 조각을 찾는다 → ② 놓을 때 간격·높이는 `layout` 이름으로 →
+**화면을 만들 때 순서**: ① 놀이터 「부품 지도」(또는 `catalog.js`)에서 조각을 찾는다 → ② 놓을 때 간격·높이는 `layout.js` 기준표의 값으로
+(클래스는 그대로 `px-5`·`gap-2` — layout.js 는 어떤 값을 고를지 정한 표지, import 해서 쓰라는 게 아니다) →
 ③ 없으면 web↔앱 짝을 먼저 grep 하고, 새로 만들면 모양은 `recipes.js`, 목록은 `catalog.js`, web 부품 옆에 스토리.
 등록이나 스토리를 빼먹으면 `catalog.test.mjs` 가 커밋을 막는다.
 
@@ -83,6 +85,8 @@ tailwind-merge 가 `text-13` 을 색으로 읽어 같은 `cn()` 의 `text-gray-5
 - 색 스케일은 300~500 은 그대로, 옅은 면(50~200)은 짙게, 짙은 글자(600~900)는 밝게. 옅은 면은 바탕에 500 을 8·14·24% 섞은 값이다
   (순수 진초록 같은 채도 높은 면은 남색 바탕 위에서 덩어리로 떠 보였다).
 - 켜는 곳: web 은 사용자 설정(`COLOR_SCHEME=dark` 쿠키 → `<html class="dark">`), 앱은 OS 설정(내정보 > 화면 모드로 고정 가능).
+- **짙은 면을 고를 때**: 다크에서도 짙어야 하나(사진 위·토스트·라임 위 글자)? → `fixed-*` / 바탕과 반대면 되나(다크에선 밝은 면이어도 됨)? → `gray-*`.
+- `text-black` 은 토큰이 아니라 `#000` 그대로라 다크에서 검은 바탕에 검은 글자가 된다(린트가 막는다) — 바탕 위 글자는 `text-gray-900`, 색 판 위는 `text-fixed-900`.
 - `dark:` 는 토큰이 뒤집혀도 모자랄 때만 — 예: 랭킹 탭 선택(`bg-fixed-800 dark:bg-gray-900`, fixed-800 이 다크 비활성 면과 같은 색이라). 옅은 색 면(`bg-secondary-100`) 위 글자는 `dark:` 대신 700 을 쓰면 두 테마 다 AA 다.
 - 앱에서 className 이 안 닿는 색(아이콘 `color`·`placeholderTextColor`·StyleSheet)은 hex 대신 `useColors()`, 고정색은 `fixed`
   (`import {fixed} from '@jirum/design-system'`). hex 를 직접 적으면 다크에서 안 바뀐다.
@@ -148,7 +152,8 @@ Tailwind 기본 간격이라 web·앱이 같은 클래스로 같은 값이 된�
 - 30px 미만 임의 글자 크기 `text-[13px]`, 임의 모서리 `rounded-[8px]`, 임의 그림자 `shadow-[…]`
 - 효과 없는 클래스 `text-semibold`·`rounded-t-5`·`bg-opacity-90`
 - 눈금에 이름이 있는 간격·크기를 숫자로 `w-[48px]`·`gap-[8px]`(→ `w-12`·`gap-2`) — 두 플랫폼에 같은 이름이 있는 Tailwind v3 기본 눈금만 막는다
-- 4px 격자 밖 여백 `px-[7px]`·`gap-x-[25px]`(홀수 px). 레이아웃 고유 치수(`w-[120px]`·`max-w-[600px]`·`h-[81px]`)는 막지 않는다
+- 2px 단위 밖 여백(홀수 px) `px-[7px]`·`gap-x-[25px]` — 정확히는 홀수만 막는다(`gap-[6px]` 는 통과하지만 그 값은 이름 `gap-1.5` 가 있어 위 규칙에 걸린다).
+  눈금 이름이 있으면 이름으로, 가능하면 4px 눈금(`layout.js`). 레이아웃 고유 치수(`w-[120px]`·`max-w-[600px]`·`h-[81px]`)는 막지 않는다
 
 정말 토큰 밖이어야 하는 자리는 **이유를 적고** 끈다. 지금 예외는 이것뿐이다 — 새로 늘릴 땐 이 목록도 같이 고친다.
 
@@ -162,7 +167,7 @@ Tailwind 기본 간격이라 web·앱이 같은 클래스로 같은 값이 된�
 | web 광고 소재 문구(`HomeContainerV2`, `AdBanner`) | 소재 이미지에 맞춘 색 |
 | 소개 배너 짙은 초록(web `AboutLink`, 앱 `HomeBannerCarousel`) | 배너 고유색 |
 | 핫딜 배지 그라데이션(web `HotdealBadge`) | 배지 고유 그림(앱과 같은 정지점) |
-| 가격 3단계 안내 그라데이션(web `HotDealGuideModal`) | 일러스트 |
+| 핫딜 배지 그라데이션(beauty-web `widgets/ProductCard`) | web·앱 HotdealBadge 와 같은 정지점 |
 | 소개 페이지 히어로(landing `KeyVisual`) | 히어로 모서리·오목한 모서리 트릭 |
 | 앱 `TextField` 입력 글자 `text-[16px]` | TextInput 줄높이 문제(위 「글자」) |
 
@@ -175,71 +180,51 @@ UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·
 겉(box)·글자(text)로 나눠 두고, web·앱 컴포넌트가 둘 다 그걸 읽는다(web 은 한 요소에, 앱은 View·Text 에 나눠 건다).
 예전엔 같은 배지를 두 번 적어 굵기·색·글자 크기가 갈렸다 — 새 공용 부품의 모양도 recipes 에 두고, 컴포넌트엔 배치만 적는다
 (`__tests__/design-system-component-parity.test.ts` 가 두 플랫폼이 레시피를 읽는지·색을 직접 적지 않는지 본다).
-새 화면은 아래부터 찾아 쓰고, 없으면 직접 만들기 전에 짝(web↔앱)을 먼저 grep 한다.
 
-- **Badge**(누를 수 없는 라벨) — `size`: xs 10px·sm 11px·md 12px 정보 태그, tag = 22px 상태 태그(판매종료·핫딜).
+**부품 목록의 정본은 `catalog.js`** — 무엇이 있고(이름·언제 쓰나·web/앱 경로·레시피), 어디서 만져 보나(놀이터 「소개/부품 지도」).
+이 절엔 목록을 다시 적지 않고 **고를 때의 규칙과 이유**만 둔다. 공용 폴더(web `shared/ui`·앱 `shared/components`)에 부품을 만들면
+카탈로그에 한 줄 올리거나 `catalog.test.mjs` 의 `NOT_PARTS` 에 올리지 않는 이유를 적는다 — 둘 다 없으면 커밋이 막힌다.
+
+### 무엇을 고르나
+
+- **칩·탭·링크 칩**: 고르면 아래 목록이 통째로 바뀌나 → 탭(`tab`) / 조건을 더하나(필터) → 고르는 칩(Chip) / 다른 페이지로 가나 → 링크 칩(`linkChip`).
+  web 에는 탭 컴포넌트가 없다 — 각 자리의 `<button>` 이 `tab` 레시피를 읽는다(예: web 랭킹 카테고리 탭, 커뮤니티 탭).
+- **배지와 칩**: 누를 수 없으면 Badge, 누르면 Chip. 판정(역대 최저·평소보다 비싸요)은 `pill` 배지.
+- **토스트와 확인 창**: 이미 일어난 결과를 알리면 토스트, 되돌릴 수 없는 동작 전에 묻는 건 확인 창.
+- **글자**: 먼저 `text` 역할(display·title·subtitle·label·body·muted·caption). 홈·목록 섹션 제목은 `sectionTitle`, 카드 가격은 `productCard.price`.
+- **빈 화면**: 컴포넌트가 아니라 패턴 — 그림 + `text.display` + 설명 + 다음 동작(놀이터 「패턴/빈·오류 상태」). 목록 한 줄은 `emptyText`.
+
+### 부품별 규칙
+
+- **Badge** — `size`: xs 10px·sm 11px·md 12px 정보 태그, tag = 22px 상태 태그(판매종료·핫딜).
   `variant`·`tone`: soft(gray·secondary·success·warning·error) / solid(gray=사진 위·secondary·error) / outline(gray).
-  `pill` = 판정 배지(역대 최저·평소보다 비싸요). 예: `<Badge tone="success">도착보장</Badge>`, `<Badge size="tag" variant="outline">판매종료</Badge>`.
-- **Chip**(고르는 칩: 필터·탭) — `selected`, `size` md(탭)·sm(필터)·xs(하위 탭). 골라서 굵어져도 너비가 그대로다(굵은 글자 너비를 미리 잡음). 앱은 누르면 햅틱.
-- **ProductCardStatus**(상품 카드 사진 위 판매종료·핫딜 배지·유통기한 띠) — 카드 종류와 무관하게 이것만 쓴다. 같은 상품이
-  화면마다 다르게 보이면 버그로 읽힌다. 유통기한 띠가 있으면 핫딜 배지는 숨긴다. 모서리 라벨만 필요하면 `CardCornerLabel`.
-- **Switch**(켜고 끄기) — web·앱 같은 44x24, 켜짐 = primary-500, 노브는 테마 무관 흰색. web 은 `role="switch"` 버튼이라
-  옆 `<label htmlFor>` 로 이름을 준다(예전 hidden checkbox 는 키보드·스크린리더가 못 닿았다). 앱은 누르면 햅틱.
-- **탭**(`tab`, 면을 채워 고른 것을 보이는 목록 전환) — Chip(테두리, 필터·섹션 탭)과 모양으로 구분한다.
-  neutral = 커뮤니티 전체·인기·공지, 토스 하위 카테고리, 큐레이션 탭 / brand = 랭킹·핫딜 모음 카테고리(라임, 다크에선 밝은 면) /
-  segment = 기간 고르기(네모 + 테두리). 높이 `tab.size` sm 32·md 36. 앱은 `TabPill`, web 은 각 자리의 `<button>` 이 레시피를
-  직접 읽는다(랭킹 탭은 Radix Trigger + 드래그라 껍데기를 못 나눈다). 비활성 글자는 전부 gray-600 — gray-500 은 gray-100 위에서 4.51:1 경계값이다.
-- **섹션 제목**(`sectionTitle`) — page = 홈·목록 섹션(bold, web `SectionHeader`·앱 `SectionHeader` h-14 + 더보기),
-  detail = 상세 안 섹션(semibold, web `DetailSectionHeader`, 앱은 자리마다 여백이 달라 Text 에 레시피를 바로 쓴다), subtitle.
-- **카드 사진 틀**(`cardThumb`) — 상품 카드 사진 자리의 옅은 면 + 테두리. web 5종·앱 3종 카드가 같은 문자열을 읽는다.
-- **상세 정보 표**(`detailInfo`) — 상품 상세 쇼핑몰·가격 조건·혜택·배송비 줄. 라벨 고정폭(64px) 왼쪽 + 값 옆에서 줄바꿈 한 모양만 쓴다(web `ProductGuideMetaRows`·`DetailInfoRow`, 앱 `ProductInfo` MetaRow).
-- **정보 상자**(`infoBox`) — 본문 안 옅은 면 + 테두리 상자(가격 판정 요약·공유 미리보기). 여백은 자리마다.
-- **바텀시트 겉**(`sheet`) — 가림막 40% 검정·판 위 모서리 `rounded-t-sheet`(20px)·손잡이 40x4 gray-300.
-  다크에선 판 위 테두리 한 줄(gray-100) — 판이 바탕색이라 가림막과의 경계가 안 보였다(앱은 `useSheetPanelStyle`).
-  web 은 `shared/ui/common/BottomSheet` 의 `BottomSheetContent`(vaul `Drawer.Root` 안에, `handle`·`srTitle`), 앱은 `shared/components/BottomSheet`
-  (공유 시트도 같은 값). 예전엔 web 에 가림막·판 클래스가 11벌 복사돼 있었고 앱은 모서리가 16px 로 달랐다.
-- **스켈레톤**(`skeleton`, gray-200) — web `shared/ui/common/Skeleton`, 앱 `shared/components/Skeletons`(`SkeletonBox`). 크기·모서리는 실제 요소와 맞춘다.
-- **토스트**(`toast`) — 짙은 판(fixed-800, 테마 무관)·왼쪽 정렬 흰 글자·오른쪽 라임 동작. 앱 AppToast 모양이 기준이고 web 도 같다
-  (예전 web 은 가운데 정렬 gray-600 280px 상자). web 은 `role="status"` 라 스크린리더가 읽는다.
-  종류도 같다: 성공(체크)·실패(느낌표)·안내(아이콘 없음), 동작 버튼(예: 「보기」·「보러가기」)이 있으면 4초, 없으면 2.5초.
-  web 은 `toast.success(msg, {action: {label, onClick}})`·`toast.error(msg)`·`toast(msg)`(안내) — 실패 문구에 success 를 쓰면 테스트가 막는다.
-- **버튼**(`button`, `buttonTone`) — lg 48px 가득(주 버튼 라임), md·sm 작은 버튼(주 버튼이면 짙은 판 + 라임 글자), 보조(gray-100)·위험(error-50)·테두리.
-  누르면 면이 한 단계 진해진다(web 은 살짝 줄어드는 움직임도). 비활성은 disabled 일 때 disabledBox·disabledText 를 컴포넌트가 붙인다.
-  (variant, color, size) → 모양 고르기는 `buttonTone` 하나 — 예전엔 web·앱 cva 가 따로라 눌림 피드백이 달랐다(web 글자색, 앱 면).
-- **딜 줄**(`dealRow`) — web /deals 상세·같은 상품 다른 가격 목록의 한 줄(앱엔 이 화면이 없다).
-- **링크 칩**(`linkChip`) — 다른 페이지로 가는 칩 모양 링크(키워드 허브 목록·가이드 인기 키워드·관련 모델). 고르는 칩보다 옅은 테두리. web 만.
-- **최근 검색어 칩**(`keywordChip`) — 36px·text-sm(앱 값). web 은 40px·text-base 였다. ✕ 아이콘·배치는 자리마다.
-- **추천 키워드 칩**(`addChip`) — 눌러서 키워드 알림을 바로 등록(내 키워드 「요즘 많이 받는 키워드」). web·앱 값은 같았고 손으로 두 번 적혀 있었다.
-- **단어 태그**(`wordTag`) — 누를 수 없는 단어 나열(관심사 키워드 fill·제외어 struck)과 끝의 「+N개 더 보기」(more). 알약 모양 —
-  앱은 6px 사각·gray-50 이라 web 과 달랐다. 앱은 Text 하나에 면을 주면 iOS 가 둥근 면을 안 잘라서 View(겉)·Text(글자)로 나눈다.
-- **AD 표시**(`adLabel`) — 배너·광고 소재 위 「AD」. 짙은 판(fixed-500, 흰 글자 4.8:1). web 배너 2곳·앱 홈 배너가 따로 적혀 바탕이 세 가지(그중 fixed-400 은 AA 미달)였다.
-- **빈 목록 한 줄 안내**(`emptyText`, text-sm gray-500) — 정렬·여백은 자리마다. gray-400 은 AA 미달이라 쓰지 않는다.
-  그림·큰 제목이 있는 빈 화면(검색 결과 없음·알림 없음)은 이미 web·앱이 같은 text-2xl semibold 라 화면별로 둔다.
-  gray-100 은 깜빡임과 겹치면 흰 바탕에서 안 보였다(앱 사용자 지적). web 은 「동작 줄이기」면 깜빡임을 멈춘다(`motion-safe`).
+- **Chip** — `selected`, `size` md·sm·xs. 골라서 굵어져도 너비가 그대로다(굵은 글자 너비를 미리 잡음). 앱은 누르면 햅틱.
+- **카드 사진 위 상태**(ProductCardStatus) — 카드 종류와 무관하게 이것만 쓴다. 같은 상품이 화면마다 다르게 보이면 버그로 읽힌다.
+  유통기한 띠가 있으면 핫딜 배지는 숨긴다. 모서리 라벨만 필요하면 `CardCornerLabel`.
+- **Switch** — web·앱 같은 44x24, 켜짐 = primary-500, 노브는 테마 무관 흰색. web 은 `role="switch"` 버튼이라 옆 `<label htmlFor>` 로 이름을 준다.
+- **탭**(`tab`) — neutral = 커뮤니티·토스 하위 카테고리·큐레이션 / brand = 랭킹·핫딜 모음 카테고리(라임) / segment = 기간 고르기(네모 + 테두리).
+  높이 sm 32·md 36. 비활성 글자는 전부 gray-600 — gray-500 은 gray-100 위에서 4.51:1 경계값이다.
+- **섹션 제목**(`sectionTitle`) — page = 홈·목록 섹션(bold, h-14 + 더보기), detail = 상세 안 섹션(semibold).
+- **화면 헤더**(`pageHeader`) — 56px, 제목 왼쪽(`text.title`). 예전엔 앱 내정보 탭만 제목이 가운데였고 56 이 세 파일에 따로 적혀 있었다.
+- **목록 행**(`listRow`) — 작은 회색 묶음 제목 + 아이콘·제목·값·화살표. 앱 행은 PressableScale 대신 opacity·ripple(폭이 꽉 차 축소가 어색하다).
+- **상품 카드**(`productCard`) — 제목 2줄 고정(48px), 가격은 캐러셀·목록 18px·그리드 16px. 같은 그리드 카드 가격이 web 16·앱 18 로 갈려 있었다.
+- **권유 카드**(`promptCard`) — 상세 안 다음 행동(쿠팡 검색 = neutral, 카톡방 = brand). 면은 옅게 두고 테두리 알약으로만 눈에 띄게 —
+  진한 면으로 올리면 상세에서 가장 강한 요소가 되어 구매 버튼과 경합한다.
+- **버튼**(`button`, `buttonTone`) — lg 48px 가득(주 버튼 라임), md·sm 작은 버튼(주 버튼이면 짙은 판 + 라임 글자), 보조·위험·테두리.
+  줄 끝 작은 동작은 `button.size.xs`(32px) + `tone.neutralOutline`(회색 테두리) — Link·PressableScale 에도 걸려 레시피를 바로 읽는다.
+  누르면 면이 한 단계 진해진다. (variant, color, size) → 모양 고르기는 `buttonTone` 하나.
+- **바텀시트 겉**(`sheet`) — 가림막 40% 검정·윗모서리 20px·손잡이 40x4. 다크에선 판 위 테두리 한 줄(판이 바탕색이라 경계가 안 보였다).
+- **토스트**(`toast`) — 짙은 판(fixed-800, 테마 무관)·왼쪽 흰 글자·오른쪽 라임 동작. 성공(체크)·실패(느낌표)·안내(아이콘 없음),
+  동작 버튼이 있으면 4초, 없으면 2.5초. web 은 `const {toast} = useToast()` 후 `toast.success(msg, {action: {label, onClick}})`·`toast.error(msg)`·`toast(msg)`,
+  앱은 `showToast.success·error·info`. 실패 문구에 success 를 쓰면 테스트가 막는다.
+- **단어 태그**(`wordTag`) — 알약 모양. 앱은 Text 하나에 면을 주면 iOS 가 둥근 면을 안 잘라서 View(겉)·Text(글자)로 나눈다.
+- **빈 목록 한 줄**(`emptyText`, text-sm gray-500) — gray-400 은 AA 미달이라 쓰지 않는다.
+- **스켈레톤**(`skeleton`, gray-200) — gray-100 은 깜빡임과 겹치면 흰 바탕에서 안 보였다. web 은 「동작 줄이기」면 깜빡임을 멈춘다.
 
-| 개념 | web | 앱 |
-| --- | --- | --- |
-| 버튼 | `shared/ui/common/Button` | `shared/components/ui/Button` (`loading`) — 둘 다 레시피 `button` + `buttonTone(variant, color, size)` |
-| 입력칸 | `shared/ui/common/Input` | `shared/components/ui/Text/TextField` |
-| 글자 | (DOM) | `shared/components/ui/Text/AppText` — 모든 Text 는 이걸로 |
-| 토스트 | `shared/ui/common/Toast` (`toast.success·error·info`, `{action}`) | `shared/components/AppToast` (`showToast.success·error·info`, `{action}`) |
-| 확인 | `shared/ui/common/AlertDialog` | `shared/components/ConfirmSheet` |
-| 핫딜 배지 | `shared/ui/HotdealBadge` | `shared/components/product/HotdealBadge` |
-| 배지·태그 | `shared/ui/common/Badge` | `shared/components/ui/Badge` |
-| 고르는 칩 | `shared/ui/common/Chip` | `shared/components/ui/Chip` |
-| 카드 사진 위 상태 | `entities/product-list/ui/ProductCardStatus` | `shared/components/product/ProductCardStatus` |
-| 스위치 | `shared/ui/common/Switch` | `shared/components/ui/Switch` |
-| 채운 탭 | 각 자리 `<button>` + `tab` 레시피 | `shared/components/ui/TabPill` (토스·큐레이션 줄은 `ChipRow variant`) |
-| 섹션 제목 | `shared/ui/SectionHeader`·`DetailSectionHeader` | `shared/components/ui/SectionHeader` |
-| 체크 표시 | (DOM 체크박스) | `shared/components/icons` `CheckIcon` — ✓ 글리프는 글꼴에 없으면 두부 |
-| 바텀시트 겉 | `shared/ui/common/BottomSheet` (`BottomSheetContent`) | `shared/components/BottomSheet` |
-| 스켈레톤 판 | `shared/ui/common/Skeleton` | `shared/components/Skeletons` (`SkeletonBox`) |
-| 섹션 오류 | `ApiErrorBoundary` | `shared/components/SectionErrorRow` |
+### 플랫폼 관례
 
-아직 공용 부품이 없어 화면마다 손으로 만든 것(2026-10 조사, 다음에 묶을 후보):
-(2026-10-09 조사 목록은 모두 묶었다. 새 부품을 만들기 전에 위 표와 recipes.js 부터 볼 것.)
-체크박스는 web 1곳(네이티브 input, `accent-secondary-500`)·앱 1곳이라 부품 없이 앱 체크 표시만 `CheckIcon` 으로 바꿨다.
-묶을 때도 값은 이 토큰만 쓰고, 모양은 recipes 에 둔다.
+- 앱의 모든 글자는 `shared/components/ui/Text/AppText` — 굵기 클래스로 Pretendard 파일을 고른다.
+- 앱 체크 표시는 `CheckIcon` — ✓ 글리프는 글꼴에 없으면 두부(□)가 된다. 체크박스는 web 1곳·앱 1곳이라 부품으로 묶지 않았다.
 
 ## 놀이터 (`apps/design`)
 
