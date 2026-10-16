@@ -168,7 +168,7 @@ export default function RecommendedKeywordSection() {
                 style={{width: 12, lineHeight: 18, textAlign: 'center'}}
                 className={cn(
                   'text-sm',
-                  added ? 'text-primary-600' : 'text-gray-500',
+                  added ? 'text-primary-800' : 'text-gray-500',
                 )}>
                 {added ? '✓' : '+'}
               </Text>

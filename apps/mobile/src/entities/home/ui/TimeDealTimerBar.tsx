@@ -25,7 +25,7 @@ export default function TimeDealTimerBar({className}: {className?: string}) {
         style={{fontVariant: ['tabular-nums']}}>
         {formatCountdown(nextKstMidnight(now) - now)}
       </Text>
-      <Text className="text-sm text-gray-400">· 밤 12시 새 특가 오픈</Text>
+      <Text className="text-sm text-gray-500">· 밤 12시 새 특가 오픈</Text>
     </View>
   );
 }

@@ -50,7 +50,7 @@ export default function SearchKeywordHubCard({ keyword }: { keyword: string }) {
           {[`최근 30일 ${formatHubCount(hub)}`, ...facts].join(' · ')}
         </p>
       </div>
-      <span className="shrink-0 text-sm text-gray-400" aria-hidden>
+      <span className="shrink-0 text-sm text-gray-500" aria-hidden>
         →
       </span>
     </Link>

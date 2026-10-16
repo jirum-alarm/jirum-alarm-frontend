@@ -51,7 +51,7 @@ const AppDownload = ({ type }: { type: Position }) => {
             <GooglePlayDownload position={type} />
           </div>
         </div>
-        <p className="text-sm text-gray-400">휴대폰 카메라로 QR 을 찍으면 바로 설치할 수 있어요</p>
+        <p className="text-fixed-400 text-sm">휴대폰 카메라로 QR 을 찍으면 바로 설치할 수 있어요</p>
       </div>
       {single && (
         <Link
@@ -91,7 +91,7 @@ const AppStoreDownload = ({ position }: { position: Position }) => {
     <Link
       href={appStoreLink(position)}
       target="_blank"
-      className="flex h-11 w-38.5 items-center justify-center gap-x-1 rounded-lg border border-white/40 bg-white/10 text-gray-300"
+      className="text-fixed-300 flex h-11 w-38.5 items-center justify-center gap-x-1 rounded-lg border border-white/40 bg-white/10"
     >
       <div className="-ml-1 flex size-8 items-center justify-center">
         <Image src="/assets/icons/apple.svg" alt="" unoptimized width={20} height={26} />
@@ -106,7 +106,7 @@ const GooglePlayDownload = ({ position }: { position: Position }) => {
     <Link
       href={googlePlayLink(position)}
       target="_blank"
-      className="flex h-11 w-38.5 items-center justify-center gap-x-1 rounded-lg border border-white/40 bg-white/10 text-gray-300"
+      className="text-fixed-300 flex h-11 w-38.5 items-center justify-center gap-x-1 rounded-lg border border-white/40 bg-white/10"
     >
       <Image
         unoptimized

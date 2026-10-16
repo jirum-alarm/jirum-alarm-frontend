@@ -19,7 +19,7 @@ export default function TimeDealTimerBar({ className }: { className?: string }) 
       <span className="text-error-600 font-semibold tabular-nums">
         {left == null ? '-:--:--' : formatCountdown(left)}
       </span>
-      <span className="text-gray-400">· 밤 12시 새 특가 오픈</span>
+      <span className="text-gray-500">· 밤 12시 새 특가 오픈</span>
     </div>
   );
 }

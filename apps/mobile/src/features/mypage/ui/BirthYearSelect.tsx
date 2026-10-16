@@ -36,7 +36,7 @@ export default function BirthYearSelect({
         className="flex-row items-center justify-between border-b border-b-gray-400 px-2 py-2.5">
         <Text
           className={
-            value ? 'text-base text-gray-900' : 'text-base text-gray-400'
+            value ? 'text-base text-gray-900' : 'text-base text-gray-500'
           }>
           {selected?.text ?? '출생 연도'}
         </Text>

@@ -45,11 +45,14 @@ const PasswordInput = ({
         required
         value={value}
         icon={
-          masking ? (
-            <EyeOff onClick={toggleMasking} className="cursor-pointer" />
-          ) : (
-            <Eye onClick={toggleMasking} className="cursor-pointer" />
-          )
+          <button
+            type="button"
+            onClick={toggleMasking}
+            aria-label={masking ? '비밀번호 보기' : '비밀번호 숨기기'}
+            className="block cursor-pointer text-gray-500"
+          >
+            {masking ? <EyeOff /> : <Eye />}
+          </button>
         }
         helperText={helperText}
         onChange={handleInputChange}

@@ -52,6 +52,8 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
               {editingComment.comment.author?.nickname ?? '?'}님에게 대댓글 남기는 중
             </div>
             <button
+              type="button"
+              aria-label="대댓글 취소"
               className="-m-2 flex h-auto items-center gap-x-1 bg-transparent p-2"
               onClick={handleClickCancel}
             >
@@ -60,9 +62,11 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
           </div>
         )}
         {editingComment?.status === 'update' && (
-          <div className="border-primary-100 bg-primary-50 text-primary-700 flex h-[30px] w-full items-center justify-between border-b pr-2 pl-3 text-sm">
+          <div className="border-primary-100 bg-primary-50 text-primary-800 flex h-[30px] w-full items-center justify-between border-b pr-2 pl-3 text-sm">
             <div className="flex items-center gap-x-1">댓글 수정 중</div>
             <button
+              type="button"
+              aria-label="수정 취소"
               className="-m-2 flex h-auto items-center gap-x-1 bg-transparent p-2"
               onClick={handleClickCancel}
             >

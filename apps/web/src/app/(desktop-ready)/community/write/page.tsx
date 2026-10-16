@@ -42,7 +42,7 @@ export default async function CommunityWritePage({
               <button
                 type="submit"
                 form={POST_FORM_ID}
-                className="text-primary-500 text-sm font-semibold"
+                className="text-primary-800 text-sm font-semibold"
               >
                 {editPostId ? '수정 완료' : '올리기'}
               </button>

@@ -75,7 +75,7 @@ export default async function ProductPriceContext({
                 .join(' · ')}
             </p>
           </div>
-          <span className="shrink-0 text-sm text-gray-400" aria-hidden>
+          <span className="shrink-0 text-sm text-gray-500" aria-hidden>
             →
           </span>
         </Link>

@@ -110,7 +110,7 @@ export default function DealEvidenceBlock({ productId, source, evidence }: Props
             isPeople
               ? 'bg-secondary-100 text-secondary-600'
               : strong
-                ? 'bg-error-50 text-error-500'
+                ? 'bg-error-50 text-error-600'
                 : 'bg-gray-200 text-gray-600',
           )}
           aria-hidden
@@ -158,7 +158,7 @@ function Highlighted({ text, part }: { text: string; part?: string | null }) {
   return (
     <>
       {text.slice(0, at)}
-      <b className="text-error-500 font-bold">{part}</b>
+      <b className="text-error-600 font-bold">{part}</b>
       {text.slice(at + part.length)}
     </>
   );

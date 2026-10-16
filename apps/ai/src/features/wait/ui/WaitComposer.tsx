@@ -52,7 +52,7 @@ export default function WaitComposer({
           aria-label="기다릴 상품"
           maxLength={100}
           enterKeyHint="search"
-          className="focus-visible:outline-secondary-400 text-15 h-[52px] w-full rounded-full border border-gray-300 bg-white pr-[52px] pl-5 shadow-sm placeholder:text-gray-400 focus-visible:border-gray-400 focus-visible:outline-2 focus-visible:outline-offset-1"
+          className="focus-visible:outline-secondary-400 text-15 h-[52px] w-full rounded-full border border-gray-300 bg-white pr-[52px] pl-5 shadow-sm placeholder:text-gray-500 focus-visible:border-gray-400 focus-visible:outline-2 focus-visible:outline-offset-1"
         />
         <button
           type="submit"

@@ -160,14 +160,14 @@ export default function RecommendedKeywordSection() {
                 // 또렷하게 보여야 한다(그래서 disabled:opacity-50 대신 분기).
                 className={`relative flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium shadow-xs before:absolute before:inset-x-0 before:top-1/2 before:h-11 before:-translate-y-1/2 before:content-[''] ${
                   added
-                    ? 'border-primary-200 bg-primary-50 text-primary-700'
+                    ? 'border-primary-200 bg-primary-50 text-primary-800'
                     : 'border-gray-100 bg-white text-gray-900 disabled:opacity-50'
                 }`}
               >
                 {keyword}
                 <span
                   aria-hidden
-                  className={`leading-none font-normal ${added ? 'text-primary-600 text-sm' : 'text-base text-gray-400'}`}
+                  className={`leading-none font-normal ${added ? 'text-primary-800 text-sm' : 'text-base text-gray-500'}`}
                 >
                   {added ? '✓' : '+'}
                 </span>

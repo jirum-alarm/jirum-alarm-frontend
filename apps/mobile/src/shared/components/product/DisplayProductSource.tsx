@@ -39,6 +39,7 @@ export default function DisplayProductSource({
 
   if (!mall && !community && !time) return null;
 
+  // eslint-disable-next-line no-restricted-syntax -- 구분점(글자 아님)
   const dot = <Text className="text-xs text-gray-300"> · </Text>;
 
   return (

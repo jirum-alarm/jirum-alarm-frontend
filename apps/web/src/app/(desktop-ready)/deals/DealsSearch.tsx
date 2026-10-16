@@ -61,7 +61,7 @@ export default function DealsSearch({ items }: { items: DealsSearchItem[] }) {
               <Link
                 href={PAGE.MYPAGE_KEYWORD}
                 rel="nofollow"
-                className="text-primary-600 font-semibold"
+                className="text-primary-800 font-semibold"
               >
                 키워드 알림
               </Link>

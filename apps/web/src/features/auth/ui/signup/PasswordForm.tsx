@@ -73,11 +73,14 @@ const PasswordInput = ({
         required
         value={value}
         icon={
-          masking ? (
-            <EyeOff onClick={toggleMasking} className="cursor-pointer" />
-          ) : (
-            <Eye onClick={toggleMasking} className="cursor-pointer" />
-          )
+          <button
+            type="button"
+            onClick={toggleMasking}
+            aria-label={masking ? '비밀번호 보기' : '비밀번호 숨기기'}
+            className="block cursor-pointer text-gray-500"
+          >
+            {masking ? <EyeOff /> : <Eye />}
+          </button>
         }
         /** @MEMO 헬퍼 텍스트에서 조건에 맞거나 틀린 경우 색을 바꾸는 형태라 errorText를 의도적으로 사용하지 않았음
          * */
@@ -108,8 +111,8 @@ const HelperText = ({
       <li
         className={cn(
           'transition-colors',
-          value && !isInvalidLength && 'text-primary-600',
-          isInvalidLength && 'text-error-500',
+          value && !isInvalidLength && 'text-primary-800',
+          isInvalidLength && 'text-error-600',
         )}
       >
         8자 이상 30자 이하 입력
@@ -117,8 +120,8 @@ const HelperText = ({
       <li
         className={cn(
           'transition-colors',
-          value && !isInvalidType && 'text-primary-600',
-          isInvalidType && 'text-error-500',
+          value && !isInvalidType && 'text-primary-800',
+          isInvalidType && 'text-error-600',
         )}
       >
         영어, 숫자, 특수문자 중 2가지 이상 조합

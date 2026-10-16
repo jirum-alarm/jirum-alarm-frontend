@@ -40,7 +40,7 @@ export default function SearchKeywordAlertBar({ keyword }: { keyword: string }) 
       {isOn ? (
         <span
           role="status"
-          className="text-primary-700 flex h-9 shrink-0 items-center px-3 text-sm font-semibold"
+          className="text-primary-800 flex h-9 shrink-0 items-center px-3 text-sm font-semibold"
         >
           받는 중
         </span>

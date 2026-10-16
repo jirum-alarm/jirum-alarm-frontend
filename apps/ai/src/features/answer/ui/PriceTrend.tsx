@@ -89,7 +89,7 @@ export default function PriceTrend({
 
       <div className="flex gap-2">
         {/* Y-axis */}
-        <div className="text-10 flex w-12 shrink-0 flex-col justify-between py-0.5 text-right font-medium text-gray-400 tabular-nums">
+        <div className="text-10 flex w-12 shrink-0 flex-col justify-between py-0.5 text-right font-medium text-gray-500 tabular-nums">
           {tickValues.map((v) => (
             <span key={v}>{won(Math.round(v))}</span>
           ))}
@@ -224,7 +224,7 @@ export default function PriceTrend({
         </div>
       </div>
 
-      <div className="text-10 mt-2 flex justify-between pl-14 font-medium text-gray-400">
+      <div className="text-10 mt-2 flex justify-between pl-14 font-medium text-gray-500">
         <span>{series[0][0].slice(5).replace('-', '/')}</span>
         <span>{series[series.length - 1][0].slice(5).replace('-', '/')}</span>
       </div>
@@ -244,7 +244,7 @@ export default function PriceTrend({
       </div>
 
       {confidence !== 'HIGH' && (
-        <p className="text-11 mt-3 text-center leading-snug text-gray-400">
+        <p className="text-11 mt-3 text-center leading-snug text-gray-500">
           비슷한 상품 딜로 그린 추이예요. 규격이 다를 수 있어요.
         </p>
       )}

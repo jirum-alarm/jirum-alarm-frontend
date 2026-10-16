@@ -222,7 +222,7 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
               </Dialog.Title>
               <Dialog.Close
                 aria-label="닫기"
-                className="-m-2 flex size-9 items-center justify-center rounded-full p-2 text-lg leading-none text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+                className="-m-2 flex size-9 items-center justify-center rounded-full p-2 text-lg leading-none text-gray-500 hover:bg-gray-100 hover:text-gray-700"
               >
                 ✕
               </Dialog.Close>

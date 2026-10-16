@@ -201,7 +201,7 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
       <div className={cn('mt-1', !isMobile && 'mx-auto max-w-xl text-center')}>
         <p className="text-sm text-gray-500">{theme.description}</p>
         {theme.subscriberCount >= SUBSCRIBER_COUNT_MIN_VISIBLE && (
-          <p className="mt-1 text-xs text-gray-400">
+          <p className="mt-1 text-xs text-gray-500">
             {theme.subscriberCount.toLocaleString()}명이 알림 받는 중
           </p>
         )}
@@ -218,7 +218,7 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
         >
           {isSubscribed ? '알림 받는 중 · 끄기' : '알림 받기'}
         </Button>
-        <p className="mt-2 text-xs text-gray-400">
+        <p className="mt-2 text-xs text-gray-500">
           키워드를 하나하나 등록하지 않아도, 반응 좋은 딜만 하루 최대 3건 보내드려요.
         </p>
       </div>

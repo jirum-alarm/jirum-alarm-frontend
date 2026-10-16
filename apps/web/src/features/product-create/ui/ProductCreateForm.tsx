@@ -94,7 +94,7 @@ export default function ProductCreateForm() {
                   )}
                 >
                   <Icon width={36} height={36} />
-                  <span className={cn('text-sm text-gray-700', { 'text-primary-700': selected })}>
+                  <span className={cn('text-sm text-gray-700', { 'text-primary-800': selected })}>
                     {category.text}
                   </span>
                 </button>
@@ -127,7 +127,7 @@ export default function ProductCreateForm() {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="상품에 대한 설명을 자유롭게 적어 주세요"
-          className="min-h-40 w-full resize-none rounded-lg border border-gray-300 p-3 text-sm leading-relaxed text-gray-900 placeholder-gray-400 outline-none focus:border-gray-900"
+          className="min-h-40 w-full resize-none rounded-lg border border-gray-300 p-3 text-sm leading-relaxed text-gray-900 placeholder-gray-500 outline-none focus:border-gray-900"
           maxLength={5000}
         />
       </Field>
@@ -152,7 +152,7 @@ function Field({
     <div className="flex flex-col gap-2">
       <label className="text-sm font-medium text-gray-700">
         {label}
-        {required && <span className="text-error-500 ml-0.5">*</span>}
+        {required && <span className="text-error-600 ml-0.5">*</span>}
       </label>
       {children}
     </div>

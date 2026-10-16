@@ -170,7 +170,7 @@ export function DealCard({ item: p }: { item: ListItem }) {
 }
 
 function NoImage() {
-  return <div className="flex h-full items-center justify-center text-gray-300">이미지 없음</div>;
+  return <div className="flex h-full items-center justify-center text-gray-500">이미지 없음</div>;
 }
 
 /**

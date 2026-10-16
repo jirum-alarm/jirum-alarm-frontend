@@ -208,7 +208,7 @@ export default function BottomCTA({
           <Text
             className={cn(
               'text-11',
-              isWishlisted ? 'text-error-500' : 'text-gray-800',
+              isWishlisted ? 'text-error-600' : 'text-gray-800',
             )}>
             찜하기
           </Text>

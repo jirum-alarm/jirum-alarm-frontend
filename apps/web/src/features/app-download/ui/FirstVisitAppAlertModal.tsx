@@ -121,7 +121,7 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
         <Drawer.Title className="text-2xl font-semibold text-gray-900">{title}</Drawer.Title>
         <Drawer.Description asChild>{image}</Drawer.Description>
         <div className="mt-4 flex flex-col items-center">
-          <p className="pb-3 text-center text-sm text-gray-400">
+          <p className="pb-3 text-center text-sm text-gray-500">
             키워드를 등록하고
             <br />
             누구보다 빠르게 받아보세요

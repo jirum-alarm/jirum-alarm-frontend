@@ -77,7 +77,7 @@ export default function CommunityPostDetailClient({
               {post.author?.nickname ?? '알 수 없음'}
             </span>
           )}
-          <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>
+          <span className="text-xs text-gray-500">{displayTime(post.createdAt)}</span>
         </div>
         {isUserLogin && (
           <div className="pc:block hidden">
@@ -104,7 +104,7 @@ export default function CommunityPostDetailClient({
           href={`/products/${post.taggedProduct.id}`}
           className="bg-secondary-50 hover:bg-secondary-100 active:bg-secondary-100 mx-5 mb-4 block rounded-2xl p-4 transition-transform active:scale-[0.98]"
         >
-          <span className="bg-secondary-100 text-secondary-500 dark:text-secondary-400 mb-3 inline-block rounded-full px-2.5 py-0.5 text-xs font-medium">
+          <span className="bg-secondary-100 text-secondary-700 mb-3 inline-block rounded-full px-2.5 py-0.5 text-xs font-medium">
             태그한 상품
           </span>
           <div className="flex items-center gap-x-3">
@@ -135,7 +135,7 @@ export default function CommunityPostDetailClient({
 
       {/* 통계 + 추천 */}
       <div className="flex items-center justify-between border-y border-gray-100 px-5 py-3">
-        <div className="flex items-center gap-x-3 text-sm text-gray-400">
+        <div className="flex items-center gap-x-3 text-sm text-gray-500">
           <span className="flex items-center gap-x-1">
             <ThumbsupFill className="h-4 w-4" aria-hidden />
             {post.likeCount}
@@ -151,7 +151,7 @@ export default function CommunityPostDetailClient({
             'flex items-center gap-x-2 rounded-full border px-4 py-1.5 text-sm font-medium transition-colors',
             'transition-transform active:scale-95',
             post.isMyLike
-              ? 'border-primary-500 bg-primary-50 text-primary-500'
+              ? 'border-primary-500 bg-primary-50 text-primary-800'
               : 'border-gray-200 text-gray-500 hover:border-gray-300',
             !isUserLogin && 'opacity-40',
           )}

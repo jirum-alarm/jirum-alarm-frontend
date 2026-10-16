@@ -129,7 +129,7 @@ export default function KeywordAlertButton({
         <Text
           className={
             isOn
-              ? 'text-sm font-semibold text-primary-700'
+              ? 'text-sm font-semibold text-primary-800'
               : 'text-sm font-semibold text-primary-500'
           }>
           {isOn ? '받는 중' : '알림 받기'}

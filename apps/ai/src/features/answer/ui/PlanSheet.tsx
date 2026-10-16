@@ -227,7 +227,7 @@ export default function PlanSheet({
               </button>
             </div>
             {/* 실패를 조용히 삼키지 않는다 — 안 눌린 건지 실패한 건지 알 수 없으면 다시 누른다 */}
-            {error && <p className="text-error-500 mt-2 text-xs">{error}</p>}
+            {error && <p className="text-error-600 mt-2 text-xs">{error}</p>}
           </form>
         ) : (
           <button

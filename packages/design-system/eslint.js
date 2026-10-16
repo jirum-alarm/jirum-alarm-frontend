@@ -93,6 +93,19 @@ const banned = [
     pattern: '(?:bg|text|border|divide|ring|placeholder)-opacity-[0-9]',
     message: 'bg-opacity-* 는 Tailwind v4 에 없다(효과 없음) — bg-black/50 처럼 색 뒤에 /투명도.',
   },
+  // ↓ 읽히지 않는 회색 글자 — gray-400 은 흰 바탕 2.58:1, gray-300 은 1.47:1(AA 4.5 미달). 2026-10-16 리뷰에 web 글자 68곳.
+  // gray-300·400 은 아이콘·구분선·비활성 표시엔 정당하므로, 글자 크기 클래스와 **같은 문자열**에 있을 때만 막는다
+  // (크기를 부모에서 물려받는 글자는 못 잡는다 — 리뷰에서 본다). disabled: 상태는 WCAG 예외라 막지 않는다.
+  {
+    pattern:
+      '^(?=[\\s\\S]*(?:^|[\\s\'"`:])text-(?:10|11|xs|13|sm|15|base|lg|xl|22|2xl|28)(?![\\w-]))[\\s\\S]*(?:^|[\\s\'"`])(?!disabled:)(?:[a-z0-9-]+:)*text-gray-[34]00(?![\\w-])',
+    message:
+      '글자에 text-gray-300·400 금지(흰 바탕 1.5·2.6:1, AA 미달) — 보조 글자는 text-gray-500 부터. 아이콘·구분점이면 크기 클래스를 떼거나 이유를 적고 끈다.',
+  },
+  {
+    pattern: '(?:^|[\\s\'"`:])placeholder(?:-|:text-)gray-[34]00(?![\\w-])',
+    message: 'placeholder 글자도 text-gray-500 부터(gray-300·400 은 AA 미달) — placeholder-gray-500 / placeholder:text-gray-500.',
+  },
 ];
 
 module.exports = {

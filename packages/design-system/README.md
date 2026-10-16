@@ -61,10 +61,10 @@ tailwind-merge 가 `text-13` 을 색으로 읽어 같은 `cn()` 의 `text-gray-5
 | 화면 바탕 | `bg-white` | 다크에선 가장 어두운 면(#0C111D)이 된다 |
 | 카드·연한 면 / 테두리·칩 / 구분선 | `bg-gray-50` / `border-gray-100`·`bg-gray-100` / `border-gray-200` | |
 | 본문 글자 | `text-gray-900` (부제 `700`·`600`) | |
-| 보조 글자 | `text-gray-500` 가 최저선 | **`gray-400` 은 글자 금지**(흰 바탕 2.58:1) — 아이콘·구분선만 |
-| 브랜드 강조(라임) | `bg-primary-500` + `text-fixed-900` | **라임 위 흰 글자 금지**(1.4:1). 라임 글자는 짙은 면(`bg-gray-800`·`900`) 위에서만 |
+| 보조 글자 | `text-gray-500` 가 최저선(placeholder 도) | **`gray-300`·`400` 은 글자 금지**(흰 바탕 1.47·2.58:1) — 아이콘·구분점·비활성만. 글자 크기 클래스와 같이 쓰면 린트가 막는다 |
+| 브랜드 강조(라임) | `bg-primary-500` + `text-fixed-900` | **라임 위 흰 글자 금지**(1.4:1). 라임 글자(500)는 테마 무관 짙은 면(`bg-fixed-800`·`900`) 위에서만 — `bg-gray-800`·`900` 은 다크에서 밝아져 1.4~1.6:1. 밝은 면 위 라임 글자는 `text-primary-800`(8.6:1, 600 은 2.0·700 은 4.2) |
 | 링크·정보·선택됨 | `secondary` (`text-secondary-600`, `bg-secondary-50`) | |
-| 싸다·할인율·최저가 / 오류·알림 점 | `error` (`text-error-500`·`600`, 면 `error-50`) | 일반 가격은 `text-gray-900` |
+| 싸다·할인율·최저가 / 오류·알림 점 | 글자는 `text-error-600`(면 `error-50`), 점·면은 `bg-error-500` | 일반 가격은 `text-gray-900`. `text-error-500` 은 24px 굵은 큰 가격만 — 작은 글자는 다크 카드 위 3.2:1 |
 | 좋음(지금 사도 좋아요·도착보장) | `bg-success-50` + `text-success-700` | 글자는 700 부터(600 은 3.8:1) |
 | 주의(평소보다 비싸요) | `bg-warning-50` + `text-warning-700`·`800` | 글자는 700 부터(600 은 3.2:1) |
 | 차트 | 강조·나쁨 `error`, 정상·좋음 `secondary`, 중립 `gray-200`·`300` | 기준: web `ReactionChart` |
@@ -83,7 +83,7 @@ tailwind-merge 가 `text-13` 을 색으로 읽어 같은 `cn()` 의 `text-gray-5
 - 색 스케일은 300~500 은 그대로, 옅은 면(50~200)은 짙게, 짙은 글자(600~900)는 밝게. 옅은 면은 바탕에 500 을 8·14·24% 섞은 값이다
   (순수 진초록 같은 채도 높은 면은 남색 바탕 위에서 덩어리로 떠 보였다).
 - 켜는 곳: web 은 사용자 설정(`COLOR_SCHEME=dark` 쿠키 → `<html class="dark">`), 앱은 OS 설정(내정보 > 화면 모드로 고정 가능).
-- `dark:` 는 토큰이 뒤집혀도 모자랄 때만 — 예: 다크 면 위 중간 톤 글자(`text-secondary-500 dark:text-secondary-400`).
+- `dark:` 는 토큰이 뒤집혀도 모자랄 때만 — 예: 랭킹 탭 선택(`bg-fixed-800 dark:bg-gray-900`, fixed-800 이 다크 비활성 면과 같은 색이라). 옅은 색 면(`bg-secondary-100`) 위 글자는 `dark:` 대신 700 을 쓰면 두 테마 다 AA 다.
 - 앱에서 className 이 안 닿는 색(아이콘 `color`·`placeholderTextColor`·StyleSheet)은 hex 대신 `useColors()`, 고정색은 `fixed`
   (`import {fixed} from '@jirum/design-system'`). hex 를 직접 적으면 다크에서 안 바뀐다.
 
@@ -100,7 +100,7 @@ Tailwind 이름(크기+줄높이)이 기본이고, 그 **사이 크기만** 숫�
 | `text-sm` | 14 / 20 | | `text-2xl` | 24 / 32 |
 | `text-15` | 15 / 부모 | | `text-28` | 28 / 부모 |
 
-- 10px 아래는 쓰지 않는다. 작은 글자일수록 대비가 더 필요하다(보조 글자도 `gray-500` 부터).
+- 10px 아래는 쓰지 않는다. 작은 글자일수록 대비가 더 필요하다(보조 글자도 `gray-500` 부터). 색 면 위 글자는 대비 표(`tokens.test.mjs` TEXT_ON_SURFACE)에 있는 짝만 — 새 짝은 거기 한 줄 더하면 두 테마 AA 를 테스트가 본다.
 - 30px 이상(히어로·캠페인 제목)만 `text-[40px]` 같은 임의 값을 허용한다 — 화면마다 달라 토큰으로 묶을 이득이 없다.
 - 굵기는 `font-medium`·`font-semibold`·`font-bold`. `text-semibold` 는 Tailwind 에 없는 클래스라 아무 효과가 없다.
   앱은 `AppText` 가 굵기 클래스를 보고 Pretendard 파일을 고른다(RN 은 fontWeight 만으로 굵기별 파일을 못 고른다).

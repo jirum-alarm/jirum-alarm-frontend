@@ -54,7 +54,7 @@ export default function HotdealCriteriaBadge({ hotdealType }: { hotdealType: Hot
                 <p className="text-sm font-semibold text-gray-900">
                   {hotdealCriteria[type].title}
                   {type === hotdealType ? (
-                    <span className="text-error-500 ml-1.5 text-xs font-medium">이 딜</span>
+                    <span className="text-error-600 ml-1.5 text-xs font-medium">이 딜</span>
                   ) : null}
                 </p>
                 <p className="mt-0.5 text-xs text-gray-500">{hotdealCriteria[type].detail}</p>

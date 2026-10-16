@@ -311,7 +311,7 @@ export default function PriceHistorySection({
           <View className="flex-row">
             <View className="flex-1 gap-y-0.5">
               <Text className="text-xs text-gray-500">최저</Text>
-              <Text className="text-sm font-bold text-error-500">
+              <Text className="text-sm font-bold text-error-600">
                 {won(minPrice, currency)}
               </Text>
             </View>
@@ -421,7 +421,7 @@ function DealPreview({
               </Text>
             ) : null}
           </View>
-          <Text className="text-xs font-semibold text-error-500">
+          <Text className="text-xs font-semibold text-error-600">
             {won(deal.price, deal.currency)}
           </Text>
         </View>

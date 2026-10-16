@@ -46,7 +46,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
               </span>
             </>
           )}
-          <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>
+          <span className="text-xs text-gray-500">{displayTime(post.createdAt)}</span>
           {post.isNotice && (
             <Badge size="md" variant="solid" tone="secondary">
               NEW
@@ -65,7 +65,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
         )}
 
         {/* 통계: 하단 고정 */}
-        <div className="mt-auto flex items-center gap-x-3 pt-2 text-xs text-gray-400">
+        <div className="mt-auto flex items-center gap-x-3 pt-2 text-xs text-gray-500">
           <span className="flex items-center gap-x-1">
             <ThumbsupFill className="h-3.5 w-3.5" aria-hidden />
             {post.likeCount}
@@ -110,7 +110,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
             )}
           </div>
           {showProductTitle && (
-            <p className="line-clamp-2 text-xs leading-tight text-gray-400">
+            <p className="line-clamp-2 text-xs leading-tight text-gray-500">
               {post.taggedProduct!.title}
             </p>
           )}

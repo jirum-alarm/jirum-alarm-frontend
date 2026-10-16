@@ -52,7 +52,7 @@ export default function CommentMenu({ comment }: { comment: TComment }) {
       <BottomSheetContent srTitle="댓글 메뉴">
         <div className="flex flex-col items-center pt-4 pb-8">
           <button
-            className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium"
+            className="text-error-600 flex h-14 w-full items-center justify-center text-lg font-medium"
             onClick={handleRemove}
           >
             삭제

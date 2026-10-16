@@ -122,7 +122,7 @@ function CurrentPasswordStep({
             onSubmitEditing={submit}
             helper={
               value && failed ? (
-                <Text className="text-error-500 text-xs">
+                <Text className="text-error-600 text-xs">
                   올바른 비밀번호를 입력해주세요.
                 </Text>
               ) : undefined
@@ -221,7 +221,7 @@ function ChangePasswordStep({
             onSubmitEditing={submit}
             helper={
               confirm && mismatch ? (
-                <Text className="text-error-500 text-xs">
+                <Text className="text-error-600 text-xs">
                   새 비밀번호와 일치하지 않아요. 다시 확인해주세요.
                 </Text>
               ) : undefined
@@ -258,7 +258,7 @@ function RuleText({
   const color = empty
     ? 'text-gray-500'
     : invalid
-    ? 'text-error-500'
+    ? 'text-error-600'
     : 'text-primary-800';
   return <Text className={`text-xs ${color}`}>{`• ${text}`}</Text>;
 }

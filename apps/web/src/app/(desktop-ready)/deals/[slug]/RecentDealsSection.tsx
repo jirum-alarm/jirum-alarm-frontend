@@ -18,7 +18,7 @@ export default function RecentDealsSection({ rows }: { rows: RecentDealRow[] }) 
     <section className="mb-6">
       <div className="mb-3 flex items-baseline justify-between gap-2">
         <h2 className="text-base font-semibold">최근 올라온 핫딜</h2>
-        <span className="text-xs text-gray-400">새로 올라온 순</span>
+        <span className="text-xs text-gray-500">새로 올라온 순</span>
       </div>
       <ul className="pc:grid-cols-2 grid grid-cols-1 gap-2">
         {rows.map((r) => (
@@ -59,7 +59,7 @@ export default function RecentDealsSection({ rows }: { rows: RecentDealRow[] }) 
                 <span
                   className={cn(
                     'shrink-0 text-sm font-semibold',
-                    r.isEnd ? 'text-gray-400' : 'text-gray-900',
+                    r.isEnd ? 'text-gray-500' : 'text-gray-900',
                   )}
                 >
                   {r.priceText}

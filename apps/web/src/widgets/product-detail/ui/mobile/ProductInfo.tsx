@@ -99,7 +99,7 @@ export default function ProductInfo({
               ) : (
                 <>
                   {displayData?.originalPrice && (
-                    <span className="text-sm text-gray-400 line-through">
+                    <span className="text-sm text-gray-500 line-through">
                       {displayData.originalPrice.toLocaleString()}원
                     </span>
                   )}
@@ -126,7 +126,7 @@ export default function ProductInfo({
                       </span>
                     )}
                     {!hidePrice && displayData.couponDiscount ? (
-                      <span className="text-error-500">
+                      <span className="text-error-600">
                         쿠폰{' '}
                         {typeof displayData.couponDiscount === 'number'
                           ? `${displayData.couponDiscount.toLocaleString()}원 추가할인`

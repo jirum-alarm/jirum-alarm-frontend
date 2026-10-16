@@ -76,7 +76,7 @@ export default function LoginModal() {
           <button
             type="button"
             aria-label="닫기"
-            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
           >
             <SvgClose className="size-5" />
           </button>
@@ -89,7 +89,7 @@ export default function LoginModal() {
             {message.description}
           </AlertDialog.Description>
           {recentMethod && (
-            <p className="shrink-0 text-xs whitespace-nowrap text-gray-400">
+            <p className="shrink-0 text-xs whitespace-nowrap text-gray-500">
               최근에 {RECENT_METHOD_PHRASE[recentMethod]} 로그인했어요
             </p>
           )}

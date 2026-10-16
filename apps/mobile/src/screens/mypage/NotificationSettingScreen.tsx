@@ -82,6 +82,7 @@ export default function NotificationSettingScreen({navigation}: Props) {
           <PressableScale
             accessibilityRole="button"
             accessibilityLabel="알림 켜기"
+            hitSlop={6}
             className="h-8 justify-center rounded-md bg-fixed-800 px-3"
             onPress={push.enable}>
             <Text className="text-sm font-semibold text-primary-500">켜기</Text>

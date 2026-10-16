@@ -384,7 +384,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
               <p className="mt-1 text-sm text-gray-600">
                 {leadSentence ?? '커뮤니티 핫딜을 단위가로 모아, 사도 되는 가격을 알려드립니다.'}
               </p>
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-xs text-gray-500">
                 {page.brand ? `${page.brand} · ` : ''}지금까지 핫딜 {page.dealCount}건
                 {page.lastDealAt
                   ? ` · 마지막 ${new Date(page.lastDealAt).toLocaleDateString('ko-KR')}`
@@ -400,7 +400,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                       </Badge>
                     )}
                     {timing.activeDealCount > 0 && (
-                      <span className="text-11 text-gray-400">
+                      <span className="text-11 text-gray-500">
                         진행 중 {timing.activeDealCount}건
                       </span>
                     )}
@@ -408,7 +408,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
 
                   <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
                     <div>
-                      <p className="text-11 text-gray-400">
+                      <p className="text-11 text-gray-500">
                         {timing.isActivePrice ? '지금 진행 최저' : '지난 핫딜 최저'}
                         {timing.basis === 'unit' && timing.unitLabel
                           ? ` (${timing.unitLabel})`
@@ -430,7 +430,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                     </div>
                     {timing.avg != null && (
                       <div>
-                        <p className="text-11 text-gray-400">추이 평균 대비</p>
+                        <p className="text-11 text-gray-500">추이 평균 대비</p>
                         <p className="text-lg font-semibold text-gray-900">
                           {timing.savePct != null
                             ? timing.savePct > 0
@@ -445,7 +445,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                     )}
                     {timing.buyLine != null && (
                       <div>
-                        <p className="text-11 text-gray-400">이하면 사도 됨</p>
+                        <p className="text-11 text-gray-500">이하면 사도 됨</p>
                         <p className="text-lg font-semibold text-gray-900">
                           {fmtHist(timing.buyLine)}
                         </p>
@@ -467,7 +467,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                     <Link
                       href={PAGE.MYPAGE_KEYWORD}
                       rel="nofollow"
-                      className="text-primary-600 mt-3 inline-flex text-sm font-semibold"
+                      className="text-primary-800 mt-3 inline-flex text-sm font-semibold"
                     >
                       ‘{displayName}’ 핫딜 알림 받기 →
                     </Link>
@@ -485,7 +485,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
               <div className="mb-3 flex items-baseline justify-between gap-2">
                 <h2 className="text-base font-semibold">용량·수량별 대표 상품</h2>
                 {bestRep && (
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs text-gray-500">
                     가성비 1위 {bestRep.label}
                     {bestRep.unitPrice != null && bestRep.unitLabel
                       ? ` · ${bestRep.unitLabel} ${won(bestRep.unitPrice)}`
@@ -538,7 +538,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                           {rep.unitLabel} {won(rep.unitPrice)}
                         </span>
                       )}
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-gray-500">
                         {danawaDisplay != null ? `다나와 ${won(danawaDisplay)}` : ''}
                         {rep.mallCount ? ` · ${rep.mallCount}곳` : ''}
                         {rep.danawaSaving != null ? ` · ${won(rep.danawaSaving)} 절약` : ''}
@@ -556,7 +556,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             <section className="mb-6">
               <div className="mb-1 flex items-baseline justify-between">
                 <h2 className="text-base font-semibold">{histTitle}</h2>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-gray-500">
                   {histBasis === 'unit' && histUnitLabel
                     ? histUnitLabel
                     : histCurrency === 'USD'
@@ -571,7 +571,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                     <span className="text-gray-300"> · </span>
                   </>
                 )}
-                추이 최저 <span className="text-error-500 font-semibold">{fmtHist(histMin)}</span>
+                추이 최저 <span className="text-error-600 font-semibold">{fmtHist(histMin)}</span>
                 <span className="text-gray-300"> · </span>
                 최고 {fmtHist(histMax)}
                 {timing.buyLine != null && (
@@ -611,8 +611,8 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                               isNearNow
                                 ? 'text-success-600 font-semibold'
                                 : isLow
-                                  ? 'text-error-500 font-semibold'
-                                  : 'text-gray-400'
+                                  ? 'text-error-600 font-semibold'
+                                  : 'text-gray-500'
                             }`}
                           >
                             {isNearNow ? `지금 ${fmtHist(p.price)}` : fmtHist(p.price)}
@@ -629,7 +629,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                           style={{ height: `${histBarH(p.price)}px` }}
                           title={`${p.month}: ${fmtHist(p.price)}`}
                         />
-                        <span className="text-10 h-3 text-gray-400">
+                        <span className="text-10 h-3 text-gray-500">
                           {showLabel ? histPeriodLabel(p.month, histGranularity) : ''}
                         </span>
                       </div>
@@ -667,7 +667,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                   {danawa.danawaPrice ? ` · ${won(danawa.danawaPrice)}` : ''}
                 </div>
               </div>
-              <span className="text-sm text-gray-400">바로가기 →</span>
+              <span className="text-sm text-gray-500">바로가기 →</span>
             </a>
           )}
 

@@ -122,7 +122,7 @@ export default function ProductInfo({
               </Text>
             ) : null}
             {!hidePrice && display.couponDiscount ? (
-              <Text className="text-sm text-error-500">
+              <Text className="text-sm text-error-600">
                 쿠폰{' '}
                 {typeof display.couponDiscount === 'number'
                   ? `${display.couponDiscount.toLocaleString()}원 추가할인`

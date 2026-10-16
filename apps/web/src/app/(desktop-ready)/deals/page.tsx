@@ -148,7 +148,7 @@ export default async function DealsIndexPage() {
                   <Link
                     href={PAGE.MYPAGE_KEYWORD}
                     rel="nofollow"
-                    className="text-primary-600 shrink-0 text-sm font-semibold"
+                    className="text-primary-800 shrink-0 text-sm font-semibold"
                   >
                     알림 설정
                   </Link>
@@ -167,7 +167,7 @@ export default async function DealsIndexPage() {
                 >
                   <h3 className="mb-4 text-base font-bold text-gray-900">
                     {section.label}
-                    <span className="ml-1 text-sm font-medium text-gray-400">
+                    <span className="ml-1 text-sm font-medium text-gray-500">
                       {section.items.length}
                     </span>
                   </h3>

@@ -34,7 +34,7 @@ export default function NoticePostCard({
     >
       <div className="flex items-center gap-x-2">
         <NoticeAuthor />
-        <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>
+        <span className="text-xs text-gray-500">{displayTime(post.createdAt)}</span>
         {isNew && (
           <Badge size="md" variant="solid" tone="secondary">
             NEW
@@ -49,7 +49,7 @@ export default function NoticePostCard({
         <p className="mt-0.5 truncate text-sm text-gray-600">{displayContent}</p>
       )}
 
-      <div className="mt-2 flex items-center gap-x-3 text-xs text-gray-400">
+      <div className="mt-2 flex items-center gap-x-3 text-xs text-gray-500">
         <span className="flex items-center gap-x-1">
           <ThumbsupFill className="h-3.5 w-3.5" aria-hidden />
           {post.likeCount}

@@ -80,7 +80,7 @@ export default function Composer({
           disabled={walled}
           maxLength={40}
           enterKeyHint="send"
-          className="focus-visible:outline-secondary-400 text-15 h-[52px] w-full rounded-full border border-gray-300 bg-white pr-[52px] pl-[46px] shadow-sm placeholder:text-gray-400 focus-visible:border-gray-400 focus-visible:outline-2 focus-visible:outline-offset-1 disabled:bg-gray-50 disabled:text-gray-400"
+          className="focus-visible:outline-secondary-400 text-15 h-[52px] w-full rounded-full border border-gray-300 bg-white pr-[52px] pl-[46px] shadow-sm placeholder:text-gray-500 focus-visible:border-gray-400 focus-visible:outline-2 focus-visible:outline-offset-1 disabled:bg-gray-50 disabled:text-gray-400"
         />
         <svg
           className="pointer-events-none absolute top-[17px] left-4 size-[18px] text-gray-400"

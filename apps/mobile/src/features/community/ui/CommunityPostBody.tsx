@@ -75,10 +75,10 @@ export default function CommunityPostBody({
           accessibilityLabel={`태그한 상품 ${post.taggedProduct.title}`}
           // ★Pressable 엔 opacity 만(ThemeCards 주석 참조). 바탕·여백은 안쪽 View.
           style={({pressed}) => ({opacity: pressed ? 0.8 : 1})}>
-          {/* 태그 상품 카드 색 — web CommunityPostDetail 과 같은 토큰. 글자는 다크 면 위라 한 톤 밝게(400). */}
+          {/* 태그 상품 카드 색 — web CommunityPostDetail 과 같은 토큰. 글자는 secondary-100 위 700 — 두 테마 AA(500 은 2.97:1). */}
           <View className="mx-5 mb-4 rounded-2xl bg-secondary-50 p-4">
             <View className="self-start rounded-full bg-secondary-100 px-2.5 py-0.5">
-              <Text className="text-xs font-medium text-secondary-500 dark:text-secondary-400">
+              <Text className="text-xs font-medium text-secondary-700">
                 태그한 상품
               </Text>
             </View>
