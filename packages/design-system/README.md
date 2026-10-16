@@ -247,6 +247,7 @@ Storybook 서브 앱. 기초(색·글자·모서리)·조립 규칙·레시피 �
 앱(RN) 부품은 실기기 렌더가 진짜라 앱 안 숨은 화면 「디자인 시스템」(딥링크 `jirumalarm://design-system`)에서 본다.
 
 - 만지기: `pnpm --filter design storybook` (툴바 「테마」로 다크, 오른쪽 아래 Controls 로 props)
+  - `packages/design-system/*.js`(레시피·토큰)를 고쳤으면 **storybook 을 다시 켠다** — CommonJS 라 Vite 가 미리 변환해 두는데, 그 캐시 이름(패키지 내용 해시)은 켤 때 한 번만 정해진다. 안 그러면 옛 레시피가 보인다.
 - 검증: `pnpm --filter design test:stories` — 모든 스토리를 **라이트·다크 두 번** 렌더 + play 함수(조작 시나리오) + axe 접근성(대비 AA·이름 없는 버튼·라벨 없는 입력칸)을 `error` 로. 처음 돌렸을 때 입력칸 도움말 gray-400(AA 미달)·이름 없이 읽히는 Select 를 찾았다.
 - CI·배포: `.github/workflows/design-system.yml` — main 푸시면 같은 검증 후 배포.
 - 새 스토리 규칙: 인터랙티브 부품은 play 함수로 "눌러서 바뀌는지"를 적는다. a11y 규칙을 끄는 건 테스트 환경 탓(포털·애니메이션)일 때만, 이유 주석과 함께.

@@ -6,6 +6,9 @@ name: design-system
 #   배포: 검증한 정적 빌드를 그대로 nginx 이미지에 담아 Harbor → gitops apps/frontend-design 태그 → ArgoCD.
 #         https://design.jirum-alarm.com (공개 — 레포가 공개라 담긴 것도 같다. GitHub Pages 는 조직 설정이 막아 둠)
 # 놀이터는 web 컴포넌트 스토리를 모아 보여 주므로 web 공용 UI 가 바뀌어도 돈다.
+# lint-web-family: web·ai·landing·beauty-web 의 디자인 린트(토큰·격자·층). 이 레포는 main 직접 푸시라
+#   web 계열 배포 워크플로엔 린트가 없고(web-pr-check 는 PR 에서만), 커밋 훅을 건너뛴 커밋은 그대로 나갔다.
+#   앱은 mobile-validation 이 린트한다. apps/mobile/src 는 catalog.test 가 앱 경로를 검사해서 넣었다.
 on:
   push:
     branches: [main]
@@ -14,6 +17,10 @@ on:
       - packages/design-system/**
       - apps/design/**
       - apps/web/src/**
+      - apps/ai/**
+      - apps/landing/**
+      - apps/beauty-web/**
+      - apps/mobile/src/**
       - pnpm-lock.yaml
   pull_request:
     paths:
@@ -21,6 +28,10 @@ on:
       - packages/design-system/**
       - apps/design/**
       - apps/web/src/**
+      - apps/ai/**
+      - apps/landing/**
+      - apps/beauty-web/**
+      - apps/mobile/src/**
   workflow_dispatch:
 
 permissions:
@@ -35,6 +46,28 @@ env:
   PNPM_VERSION: 10.30.3
 
 jobs:
+  lint-web-family:
+    name: Design lint (web·ai·landing·beauty-web)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm --filter web --filter ai --filter landing --filter beauty-web --no-bail lint:check
+
   verify:
     name: Verify & build playground
     runs-on: ubuntu-latest
@@ -82,6 +115,8 @@ jobs:
 
   build-and-push:
     name: Build and push image
+    # 놀이터 배포는 verify 만 기다린다 — ai·landing 의 린트 실패가 놀이터(web 부품 문서)를 막을 이유는 없다.
+    # 린트 실패는 이 실행을 빨간불로 남겨 드러낸다.
     needs: verify
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
