@@ -321,8 +321,10 @@ for k, mon in zip(keys, mondays):
     row = {**wk, **{p: round(by.get(p, 0)) for p in PROVIDERS},
            "other": round(sum(v for p, v in by.items() if p not in PROVIDERS)), "adsense": round(ad)}
     row["revenue"] = sum(row[p] for p in PROVIDERS + ["other", "adsense"])
-    # 제휴 실적은 평균 2일·최대 ~10일 늦게 적재된다 — 끝난 지 10일이 안 된 주는 덜 찬 값이라 판정에서 뺀다.
-    row["provisional"] = (today - (mon + dt.timedelta(days=6))).days < 10
+    # 실측(2026-10-16): 적재는 다음 날 15:30 이면 다 차고(쿠팡·네이버·애드픽·애드센스가 그때 일괄), 남는 건 늦게 오는 취소뿐 —
+    # 애드픽 취소(주문의 ~20%)가 ~1주 뒤, 토스는 취소액의 89% 가 7일 안. 끝난 지 2일이면 잔여 오차가 수익의 ~2% 라
+    # (판정 기준 ±10% 안) 그때부터 판정에 넣는다. 월요일 09:45 갱신은 일요일 몫이 아직 안 들어와 뺀다.
+    row["provisional"] = (today - (mon + dt.timedelta(days=6))).days < 2
     money.append(row)
 
     ch = g["channel"].get(k, {})
