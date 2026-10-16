@@ -30,7 +30,7 @@ export default function TabBar({
             type="button"
             aria-pressed={isActive}
             onClick={() => onChange(item.value)}
-            className={cn('transition-all active:scale-95', tab.size.sm, t.box, t.text)}
+            className={cn('transition-all active:scale-95', tab.size.sm, t.box, t.text, t.hover)}
           >
             {item.label}
           </button>

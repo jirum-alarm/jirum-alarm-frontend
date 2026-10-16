@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {fixed, light} from '@jirum/design-system';
+import {layout} from '@jirum/design-system/layout';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useNetworkStatus from '@/shared/hooks/useNetworkStatus';
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     alignItems: 'center',
     pointerEvents: 'none',
-    zIndex: 9999,
+    zIndex: layout.layer.toast, // 화면 위 알림 층(layout.js) — 예전 9999
   },
   text: {
     color: fixed.white,

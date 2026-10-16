@@ -42,7 +42,7 @@ export default function UserMenu({ color }: { color: string }) {
         <DropdownMenu.Content
           align="end"
           sideOffset={10}
-          className="z-[60] w-64 rounded-2xl border border-gray-200 bg-white p-2 shadow-lg"
+          className="z-70 w-64 rounded-2xl border border-gray-200 bg-white p-2 shadow-lg"
         >
           <DropdownMenu.Item asChild>
             <Link

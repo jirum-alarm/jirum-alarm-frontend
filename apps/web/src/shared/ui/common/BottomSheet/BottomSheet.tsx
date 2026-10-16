@@ -39,11 +39,11 @@ export const BottomSheetContent = ({
 
   return (
     <Drawer.Portal>
-      <Drawer.Overlay className={cn('fixed inset-0 z-[9999]', sheet.overlay)} />
+      <Drawer.Overlay className={cn('fixed inset-0 z-80', sheet.overlay)} />
       <Drawer.Content
         {...rest}
         className={cn(
-          'fixed z-[9999] h-fit w-full outline-hidden',
+          'fixed z-80 h-fit w-full outline-hidden',
           isMobile
             ? ['max-w-mobile-max inset-x-0 bottom-0 mx-auto', sheet.panel, handle && 'pt-3']
             : [

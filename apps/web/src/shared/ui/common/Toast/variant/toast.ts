@@ -12,7 +12,9 @@ export const toastVariant = cva('', {
   variants: {
     variant: {
       default: cn(
-        'fixed bottom-[calc(84px+env(safe-area-inset-bottom))] left-1/2 z-40 flex w-[calc(100%-40px)] max-w-[440px] -translate-x-1/2 items-center gap-x-2 text-left',
+        // z-90 = 토스트 층(layout.js) — 시트·확인 창(z-80) 위. pointer-events-auto: 모달이 열리면 vaul·Radix 가 body 에
+        // pointer-events:none 을 걸어, 시트 위에서 띄운 토스트의 「보기」가 눌리지 않았다.
+        'pointer-events-auto fixed bottom-[calc(84px+env(safe-area-inset-bottom))] left-1/2 z-90 flex w-[calc(100%-40px)] max-w-[440px] -translate-x-1/2 items-center gap-x-2 text-left',
         toast.box,
         toast.text,
       ),

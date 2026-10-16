@@ -54,7 +54,8 @@ const banned = [
       '임의 모서리 대신 토큰 — 2→rounded-xs, 4→rounded-sm, 6→rounded-md, 8→rounded-lg, 12→rounded-xl, 16→rounded-2xl, 20→rounded-sheet, 24→rounded-3xl, 원·알약→rounded-full.',
   },
   {
-    pattern: 'shadow-\\[',
+    // 앞 경계 — drop-shadow-[…]·text-shadow-[…] 는 다른 유틸리티라 잡지 않는다.
+    pattern: '(?:^|[\\s:\'"`!])shadow-\\[',
     message: '임의 그림자 대신 토큰 — 카드 경계는 shadow-card, 형광펜 밑줄은 shadow-highlight, 그 밖엔 shadow-sm·shadow-md·shadow-lg.',
   },
   // ↓ 조립 규칙(layout.js)의 눈금. 이름이 있는 값을 숫자로 적으면 같은 값이 화면마다 다른 글자로 흩어진다.
@@ -67,6 +68,12 @@ const banned = [
     // 여백·간격은 2px 격자 안에서만. 레이아웃 고유 치수(w·h·max-w 의 120px·81px 등)는 막지 않는다.
     pattern: `${START}${SPACE_UTIL}-\\[[0-9]*[13579]px\\]`,
     message: '여백·간격은 4px 격자(최소 2px 단위) — 7px→px-2(8), 3px→py-1(4), 25px→gap-6(24). 조립 규칙: @jirum/design-system/layout',
+  },
+  // ↓ 겹침 층(layout.js layer). 9999·999·100 이 섞여 토스트가 시트 아래에 깔렸다(2026-10-16).
+  {
+    pattern: '(?:^|[\\s:\'"`!])-?z-(?:\\[|[1-9][0-9]{2,}(?![\\w-]))',
+    message:
+      '겹침은 층 이름으로 — sticky z-40·header z-50·nav z-60·dropdown z-70·overlay(시트·대화창) z-80·toast z-90. 콘텐츠 안 작은 겹침은 z-10~30. 조립 규칙: @jirum/design-system/layout',
   },
   // ↓ Tailwind 에 없는 클래스 — 아무 효과가 없어 "적용됐다"고 착각하게 만든다(실제로 web 에 12곳·7곳 있었다).
   {

@@ -75,7 +75,7 @@ const defaultStyles: Required<TabBarStyles> = {
   tabTrigger: {
     base: `relative shrink-0 whitespace-nowrap transition-all duration-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${tab.size.md} pc:h-10 pc:text-lg`,
     active: `${tab.brand.selected.box} ${tab.brand.selected.text}`,
-    inactive: `${tab.brand.idle.box} ${tab.brand.idle.text}`,
+    inactive: `${tab.brand.idle.box} ${tab.brand.idle.text} ${tab.brand.idle.hover}`,
   },
   settingsContainer: 'absolute bottom-0 right-0 flex h-full items-center',
   settingsGradient: 'h-full w-5 bg-linear-to-r from-transparent to-white pointer-events-none',
