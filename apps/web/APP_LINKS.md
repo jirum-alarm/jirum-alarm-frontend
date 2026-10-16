@@ -32,10 +32,11 @@ iOS 는 범위를 서버(AASA components)가 정하지만 Android 는 앱의 int
 된 뒤 지문을 넣었다. 검증은 설치·업데이트 때 일어나므로 옛 바이너리(전 경로 필터)가 깔린 기기는 업데이트 전까지 검증되지 않고
 (지금처럼 브라우저), 업데이트하면 좁힌 필터를 받는다. ⚠️ Play 프로덕션을 1.5.0 이하로 되돌리는 일이 생기면 이 지문부터 뺄 것.
 
-### 다음 네이티브 빌드에 넣을 것
+### 1.5.4 에서 경로를 AASA 에 맞췄다(2026-10-16)
 
-매니페스트 `pathPrefix` 는 끝 슬래시까지 비교한다 — `/toss/` 는 실제 페이지 `/toss` 를 못 잡는다. AASA(2026-10-16)와 맞추려면
-`android:path` 로 `/toss`·`/community`·`/trending`·`/search` 를 더하고, 앱이 열지 않는 `/deals/` 는 뺀다(네이티브 변경 → 버전 올림).
+매니페스트 `pathPrefix` 는 끝 슬래시까지 비교한다 — `/toss/` 는 실제 페이지 `/toss` 를 못 잡는다. 1.5.4 매니페스트에
+`android:path` 로 `/toss`·`/community`·`/trending`·`/search` 를 더하고, 앱이 열지 않는 `/deals/` 는 뺐다(AASA 와 같은 범위).
+1.5.3 이하 바이너리는 업데이트 전까지 이 네 경로가 브라우저로 열린다.
 
 웹 「앱 열기」 버튼(`features/app-download/model/appHandoff.ts`)은 이 검증과 무관하다 — intent 에 package 를
 지정해 검증 없이도 앱으로 간다.

@@ -52,9 +52,11 @@
       </intent-filter>
       <!-- App Links: jirum-alarm.com 링크를 브라우저 대신 앱이 연다.
            autoVerify 는 서버의 /.well-known/assetlinks.json 이 있어야 성립한다.
-           경로는 iOS AASA(apps/web/public/.well-known/apple-app-site-association)와 같은 6개만 — 전 경로를 잡으면
+           경로는 iOS AASA(apps/web/public/.well-known/apple-app-site-association)와 같은 범위만 — 전 경로를 잡으면
            검증이 통과하는 순간 웹 카카오 로그인 복귀(/login/callback/kakao)를 크롬이 앱으로 넘겨 웹 로그인이 깨진다
-           (apps/web/APP_LINKS.md). 웹 「앱 열기」 버튼은 커스텀 스킴 intent 라 이 범위와 무관하다. -->
+           (apps/web/APP_LINKS.md). 웹 「앱 열기」 버튼은 커스텀 스킴 intent 라 이 범위와 무관하다.
+           pathPrefix 는 끝 슬래시까지 비교해 "/toss/" 가 실제 페이지 "/toss" 를 못 잡는다 → 첫 화면은 path 로 따로(1.5.4).
+           /deals 는 앱이 열지 않는 페이지라 뺐다(AASA 도 exclude). -->
       <intent-filter android:autoVerify="true">
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
@@ -67,7 +69,10 @@
         <data android:pathPrefix="/trending/" />
         <data android:pathPrefix="/curation/" />
         <data android:pathPrefix="/toss/" />
-        <data android:pathPrefix="/deals/" />
+        <data android:path="/toss" />
+        <data android:path="/community" />
+        <data android:path="/trending" />
+        <data android:path="/search" />
       </intent-filter>
     </activity>
     <activity
