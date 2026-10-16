@@ -1,5 +1,27 @@
 # Jirum-Alarm-Frontend Monorepo
 
+## 이 레포가 푸는 문제
+핫딜은 커뮤니티·쇼핑몰 수십 곳에 흩어져 있고 몇 시간이면 끝난다. 사용자가 그걸 돌아다니지 않고 한 곳에서 찾고(웹·검색 유입), 관심사를 걸어 두면 알림으로 다시 돌아오게(앱 푸시·알림함) 하는 것이 지름알림의 «사람 쪽» 절반이고, 이 레포가 사람이 닿는 화면 전부를 가진다.
+수집·판정·발송은 백엔드가 하고 여기는 그 결과를 crawling-server GraphQL 하나로 읽어 보여 주고 등록받는다.
+화면들이 같은 GraphQL 스키마·디자인 토큰(`packages/design-system`)·카드 규칙을 공유하고 웹 운영 태그 하나(`release-tag.py`)가 admin·ai·beauty 배포까지 같이 데려가서 한 Turborepo 에 모았다.
+
+- **성공의 모습**: 북극성 = 알림 경유 재방문/주, 보조 = 검색 유입 활성·포획률(그로스 트리 대시보드, vault `domain/growth-targets.md`). 배포는 `RELEASE-TAG DONE` + gitops `deploy-verify.py` PASS, 앱 JS 는 `mobile-ota` boot-check 통과, 런타임 오류는 Sentry.
+- **소유**: 아래 앱 7개의 화면·Next API 라우트(`/api/graphql` 프록시 등), 스토어 바이너리·OTA, 업데이트 안내 `apps/web/public/app-release.json`, 디자인 토큰.
+- **안 하는 것**: 수집·매칭·가격 판정·알림 발송·GraphQL 스키마 = crawling-server(+matching-api·metadata-api·publisher). 카톡방 봇 = kakaotalk-bot. 단축 URL = shortner-server. 옛 AI 채팅 백엔드 = jirum-alarm-chat. 운영 링크 모음 = jirum-alarm-dashboard. 배포 매니페스트 = jirum-alarm-gitops `apps/frontend-*`.
+- **위아래**: crawling-server GraphQL(검색도 그 뒤 Meili) → 이 레포 → 검색·카톡방·푸시로 들어온 사용자 / 운영자(admin).
+- **더 읽을 것**: vault `domain/service-blueprint.md` · `runbook/frontend-deploy-and-api-routing.md` · `runbook/mobile-*.md` · 각 `apps/*/AGENTS.md`.
+
+앱별로 푸는 문제:
+- `web`(jirum-alarm.com) — 검색 유입의 입구. 핫딜 목록·상세(「왜 핫딜인지」 근거)·키워드 알림 등록. 앱 안 웹뷰 화면(글쓰기·약관 등)도 여기서 나간다.
+- `mobile`(Expo, iOS·Android) — 알림을 받는 개인 우편함. 푸시를 실제로 받는 사람 대부분이 앱 사용자라 마이페이지·키워드·설정·상세는 네이티브 화면이다.
+- `admin`(admin.jirum-alarm.com) — 운영자용: 매칭 검수·키워드·광고·알림·수익링크·서비스 점검·실험 등록부. 사용자 기능 없음.
+- `landing`(about-us 소개 페이지, Cloudflare Pages) — 처음 온 사람에게 서비스를 보여 주고 스토어·카톡방으로 보낸다. gitops 밖이라 실패는 `landing-build` CI 로만 보인다.
+- `ai`(ai.jirum-alarm.com, 허용 유저만) — 「언제 사나」 프로토타입: 상품 한 줄 → 90일 핫딜로 본 좋은 가격·지금 살지. 옛 시세 채팅 `/c/*` 와 홈 잠금(`/api/quota`)은 아직 jirum-alarm-chat 에 붙어 있다.
+- `beauty-web`(jirum-alarm.com/beauty) — 화장품만 보는 별도 서비스. basePath `/beauty` 가 gitops 라우팅과의 계약이고 그 밖 경로는 web 이 받는다.
+- `design`(design.jirum-alarm.com) — 디자인 시스템 놀이터(Storybook)·스토리 자동 검증. 사용자 기능 없음.
+
+**사용자 화면 기능은 `apps/web` 과 `apps/mobile` 을 같이 바꾼다.** 앱 화면 대부분이 웹뷰가 아니라 네이티브라 웹만 고치면 앱 사용자에게 안 보인다. 한쪽만 했으면 완료 보고에 「앱 미반영」을 적는다.
+
 **Korean Hot Deal Aggregation Service** - 모든 핫딜을 한번에
 
 A comprehensive monorepo for the Jirum-Alarm service, which aggregates hot deals from various Korean communities. Built with Next.js, TypeScript, and modern web technologies.
