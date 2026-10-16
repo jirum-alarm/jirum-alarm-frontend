@@ -23,7 +23,7 @@ const daysBetween = (from: string, to: string) => {
   return days;
 };
 
-// 어제·오늘은 아직 덜 찬 값 — 쿠팡·네이버는 하루 뒤 오후, 애드센스는 이틀 뒤에 들어온다
+// 덜 찬 날의 막대 색. 토스·알리는 그날 바로, 쿠팡·네이버·애드픽은 다음 날 15시, 애드센스는 다음 날 15:30 에 들어온다
 const PARTIAL_COLOR = '#C7CEF7';
 
 const PERIODS = [
@@ -55,6 +55,12 @@ const RevenueSummary = () => {
   );
   const { data } = useRevenueTrend(range, { skip: !canProfit });
   const rows = data?.revenueTrend;
+  // 애드센스가 다음 날 배치 중 마지막이라, 어제 애드센스 행이 있으면 어제는 다 들어온 것 — 오늘만 덜 찬 값
+  const partialStart = rows?.some(
+    (r) => r.source === 'adsense' && r.date.slice(0, 10) === yesterday,
+  )
+    ? today
+    : yesterday;
 
   const periodStart = { today, month: monthStart, last30: last30Start }[period];
   const view = useMemo(() => {
@@ -85,12 +91,12 @@ const RevenueSummary = () => {
       daily: days.map((d) => ({
         x: md(d),
         y: Math.round(byDay.get(d) ?? 0),
-        fillColor: d >= yesterday ? PARTIAL_COLOR : '#3C50E0',
+        fillColor: d >= partialStart ? PARTIAL_COLOR : '#3C50E0',
       })),
-      partialFrom: days.findIndex((d) => d >= yesterday),
+      partialFrom: days.findIndex((d) => d >= partialStart),
     };
     // eslint-disable-next-line react-hooks/preserve-manual-memoization -- today 등은 문자열(원시값)이라 나중에 바뀔 수 없다 — 컴파일러가 타입을 몰라 보수적으로 판단한 것.
-  }, [rows, periodStart, today, yesterday]);
+  }, [rows, periodStart, today, partialStart]);
 
   if (!canProfit) return null;
 
@@ -103,7 +109,7 @@ const RevenueSummary = () => {
     .sort((a, b) => b.revenue - a.revenue);
   const stats = [
     { label: '오늘', value: sum(today), partial: true },
-    { label: '어제', value: sum(yesterday, yesterday), partial: true },
+    { label: '어제', value: sum(yesterday, yesterday), partial: partialStart === yesterday },
     { label: '최근 7일', value: sum(weekStart), partial: false },
   ];
 
@@ -216,8 +222,9 @@ const RevenueSummary = () => {
             className="mr-1 inline-block h-2 w-2 rounded-xs align-middle"
             style={{ background: PARTIAL_COLOR }}
           />
-          연한 막대(어제·오늘)는 집계 중 — 쿠팡·네이버는 하루 뒤 오후, 애드센스는 이틀 뒤에 들어와
-          더 오른다. 결제일 기준·취소 제외.
+          연한 막대({partialStart === yesterday ? '어제·오늘' : '오늘'})는 집계 중 —
+          쿠팡·네이버·애드픽·애드센스는 다음 날 오후 3시 반쯤 들어와 더 오른다. 결제일 기준·취소
+          제외(구매확정 전 취소는 뒤늦게 빠진다).
         </p>
       </Panel>
     </section>
