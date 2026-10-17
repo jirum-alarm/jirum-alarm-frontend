@@ -1,4 +1,24 @@
+import {
+  buildKeywordHubLead,
+  describeKeywordHubRhythm,
+  formatHubCount,
+  KEYWORD_HUB_MIN_DEALS,
+  KEYWORD_HUB_WINDOW_DAYS,
+} from '@jirum/domain/keyword-hub';
+
 import type { KeywordHub } from '@/shared/api/keyword-hub';
+
+// 문장·숫자 규칙(건수·리듬·한 줄 소개·허브 주소)은 앱과 같은 말을 해야 해서 @jirum/domain 이 정본이다(2026-10-17 앱 허브 화면).
+// 여기엔 web 만 쓰는 것 — 제목 매칭(제외어 포함)·SEO 제목·설명 — 만 둔다.
+export {
+  buildKeywordHubFacts,
+  describeKeywordHubRhythm,
+  findKeywordHubForQuery,
+  formatHubCount,
+  KEYWORD_HUB_MIN_DEALS,
+  KEYWORD_HUB_WINDOW_DAYS,
+  keywordHubPath,
+} from '@jirum/domain/keyword-hub';
 
 /**
  * 키워드 허브(`/keywords/{slug}`) — "삼다수 핫딜" 같은 검색어 그대로의 모음 페이지.
@@ -13,11 +33,6 @@ import type { KeywordHub } from '@/shared/api/keyword-hub';
  * 이 파일은 그 목록을 받아 쓰는 순수 함수만 둔다.
  */
 export type KeywordHubTerms = Pick<KeywordHub, 'slug' | 'name' | 'aliases' | 'excludes'>;
-
-/** 서버 통계 창과 같은 값. 제목의 "최근 N일 M건" 도 이 창이다. */
-export const KEYWORD_HUB_WINDOW_DAYS = 30;
-/** 이보다 적으면 noindex — 얇은 허브를 색인에 내지 않는다(링크는 따라가게 follow). */
-export const KEYWORD_HUB_MIN_DEALS = 5;
 
 const norm = (s: string) => s.toLowerCase().replace(/\s+/g, '');
 
@@ -40,56 +55,8 @@ export function findKeywordHubsForTitle<T extends KeywordHubTerms>(
   return hubs.filter((h) => matchesKeywordHub(title, h)).slice(0, max);
 }
 
-/** 검색어가 허브 키워드 자체인가("삼다수", "플스 5"). 포함이 아니라 같음 — "삼다수 2L" 는 검색 결과가 더 맞다. */
-export function findKeywordHubForQuery<T extends KeywordHubTerms>(
-  query: string | null | undefined,
-  hubs: T[],
-): T | undefined {
-  const q = norm(query ?? '');
-  if (!q) return undefined;
-  return hubs.find((h) => [h.slug, h.name, ...(h.aliases ?? [])].some((term) => norm(term) === q));
-}
-
-export function keywordHubPath(hub: Pick<KeywordHub, 'slug'>): string {
-  return `/keywords/${encodeURIComponent(hub.slug)}`;
-}
-
-type HubCount = Pick<KeywordHub, 'recentDealCount' | 'countCapped'>;
-
-/** "76건" / 상한에 걸렸으면 "300건+". */
-export function formatHubCount(hub: HubCount): string {
-  return `${hub.recentDealCount.toLocaleString()}건${hub.countCapped ? '+' : ''}`;
-}
-
 type HubRhythm = Pick<KeywordHub, 'name' | 'activeDays' | 'topSources'>;
-
-/**
- * 이 키워드 핫딜이 얼마나 자주·어디에 올라오나 — 「최근 30일 중 29일 올라왔어요」 + 빈도에 맞는 권유.
- * 날짜·출처는 게시 시각·수집처라 틀릴 일이 없어 그대로 말해도 된다. 같은 딜을 여러 곳에 올려도 「올라온 날」은 하루
- * (서버가 KST 달력 날짜로 센다). 가격은 쓰지 않는다: 같은 키워드라도 다른 상품·묶음이 섞여(생수 500ml 와 2L)
- * "최저 N원" 은 틀린 주장이 된다. 딜이 없으면 null.
- */
-export function describeKeywordHubRhythm(hub: HubRhythm) {
-  if (hub.activeDays <= 0) return null;
-  const windowDays = KEYWORD_HUB_WINDOW_DAYS;
-  const often = hub.activeDays >= Math.round(windowDays * 0.7);
-  return {
-    headline: `최근 ${windowDays}일 중 ${hub.activeDays}일 올라왔어요`,
-    advice: often
-      ? `${hub.name} 핫딜은 거의 매일 올라와요. 급하지 않다면 알림을 걸어 두고 마음에 드는 딜을 골라도 돼요.`
-      : `${hub.name} 핫딜은 매일 올라오지는 않아요. 알림을 걸어 두면 다음 딜을 놓치지 않아요.`,
-    sources: hub.topSources.map((src) => `${src.name} ${src.share}%`).join(' · '),
-  };
-}
-
-/** 검색 요약 카드·앱 요약 줄용 짧은 조각 — 「30일 중 29일 · 주로 뽐뿌 62%」. */
-export function buildKeywordHubFacts(hub: HubRhythm): string[] {
-  const facts: string[] = [];
-  if (hub.activeDays > 0) facts.push(`${KEYWORD_HUB_WINDOW_DAYS}일 중 ${hub.activeDays}일`);
-  const top = hub.topSources[0];
-  if (top) facts.push(`주로 ${top.name} ${top.share}%`);
-  return facts;
-}
+type HubCount = Pick<KeywordHub, 'recentDealCount' | 'countCapped'>;
 
 type HubDeal = {
   title: string;
@@ -139,10 +106,7 @@ export function buildKeywordHubSeo(hub: HubRhythm & HubCount, deals: HubDeal[]) 
     : '';
 
   // 토스·네이버쇼핑 같은 쇼핑몰 특가도 섞여 있다(커뮤니티만이 아니다).
-  const lead =
-    count > 0
-      ? `최근 ${KEYWORD_HUB_WINDOW_DAYS}일 동안 커뮤니티·쇼핑몰 특가에 올라온 ${hub.name} 핫딜 ${countText}을 모았어요.${latestText}`
-      : `커뮤니티·쇼핑몰 특가에 올라오는 ${hub.name} 핫딜을 모아 보여드려요.`;
+  const lead = `${buildKeywordHubLead(hub)}${count > 0 ? latestText : ''}`;
 
   // 설명(검색결과 스니펫)엔 「며칠 올라왔나」를 덧붙인다 — 건수보다 「얼마나 자주」가 기다릴지 정하는 데 쓰인다.
   const rhythm = describeKeywordHubRhythm(hub);

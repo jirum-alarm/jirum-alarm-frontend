@@ -72,19 +72,16 @@ describe('문장 — @jirum/domain 한 곳(웹 허브와 같은 말)', () => {
     );
   });
 
-  it('web 허브(아직 자기 복사본을 쓴다)와 문장이 한 글자도 다르지 않다', () => {
-    const webLib = readWeb('entities/keyword-hub/lib/keyword-hub.ts');
-    const domain = read('../../packages/domain/src/keyword-hub.ts');
+  it('web 허브도 같은 정본을 쓴다 — 문장 규칙을 다시 복사하지 않는다', () => {
+    const webLib: string = readWeb('entities/keyword-hub/lib/keyword-hub.ts');
+    expect(webLib).toContain("from '@jirum/domain/keyword-hub'");
+    expect(webLib).toContain('buildKeywordHubLead(hub)');
     for (const phrase of [
-      '일 올라왔어요`',
-      '핫딜은 거의 매일 올라와요. 급하지 않다면 알림을 걸어 두고 마음에 드는 딜을 골라도 돼요.',
-      '핫딜은 매일 올라오지는 않아요. 알림을 걸어 두면 다음 딜을 놓치지 않아요.',
-      'windowDays * 0.7',
-      '일 동안 커뮤니티·쇼핑몰 특가에 올라온 ${hub.name} 핫딜 ',
-      '커뮤니티·쇼핑몰 특가에 올라오는 ${hub.name} 핫딜을 모아 보여드려요.',
+      '핫딜은 거의 매일 올라와요',
+      '핫딜은 매일 올라오지는 않아요',
+      '커뮤니티·쇼핑몰 특가에 올라오는',
     ]) {
-      expect(webLib).toContain(phrase);
-      expect(domain).toContain(phrase);
+      expect(webLib).not.toContain(phrase);
     }
   });
 });
