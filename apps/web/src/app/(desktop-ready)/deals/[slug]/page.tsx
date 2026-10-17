@@ -213,10 +213,15 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   const searched = await searchRecentDeals(page.modelName);
   // 이 모델이 속한 키워드 허브(삼다수 2L → 삼다수 핫딜). 구글은 사람을 모델 페이지로 데려오고(10/1~13 착지 53),
   // 허브는 아직 거의 안 데려온다 — 같은 키워드의 다른 상품을 보러 갈 길을 낸다(허브 → 모델 페이지 칩과 짝).
-  const keywordHubs = findKeywordHubsForTitle(
-    `${page.brand ?? ''} ${page.modelName}`,
-    await fetchKeywordHubs(),
-  );
+  // 상위 키워드(page.keywordHub)는 서버가 고른 가장 좁은 허브 — 경로 표시의 부모이고 칩도 맨 앞이다(2026-10-17 키워드가 위층).
+  const parentHub = page.keywordHub ?? null;
+  // 모델명만 본다 — 브랜드까지 넣으면 회사명 속 낱말이 걸린다(코카콜라음료 파워에이드 → 콜라). 브랜드 허브(켈로그)는 부모로 온다.
+  const keywordHubs = [
+    ...(parentHub ? [parentHub] : []),
+    ...findKeywordHubsForTitle(page.modelName, await fetchKeywordHubs(), 10),
+  ]
+    .filter((hub, i, all) => all.findIndex((h) => h.slug === hub.slug) === i)
+    .slice(0, 2);
 
   const payload = (page.payload ?? {}) as ModelPagePayload;
   const {
@@ -302,15 +307,18 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: '지름알림', item: METADATA_SERVICE_URL },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: '핫딜 최저가 모음',
-        item: `${METADATA_SERVICE_URL}/deals`,
-      },
-      { '@type': 'ListItem', position: 3, name: displayName },
-    ],
+      { name: '지름알림', item: METADATA_SERVICE_URL },
+      ...(parentHub
+        ? [
+            { name: '키워드별 핫딜', item: `${METADATA_SERVICE_URL}${PAGE.KEYWORDS}` },
+            {
+              name: `${parentHub.name} 핫딜`,
+              item: `${METADATA_SERVICE_URL}${keywordHubPath(parentHub)}`,
+            },
+          ]
+        : [{ name: '핫딜 최저가 모음', item: `${METADATA_SERVICE_URL}${PAGE.DEALS}` }]),
+      { name: displayName },
+    ].map((it, i) => ({ '@type': 'ListItem', position: i + 1, ...it })),
   };
   const jsonLd = productLd ? [productLd, breadcrumbLd] : [breadcrumbLd];
   const rankedReps = rankRepresentatives(representatives);
@@ -354,6 +362,29 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
 
       <DealsTracking slug={page.slug} />
       <DealsMobileHeader title={displayName} />
+
+      <nav aria-label="위치" className="mb-3 text-sm text-gray-500">
+        {parentHub ? (
+          <>
+            <Link href={PAGE.KEYWORDS} className="hover:underline">
+              키워드별 핫딜
+            </Link>
+            <span aria-hidden> › </span>
+            <Link
+              href={keywordHubPath(parentHub)}
+              data-track="keyword-hub-link"
+              data-source="model_page_breadcrumb"
+              className="font-medium text-gray-700 hover:underline"
+            >
+              {parentHub.name} 핫딜
+            </Link>
+          </>
+        ) : (
+          <Link href={PAGE.DEALS} className="hover:underline">
+            핫딜 최저가 모음
+          </Link>
+        )}
+      </nav>
 
       <div className="pc:grid pc:grid-cols-3 pc:items-start pc:gap-x-10">
         <div className="pc:col-span-2">

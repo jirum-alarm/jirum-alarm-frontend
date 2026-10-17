@@ -782,6 +782,8 @@ type ModelPageOutput {
   dealCount: Int!
   id: Int
   isPublished: Boolean
+  """이 모델 페이지가 속한 공개 키워드 허브(걸리는 것 중 가장 좁은 것). 없으면 null"""
+  keywordHub: KeywordHubOutput
   lastDealAt: DateTime
   metaDescription: String
   modelName: String!

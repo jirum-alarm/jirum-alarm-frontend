@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = T | null | undefined;
@@ -837,6 +838,8 @@ export type ModelPageOutput = {
   dealCount: Scalars['Int']['output'];
   id?: Maybe<Scalars['Int']['output']>;
   isPublished?: Maybe<Scalars['Boolean']['output']>;
+  /** 이 모델 페이지가 속한 공개 키워드 허브(걸리는 것 중 가장 좁은 것). 없으면 null */
+  keywordHub?: Maybe<KeywordHubOutput>;
   lastDealAt?: Maybe<Scalars['DateTime']['output']>;
   metaDescription?: Maybe<Scalars['String']['output']>;
   modelName: Scalars['String']['output'];
@@ -4449,6 +4452,13 @@ export type ModelPageQuery = {
     lastDealAt?: any | null;
     metaDescription?: string | null;
     payload?: any | null;
+    keywordHub?: {
+      __typename?: 'KeywordHubOutput';
+      slug: string;
+      name: string;
+      recentDealCount: number;
+      countCapped: boolean;
+    } | null;
   } | null;
 };
 
@@ -5570,6 +5580,12 @@ export const ModelPageDocument = new TypedDocumentString(`
     lastDealAt
     metaDescription
     payload
+    keywordHub {
+      slug
+      name
+      recentDealCount
+      countCapped
+    }
   }
 }
     `) as unknown as TypedDocumentString<ModelPageQuery, ModelPageQueryVariables>;

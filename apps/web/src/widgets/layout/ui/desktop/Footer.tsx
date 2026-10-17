@@ -44,7 +44,11 @@ const Footer = () => {
                 개인정보 처리방침
               </Link>
               <span className="text-gray-400">ㅣ</span>
-              {/* /deals 는 내부 링크 0개 고아 트리라 구글 미색인이었음(2026-07-20) — 유일한 상시 크롤 경로 */}
+              <Link href="/keywords" className="underline">
+                키워드별 핫딜
+              </Link>
+              <span className="text-gray-400">ㅣ</span>
+              {/* /deals 는 내부 링크 0개 고아 트리라 구글 미색인이었음(2026-07-20) — 메뉴에서 내린 뒤(10/17) 모든 PC 페이지에서 걸리는 상시 크롤 경로 */}
               <Link href="/deals" className="underline">
                 핫딜 최저가 모음
               </Link>

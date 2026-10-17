@@ -39,9 +39,11 @@ const NAV_LINKS = [
     isActive: (pathname: string) => pathname === PAGE.TRENDING_RANKING,
   },
   {
-    href: PAGE.DEALS,
-    label: '최저가',
-    isActive: (pathname: string) => pathname.startsWith(PAGE.DEALS),
+    // 키워드가 위층·모델 페이지(/deals)가 아래층(2026-10-17, 옛 「최저가」=/deals). 모델 페이지에서도 이 메뉴가 켜진다.
+    href: PAGE.KEYWORDS,
+    label: '키워드',
+    isActive: (pathname: string) =>
+      pathname.startsWith(PAGE.KEYWORDS) || pathname.startsWith(PAGE.DEALS),
   },
   {
     href: PAGE.COMMUNITY,

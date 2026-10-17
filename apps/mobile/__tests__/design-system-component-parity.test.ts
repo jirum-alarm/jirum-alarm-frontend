@@ -345,7 +345,7 @@ describe('딜 줄 — web 두 목록이 같은 dealRow', () => {
   });
 });
 
-describe('링크 칩 — web 네 곳이 같은 linkChip', () => {
+describe('링크 칩 — web 세 곳이 같은 linkChip(/keywords 목록은 10/17 카드로 바뀜)', () => {
   it('web 어디에도 칩·태그 모양을 손으로 다시 적지 않는다(3차 때 검색이 여러 줄 JSX 를 놓쳐 링크 칩이 남은 줄 몰랐다)', () => {
     const offenders = webTsxFiles([]).filter(f =>
       /rounded-full border border-gray-200 (?:bg-white )?px-|rounded-full bg-gray-100 px-2\.5/.test(
@@ -357,7 +357,6 @@ describe('링크 칩 — web 네 곳이 같은 linkChip', () => {
 
   it.each([
     'app/(desktop-ready)/keywords/[keyword]/page.tsx',
-    'app/(desktop-ready)/keywords/page.tsx',
     'app/(desktop-ready)/guide/hotdeal-alarm/page.tsx',
     'app/(desktop-ready)/deals/[slug]/page.tsx',
   ])('%s', file => {

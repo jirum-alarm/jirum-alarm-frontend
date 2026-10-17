@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as types from './graphql';
 
 /**
@@ -73,7 +74,7 @@ type Documents = {
   '\n  query QueryWishlistCount {\n    wishlistCount\n  }\n': typeof types.QueryWishlistCountDocument;
   '\n  query QueryRecommendedNotificationKeywords {\n    recommendedNotificationKeywords\n  }\n': typeof types.QueryRecommendedNotificationKeywordsDocument;
   '\n  query publishedModelPages {\n    publishedModelPages {\n      slug\n      brand\n      modelName\n      dealCount\n      heroImage\n      heroMinPrice\n      unitLabel\n      unitPrice\n      categoryId\n      categoryName\n      lastDealAt\n      activeDealCount\n      activePrice\n      activePostedAt\n      priceTone\n      savePct\n      buyLine\n      buyLineUnitLabel\n      trendPrices\n    }\n  }\n': typeof types.PublishedModelPagesDocument;
-  '\n  query modelPage($slug: String!) {\n    modelPage(slug: $slug) {\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n': typeof types.ModelPageDocument;
+  '\n  query modelPage($slug: String!) {\n    modelPage(slug: $slug) {\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n      keywordHub {\n        slug\n        name\n        recentDealCount\n        countCapped\n      }\n    }\n  }\n': typeof types.ModelPageDocument;
   '\n  query QueryProductsByKeyword(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      isYearLowest\n      provider {\n        nameKr\n      }\n      # 토스 하루특가 배지(data.toss.todayDeal*·dealStatus·pageViewCount) — 20개에 ~14KB.\n      data\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.QueryProductsByKeywordDocument;
 };
 const documents: Documents = {
@@ -197,7 +198,7 @@ const documents: Documents = {
     types.QueryRecommendedNotificationKeywordsDocument,
   '\n  query publishedModelPages {\n    publishedModelPages {\n      slug\n      brand\n      modelName\n      dealCount\n      heroImage\n      heroMinPrice\n      unitLabel\n      unitPrice\n      categoryId\n      categoryName\n      lastDealAt\n      activeDealCount\n      activePrice\n      activePostedAt\n      priceTone\n      savePct\n      buyLine\n      buyLineUnitLabel\n      trendPrices\n    }\n  }\n':
     types.PublishedModelPagesDocument,
-  '\n  query modelPage($slug: String!) {\n    modelPage(slug: $slug) {\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n':
+  '\n  query modelPage($slug: String!) {\n    modelPage(slug: $slug) {\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n      keywordHub {\n        slug\n        name\n        recentDealCount\n        countCapped\n      }\n    }\n  }\n':
     types.ModelPageDocument,
   '\n  query QueryProductsByKeyword(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      isYearLowest\n      provider {\n        nameKr\n      }\n      # 토스 하루특가 배지(data.toss.todayDeal*·dealStatus·pageViewCount) — 20개에 ~14KB.\n      data\n      searchAfter\n      postedAt\n    }\n  }\n':
     types.QueryProductsByKeywordDocument,
@@ -573,7 +574,7 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query modelPage($slug: String!) {\n    modelPage(slug: $slug) {\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n',
+  source: '\n  query modelPage($slug: String!) {\n    modelPage(slug: $slug) {\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n      keywordHub {\n        slug\n        name\n        recentDealCount\n        countCapped\n      }\n    }\n  }\n',
 ): typeof import('./graphql').ModelPageDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.

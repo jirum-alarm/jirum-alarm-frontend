@@ -137,16 +137,16 @@ const FEATURE_GROUPS: { title: string; tone: Tone; items: Feature[] }[] = [
         href: PAGE.TRENDING_RANKING,
       },
       {
-        icon: 'chart',
-        name: '최저가 모음',
-        text: '인기 상품별 핫딜 최저가와 가격 흐름',
-        href: PAGE.DEALS,
-      },
-      {
         icon: 'hash',
         name: '키워드별 핫딜',
         text: '삼다수·기저귀·노트북처럼 검색어별 최근 핫딜',
         href: PAGE.KEYWORDS,
+      },
+      {
+        icon: 'chart',
+        name: '최저가 모음',
+        text: '상품별 핫딜 최저가와 가격 흐름 — 키워드 안의 상품별 보기',
+        href: PAGE.DEALS,
       },
       {
         icon: 'doc',

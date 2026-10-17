@@ -10,17 +10,17 @@ import { buildModelDisplayName } from '@/features/deals/lib/model-page-insights'
 
 import DealsMobileHeader from './[slug]/DealsMobileHeader';
 import DealsCategoryTabs from './DealsCategoryTabs';
-import DealsFoldedMore, { type FoldedLink } from './DealsFoldedMore';
-import {
-  DealGrid,
-  type DealItem,
-  DealRows,
-  verdictBadge,
-  waitingPriceText,
-} from './DealsListParts';
+import DealsFoldedMore from './DealsFoldedMore';
+import { type DealItem, DealRows, verdictBadge, waitingPriceText } from './DealsListParts';
 import DealsSearch, { DealsSearchItem } from './DealsSearch';
-
-import type { ReactNode } from 'react';
+import {
+  BUY_NOW_VISIBLE,
+  FoldedGrid,
+  RECENT_VISIBLE,
+  SectionTitle,
+  splitByVerdict,
+  toFoldedLink,
+} from './DealsSections';
 
 // /deals 인덱스 — "이 상품, 지금 사도 되나?"에 답하는 곳. 새 딜 피드(홈·랭킹)와 역할이 다르다.
 // 섹션: ① 지금 사기 좋아요(진행 딜이 추이보다 쌈) ② 최근 핫딜(진행 중, 평소·비쌈 그대로 표시)
@@ -29,6 +29,8 @@ import type { ReactNode } from 'react';
 // ③은 사진 카드 대신 줄 목록 — 사진 카드 500장이 같은 모양으로 이어져 "그냥 나열"로 읽혔다(2026-10-13).
 // 맨 위 검색창은 그 500장을 훑는 대신 사려던 상품으로 바로 가는 길.
 // 앱은 /deals 를 열지 않는다(apps/mobile tab-routing) — 웹 전용.
+// 2026-10-17 메뉴에서 내렸다: 키워드(/keywords)가 위층, 모델 페이지가 아래층이다. 이 목록은 모델 페이지 전체(1,273개)를 잇는
+// 내부링크 허브로 남는다 — 키워드 허브에 걸리는 모델 페이지는 22%뿐이라 이걸 지우면 나머지가 고아가 된다(구글 유입 원천).
 
 export const metadata: Metadata = {
   title: '핫딜 최저가 모음 | 지름알림',
@@ -111,6 +113,12 @@ export default async function DealsIndexPage() {
         <p className="mt-1 text-sm text-gray-600">
           {leadSentence ?? '인기 상품별로 커뮤니티 핫딜 가격을 모았어요.'}
         </p>
+        <Link
+          href={PAGE.KEYWORDS}
+          className="mt-2 inline-block text-sm text-gray-500 underline underline-offset-2"
+        >
+          키워드별 핫딜로 보기
+        </Link>
       </header>
 
       {pages.length > 0 && <DealsSearch items={searchItems} />}
@@ -182,64 +190,8 @@ export default async function DealsIndexPage() {
   );
 }
 
-/**
- * ①② 에서 접지 않고 보여줄 개수 — PC 5열 × 2줄, 모바일 2열 × 5줄. 발행 페이지가 1,136개로 늘자(2026-10-13)
- * ① 25개가 다 펼쳐져 모바일에선 ② 가 화면 6장 아래에서야 시작했다. 12개면 PC 마지막 줄에 2개만 남는다.
- */
-const BUY_NOW_VISIBLE = 10;
-const RECENT_VISIBLE = 10;
 /** ③ 카테고리 섹션마다 접지 않고 보여줄 줄 수(PC 3열 × 2줄). 모바일은 1열이라 12줄 × 카테고리 10개면 너무 길었다. */
 const CATEGORY_VISIBLE = 6;
-
-const GOOD_TONES = new Set(['lowest', 'cheap']);
-
-/**
- * 판정으로 세 덩어리. ①② 는 최근 올라온 딜 순(새 딜이 위), ③ 은 카테고리 섹션이 정렬한다.
- * ①② 를 할인율 순으로 두지 않는 이유: 추이 점이 5~9개인 상품이 대부분이라 % 의 정밀도가 낮다.
- */
-function splitByVerdict(pages: DealItem[]) {
-  const byRecent = (a: DealItem, b: DealItem) =>
-    Date.parse(b.activePostedAt ?? '') - Date.parse(a.activePostedAt ?? '');
-  const active = pages.filter((p) => p.activeDealCount > 0 && p.activePrice != null);
-  const activeSlugs = new Set(active.map((p) => p.slug));
-  return {
-    buyNow: active.filter((p) => GOOD_TONES.has(p.priceTone ?? '')).sort(byRecent),
-    recent: active.filter((p) => !GOOD_TONES.has(p.priceTone ?? '')).sort(byRecent),
-    waiting: pages.filter((p) => !activeSlugs.has(p.slug)),
-  };
-}
-
-function SectionTitle({
-  title,
-  description,
-  action,
-}: {
-  title: string;
-  description: string;
-  action?: ReactNode;
-}) {
-  return (
-    <div className="mb-4 flex items-end justify-between gap-3">
-      <div>
-        <h2 className="text-lg font-bold text-gray-900">{title}</h2>
-        <p className="mt-0.5 text-sm text-gray-500">{description}</p>
-      </div>
-      {action}
-    </div>
-  );
-}
-
-/** 앞 `visible` 개만 서버에서 그리고, 나머지는 DealsFoldedMore 가 접어 둔다(닫힌 동안엔 이름 링크만 — HTML 을 가볍게). */
-function FoldedGrid({ items, visible }: { items: DealItem[]; visible: number }) {
-  return (
-    <>
-      <DealGrid items={items.slice(0, visible)} />
-      {items.length > visible && (
-        <DealsFoldedMore variant="grid" links={items.slice(visible).map(toFoldedLink)} />
-      )}
-    </>
-  );
-}
 
 /** ③ 줄 목록 — FoldedGrid 와 같은 접기. 줄 하나 = 작은 사진·이름·적정가·마지막 핫딜. */
 function FoldedRows({ items, visible }: { items: DealItem[]; visible: number }) {
@@ -252,11 +204,6 @@ function FoldedRows({ items, visible }: { items: DealItem[]; visible: number }) 
     </>
   );
 }
-
-const toFoldedLink = (p: DealItem): FoldedLink => ({
-  slug: p.slug,
-  name: buildModelDisplayName(p.brand, p.modelName),
-});
 
 /** 검색 결과 한 줄 — 진행 중이면 지금 가격과 판정, 아니면 적정가. */
 function searchHint(p: DealItem): string | null {

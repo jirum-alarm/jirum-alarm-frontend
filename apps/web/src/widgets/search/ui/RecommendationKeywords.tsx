@@ -1,8 +1,10 @@
 'use client';
 
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { PAGE } from '@/shared/config/page';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
@@ -31,7 +33,21 @@ export default function RecommendationKeywords() {
 
   return (
     <section className="pc:px-0 px-5">
-      <SectionHeader title="추천 검색어" shouldShowMobileUI />
+      {/* 모바일 웹엔 상단 메뉴가 없어 키워드 목록(/keywords)으로 가는 길이 여기뿐이다(2026-10-17). */}
+      <SectionHeader
+        title="추천 검색어"
+        shouldShowMobileUI
+        right={
+          <Link
+            href={PAGE.KEYWORDS}
+            data-track="keyword-index-link"
+            data-source="search_recommend"
+            className="text-sm text-gray-500"
+          >
+            키워드 전체 보기
+          </Link>
+        }
+      />
       <div className="flex flex-wrap gap-2">
         {keywords.map((keyword, i) => (
           <Chip key={i} keyword={keyword} />

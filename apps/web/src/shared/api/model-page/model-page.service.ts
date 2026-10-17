@@ -73,6 +73,12 @@ const ModelPageDocument = graphql(`
       lastDealAt
       metaDescription
       payload
+      keywordHub {
+        slug
+        name
+        recentDealCount
+        countCapped
+      }
     }
   }
 `);
