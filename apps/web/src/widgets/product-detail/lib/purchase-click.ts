@@ -1,4 +1,5 @@
 import { ProductService } from '@/shared/api/product';
+import { pushDataLayerSoon } from '@/shared/lib/data-layer-soon';
 import { getEntry } from '@/shared/lib/entry';
 
 import { peekNotificationOrigin } from '@/entities/product-list/model/notification-origin';
@@ -31,8 +32,8 @@ export const recordPurchaseClick = ({
     nid,
   }).catch(() => {});
 
-  if (typeof window === 'undefined') return;
-  (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+  // GTM 태그가 동기로 돌아 새 창이 늦게 뜬다 — 클릭 처리 뒤로 미룬다(data-layer-soon.ts).
+  pushDataLayerSoon({
     event: 'purchase_link_click',
     product_id: String(productId),
     click_url: product?.detailUrl ?? '',

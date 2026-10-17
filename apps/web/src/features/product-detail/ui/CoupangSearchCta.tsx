@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 
 import { ProductService } from '@/shared/api/product';
 import { cn } from '@/shared/lib/cn';
+import { pushDataLayerSoon } from '@/shared/lib/data-layer-soon';
 import { getEntry } from '@/shared/lib/entry';
 
 import { ProductQueries } from '@/entities/product';
@@ -57,7 +58,7 @@ export default function CoupangSearchCta({
       entry: getEntry(),
       nid,
     }).catch(() => {});
-    (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+    pushDataLayerSoon({
       event: 'purchase_link_click',
       product_id: String(productId),
       click_url: cta.url,

@@ -9,6 +9,7 @@ import { ProductService } from '@/shared/api/product';
 import type { ProductDealEvidence } from '@/shared/api/product/product.service';
 import { hotdealTextMap } from '@/shared/config/hotdeal';
 import { cn } from '@/shared/lib/cn';
+import { pushDataLayerSoon } from '@/shared/lib/data-layer-soon';
 import { getEntry } from '@/shared/lib/entry';
 import {
   buildPostPurchasePromptQueue,
@@ -296,8 +297,7 @@ export default function ProductInfo({
                 nid,
               }).catch(() => {});
 
-              if (typeof window === 'undefined') return;
-              (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+              pushDataLayerSoon({
                 event: 'purchase_link_click',
                 product_id: String(productId),
                 click_url: product.detailUrl ?? '',
