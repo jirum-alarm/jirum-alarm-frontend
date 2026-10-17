@@ -51,8 +51,10 @@ export function dealComparePrice(
   basis: HistBasis,
   unitLabel?: string | null,
 ): number | null {
-  if (basis === 'unit' && unitLabel && deal.unitLabel === unitLabel && deal.unitPrice != null) {
-    return deal.unitPrice;
+  if (basis === 'unit' && unitLabel) {
+    // 단가 축 페이지에서 단가가 없거나 다른 축인 딜은 비교할 수 없다 — 총액으로 대신하면 「개당 662원」이 100ml당 추이와 비교돼
+    // "1425% 비쌈" 이 나갔다(2026-10-17 삼다수). 백엔드 model-page-price-verdict.ts comparePrice 와 같은 규칙.
+    return deal.unitLabel === unitLabel && deal.unitPrice != null ? deal.unitPrice : null;
   }
   return deal.price;
 }
@@ -213,7 +215,12 @@ export function buildTimingInsight(input: {
     // 지난 가격으로 "사기 좋은 구간"이라 하면 /deals 목록("핫딜을 기다리는 상품")과 모순된다.
     // 증정·포인트 딜만 진행 중이면 목록은 "진행 중"으로 세니 "없음"이라 하지 않는다(가격엔 사은품이 섞여 판정은 보류).
     tone = 'unknown';
-    label = active.length > 0 ? '증정·혜택 딜만 진행 중' : '진행 중인 핫딜 없음';
+    label =
+      pool.length > 0
+        ? '진행 중 · 단가 비교 불가'
+        : active.length > 0
+          ? '증정·혜택 딜만 진행 중'
+          : '진행 중인 핫딜 없음';
   } else if (histPrices.length < MIN_HISTORY_POINTS) {
     tone = 'unknown';
     label = '추이 대비 판단 불가';

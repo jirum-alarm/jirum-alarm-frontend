@@ -287,6 +287,37 @@ describe('buildTimingInsight', () => {
     assert.equal(usd.current, 199.99);
   });
 
+  // 2026-10-17 삼다수: 「지그재그 삼다수2L 36병 23850원 개당 662원」이 가격 662·단가 없음으로 들어와 100ml당 추이(~43원)와
+  // 비교돼 "지금 진행 최저 100ml당 662원 · 약 1425% 비쌈" 이 나갔다.
+  it('단가 축 페이지에서 단가가 없는(다른 축) 딜은 판정에 안 쓴다 — 진행 중으로만 센다', () => {
+    const ml = {
+      histPrices: [33, 38, 41, 43, 50],
+      histBasis: 'unit' as const,
+      histUnitLabel: '100ml당',
+    };
+    const only = buildTimingInsight({
+      ...ml,
+      deals: [deal(662, '2026-09-30T00:00:00Z')],
+      heroPrice: { minPrice: 7720, label: '2L 12개', unitPrice: 32, unitLabel: '100ml당' },
+      now,
+    });
+    assert.equal(only.activeDealCount, 1);
+    assert.equal(only.isActivePrice, false);
+    assert.equal(only.tone, 'unknown');
+    assert.equal(only.label, '진행 중 · 단가 비교 불가');
+
+    const mixed = buildTimingInsight({
+      ...ml,
+      deals: [
+        deal(662, '2026-09-30T00:00:00Z'),
+        deal(9590, '2026-09-30T00:00:00Z', { unitLabel: '100ml당', unitPrice: 40 }),
+        deal(5000, '2026-09-30T00:00:00Z', { unitLabel: '개당', unitPrice: 30 }),
+      ],
+      now,
+    });
+    assert.equal(mixed.current, 40);
+  });
+
   it('추이 점이 5개 미만이면 판정하지 않는다', () => {
     const t = buildTimingInsight({
       deals: [deal(5000, '2026-09-30T00:00:00Z')],

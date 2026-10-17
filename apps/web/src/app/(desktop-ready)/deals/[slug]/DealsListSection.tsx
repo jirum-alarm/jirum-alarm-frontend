@@ -106,6 +106,7 @@ export default function DealsListSection({
             !deal.isEnd &&
             !isBundle &&
             !isForeignPriceDeal(deal, currency) &&
+            comparePrice != null &&
             deals[0] === deal;
           const title = cleanDealTitle(deal.title);
 
