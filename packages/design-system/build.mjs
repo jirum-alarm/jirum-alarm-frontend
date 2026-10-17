@@ -13,7 +13,7 @@ import {createRequire} from 'node:module';
 import {fileURLToPath} from 'node:url';
 
 const require = createRequire(import.meta.url);
-const {light, dark, fixed, brand, fontSize, radius, shadow} = require('./tokens.js');
+const {light, dark, fixed, brand, fontSize, radius, shadow, focusRing} = require('./tokens.js');
 
 /** {white: '#..', gray: {50: '#..'}} → [['white', '#..'], ['gray-50', '#..'], ...] */
 const flat = (palette) =>
@@ -52,6 +52,14 @@ export function render() {
     ...decl('radius', Object.entries(radius)),
     '',
     ...decl('shadow', Object.entries(shadow)),
+    '}',
+    '',
+    '/* 키보드 포커스 — 자리마다 다르던 링을 한 모양으로(tokens.js focusRing). 유틸리티(outline-none·ring-*)가 이 위에 이긴다. */',
+    '@layer base {',
+    '  :focus-visible {',
+    `    outline: ${focusRing.width}px solid var(--color-${focusRing.color});`,
+    `    outline-offset: ${focusRing.offset}px;`,
+    '  }',
     '}',
     '',
     '/* 다크 = 클래스는 그대로, 같은 변수의 값만 바꾼다. web 은 <html class="dark">(사용자 설정)일 때만 켜진다. */',

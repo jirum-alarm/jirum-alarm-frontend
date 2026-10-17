@@ -108,6 +108,14 @@
   --shadow-highlight: inset 0 -12px 0;
 }
 
+/* 키보드 포커스 — 자리마다 다르던 링을 한 모양으로(tokens.js focusRing). 유틸리티(outline-none·ring-*)가 이 위에 이긴다. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-secondary-500);
+    outline-offset: 2px;
+  }
+}
+
 /* 다크 = 클래스는 그대로, 같은 변수의 값만 바꾼다. web 은 <html class="dark">(사용자 설정)일 때만 켜진다. */
 html.dark {
   --color-white: #0c111d;

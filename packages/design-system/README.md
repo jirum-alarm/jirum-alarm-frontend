@@ -138,6 +138,25 @@ Tailwind 기본 간격이라 web·앱이 같은 클래스로 같은 값이 된�
 | `icon.nav·action·row·inline` | 28·24·20·16 | 헤더·하단 탭 · 줄 끝 동작 · 목록 행/버튼 안 · 글자 옆 |
 | `minTouch` | 44 | 누르는 것의 최소 크기(작은 아이콘은 패딩·hitSlop 으로 채운다) |
 
+## 아이콘
+
+놀이터 「기초/아이콘」이 web 아이콘 폴더를 전부 모아 보여 준다(새 파일은 등록 없이 나온다) — 툴바 「테마」를 다크로 바꿔 바탕에 묻히는 게 없는지 본다.
+
+- **한 색 아이콘은 `currentColor`** — 놓인 자리의 글자 색(`text-gray-900`, 라임 버튼 위 `text-fixed-900`)을 따른다. 2026-10-17 web 하단 탭 「발견」이
+  `fill="black"`, 로그인 이메일 아이콘이 `#344054` 로 박혀 있어 다크에서 안 보였다.
+- **회색 그림**(카테고리 꺼짐 아이콘·빈 사진 그림)은 `var(--color-gray-N)` — 라이트 픽셀은 같고 다크에서 뒤집힌다. 그림 안 흰 면은 `var(--color-white)`(바탕색).
+  앱은 같은 그림을 `useColors()` 로 그린다(앱이 먼저 이렇게 돼 있었고 web 이 hex 로 남아 있었다).
+- **브랜드·그림 고유색**(라임·카카오·마스코트 그라데이션·카테고리 켜짐 아이콘의 색)은 hex 그대로 — 테마가 바뀌어도 같은 그림이어야 한다.
+- 크기는 조립 규칙 `icon`(28·24·20·16), 누르는 아이콘은 `minTouch` 44 를 패딩·hitSlop 으로 채운다.
+
+## 포커스·움직임
+
+- **키보드 포커스**는 한 모양 — `tokens.js` `focusRing`(secondary-500, 2px, 바깥 2px)을 theme.css 가 `:focus-visible` 에 그린다(web·ai·landing·beauty-web).
+  예전엔 브라우저 기본 링과 자리마다 고른 ring-gray-400·primary-500·gray-900 이 섞여 있었다. 두 테마 바탕·연한 면 위 3:1 이상을 테스트가 본다.
+  입력칸처럼 테두리 색으로 포커스를 보이는 자리는 `outline-none focus:border-*` 그대로. 포커스를 없애기만 하는 `focus-visible:outline-none` 은 린트가 막는다.
+- **「동작 줄이기」**(OS 설정)를 켠 사람에겐 움직임을 멈춘다 — web 은 `MotionConfig reducedMotion="user"`(위치·크기 애니메이션 끔, 투명도는 남김)와
+  CSS `motion-safe:`(스켈레톤 깜빡임), 앱은 Reanimated 기본값(시스템 설정을 따른다). 새 CSS 애니메이션은 `motion-safe:` 를 붙인다.
+
 ## 차트 색 (`chart`)
 
 차트는 역할 이름으로 칠한다 — web `chartVar('line')`(→ `var(--color-secondary-500)`, 다크 자동), 앱 `chartColor('line', useColors())`.
@@ -152,6 +171,9 @@ Tailwind 기본 간격이라 web·앱이 같은 클래스로 같은 값이 된�
 - 30px 미만 임의 글자 크기 `text-[13px]`, 임의 모서리 `rounded-[8px]`, 임의 그림자 `shadow-[…]`
 - 효과 없는 클래스 `text-semibold`·`rounded-t-5`·`bg-opacity-90`
 - 눈금에 이름이 있는 간격·크기를 숫자로 `w-[48px]`·`gap-[8px]`(→ `w-12`·`gap-2`) — 두 플랫폼에 같은 이름이 있는 Tailwind v3 기본 눈금만 막는다
+- 아이콘·SVG 색 속성(`fill`·`stroke`·`color`·`stopColor`)의 검정·회색 hex(`fill="black"`·`fill="#344054"`) — className 이 아니라 위 규칙이 못 보던 자리.
+  한 색 아이콘은 `currentColor`, 회색 그림은 `var(--color-gray-N)`(앱은 `useColors()`). 브랜드·그림 고유색 hex 와 mask·clipPath 는 막지 않는다
+- 자리마다 고른 포커스 링 `focus-visible:ring-*`·`focus-visible:outline-none` — 공용 링(아래 「포커스·움직임」)을 쓴다
 - 2px 단위 밖 여백(홀수 px) `px-[7px]`·`gap-x-[25px]` — 정확히는 홀수만 막는다(`gap-[6px]` 는 통과하지만 그 값은 이름 `gap-1.5` 가 있어 위 규칙에 걸린다).
   눈금 이름이 있으면 이름으로, 가능하면 4px 눈금(`layout.js`). 레이아웃 고유 치수(`w-[120px]`·`max-w-[600px]`·`h-[81px]`)는 막지 않는다
 
@@ -170,8 +192,10 @@ Tailwind 기본 간격이라 web·앱이 같은 클래스로 같은 값이 된�
 | 핫딜 배지 그라데이션(beauty-web `widgets/ProductCard`) | web·앱 HotdealBadge 와 같은 정지점 |
 | 소개 페이지 히어로(landing `KeyVisual`) | 히어로 모서리·오목한 모서리 트릭 |
 | 앱 `TextField` 입력 글자 `text-[16px]` | TextInput 줄높이 문제(위 「글자」) |
+| web 아이콘 `Jirume`(마스코트 눈)·`RoundedLogo`(로고 마크)·`Illust/AppIcon`(앱 아이콘 남색) | 브랜드 그림 — 테마와 무관하게 검정·남색 |
 
-린트가 못 보는 것: JS 값으로 넘기는 hex(`color="#101828"`, StyleSheet), CSS 파일, 아이콘·일러스트 SVG. 이건 리뷰에서 본다 —
+린트가 못 보는 것: StyleSheet·변수로 넘기는 hex, CSS 파일, 브랜드색처럼 회색이 아닌 hex. 앱은 `no-hex-in-ui-chrome` 테스트가 src 의 hex 를,
+`design-system-demos-render` 테스트가 다크에 남은 라이트 회색을 잡는다. 그 밖엔 리뷰에서 본다 —
 UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·`var(--color-…)`·`fixed` 로).
 
 ## 컴포넌트
@@ -244,3 +268,5 @@ Storybook 서브 앱. 기초(색·글자·모서리)·조립 규칙·레시피 �
   레시피(recipes.js)의 글자·바탕도 두 테마 AA·린트 규칙 준수·토큰에 있는 색인지 같이 본다.
 - 앱: `apps/mobile/__tests__/dark-mode-palette.test.ts` — tailwind 설정이 토큰을 변수로 까는지, AppText 의 색 판정.
   `cn-design-tokens.test.ts` — cn() 이 사용자 정의 값을 지우지 않는지. `design-system-component-parity.test.ts` — web·앱 컴포넌트가 같은 레시피를 읽는지.
+  `design-system-demos-render.test.tsx` — 앱 놀이터 데모(카탈로그 앱 부품 전부)를 라이트·다크로 그려 던지지 않는지, 다크에 라이트 회색이 남지 않는지
+  (web 스토리의 두 테마 검사에 해당하는 앱 쪽 자동 검사).

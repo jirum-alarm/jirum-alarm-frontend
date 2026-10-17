@@ -18,12 +18,40 @@ const PetOffIcon = ({ width = 64, height = 64, className = '' }: PetOffIconProps
     >
       <path
         d="M32 33C38 33 42.5 37.5 46 43C49.5 48.5 47.5 56 40.5 56C36.5 56 35 54 32 54C29 54 27.5 56 23.5 56C16.5 56 14.5 48.5 18 43C21.5 37.5 26 33 32 33Z"
-        fill="#D0D5DD"
+        fill="var(--color-gray-300)"
       />
-      <ellipse cx="15" cy="30" rx="6" ry="8" transform="rotate(-20 15 30)" fill="#98A2B3" />
-      <ellipse cx="25" cy="18" rx="6.5" ry="8.5" transform="rotate(-8 25 18)" fill="#98A2B3" />
-      <ellipse cx="39" cy="18" rx="6.5" ry="8.5" transform="rotate(8 39 18)" fill="#98A2B3" />
-      <ellipse cx="49" cy="30" rx="6" ry="8" transform="rotate(20 49 30)" fill="#98A2B3" />
+      <ellipse
+        cx="15"
+        cy="30"
+        rx="6"
+        ry="8"
+        transform="rotate(-20 15 30)"
+        fill="var(--color-gray-400)"
+      />
+      <ellipse
+        cx="25"
+        cy="18"
+        rx="6.5"
+        ry="8.5"
+        transform="rotate(-8 25 18)"
+        fill="var(--color-gray-400)"
+      />
+      <ellipse
+        cx="39"
+        cy="18"
+        rx="6.5"
+        ry="8.5"
+        transform="rotate(8 39 18)"
+        fill="var(--color-gray-400)"
+      />
+      <ellipse
+        cx="49"
+        cy="30"
+        rx="6"
+        ry="8"
+        transform="rotate(20 49 30)"
+        fill="var(--color-gray-400)"
+      />
     </svg>
   );
 };

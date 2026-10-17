@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- 마스코트 눈·입 검정 — 라임 몸통 위라 테마와 무관하게 검정이어야 한다 */
 import type { SVGProps } from 'react';
 
 interface JirumeProps extends SVGProps<SVGSVGElement> {

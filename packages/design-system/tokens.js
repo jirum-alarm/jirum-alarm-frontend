@@ -282,4 +282,11 @@ const twMergeConfig = {
   },
 };
 
-module.exports = {light, dark, fixed, brand, chart, chartVar, chartColor, fontSize, radius, shadow, twMergeConfig};
+/**
+ * 키보드 포커스 표시 — web 은 :focus-visible 에 한 모양으로 그린다(theme.css base). 브라우저 기본 링은 브라우저마다 달랐고,
+ * 자리마다 ring-gray-400·primary-500·gray-900 이 섞여 있었다. 테두리 밖 2px 링 = 바탕 위 대비 3:1 이상(WCAG 1.4.11, 테스트가 본다).
+ * 입력칸처럼 테두리 색으로 포커스를 보이는 자리는 outline-none + focus:border-* 로 그대로 둔다.
+ */
+const focusRing = {color: 'secondary-500', width: 2, offset: 2};
+
+module.exports = {light, dark, fixed, brand, chart, chartVar, chartColor, fontSize, radius, shadow, focusRing, twMergeConfig};

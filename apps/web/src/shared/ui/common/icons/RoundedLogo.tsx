@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- 로고 마크(흰 원 위 검정) — 테마와 무관한 브랜드 그림 */
 import type { SVGProps } from 'react';
 
 interface RoundedLogoProps extends SVGProps<SVGSVGElement> {

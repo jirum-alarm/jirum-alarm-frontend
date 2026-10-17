@@ -89,6 +89,12 @@ const banned = [
     pattern: '(?:^|[\\s:\'"`])text-black(?![\\w-])',
     message: 'text-black 은 다크에서 안 뒤집혀 검은 바탕에 검은 글자가 된다 — 바탕 위 글자는 text-gray-900, 색 판(라임 버튼 등) 위는 text-fixed-900.',
   },
+  // ↓ 키보드 포커스는 한 모양(tokens.js focusRing → theme.css :focus-visible). 자리마다 링 색을 고르면 다시 갈린다(2026-10-17 4가지였다).
+  {
+    pattern: '(?:^|[\\s:\'"`])focus-visible:(?:outline-(?:none|hidden)|ring-)',
+    message:
+      '포커스 링은 공용 모양(theme.css :focus-visible, tokens.js focusRing)을 쓴다 — focus-visible:ring-*·outline-none 을 떼면 된다. 입력칸은 outline-none + focus:border-* 로.',
+  },
   {
     pattern: '(?:bg|text|border|divide|ring|placeholder)-opacity-[0-9]',
     message: 'bg-opacity-* 는 Tailwind v4 에 없다(효과 없음) — bg-black/50 처럼 색 뒤에 /투명도.',
@@ -108,9 +114,24 @@ const banned = [
   },
 ];
 
+// ↓ SVG·아이콘의 색 속성(fill="…", color="…") — className 이 아니라 위 규칙이 못 본다. 2026-10-17 web 하단 탭 「발견」(fill="black")·
+// 로그인 이메일 아이콘(#344054)이 다크에서 바탕에 묻혔다. 회색 토큰과 같은 hex·검정은 테마를 따라야 하는 색이다
+// → 한 색 아이콘은 currentColor, 회색 그림은 var(--color-gray-N)(앱은 useColors()). 브랜드·그림 고유색 hex 는 막지 않는다.
+// mask·clipPath 의 검정·흰색은 색이 아니라 가림 범위라 뺀다.
+const GRAY_HEX = Object.values(require('./tokens.js').light.gray).map((hex) => hex.slice(1));
+const SVG_THEME_COLOR = `^(?:black|#000|#000000|#(?:${GRAY_HEX.join('|')}))$`;
+const SVG_COLOR_ATTR = '/^(?:fill|stroke|color|stopColor|floodColor)$/';
+const SVG_MESSAGE =
+  '아이콘·SVG 색에 검정·회색 hex 금지(다크에서 안 뒤집혀 바탕에 묻힌다) — 한 색 아이콘은 currentColor, 회색 그림은 var(--color-gray-N), 앱은 useColors().';
+const svgSelectors = [
+  `JSXOpeningElement:not([name.name=/^(?:mask|clipPath)$/]) > JSXAttribute[name.name=${SVG_COLOR_ATTR}] > Literal[value=/${SVG_THEME_COLOR}/i]`,
+  `JSXOpeningElement:not([name.name=/^(?:mask|clipPath)$/]) > JSXAttribute[name.name=${SVG_COLOR_ATTR}] > JSXExpressionContainer > Literal[value=/${SVG_THEME_COLOR}/i]`,
+];
+
 module.exports = {
   // 테스트용(정규식이 잡을 것만 잡는지) — 설정에선 rules 만 펼친다.
   patterns: banned.map(({pattern}) => pattern),
+  svgThemeColor: SVG_THEME_COLOR,
   rules: {
     'no-restricted-syntax': [
       'error',
@@ -118,6 +139,7 @@ module.exports = {
         {selector: `Literal[value=/${pattern}/]`, message: message + GUIDE},
         {selector: `TemplateElement[value.raw=/${pattern}/]`, message: message + GUIDE},
       ]),
+      ...svgSelectors.map((selector) => ({selector, message: SVG_MESSAGE + GUIDE})),
     ],
   },
 };

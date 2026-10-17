@@ -710,7 +710,7 @@ export default async function HelpPage() {
                       {group.items.map((f) => (
                         // 접힌 답도 HTML 에 있다(details) — 크롤러·AI 가 본문으로 읽는다.
                         <details key={f.id} id={f.id} className="group scroll-mt-20">
-                          <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 px-4 py-3.5 font-medium text-gray-900 group-open:font-semibold hover:bg-gray-100 focus-visible:bg-gray-100 focus-visible:outline-none [&::-webkit-details-marker]:hidden">
+                          <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 px-4 py-3.5 font-medium text-gray-900 group-open:font-semibold hover:bg-gray-100 focus-visible:bg-gray-100 [&::-webkit-details-marker]:hidden">
                             <span aria-hidden className="text-primary-800 shrink-0 font-bold">
                               Q
                             </span>

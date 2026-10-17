@@ -33,7 +33,7 @@ export default function UserMenu({ color }: { color: string }) {
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger
         aria-label="내 메뉴"
-        className="flex items-center gap-0.5 rounded-full py-0.5 pr-1 pl-0.5 duration-300 outline-none hover:bg-gray-400/20 focus-visible:ring-2 focus-visible:ring-gray-400"
+        className="flex items-center gap-0.5 rounded-full py-0.5 pr-1 pl-0.5 duration-300 hover:bg-gray-400/20"
       >
         <My width={28} height={28} color={color} />
         <ArrowDown width={14} height={14} viewBox="0 0 24 24" color={color} />

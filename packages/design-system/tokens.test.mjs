@@ -11,7 +11,7 @@ import {test} from 'node:test';
 import {render} from './build.mjs';
 
 const require = createRequire(import.meta.url);
-const {light, dark, fixed, brand, twMergeConfig} = require('./tokens.js');
+const {light, dark, fixed, brand, focusRing, twMergeConfig} = require('./tokens.js');
 const {patterns} = require('./eslint.js');
 
 const keys = (palette) =>
@@ -133,6 +133,8 @@ test('린트 정규식은 우회한 클래스만 잡는다', () => {
     'text-sm font-medium hover:text-gray-300',
     'placeholder-gray-400',
     'w-full placeholder:text-gray-300',
+    'focus-visible:ring-2 focus-visible:ring-gray-400',
+    'focus-visible:outline-none',
   ])
     assert.ok(flagged(bad), `잡혀야 함: ${bad}`);
   for (const good of [
@@ -288,4 +290,49 @@ test('앱이 읽는 레시피 문자열엔 hover:·focus: 가 없고, active: �
   };
   for (const [name, v] of Object.entries(recipes)) if (!WEB_ONLY.has(name) && typeof v !== 'function') walk(v, [name]);
   assert.deepEqual(bad, []);
+});
+
+test('아이콘·SVG 색 속성의 검정·회색 hex 를 잡는다(mask·clipPath·브랜드 색·토큰 변수는 통과)', () => {
+  // 선택자 문법이 틀리면 ESLint 가 규칙째 버린다 — 실제 Linter 로 JSX 를 돌려 본다.
+  const {Linter} = require('eslint');
+  const {rules} = require('./eslint.js');
+  const linter = new Linter();
+  const lint = (code) =>
+    linter
+      .verify(code, {
+        languageOptions: {parserOptions: {ecmaFeatures: {jsx: true}}},
+        rules,
+      })
+      .filter((m) => m.message.includes('아이콘·SVG'));
+  for (const bad of [
+    '<path fill="black" />',
+    '<path fill="#000" />',
+    '<path fill="#344054" />',
+    '<path stroke="#98a2b3" />',
+    '<stop stopColor="#E4E7EC" />',
+    '<Icon color={"#667085"} />',
+  ]) {
+    assert.equal(lint(`const a = ${bad};`).length, 1, bad);
+  }
+  for (const ok of [
+    '<path fill="currentColor" />',
+    '<path fill="var(--color-gray-400)" />',
+    '<path fill="#9EF22E" />',
+    '<path fill="#162034" />',
+    '<path fill="white" />',
+    '<mask id="m" fill="black"><rect fill="white" /></mask>',
+  ]) {
+    assert.equal(lint(`const a = ${ok};`).length, 0, ok);
+  }
+});
+
+test('포커스 링은 두 테마의 바탕·연한 면 위에서 3:1 이상(WCAG 1.4.11)이고 theme.css 에 그려진다', () => {
+  const [group, step] = focusRing.color.split('-');
+  for (const [name, theme] of [['라이트', light], ['다크', dark]]) {
+    for (const bg of ['white', 'gray.50', 'gray.100']) {
+      const ratio = contrast(theme[group][step], pick(theme, bg));
+      assert.ok(ratio >= 3, `${name} ${focusRing.color} on ${bg} = ${ratio.toFixed(2)}:1`);
+    }
+  }
+  assert.match(render(), new RegExp(`:focus-visible \\{\\s*outline: ${focusRing.width}px solid var\\(--color-${focusRing.color}\\)`));
 });

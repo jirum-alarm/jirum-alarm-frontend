@@ -150,7 +150,7 @@ function LoginOptionButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`flex h-12 w-full items-center justify-center gap-2 rounded-full font-semibold whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-50 ${LOGIN_BUTTON_STYLE[method]}`}
+      className={`flex h-12 w-full items-center justify-center gap-2 rounded-full font-semibold whitespace-nowrap transition-colors disabled:opacity-50 ${LOGIN_BUTTON_STYLE[method]}`}
     >
       {isLoading ? (
         <LoadingSpinner className="size-5 shrink-0" />

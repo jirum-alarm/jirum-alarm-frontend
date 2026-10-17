@@ -1,7 +1,7 @@
 'use client';
 
 import { Provider as JotaiProvider } from 'jotai';
-import { LazyMotion } from 'motion/react';
+import { LazyMotion, MotionConfig } from 'motion/react';
 import dynamic from 'next/dynamic';
 import Script from 'next/script';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
@@ -63,24 +63,27 @@ export const AppProvider = ({ children, device, isLoggedIn, isGuest }: Props) =>
         <MSW />
       )}
       <LazyMotion features={loadMotionFeatures}>
-        <JotaiProvider>
-          <ServerStateProvider device={device} isLoggedIn={isLoggedIn} isGuest={isGuest}>
-            <ReactQueryProviders>
-              {IS_PRD ? <DeviceId /> : null}
-              <ClarityProvider />
-              <EntryTracker />
-              <WebVitalsReporter />
-              <ProductCardTracker />
-              <NuqsAdapter>{children}</NuqsAdapter>
-              <LazyLoginModal />
-              <LazyPushChannelSheet />
-              <BrowserHandoffArrival />
-              <AppHandoffLanding />
-              <KakaoAppOpen />
-            </ReactQueryProviders>
-          </ServerStateProvider>
-        </JotaiProvider>
-        <Toaster />
+        {/* OS 「동작 줄이기」를 켠 사람에겐 움직임(위치·크기)을 끄고 투명도만 남긴다 — Skeleton motion-safe 와 같은 규칙. */}
+        <MotionConfig reducedMotion="user">
+          <JotaiProvider>
+            <ServerStateProvider device={device} isLoggedIn={isLoggedIn} isGuest={isGuest}>
+              <ReactQueryProviders>
+                {IS_PRD ? <DeviceId /> : null}
+                <ClarityProvider />
+                <EntryTracker />
+                <WebVitalsReporter />
+                <ProductCardTracker />
+                <NuqsAdapter>{children}</NuqsAdapter>
+                <LazyLoginModal />
+                <LazyPushChannelSheet />
+                <BrowserHandoffArrival />
+                <AppHandoffLanding />
+                <KakaoAppOpen />
+              </ReactQueryProviders>
+            </ServerStateProvider>
+          </JotaiProvider>
+          <Toaster />
+        </MotionConfig>
       </LazyMotion>
       <FCMConfig />
     </>

@@ -124,7 +124,7 @@ const KeywordItem = ({
                   <label
                     key={choice.label}
                     className={cn(
-                      'flex cursor-pointer items-start gap-3 rounded-lg border px-3 py-3 has-focus-visible:ring-2 has-focus-visible:ring-gray-400',
+                      'has-focus-visible:outline-secondary-500 flex cursor-pointer items-start gap-3 rounded-lg border px-3 py-3 has-focus-visible:outline-2 has-focus-visible:outline-offset-2',
                       selected ? 'border-gray-900' : 'border-gray-200',
                     )}
                   >

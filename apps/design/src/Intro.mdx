@@ -11,7 +11,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 값은 아래층에서 위층으로만 흐른다. 위층은 아래층의 **이름**만 쓴다.
 
-- ① **토큰** — 색·글자 크기·모서리·그림자·차트 색. 원본 `packages/design-system/tokens.js` → 여기 「기초」
+- ① **토큰** — 색·글자 크기·모서리·그림자·차트 색·포커스 링. 원본 `packages/design-system/tokens.js` → 여기 「기초」(아이콘 전체도 「기초/아이콘」)
 - ② **레시피** — 부품 모양(클래스 문자열). web·앱이 같은 값을 읽는다. 원본 `recipes.js` → 「레시피」
 - ③ **부품** — 플랫폼별 컴포넌트(web DOM·앱 RN)와 언제 쓰나. 목록 `catalog.js` → 「소개/부품 지도」·「components」
 - ④ **조립 규칙** — 화면 여백·섹션 간격·조작 높이·아이콘 크기. 원본 `layout.js` → 「조립 규칙」
@@ -30,5 +30,6 @@ import { Meta } from '@storybook/addon-docs/blocks';
 - 모든 스토리가 **라이트·다크 두 번** 렌더되고, axe 접근성 검사(대비 AA·이름 없는 버튼·라벨 없는 입력칸)를 통과해야 한다.
 - 조작 시나리오(play 함수)가 있는 스토리는 눌러 보고 결과를 확인한다(스위치가 켜지는지, 비활성 버튼이 안 눌리는지).
 - 린트가 hex·기본 팔레트·임의 크기를 막고, 토큰 테스트가 theme.css·다크 키·대비를 본다.
+- 앱(RN) 부품은 jest 가 놀이터 데모를 라이트·다크로 그려 본다(`apps/mobile/__tests__/design-system-demos-render.test.tsx`).
 
 로컬: `pnpm --filter design storybook`(만지기) · `pnpm --filter design test:stories`(검증).

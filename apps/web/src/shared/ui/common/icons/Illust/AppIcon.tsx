@@ -71,6 +71,7 @@ const AppIcon = () => {
           gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="#233144" />
+          {/* eslint-disable-next-line no-restricted-syntax -- 앱 아이콘 남색 바탕(브랜드 그림, 테마 무관) */}
           <stop offset="1" stopColor="#101828" />
         </linearGradient>
         <linearGradient

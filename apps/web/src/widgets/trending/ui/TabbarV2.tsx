@@ -73,7 +73,7 @@ const defaultStyles: Required<TabBarStyles> = {
   tabList: 'relative flex gap-2.5 pc:justify-center',
   // 탭 모양은 recipes 의 tab.brand(앱 CategoryTabBar 와 같은 클래스). PC 만 한 단계 키운다.
   tabTrigger: {
-    base: `relative shrink-0 whitespace-nowrap transition-all duration-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${tab.size.md} pc:h-10 pc:text-lg`,
+    base: `relative shrink-0 whitespace-nowrap transition-all duration-400 ${tab.size.md} pc:h-10 pc:text-lg`,
     active: `${tab.brand.selected.box} ${tab.brand.selected.text}`,
     inactive: `${tab.brand.idle.box} ${tab.brand.idle.text} ${tab.brand.idle.hover}`,
   },

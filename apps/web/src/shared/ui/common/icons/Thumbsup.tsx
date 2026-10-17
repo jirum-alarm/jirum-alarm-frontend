@@ -16,7 +16,7 @@ const SvgThumbsup = ({
   ...props
 }: SvgThumbsupProps) => {
   const fillColor = active ? 'var(--color-secondary-50)' : fill;
-  const lineColor = active ? '#467DFB' : line;
+  const lineColor = active ? 'var(--color-secondary-500)' : line;
 
   return (
     <svg
