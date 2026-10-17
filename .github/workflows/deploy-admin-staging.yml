@@ -103,13 +103,20 @@ jobs:
 
       - name: Commit files
         working-directory: infra
+        env:
+          HEAD_MSG: ${{ github.event.head_commit.message }}
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "github-actions"
           git add .
           # 같은 이미지 태그가 이미 들어가 있으면(같은 커밋을 다른 배포가 먼저 냄) 바꿀 게 없다 — 성공으로 끝낸다.
           if git diff --cached --quiet; then echo "image tag already up to date"; exit 0; fi
-          git commit -m "Update image tag"
+          # 무엇이 나갔나를 gitops git log 한 줄로 — 앱/환경·옛→새 태그·소스 커밋 (getmiso release 기록 차용, 2026-10-17)
+          d=$(git diff HEAD -U0)
+          what=$(git diff HEAD --name-only | head -1 | cut -d/ -f2,4)
+          old=$(printf '%s\n' "$d" | sed -n 's/^-.*newTag: *//p' | head -1 | tr -d '"')
+          new=$(printf '%s\n' "$d" | sed -n 's/^+.*newTag: *//p' | head -1 | tr -d '"')
+          git commit -m "deploy($what): ${old:-?} → ${new:-?}" -m "$GITHUB_REPOSITORY@${GITHUB_SHA::8} $(printf '%s\n' "$HEAD_MSG" | head -1)"
           # 여러 앱 배포가 같은 gitops main 에 동시에 민다 — 뒤처지면 거절된다(2026-10-07 v1.47.0 web 이 admin 과 겹쳐 실패).
           # 따라잡고 다시 민다. 같은 파일을 동시에 고쳐 충돌이면 그때만 실패.
           for i in 1 2 3 4 5; do
