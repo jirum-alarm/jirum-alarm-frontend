@@ -220,11 +220,10 @@ describe('스켈레톤 — web Skeleton·앱 SkeletonBox 가 같은 gray-200', (
   });
 });
 
-describe('정보 상자 — web 3곳·앱 1곳이 같은 infoBox', () => {
+describe('정보 상자 — web 2곳·앱 1곳이 같은 infoBox', () => {
   it.each([
     ['web', 'features/product-detail/ui/DealEvidenceBlock.tsx'],
     ['web', 'app/(desktop-ready)/deals/[slug]/page.tsx'],
-    ['web', 'shared/ui/ShareSheet.tsx'],
     ['앱', 'screens/detail/ui/DealEvidenceBlock.tsx'],
   ])('%s %s', (side, file) => {
     const src = side === 'web' ? web(file) : native(file);

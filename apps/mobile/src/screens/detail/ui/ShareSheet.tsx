@@ -143,6 +143,11 @@ export default function ShareSheet({
     ]).start(({finished}) => finished && setMounted(false));
   }, [visible, overlay, sheet]);
 
+  // 링크 칸에 보이는 주소 — 프로토콜·utm 을 뺀 사람이 읽는 꼴.
+  const displayUrl = `${SERVICE_URL.replace(/^https?:\/\//, '')}${
+    sharePath ?? `/products/${productId}`
+  }`;
+
   const shareTitle = title.trim() ? `${title.trim()} | 지름알림` : '지름알림';
 
   const copyLink = (url: string) => {
@@ -350,30 +355,34 @@ export default function ShareSheet({
             ))}
           </View>
 
-          <Pressable
-            onPress={() => share('copy')}
-            disabled={!!pending}
-            android_ripple={{color: c.gray[200]}}
-            className="mx-5 mt-5 flex-row items-center rounded-2xl bg-gray-50 px-3.5"
-            style={{height: 56}}
-            accessibilityRole="button"
-            accessibilityLabel={copied ? '링크 복사됨' : '링크 복사'}>
-            <View className="h-9 w-9 items-center justify-center rounded-full bg-white">
-              {copied ? (
-                <CheckIcon />
-              ) : (
-                <ShareLink width={18} height={18} color={c.gray[700]} />
-              )}
-            </View>
-            <Text className="ml-3 flex-1 text-base font-medium text-gray-900">
-              링크 복사
+          {/* 링크 칸 — 무엇이 복사되는지 보이고 결과(복사됨)도 칸 안에서 보인다. web ShareSheet 와 같은 모양. */}
+          <View className="mx-5 mt-6 h-14 flex-row items-center rounded-2xl bg-gray-50 pl-4 pr-2">
+            <ShareLink width={16} height={16} color={c.gray[500]} />
+            <Text
+              className="ml-2.5 flex-1 text-sm text-gray-700"
+              numberOfLines={1}>
+              {displayUrl}
             </Text>
-            {copied ? (
-              <Text className="text-13 font-medium text-secondary-600">
-                복사됨
+            <Pressable
+              onPress={() => share('copy')}
+              disabled={!!pending}
+              hitSlop={6}
+              className={cn(
+                'ml-2 h-10 flex-row items-center rounded-xl px-3.5',
+                copied ? 'bg-secondary-50' : 'bg-gray-900',
+              )}
+              accessibilityRole="button"
+              accessibilityLabel={copied ? '링크 복사됨' : '링크 복사'}>
+              {copied ? <CheckIcon /> : null}
+              <Text
+                className={cn(
+                  'text-sm font-semibold',
+                  copied ? 'ml-1 text-secondary-700' : 'text-white',
+                )}>
+                {copied ? '복사됨' : '링크 복사'}
               </Text>
-            ) : null}
-          </Pressable>
+            </Pressable>
+          </View>
         </Animated.View>
       </View>
     </Modal>

@@ -7,7 +7,7 @@ import ShareSheet from './ShareSheet';
 import type { Meta, StoryObj } from '@storybook/react';
 
 /**
- * 공유 시트 — 카카오톡·링크 복사·X·스레드(+기기 공유). 겉은 recipes `sheet`(PC 는 가운데 카드).
+ * 공유 시트 — 미리보기 → 앱 줄(카톡·X·스레드·다른 앱) → 링크 칸(복사 결과는 칸 안 「복사됨」). 겉은 recipes `sheet`(PC 는 가운데 모달).
  * 앱은 screens/detail/ui/ShareSheet(같은 채널 순서). 채널을 누르면 실제 SDK 가 열리므로 여기선 여는 것까지만 본다.
  */
 const meta = {
@@ -39,6 +39,8 @@ export default meta;
 export const Open: StoryObj<typeof meta> = {
   play: async ({ canvasElement }) => {
     await userEvent.click(within(canvasElement).getByRole('button', { name: '공유하기' }));
-    await expect(await screen.findByText('링크 복사')).toBeVisible();
+    const dialog = await screen.findByRole('dialog', { name: '공유하기' });
+    await expect(within(dialog).getByRole('button', { name: '카카오톡으로 공유' })).toBeVisible();
+    await expect(within(dialog).getByRole('button', { name: '링크 복사' })).toBeVisible();
   },
 };

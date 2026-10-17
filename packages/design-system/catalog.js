@@ -170,7 +170,7 @@ const catalog = [
   {
     id: 'infoBox',
     name: '정보 상자',
-    use: '본문 안 옅은 면 + 테두리 상자(가격 판정 요약·공유 미리보기)',
+    use: '본문 안 옅은 면 + 테두리 상자(가격 판정 요약)',
     recipe: 'infoBox',
     web: null,
     app: null,
@@ -284,7 +284,7 @@ const catalog = [
   {
     id: 'shareSheet',
     name: '공유 시트',
-    use: '카카오톡·링크 복사·X·스레드로 공유. 겉은 바텀시트(PC 는 가운데 카드)',
+    use: '미리보기 → 앱 줄(카톡 첫 칸·X·스레드·다른 앱) → 주소가 보이는 링크 복사 칸. 겉은 바텀시트(PC 는 가운데 모달)',
     recipe: null,
     web: `${W}shared/ui/ShareSheet.tsx`,
     app: `${A}screens/detail/ui/ShareSheet.tsx`,

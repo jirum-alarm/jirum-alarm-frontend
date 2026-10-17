@@ -1,7 +1,8 @@
 'use client';
 
-import { infoBox } from '@jirum/design-system/recipes';
-import { Dialog } from 'radix-ui';
+import { layout } from '@jirum/design-system/layout';
+import { sheet, text } from '@jirum/design-system/recipes';
+import { Dialog, VisuallyHidden } from 'radix-ui';
 import { useEffect, useState } from 'react';
 import { Drawer } from 'vaul';
 
@@ -17,12 +18,19 @@ import {
 } from '@/shared/lib/share';
 import { isInApp, shareNative, triggerHaptic } from '@/shared/lib/webview';
 import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
-import { Share, ShareLink, ShareThreads, ShareX } from '@/shared/ui/common/icons';
+import {
+  Close as CloseIcon,
+  Share,
+  ShareLink,
+  ShareThreads,
+  ShareX,
+} from '@/shared/ui/common/icons';
 import SvgKakao from '@/shared/ui/common/icons/login/Kakao';
 import { useToast } from '@/shared/ui/common/Toast';
 
-// 공유 시트. 채널 순서 = 국내 사용 빈도(카톡 1순위). "기타"는 OS 시트 폴백이라
-// navigator.share 가 없는 환경(데스크톱 대부분)에서는 렌더하지 않는다.
+// 공유 시트(모바일 바텀시트 / PC 가운데 모달). 위계는 앱 ShareSheet 와 같다:
+// ① 무엇을(미리보기) ② 어디로(앱 줄 — 카톡 첫 칸) ③ 링크(주소가 보이는 복사 칸, 결과는 칸 안에서).
+// "다른 앱"은 OS 시트 폴백이라 navigator.share 가 없는 환경(데스크톱 대부분)에서는 렌더하지 않는다.
 type Props = {
   children: React.ReactNode;
   title: string;
@@ -50,11 +58,24 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
   const [canNativeShare, setCanNativeShare] = useState(false);
   // eslint-disable-next-line react-hooks/set-state-in-effect -- 위 주석대로 navigator 는 브라우저에만 있어 하이드레이션 뒤에 판정한다.
   useEffect(() => setCanNativeShare(isInApp() || !!navigator.share), []);
+  const [copied, setCopied] = useState(false);
+  const [thumbFailed, setThumbFailed] = useState(false);
+  // 링크 칸에 보이는 주소 — 프로토콜·쿼리(utm 등)를 뺀 사람이 읽는 꼴. 열릴 때 계산(SSR 엔 window 가 없다).
+  const [displayUrl, setDisplayUrl] = useState('');
+
+  const onOpenChange = (next: boolean) => {
+    setOpen(next);
+    if (!next) return;
+    setCopied(false);
+    setThumbFailed(false);
+    const { host, pathname } = window.location;
+    setDisplayUrl(`${host}${pathname === '/' ? '' : pathname}`);
+  };
 
   const copyLink = async (url: string) => {
     try {
       await navigator.clipboard.writeText(buildShareMessage(title, url, description));
-      toast.success(<>링크가 클립보드에 복사되었어요!</>);
+      setCopied(true);
     } catch {
       toast.error(<>복사에 실패했어요. 주소창의 링크를 직접 복사해주세요.</>);
     }
@@ -87,7 +108,9 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
         if (opened) opened.opener = null;
         else await copyLink(url);
       } else {
+        // 복사는 시트 안에서 끝나는 동작 — 닫지 않고 칸에 「복사됨」을 보여 준다.
         await copyLink(url);
+        return;
       }
       setOpen(false);
     } catch (e) {
@@ -104,16 +127,23 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
     }
   };
 
-  // 브랜드 배경색 원형 + 흰 로고. X·Threads 공식 배경은 검정, 링크 복사는 브랜드가 아니라 회색.
-  // 다크에선 검은 원이 시트 바탕에 묻혀 앱 ShareSheet 처럼 회색 원(gray-100)으로 둔다.
-  // a11y = 화면 읽기 이름. 예전엔 라벨 뒤에 괄호 조사 「(으)로」를 붙여 「스레드 으 로 공유」로 읽혔다 → 조사까지 적는다.
+  // 카톡은 앱 줄 첫 칸(국내 1순위) — 앱 ShareSheet 와 같은 위계: 무엇을 → 어디로 → 링크.
+  // X·Threads 공식 배경은 검정이지만 다크에선 시트 바탕에 묻혀 회색 원(gray-100)으로 둔다.
+  // a11y = 화면 읽기 이름. 조사까지 적는다(예전 「스레드 으 로 공유」).
   const channels: {
-    c: ShareChannel;
+    c: Exclude<ShareChannel, 'copy'>;
     label: string;
     a11y: string;
     icon: React.ReactNode;
     badge: string;
   }[] = [
+    {
+      c: 'kakao',
+      label: '카카오톡',
+      a11y: '카카오톡으로 공유',
+      icon: <SvgKakao width={26} height={26} />,
+      badge: 'bg-kakao',
+    },
     {
       c: 'x',
       label: 'X',
@@ -128,65 +158,50 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
       icon: <ShareThreads width={22} height={22} className="text-fixed-white" />,
       badge: 'bg-black dark:bg-gray-100',
     },
-    {
-      c: 'copy',
-      label: '링크 복사',
-      a11y: '링크 복사',
-      icon: <ShareLink width={20} height={20} className="text-gray-600" />,
-      badge: 'bg-gray-100',
-    },
     // OS 시트 폴백(문자·인스타DM 등). 지원 안 하는 환경(데스크톱 대부분)에선 빼야
-    // 눌러도 아무 일 없는 타일이 안 생긴다. Share 글리프 재사용 — 전용 아이콘 없음.
+    // 눌러도 아무 일 없는 칸이 안 생긴다.
     ...(canNativeShare
       ? ([
           {
             c: 'native' as const,
             label: '다른 앱',
             a11y: '다른 앱으로 공유',
-            icon: <Share width={20} height={20} className="text-gray-600" />,
+            icon: <Share width={20} height={20} className="text-gray-700" />,
             badge: 'bg-gray-100',
           },
         ] as const)
       : []),
   ];
 
-  // 무엇을 공유하는지 보여주는 프리뷰. 링크만 있으면 뭘 보내는지 알 수 없다.
+  // 무엇을 공유하는지 — 링크만 있으면 뭘 보내는지 알 수 없다.
   const preview = (
-    <div className={cn('mb-3 flex items-center gap-2.5 p-2.5', infoBox)}>
-      {imageUrl ? (
+    <div className="flex min-w-0 flex-1 items-center gap-3">
+      {imageUrl && !thumbFailed ? (
         // 외부 CDN 썸네일이라 next/image 대신 img — 도메인 화이트리스트 없이 뜨게.
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={imageUrl}
           alt=""
-          className="size-11 flex-none rounded-lg object-cover"
-          onError={(e) => {
-            e.currentTarget.style.display = 'none';
-          }}
+          className="size-14 flex-none rounded-xl bg-gray-100 object-cover"
+          onError={() => setThumbFailed(true)}
         />
-      ) : null}
+      ) : (
+        <span className="flex size-14 flex-none items-center justify-center rounded-xl bg-gray-100">
+          <Share width={20} height={20} className="text-gray-400" />
+        </span>
+      )}
       <div className="min-w-0">
-        <div className="line-clamp-2 text-xs font-semibold break-all">{title}</div>
-        {description ? <div className="mt-0.5 text-xs font-bold">{description}</div> : null}
+        <p className={cn('line-clamp-2 break-all', text.label)}>{title}</p>
+        {description ? (
+          <p className={cn('mt-0.5 line-clamp-1', text.caption)}>{description}</p>
+        ) : null}
       </div>
     </div>
   );
 
-  // 시트/모달이 공유하는 본문. 두 껍데기 모두 같은 위계(카톡 풀너비 → 나머지 균등).
   const body = (
     <>
-      {preview}
-      {/* 카카오 브랜드 색 = 토큰 kakao(로그인 버튼·앱과 같은 값) */}
-      <button
-        type="button"
-        onClick={() => share('kakao')}
-        disabled={!!pending}
-        className="text-fixed-900 bg-kakao flex h-[46px] w-full items-center justify-center gap-1.5 rounded-xl text-sm font-bold hover:brightness-95 disabled:opacity-60"
-      >
-        <SvgKakao width={20} height={20} />
-        {pending === 'kakao' ? '카카오톡 여는 중…' : '카카오톡으로 공유'}
-      </button>
-      <div className="mt-2 flex gap-2">
+      <div className="mt-6 flex">
         {channels.map(({ c, label, a11y, icon, badge }) => (
           <button
             key={c}
@@ -194,39 +209,78 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
             onClick={() => share(c)}
             disabled={!!pending}
             aria-label={a11y}
-            className="group flex flex-1 flex-col items-center gap-1.5 rounded-xl py-1 disabled:opacity-60"
+            className="group flex flex-1 flex-col items-center gap-2 rounded-xl py-1 disabled:opacity-60"
           >
             <span
-              className={`flex size-11 items-center justify-center rounded-full transition-transform group-active:scale-95 ${badge}`}
+              className={cn(
+                'flex size-14 items-center justify-center rounded-full transition group-hover:brightness-95 group-active:scale-95',
+                badge,
+              )}
             >
               {icon}
             </span>
-            <span className="text-11 font-medium text-gray-700">{label}</span>
+            <span className="text-xs font-medium text-gray-700">
+              {pending === c ? '여는 중…' : label}
+            </span>
           </button>
         ))}
+      </div>
+
+      {/* 링크 칸 — 무엇이 복사되는지 보이고, 결과도 시트 안에서 바로 보인다(토스트에 기대지 않음). */}
+      <div className="mt-6 flex h-12 items-center gap-2 rounded-xl bg-gray-50 pr-1.5 pl-3.5">
+        <ShareLink width={16} height={16} className="flex-none text-gray-500" />
+        <span className="min-w-0 flex-1 truncate text-sm text-gray-700">{displayUrl}</span>
+        <button
+          type="button"
+          onClick={() => share('copy')}
+          disabled={!!pending}
+          aria-live="polite"
+          className={cn(
+            'h-9 flex-none rounded-lg px-3.5 text-sm font-semibold transition-colors disabled:opacity-60',
+            copied
+              ? 'text-secondary-700 bg-secondary-50'
+              : 'bg-gray-900 text-white hover:bg-gray-800',
+          )}
+        >
+          {copied ? '복사됨' : '링크 복사'}
+        </button>
       </div>
     </>
   );
 
   // PC 는 센터 모달, 모바일은 바텀시트 — 손이 닿는 위치가 달라 껍데기를 나눈다.
+  const header = (CloseButton: typeof Dialog.Close | typeof Drawer.Close) => (
+    <div className="flex items-start gap-2">
+      {preview}
+      <CloseButton
+        aria-label="닫기"
+        className="-mt-1 -mr-2 flex size-9 flex-none items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+      >
+        <CloseIcon width={20} height={20} />
+      </CloseButton>
+    </div>
+  );
+
+  // PC 는 센터 모달, 모바일은 바텀시트 — 손이 닿는 위치가 달라 껍데기만 나눈다.
   if (isDesktop) {
     return (
-      <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Root open={open} onOpenChange={onOpenChange}>
         <Dialog.Trigger asChild>{children}</Dialog.Trigger>
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 z-80 bg-black/30" />
-          <Dialog.Content className="fixed top-1/2 left-1/2 z-80 w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-5 shadow-xl outline-hidden">
-            <div className="mb-3 flex items-center justify-between">
-              <Dialog.Title asChild>
-                <h3 className="text-base font-bold">공유하기</h3>
-              </Dialog.Title>
-              <Dialog.Close
-                aria-label="닫기"
-                className="-m-2 flex size-9 items-center justify-center rounded-full p-2 text-lg leading-none text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-              >
-                ✕
-              </Dialog.Close>
-            </div>
+          <Dialog.Overlay
+            className={cn('fixed inset-0', sheet.overlay, layout.layerClass.overlay)}
+          />
+          <Dialog.Content
+            aria-describedby={undefined}
+            className={cn(
+              'fixed top-1/2 left-1/2 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-5 shadow-xl outline-hidden dark:border dark:border-gray-100',
+              layout.layerClass.overlay,
+            )}
+          >
+            <VisuallyHidden.Root asChild>
+              <Dialog.Title>공유하기</Dialog.Title>
+            </VisuallyHidden.Root>
+            {header(Dialog.Close)}
             {body}
           </Dialog.Content>
         </Dialog.Portal>
@@ -235,15 +289,16 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
   }
 
   return (
-    <Drawer.Root open={open} onOpenChange={setOpen}>
+    <Drawer.Root open={open} onOpenChange={onOpenChange}>
       <Drawer.Trigger asChild>{children}</Drawer.Trigger>
       {/* pb 에 safe-area 를 더해야 홈 인디케이터가 있는 기기에서 마지막 행이 안 잘린다. */}
-      <BottomSheetContent handle className="pb-[calc(env(safe-area-inset-bottom)+20px)]">
-        <Drawer.Title asChild>
-          <h3 className="px-5 pb-3 text-base font-bold">공유하기</h3>
-        </Drawer.Title>
-
-        <div className="px-5">{body}</div>
+      <BottomSheetContent
+        handle
+        srTitle="공유하기"
+        className="px-5 pb-[calc(env(safe-area-inset-bottom)+20px)]"
+      >
+        {header(Drawer.Close)}
+        {body}
       </BottomSheetContent>
     </Drawer.Root>
   );
