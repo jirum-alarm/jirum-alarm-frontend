@@ -41,6 +41,10 @@
             "comment": "검색 결과(?keyword=) — 앱 검색 화면이 받는다"
           },
           {
+            "/": "/keywords/*",
+            "comment": "키워드 핫딜 — 앱 KeywordHubScreen(1.5.5+), 옛 앱은 앱 안 웹뷰. 목록 /keywords 는 앱 화면이 없어 웹"
+          },
+          {
             "/": "/deals/*",
             "exclude": true,
             "comment": "핫딜 최저가는 앱이 열지 않는다(tab-routing) — 웹에서 연다"

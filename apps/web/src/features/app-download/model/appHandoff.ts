@@ -40,9 +40,10 @@ const WWW_ORIGIN = 'https://www.jirum-alarm.com';
 /**
  * apps/web/public/.well-known/apple-app-site-association 의 components 와 맞춘다.
  * `/deals` 는 앱이 열지 않는 페이지라(tab-routing) AASA 에서 뺐다 — 여기 남기면 앱이 있는 사람도 웹에 떨어져
- * #handoff 를 보고 App Store 로 간다.
+ * #handoff 를 보고 App Store 로 간다. `/keywords` 는 허브 하나(`/keywords/{slug}`)만 — 목록 화면은 앱에 없다(2026-10-17).
  */
-const UNIVERSAL_LINK_PATH = /^\/(products|community|trending|curation|toss|search)(\/|$)/;
+const UNIVERSAL_LINK_PATH =
+  /^\/(?:(?:products|community|trending|curation|toss|search)(?:\/|$)|keywords\/.)/;
 
 /**
  * 앱 화면이 읽는 쿼리만 싣는다 — 검색어(`/search?keyword=`)·탭(`/toss?tab=`·`/trending/*?tab=`).

@@ -70,6 +70,12 @@ test('iOS: AASA 범위 밖(홈·알림)은 유니버설 링크가 안 되니 App
   assert.equal(iosOpenAppUrl('/alarm', 'alarm_tab'), null);
   // 접두사만 같은 경로에 속지 않는다.
   assert.equal(iosOpenAppUrl('/productsearch', 'banner'), null);
+  // 키워드 허브는 하나씩만 앱이 연다 — 목록(/keywords)은 앱 화면이 없다(AASA 와 같은 범위).
+  assert.equal(
+    iosOpenAppUrl('/keywords/%EC%82%BC%EB%8B%A4%EC%88%98', 'banner'),
+    'https://www.jirum-alarm.com/keywords/%EC%82%BC%EB%8B%A4%EC%88%98#handoff=banner',
+  );
+  assert.equal(iosOpenAppUrl('/keywords', 'banner'), null);
   assert.match(
     appHandoffHref('apple', '/', 'banner', { iosUniversalLink: true }),
     /^https:\/\/apps\.apple\.com\//,

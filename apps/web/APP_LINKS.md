@@ -38,5 +38,11 @@ iOS 는 범위를 서버(AASA components)가 정하지만 Android 는 앱의 int
 `android:path` 로 `/toss`·`/community`·`/trending`·`/search` 를 더하고, 앱이 열지 않는 `/deals/` 는 뺐다(AASA 와 같은 범위).
 1.5.3 이하 바이너리는 업데이트 전까지 이 네 경로가 브라우저로 열린다.
 
+### `/keywords/*` — iOS 는 10/17 바로, Android 는 1.5.6 부터
+
+키워드 핫딜 화면(앱 1.5.5+ KeywordHubScreen)이 생겨 AASA 에 `/keywords/*` 를 더했다(목록 `/keywords` 는 앱 화면이 없어 뺀다).
+옛 앱(1.5.4 이하)은 모르는 경로를 앱 안 웹뷰로 연다(tab-routing `allowWebViewRoute`). Android 는 매니페스트 `pathPrefix="/keywords/"`
+가 필요한 네이티브 변경이라 `native/1.5.6-batch` 에 넣었다 — 그 빌드가 나가기 전까지 Android 는 브라우저로 열린다.
+
 웹 「앱 열기」 버튼(`features/app-download/model/appHandoff.ts`)은 이 검증과 무관하다 — intent 에 package 를
 지정해 검증 없이도 앱으로 간다.
