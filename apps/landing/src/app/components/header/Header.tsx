@@ -10,7 +10,7 @@ const NAV_LINKS = [
   { path: PAGE.HOME, label: '홈' },
   { path: PAGE.TRENDING_LIVE, label: '실시간' },
   { path: PAGE.TRENDING_RANKING, label: '랭킹' },
-  { path: PAGE.DEALS, label: '최저가' },
+  { path: PAGE.KEYWORDS, label: '키워드' },
   { path: PAGE.COMMUNITY, label: '커뮤니티' },
 ];
 

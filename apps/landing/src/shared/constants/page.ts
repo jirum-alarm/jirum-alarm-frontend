@@ -4,7 +4,7 @@ export enum PAGE {
   HOME = '/',
   TRENDING_LIVE = '/trending/live',
   TRENDING_RANKING = '/trending/ranking',
-  DEALS = '/deals',
+  KEYWORDS = '/keywords',
   COMMUNITY = '/community',
   PRODUCT_NEW = '/products/new',
 
