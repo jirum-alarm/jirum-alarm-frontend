@@ -15,6 +15,7 @@ import { markKakaoBridgeSeen, seenKakaoBridgeToday } from '@/shared/lib/kakao-br
 import { shouldUseKakaoBridge } from '@/shared/lib/kakao-bridge-ua';
 import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
+import { runWhenSeen } from '@/shared/lib/run-when-seen';
 import { Alert } from '@/shared/ui/common/icons';
 import { useToast } from '@/shared/ui/common/Toast';
 
@@ -145,15 +146,19 @@ export default function PostPurchaseKeywordPrompt({
   // 클릭만 재면 "안 눌렸다"가 배너 탓인지 노출이 적어서인지 못 가른다. 노출도 같이 보낸다.
   // done 은 제외 — 등록 완료 문구는 새로운 권유 노출이 아니라 같은 배너의 결과 상태라
   // 여기서 세면 노출이 부풀어 등록률(클릭/노출)이 실제보다 낮게 나온다.
+  // 쇼핑몰 창이 앞으로 오면 아무도 못 본 노출이 된다 — 실제로 보일 때만 센다(run-when-seen.ts).
+  // 카톡 「하루 한 번」 기록도 본 때에 남긴다 — 못 본 권유로 그날 기회를 쓰지 않게.
   useEffect(() => {
     if (!visible || done || typeof window === 'undefined') return;
-    (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
-      event: 'keyword_prompt_view',
-      keyword,
-      // 첫 방문·브라우저 넘기기와 같은 이벤트라 자리로 가른다.
-      placement,
+    return runWhenSeen(() => {
+      (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+        event: 'keyword_prompt_view',
+        keyword,
+        // 첫 방문·브라우저 넘기기와 같은 이벤트라 자리로 가른다.
+        placement,
+      });
+      if (kakaoBridge) markKakaoBridgeSeen(localStorage);
     });
-    if (kakaoBridge) markKakaoBridgeSeen(localStorage);
   }, [visible, done, keyword, placement, kakaoBridge]);
 
   if (!visible) return null;

@@ -9,6 +9,7 @@ import {
   openOkachatDirect,
   pushOkachatEvent,
 } from '@/shared/lib/okachat';
+import { runWhenSeen } from '@/shared/lib/run-when-seen';
 import TalkLight from '@/shared/ui/common/icons/TalkLight';
 
 import type { BeautyRoomAssignment } from '../lib/useBeautyRoomAssignment';
@@ -35,9 +36,10 @@ export default function PostPurchaseKakaoPrompt({
   const link = beauty ? beautyRoom.beautyLink : OKACHAT_LINK;
   const exp = beautyRoom?.exp;
 
+  // 쇼핑몰 창이 앞으로 오면 이 카드는 아무도 못 본다 — 실제로 보일 때만 노출로 센다(run-when-seen.ts).
   useEffect(() => {
     if (!show) return;
-    pushOkachatEvent('okachat_prompt_view', 'after_purchase', room, exp);
+    return runWhenSeen(() => pushOkachatEvent('okachat_prompt_view', 'after_purchase', room, exp));
   }, [show, room, exp]);
 
   if (!show) return null;

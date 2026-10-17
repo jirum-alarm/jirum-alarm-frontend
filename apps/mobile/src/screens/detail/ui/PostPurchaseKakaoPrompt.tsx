@@ -1,5 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {View} from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import PressableScale from '@/shared/components/PressableScale';
@@ -31,11 +32,20 @@ export default function PostPurchaseKakaoPrompt({
   const room = beauty ? 'beauty' : 'hotdeal';
   const exp = beautyRoom?.exp;
 
-  // web PostPurchaseKakaoPrompt: show 가 켜질 때마다(구매 클릭 후 큐 차례).
+  // web PostPurchaseKakaoPrompt: show 가 켜질 때마다(구매 클릭 후 큐 차례). 단 구매 웹뷰가 위에 떠 있는 동안은
+  // 아무도 못 보니 상세로 돌아와 화면이 앞에 왔을 때 센다 — 예전엔 클릭 순간 세어 노출이 부풀었다(2026-10-17).
+  // 한 번 뜬 권유는 한 번만 센다 — 상세에서 다른 화면을 다녀와도 다시 세지 않게.
+  const focused = useIsFocused();
+  const counted = useRef(false);
   useEffect(() => {
-    if (!show) return;
+    if (!show) {
+      counted.current = false;
+      return;
+    }
+    if (!focused || counted.current) return;
+    counted.current = true;
     trackOkachatEvent('okachat_prompt_view', 'after_purchase', {room, exp});
-  }, [show, room, exp]);
+  }, [show, focused, room, exp]);
 
   if (!show) return null;
 

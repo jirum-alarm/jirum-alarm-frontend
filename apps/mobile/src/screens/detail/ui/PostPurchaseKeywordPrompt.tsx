@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {fixed} from '@jirum/design-system';
@@ -111,10 +112,18 @@ export default function PostPurchaseKeywordPrompt({
     setDone(false);
   }, [title]);
 
+  // 구매 웹뷰가 위에 떠 있는 동안은 못 보는 노출이다 — 상세가 앞에 왔을 때 센다(PostPurchaseKakaoPrompt 와 같다).
+  const focused = useIsFocused();
+  const counted = useRef(false);
   useEffect(() => {
-    if (!visible || done) return;
+    if (!visible || done) {
+      counted.current = false;
+      return;
+    }
+    if (!focused || counted.current) return;
+    counted.current = true;
     Analytics.track('keyword_prompt_view', {keyword});
-  }, [visible, done, keyword]);
+  }, [visible, done, focused, keyword]);
 
   if (!visible) return null;
 

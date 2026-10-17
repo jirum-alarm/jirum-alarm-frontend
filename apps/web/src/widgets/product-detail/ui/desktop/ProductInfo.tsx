@@ -2,7 +2,7 @@
 
 import { detailInfo } from '@jirum/design-system/recipes';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect } from 'react';
 
 import { UploaderType } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
@@ -11,11 +11,6 @@ import { hotdealTextMap } from '@/shared/config/hotdeal';
 import { cn } from '@/shared/lib/cn';
 import { pushDataLayerSoon } from '@/shared/lib/data-layer-soon';
 import { getEntry } from '@/shared/lib/entry';
-import {
-  buildPostPurchasePromptQueue,
-  hasJoinedOkachat,
-  type PostPurchasePromptKind,
-} from '@/shared/lib/okachat';
 import { pushRecentViewedProduct } from '@/shared/lib/recentViewedProducts';
 import Badge from '@/shared/ui/common/Badge';
 import Button from '@/shared/ui/common/Button';
@@ -38,6 +33,7 @@ import { formatDeliveryText } from '@/features/product-detail/lib/delivery-text'
 import { dealFreshnessAt, isSeenBasedFreshness } from '@/features/product-detail/lib/product-seo';
 import { buildProductShareDescription } from '@/features/product-detail/lib/share-card';
 import { useBeautyRoomAssignment } from '@/features/product-detail/lib/useBeautyRoomAssignment';
+import { usePostPurchasePrompts } from '@/features/product-detail/lib/usePostPurchasePrompts';
 import DealEvidenceBlock from '@/features/product-detail/ui/DealEvidenceBlock';
 import HotdealCriteriaBadge from '@/features/product-detail/ui/HotdealCriteriaBadge';
 import PostPurchaseKakaoPrompt from '@/features/product-detail/ui/PostPurchaseKakaoPrompt';
@@ -72,11 +68,13 @@ export default function ProductInfo({
   const displayData = tossData ?? ohouData;
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
   const displayTitle = hidePrice ? stripPriceFromTitle(product.title) : product.title;
-  const [promptQueue, setPromptQueue] = useState<PostPurchasePromptKind[]>([]);
-  const phase = promptQueue[0] ?? null;
-  const advancePrompt = () => setPromptQueue((q) => q.slice(1));
   // 화장품 상세 실험 beauty_detail_room_v1 — b 군은 구매 후 권유도 뷰티방(입장 기록도 뷰티방 것으로 본다).
   const beautyRoom = useBeautyRoomAssignment(product.categoryId);
+  const {
+    phase,
+    start: startPrompts,
+    advance: advancePrompt,
+  } = usePostPurchasePrompts({ productId, isUserLogin, beautyRoom });
 
   useEffect(() => {
     pushRecentViewedProduct({
@@ -283,11 +281,7 @@ export default function ProductInfo({
             href={product.detailUrl ?? ''}
             // 모바일 BottomCTA 와 동일 — GTM Click URL 빈값 문제로 dataLayer 명시 전송 (2026-07-20)
             onClick={() => {
-              setPromptQueue(
-                buildPostPurchasePromptQueue(isUserLogin, {
-                  joined: hasJoinedOkachat(beautyRoom?.arm === 'b' ? 'beauty' : 'hotdeal'),
-                }),
-              );
+              startPrompts();
               // 푸시로 들어온 상세면 그 발송 nid 도 — 알림 → 구매 귀속(notification-origin).
               const nid = peekNotificationOrigin(productId);
               void ProductService.collectPurchaseClick({

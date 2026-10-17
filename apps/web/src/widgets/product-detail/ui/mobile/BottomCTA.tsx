@@ -2,13 +2,8 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
-import {
-  buildPostPurchasePromptQueue,
-  hasJoinedOkachat,
-  type PostPurchasePromptKind,
-} from '@/shared/lib/okachat';
 import Button from '@/shared/ui/common/Button';
 import TopButton from '@/shared/ui/TopButton';
 
@@ -16,6 +11,7 @@ import { ProductQueries } from '@/entities/product';
 
 import { LikeButton } from '@/features/product-actions/ui';
 import { useBeautyRoomAssignment } from '@/features/product-detail/lib/useBeautyRoomAssignment';
+import { usePostPurchasePrompts } from '@/features/product-detail/lib/usePostPurchasePrompts';
 import PostPurchaseKakaoPrompt from '@/features/product-detail/ui/PostPurchaseKakaoPrompt';
 import PostPurchaseKeywordPrompt from '@/features/product-detail/ui/PostPurchaseKeywordPrompt';
 
@@ -31,12 +27,13 @@ export default function BottomCTA({
   isUserLogin: boolean;
 }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
-  const [promptQueue, setPromptQueue] = useState<PostPurchasePromptKind[]>([]);
-
-  const phase = promptQueue[0] ?? null;
-  const advancePrompt = () => setPromptQueue((q) => q.slice(1));
   // 화장품 상세 실험 beauty_detail_room_v1 — b 군은 구매 후 권유도 뷰티방(입장 기록도 뷰티방 것으로 본다).
   const beautyRoom = useBeautyRoomAssignment(product?.categoryId);
+  const {
+    phase,
+    start: startPrompts,
+    advance: advancePrompt,
+  } = usePostPurchasePrompts({ productId, isUserLogin, beautyRoom });
 
   // 구매 버튼이 화면 안에 보이는지 한 번 잰다(삼성 인터넷 30 구매 클릭 급감 판정용, cta-visibility.ts).
   // 첫 화면 시트·주소창 애니메이션이 가라앉은 뒤에 잰다.
@@ -52,12 +49,8 @@ export default function BottomCTA({
   }, [productId, setMissingProduct]);
 
   const handlePurchaseClick = () => {
-    // 구매 링크는 target=_blank 라 유저는 이 페이지에 남는다. 그 순간에만 알림/오카방을 권한다.
-    setPromptQueue(
-      buildPostPurchasePromptQueue(isUserLogin, {
-        joined: hasJoinedOkachat(beautyRoom?.arm === 'b' ? 'beauty' : 'hotdeal'),
-      }),
-    );
+    // 구매 링크는 target=_blank 라 유저는 이 페이지로 돌아온다. 그때만 알림/오카방을 권한다.
+    startPrompts();
     recordPurchaseClick({ productId, product, source: 'detail_mobile' });
   };
 
