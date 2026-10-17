@@ -56,7 +56,7 @@
            검증이 통과하는 순간 웹 카카오 로그인 복귀(/login/callback/kakao)를 크롬이 앱으로 넘겨 웹 로그인이 깨진다
            (apps/web/APP_LINKS.md). 웹 「앱 열기」 버튼은 커스텀 스킴 intent 라 이 범위와 무관하다.
            pathPrefix 는 끝 슬래시까지 비교해 "/toss/" 가 실제 페이지 "/toss" 를 못 잡는다 → 첫 화면은 path 로 따로(1.5.4).
-           /deals 는 앱이 열지 않는 페이지라 뺐다(AASA 도 exclude). -->
+           /deals 는 앱이 열지 않는 페이지라 뺐다(AASA 도 exclude). /keywords/ 는 키워드 핫딜 화면(1.5.6, 목록 /keywords 는 웹). -->
       <intent-filter android:autoVerify="true">
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
@@ -69,6 +69,7 @@
         <data android:pathPrefix="/trending/" />
         <data android:pathPrefix="/curation/" />
         <data android:pathPrefix="/toss/" />
+        <data android:pathPrefix="/keywords/" />
         <data android:path="/toss" />
         <data android:path="/community" />
         <data android:path="/trending" />
