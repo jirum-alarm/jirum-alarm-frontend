@@ -6,6 +6,12 @@
 // 그리고 백엔드·검색엔진이 잠깐 죽을 때 같은 에러가 요청마다 수천 건.
 import type { ErrorEvent } from '@sentry/nextjs';
 
+// 에러 표본 비율 — 거르고 남은 웹 에러가 아직 하루 ~650건이었다(10/16 stats_v2, 앱 ~25건). 무료 할당량은 앱과 합쳐
+// 월 5천이고 매달 20일에 초기화되는데, 7~9월 내내 4~19일 만에 바닥나 나머지 기간은 장애가 하나도 안 보였다.
+// 15% 면 하루 ~100건 = 월 ~3천 + 앱 ~1천. 반복되는 문제는 표본으로도 충분히 보이고, 놓치는 건 한 번뿐인 에러다.
+// 키별 상한(Custom Rate Limits)은 Business 요금제 전용이라 코드에서 줄인다(2026-10-17).
+export const SENTRY_ERROR_SAMPLE_RATE = 0.15;
+
 export const SENTRY_IGNORE_ERRORS: (string | RegExp)[] = [
   'PRODUCT_NOT_FOUND',
   /^aborted$/,

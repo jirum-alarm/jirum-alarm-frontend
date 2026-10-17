@@ -8,6 +8,7 @@ import * as Sentry from '@sentry/nextjs';
 import {
   createBurstLimiter,
   SENTRY_DENY_URLS,
+  SENTRY_ERROR_SAMPLE_RATE,
   SENTRY_IGNORE_ERRORS,
 } from './src/shared/lib/sentry-filter';
 
@@ -31,6 +32,7 @@ Sentry.init({
   // Enable sending user PII (Personally Identifiable Information)
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/#sendDefaultPii
   // 소음·폭주 거르기 — 이유는 sentry-filter.ts.
+  sampleRate: SENTRY_ERROR_SAMPLE_RATE,
   ignoreErrors: SENTRY_IGNORE_ERRORS,
   denyUrls: SENTRY_DENY_URLS,
   beforeSend: createBurstLimiter(),
