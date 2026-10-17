@@ -13,8 +13,8 @@ export type PolicyDates = { announcedAt: string; effectiveAt: string };
 
 /** 개인정보 처리방침 공고·시행일 */
 export const PRIVACY_DATES: PolicyDates = {
-  announcedAt: '2026년 10월 15일',
-  effectiveAt: '2026년 10월 15일',
+  announcedAt: '2026년 10월 17일',
+  effectiveAt: '2026년 10월 17일',
 };
 
 /**
@@ -122,7 +122,7 @@ export const PRIVACY_CONTENT_DATA = [
         text: '서비스는 원활한 서비스 제공을 위해 다음과 같이 개인정보 처리 업무를 위탁하고 있습니다. 국외에 있는 수탁자에 대한 이전 내용은 7항에 함께 적었습니다.',
       },
       {
-        text: '- Amazon Web Services, Inc.: 푸시 알림 발송 중계(Amazon SNS) / 처리 위치 대한민국(서울 리전)\n- Google LLC: 푸시 알림 전달(Firebase Cloud Messaging), 이용 통계 분석(Google Analytics 4, Firebase Analytics)\n- Apple Inc.: iOS 기기 푸시 알림 전달(Apple Push Notification service)\n- Functional Software, Inc.(Sentry): 오류 수집·분석\n- Microsoft Corporation: 웹 이용 행태 분석(Microsoft Clarity)\n- Mixpanel, Inc.: 이용 통계 분석',
+        text: '- Amazon Web Services, Inc.: 푸시 알림 발송 중계(Amazon SNS) / 처리 위치 대한민국(서울 리전)\n- Google LLC: 푸시 알림 전달(Firebase Cloud Messaging), 이용 통계 분석(Google Analytics 4, Firebase Analytics)\n- Apple Inc.: iOS 기기 푸시 알림 전달(Apple Push Notification service)\n- Functional Software, Inc.(Sentry): 오류 수집·분석\n- Microsoft Corporation: 웹 이용 행태 분석(Microsoft Clarity)',
       },
       {
         text: '위탁 계약 시 개인정보 보호법 제26조에 따라 위탁 업무 수행 목적 외 처리 금지, 안전성 확보 조치 등을 정하고 있으며, 수탁자나 위탁 업무가 바뀌면 이 처리방침으로 알립니다.',
@@ -151,9 +151,6 @@ export const PRIVACY_CONTENT_DATA = [
       {
         text: '⑤ Microsoft Corporation(Microsoft Clarity) / 연락처: https://aka.ms/privacyresponse\n- 이전 국가: Microsoft Azure 클라우드 데이터센터(계약 상대방 Microsoft Corporation 소재국 미국 등). Microsoft 공식 문서는 ‘Microsoft Azure 클라우드에 저장’이라고만 밝히고 저장 국가를 따로 공개하지 않습니다.\n- 이전 항목: 회원 식별번호, 웹 화면에서의 클릭·스크롤·이동 등 상호작용 기록(세션 재생), 기기·브라우저 정보, 쿠키\n- 이용 목적: 웹 이용 행태 분석, 화면 개선\n- 보유·이용 기간: 세션 녹화는 30일(일부 표본·보관 표시한 녹화는 최대 9개월), 히트맵은 최대 9개월 보관 후 삭제\n- 거부 방법 및 효과: 브라우저 쿠키 차단으로 거부할 수 있으며, 서비스 이용에는 영향이 없습니다.',
       },
-      {
-        text: '⑥ Mixpanel, Inc. / 연락처: compliance@mixpanel.com\n- 이전 국가: 미국\n- 이전 항목: 회원 식별번호, 서비스 이용 기록(웹 이벤트, 알림 발송 기록), 기기·브라우저 정보, 쿠키\n- 이용 목적: 이용 통계 분석\n- 보유·이용 기간: 이벤트 데이터는 수집 후 2년 뒤 자동 삭제(2025년 9월 1일 전에 만든 프로젝트는 5년, 요금제를 바꾸거나 무료 요금제로 옮기면 2년), 사용자 프로필은 Mixpanel 이용 기간 동안\n- 거부 방법 및 효과: 웹은 브라우저 쿠키 차단으로 거부할 수 있습니다. 서버에서 보내는 알림 발송 기록은 별도 거부 설정을 제공하지 않으며, 원하지 않으면 13항의 연락처로 처리정지를 요청할 수 있습니다.',
-      },
     ],
   },
   {
@@ -161,7 +158,7 @@ export const PRIVACY_CONTENT_DATA = [
     title: '8. 자동수집 장치(쿠키 등)의 설치·운영 및 거부',
     content: [
       {
-        text: '① 서비스는 로그인 상태 유지, 기기 식별, 이용 통계 분석을 위해 쿠키와 브라우저 저장소를 사용합니다. 쿠키는 웹사이트가 이용자의 브라우저에 보내는 작은 텍스트 파일로, 이용자의 기기에 저장됩니다.\n- 서비스가 직접 설치하는 쿠키: 로그인 인증 쿠키, 비회원 인증 쿠키, 기기 식별 쿠키\n- 분석 도구가 설치하는 쿠키: Google Analytics, Microsoft Clarity, Mixpanel(7항 참고)',
+        text: '① 서비스는 로그인 상태 유지, 기기 식별, 이용 통계 분석을 위해 쿠키와 브라우저 저장소를 사용합니다. 쿠키는 웹사이트가 이용자의 브라우저에 보내는 작은 텍스트 파일로, 이용자의 기기에 저장됩니다.\n- 서비스가 직접 설치하는 쿠키: 로그인 인증 쿠키, 비회원 인증 쿠키, 기기 식별 쿠키\n- 분석 도구가 설치하는 쿠키: Google Analytics, Microsoft Clarity(7항 참고)',
       },
       {
         text: '② 제3자 광고 쿠키: 서비스 웹사이트에는 Google AdSense 광고가 게재됩니다. Google을 포함한 제3자 광고 사업자는 쿠키를 사용해 이용자가 이 웹사이트와 다른 웹사이트를 방문한 기록을 바탕으로 광고를 게재할 수 있습니다. Google이 광고 쿠키를 사용하는 방식은 https://policies.google.com/technologies/ads 에서 확인할 수 있고, 맞춤 광고는 Google 광고 설정(https://adssettings.google.com)에서 끌 수 있습니다. 다른 제3자 광고 사업자의 맞춤 광고 쿠키는 https://www.aboutads.info 에서 거부할 수 있습니다.',
@@ -254,7 +251,7 @@ export const PRIVACY_CONTENT_DATA = [
         text: `① 이 개인정보 처리방침은 ${PRIVACY_DATES.announcedAt}에 공고하고 ${PRIVACY_DATES.effectiveAt}부터 시행합니다.`,
       },
       {
-        text: `② 변경 이력\n- ${PRIVACY_DATES.effectiveAt}: 처리 항목(소셜 로그인·푸시 토큰·기기 정보·이용 기록 등)을 실제 처리에 맞게 보완하고, 항목별 보유 기간(회원 탈퇴 시 삭제 범위, 비회원 정보 1년), 처리 위탁, 국외 이전, 제3자 광고 쿠키, 행태정보, 광고성 정보 전송, 안전성 확보 조치, 개인정보 보호책임자, 권익침해 구제 방법을 추가\n- 2023년 12월 1일: 최초 시행`,
+        text: `② 변경 이력\n- ${PRIVACY_DATES.effectiveAt}: 더 이상 이용하지 않는 Mixpanel, Inc.(이용 통계 분석)를 처리 위탁·국외 이전·쿠키 항목에서 삭제\n- 2026년 10월 15일: 처리 항목(소셜 로그인·푸시 토큰·기기 정보·이용 기록 등)을 실제 처리에 맞게 보완하고, 항목별 보유 기간(회원 탈퇴 시 삭제 범위, 비회원 정보 1년), 처리 위탁, 국외 이전, 제3자 광고 쿠키, 행태정보, 광고성 정보 전송, 안전성 확보 조치, 개인정보 보호책임자, 권익침해 구제 방법을 추가\n- 2023년 12월 1일: 최초 시행`,
       },
     ],
   },
