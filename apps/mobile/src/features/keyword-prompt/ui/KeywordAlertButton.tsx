@@ -1,23 +1,12 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
-import {useMutation, useQueryClient} from '@tanstack/react-query';
 
-import {MyPageService} from '@/shared/api/mypage';
 import PressableScale from '@/shared/components/PressableScale';
 import {CheckIcon} from '@/shared/components/icons';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {Analytics} from '@/shared/lib/analytics/ga4';
-import {trackKeywordRegister} from '@/shared/lib/analytics/keyword-tracking';
-import {requestPushPermissionIfNeeded} from '@/shared/lib/fcm/push-permission';
-import {showToast} from '@/shared/lib/feedback';
-import {isValidKeyword} from '@/features/mypage/lib/validation';
 
-import {
-  invalidateMyKeywords,
-  normalizeKeyword,
-  openKeywordSettings,
-  useMyKeywordSet,
-} from '../model/myKeywords';
+import {useKeywordAlert} from '../model/useKeywordAlert';
 import {useColors} from '@/shared/theme/useColors';
 
 /**
@@ -25,7 +14,7 @@ import {useColors} from '@/shared/theme/useColors';
  * 보내서 방금 친 단어를 다시 쳐야 했다 — 검색은 "이걸 원한다" 는 가장 강한 신호인데 거기서 끊겼다.
  *
  * - `variant="bar"`: 검색 결과 위 한 줄. `variant="cta"`: 결과 없음 화면의 큰 버튼.
- * - 누르는 즉시 "알림 받는 중" 으로 바꾸고(낙관적), 실패하면 되돌린다.
+ * - 등록·낙관적 표시·실패 되돌리기는 useKeywordAlert(키워드 허브 버튼과 같은 경로).
  */
 export default function KeywordAlertButton({
   keyword,
@@ -35,47 +24,18 @@ export default function KeywordAlertButton({
   variant: 'bar' | 'cta';
 }) {
   const c = useColors();
-  const queryClient = useQueryClient();
-  const registered = useMyKeywordSet();
-  const [optimistic, setOptimistic] = useState<string | null>(null);
-  const trimmed = keyword.trim();
-  const isOn =
-    registered.has(normalizeKeyword(trimmed)) || optimistic === trimmed;
-
-  const {mutate} = useMutation({
-    mutationFn: () => MyPageService.addKeyword({keyword: trimmed}),
-    onSuccess: () => {
-      trackKeywordRegister(
-        variant === 'bar' ? 'search_bar' : 'search_no_result',
-        trimmed,
-      );
-      // 등록한 뒤 갈 곳이 없던 자리 — 조건(제외 단어·가격)을 바로 손볼 수 있게 키워드 화면으로 잇는다.
-      showToast.success(`'${trimmed}' 새 핫딜이 올라오면 알려드릴게요.`, {
-        action: {label: '보기', onPress: openKeywordSettings},
-      });
-      requestPushPermissionIfNeeded();
-      return invalidateMyKeywords(queryClient);
-    },
-    onError: (error: unknown) => {
-      setOptimistic(null);
-      const message = error instanceof Error ? error.message : '';
-      // 다른 화면에서 이미 등록했다면 실패가 아니다 — 켜진 상태로 맞춘다.
-      if (message.includes('이미 등록된')) {
-        invalidateMyKeywords(queryClient);
-        return;
-      }
-      showToast.error(message || '알림을 등록하지 못했어요.');
-    },
-  });
+  const {trimmed, isOn, canRegister, register} = useKeywordAlert(
+    keyword,
+    variant === 'bar' ? 'search_bar' : 'search_no_result',
+  );
 
   // 2~20자 밖이면 키워드로 못 건다 — 버튼을 내밀었다가 거절하느니 안 보인다.
-  if (!isValidKeyword(trimmed)) return null;
+  if (!canRegister) return null;
 
   const onPress = () => {
     if (isOn) return;
     Analytics.track('search_keyword_alert_click', {keyword: trimmed, variant});
-    setOptimistic(trimmed);
-    mutate();
+    register();
   };
 
   const label = isOn

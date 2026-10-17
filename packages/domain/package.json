@@ -8,6 +8,7 @@
     "./deal-status-reaction": "./src/deal-status-reaction.ts",
     "./derive-keyword": "./src/derive-keyword.ts",
     "./hangul-search": "./src/hangul-search.ts",
+    "./keyword-hub": "./src/keyword-hub.ts",
     "./keyword-options": "./src/keyword-options.ts",
     "./live-alternatives": "./src/live-alternatives.ts",
     "./quiet-hours": "./src/quiet-hours.ts",

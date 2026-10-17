@@ -26,6 +26,8 @@ import {
 import {navigateToNativeRoute} from '@/navigations/navigation-ref';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {normalizeKeyword} from '@/features/keyword-prompt/model/myKeywords';
+import {findKeywordHubForQuery} from '@/entities/keyword-hub/lib/keyword-hub';
+import {useKeywordHubs} from '@/entities/keyword-hub/model/useKeywordHubs';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import KeywordItem, {
   PriceKeyboardAccessory,
@@ -68,6 +70,19 @@ export default function KeywordScreen({navigation, route}: Props) {
       tabStackNavigations.SEARCH,
       {screen: searchStackNavigations.HOME, params: {keyword}},
     );
+  };
+  // 내 키워드 중 공개 허브 자체인 것(「삼다수」·「플스 5」 — 서버 isKeywordHubQuery 와 같은 같음 비교)엔 허브로 가는 길을 단다.
+  // 허브 목록은 검색과 같은 캐시(세션당 한 번) — 실패하면 링크만 안 보인다.
+  const {data: hubs} = useKeywordHubs();
+  const openHub = (hub: {slug: string; name: string}) => {
+    Analytics.track('keyword_hub_card_click', {
+      keyword: hub.slug,
+      placement: 'mypage_keyword',
+    });
+    navigation.push(tabStackNavigations.KEYWORD_HUB, {
+      slug: hub.slug,
+      name: hub.name,
+    });
   };
   const insets = useSafeAreaInsets();
   const bottomClip = useHiddenTabBarClipPadding();
@@ -165,15 +180,21 @@ export default function KeywordScreen({navigation, route}: Props) {
                 키워드를 누르면 알림 받을 조건을 바꿀 수 있어요.
               </Text>
               <View className="mt-4 gap-2">
-                {sortFocusFirst(keywords, focus).map(keyword => (
-                  <KeywordItem
-                    key={keyword.id}
-                    keyword={keyword}
-                    defaultOpen={normalizeKeyword(keyword.keyword) === focus}
-                    onDelete={() => removeKeyword(keyword.id)}
-                    onOpenDeals={() => openSearch(keyword.keyword)}
-                  />
-                ))}
+                {sortFocusFirst(keywords, focus).map(keyword => {
+                  const hub = hubs
+                    ? findKeywordHubForQuery(keyword.keyword, hubs)
+                    : undefined;
+                  return (
+                    <KeywordItem
+                      key={keyword.id}
+                      keyword={keyword}
+                      defaultOpen={normalizeKeyword(keyword.keyword) === focus}
+                      onDelete={() => removeKeyword(keyword.id)}
+                      onOpenDeals={() => openSearch(keyword.keyword)}
+                      onOpenHub={hub ? () => openHub(hub) : undefined}
+                    />
+                  );
+                })}
               </View>
             </>
           )}

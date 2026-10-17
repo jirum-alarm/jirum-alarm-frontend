@@ -274,7 +274,7 @@ test('겹침 층은 아래에서 위로 커지고, web 클래스가 숫자와 �
 
 test('앱이 읽는 레시피 문자열엔 hover:·focus: 가 없고, active: 는 버튼 겉(Pressable 자신)에만 있다', () => {
   // NativeWind 는 hover:·focus:·active: 가 붙은 View 를 Pressable 로 바꿔 터치를 삼킨다(2026-10-11 앱 비선택 탭 전부 안 눌림).
-  // web 전용 상태는 `hover` 키에 따로 둔다. linkChip·dealRow 는 앱에 없는 web 전용 부품.
+  // web 전용 상태는 `hover` 키에 따로 둔다. linkChip·dealRow 는 한 줄 문자열 그대로라 예외 — 앱은 cn·splitBoxText 가 hover: 를 버린다.
   const recipes = require('./recipes.js');
   const WEB_ONLY = new Set(['linkChip', 'dealRow']);
   const bad = [];

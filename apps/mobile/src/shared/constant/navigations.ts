@@ -38,6 +38,8 @@ const tabStackNavigations = {
   /** 네이티브 화면이 아직 없는 web 페이지(토스 등)를 루트 스택에 쌓는다. */
   WEBVIEW: 'TabWebViewPage',
   COMMENTS: 'ProductComments',
+  /** 키워드 허브 — 「삼다수 핫딜」 30일 모음(web /keywords/{slug}). 내 키워드·검색 요약 줄·딥링크에서 들어온다. */
+  KEYWORD_HUB: 'KeywordHub',
   /** 구매 링크 웹뷰 — 쇼핑몰 앱으로 바로 넘긴다(실험 app_purchase_webview_v1). */
   PURCHASE_BROWSER: 'PurchaseBrowser',
 

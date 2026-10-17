@@ -16,6 +16,7 @@ import JirumAlarmWebViewScreen from '@/screens/jirumalarmwebview/JirumAlarmWebVi
 import LoginModalScreen from '@/screens/auth/LoginModalScreen';
 import CurationScreen from '@/screens/curation/CurationScreen';
 import TossCurationScreen from '@/screens/curation/TossCurationScreen';
+import KeywordHubScreen from '@/screens/keyword-hub/KeywordHubScreen';
 import ProductDetailScreen from '@/screens/detail/ProductDetailScreen';
 import ProductCommentsScreen from '@/screens/comment/ProductCommentsScreen';
 import PurchaseBrowserScreen from '@/screens/purchase/PurchaseBrowserScreen';
@@ -140,6 +141,15 @@ function MainStackNavigator() {
             ...baseHeaderOptions,
             title: '',
           }}
+        />
+        {/* 키워드 허브 — 제목은 목록에서 넘긴 이름으로 바로 그리고(딥링크면 조회 뒤), 뒤로·검색·공유는 화면이 채운다. */}
+        <RootStack.Screen
+          name={tabStackNavigations.KEYWORD_HUB}
+          component={KeywordHubScreen}
+          options={({route}) => ({
+            ...baseHeaderOptions,
+            title: route.params.name ? `${route.params.name} 핫딜` : '',
+          })}
         />
         <RootStack.Screen
           name={tabStackNavigations.WEBVIEW}

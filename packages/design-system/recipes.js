@@ -173,7 +173,7 @@ const cardThumb = 'overflow-hidden rounded-lg border border-gray-200 bg-gray-50'
 
 /**
  * 다른 페이지로 가는 칩 모양 링크(키워드 허브·관련 모델). 고르는 칩(chip)보다 옅은 테두리, hover 에 옅은 면.
- * 배치(inline-block 등)는 자리마다. web 만(앱엔 이 화면들이 없다).
+ * 배치(inline-block 등)는 자리마다. 앱(키워드 허브의 상품별 최저가 모음)은 splitBoxText 로 겉·글자를 나누고 hover: 를 버린다.
  */
 const linkChip = 'rounded-full border border-gray-200 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50';
 

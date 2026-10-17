@@ -25,6 +25,8 @@ export type TabStackParamList = ProductFlowParamList & {
   [tabStackNavigations.CURATION]: {sectionId: string; title?: string};
   [tabStackNavigations.TOSS_CURATION]: {sectionId?: string};
   [tabStackNavigations.WEBVIEW]: {uri: string; title?: string};
+  /** name: 목록에서 이미 아는 이름 — 조회 전에 헤더를 바로 그린다(딥링크면 없다). */
+  [tabStackNavigations.KEYWORD_HUB]: {slug: string; name?: string};
   [tabStackNavigations.PURCHASE_BROWSER]: {
     url: string;
     /** 쇼핑몰 이름(mallName) — 없으면 헤더에 호스트. */

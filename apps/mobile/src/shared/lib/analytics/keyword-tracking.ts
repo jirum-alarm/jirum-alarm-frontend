@@ -12,6 +12,7 @@ export type KeywordRegisterSource =
   | 'post_purchase' // 상세 구매 후 권유 카드
   | 'search_bar' // 검색 결과 위 한 줄
   | 'search_no_result' // 검색 결과 없음 버튼
+  | 'keyword_hub' // 키워드 허브 화면의 알림 버튼(web /keywords/{slug} 와 같은 값)
   | 'first_alert'; // 첫 실행 「이런 거 싸게 뜨면 알려드릴까요?」 시트(FirstAlertSheet)
 
 export function trackKeywordRegister(

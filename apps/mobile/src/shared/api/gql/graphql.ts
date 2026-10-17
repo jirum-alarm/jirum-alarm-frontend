@@ -4864,6 +4864,53 @@ export type KeywordHubsQuery = {
   }>;
 };
 
+export type KeywordHubQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+export type KeywordHubQuery = {
+  __typename?: 'Query';
+  keywordHub?: {
+    __typename?: 'KeywordHubDetailOutput';
+    hub: {
+      __typename?: 'KeywordHubOutput';
+      slug: string;
+      name: string;
+      aliases: Array<string>;
+      recentDealCount: number;
+      activeDealCount: number;
+      countCapped: boolean;
+      activeDays: number;
+      topSources: Array<{
+        __typename?: 'KeywordHubSourceOutput';
+        name: string;
+        share: number;
+      }>;
+    };
+    deals: Array<{
+      __typename?: 'ProductOutput';
+      id: string;
+      title: string;
+      price?: string | null;
+      thumbnail?: string | null;
+      postedAt: any;
+      categoryId: number;
+      isEnd?: boolean | null;
+      isHot?: boolean | null;
+      hotDealType?: HotDealType | null;
+      mallName?: string | null;
+      provider: {__typename?: 'Provider'; nameKr: string};
+    }>;
+    modelPages: Array<{
+      __typename?: 'KeywordHubModelPageOutput';
+      slug: string;
+      brand?: string | null;
+      modelName: string;
+      dealCount: number;
+    }>;
+  } | null;
+};
+
 export type QueryMeQueryVariables = Exact<{[key: string]: never}>;
 
 export type QueryMeQuery = {
@@ -6256,6 +6303,49 @@ export const KeywordHubsDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   KeywordHubsQuery,
   KeywordHubsQueryVariables
+>;
+export const KeywordHubDocument = new TypedDocumentString(`
+    query KeywordHub($slug: String!) {
+  keywordHub(slug: $slug) {
+    hub {
+      slug
+      name
+      aliases
+      recentDealCount
+      activeDealCount
+      countCapped
+      activeDays
+      topSources {
+        name
+        share
+      }
+    }
+    deals {
+      id
+      title
+      price
+      thumbnail
+      postedAt
+      categoryId
+      isEnd
+      isHot
+      hotDealType
+      mallName
+      provider {
+        nameKr
+      }
+    }
+    modelPages {
+      slug
+      brand
+      modelName
+      dealCount
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  KeywordHubQuery,
+  KeywordHubQueryVariables
 >;
 export const QueryMeDocument = new TypedDocumentString(`
     query QueryMe {

@@ -67,7 +67,7 @@ const catalog = [
   {
     id: 'linkChip',
     name: '링크 칩',
-    use: '다른 페이지로 가는 칩 모양 링크(키워드 허브·관련 모델). web 만',
+    use: '다른 페이지로 가는 칩 모양 링크(키워드 허브·관련 모델). 앱은 splitBoxText 로 겉·글자를 나눠 쓴다',
     recipe: 'linkChip',
     web: null,
     app: null,

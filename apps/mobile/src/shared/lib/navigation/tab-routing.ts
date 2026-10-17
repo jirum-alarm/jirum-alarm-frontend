@@ -328,6 +328,19 @@ export function resolveNativeRoute(
     };
   }
 
+  // 키워드 허브(`/keywords/{slug}`) — 네이티브 화면(KeywordHubScreen). slug 는 한글이라 인코딩돼 온다.
+  // 목록(`/keywords`)은 네이티브가 없어 아래 웹뷰 폴백으로 간다.
+  // https 링크로 앱이 열리려면 AASA·Android 앱 링크 경로에도 `/keywords/*` 가 있어야 한다(아직 없음 — 지금은
+  // 푸시·커스텀 스킴·앱 안 이동만 여기로 온다).
+  const hubSlug = path.match(/^\/keywords\/([^/]+)\/?$/)?.[1];
+  if (hubSlug) {
+    return {
+      tab: getTabNameFromUrl(url),
+      screen: tabStackNavigations.KEYWORD_HUB,
+      params: {slug: safeDecodeURIComponent(hubSlug)},
+    };
+  }
+
   // ★핫딜 최저가(`/deals`·`/deals/{slug}`)는 **앱에서 열지 않는다**
   // (2026-09-09 사용자 지시: "모바일에서는 핫딜 최저가 페이지 만들지 말자").
   // 데스크톱 폭을 전제로 만든 페이지라 앱 웹뷰(402pt)에서 레이아웃이 깨졌다.
@@ -376,6 +389,15 @@ export function getTabBaseUrl(tabName: TabName): string {
       return '/mypage';
     default:
       return '/';
+  }
+}
+
+/** 잘못된 % 인코딩(`%E`)이면 던지지 않고 그대로 — 링크 하나 때문에 라우팅 전체가 죽지 않게. */
+function safeDecodeURIComponent(s: string): string {
+  try {
+    return decodeURIComponent(s);
+  } catch {
+    return s;
   }
 }
 

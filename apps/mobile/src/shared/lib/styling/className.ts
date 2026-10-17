@@ -30,3 +30,17 @@ const dropHover = (classes: string) =>
 export const cn = (...inputs: CxOptions) => {
   return twMerge(dropHover(cx(inputs)));
 };
+
+/**
+ * web 이 한 줄 문자열로 쓰는 레시피(겉 + 글자, 예: linkChip)를 앱의 겉(View)·글자(Text) 두 몫으로 나눈다.
+ * RN 은 글자 모양을 Text 만 받는다 — 겉에 text-* 를 두면 안 먹고, 글자를 손으로 다시 적으면 레시피와 갈라진다.
+ * `hover:` 는 버린다(cn 과 같은 이유 — 앱에서 터치를 삼킨다).
+ */
+export const splitBoxText = (recipe: string): {box: string; text: string} => {
+  const classes = dropHover(recipe).split(' ').filter(Boolean);
+  const isText = (c: string) => /^(text|font|leading|tracking)-/.test(c);
+  return {
+    box: classes.filter(c => !isText(c)).join(' '),
+    text: classes.filter(isText).join(' '),
+  };
+};

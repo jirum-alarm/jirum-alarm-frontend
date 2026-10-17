@@ -55,12 +55,18 @@ export default function KeywordItem({
   keyword,
   onDelete,
   onOpenDeals,
+  onOpenHub,
   defaultOpen = false,
 }: {
   keyword: MyKeyword;
   onDelete: () => void;
   /** 이 키워드로 지금 올라온 딜(검색 결과). */
   onOpenDeals: () => void;
+  /**
+   * 이 키워드가 공개 키워드 허브 자체면(「삼다수」) 허브 화면으로. 접힌 카드에서도 보이게 머리 줄에 둔다 —
+   * 키워드가 맨 위 단위라, 알림을 건 그 단어의 30일 모음으로 바로 가는 길이 카드에 있어야 한다.
+   */
+  onOpenHub?: () => void;
   /** 알림 한 줄의 키워드 라벨에서 들어오면 펼친 채로 시작한다. */
   defaultOpen?: boolean;
 }) {
@@ -84,6 +90,7 @@ export default function KeywordItem({
     formatPriceInput(String(saved.maxPrice ?? '')),
   );
   const {mutate, isPending} = useUpdateKeywordOptions();
+  const toggle = () => setOpen(prev => !prev);
 
   const save = () =>
     mutate(
@@ -106,25 +113,43 @@ export default function KeywordItem({
       <View className="rounded-xl border border-gray-200 bg-white">
         <View className="flex-row items-center">
           <Pressable
-            onPress={() => setOpen(prev => !prev)}
+            onPress={toggle}
             accessibilityRole="button"
             accessibilityState={{expanded: open}}
             accessibilityLabel={`${keyword.keyword} 알림 설정`}
-            className="min-w-0 flex-1 flex-row items-center gap-2 py-3.5 pl-4"
+            className="min-w-0 flex-1 py-3.5 pl-4"
             style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-            <View className="min-w-0 flex-1">
-              <Text
-                className="text-sm font-semibold text-gray-900"
-                numberOfLines={1}>
-                {keyword.keyword}
+            <Text
+              className="text-sm font-semibold text-gray-900"
+              numberOfLines={1}>
+              {keyword.keyword}
+            </Text>
+            <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
+              {summarizeKeywordAlert(saved)}
+            </Text>
+          </Pressable>
+          {onOpenHub ? (
+            <Pressable
+              onPress={onOpenHub}
+              accessibilityRole="link"
+              accessibilityLabel={`${keyword.keyword} 핫딜 모아보기`}
+              hitSlop={8}
+              style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+              <Text className="py-3.5 pl-2 text-xs font-medium text-gray-700">
+                핫딜 모아보기 ›
               </Text>
-              <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
-                {summarizeKeywordAlert(saved)}
-              </Text>
-            </View>
+            </Pressable>
+          ) : null}
+          {/* 펼침 화살표도 같은 토글 — 읽기 프로그램엔 위 줄 하나로 충분해 숨긴다. */}
+          <Pressable
+            onPress={toggle}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+            hitSlop={8}
+            style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
             {/* transform 은 style 로 — 조건부 className + transform 은 NativeWind 에서 레드스크린. */}
             <View
-              className="mr-3"
+              className="mx-3 my-3.5"
               style={{transform: [{rotate: open ? '-90deg' : '90deg'}]}}>
               <ArrowRight width={20} height={20} color={c.gray[500]} />
             </View>

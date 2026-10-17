@@ -1,4 +1,5 @@
 import {
+  QueryKeywordHub,
   QueryKeywordHubs,
   QuerySearchProducts,
   QuerySearchSuggestions,
@@ -38,5 +39,11 @@ export class SearchService {
   static async getKeywordHubs() {
     const res = await HttpClient.withNoAuth().execute(QueryKeywordHubs);
     return res.data?.keywordHubs ?? [];
+  }
+
+  /** 키워드 허브 한 곳(통계·최근 딜·모델 모음). 모르는 slug 면 null — 화면이 「찾을 수 없어요」를 그린다. */
+  static async getKeywordHub(slug: string) {
+    const res = await HttpClient.withNoAuth().execute(QueryKeywordHub, {slug});
+    return res.data?.keywordHub ?? null;
   }
 }

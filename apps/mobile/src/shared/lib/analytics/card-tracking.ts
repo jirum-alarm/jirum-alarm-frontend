@@ -24,6 +24,7 @@ export type ProductCardSource =
   | 'together_viewed' // 함께 본 상품
   | 'category_popular' // 카테고리 인기
   | 'notification_theme' // 알림 묶음 상세 라이브딜
+  | 'keyword_hub' // 키워드 허브 화면 목록(앱만 — web 허브 그리드는 아직 source 를 안 붙인다)
   | 'live_alternative'; // 진행 중 딜 상세의 '다른 곳 진행 중인 딜' 블록
 
 /**

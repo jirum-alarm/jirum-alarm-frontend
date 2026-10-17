@@ -83,3 +83,48 @@ export const QueryKeywordHubs = graphql(`
     }
   }
 `);
+
+/**
+ * 키워드 허브 한 곳(앱 KeywordHubScreen). 모르는 slug 면 null. web: shared/api/keyword-hub/keyword-hub.service.ts 의 상세 쿼리.
+ * 통계(hub)는 아래 deals 와 같은 묶음에서 센 값이고, deals 는 최근 30일 진행 중 먼저·최대 40개다.
+ */
+export const QueryKeywordHub = graphql(`
+  query KeywordHub($slug: String!) {
+    keywordHub(slug: $slug) {
+      hub {
+        slug
+        name
+        aliases
+        recentDealCount
+        activeDealCount
+        countCapped
+        activeDays
+        topSources {
+          name
+          share
+        }
+      }
+      deals {
+        id
+        title
+        price
+        thumbnail
+        postedAt
+        categoryId
+        isEnd
+        isHot
+        hotDealType
+        mallName
+        provider {
+          nameKr
+        }
+      }
+      modelPages {
+        slug
+        brand
+        modelName
+        dealCount
+      }
+    }
+  }
+`);
