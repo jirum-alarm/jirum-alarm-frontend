@@ -23,15 +23,25 @@ Sitemap: ${METADATA_SERVICE_URL}/keywords/sitemap.xml`
   // 2026-10-13 게이트웨이 로그 기준 하루 ~3.6만 요청(Ahrefs 2.3만·Semrush 7.7천·MJ12 3.5천·DotBot 1.7천)이
   // 대부분 상품 SSR 이었다. 이름을 지정한 그룹은 `*` 그룹 대신 적용되므로 `*` 규칙과 섞이지 않는다.
   // dev 호스트도 같이 막는다 — 위 noindex 논리는 검색엔진 얘기이고 이 툴들은 색인과 상관없다.
-  const robotsTxt = `User-agent: AhrefsBot
-User-agent: SemrushBot
-User-agent: MJ12bot
-User-agent: DotBot
-User-agent: DataForSeoBot
-User-agent: BLEXBot
-Disallow: /
+  //
+  // ★순서·모양(2026-10-19): 10/12 까지의 파일(`*` 그룹이 맨 앞)을 한 글자도 안 바꾸고, 막는 봇은 **맨 뒤에
+  // 한 봇 = 한 그룹**으로 붙인다. 10/13 에 여러 User-agent 줄을 한 그룹으로 묶어 파일 맨 앞에 `Disallow: /` 를
+  // 둔 뒤, Yeti 가 그 robots 를 받아 간 10/13 22:19 KST 로부터 6시간 뒤(10/14 04시)부터 네이버가 새 URL 을
+  // 하나도 안 긁는다(옛 URL 재수집은 그대로, bingbot·Googlebot 은 이 변화와 무관). RFC 9309 로는 같은 뜻이지만
+  // 네이버 쪽 파서가 묶음 그룹을 잘못 읽을 여지를 없앤다. 판독: crawling-server 실험 등록부 obs_seo_naver_new_url_freeze.
+  const blockedSeoTools = [
+    'AhrefsBot',
+    'SemrushBot',
+    'MJ12bot',
+    'DotBot',
+    'DataForSeoBot',
+    'BLEXBot',
+  ];
+  const seoToolGroups = blockedSeoTools
+    .map((bot) => `User-agent: ${bot}\nDisallow: /`)
+    .join('\n\n');
 
-User-agent: *
+  const robotsTxt = `User-agent: *
 Disallow: /admin/
 Disallow: /mypage
 Disallow: /like
@@ -43,7 +53,9 @@ Allow: /
 ${sitemapLines}
 Host: ${METADATA_SERVICE_URL}
 
-#DaumWebMasterTool:23923d97dcee44c14f5c6b379f1bb5affe2d9cb6fcd4560b5e3c648b9e856318:jEv4QRLqgJxV7IQJ1W7Mww==`;
+#DaumWebMasterTool:23923d97dcee44c14f5c6b379f1bb5affe2d9cb6fcd4560b5e3c648b9e856318:jEv4QRLqgJxV7IQJ1W7Mww==
+
+${seoToolGroups}`;
 
   return new NextResponse(robotsTxt, {
     headers: {
