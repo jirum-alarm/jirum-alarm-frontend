@@ -118,34 +118,34 @@ const chip = {
  *   brand    랭킹·핫딜 모음 카테고리(라임)
  *   segment  기간 고르기(가격 추이) — 네모 + 테두리
  * 높이는 size(sm 32·md 36)로 고르고, 앱 기간 버튼처럼 손가락 크기가 필요한 자리는 그 자리에서 키운다.
- * hover = web 전용(마우스) — 앱은 box·text 만 읽는다. NativeWind 는 hover:·focus: 가 붙은 View 를 Pressable 로 바꿔
+ * hover = web 전용(마우스 hover + 터치 눌림 active:) — 앱은 box·text 만 읽는다. NativeWind 는 hover:·focus: 가 붙은 View 를 Pressable 로 바꿔
  * 터치를 삼킨다(2026-10-11 앱 비선택 탭 전부 안 눌림). 그래서 앱이 읽는 문자열엔 상태 클래스를 두지 않는다(tokens.test 가 막음).
  */
 const tab = {
   size: {sm: 'h-8', md: 'h-9'},
   neutral: {
-    selected: {box: 'rounded-full px-3 bg-gray-900', text: 'text-sm font-medium text-white', hover: ''},
-    idle: {box: 'rounded-full px-3 bg-gray-100', text: 'text-sm font-medium text-gray-600', hover: 'hover:bg-gray-200'},
+    selected: {box: 'rounded-full px-3 bg-gray-900', text: 'text-sm font-medium text-white', hover: 'active:opacity-80'},
+    idle: {box: 'rounded-full px-3 bg-gray-100', text: 'text-sm font-medium text-gray-600', hover: 'hover:bg-gray-200 active:bg-gray-200'},
   },
   brand: {
     // 다크에선 fixed-800 이 비활성 gray-100 과 거의 같은 색이라 neutral 처럼 밝은 면으로 뒤집는다.
     selected: {
       box: 'rounded-full px-3 bg-fixed-800 dark:bg-gray-900',
       text: 'text-sm font-bold text-primary-500 dark:text-white',
-      hover: '',
+      hover: 'active:opacity-80',
     },
-    idle: {box: 'rounded-full px-3 bg-gray-100', text: 'text-sm font-medium text-gray-600', hover: 'hover:bg-gray-200'},
+    idle: {box: 'rounded-full px-3 bg-gray-100', text: 'text-sm font-medium text-gray-600', hover: 'hover:bg-gray-200 active:bg-gray-200'},
   },
   segment: {
     selected: {
       box: 'rounded-lg border px-3 border-gray-900 bg-gray-900',
       text: 'text-sm font-semibold text-white',
-      hover: '',
+      hover: 'active:opacity-80',
     },
     idle: {
       box: 'rounded-lg border px-3 border-gray-200 bg-white',
       text: 'text-sm text-gray-600',
-      hover: 'hover:border-gray-300 hover:bg-gray-50',
+      hover: 'hover:border-gray-300 hover:bg-gray-50 active:bg-gray-100',
     },
   },
 };

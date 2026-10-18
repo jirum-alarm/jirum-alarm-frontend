@@ -18,6 +18,36 @@
       cursor: pointer;
     }
   }
+
+  /* 터치: 회색 탭 하이라이트 대신 각 컴포넌트의 active: 로 눌림을 보이고, 더블탭 확대 대기(300ms)를 없앤다. */
+  a,
+  button,
+  summary,
+  label,
+  [role='button'],
+  [role='switch'],
+  [role='tab'] {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* 키보드로 옮겨 다닐 때만 보이는 초점 테두리(마우스·터치엔 안 뜬다). */
+  :focus-visible {
+    outline: 2px solid var(--color-secondary-500);
+    outline-offset: 2px;
+  }
+
+  /* 움직임 줄이기 설정이면 전환·애니메이션을 사실상 즉시로(Swiper 슬라이드·Switch 노브 포함). */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 .no-scrollbar::-webkit-scrollbar {

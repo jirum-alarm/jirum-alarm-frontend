@@ -135,6 +135,7 @@ function HeaderRow({
           accessibilityLabel="검색"
           // 흰 겹이 위에 깔려 있어도 투명할 때는 아래 겹이 눌려야 한다.
           // 두 겹의 버튼이 같은 자리라 어느 쪽이 눌려도 동작은 같다.
+          style={pressedOpacity}
           className="h-9 w-9 items-center justify-center">
           <SearchIcon
             width={24}
@@ -156,6 +157,7 @@ function HeaderRow({
           hitSlop={8}
           accessibilityRole="button"
           accessibilityLabel={hasNewAlarm ? '알림, 새 알림 있음' : '알림'}
+          style={pressedOpacity}
           className="h-9 w-9 items-center justify-center">
           <AlertIcon
             width={26}
@@ -195,8 +197,14 @@ function ThemeButton({inverted}: {inverted: boolean}) {
       accessibilityLabel={
         isDark ? '라이트 모드로 바꾸기' : '다크 모드로 바꾸기'
       }
+      style={pressedOpacity}
       className="h-9 w-9 items-center justify-center">
       <Icon width={24} height={24} color={color} />
     </Pressable>
   );
 }
+
+// 아이콘 버튼은 면이 없어 active: 색 변화가 안 보인다 — 누르는 동안 흐려진다(함수형 style 은 opacity 객체만: NativeWind 가 레이아웃을 떨군다).
+const pressedOpacity = ({pressed}: {pressed: boolean}) => ({
+  opacity: pressed ? 0.5 : 1,
+});

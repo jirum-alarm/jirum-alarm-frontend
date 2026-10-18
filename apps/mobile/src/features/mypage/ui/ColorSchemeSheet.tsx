@@ -8,6 +8,7 @@ import {
   COLOR_SCHEME_LABEL,
   type ColorSchemePreference,
 } from '@/shared/theme/color-scheme-preference';
+import {tick} from '@/shared/lib/feedback/haptic';
 import {useColors} from '@/shared/theme/useColors';
 
 const OPTIONS: ColorSchemePreference[] = ['system', 'light', 'dark'];
@@ -38,6 +39,7 @@ export default function ColorSchemeSheet({
             <Pressable
               key={option}
               onPress={() => {
+                tick();
                 onChange(option);
                 onClose();
               }}

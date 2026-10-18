@@ -3,6 +3,7 @@ import {Pressable, StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import {Gender} from '@/shared/api/gql/graphql';
+import {tick} from '@/shared/lib/feedback/haptic';
 
 /**
  * 성별 선택. web `entities/user/ui/GenderRadioGroup`.
@@ -32,7 +33,10 @@ export default function GenderRadioGroup({
           return (
             <Pressable
               key={option.value}
-              onPress={() => onChange(checked ? null : option.value)}
+              onPress={() => {
+                tick();
+                onChange(checked ? null : option.value);
+              }}
               accessibilityRole="radio"
               accessibilityState={{selected: checked}}
               accessibilityLabel={option.label}

@@ -232,7 +232,8 @@ function useTabActions() {
     (tabName: TabName, navigation: TabPressNavigation) => {
       const state = navigation.getState();
       const isFocused = state.routes[state.index]?.name === tabName;
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      // 탭 전환은 '고르기' — 부딪히는 충격(impact)보다 가벼운 selection 이 iOS 탭바 관례다.
+      Haptics.selectionAsync().catch(() => {});
       setActiveTab(tabName);
       if (isFocused) {
         // ★상세 등이 쌓여 있으면 먼저 목록으로 돌아온다.

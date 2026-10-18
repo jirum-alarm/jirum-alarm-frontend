@@ -1,6 +1,7 @@
 import { toggle } from '@jirum/design-system/recipes';
 
 import { cn } from '@/shared/lib/cn';
+import { triggerHaptic } from '@/shared/lib/webview';
 
 import type { ButtonHTMLAttributes } from 'react';
 
@@ -26,7 +27,10 @@ export const Switch = ({
     type={type}
     role="switch"
     aria-checked={checked}
-    onClick={() => onCheckedChange(!checked)}
+    onClick={() => {
+      triggerHaptic('light');
+      onCheckedChange(!checked);
+    }}
     className={cn(
       'relative shrink-0 cursor-pointer transition-colors disabled:cursor-default disabled:opacity-50',
       toggle.track,

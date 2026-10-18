@@ -291,7 +291,7 @@ function useAndroidRefreshLogic(webviewRef: React.RefObject<WebView | null>) {
   const [enableRefresh, setEnableRefresh] = useState(false);
 
   const onRefresh = useCallback(() => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Haptics.selectionAsync().catch(() => {});
     setRefreshing(true);
     webviewRef.current?.reload();
     setTimeout(() => setRefreshing(false), 1000);

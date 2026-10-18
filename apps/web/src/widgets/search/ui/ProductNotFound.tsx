@@ -78,9 +78,13 @@ const ProductNotFound = () => {
                 title="오늘 가장 인기있는 핫딜"
                 right={
                   <div className="flex items-center px-2 py-3">
-                    <div onClick={handleShowMoreClick} className="cursor-pointer">
+                    <button
+                      type="button"
+                      onClick={handleShowMoreClick}
+                      className="active:opacity-60"
+                    >
                       더보기
-                    </div>
+                    </button>
                   </div>
                 }
                 shouldShowMobileUI

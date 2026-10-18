@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { AuthService } from '@/shared/api/auth';
+import { triggerHaptic } from '@/shared/lib/webview';
 import { useToast } from '@/shared/ui/common/Toast';
 
 import { AuthQueries } from '@/entities/auth';
@@ -11,9 +12,11 @@ export const useRemoveKeyword = () => {
   return useMutation({
     mutationFn: AuthService.removeKeyword,
     onSuccess: () => {
+      triggerHaptic('light');
       queryClient.invalidateQueries({ queryKey: AuthQueries.keyword() });
     },
     onError: () => {
+      triggerHaptic('error');
       toast.error('키워드 삭제에 실패했습니다.');
     },
   });

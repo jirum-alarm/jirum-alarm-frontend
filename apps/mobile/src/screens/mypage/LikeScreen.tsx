@@ -12,6 +12,7 @@ import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
 import type {ProductCardType} from '@/entities/home/model/types';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import Heart from '@/shared/components/icons/Heart';
+import {tick} from '@/shared/lib/feedback/haptic';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import StackHeader from '@/features/mypage/ui/StackHeader';
@@ -135,6 +136,7 @@ function WishlistHeart({
     <Pressable
       onPress={() => {
         const next = !liked;
+        tick();
         setLiked(next);
         onChange(productId, next);
       }}

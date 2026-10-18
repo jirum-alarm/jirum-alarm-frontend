@@ -69,7 +69,8 @@ export class EventBridge {
     async payload => {
       const style = payload.data.style ?? 'light';
       const trigger = hapticStyleMap[style] ?? hapticStyleMap.light;
-      await trigger();
+      // 진동이 없는 기기·저전력 모드에선 거절된다 — 웹뷰 메시지 처리까지 깨지지 않게 삼킨다.
+      await trigger().catch(() => {});
     };
   static shareRequest: EventHandler<WebViewEventType.SHARE_REQUEST> =
     async payload => {

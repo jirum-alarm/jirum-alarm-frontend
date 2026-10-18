@@ -10,7 +10,7 @@ import {ProductService} from '@/shared/api/product/product.service';
 import PressableScale from '@/shared/components/PressableScale';
 import {CheckIcon} from '@/shared/components/icons';
 import {Analytics} from '@/shared/lib/analytics/ga4';
-import {showToast} from '@/shared/lib/feedback';
+import {showToast, tick} from '@/shared/lib/feedback';
 import {trackKeywordRegister} from '@/shared/lib/analytics/keyword-tracking';
 import {requestPushPermissionIfNeeded} from '@/shared/lib/fcm/push-permission';
 import {
@@ -78,6 +78,8 @@ export default function PostPurchaseKeywordPrompt({
       trackKeywordRegister('post_purchase', keyword);
       // 배너를 없애지 않고 안내 문구로 바꾼다. 사라지면 등록된 건지 눌림이
       // 씹힌 건지 알 수 없다 — 결과를 남겨두는 쪽이 신뢰를 만든다.
+      // 토스트 없이 문구만 바뀌므로 손에도 «됐다»를 준다.
+      tick();
       setDone(true);
       invalidateMyKeywords(queryClient);
       // web 과 같은 자리 — 알림 권한이 아직 없고 물어볼 수 있을 때만 묻는다.

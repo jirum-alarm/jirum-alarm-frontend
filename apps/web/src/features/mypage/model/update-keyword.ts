@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { AuthService } from '@/shared/api/auth';
+import { triggerHaptic } from '@/shared/lib/webview';
 import { useToast } from '@/shared/ui/common/Toast';
 
 import { AuthQueries } from '@/entities/auth';
@@ -44,10 +45,12 @@ export const useUpdateKeyword = (options: {
         source: options.source,
         keyword: variables.keyword,
       });
+      triggerHaptic('success');
       queryClient.invalidateQueries({ queryKey: AuthQueries.keyword() });
       options.onSuccess?.(variables);
     },
     onError: (error) => {
+      triggerHaptic('error');
       if (options.onError) {
         options.onError(error);
         return;

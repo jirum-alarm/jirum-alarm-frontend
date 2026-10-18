@@ -50,6 +50,12 @@ export default function LikeButton({
         action: { label: '보러가기', onClick: () => router.push(PAGE.LIKE) },
       });
     },
+    // 하트는 누르는 즉시 바꿨으니, 실패하면 되돌리고 알린다(안 그러면 저장 안 된 하트가 남는다).
+    onError: () => {
+      setIsLiked(false);
+      triggerHaptic('error');
+      toast.error('찜하지 못했어요. 다시 시도해주세요.');
+    },
   });
   const { mutate: removeWishlist } = useMutation({
     mutationFn: WishlistService.removeWishlist,
@@ -58,6 +64,11 @@ export default function LikeButton({
         queryClient.invalidateQueries({ queryKey: productKey }),
         queryClient.invalidateQueries({ queryKey: WishlistQueries.lists() }),
       ]);
+    },
+    onError: () => {
+      setIsLiked(true);
+      triggerHaptic('error');
+      toast.error('찜을 풀지 못했어요. 다시 시도해주세요.');
     },
   });
 
