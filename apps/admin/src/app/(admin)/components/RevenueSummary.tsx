@@ -9,6 +9,7 @@ import SegmentedControl from '@/components/SegmentedControl';
 import { useMyAdminAccess } from '@/hooks/graphql/permission';
 import { useRevenueTrend } from '@/hooks/graphql/profitLink';
 import { canAccessPath } from '@/lib/adminSection';
+import { CHART_COLOR } from '@/lib/chartColors';
 import { monthDay as md, shortWon, won } from '@/lib/format';
 import { sourceColor, sourceName } from '@/lib/labels';
 import { partialRevenueStart } from '@/lib/revenue';
@@ -25,7 +26,7 @@ const daysBetween = (from: string, to: string) => {
 };
 
 // 덜 찬 날의 막대 색. 토스·알리는 그날 바로, 쿠팡·네이버·애드픽은 다음 날 15시, 애드센스는 다음 날 15:30 에 들어온다
-const PARTIAL_COLOR = '#C7CEF7';
+const PARTIAL_COLOR = CHART_COLOR.primarySoft;
 
 const PERIODS = [
   { value: 'today', label: '오늘' },
@@ -87,7 +88,7 @@ const RevenueSummary = () => {
       daily: days.map((d) => ({
         x: md(d),
         y: Math.round(byDay.get(d) ?? 0),
-        fillColor: d >= partialStart ? PARTIAL_COLOR : '#3C50E0',
+        fillColor: d >= partialStart ? PARTIAL_COLOR : CHART_COLOR.primary,
       })),
       partialFrom: days.findIndex((d) => d >= partialStart),
     };

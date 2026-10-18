@@ -1,6 +1,7 @@
 'use client';
 
 import Chart from '@/components/Chart';
+import { CHART_COLOR } from '@/lib/chartColors';
 import { formatStatsDate } from '@/utils/date';
 
 import ChartCard from './ChartCard';
@@ -15,7 +16,7 @@ const TrendCard = ({
   loading,
   rows,
   name,
-  color = '#3C50E0',
+  color = CHART_COLOR.primary,
 }: {
   title: string;
   loading?: boolean;

@@ -13,6 +13,7 @@ import {
   useProductPriceDistribution,
   useProductRegistrationStats,
 } from '@/hooks/graphql/stats';
+import { CHART_COLOR } from '@/lib/chartColors';
 import { labelOf } from '@/lib/labels';
 import { toStatsDateRange } from '@/utils/date';
 
@@ -78,7 +79,7 @@ const ProductStats = () => {
         <Chart
           type="line"
           categories={hotDealRatio.map((d) => axisDate(d.date))}
-          colors={['#FB5454']}
+          colors={[CHART_COLOR.danger]}
           series={[
             { name: '핫딜 비율', data: hotDealRatio.map((d) => Math.round(d.ratio * 10) / 10) },
           ]}
@@ -93,7 +94,7 @@ const ProductStats = () => {
             type="donut"
             height={240}
             categories={hotDealTypes.map((d) => labelOf(HOT_DEAL_TYPE_LABEL, d.hotDealType))}
-            colors={['#3C50E0', '#80CAEE', '#10B981', '#FB5454']}
+            colors={[CHART_COLOR.primary, CHART_COLOR.sky, CHART_COLOR.success, CHART_COLOR.danger]}
             series={hotDealTypes.map((d) => d.count)}
           />
         </ChartCard>
@@ -102,7 +103,7 @@ const ProductStats = () => {
           <Chart
             type="bar"
             categories={priceDistribution.map((d) => d.priceRange)}
-            colors={['#80CAEE']}
+            colors={[CHART_COLOR.sky]}
             series={[{ name: '상품', data: priceDistribution.map((d) => d.count) }]}
             options={{ xaxis: { tickAmount: undefined } }}
           />
@@ -121,7 +122,7 @@ const ProductStats = () => {
 
         <ChartCard title="커뮤니티별 상품 수" loading={providerLoading}>
           <RankList
-            color="#10B981"
+            color={CHART_COLOR.success}
             items={(providerData?.productCountByProvider ?? []).map((p) => ({
               label: p.providerName,
               value: p.count,

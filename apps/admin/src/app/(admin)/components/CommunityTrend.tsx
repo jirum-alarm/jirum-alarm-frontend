@@ -8,11 +8,12 @@ import { ignoreLazyRejection } from '@/hooks/graphql/options';
 import { useMyAdminAccess } from '@/hooks/graphql/permission';
 import { useProductRegistrationStatsByProvider } from '@/hooks/graphql/stats';
 import { canAccessPath } from '@/lib/adminSection';
+import { CHART_COLOR } from '@/lib/chartColors';
 import { monthDay as md } from '@/lib/format';
 import { DateInterval, ProviderType } from '@/types/stats';
 import { formatStatsDate, toKstDateString, toStatsDateRange } from '@/utils/date';
 
-const SPARK_COLOR = '#3C50E0';
+const SPARK_COLOR = CHART_COLOR.primary;
 /** 지난 7일이 그 전 7일의 절반 아래면 «수집이 줄었다» — 셀렉터 고장은 대개 이렇게 먼저 보인다 */
 const DROP_RATIO = 0.5;
 

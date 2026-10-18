@@ -8,6 +8,7 @@ import { axisDate } from '@/app/(admin)/stats/components/TrendCard';
 import Chart from '@/components/Chart';
 import RankList from '@/components/RankList';
 import { useProductRegistrationStatsByProvider } from '@/hooks/graphql/stats';
+import { CHART_COLOR } from '@/lib/chartColors';
 import { ProviderType } from '@/types/stats';
 import { toStatsDateRange } from '@/utils/date';
 
@@ -81,7 +82,7 @@ const CommunityCrawlerStats = () => {
         <Chart
           type="area"
           categories={dates.map(axisDate)}
-          colors={['#3C50E0']}
+          colors={[CHART_COLOR.primary]}
           series={[{ name: picked === ALL ? '전체' : picked, data: line }]}
           options={{ fill: { type: 'gradient', gradient: { opacityFrom: 0.35, opacityTo: 0.05 } } }}
         />

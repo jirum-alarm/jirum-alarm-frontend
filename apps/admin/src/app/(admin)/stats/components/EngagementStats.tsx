@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import RankList from '@/components/RankList';
 import { ignoreLazyRejection } from '@/hooks/graphql/options';
 import { useDailyServiceViewStats, useTopNotificationKeywords } from '@/hooks/graphql/stats';
+import { CHART_COLOR } from '@/lib/chartColors';
 import { toStatsDateRange } from '@/utils/date';
 
 import ChartCard from './ChartCard';
@@ -36,7 +37,7 @@ const EngagementStats = () => {
 
       <ChartCard title="알림 키워드 TOP 30" loading={keywordLoading}>
         <RankList
-          color="#80CAEE"
+          color={CHART_COLOR.sky}
           items={(keywordData?.topNotificationKeywords ?? []).map((k) => ({
             label: k.keyword,
             value: k.count,

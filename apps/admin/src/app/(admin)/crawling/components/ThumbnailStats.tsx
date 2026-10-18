@@ -8,6 +8,7 @@ import Chart from '@/components/Chart';
 import RankList from '@/components/RankList';
 import StatTiles from '@/components/StatTiles';
 import { useThumbnailStats } from '@/hooks/graphql/stats';
+import { CHART_COLOR } from '@/lib/chartColors';
 import { toStatsDateRange } from '@/utils/date';
 
 const TYPE_LABEL: Record<string, string> = {
@@ -55,14 +56,14 @@ const ThumbnailStats = () => {
           categories={typeDistribution.map(
             (t) => TYPE_LABEL[t.thumbnailType ?? 'missing'] ?? t.thumbnailType ?? '미수집',
           )}
-          colors={['#3C50E0', '#10B981', '#FB5454', '#94A3B8']}
+          colors={[CHART_COLOR.primary, CHART_COLOR.success, CHART_COLOR.danger, CHART_COLOR.muted]}
           series={typeDistribution.map((t) => t.count)}
         />
       </ChartCard>
 
       <ChartCard title="쇼핑몰별 수집량 (상위 20)" loading={loading}>
         <RankList
-          color="#10B981"
+          color={CHART_COLOR.success}
           items={(stats?.mallDistribution ?? []).map((m) => ({
             label: m.mallName,
             value: m.count,

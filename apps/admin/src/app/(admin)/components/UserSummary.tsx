@@ -10,6 +10,7 @@ import StatTiles, { StatItem } from '@/components/StatTiles';
 import { useMyAdminAccess } from '@/hooks/graphql/permission';
 import { useUserOverview } from '@/hooks/graphql/stats';
 import { canAccessPath } from '@/lib/adminSection';
+import { CHART_COLOR } from '@/lib/chartColors';
 import { monthDay as md } from '@/lib/format';
 import { channelColor, channelName } from '@/lib/labels';
 import { kstDaysAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
@@ -26,7 +27,7 @@ import {
   Window,
 } from './userSummaryPeriods';
 
-const MEMBER_COLOR = '#3C50E0';
+const MEMBER_COLOR = CHART_COLOR.primary;
 const GUEST = 'guest';
 
 const rate = (part: number, whole: number) =>

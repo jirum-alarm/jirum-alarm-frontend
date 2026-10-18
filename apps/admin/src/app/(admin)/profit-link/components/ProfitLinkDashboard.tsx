@@ -16,6 +16,7 @@ import {
   useProfitLinkQueueHealth,
   useRevenueTrend,
 } from '@/hooks/graphql/profitLink';
+import { CHART_COLOR } from '@/lib/chartColors';
 import { formatAgo, monthDay, shortWon, won } from '@/lib/format';
 import { sourceColor, sourceName } from '@/lib/labels';
 import { partialRevenueStart } from '@/lib/revenue';
@@ -238,7 +239,12 @@ const FunnelSection = () => {
               type="bar"
               stacked
               categories={funnel.map((d) => monthDay(d.date))}
-              colors={['#10B981', '#3C50E0', '#F59E0B', '#94A3B8']}
+              colors={[
+                CHART_COLOR.success,
+                CHART_COLOR.primary,
+                CHART_COLOR.warning,
+                CHART_COLOR.muted,
+              ]}
               series={[
                 { name: '발급', data: funnel.map((d) => d.issued) },
                 { name: '재시도 중', data: funnel.map((d) => d.pending) },

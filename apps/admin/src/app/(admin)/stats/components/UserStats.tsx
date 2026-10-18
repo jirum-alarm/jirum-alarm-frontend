@@ -10,6 +10,7 @@ import {
   useUserDemographicStats,
   useUserRegistrationStats,
 } from '@/hooks/graphql/stats';
+import { CHART_COLOR } from '@/lib/chartColors';
 import { GENDER_LABEL, labelOf } from '@/lib/labels';
 import { toStatsDateRange } from '@/utils/date';
 
@@ -52,7 +53,12 @@ const UserStats = () => {
             type="donut"
             height={240}
             categories={genders.map((d) => (d.gender ? labelOf(GENDER_LABEL, d.gender) : '미설정'))}
-            colors={['#3C50E0', '#FB5454', '#94A3B8', '#10B981']}
+            colors={[
+              CHART_COLOR.primary,
+              CHART_COLOR.danger,
+              CHART_COLOR.muted,
+              CHART_COLOR.success,
+            ]}
             series={genders.map((d) => d.count)}
           />
         </ChartCard>
@@ -61,7 +67,7 @@ const UserStats = () => {
           <Chart
             type="bar"
             categories={ages.map((d) => d.ageGroup)}
-            colors={['#3C50E0']}
+            colors={[CHART_COLOR.primary]}
             series={[{ name: '사용자', data: ages.map((d) => d.count) }]}
           />
         </ChartCard>

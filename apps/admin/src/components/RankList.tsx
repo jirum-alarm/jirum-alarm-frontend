@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import { CHART_COLOR } from '@/lib/chartColors';
+
 export type RankItem = { label: string; value: number; color?: string };
 
 /** 순위 목록 — 이름·값·비례 막대. 폰에서 가로 막대 차트보다 읽기 쉽다 */
@@ -9,7 +11,7 @@ const RankList = ({
   items,
   format = (v) => v.toLocaleString(),
   initial = 10,
-  color = '#3C50E0',
+  color = CHART_COLOR.primary,
 }: {
   items: RankItem[];
   format?: (v: number) => string;
