@@ -28,6 +28,7 @@ import {
 } from '@/shared/constant/navigations';
 import {isInTabStack} from '@/shared/lib/navigation/search-flow';
 import {getPushablePath} from '@/shared/lib/navigation/tab-routing';
+import {navigateToNativeRoute} from '@/navigations/navigation-ref';
 
 export function useCommonWebViewLogic() {
   const insets = useSafeAreaInsets();
@@ -104,6 +105,16 @@ export function useCommonWebViewLogic() {
               path: pushablePath,
             }),
           );
+          return false;
+        }
+        // 네이티브 화면이 있는 서비스 경로(홈·발견·커뮤니티·테마 등)는 그 화면으로 연다.
+        // 없으면 사용법(/help) 기능 카드를 눌렀을 때 웹 홈·랭킹이 이 웹뷰 안에 그대로 떴다.
+        // 네이티브가 없는 경로(/keywords 목록·/guide 등)는 null 이라 지금처럼 웹뷰가 읽는다.
+        if (
+          event.url.startsWith(SERVICE_URL) &&
+          navigateToNativeRoute(event.url)
+        ) {
+          clearLoadingState();
           return false;
         }
       }

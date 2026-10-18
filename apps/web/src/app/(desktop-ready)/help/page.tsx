@@ -355,6 +355,10 @@ const breadcrumbLd = {
 };
 
 const isExternal = (href: string) => href.startsWith('http');
+
+/** 앱엔 「마이페이지」가 없다 — 같은 화면을 「내정보」라 부른다. 본문 글의 위치 안내를 앱 이름으로 바꾼다. */
+const placeName = (text: string, isApp: boolean) =>
+  isApp ? text.replaceAll('마이페이지 →', '내정보 →') : text;
 const externalProps = (href: string) =>
   isExternal(href) ? { target: '_blank', rel: 'noopener' } : {};
 
@@ -628,60 +632,69 @@ export default async function HelpPage() {
                 sub="화살표가 있는 건 눌러서 바로 가 볼 수 있어요."
               />
               <div className="space-y-7">
+                {/* 앱: 핫딜 최저가(/deals)는 앱에서 열지 않는다(tab-routing — 탭 루트로 흘린다) → 카드도 뺀다. */}
                 {FEATURE_GROUPS.map((g) => (
                   <div key={g.title}>
                     <h3 className="mb-2.5 text-sm font-semibold text-gray-500">{g.title}</h3>
                     <ul className="pc:grid-cols-3 grid grid-cols-2 gap-2">
-                      {g.items.map((f) => {
-                        const body = (
-                          <>
-                            <span className="flex items-center justify-between">
-                              <span
-                                className={cn(
-                                  'flex size-9 items-center justify-center rounded-lg',
-                                  TONE[g.tone],
-                                )}
-                              >
-                                <HelpIcon name={f.icon} className="size-[18px]" />
+                      {g.items
+                        .filter((f) => !(isJirumAlarmApp && f.href === PAGE.DEALS))
+                        .map((f) => {
+                          const body = (
+                            <>
+                              <span className="flex items-center justify-between">
+                                <span
+                                  className={cn(
+                                    'flex size-9 items-center justify-center rounded-lg',
+                                    TONE[g.tone],
+                                  )}
+                                >
+                                  <HelpIcon name={f.icon} className="size-[18px]" />
+                                </span>
+                                {f.href ? (
+                                  <ArrowRight
+                                    width={16}
+                                    height={16}
+                                    color="var(--color-gray-400)"
+                                    aria-hidden
+                                    className="transition-transform group-hover:translate-x-0.5"
+                                  />
+                                ) : null}
                               </span>
-                              {f.href ? (
-                                <ArrowRight
-                                  width={16}
-                                  height={16}
-                                  color="var(--color-gray-400)"
-                                  aria-hidden
-                                  className="transition-transform group-hover:translate-x-0.5"
-                                />
-                              ) : null}
-                            </span>
-                            <span className="mt-3 block text-sm font-semibold text-gray-900">
-                              {f.name}
-                            </span>
-                            <span className="mt-0.5 block text-xs leading-snug text-gray-500">
-                              {f.text}
-                            </span>
-                          </>
-                        );
-                        const box = 'block h-full rounded-2xl bg-gray-50 p-4';
-                        return (
-                          <li key={f.name}>
-                            {f.href ? (
-                              <Link
-                                href={f.href}
-                                {...externalProps(f.href)}
-                                className={cn(
-                                  box,
-                                  'group transition-colors hover:bg-gray-100 active:bg-gray-100',
-                                )}
-                              >
-                                {body}
-                              </Link>
-                            ) : (
-                              <div className={box}>{body}</div>
-                            )}
-                          </li>
-                        );
-                      })}
+                              <span className="mt-3 block text-sm font-semibold text-gray-900">
+                                {f.name}
+                              </span>
+                              <span className="mt-0.5 block text-xs leading-snug text-gray-500">
+                                {placeName(f.text, isJirumAlarmApp)}
+                              </span>
+                            </>
+                          );
+                          const box = 'block h-full rounded-2xl bg-gray-50 p-4';
+                          return (
+                            <li key={f.name}>
+                              {f.href && isJirumAlarmApp ? (
+                                // 앱: next/link 는 웹뷰 안 SPA 이동이라 앱이 못 가로채 웹 홈·랭킹이 웹뷰 안에 떴다.
+                                // 문서 이동(<a>)이면 앱이 링크를 받아 네이티브 화면(홈·발견·커뮤니티·테마)으로 연다.
+                                <a href={f.href} className={cn(box, 'group active:bg-gray-100')}>
+                                  {body}
+                                </a>
+                              ) : f.href ? (
+                                <Link
+                                  href={f.href}
+                                  {...externalProps(f.href)}
+                                  className={cn(
+                                    box,
+                                    'group transition-colors hover:bg-gray-100 active:bg-gray-100',
+                                  )}
+                                >
+                                  {body}
+                                </Link>
+                              ) : (
+                                <div className={box}>{body}</div>
+                              )}
+                            </li>
+                          );
+                        })}
                     </ul>
                   </div>
                 ))}
@@ -724,8 +737,9 @@ export default async function HelpPage() {
                             />
                           </summary>
                           <div className="pr-4 pb-4 pl-[42px] text-sm leading-relaxed text-gray-700">
-                            <p>{f.a}</p>
-                            {f.link ? (
+                            <p>{placeName(f.a, isJirumAlarmApp)}</p>
+                            {/* 앱 안에서 「앱 받기」는 엉뚱하다. */}
+                            {f.link && !(isJirumAlarmApp && f.link.href === '/app') ? (
                               <Link
                                 href={f.link.href}
                                 {...externalProps(f.link.href)}
