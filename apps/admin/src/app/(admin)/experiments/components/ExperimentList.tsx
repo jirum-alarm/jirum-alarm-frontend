@@ -1,6 +1,5 @@
 'use client';
 
-import { useQuery } from '@apollo/client/react';
 import { useState } from 'react';
 
 import Panel from '@/components/Panel';
@@ -8,7 +7,7 @@ import SegmentedControl from '@/components/SegmentedControl';
 import Spinner from '@/components/Spinner';
 import StatusDot, { type StatusLevel } from '@/components/StatusDot';
 import { QueryExperimentsQuery } from '@/generated/gql/graphql';
-import { QueryExperiments } from '@/graphql/experiment';
+import { useExperiments } from '@/hooks/graphql/experiment';
 
 type Experiment = QueryExperimentsQuery['experiments'][number];
 type View = 'active' | 'ended' | 'all';
@@ -121,9 +120,7 @@ const ExperimentCard = ({ e }: { e: Experiment }) => {
  */
 const ExperimentList = () => {
   const [view, setView] = useState<View>('active');
-  const { data, loading } = useQuery<QueryExperimentsQuery>(QueryExperiments, {
-    fetchPolicy: 'cache-and-network',
-  });
+  const { data, loading } = useExperiments({ fetchPolicy: 'cache-and-network' });
   const all = data?.experiments ?? [];
   const shown = all.filter((e) =>
     view === 'all' ? true : view === 'ended' ? ENDED.includes(e.status) : !ENDED.includes(e.status),

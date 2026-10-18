@@ -12,7 +12,12 @@ import {
   QueryProductRegistrationStatsByProviderQuery,
   QueryProductRegistrationStatsQuery,
   QueryProviderHealthStatusQuery,
+  QuerySearchProbeQuery,
+  QuerySearchProbeQueryVariables,
+  QueryServiceHealthSignalsQuery,
+  QueryServiceHealthSignalsQueryVariables,
   QueryThumbnailStatsQuery,
+  QueryThumbnailStatsQueryVariables,
   QueryTopFavoriteCategoriesQuery,
   QueryTopFavoriteCategoriesQueryVariables,
   QueryTopNotificationKeywordsQuery,
@@ -33,6 +38,8 @@ import {
   QueryProductRegistrationStats,
   QueryProductRegistrationStatsByProvider,
   QueryProviderHealthStatus,
+  QuerySearchProbe,
+  QueryServiceHealthSignals,
   QueryThumbnailStats,
   QueryTopFavoriteCategories,
   QueryTopNotificationKeywords,
@@ -234,3 +241,31 @@ export const useThumbnailStats = () => {
     notifyOnNetworkStatusChange: true,
   });
 };
+
+// 점검 화면용 — 지금 상태를 보는 거라 캐시를 쓰지 않는다
+export const useThumbnailStatsNow = (variables: QueryThumbnailStatsQueryVariables) =>
+  useQuery<QueryThumbnailStatsQuery, QueryThumbnailStatsQueryVariables>(QueryThumbnailStats, {
+    variables,
+    fetchPolicy: 'network-only',
+  });
+
+export const useSearchProbe = (
+  keyword: string,
+  options?: QueryOptions<QuerySearchProbeQuery, QuerySearchProbeQueryVariables>,
+) =>
+  useQuery<QuerySearchProbeQuery, QuerySearchProbeQueryVariables>(QuerySearchProbe, {
+    variables: { keyword },
+    fetchPolicy: 'network-only',
+    ...options,
+  });
+
+export const useServiceHealthSignals = (
+  options?: QueryOptions<QueryServiceHealthSignalsQuery, QueryServiceHealthSignalsQueryVariables>,
+) =>
+  useQuery<QueryServiceHealthSignalsQuery, QueryServiceHealthSignalsQueryVariables>(
+    QueryServiceHealthSignals,
+    {
+      fetchPolicy: 'network-only',
+      ...options,
+    },
+  );

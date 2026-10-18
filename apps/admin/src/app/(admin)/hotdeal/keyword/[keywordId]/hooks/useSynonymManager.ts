@@ -37,7 +37,7 @@ const useSynonymManager = (type: SynonymType) => {
   const addQueryString = (text: string, isChecked: boolean) => {
     const params = new URLSearchParams(searchParams);
     params.append(type, `${text}:${isChecked}`);
-    router.replace(`${pathname}/?${params.toString()}`);
+    router.replace(`${pathname}?${params.toString()}`);
   };
 
   const updateQueryString = (text: string, isChecked: boolean) => {
@@ -46,7 +46,7 @@ const useSynonymManager = (type: SynonymType) => {
     params.delete(type);
     values.filter((val) => !val.startsWith(`${text}:`)).forEach((val) => params.append(type, val));
     params.append(type, `${text}:${isChecked}`);
-    router.replace(`${pathname}/?${params.toString()}`);
+    router.replace(`${pathname}?${params.toString()}`);
   };
 
   const deleteQueryString = (text: string) => {
@@ -54,7 +54,7 @@ const useSynonymManager = (type: SynonymType) => {
     const values = params.getAll(type);
     params.delete(type);
     values.filter((val) => !val.startsWith(`${text}:`)).forEach((val) => params.append(type, val));
-    router.replace(`${pathname}/?${params.toString()}`);
+    router.replace(`${pathname}?${params.toString()}`);
   };
 
   const onAddSynonym = (text: string) => {

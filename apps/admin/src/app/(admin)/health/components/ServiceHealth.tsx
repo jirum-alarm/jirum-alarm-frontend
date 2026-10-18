@@ -1,6 +1,5 @@
 'use client';
 
-import { useQuery } from '@apollo/client/react';
 import Link from 'next/link';
 
 import Panel from '@/components/Panel';
@@ -9,16 +8,8 @@ import {
   DateInterval,
   ProductMappingMatchStatus,
   ProductMappingTarget,
-  QueryExperimentsQuery,
-  QuerySearchProbeQuery,
-  QuerySearchProbeQueryVariables,
-  QueryServiceHealthSignalsQuery,
-  QueryServiceHealthSignalsQueryVariables,
-  QueryThumbnailStatsQuery,
-  QueryThumbnailStatsQueryVariables,
 } from '@/generated/gql/graphql';
-import { QueryExperiments } from '@/graphql/experiment';
-import { QuerySearchProbe, QueryServiceHealthSignals, QueryThumbnailStats } from '@/graphql/stats';
+import { useExperiments } from '@/hooks/graphql/experiment';
 import {
   useProfitLinkProviderHealth,
   useProfitLinkQueueHealth,
@@ -28,7 +19,12 @@ import {
   useQueryHasTossSession,
   useRevenueTrend,
 } from '@/hooks/graphql/profitLink';
-import { useProviderHealthStatus } from '@/hooks/graphql/stats';
+import {
+  useProviderHealthStatus,
+  useSearchProbe,
+  useServiceHealthSignals,
+  useThumbnailStatsNow,
+} from '@/hooks/graphql/stats';
 import { useGetPendingVerificationsTotalCount } from '@/hooks/graphql/verification';
 import { partialRevenueStart } from '@/lib/revenue';
 import { ProviderType } from '@/types/stats';
@@ -144,24 +140,12 @@ const ServiceHealth = () => {
   const revenue = useRevenueTrend(toStatsDateRange(kstDaysAgo(6), toKstDateString()));
   const revenuePartialStart = partialRevenueStart(revenue.data?.revenueTrend);
   const thumbRange = toStatsDateRange(kstDaysAgo(1), toKstDateString());
-  const thumb = useQuery<QueryThumbnailStatsQuery, QueryThumbnailStatsQueryVariables>(
-    QueryThumbnailStats,
-    { variables: { ...thumbRange, interval: DateInterval.Daily }, fetchPolicy: 'network-only' },
-  );
-  const search = useQuery<QuerySearchProbeQuery, QuerySearchProbeQueryVariables>(QuerySearchProbe, {
-    variables: { keyword: '노트북' },
-    fetchPolicy: 'network-only',
-    ...poll,
-  });
+  const thumb = useThumbnailStatsNow({ ...thumbRange, interval: DateInterval.Daily });
+  const search = useSearchProbe('노트북', poll);
 
-  const backend = useQuery<QueryServiceHealthSignalsQuery, QueryServiceHealthSignalsQueryVariables>(
-    QueryServiceHealthSignals,
-    { fetchPolicy: 'network-only', ...poll },
-  ).data?.serviceHealthSignals;
+  const backend = useServiceHealthSignals(poll).data?.serviceHealthSignals;
 
-  const experiments = useQuery<QueryExperimentsQuery>(QueryExperiments, {
-    fetchPolicy: 'network-only',
-  });
+  const experiments = useExperiments();
 
   const sections = buildSections({
     experimentsOverdue: experiments.error

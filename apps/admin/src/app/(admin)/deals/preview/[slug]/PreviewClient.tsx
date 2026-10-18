@@ -4,6 +4,8 @@ import dayjs from 'dayjs';
 import Image from 'next/image';
 
 import { useConfirm } from '@/components/Confirm';
+import Spinner from '@/components/Spinner';
+import { useToast } from '@/components/Toast';
 import { QueryModelPagePreviewByAdmin } from '@/graphql/modelPage';
 import {
   useGetModelPagePreviewByAdmin,
@@ -55,13 +57,22 @@ const won = (n?: number | null) => (n == null ? '-' : `${Math.round(n).toLocaleS
 
 const PreviewClient = ({ slug }: { slug: string }) => {
   const confirm = useConfirm();
+  const toast = useToast();
   const { data, loading } = useGetModelPagePreviewByAdmin({ slug });
   const [setPublished, { loading: mutating }] = useSetModelPagePublishedByAdmin({
     // 미리보기 쿼리를 다시 받아 상태 배지·버튼 갱신.
     refetchQueries: [{ query: QueryModelPagePreviewByAdmin, variables: { slug } }],
+    onCompleted: (_, options) =>
+      toast.success(options?.variables?.isPublished ? '발행했습니다.' : '발행을 취소했습니다.'),
+    onError: (e) => toast.error(`실패: ${e.message}`),
   });
 
-  if (loading) return <div className="py-20 text-center text-bodydark2">불러오는 중…</div>;
+  if (loading)
+    return (
+      <div className="flex justify-center py-20">
+        <Spinner size="lg" />
+      </div>
+    );
   const page = data?.modelPagePreviewByAdmin;
   if (!page)
     return <div className="py-20 text-center text-bodydark2">페이지를 찾을 수 없습니다.</div>;

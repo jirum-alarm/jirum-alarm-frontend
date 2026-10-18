@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { useToast } from '@/components/Toast';
 import { ResponsiveAdvertiseGraphic } from '@/hooks/graphql/advertisement';
 
 import { UploadedAssetDesignSize } from '../AssetUploader';
@@ -32,6 +33,7 @@ export default function GraphicLayerEditor({
   onElementAssetUploaded,
   onRemoveForegroundElement,
 }: GraphicLayerEditorProps) {
+  const toast = useToast();
   const [activeBreakpoint, setActiveBreakpoint] = useState<BreakpointKey>('_default');
   const [selectedElementIndex, setSelectedElementIndex] = useState<number | null>(-1);
   const [dragState, setDragState] = useState<DragState | null>(null);
@@ -74,6 +76,7 @@ export default function GraphicLayerEditor({
     onGraphicChange,
     onBackgroundUploaded,
     setActiveBreakpoint,
+    onError: toast.error,
   });
 
   return (

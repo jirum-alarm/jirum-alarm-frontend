@@ -77,7 +77,7 @@ const ModelPagesTable = () => {
                 !!p.lastDealAt && dayjs().diff(dayjs(p.lastDealAt), 'day') > STALE_DAYS;
               return (
                 <tr key={p.id} className="hover:bg-slate-50">
-                  <td className="border-b border-[#eee] px-4 py-4 xl:pl-11 dark:border-strokedark">
+                  <td className="border-b border-stroke px-4 py-4 xl:pl-11 dark:border-strokedark">
                     <div className="flex items-center gap-3">
                       {p.heroImage ? (
                         <Image
@@ -119,19 +119,19 @@ const ModelPagesTable = () => {
                   </td>
                   <td
                     data-label="딜수"
-                    className="border-b border-[#eee] px-4 py-4 text-center dark:border-strokedark"
+                    className="border-b border-stroke px-4 py-4 text-center dark:border-strokedark"
                   >
                     {p.dealCount}
                   </td>
                   <td
                     data-label="최저가"
-                    className="border-b border-[#eee] px-4 py-4 text-center dark:border-strokedark"
+                    className="border-b border-stroke px-4 py-4 text-center dark:border-strokedark"
                   >
                     {p.heroMinPrice != null ? `${p.heroMinPrice.toLocaleString()}원` : '-'}
                   </td>
                   <td
                     data-label="마지막 딜"
-                    className="border-b border-[#eee] px-4 py-4 text-center dark:border-strokedark"
+                    className="border-b border-stroke px-4 py-4 text-center dark:border-strokedark"
                   >
                     {p.lastDealAt ? (
                       <span className={isStale ? 'font-medium text-meta-1' : ''}>
@@ -144,7 +144,7 @@ const ModelPagesTable = () => {
                   </td>
                   <td
                     data-label="상태"
-                    className="border-b border-[#eee] px-4 py-4 text-center dark:border-strokedark"
+                    className="border-b border-stroke px-4 py-4 text-center dark:border-strokedark"
                   >
                     {p.isPublished ? (
                       <span className="inline-flex rounded-full bg-success/10 px-2.5 py-0.5 text-sm font-medium text-success">
@@ -158,7 +158,7 @@ const ModelPagesTable = () => {
                   </td>
                   <td
                     data-label="actions"
-                    className="border-b border-[#eee] px-4 py-4 text-center dark:border-strokedark"
+                    className="border-b border-stroke px-4 py-4 text-center dark:border-strokedark"
                   >
                     <button
                       disabled={mutating}

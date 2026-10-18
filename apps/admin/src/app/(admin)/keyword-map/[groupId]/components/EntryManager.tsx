@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Card from '@/components/Card';
 import { useConfirm } from '@/components/Confirm';
 import Spinner from '@/components/Spinner';
+import { useToast } from '@/components/Toast';
 import {
   useAddKeywordMapEntries,
   useAddKeywordMapEntry,
@@ -18,10 +19,17 @@ interface Props {
 
 const EntryManager = ({ groupId, entries }: Props) => {
   const confirm = useConfirm();
+  const toast = useToast();
   const [keyword, setKeyword] = useState('');
-  const [addEntry, { loading: addingOne }] = useAddKeywordMapEntry(groupId);
-  const [addEntries, { loading: addingBulk }] = useAddKeywordMapEntries(groupId);
-  const [removeEntry] = useRemoveKeywordMapEntry(groupId);
+  const [addEntry, { loading: addingOne }] = useAddKeywordMapEntry(groupId, {
+    onError: (e) => toast.error(`추가 실패: ${e.message}`),
+  });
+  const [addEntries, { loading: addingBulk }] = useAddKeywordMapEntries(groupId, {
+    onError: (e) => toast.error(`추가 실패: ${e.message}`),
+  });
+  const [removeEntry] = useRemoveKeywordMapEntry(groupId, {
+    onError: (e) => toast.error(`삭제 실패: ${e.message}`),
+  });
 
   const isAdding = addingOne || addingBulk;
 

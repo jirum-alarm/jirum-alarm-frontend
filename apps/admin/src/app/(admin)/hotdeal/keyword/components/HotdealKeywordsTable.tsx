@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useConfirm } from '@/components/Confirm';
 import Panel from '@/components/Panel';
 import Switcher from '@/components/Switchers/SwitcherOne';
+import { useToast } from '@/components/Toast';
 import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import { useGetHotDealKeywords, useRemoveHotDealKeyword } from '@/hooks/graphql/keyword';
 import { useLoadMoreOnView } from '@/hooks/useLoadMoreOnView';
@@ -15,6 +16,7 @@ import { getParticle } from '@/utils/text';
 
 const HotdealKeywordsTable = () => {
   const confirm = useConfirm();
+  const toast = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
   const keywordType = (searchParams.get('keywordType') ??
@@ -25,7 +27,9 @@ const HotdealKeywordsTable = () => {
     },
   });
 
-  const [removeHotdealKeyword] = useRemoveHotDealKeyword(keywordType);
+  const [removeHotdealKeyword] = useRemoveHotDealKeyword(keywordType, {
+    onError: (e) => toast.error(`삭제 실패: ${e.message}`),
+  });
 
   const handleRemoveHotdealKeyword = (id: string, keyword: string) => {
     return async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -95,7 +99,7 @@ const HotdealKeywordsTable = () => {
           <tbody>
             {data.hotDealKeywordsByAdmin.map((hotdeal, key) => (
               <tr key={hotdeal.id} className="cursor-pointer hover:bg-slate-50">
-                <td className="border-b border-[#eee] text-center sm:pl-9 xl:pl-11 dark:border-strokedark">
+                <td className="border-b border-stroke text-center sm:pl-9 xl:pl-11 dark:border-strokedark">
                   <Link className="block h-full md:p-4" href={`/hotdeal/keyword/${hotdeal.id}`}>
                     <h5 className="font-medium text-black dark:text-white">
                       <span>{hotdeal.keyword}</span>
@@ -104,7 +108,7 @@ const HotdealKeywordsTable = () => {
                 </td>
                 <td
                   data-label="업데이트"
-                  className="hidden border-b border-[#eee] text-center md:table-cell dark:border-strokedark"
+                  className="hidden border-b border-stroke text-center md:table-cell dark:border-strokedark"
                 >
                   <Link className="block h-full md:p-4" href={`/hotdeal/keyword/${hotdeal.id}`}>
                     <span className="text-xs text-slate-400">
@@ -114,7 +118,7 @@ const HotdealKeywordsTable = () => {
                 </td>
                 <td
                   data-label="유의어"
-                  className="border-b border-[#eee] text-center dark:border-strokedark"
+                  className="border-b border-stroke text-center dark:border-strokedark"
                 >
                   <Link className="block h-full md:p-4" href={`/hotdeal/keyword/${hotdeal.id}`}>
                     <p className="text-black dark:text-white">
@@ -126,13 +130,13 @@ const HotdealKeywordsTable = () => {
                 </td>
                 <td
                   data-label="가중치"
-                  className="border-b border-[#eee] text-center dark:border-strokedark"
+                  className="border-b border-stroke text-center dark:border-strokedark"
                 >
                   <Link className="block h-full md:p-4" href={`/hotdeal/keyword/${hotdeal.id}`}>
                     <p className="text-black dark:text-white">{hotdeal.weight}</p>
                   </Link>
                 </td>
-                <td data-label="유형" className="border-b border-[#eee] dark:border-strokedark">
+                <td data-label="유형" className="border-b border-stroke dark:border-strokedark">
                   <Link className="block h-full md:p-4" href={`/hotdeal/keyword/${hotdeal.id}`}>
                     <div className="flex justify-center">
                       <p
@@ -149,7 +153,7 @@ const HotdealKeywordsTable = () => {
                     </div>
                   </Link>
                 </td>
-                <td data-label="actions" className="border-b border-[#eee] dark:border-strokedark">
+                <td data-label="actions" className="border-b border-stroke dark:border-strokedark">
                   <div className="flex items-center justify-center space-x-1 px-2 whitespace-nowrap sm:space-x-3.5 sm:px-0">
                     <Link
                       className="rounded-md p-2 text-sm hover:bg-slate-200 hover:text-primary"

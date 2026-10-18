@@ -4,13 +4,17 @@ import Link from 'next/link';
 
 import { useConfirm } from '@/components/Confirm';
 import Panel from '@/components/Panel';
+import { useToast } from '@/components/Toast';
 import { useGetKeywordMapGroups, useRemoveKeywordMapGroup } from '@/hooks/graphql/keywordMap';
 import { useLoadMoreOnView } from '@/hooks/useLoadMoreOnView';
 
 const KeywordMapGroupsTable = () => {
   const confirm = useConfirm();
+  const toast = useToast();
   const { data, loading, fetchMore } = useGetKeywordMapGroups();
-  const [removeGroup] = useRemoveKeywordMapGroup();
+  const [removeGroup] = useRemoveKeywordMapGroup({
+    onError: (e) => toast.error(`삭제 실패: ${e.message}`),
+  });
 
   const handleRemoveGroup = (id: string, name: string) => {
     return async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -60,14 +64,14 @@ const KeywordMapGroupsTable = () => {
           <tbody>
             {groups.map((group) => (
               <tr key={group.id} className="cursor-pointer hover:bg-slate-50">
-                <td className="border-b border-[#eee] text-center sm:pl-9 xl:pl-11 dark:border-strokedark">
+                <td className="border-b border-stroke text-center sm:pl-9 xl:pl-11 dark:border-strokedark">
                   <Link className="block h-full md:p-4" href={`/keyword-map/${group.id}`}>
                     <h5 className="font-medium text-black dark:text-white">{group.name}</h5>
                   </Link>
                 </td>
                 <td
                   data-label="설명"
-                  className="border-b border-[#eee] text-center dark:border-strokedark"
+                  className="border-b border-stroke text-center dark:border-strokedark"
                 >
                   <Link className="block h-full md:p-4" href={`/keyword-map/${group.id}`}>
                     <span className="text-sm text-slate-500">{group.description || '-'}</span>
@@ -75,13 +79,13 @@ const KeywordMapGroupsTable = () => {
                 </td>
                 <td
                   data-label="엔트리 수"
-                  className="border-b border-[#eee] text-center dark:border-strokedark"
+                  className="border-b border-stroke text-center dark:border-strokedark"
                 >
                   <Link className="block h-full md:p-4" href={`/keyword-map/${group.id}`}>
                     <span className="font-bold text-green-500">{group.entryCount}</span>
                   </Link>
                 </td>
-                <td data-label="actions" className="border-b border-[#eee] dark:border-strokedark">
+                <td data-label="actions" className="border-b border-stroke dark:border-strokedark">
                   <div className="flex items-center justify-center space-x-1 px-2 whitespace-nowrap sm:space-x-3.5 sm:px-0">
                     <Link
                       className="rounded-md p-2 text-sm hover:bg-slate-200 hover:text-primary"

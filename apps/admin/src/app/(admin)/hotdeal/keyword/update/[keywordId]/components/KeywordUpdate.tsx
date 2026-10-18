@@ -34,7 +34,7 @@ const KeywordUpdate = ({ keywordId }: Props) => {
     isMajor: false,
   });
 
-  const { data: detail } = useGetHotDealDetailKeyword({
+  const { data: detail, loading: fetching } = useGetHotDealDetailKeyword({
     variables: {
       id: Number(keywordId),
     },
@@ -86,6 +86,18 @@ const KeywordUpdate = ({ keywordId }: Props) => {
       },
     });
   };
+  // 받기 전 빈 폼(기본 weight 1)으로 수정을 누르면 원래 가중치를 덮어쓴다 — 받을 때까지 폼을 안 보인다
+  if (fetching) {
+    return (
+      <div className="animate-pulse space-y-4">
+        <div className="h-40 rounded-sm bg-gray-200" />
+      </div>
+    );
+  }
+  if (!detail?.hotDealKeywordByAdmin) {
+    return <div className="py-20 text-center text-bodydark2">키워드를 찾을 수 없습니다.</div>;
+  }
+
   return (
     <div className="flex flex-col gap-2">
       <PrimaryKeywordForm keyword={keyword.keyword} onChangeKeyword={handleChangeKeyword} />

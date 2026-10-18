@@ -19,7 +19,7 @@ export const SECTION_LABELS: Record<string, string> = {
   experiments: '실험',
 };
 
-export const sectionOfPath = (pathname: string) => pathname.split('/')[1] || 'home';
+const sectionOfPath = (pathname: string) => pathname.split('/')[1] || 'home';
 
 export type AdminAccess = { isAdmin: boolean; sections: string[] };
 

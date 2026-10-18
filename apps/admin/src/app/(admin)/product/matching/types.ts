@@ -43,13 +43,6 @@ export interface UndoAction {
   timestamp: number;
 }
 
-/** 토스트 상태 */
-export interface ToastState {
-  isVisible: boolean;
-  message: string;
-  type: 'success' | 'error' | 'info';
-}
-
 /** 이미지 비교 모달 상태 */
 export interface ImageModalState {
   isOpen: boolean;

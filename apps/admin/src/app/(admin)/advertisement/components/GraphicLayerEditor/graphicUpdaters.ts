@@ -21,6 +21,7 @@ type Params = {
   onGraphicChange: (graphic: ResponsiveAdvertiseGraphic) => void;
   onBackgroundUploaded: (assetUrl: string, designSize?: UploadedAssetDesignSize) => void;
   setActiveBreakpoint: (breakpoint: BreakpointKey) => void;
+  onError: (message: string) => void;
 };
 
 // graphic 을 불변 갱신하는 편집 연산들. 원본처럼 렌더마다 새로 만든다(현재 graphic 을 클로저로 잡는다).
@@ -28,6 +29,7 @@ export function createGraphicUpdaters({
   graphic,
   breakpointKeys,
   onGraphicChange,
+  onError,
   onBackgroundUploaded,
   setActiveBreakpoint,
 }: Params) {
@@ -96,7 +98,7 @@ export function createGraphicUpdaters({
 
   const addBreakpoint = (width: number) => {
     const key: BreakpointKey = `>=${width}`;
-    if (breakpointKeys.includes(key)) return alert(`${key} variant가 이미 있습니다.`);
+    if (breakpointKeys.includes(key)) return onError(`${key} variant가 이미 있습니다.`);
 
     updateGraphic((current) => ({
       ...current,
@@ -119,7 +121,7 @@ export function createGraphicUpdaters({
 
     const to: BreakpointKey = `>=${width}`;
     if (from === to) return;
-    if (breakpointKeys.includes(to)) return alert(`${to} variant가 이미 있습니다.`);
+    if (breakpointKeys.includes(to)) return onError(`${to} variant가 이미 있습니다.`);
 
     updateGraphic((current) => ({
       ...current,

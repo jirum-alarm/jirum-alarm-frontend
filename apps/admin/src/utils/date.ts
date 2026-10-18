@@ -27,13 +27,6 @@ export const toKstDateString = (date: Date = new Date()) =>
 export const kstDaysAgo = (days: number, now: Date = new Date()) =>
   toKstDateString(new Date(now.getTime() - days * DAY_MS));
 
-/** 오늘(KST)에서 months 달 전의 KST 날짜 (말일 넘침은 Date 규칙대로) */
-export const kstMonthsAgo = (months: number, now: Date = new Date()) => {
-  const kst = new Date(now.getTime() + KST_OFFSET_MS);
-  kst.setUTCMonth(kst.getUTCMonth() - months);
-  return kst.toISOString().slice(0, 10);
-};
-
 /**
  * 화면의 포함 구간 [start, end] (KST 날짜) → 서버 인자 [startDate, endDate).
  * 서버 endDate 가 exclusive 라 종료일 다음 날 KST 자정을 보내야 종료일(오늘)이 포함된다.

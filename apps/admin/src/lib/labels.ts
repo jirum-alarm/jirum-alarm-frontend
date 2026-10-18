@@ -4,7 +4,7 @@
  */
 
 // 수익·발급 출처. 색은 차트·막대·점이 화면이 달라도 같은 출처면 같은 색이게
-export const SOURCES: Record<string, { name: string; color: string }> = {
+const SOURCES: Record<string, { name: string; color: string }> = {
   toss: { name: '토스', color: '#3182F6' },
   adpick: { name: '애드픽', color: '#10B981' },
   ali_express: { name: '알리', color: '#F97316' },
@@ -19,7 +19,7 @@ export const sourceName = (code: string) => SOURCES[code]?.name ?? code;
 export const sourceColor = (code: string) => SOURCES[code]?.color ?? '#94A3B8';
 
 // 가입 경로(userOverview.dailySignups.channel) — 첫 소셜 연결, 소셜 없으면 email, 게스트 계정은 guest
-export const SIGNUP_CHANNELS: Record<string, { name: string; color: string }> = {
+const SIGNUP_CHANNELS: Record<string, { name: string; color: string }> = {
   kakao: { name: '카카오', color: '#EAB308' },
   naver: { name: '네이버', color: '#22C55E' },
   apple: { name: '애플', color: '#1C2434' },

@@ -2,14 +2,14 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useToast } from '@/components/Toast';
 import { BrandItem, BrandProduct } from '@/hooks/graphql/brandProduct';
 
 import { useUndoStack } from '../../hooks/useUndoStack';
-import { ImageModalState, ToastState } from '../../types';
+import { ImageModalState } from '../../types';
 import ImageCompareModal from '../ImageCompareModal';
 import KeyboardShortcutModal from '../KeyboardShortcutModal';
 import SimilarDealsPanel from '../SimilarDealsPanel';
-import Toast from '../Toast';
 
 import BrandItemList from './BrandItemList';
 import BrandSearchHeader from './BrandSearchHeader';
@@ -71,11 +71,7 @@ const VerificationGroupByView = () => {
     danawaTitle: '',
     communityTitle: '',
   });
-  const [toast, setToast] = useState<ToastState>({
-    isVisible: false,
-    message: '',
-    type: 'success',
-  });
+  const toast = useToast();
   const [isShortcutModalOpen, setIsShortcutModalOpen] = useState(false);
 
   // ── #7: Undo 훅 ──
@@ -247,10 +243,8 @@ const VerificationGroupByView = () => {
   }, [selectedBrandItem, allBrandItems, activeTab]);
 
   const showToast = useCallback(
-    (message: string, type: 'success' | 'error' | 'info' = 'success') => {
-      setToast({ isVisible: true, message, type });
-    },
-    [],
+    (message: string, type: 'success' | 'error' | 'info' = 'success') => toast[type](message),
+    [toast],
   );
 
   // ── 확정 / 실행 취소 / 항목 핸들러 ──
@@ -518,13 +512,6 @@ const VerificationGroupByView = () => {
       <KeyboardShortcutModal
         isOpen={isShortcutModalOpen}
         onClose={() => setIsShortcutModalOpen(false)}
-      />
-
-      <Toast
-        message={toast.message}
-        type={toast.type}
-        isVisible={toast.isVisible}
-        onClose={() => setToast((prev) => ({ ...prev, isVisible: false }))}
       />
     </>
   );

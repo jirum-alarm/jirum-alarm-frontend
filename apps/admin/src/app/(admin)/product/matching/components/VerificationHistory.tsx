@@ -274,13 +274,13 @@ const VerificationHistory = () => {
                   >
                     <td
                       data-label="ID"
-                      className="hidden border-b border-[#eee] px-4 py-5 text-center md:table-cell dark:border-strokedark"
+                      className="hidden border-b border-stroke px-4 py-5 text-center md:table-cell dark:border-strokedark"
                     >
                       <p className="text-black dark:text-white">{item.id}</p>
                     </td>
                     <td
                       data-label="Product ID"
-                      className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark"
+                      className="border-b border-stroke px-4 py-5 text-center dark:border-strokedark"
                     >
                       <Link
                         href={`https://jirum-alarm.com/products/${item.productId}`}
@@ -290,14 +290,14 @@ const VerificationHistory = () => {
                         {item.productId}
                       </Link>
                     </td>
-                    <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
+                    <td className="border-b border-stroke px-4 py-5 text-center dark:border-strokedark">
                       <p className="text-sm whitespace-normal text-black dark:text-white">
                         {item.product?.title ?? '-'}
                       </p>
                     </td>
                     <td
                       data-label="다나와 상품명"
-                      className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark"
+                      className="border-b border-stroke px-4 py-5 text-center dark:border-strokedark"
                     >
                       <p className="text-sm whitespace-normal text-black dark:text-white">
                         {item.brandProduct ?? '-'}
@@ -305,7 +305,7 @@ const VerificationHistory = () => {
                     </td>
                     <td
                       data-label="검증 상태"
-                      className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark"
+                      className="border-b border-stroke px-4 py-5 text-center dark:border-strokedark"
                     >
                       <span
                         className={`inline-flex rounded-full px-3 py-1 text-sm font-medium ${
@@ -321,7 +321,7 @@ const VerificationHistory = () => {
                     </td>
                     <td
                       data-label="검증 정보"
-                      className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark"
+                      className="border-b border-stroke px-4 py-5 text-center dark:border-strokedark"
                     >
                       <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-left text-xs text-slate-600 md:flex-col md:items-start md:gap-1 dark:text-slate-300">
                         <span className="flex items-center gap-1">
@@ -347,7 +347,7 @@ const VerificationHistory = () => {
                     </td>
                     <td
                       data-label="생성일"
-                      className="hidden border-b border-[#eee] px-4 py-5 text-center md:table-cell dark:border-strokedark"
+                      className="hidden border-b border-stroke px-4 py-5 text-center md:table-cell dark:border-strokedark"
                     >
                       <p className="text-sm text-black dark:text-white">
                         {item.createdAt ? dateFormatter(item.createdAt) : '-'}
@@ -355,7 +355,7 @@ const VerificationHistory = () => {
                     </td>
                     <td
                       data-label="actions"
-                      className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark"
+                      className="border-b border-stroke px-4 py-5 text-center dark:border-strokedark"
                     >
                       {item.verificationStatus &&
                       item.verificationStatus !==

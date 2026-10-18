@@ -25,30 +25,30 @@ const HotdealKeywordsTableSkeleton = () => {
           <tbody className="animate-pulse">
             {Array.from({ length: 5 }, (v, i) => i).map((v, i) => (
               <tr key={v}>
-                <td className="border-b border-[#eee] px-4 py-5 sm:pl-9 xl:pl-11 dark:border-strokedark">
+                <td className="border-b border-stroke px-4 py-5 sm:pl-9 xl:pl-11 dark:border-strokedark">
                   <div className="mb-4 h-2.5 w-12 rounded-full bg-slate-200 dark:bg-gray-700"></div>
                 </td>
                 <td
                   data-label="업데이트"
-                  className="hidden border-b border-[#eee] px-4 py-5 md:table-cell dark:border-strokedark"
+                  className="hidden border-b border-stroke px-4 py-5 md:table-cell dark:border-strokedark"
                 >
                   <div className="mb-4 h-2.5 w-12 rounded-full bg-slate-200 dark:bg-gray-700"></div>
                 </td>
                 <td
                   data-label="가중치"
-                  className="border-b border-[#eee] px-4 py-5 dark:border-strokedark"
+                  className="border-b border-stroke px-4 py-5 dark:border-strokedark"
                 >
                   <div className="mb-4 h-2.5 w-12 rounded-full bg-slate-200 dark:bg-gray-700"></div>
                 </td>
                 <td
                   data-label="유형"
-                  className="border-b border-[#eee] px-4 py-5 dark:border-strokedark"
+                  className="border-b border-stroke px-4 py-5 dark:border-strokedark"
                 >
                   <div className="mb-4 h-2.5 w-12 rounded-full bg-slate-200 dark:bg-gray-700"></div>
                 </td>
                 <td
                   data-label="actions"
-                  className="border-b border-[#eee] px-4 py-5 dark:border-strokedark"
+                  className="border-b border-stroke px-4 py-5 dark:border-strokedark"
                 >
                   <div className="mb-4 h-2.5 w-12 rounded-full bg-slate-200 dark:bg-gray-700"></div>
                 </td>
