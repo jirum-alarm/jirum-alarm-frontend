@@ -24,6 +24,7 @@ import type { GuideRow as ProductGuideRow } from '@/features/product-detail/ui/P
 import ProductPriceContext from '@/features/product-detail/ui/ProductPriceContext';
 import SoftKakaoOpenChatPrompt from '@/features/product-detail/ui/SoftKakaoOpenChatPrompt';
 import ViewerCount from '@/features/product-detail/ui/ViewerCount';
+import WaitCard from '@/features/product-detail/ui/WaitCard';
 import {
   CategoryLatestLinksSection,
   CategoryPopularByProductSection,
@@ -145,6 +146,14 @@ export default async function DesktopProductDetailPage({
                 productTitle={initialProduct?.title}
                 showHelpLink={!hidePrice}
               />
+              {/* «언제 사나» 카드(A/B wait_card_detail_v1, 11/5~) — 가격 블록 아래·근거 칸 밖. 서버가 null 이면 자리도 없다. */}
+              {!hidePrice && (
+                <WaitCard
+                  productId={productId}
+                  source="detail_desktop"
+                  answerKind={initialEvidence?.headline?.kind}
+                />
+              )}
             </div>
           </div>
           <div className="col-span-2 pt-5">

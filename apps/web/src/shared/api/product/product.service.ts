@@ -55,6 +55,23 @@ type ProductListResult = Omit<QueryProductsQuery, 'products'> & {
   })[];
 };
 
+/** 상세 «언제 사나» 카드(waitCardForProduct) — 서버 WaitCardOutput 그대로. 대조군·excluded 는 내용 칸이 null. */
+export type WaitCard = {
+  arm: string;
+  eligible: boolean;
+  verdict: string | null;
+  keyword: string | null;
+  unit: string | null;
+  goodPrice: number | null;
+  goodDays: number | null;
+  windowDays: number;
+  dealCount: number | null;
+  typicalGapDays: number | null;
+  lastGoodAt: string | null;
+  pageUnitPrice: number | null;
+  watching: boolean;
+};
+
 /** liveAlternativeDeals 한 줄. same=같은 상품(다른 곳·다른 값), related=같은 라인(용량·구성·색이 다름). */
 export type LiveAlternativeDeal = {
   kind: 'same' | 'related';
@@ -143,6 +160,24 @@ export class ProductService {
     if (isCrawlerBrowser()) return null;
     return execute(QueryFirstVisitSheetCopy, { keyword, productId }).then(
       (res) => res.data?.firstVisitSheetCopy ?? null,
+    );
+  }
+
+  /**
+   * 상세 «언제 사나» 카드 A/B(wait_card_detail_v1) — 서버가 기기(X-Device-Id)로 배정하고 카드를 계산한다.
+   * 시작 전(2026-11-05)·꺼짐이면 null. 대조군도 eligible·verdict 는 온다(그리지 않고 노출만 기록).
+   */
+  static async getWaitCard(productId: number): Promise<WaitCard | null> {
+    if (isCrawlerBrowser()) return null;
+    return execute(QueryWaitCardForProduct, { productId }).then(
+      (res) => res.data?.waitCardForProduct ?? null,
+    );
+  }
+
+  /** 카드 「이 가격 오면 알려줘」 — 게스트 세션이 있어야 한다(useAlertSession 먼저). 서버가 기준가를 다시 정한다. */
+  static async addWaitWatchForProduct(productId: number) {
+    return execute(MutationAddWaitWatchForProduct, { productId }).then(
+      (res) => res.data?.addWaitWatchForProduct ?? null,
     );
   }
 
@@ -868,6 +903,42 @@ const QueryFirstVisitSheetCopy = new TypedDocumentString<
       keyword
       broadened
       keywordArm
+    }
+  }
+`);
+
+const QueryWaitCardForProduct = new TypedDocumentString<
+  { waitCardForProduct: WaitCard | null },
+  { productId: number }
+>(`
+  query QueryWaitCardForProduct($productId: Int!) {
+    waitCardForProduct(productId: $productId) {
+      arm
+      eligible
+      verdict
+      keyword
+      unit
+      goodPrice
+      goodDays
+      windowDays
+      dealCount
+      typicalGapDays
+      lastGoodAt
+      pageUnitPrice
+      watching
+    }
+  }
+`);
+
+const MutationAddWaitWatchForProduct = new TypedDocumentString<
+  { addWaitWatchForProduct: { keyword: string; priced: boolean; created: boolean } },
+  { productId: number }
+>(`
+  mutation MutationAddWaitWatchForProduct($productId: Int!) {
+    addWaitWatchForProduct(productId: $productId) {
+      keyword
+      priced
+      created
     }
   }
 `);

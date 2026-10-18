@@ -24,6 +24,7 @@ import type { GuideRow as ProductGuideRow } from '@/features/product-detail/ui/P
 import ProductPriceContext from '@/features/product-detail/ui/ProductPriceContext';
 import SoftKakaoOpenChatPrompt from '@/features/product-detail/ui/SoftKakaoOpenChatPrompt';
 import ViewerCount from '@/features/product-detail/ui/ViewerCount';
+import WaitCard from '@/features/product-detail/ui/WaitCard';
 import {
   CategoryLatestLinksSection,
   CategoryPopularByProductSection,
@@ -105,6 +106,14 @@ function ProductDetailPage({
               (오카방 UTM·이미 입장한 유저는 SoftKakao 가 숨김). 광고 슬롯이 비어 있는 시간이 대부분이라
               상품 정보 바로 아래 = 보이는 자리. */}
           <div className="flex flex-col gap-3 px-5 pb-8 empty:hidden">
+            {/* «언제 사나» 카드(A/B wait_card_detail_v1, 11/5~) — 가격 블록 바로 아래·근거 칸 밖. 서버가 null 이면 자리도 없다. */}
+            {!hidePrice && (
+              <WaitCard
+                productId={productId}
+                source="detail_mobile"
+                answerKind={initialEvidence?.headline?.kind}
+              />
+            )}
             <AdvertiseSlotBanner slotLocation={AdvertiseSlotLocation.ProductMainBanner} />
             <SoftKakaoOpenChatPrompt
               categoryId={initialProduct?.categoryId}

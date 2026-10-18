@@ -15,8 +15,11 @@ export const readPushStatus = (): PushStatus => {
   return Notification.permission;
 };
 
-/** 열려 있으면 방금 등록한 것의 이름(키워드·테마). label 이 없으면 일반 문구. */
-export const pushChannelSheetAtom = atom<{ label?: string } | null>(null);
+/**
+ * 열려 있으면 방금 등록한 것의 이름(키워드·테마). label 이 없으면 일반 문구.
+ * placement 는 어디서 열었나(예: wait_card) — 시트 이벤트에 실어 등록 지점별 통로 선택을 가른다.
+ */
+export const pushChannelSheetAtom = atom<{ label?: string; placement?: string } | null>(null);
 
 const SHOWN_KEY = 'jirum:push-channel-sheet-shown';
 const COOLDOWN_MS = 24 * 60 * 60 * 1000;
@@ -35,7 +38,7 @@ export const usePushChannelPrompt = () => {
   const open = useSetAtom(pushChannelSheetAtom);
 
   return useCallback(
-    (label?: string) => {
+    (label?: string, placement?: string) => {
       if (readPushStatus() === 'ok') return;
       try {
         const shownAt = Number(localStorage.getItem(SHOWN_KEY));
@@ -44,7 +47,7 @@ export const usePushChannelPrompt = () => {
       } catch {
         // 저장소가 막힌 브라우저 — 쿨다운 없이 띄운다.
       }
-      open({ label });
+      open({ label, placement });
     },
     [open],
   );
