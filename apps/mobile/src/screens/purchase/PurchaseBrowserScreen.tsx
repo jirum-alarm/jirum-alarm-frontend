@@ -4,7 +4,9 @@ import {
   AppState,
   BackHandler,
   Linking,
+  Platform,
   Pressable,
+  ToastAndroid,
   View,
 } from 'react-native';
 import WebView from 'react-native-webview';
@@ -146,6 +148,14 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
         setCover(prev => (prev === 'loading' ? 'handedOff' : prev));
         if (handedOffAt.current == null) {
           handedOffAt.current = Date.now();
+          // iOS 는 넘어간 앱 왼쪽 위에 OS 가 「◀ 지름알림」을 붙여 준다. 안드로이드엔 그게 없어
+          // 시스템 토스트(다른 앱 위에도 잠깐 보인다)로 돌아오는 길을 알려 준다.
+          if (Platform.OS === 'android') {
+            ToastAndroid.show(
+              '뒤로가기를 누르면 지름알림으로 돌아와요',
+              ToastAndroid.LONG,
+            );
+          }
           Analytics.track('purchase_app_handoff', {
             product_id: String(productId),
             app_scheme: appSchemeName(appUrl),
@@ -220,11 +230,15 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
           <Pressable
             onPress={close}
             hitSlop={8}
-            className="size-11 items-center justify-center"
+            className="h-11 flex-row items-center gap-x-0.5 pr-1"
             accessibilityRole="button"
-            accessibilityLabel="닫기"
+            accessibilityLabel="지름알림으로 돌아가기"
             style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
             <Close />
+            {/* X 만으론 «쇼핑몰을 닫고 지름알림으로 간다»가 안 읽혀서 이름을 붙인다. */}
+            <Text className="text-sm font-semibold text-gray-900">
+              지름알림
+            </Text>
           </Pressable>
           {canGoBack ? (
             <Pressable
