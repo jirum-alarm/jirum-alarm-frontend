@@ -51,7 +51,7 @@ const DynamicProductSection = async ({
 
   // 게스트 추천 섹션은 개인화 결과가 없으면(빈 배열) 섹션 전체를 숨긴다.
   // (선호 없음/부스트 OFF 시 백엔드가 [] 반환 → 메인 핫딜과 중복 노출 방지)
-  // 해외직구 블프 세일은 기간(11/18~12/10 KST) 밖이면 서버가 [] — 폴백 카탈로그에서도 제목만 남지 않게.
+  // 해외직구 시즌 섹션은 기간(서버 overseas-sale.logic — 기본 11/11~12/10 KST) 밖이면 서버가 [] — 폴백 카탈로그에서도 제목만 남지 않게.
   if (
     (section.dataSource.queryName === 'guestRecommendedHotDeals' ||
       section.id === 'overseas-sale') &&

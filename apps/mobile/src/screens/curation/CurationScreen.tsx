@@ -78,13 +78,14 @@ export default function CurationScreen({
       }),
       sectionId,
     );
-    return (
-      local ??
-      findPromotionSectionById(
-        mapHomePageSections(homePage?.sections),
-        sectionId,
-      )
+    const server = findPromotionSectionById(
+      mapHomePageSections(homePage?.sections),
+      sectionId,
     );
+    // ★제목은 서버 것 — 서버 카탈로그가 날짜에 따라 바꾸는 제목(해외직구 시즌 «광군제 → 블프 → 12.12 직구 특가»)이
+    // 홈에서 누른 그대로 보이게. 조회 규칙(dataSource·탭)은 로컬 카탈로그를 그대로 쓴다.
+    if (local && server) return {...local, title: server.title};
+    return local ?? server;
   }, [tabSources, homePage, sectionId]);
 
   /**

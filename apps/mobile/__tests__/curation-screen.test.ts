@@ -102,6 +102,13 @@ describe('web /curation/[id] 와 같은 화면 구성', () => {
     expect(screen).toMatch(/setOptions\(\{\s*title,/);
   });
 
+  it('★서버에도 있는 섹션이면 제목은 서버 것 — 해외직구 시즌 제목이 날짜에 따라 바뀐다(2026-10-19)', () => {
+    // 로컬 폴백 제목은 날짜를 몰라 「해외직구 특가」라, 서버 제목(«블프 직구 특가» 등)을 덮어써야 홈에서 누른 그대로 보인다.
+    expect(screen).toContain(
+      'if (local && server) return {...local, title: server.title};',
+    );
+  });
+
   it('★없는 id 는 스피너에 멈추지 않고 안내를 띄운다(web notFound)', () => {
     expect(screen).toContain('isTabSourcesPending');
     expect(screen).toContain('페이지를 찾을 수 없어요');

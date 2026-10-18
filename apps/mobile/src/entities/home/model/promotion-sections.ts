@@ -95,10 +95,11 @@ export function buildPromotionSections({
       viewMoreLink: '/curation/time-deal',
     },
     {
-      // 블프~12.12 전(11/18~12/10 KST)에만 채워지는 해외직구 딜. 서버가 기간 밖엔 카탈로그에서 빼고 빈 배열을
-      // 주므로(crawling-server product/overseas-sale.logic) 여기 폴백 카탈로그에선 비면 숨긴다.
+      // 해외직구 시즌(서버 달력 — 기본 광군제 11/11 ~ 12/10 KST, env 로 바뀜)에만 채워지는 해외직구 딜. 서버가 기간 밖엔
+      // 카탈로그에서 빼고 빈 배열을 주므로(crawling-server product/overseas-sale.logic) 여기 폴백 카탈로그에선 비면 숨긴다.
+      // 제목은 서버 카탈로그가 날짜에 따라 «광군제 → 블프 → 12.12 직구 특가»로 바꾼다 — 폴백은 날짜를 모르니 중립 문구.
       id: 'overseas-sale',
-      title: '해외직구 블프 세일',
+      title: '해외직구 특가',
       type: 'HORIZONTAL_SCROLL',
       dataSource: {
         type: 'GRAPHQL_QUERY',
