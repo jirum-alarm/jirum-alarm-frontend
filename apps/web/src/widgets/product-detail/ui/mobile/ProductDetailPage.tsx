@@ -25,6 +25,7 @@ import ProductPriceContext from '@/features/product-detail/ui/ProductPriceContex
 import SoftKakaoOpenChatPrompt from '@/features/product-detail/ui/SoftKakaoOpenChatPrompt';
 import ViewerCount from '@/features/product-detail/ui/ViewerCount';
 import {
+  CategoryLatestLinksSection,
   CategoryPopularByProductSection,
   TossInternalLinksSection,
 } from '@/features/product-list/ui';
@@ -158,6 +159,13 @@ function ProductDetailPage({
             )}
             <Suspense>
               <CategoryPopularByProductSection productId={productId} />
+            </Suspense>
+            <Suspense>
+              <CategoryLatestLinksSection
+                productId={productId}
+                categoryId={initialProduct?.categoryId ?? null}
+                categoryName={initialProduct?.categoryName}
+              />
             </Suspense>
           </DetailSection>
 
