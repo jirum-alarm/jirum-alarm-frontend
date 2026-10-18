@@ -40,12 +40,20 @@ export default function BottomCTA({
   // 그려지지 않았으면(삼성 인터넷이 떠 있는 제휴 링크를 숨긴다) 가격 아래 본문에 구매 버튼을 대신 띄운다.
   const buyRef = useRef<HTMLAnchorElement>(null);
   const setMissingProduct = useSetAtom(bottomCtaMissingProductAtom);
+  // 본문 버튼은 1초에 먼저 띄운다(3초를 기다리면 그동안 구매 버튼이 하나도 없다). 계측 이벤트는 비교 가능하게 3초 그대로.
   useEffect(() => {
-    const timer = window.setTimeout(() => {
+    const early = window.setTimeout(() => {
+      const rect = buyRef.current?.getBoundingClientRect();
+      if (rect && rect.width === 0 && rect.height === 0) setMissingProduct(productId);
+    }, 1000);
+    const report = window.setTimeout(() => {
       if (!buyRef.current) return;
       if (reportCtaVisibility(buyRef.current) === 'not_rendered') setMissingProduct(productId);
     }, 3000);
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(early);
+      window.clearTimeout(report);
+    };
   }, [productId, setMissingProduct]);
 
   const handlePurchaseClick = () => {
@@ -79,9 +87,9 @@ export default function BottomCTA({
           onClick={handlePurchaseClick}
           className="block flex-1"
           target="_blank"
-          // 제휴 아웃바운드 — 크롤러가 따라가 봇클릭을 만들지 않게 nofollow.
-          // sponsored 는 뺀다: 삼성 인터넷이 「떠 있는 요소 + sponsored 링크」를 광고로 보고 이 바를 숨겼다(cta-visibility.ts).
-          rel="nofollow noopener noreferrer"
+          // 제휴 아웃바운드 — 크롤러가 따라가 봇클릭을 만들지 않게 nofollow/sponsored.
+          // (10/16 삼성 인터넷 숨김 의심으로 sponsored 를 뺐지만 숨김 비율이 그대로라 되돌렸다 — cta-visibility.ts)
+          rel="nofollow sponsored noopener noreferrer"
         >
           <Button className="h-12 w-full px-6 text-base font-semibold">구매하러 가기</Button>
         </a>
