@@ -113,9 +113,10 @@ describe('★배지 인수인계 — 웹뷰가 하던 일을 네이티브가 이
   });
 
   it('읽음·삭제 4개 흐름 모두 배지 동기화를 지난다', () => {
-    // syncUnreadCount 를 onSettled 로 매단 횟수 = 뮤테이션 4개
+    // 읽음·모두 읽음·모두 삭제 = 뮤테이션 onSettled 3개, 한 개 삭제 = 되돌리기 시간 뒤 서버 삭제(commitRemove)의 finally
     const hooked = viewModel.match(/onSettled: \(\) => syncUnreadCount/g) ?? [];
-    expect(hooked).toHaveLength(4);
+    expect(hooked).toHaveLength(3);
+    expect(viewModel).toMatch(/finally \{\s*syncUnreadCount\(true\)/);
   });
 });
 

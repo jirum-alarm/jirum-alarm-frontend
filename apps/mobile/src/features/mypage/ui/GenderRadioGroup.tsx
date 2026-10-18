@@ -1,9 +1,10 @@
 import React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import {Gender} from '@/shared/api/gql/graphql';
 import {tick} from '@/shared/lib/feedback/haptic';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 
 /**
  * 성별 선택. web `entities/user/ui/GenderRadioGroup`.
@@ -31,7 +32,7 @@ export default function GenderRadioGroup({
         {options.map(option => {
           const checked = gender === option.value;
           return (
-            <Pressable
+            <PressableOpacity
               key={option.value}
               onPress={() => {
                 tick();
@@ -50,7 +51,7 @@ export default function GenderRadioGroup({
                 <Text className="text-2xl">{option.emoji}</Text>
                 <Text className="text-sm text-gray-700">{option.label}</Text>
               </View>
-            </Pressable>
+            </PressableOpacity>
           );
         })}
       </View>

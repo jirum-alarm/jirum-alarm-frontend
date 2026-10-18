@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Pressable, View} from 'react-native';
+import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useQuery} from '@tanstack/react-query';
@@ -23,6 +23,7 @@ import {
   isValidNickname,
   NICKNAME_HELPER_TEXT,
 } from '@/features/mypage/lib/validation';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -80,7 +81,7 @@ export default function NicknameScreen({navigation}: Props) {
             helperText={NICKNAME_HELPER_TEXT}
             suffixIcon={
               !!value && (
-                <Pressable
+                <PressableOpacity
                   onPress={() => {
                     setTouched(true);
                     setValue('');
@@ -89,7 +90,7 @@ export default function NicknameScreen({navigation}: Props) {
                   accessibilityRole="button"
                   accessibilityLabel="입력 지우기">
                   <CircleXIcon />
-                </Pressable>
+                </PressableOpacity>
               )
             }
           />

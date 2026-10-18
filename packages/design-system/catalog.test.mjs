@@ -69,7 +69,6 @@ const NOT_PARTS = {
   // 앱 shared/components
   'apps/mobile/src/shared/components/icons': '아이콘·그림 모음',
   'apps/mobile/src/shared/components/OfflineBanner.tsx': '오프라인 띠 — 앱 전역 한 자리',
-  'apps/mobile/src/shared/components/PressableScale.tsx': '눌림 축소 동작(모양 없음)',
   'apps/mobile/src/shared/components/PushPermissionPrePrompt.tsx': '알림 권한 안내 — 한 흐름 전용',
   'apps/mobile/src/shared/components/SwipeToDelete.tsx': '밀어서 삭제 동작(모양 없음)',
   'apps/mobile/src/shared/components/UpdateAvailableSheet.tsx': '업데이트 안내 시트 — 한 흐름 전용',

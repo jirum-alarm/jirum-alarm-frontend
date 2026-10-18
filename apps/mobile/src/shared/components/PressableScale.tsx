@@ -1,5 +1,6 @@
 import React, {useMemo} from 'react';
 import {Pressable, View, type PressableProps} from 'react-native';
+import {press} from '@jirum/design-system/recipes';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -31,7 +32,7 @@ const DURATION = 100;
 
 export default function PressableScale({
   children,
-  scaleTo = 0.95,
+  scaleTo = press.scale,
   style,
   className,
   disabled,

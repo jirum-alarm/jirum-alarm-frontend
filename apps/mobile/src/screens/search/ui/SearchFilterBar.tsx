@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useQuery} from '@tanstack/react-query';
 import {fixed} from '@jirum/design-system';
@@ -16,6 +16,7 @@ import {cn} from '@/shared/lib/styling';
 import {tick} from '@/shared/lib/feedback';
 import BaseChip from '@/shared/components/ui/Chip';
 import {CheckIcon} from '@/shared/components/icons';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 
 /**
  * 검색 필터 바. web: widgets/search/ui/SearchFilterBar.tsx
@@ -53,7 +54,7 @@ export default function SearchFilterBar({
               {i > 0 ? (
                 <View className="bg-gray-200" style={styles.divider} />
               ) : null}
-              <Pressable
+              <PressableOpacity
                 onPress={() => {
                   tick();
                   setFilters({sort});
@@ -74,14 +75,14 @@ export default function SearchFilterBar({
                   )}>
                   {SORT_LABELS[sort]}
                 </Text>
-              </Pressable>
+              </PressableOpacity>
             </View>
           ))}
         </View>
 
         <View className="flex-row items-center gap-3">
           {hasActiveFilters ? (
-            <Pressable
+            <PressableOpacity
               onPress={() => {
                 tick();
                 resetFilters();
@@ -91,9 +92,9 @@ export default function SearchFilterBar({
               accessibilityLabel="필터 초기화"
               className="py-2">
               <Text className="text-sm text-gray-500 underline">초기화</Text>
-            </Pressable>
+            </PressableOpacity>
           ) : null}
-          <Pressable
+          <PressableOpacity
             onPress={() => {
               tick();
               setFilters({ended: !filters.ended});
@@ -105,7 +106,7 @@ export default function SearchFilterBar({
             className="flex-row items-center gap-1.5 py-2">
             <Checkbox checked={filters.ended} />
             <Text className="text-sm text-gray-500">품절 포함</Text>
-          </Pressable>
+          </PressableOpacity>
         </View>
       </View>
 

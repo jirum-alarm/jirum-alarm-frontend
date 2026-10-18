@@ -18,6 +18,8 @@ import ProductCardStatus from '@/shared/components/product/ProductCardStatus';
 import Thumbnail from '@/shared/components/product/Thumbnail';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {SkeletonBox, ListRowsSkeleton} from '@/shared/components/Skeletons';
+import PressableOpacity from '@/shared/components/PressableOpacity';
+import PressableScale from '@/shared/components/PressableScale';
 import Badge from '@/shared/components/ui/Badge';
 import Button from '@/shared/components/ui/Button';
 import Chip from '@/shared/components/ui/Chip';
@@ -27,6 +29,7 @@ import TabPill from '@/shared/components/ui/TabPill';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import TextField from '@/shared/components/ui/Text/TextField';
 import {tabStackNavigations} from '@/shared/constant/navigations';
+import {tick} from '@/shared/lib/feedback/haptic';
 import {showToast} from '@/shared/lib/feedback/toast';
 import {
   COLOR_SCHEME_LABEL,
@@ -186,6 +189,28 @@ function SwitchDemo() {
         accessibilityLabel="비활성 스위치"
       />
       <Text className="text-sm text-gray-700">{on ? '켜짐' : '꺼짐'}</Text>
+    </Row>
+  );
+}
+
+function PressDemo() {
+  return (
+    <Row>
+      <PressableScale
+        onPress={tick}
+        accessibilityRole="button"
+        accessibilityLabel="면이 있는 버튼"
+        className="rounded-lg bg-gray-900 px-4 py-3">
+        <Text className="text-sm font-semibold text-white">줄어듦</Text>
+      </PressableScale>
+      <PressableOpacity
+        onPress={tick}
+        accessibilityRole="button"
+        accessibilityLabel="아이콘 버튼"
+        className="h-11 w-11 items-center justify-center">
+        <Text className="text-lg text-gray-700">★</Text>
+      </PressableOpacity>
+      <Text className="text-sm text-gray-500">누르면 tick()</Text>
     </Row>
   );
 }
@@ -515,6 +540,7 @@ function ErrorStateDemo() {
 
 /** 카탈로그 id → 데모. 카탈로그에 app 부품이 생기면 여기에도 한 줄(테스트가 막는다). */
 export const DEMOS: Record<string, React.ComponentType> = {
+  press: PressDemo,
   button: ButtonDemo,
   chip: ChipDemo,
   tab: TabDemo,

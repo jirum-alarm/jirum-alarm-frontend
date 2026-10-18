@@ -31,12 +31,6 @@
     touch-action: manipulation;
   }
 
-  /* 키보드로 옮겨 다닐 때만 보이는 초점 테두리(마우스·터치엔 안 뜬다). */
-  :focus-visible {
-    outline: 2px solid var(--color-secondary-500);
-    outline-offset: 2px;
-  }
-
   /* 움직임 줄이기 설정이면 전환·애니메이션을 사실상 즉시로(Swiper 슬라이드·Switch 노브 포함). */
   @media (prefers-reduced-motion: reduce) {
     *,

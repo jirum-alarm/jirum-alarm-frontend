@@ -17,6 +17,7 @@ import Thumbnail from '@/shared/components/product/Thumbnail';
 import AlarmItemNoImage from './AlarmItemNoImage';
 import {useColors} from '@/shared/theme/useColors';
 import Badge from '@/shared/components/ui/Badge';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 
 /** 키워드와 일치하는 부분만 굵게. 분할 규칙은 `lib/highlight` 가 정본이다. */
 function HighlightedMessage({
@@ -191,7 +192,7 @@ const AlarmItem = React.memo(function AlarmItem({
           </View>
         </Pressable>
         {isEditMode ? (
-          <Pressable
+          <PressableOpacity
             accessibilityRole="button"
             // 목록에 X 가 줄마다 있어 "알림 삭제" 만으론 어느 줄인지 구분이 안 된다.
             accessibilityLabel={`${message} 알림 삭제`}
@@ -202,7 +203,7 @@ const AlarmItem = React.memo(function AlarmItem({
             style={styles.deleteButton}
             onPress={() => onDelete(Number(id))}>
             <XSmall />
-          </Pressable>
+          </PressableOpacity>
         ) : null}
       </View>
     </SwipeToDelete>

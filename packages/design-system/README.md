@@ -157,6 +157,18 @@ Tailwind 기본 간격이라 web·앱이 같은 클래스로 같은 값이 된�
 - **「동작 줄이기」**(OS 설정)를 켠 사람에겐 움직임을 멈춘다 — web 은 `MotionConfig reducedMotion="user"`(위치·크기 애니메이션 끔, 투명도는 남김)와
   CSS `motion-safe:`(스켈레톤 깜빡임), 앱은 Reanimated 기본값(시스템 설정을 따른다). 새 CSS 애니메이션은 `motion-safe:` 를 붙인다.
 
+## 눌림·진동 (`press`)
+
+누르는 것은 손이 닿는 순간 티가 나야 한다 — 서버 응답을 기다렸다 바뀌면 «씹혔나?» 하고 또 누른다. 그래서 세 가지를 지킨다.
+
+- **눌림 모양**: 면이 있는 것(카드·버튼·칩)은 줄어들고(`press.scale` 0.95 — web `whileTap`, 앱 `PressableScale`),
+  면이 없는 것(아이콘 버튼·글자 링크)은 흐려진다(`press.dim` 0.5 — web `active:opacity-50`, 앱 `PressableOpacity`). 앱에서 맨 `Pressable` 에 모양만 주고 눌림을 빼먹지 않는다.
+  web 은 전역으로 회색 탭 하이라이트를 끄고 `touch-action: manipulation`(더블탭 확대 대기 제거)을 건다 — 그래서 각자 `active:` 가 필요하다. 탭 레시피는 `hover` 칸에 들어 있다.
+- **즉시 반영 + 실패 되돌리기**: 찜·추천·토글은 누르는 즉시 바꾸고(낙관적), 실패하면 되돌리고 실패 토스트. 처리 중 재탭은 무시한다.
+- **진동은 한 동작에 한 번**(`press.haptic`): 켜고 끄기·고르기·탭 전환 = selection(앱 `tick()`), 생겼다(찜·등록) = success, 해제·삭제 = light, 실패 = error.
+  토스트(success·error)가 이미 울리는 자리엔 더 넣지 않는다. 스크롤·화면 이동·단순 열기엔 진동이 없다. 웹뷰 화면은 `triggerHaptic(style)` 로 앱에 부탁한다(웹 브라우저에선 아무 일 없음).
+- **동작 줄이기**: web 은 위 MotionConfig 에 더해 `globals.css` 가 「동작 줄이기」면 CSS 전환·애니메이션을 즉시로 끝낸다(Swiper 슬라이드·스위치 노브 포함).
+
 ## 차트 색 (`chart`)
 
 차트는 역할 이름으로 칠한다 — web `chartVar('line')`(→ `var(--color-secondary-500)`, 다크 자동), 앱 `chartColor('line', useColors())`.

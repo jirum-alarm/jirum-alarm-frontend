@@ -6,7 +6,7 @@ import React, {
   useState,
   useSyncExternalStore,
 } from 'react';
-import {Pressable, RefreshControl, ScrollView, View} from 'react-native';
+import {RefreshControl, ScrollView, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {HELP_PATH} from '@/constants/env';
 import {Analytics} from '@/shared/lib/analytics/ga4';
@@ -73,6 +73,7 @@ import TossDetailImages from './ui/TossDetailImages';
 import DetailBand from './ui/DetailBand';
 import ViewerCount, {MIN_VIEWER_COUNT} from './ui/ViewerCount';
 import CommunityReaction from '@/features/community-reaction/ui/CommunityReaction';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 
 type Props = NativeStackScreenProps<
   ProductFlowParamList,
@@ -377,7 +378,7 @@ function NativeDetail({
               실험(price_answer_holdout_v1)이 숨기므로 안에 넣으면 실험 군만 링크가 생긴다. 검색 스택에서 열려도
               WEBVIEW 는 루트 스택이 받는다(push 가 부모로 올라간다). */}
           {!hidePrice ? (
-            <Pressable
+            <PressableOpacity
               accessibilityRole="link"
               className="mx-5 mb-6 self-start"
               hitSlop={8}
@@ -396,7 +397,7 @@ function NativeDetail({
               <Text className="text-sm text-gray-500">
                 지름알림이 가격을 판단하는 법 ›
               </Text>
-            </Pressable>
+            </PressableOpacity>
           ) : null}
         </View>
         {/* web 순서: 카톡방 → 쿠팡 고지 → (띠) 비교 → (띠) 가격추이 → (띠) 커뮤니티 반응. 광고는 앱에서 제거.

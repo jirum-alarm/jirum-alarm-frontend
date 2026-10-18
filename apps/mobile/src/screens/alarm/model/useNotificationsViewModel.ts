@@ -1,4 +1,4 @@
-import {useCallback} from 'react';
+import {useCallback, useRef} from 'react';
 import {
   useInfiniteQuery,
   useMutation,
@@ -13,6 +13,9 @@ import {NotificationService} from '@/shared/api/notification';
 import {setUnreadCount} from '@/shared/hooks/useUnreadNotifications';
 import {setAlarmUnreadSnapshot} from '@/shared/lib/alarm-unread-snapshot';
 import {showToast} from '@/shared/lib/feedback';
+
+/** 되돌리기 버튼이 있는 토스트가 떠 있는 시간(toast.ts VISIBILITY_WITH_ACTION_MS)과 같게. */
+const UNDO_WINDOW_MS = 4000;
 
 type Page = Awaited<ReturnType<typeof NotificationService.getNotifications>>;
 type InfiniteData = {pages: Page[]; pageParams: unknown[]};
@@ -152,16 +155,68 @@ export function useNotificationsViewModel() {
     onSettled: () => syncUnreadCount(false),
   });
 
-  const {mutate: onRemoveNotification} = useMutation({
-    mutationFn: (id: number) => NotificationService.removeNotification(id),
-    onMutate: (id: number) =>
-      optimistic(page => page.filter(n => Number(n.id) !== id)),
-    onError: (_err, _id, context) => {
-      rollback(context);
-      showToast.error('알림을 삭제하지 못했어요.');
+  // ★한 개 삭제는 되돌리기를 준다 — 알림은 서버에서 다시 만들 수 없어서, 목록에서만 먼저 지우고
+  // 토스트가 떠 있는 동안(되돌리기 시간) 서버 삭제를 미룬다. 되돌리면 서버엔 아무 일도 없었던 것.
+  // 여러 개를 연달아 지우는 중에 하나만 되돌려도 나머지가 되살아나지 않게, 미룬 id 를 따로 든다.
+  const pendingRemovals = useRef(new Set<number>());
+
+  const commitRemove = useCallback(
+    async (
+      id: number,
+      context: {previousData: [readonly unknown[], unknown][]},
+    ) => {
+      if (!pendingRemovals.current.has(id)) return;
+      pendingRemovals.current.delete(id);
+      try {
+        await NotificationService.removeNotification(id);
+      } catch {
+        rollback(context);
+        showToast.error('알림을 삭제하지 못했어요.');
+      } finally {
+        syncUnreadCount(true);
+      }
     },
-    onSettled: () => syncUnreadCount(true),
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [syncUnreadCount],
+  );
+
+  const onRemoveNotification = useCallback(
+    async (id: number) => {
+      pendingRemovals.current.add(id);
+      const context = await optimistic(page =>
+        page.filter(n => Number(n.id) !== id),
+      );
+      const timer = setTimeout(() => commitRemove(id, context), UNDO_WINDOW_MS);
+      showToast.success('알림을 삭제했어요.', {
+        action: {
+          label: '되돌리기',
+          onPress: () => {
+            clearTimeout(timer);
+            pendingRemovals.current.delete(id);
+            // 지우기 전 스냅샷으로 되돌리되, 아직 삭제 대기 중인 다른 알림은 빼 둔다.
+            context.previousData.forEach(([queryKey, previous]) => {
+              const snapshot = previous as InfiniteData | undefined;
+              queryClient.setQueryData(
+                queryKey,
+                snapshot
+                  ? {
+                      ...snapshot,
+                      pages: snapshot.pages.map(page =>
+                        page.filter(
+                          n => !pendingRemovals.current.has(Number(n.id)),
+                        ),
+                      ),
+                    }
+                  : snapshot,
+              );
+            });
+          },
+        },
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [commitRemove, queryClient],
+  );
 
   const {mutate: onRemoveAll} = useMutation({
     mutationFn: () => NotificationService.removeAllNotifications(),

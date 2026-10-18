@@ -13,6 +13,7 @@ import {showToast} from '@/shared/lib/feedback';
 import Close from '@/shared/components/icons/Close';
 import {useColors} from '@/shared/theme/useColors';
 import {useOpenLogin} from '@/shared/hooks/useRequireLogin';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 
 const MAX_INPUT_HEIGHT = 120;
 const MAX_COMMENT_LENGTH = 300; // web textarea maxLength (커뮤니티 댓글과 같다)
@@ -95,14 +96,14 @@ export default function CommentInput({
               ? ` · ${editing.comment.author.nickname}`
               : ''}
           </Text>
-          <Pressable
+          <PressableOpacity
             onPress={clearEditingComment}
             // 16px 아이콘이라 12씩 넓혀야 40pt 남짓이 된다.
             hitSlop={12}
             accessibilityRole="button"
             accessibilityLabel="취소">
             <Close width={16} height={16} color={c.gray[500]} />
-          </Pressable>
+          </PressableOpacity>
         </View>
       ) : null}
 
@@ -137,7 +138,7 @@ export default function CommentInput({
             maxLength={MAX_COMMENT_LENGTH}
           />
         </Pressable>
-        <Pressable
+        <PressableOpacity
           onPress={handleSubmit}
           disabled={!canSubmit}
           accessibilityRole="button"
@@ -153,7 +154,7 @@ export default function CommentInput({
             }>
             등록
           </Text>
-        </Pressable>
+        </PressableOpacity>
       </View>
     </View>
   );

@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, Pressable, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useColors} from '@/shared/theme/useColors';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 
 interface WebViewErrorViewProps {
   onRetry: () => void;
@@ -18,12 +19,12 @@ const WebViewErrorView = ({onRetry}: WebViewErrorViewProps) => {
       <Text style={[styles.description, {color: c.gray[500]}]}>
         네트워크 연결을 확인하고 다시 시도해주세요
       </Text>
-      <Pressable
+      <PressableOpacity
         style={[styles.button, {backgroundColor: c.gray[900]}]}
         onPress={onRetry}
         accessibilityRole="button">
         <Text style={[styles.buttonText, {color: c.white}]}>다시 시도</Text>
-      </Pressable>
+      </PressableOpacity>
     </View>
   );
 };

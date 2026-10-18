@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {Pressable, type TextInput, View} from 'react-native';
+import {type TextInput, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import BasicLayout from '@/components/layout/BasicLayout.tsx';
 import TextField from '@/shared/components/ui/Text/TextField';
@@ -17,6 +17,7 @@ import {Analytics} from '@/shared/lib/analytics/ga4';
 import {UserService} from '@/shared/api/user/user.service';
 import {handleLoginError, handleLoginSuccess} from './useSocialLogin/lib';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 
 /**
  * zod 의 email() 과 같은 정규식. ★zod 를 이 검사 하나 때문에 번들에 두 벌(v3·v4, 430KB) 싣고 있어
@@ -122,13 +123,13 @@ const EmailLoginScreen = () => {
                 returnKeyType="next"
                 suffixIcon={
                   !!field.value && (
-                    <Pressable
+                    <PressableOpacity
                       onPress={() => field.onChange('')}
                       accessibilityRole="button"
                       accessibilityLabel="입력 지우기"
                       hitSlop={12}>
                       <CircleXIcon />
-                    </Pressable>
+                    </PressableOpacity>
                   )
                 }
               />
@@ -157,7 +158,7 @@ const EmailLoginScreen = () => {
                 onSubmitEditing={onSubmit}
                 suffixIcon={
                   <View className="flex-row">
-                    <Pressable
+                    <PressableOpacity
                       onPress={() => setShowPassword(prev => !prev)}
                       accessibilityRole="button"
                       accessibilityLabel={
@@ -165,15 +166,15 @@ const EmailLoginScreen = () => {
                       }
                       hitSlop={12}>
                       {showPassword ? <EyeIcon /> : <EyeOffIcon />}
-                    </Pressable>
+                    </PressableOpacity>
                     {!!field.value && (
-                      <Pressable
+                      <PressableOpacity
                         onPress={() => field.onChange('')}
                         accessibilityRole="button"
                         accessibilityLabel="입력 지우기"
                         hitSlop={12}>
                         <CircleXIcon />
-                      </Pressable>
+                      </PressableOpacity>
                     )}
                   </View>
                 }

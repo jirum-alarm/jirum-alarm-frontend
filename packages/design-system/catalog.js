@@ -29,6 +29,16 @@ const A = 'apps/mobile/src/';
 const catalog = [
   // ── 누르는 것
   {
+    id: 'press',
+    name: '눌림·진동',
+    use: '누르는 모든 것의 눌림 표시와 진동 규칙. 면이 있으면 PressableScale(줄어듦), 아이콘·글자 링크면 PressableOpacity(흐려짐)',
+    recipe: 'press',
+    web: null,
+    app: `${A}shared/components/PressableOpacity.tsx`,
+    story: '레시피/눌림',
+    related: [`${A}shared/components/PressableScale.tsx`, `${A}shared/lib/feedback`],
+  },
+  {
     id: 'button',
     name: '버튼',
     use: '동작 하나. lg = 화면 아래 주 버튼(가득), md·sm = 작은 버튼. 보조·위험·테두리는 tone',

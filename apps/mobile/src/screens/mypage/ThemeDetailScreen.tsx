@@ -2,7 +2,6 @@ import {emptyText, wordTag} from '@jirum/design-system/recipes';
 import React, {useCallback, useState} from 'react';
 import {
   ActivityIndicator,
-  Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -26,6 +25,7 @@ import Button from '@/shared/components/ui/Button';
 import {useThemeSubscription} from '@/features/mypage/model/useThemeSubscription';
 import type {ThemeWithKeywords} from '@/shared/api/theme';
 import {cn} from '@/shared/lib/styling';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -223,7 +223,7 @@ function ThemeConditions({theme}: {theme: ThemeWithKeywords}) {
             </View>
           ))}
           {hidden > 0 ? (
-            <Pressable
+            <PressableOpacity
               onPress={() => setShowAll(true)}
               accessibilityRole="button"
               hitSlop={6}
@@ -231,7 +231,7 @@ function ThemeConditions({theme}: {theme: ThemeWithKeywords}) {
               <Text className={cn(wordTag.text, wordTag.tone.more.text)}>
                 +{hidden}개 더 보기
               </Text>
-            </Pressable>
+            </PressableOpacity>
           ) : null}
         </View>
       </ConditionRow>

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Pressable, View} from 'react-native';
+import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {
   type InfiniteData,
@@ -33,6 +33,7 @@ import ThumbsupFill from '@/shared/components/icons/ThumbsupFill';
 import CommentMenu from './CommentMenu';
 import {useColors} from '@/shared/theme/useColors';
 import {useOpenLogin} from '@/shared/hooks/useRequireLogin';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 
 export default function Comment({
   comment,
@@ -157,20 +158,20 @@ export default function Comment({
           </Text>
         </View>
         {isMyComment ? (
-          <Pressable
+          <PressableOpacity
             onPress={() => setMenuOpen(true)}
             hitSlop={8}
             accessibilityRole="button"
             accessibilityLabel="댓글 메뉴">
             <Dots width={24} height={24} />
-          </Pressable>
+          </PressableOpacity>
         ) : null}
       </View>
 
       <Text className="pt-1 text-base text-gray-900">{comment.content}</Text>
 
       <View className="flex-row items-center gap-x-2 pt-2">
-        <Pressable
+        <PressableOpacity
           onPress={handleLike}
           disabled={!isLoggedIn}
           accessibilityRole="button"
@@ -194,9 +195,9 @@ export default function Comment({
             )}>
             {comment.likeCount}
           </Text>
-        </Pressable>
+        </PressableOpacity>
         {canReply && !hasParent ? (
-          <Pressable
+          <PressableOpacity
             onPress={handleReply}
             disabled={!isLoggedIn}
             accessibilityRole="button"
@@ -214,7 +215,7 @@ export default function Comment({
               )}>
               답글
             </Text>
-          </Pressable>
+          </PressableOpacity>
         ) : null}
       </View>
 

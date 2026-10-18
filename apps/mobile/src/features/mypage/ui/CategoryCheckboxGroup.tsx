@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import {CATEGORY_ICON} from '@/shared/components/product/NoImage';
@@ -7,6 +7,7 @@ import EtcOnIcon from '@/shared/components/icons/categories/EtcOnIcon';
 
 import {CATEGORIES} from '../lib/categories';
 import {tick} from '@/shared/lib/feedback';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 
 /**
  * 관심 카테고리 3열 체크박스. web `entities/category/ui/CategoriesCheckboxGroup`.
@@ -24,7 +25,7 @@ export default function CategoryCheckboxGroup({
       {CATEGORIES.map(category => {
         const checked = selected.has(category.value);
         return (
-          <Pressable
+          <PressableOpacity
             key={category.value}
             onPress={() => {
               tick();
@@ -52,7 +53,7 @@ export default function CategoryCheckboxGroup({
               <CategoryIcon value={category.value} />
               <Text className="text-sm text-gray-700">{category.text}</Text>
             </View>
-          </Pressable>
+          </PressableOpacity>
         );
       })}
     </View>

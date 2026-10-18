@@ -356,4 +356,21 @@ const listRow = {
   value: 'text-sm text-gray-500',
 };
 
-module.exports = {adLabel, addChip, badge, button, buttonTone, chip, tab, toggle, sectionTitle, cardThumb, dealRow, detailInfo, infoBox, keywordChip, linkChip, wordTag, sheet, skeleton, toast, emptyText, cardLabel, text, pageHeader, productCard, promptCard, listRow};
+/**
+ * 눌림·진동 — 누르는 것은 손을 대는 순간 티가 나야 한다(응답을 기다리면 «씹혔나?» 하고 다시 누른다).
+ *   scale  면이 있는 것(카드·버튼·칩): 살짝 줄어든다 — web `whileTap={{scale}}`, 앱 PressableScale
+ *   dim    면이 없는 것(아이콘 버튼·글자 링크): 흐려진다 — web `active:opacity-50`, 앱 PressableOpacity
+ * 진동(앱, 웹뷰는 triggerHaptic 으로 앱에 부탁) — 한 동작에 한 번만:
+ *   toggle·select  켜고 끄기·고르기·탭 전환 → selection(앱 tick())
+ *   add            찜·키워드 등록처럼 «생겼다» → success (성공 토스트가 이미 울리면 생략)
+ *   remove         해제·삭제 → light
+ *   error          실패 → error (실패 토스트가 울린다)
+ * 스크롤·화면 이동·단순 열기엔 진동을 두지 않는다.
+ */
+const press = {
+  scale: 0.95,
+  dim: 0.5,
+  haptic: {toggle: 'selection', select: 'selection', add: 'success', remove: 'light', error: 'error'},
+};
+
+module.exports = {press, adLabel, addChip, badge, button, buttonTone, chip, tab, toggle, sectionTitle, cardThumb, dealRow, detailInfo, infoBox, keywordChip, linkChip, wordTag, sheet, skeleton, toast, emptyText, cardLabel, text, pageHeader, productCard, promptCard, listRow};

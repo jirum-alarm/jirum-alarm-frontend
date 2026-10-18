@@ -22,6 +22,7 @@ import {
   summarizeKeywordAlert,
 } from '@jirum/domain/keyword-options';
 import {useUpdateKeywordOptions} from '../model/mutations';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 
 const DEAL_CHOICES = [
   {
@@ -177,7 +178,7 @@ export default function KeywordItem({
                 {DEAL_CHOICES.map(choice => {
                   const selected = priceDropOnly === choice.value;
                   return (
-                    <Pressable
+                    <PressableOpacity
                       key={choice.label}
                       onPress={() => {
                         tick();
@@ -208,7 +209,7 @@ export default function KeywordItem({
                           {choice.hint(keyword.keyword)}
                         </Text>
                       </View>
-                    </Pressable>
+                    </PressableOpacity>
                   );
                 })}
               </View>

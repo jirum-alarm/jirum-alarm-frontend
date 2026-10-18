@@ -46,6 +46,7 @@ import {
   type ShareChannel,
 } from '@/shared/lib/share';
 import {useColors} from '@/shared/theme/useColors';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 
 /**
  * 무엇을 공유하나 — 상품(`productId`) 또는 임의 서비스 경로(`sharePath`, 예: `/community/12`).
@@ -329,14 +330,14 @@ export default function ShareSheet({
                 ) : null}
               </View>
             </View>
-            <Pressable
+            <PressableOpacity
               onPress={onClose}
               hitSlop={10}
               className="-mr-1 h-8 w-8 items-center justify-center"
               accessibilityRole="button"
               accessibilityLabel="닫기">
               <CircleX width={28} height={28} />
-            </Pressable>
+            </PressableOpacity>
           </View>
 
           <View
@@ -363,7 +364,7 @@ export default function ShareSheet({
               numberOfLines={1}>
               {displayUrl}
             </Text>
-            <Pressable
+            <PressableOpacity
               onPress={() => share('copy')}
               disabled={!!pending}
               hitSlop={6}
@@ -381,7 +382,7 @@ export default function ShareSheet({
                 )}>
                 {copied ? '복사됨' : '링크 복사'}
               </Text>
-            </Pressable>
+            </PressableOpacity>
           </View>
         </Animated.View>
       </View>

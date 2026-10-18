@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, Pressable, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useColors} from '@/shared/theme/useColors';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 
 /**
  * 앱 전체가 죽었을 때의 마지막 화면.
@@ -28,13 +29,13 @@ export default function AppErrorFallback({
         불편을 드려 죄송해요.{'\n'}
         다시 시도해도 계속된다면 앱을 완전히 종료 후 실행해주세요.
       </Text>
-      <Pressable
+      <PressableOpacity
         style={[styles.button, {backgroundColor: c.gray[900]}]}
         onPress={onRetry}
         accessibilityRole="button"
         accessibilityLabel="다시 시도">
         <Text style={[styles.buttonText, {color: c.white}]}>다시 시도</Text>
-      </Pressable>
+      </PressableOpacity>
     </View>
   );
 }

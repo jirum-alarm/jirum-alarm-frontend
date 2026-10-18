@@ -40,6 +40,7 @@ import {useKeywordViewModel} from '@/features/mypage/model/useKeywordViewModel';
 import {useThemeSubscription} from '@/features/mypage/model/useThemeSubscription';
 import {KEYWORD_HELPER_TEXT} from '@/features/mypage/lib/validation';
 import {cn} from '@/shared/lib/styling';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -128,13 +129,13 @@ export default function KeywordScreen({navigation, route}: Props) {
             helperText={KEYWORD_HELPER_TEXT}
             suffixIcon={
               !!value && (
-                <Pressable
+                <PressableOpacity
                   onPress={reset}
                   hitSlop={8}
                   accessibilityRole="button"
                   accessibilityLabel="입력 지우기">
                   <CircleXIcon />
-                </Pressable>
+                </PressableOpacity>
               )
             }
           />

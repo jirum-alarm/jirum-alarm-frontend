@@ -1,20 +1,25 @@
 'use client';
 
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { NotificationService } from '@/shared/api/notification/notification.service';
 import { setAlarmReadState } from '@/shared/lib/alarmReadState';
 import { WebViewBridge } from '@/shared/lib/webview/sender';
 import { WebViewEventType } from '@/shared/lib/webview/type';
+import { useToast } from '@/shared/ui/common/Toast';
 
 import { NotificationQueries } from '@/entities/notification';
+
+/** 되돌리기 토스트가 떠 있는 시간(동작 버튼이 있으면 4초)과 같게. */
+const UNDO_WINDOW_MS = 4000;
 
 const limit = 20;
 
 export const useNotificationsViewModel = () => {
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
     NotificationQueries.infiniteNotifications({ limit }),
@@ -156,6 +161,7 @@ export const useNotificationsViewModel = () => {
       });
     },
     onError: (_err, _id, context) => {
+      toast.error('알림을 삭제하지 못했어요.');
       if (context?.previousData) {
         context.previousData.forEach(([queryKey, data]) => {
           queryClient.setQueryData(queryKey, data);
@@ -196,6 +202,37 @@ export const useNotificationsViewModel = () => {
     },
   });
 
+  // 한 개 삭제는 되돌리기를 준다(앱과 같음) — 알림은 다시 만들 수 없어서 목록에서만 먼저 지우고,
+  // 되돌리기 토스트가 떠 있는 동안 서버 삭제를 미룬다. 되돌리면 서버엔 아무 일도 없었던 것.
+  const timers = useRef(new Map<number, ReturnType<typeof setTimeout>>());
+  const onRemoveNotification = useCallback(
+    (id: number) => {
+      queryClient.setQueriesData({ queryKey: NotificationQueries.lists() }, (old: typeof data) =>
+        old
+          ? { ...old, pages: old.pages.map((page) => page.filter((n) => Number(n.id) !== id)) }
+          : old,
+      );
+      timers.current.set(
+        id,
+        setTimeout(() => {
+          timers.current.delete(id);
+          removeNotification(id);
+        }, UNDO_WINDOW_MS),
+      );
+      toast.success('알림을 삭제했어요.', {
+        action: {
+          label: '되돌리기',
+          onClick: () => {
+            clearTimeout(timers.current.get(id));
+            timers.current.delete(id);
+            queryClient.invalidateQueries({ queryKey: NotificationQueries.lists() });
+          },
+        },
+      });
+    },
+    [queryClient, removeNotification, toast],
+  );
+
   return {
     notifications,
     loading: isLoading || isFetchingNextPage,
@@ -204,7 +241,7 @@ export const useNotificationsViewModel = () => {
     ref,
     onReadNotification: readNotification,
     onReadAll: readAllNotifications,
-    onRemoveNotification: removeNotification,
+    onRemoveNotification,
     onRemoveAll: removeAllNotifications,
   };
 };
