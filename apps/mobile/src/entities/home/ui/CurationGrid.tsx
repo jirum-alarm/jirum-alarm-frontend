@@ -6,6 +6,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {GridSkeleton} from '@/shared/components/Skeletons';
+import {tick} from '@/shared/lib/feedback/haptic';
 
 /**
  * 더보기(목록) 화면들이 공유하는 그리드 껍데기.
@@ -121,6 +122,7 @@ export default function CurationGrid<T>({
   // isRefetching 을 그대로 쓰면 백그라운드 리페치에도 스피너가 떠서 분리한다.
   const [refreshing, setRefreshing] = useState(false);
   const handleRefresh = useCallback(async () => {
+    tick();
     setRefreshing(true);
     try {
       await onRetry();

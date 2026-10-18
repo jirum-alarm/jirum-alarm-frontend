@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {sectionTitle} from '@jirum/design-system/recipes';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {tick} from '@/shared/lib/feedback/haptic';
 import {useQuery} from '@tanstack/react-query';
 
 import type {ProductCardType} from '@/entities/home/model/types';
@@ -140,6 +141,7 @@ export default function RankingList({
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(async () => {
+    tick();
     setRefreshing(true);
     try {
       await Promise.all([

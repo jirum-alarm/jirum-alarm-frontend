@@ -1,4 +1,5 @@
 import WebView from 'react-native-webview';
+import {tick} from '@/shared/lib/feedback/haptic';
 import {NATIVE_STACK_SCRIPT} from '@/shared/lib/webview';
 import {
   Platform,
@@ -61,6 +62,7 @@ function useAndroidRefreshLogic(webviewRef: React.RefObject<WebView | null>) {
   const [enableRefresh, setEnableRefresh] = useState(false);
 
   const onRefresh = useCallback(() => {
+    tick();
     setRefreshing(true);
     webviewRef.current?.reload();
     setTimeout(() => {

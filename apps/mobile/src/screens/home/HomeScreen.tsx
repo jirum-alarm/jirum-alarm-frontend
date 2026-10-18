@@ -31,6 +31,7 @@ import JirumRankingSlider from '@/entities/home/ui/JirumRankingSlider';
 import RecommendedKeywordSection from '@/entities/home/ui/RecommendedKeywordSection';
 import ThemeHomeSection from '@/entities/home/ui/ThemeHomeSection';
 import {useColors} from '@/shared/theme/useColors';
+import {tick} from '@/shared/lib/feedback/haptic';
 import TossHomeSection from '@/entities/home/ui/TossHomeSection';
 import {tossDetailPath} from '@/entities/home/lib/toss';
 import HomeHeader from '@/screens/home/ui/HomeHeader';
@@ -253,6 +254,7 @@ export default function HomeScreen() {
   );
 
   const onRefresh = useCallback(async () => {
+    tick();
     setRefreshing(true);
     await queryClient.invalidateQueries({queryKey: HomeQueries.keys.all});
     setRefreshing(false);
