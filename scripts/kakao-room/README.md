@@ -25,3 +25,11 @@
 - 저장: 맥 스튜디오 `~/jirum-kakao-room/counts-10m.csv`(온리방·전체방).
 - 쓰임: `scripts/growth-snapshot.py` 의 `room_flow()` 가 주별 입장·퇴장·표본 시간(이웃 표본 20분 안만)을 formula.json 에 넣고,
   그로스 대시보드 «방 실측 이탈률»이 퇴장 ÷ 인원으로 단골 이탈률을 쿠키 대신 잰다. 맥북이 잠든 시간은 세지 않는다.
+
+## Grafana 적재 (2026-10-18~)
+
+- `ingest-metrics.py` — 두 CSV 를 날짜(KST)×방별 `kakao_room_members`·`kakao_room_joins`·`kakao_room_leaves`·`kakao_room_cover_h` 로 묶어
+  운영 MySQL `business_metric_daily` 에 덮어쓴다(최근 3일, 인자로 일수). 정의는 `growth-snapshot.py` 의 `room_flow()` 와 같다.
+- 실행: 맥북 launchd `com.seonkyo.jirum-kakao-room-ingest`(매시, `~/.local/bin/jirum-kakao-room-ingest`, kubectl prod 로 mysql-0 에 넣는다).
+  클러스터 배치는 맥 스튜디오 CSV 에 닿지 않아서 맥북이 넣는다. 설치: `install -m 0755 scripts/kakao-room/ingest-metrics.py ~/.local/bin/jirum-kakao-room-ingest`.
+- 보는 곳: Grafana «지름알람 - 비즈니스» «💬 카톡방» 줄.
