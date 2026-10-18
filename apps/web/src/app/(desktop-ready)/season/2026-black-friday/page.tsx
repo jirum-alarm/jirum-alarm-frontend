@@ -259,8 +259,8 @@ export default async function SeasonBlackFriday2026Page() {
           2026 시즌 달력
         </h2>
         <p className="mt-1 text-xs text-gray-500">
-          2026 공식 일정은 알리가 11월 초에 발표해요. 아래는 2025년 실제 일정 기준이고, 발표되면
-          고쳐요.
+          알리익스프레스의 2026 공식 일정은 아직 발표 전이에요(10월 기준). 아래는 2025년 실제
+          일정이고, 발표되면 고쳐요.
         </p>
         <h3 className="mt-5 text-sm font-semibold text-gray-700">해외직구(알리익스프레스)</h3>
         <EventRows events={OVERSEAS_EVENTS} />
