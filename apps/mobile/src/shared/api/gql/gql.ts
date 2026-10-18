@@ -64,6 +64,7 @@ type Documents = {
   '\n  query QueryMyPushSetting {\n    pushSetting {\n      keywordAlert\n      keywordAlertLevel\n      marketing\n      nightAlerts\n      communityAlert\n      quietHoursStart\n      quietHoursEnd\n    }\n  }\n': typeof types.QueryMyPushSettingDocument;
   '\n  mutation MutationUpdateMyPushSetting(\n    $keywordAlert: Boolean\n    $keywordAlertLevel: KeywordAlertLevel\n    $marketing: Boolean\n    $nightAlerts: Boolean\n    $communityAlert: Boolean\n    $quietHoursStart: Int\n    $quietHoursEnd: Int\n  ) {\n    updatePushSetting(\n      keywordAlert: $keywordAlert\n      keywordAlertLevel: $keywordAlertLevel\n      marketing: $marketing\n      nightAlerts: $nightAlerts\n      communityAlert: $communityAlert\n      quietHoursStart: $quietHoursStart\n      quietHoursEnd: $quietHoursEnd\n    )\n  }\n': typeof types.MutationUpdateMyPushSettingDocument;
   '\n  query QueryGoodPriceSuggestion($keyword: String!) {\n    goodPriceSuggestion(keyword: $keyword) {\n      keyword\n      priced\n      watching\n      unit\n      goodPrice\n      goodDealCount\n      rawMatchCount\n      windowDays\n    }\n  }\n': typeof types.QueryGoodPriceSuggestionDocument;
+  '\n  query QueryKeywordDealFrequencies($keywords: [String!]!) {\n    keywordDealFrequencies(keywords: $keywords) {\n      keyword\n      dealCount\n      windowDays\n      lastDealAt\n      suggestedKeyword\n      suggestedDealCount\n    }\n  }\n': typeof types.QueryKeywordDealFrequenciesDocument;
   '\n  mutation MutationApplyGoodPriceOnly($keyword: String!) {\n    applyGoodPriceOnly(keyword: $keyword) {\n      keyword\n      priced\n    }\n  }\n': typeof types.MutationApplyGoodPriceOnlyDocument;
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n': typeof types.MutationAddPushTokenDocument;
   '\n  mutation MutationRemoveTokenLinkage($token: String!) {\n    removeTokenLinkage(token: $token)\n  }\n': typeof types.MutationRemoveTokenLinkageDocument;
@@ -204,6 +205,8 @@ const documents: Documents = {
     types.MutationUpdateMyPushSettingDocument,
   '\n  query QueryGoodPriceSuggestion($keyword: String!) {\n    goodPriceSuggestion(keyword: $keyword) {\n      keyword\n      priced\n      watching\n      unit\n      goodPrice\n      goodDealCount\n      rawMatchCount\n      windowDays\n    }\n  }\n':
     types.QueryGoodPriceSuggestionDocument,
+  '\n  query QueryKeywordDealFrequencies($keywords: [String!]!) {\n    keywordDealFrequencies(keywords: $keywords) {\n      keyword\n      dealCount\n      windowDays\n      lastDealAt\n      suggestedKeyword\n      suggestedDealCount\n    }\n  }\n':
+    types.QueryKeywordDealFrequenciesDocument,
   '\n  mutation MutationApplyGoodPriceOnly($keyword: String!) {\n    applyGoodPriceOnly(keyword: $keyword) {\n      keyword\n      priced\n    }\n  }\n':
     types.MutationApplyGoodPriceOnlyDocument,
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n':
@@ -584,6 +587,12 @@ export function graphql(
 export function graphql(
   source: '\n  query QueryGoodPriceSuggestion($keyword: String!) {\n    goodPriceSuggestion(keyword: $keyword) {\n      keyword\n      priced\n      watching\n      unit\n      goodPrice\n      goodDealCount\n      rawMatchCount\n      windowDays\n    }\n  }\n',
 ): typeof import('./graphql').QueryGoodPriceSuggestionDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryKeywordDealFrequencies($keywords: [String!]!) {\n    keywordDealFrequencies(keywords: $keywords) {\n      keyword\n      dealCount\n      windowDays\n      lastDealAt\n      suggestedKeyword\n      suggestedDealCount\n    }\n  }\n',
+): typeof import('./graphql').QueryKeywordDealFrequenciesDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

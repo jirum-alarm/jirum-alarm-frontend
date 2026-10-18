@@ -855,6 +855,7 @@ const QueryFirstVisitSheetCopy = new TypedDocumentString<
       windowDays: number;
       keyword: string;
       broadened: boolean;
+      keywordArm: string | null;
     };
   },
   { keyword: string; productId?: number }
@@ -866,6 +867,7 @@ const QueryFirstVisitSheetCopy = new TypedDocumentString<
       windowDays
       keyword
       broadened
+      keywordArm
     }
   }
 `);

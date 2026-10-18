@@ -5,7 +5,10 @@ import {MyPageQueries} from '@/entities/mypage';
 import {MyPageService, type MyKeyword} from '@/shared/api/mypage';
 import {showToast} from '@/shared/lib/feedback';
 import {requestPushPermissionIfNeeded} from '@/shared/lib/fcm/push-permission';
-import {trackKeywordRegister} from '@/shared/lib/analytics/keyword-tracking';
+import {
+  trackKeywordRegister,
+  type KeywordRegisterSource,
+} from '@/shared/lib/analytics/keyword-tracking';
 
 import {invalidateMyKeywords} from '@/features/keyword-prompt/model/myKeywords';
 
@@ -45,10 +48,18 @@ export function useKeywordViewModel() {
   }, []);
 
   const {mutate: addKeyword, isPending: isAdding} = useMutation({
-    mutationFn: MyPageService.addKeyword,
-    onSuccess: (_data, {keyword, fromRecommendation}) => {
+    // source 는 계측용이라 서버로 보내지 않는다.
+    mutationFn: ({
+      source: _source,
+      ...variables
+    }: {
+      keyword: string;
+      fromRecommendation?: boolean;
+      source?: KeywordRegisterSource;
+    }) => MyPageService.addKeyword(variables),
+    onSuccess: (_data, {keyword, fromRecommendation, source}) => {
       trackKeywordRegister(
-        fromRecommendation ? 'mypage_recommend' : 'mypage',
+        source ?? (fromRecommendation ? 'mypage_recommend' : 'mypage'),
         keyword,
       );
       reset();
@@ -125,6 +136,15 @@ export function useKeywordViewModel() {
     addKeyword({keyword: value.trim()});
   }, [addKeyword, canSubmit, value]);
 
+  /** 드문 키워드(90일 3번 미만)의 「‘첫 낱말’도 받기」·입력칸의 「‘첫 낱말’로 등록」 — 서버 제안을 바로 등록한다. */
+  const addBroadened = useCallback(
+    (keyword: string) => {
+      if (isAdding) return;
+      addKeyword({keyword, source: 'mypage_broaden'});
+    },
+    [addKeyword, isAdding],
+  );
+
   /** 추천 칩 — 입력 없이 바로 등록한다. */
   const addDirect = useCallback(
     (keyword: string) => {
@@ -146,6 +166,7 @@ export function useKeywordViewModel() {
     reset,
     submit,
     addDirect,
+    addBroadened,
     isAdding,
     removeKeyword: (id: string) => removeKeyword({id: Number(id)}),
   };

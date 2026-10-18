@@ -1,6 +1,11 @@
 'use client';
 
 import {
+  broadenSuggestion,
+  describeKeywordFrequency,
+  type KeywordFrequency,
+} from '@jirum/domain/keyword-frequency';
+import {
   formatPriceInput,
   parseExcludeKeywords,
   parsePrice,
@@ -59,11 +64,19 @@ const KeywordItem = ({
   keyword,
   onDelete,
   defaultOpen = false,
+  frequency,
+  onBroaden,
+  broadening = false,
 }: {
   keyword: Keyword;
   onDelete: () => void;
   /** 알림 한 줄의 키워드 링크에서 들어오면 펼친 채로 시작한다. */
   defaultOpen?: boolean;
+  /** 지난 90일 횟수(서버 keywordDealFrequencies) — 아직 없거나 실패하면 null(줄을 안 그린다). */
+  frequency?: KeywordFrequency | null;
+  /** 드문 키워드의 «넓혀 받기» — 제안 키워드를 새로 등록한다(원래 키워드는 그대로). */
+  onBroaden?: (keyword: string) => void;
+  broadening?: boolean;
 }) => {
   const detailsRef = useRef<HTMLDetailsElement>(null);
   const [priceDropOnly, setPriceDropOnly] = useState(keyword.priceDropOnly);
@@ -73,6 +86,8 @@ const KeywordItem = ({
   const { mutate, isPending } = useUpdateKeywordOptions({
     onSuccess: () => detailsRef.current?.removeAttribute('open'),
   });
+  const described = frequency ? describeKeywordFrequency(frequency) : null;
+  const suggestion = frequency ? broadenSuggestion(frequency) : null;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -94,6 +109,16 @@ const KeywordItem = ({
             <p className="mt-0.5 truncate text-xs text-gray-500">
               {summarizeKeywordAlert(keyword)}
             </p>
+            {described && (
+              <p
+                className={cn(
+                  'mt-0.5 truncate text-xs',
+                  described.sparse ? 'text-warning-700' : 'text-gray-500',
+                )}
+              >
+                {described.text}
+              </p>
+            )}
           </div>
           <ArrowDown
             width={20}
@@ -107,6 +132,21 @@ const KeywordItem = ({
           onSubmit={handleSubmit}
           className="flex flex-col gap-5 border-t border-gray-100 px-4 pt-4 pb-4"
         >
+          {suggestion && onBroaden && (
+            // 드문 키워드(90일 3번 미만) — 첫 낱말(대개 브랜드)로 넓혀 받기. 원래 키워드는 지우지 않는다(같은 딜은 한 번만 온다).
+            <div className="rounded-lg bg-gray-50 px-3 py-3">
+              <p className="text-sm text-gray-900">자주 안 올라오는 키워드라 알림이 드물게 와요.</p>
+              <p className="mt-0.5 text-xs text-gray-500">{suggestion.text}</p>
+              <button
+                type="button"
+                disabled={broadening}
+                onClick={() => onBroaden(suggestion.keyword)}
+                className="bg-primary-500 text-fixed-900 mt-3 rounded-md px-4 py-2 text-sm font-semibold disabled:opacity-50"
+              >
+                {suggestion.button}
+              </button>
+            </div>
+          )}
           <Link
             href={`${PAGE.SEARCH}?keyword=${encodeURIComponent(keyword.keyword)}`}
             onClick={() => trackAlarmLink('keyword_deals')}

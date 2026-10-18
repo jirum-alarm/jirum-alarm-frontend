@@ -10,6 +10,7 @@ import {
   MutationUpdateMyProfile,
   MutationWithdraw,
   QueryGoodPriceSuggestion,
+  QueryKeywordDealFrequencies,
   QueryMyNotificationKeywords,
   QueryMyProfile,
   QueryMyPushSetting,
@@ -83,6 +84,15 @@ export class MyPageService {
   static async withdraw() {
     const res = await HttpClient.withAccessToken().execute(MutationWithdraw);
     return res.data;
+  }
+
+  /** 키워드별 지난 90일 횟수 — 내 키워드 목록·입력칸 미리보기. web KeywordFrequencyService.frequencies 와 같다. */
+  static async getKeywordFrequencies(keywords: string[]) {
+    const res = await HttpClient.withAccessToken().execute(
+      QueryKeywordDealFrequencies,
+      {keywords},
+    );
+    return res.data?.keywordDealFrequencies ?? [];
   }
 
   /** 알림함 「좋은 가격만 받기」 권유 — 내 키워드가 아니면 null. web GoodPriceService.suggestion 과 같다. */

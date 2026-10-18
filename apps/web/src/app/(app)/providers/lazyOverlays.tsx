@@ -3,6 +3,7 @@
 import { useAtomValue } from 'jotai';
 import dynamic from 'next/dynamic';
 
+import { isGuestAtom } from '@/shared/hooks/useIsLoggedIn';
 import { pushChannelSheetAtom } from '@/shared/lib/push-channel/pushChannel';
 
 import { loginModalMessageAtom } from '@/features/auth/model/login/loginModal';
@@ -15,6 +16,9 @@ const LoginModal = dynamic(() => import('@/features/auth/ui/login/LoginModal'), 
 const PushChannelSheet = dynamic(() => import('@/features/app-download/ui/PushChannelSheet'), {
   ssr: false,
 });
+const GuestAlertReturnToast = dynamic(() => import('@/features/alarm/ui/GuestAlertReturnToast'), {
+  ssr: false,
+});
 
 export function LazyLoginModal() {
   return useAtomValue(loginModalMessageAtom) === null ? null : <LoginModal />;
@@ -22,4 +26,9 @@ export function LazyLoginModal() {
 
 export function LazyPushChannelSheet() {
   return useAtomValue(pushChannelSheetAtom) ? <PushChannelSheet /> : null;
+}
+
+/** 게스트(로그인 없이 키워드를 건 브라우저)만 — 다시 왔을 때 쌓인 알림을 알려 준다. 회원은 종·하단 탭 점이 있다. */
+export function LazyGuestAlertReturnToast() {
+  return useAtomValue(isGuestAtom) ? <GuestAlertReturnToast /> : null;
 }

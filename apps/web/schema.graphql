@@ -413,6 +413,10 @@ type FirstVisitSheetCopyOutput {
   dealCount: Int
   """시트가 걸 알림 키워드 — 넓히기가 꺼져 있거나 넓힐 필요가 없으면 받은 키워드 그대로"""
   keyword: String!
+  """
+  키워드 넓히기 A/B(first_visit_keyword_fallback_v1) — 넓힐 수 있던 기기만 군(broaden|title). 그 밖·꺼짐은 null. 배정 기록의 층 표시용
+  """
+  keywordArm: String
   """control(지금 문구) | frequency(「지난 90일에 N번 떴어요」)"""
   variant: String!
   windowDays: Int!
@@ -596,6 +600,20 @@ enum KeywordAlertLevel {
 type KeywordCountOutput {
   count: Int!
   keyword: String!
+}
+
+"""키워드 미리보기 — 지난 90일 딜 횟수(키워드 알림과 같은 매칭)와, 드물면 넓힐 첫 낱말"""
+type KeywordDealFrequencyOutput {
+  """지난 windowDays 일 뜬 횟수 — 같은 날 같은 가격(교차 게시)은 한 번"""
+  dealCount: Int!
+  """물어본 키워드(앞뒤 공백·겹친 공백 정리)"""
+  keyword: String!
+  """마지막으로 뜬 딜 게시 시각"""
+  lastDealAt: DateTime
+  suggestedDealCount: Int
+  """3번 미만이면 넓힐 첫 낱말(대개 브랜드) — 그 낱말이 3~60번일 때만"""
+  suggestedKeyword: String
+  windowDays: Int!
 }
 
 type KeywordHubDetailOutput {
@@ -2038,6 +2056,10 @@ type Query {
   hotDealRatioStats(endDate: DateTime!, interval: DateInterval! = DAILY, startDate: DateTime!): [HotDealRatioOutput!]!
   """어드민) 핫딜 유형별 분포"""
   hotDealTypeDistribution(endDate: DateTime!, interval: DateInterval! = DAILY, startDate: DateTime!): [HotDealTypeCountOutput!]!
+  """
+  키워드 미리보기 — 지난 90일 딜 횟수·마지막 딜(키워드 알림과 같은 매칭·풀), 3번 미만이면 넓힐 첫 낱말. 한 번에 20개·50자까지
+  """
+  keywordDealFrequencies(keywords: [String!]!): [KeywordDealFrequencyOutput!]!
   """키워드 허브 하나. 목록 밖 slug 는 null"""
   keywordHub(slug: String!): KeywordHubDetailOutput
   """공개 키워드 허브 목록(30일 딜 많은 순)"""

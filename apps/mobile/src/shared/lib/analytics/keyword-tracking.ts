@@ -13,7 +13,8 @@ export type KeywordRegisterSource =
   | 'search_bar' // 검색 결과 위 한 줄
   | 'search_no_result' // 검색 결과 없음 버튼
   | 'keyword_hub' // 키워드 허브 화면의 알림 버튼(web /keywords/{slug} 와 같은 값)
-  | 'first_alert'; // 첫 실행 「이런 거 싸게 뜨면 알려드릴까요?」 시트(FirstAlertSheet)
+  | 'first_alert' // 첫 실행 「이런 거 싸게 뜨면 알려드릴까요?」 시트(FirstAlertSheet)
+  | 'mypage_broaden'; // 내 키워드·입력칸의 「‘첫 낱말’도 받기」(90일 3번 미만 키워드 넓혀 받기, web 과 같은 값)
 
 export function trackKeywordRegister(
   source: KeywordRegisterSource,

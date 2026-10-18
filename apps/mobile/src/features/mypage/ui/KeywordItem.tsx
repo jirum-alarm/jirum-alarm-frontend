@@ -16,6 +16,11 @@ import type {MyKeyword} from '@/shared/api/mypage';
 import {useColors} from '@/shared/theme/useColors';
 
 import {
+  broadenSuggestion,
+  describeKeywordFrequency,
+  type KeywordFrequency,
+} from '@jirum/domain/keyword-frequency';
+import {
   parseExcludeKeywords,
   formatPriceInput,
   parsePrice,
@@ -58,6 +63,9 @@ export default function KeywordItem({
   onOpenDeals,
   onOpenHub,
   defaultOpen = false,
+  frequency,
+  onBroaden,
+  broadening = false,
 }: {
   keyword: MyKeyword;
   onDelete: () => void;
@@ -70,6 +78,11 @@ export default function KeywordItem({
   onOpenHub?: () => void;
   /** 알림 한 줄의 키워드 라벨에서 들어오면 펼친 채로 시작한다. */
   defaultOpen?: boolean;
+  /** 지난 90일 횟수(서버 keywordDealFrequencies) — 아직 없거나 실패하면 null(줄을 안 그린다). web KeywordItem 과 같다. */
+  frequency?: KeywordFrequency | null;
+  /** 드문 키워드의 «넓혀 받기» — 제안 키워드를 새로 등록한다(원래 키워드는 그대로). */
+  onBroaden?: (keyword: string) => void;
+  broadening?: boolean;
 }) {
   const c = useColors();
   const saved = {
@@ -92,6 +105,8 @@ export default function KeywordItem({
   );
   const {mutate, isPending} = useUpdateKeywordOptions();
   const toggle = () => setOpen(prev => !prev);
+  const described = frequency ? describeKeywordFrequency(frequency) : null;
+  const suggestion = frequency ? broadenSuggestion(frequency) : null;
 
   const save = () =>
     mutate(
@@ -128,6 +143,17 @@ export default function KeywordItem({
             <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
               {summarizeKeywordAlert(saved)}
             </Text>
+            {described ? (
+              <Text
+                className={
+                  described.sparse
+                    ? 'mt-0.5 text-xs text-warning-700'
+                    : 'mt-0.5 text-xs text-gray-500'
+                }
+                numberOfLines={1}>
+                {described.text}
+              </Text>
+            ) : null}
           </Pressable>
           {onOpenHub ? (
             <Pressable
@@ -159,6 +185,32 @@ export default function KeywordItem({
 
         {open ? (
           <View className="gap-5 border-t border-gray-100 p-4">
+            {suggestion && onBroaden ? (
+              // 드문 키워드(90일 3번 미만) — 첫 낱말(대개 브랜드)로 넓혀 받기. 원래 키워드는 지우지 않는다(같은 딜은 한 번만 온다).
+              <View className="rounded-lg bg-gray-50 px-3 py-3">
+                <Text className="text-sm text-gray-900">
+                  자주 안 올라오는 키워드라 알림이 드물게 와요.
+                </Text>
+                <Text className="mt-0.5 text-xs text-gray-500">
+                  {suggestion.text}
+                </Text>
+                <View className="mt-3 flex-row">
+                  <PressableOpacity
+                    onPress={() => onBroaden(suggestion.keyword)}
+                    disabled={broadening}
+                    accessibilityRole="button"
+                    className={
+                      broadening
+                        ? 'rounded-md bg-primary-500 px-4 py-2 opacity-50'
+                        : 'rounded-md bg-primary-500 px-4 py-2'
+                    }>
+                    <Text className="text-sm font-semibold text-fixed-900">
+                      {suggestion.button}
+                    </Text>
+                  </PressableOpacity>
+                </View>
+              </View>
+            ) : null}
             <Pressable
               onPress={onOpenDeals}
               accessibilityRole="link"

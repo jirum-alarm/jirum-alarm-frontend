@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { describe, it } from 'node:test';
 
 const require = createRequire(import.meta.url);
-const { formatDealCount, frequencyToShow, sheetStratumSuffix } =
+const { formatDealCount, frequencyToShow, keywordArmSuffix, sheetStratumSuffix } =
   require('./first-visit-frequency.ts') as typeof import('./first-visit-frequency');
 
 describe('frequencyToShow', () => {
@@ -34,5 +34,16 @@ describe('sheetStratumSuffix', () => {
     assert.equal(sheetStratumSuffix({ variant: 'control', dealCount: 5, windowDays: 90 }), '_n3');
     assert.equal(sheetStratumSuffix({ variant: 'control', dealCount: 2, windowDays: 90 }), '');
     assert.equal(sheetStratumSuffix(null), '');
+  });
+});
+
+describe('keywordArmSuffix', () => {
+  it('넓히기 A/B 층이면 군 표시, 아니면 빈 표시', () => {
+    const base = { variant: 'control', dealCount: 6, windowDays: 90 };
+    assert.equal(keywordArmSuffix({ ...base, keywordArm: 'broaden' }), '_kb');
+    assert.equal(keywordArmSuffix({ ...base, keywordArm: 'title' }), '_kt');
+    assert.equal(keywordArmSuffix({ ...base, keywordArm: null }), '');
+    assert.equal(keywordArmSuffix(base), '');
+    assert.equal(keywordArmSuffix(null), '');
   });
 });

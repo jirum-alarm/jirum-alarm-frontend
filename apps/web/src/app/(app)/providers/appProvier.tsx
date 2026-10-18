@@ -17,7 +17,7 @@ import KakaoAppOpen from '@/features/app-download/ui/KakaoAppOpen';
 import { ClarityProvider } from './clarityProvider';
 import { DeviceId } from './deviceId';
 import { EntryTracker } from './entryTracker';
-import { LazyLoginModal, LazyPushChannelSheet } from './lazyOverlays';
+import { LazyGuestAlertReturnToast, LazyLoginModal, LazyPushChannelSheet } from './lazyOverlays';
 import { ProductCardTracker } from './productCardTracker';
 import { ReactQueryProviders } from './ReactQueryProviders';
 import ServerStateProvider from './ServerStateProvider';
@@ -76,6 +76,7 @@ export const AppProvider = ({ children, device, isLoggedIn, isGuest }: Props) =>
                 <NuqsAdapter>{children}</NuqsAdapter>
                 <LazyLoginModal />
                 <LazyPushChannelSheet />
+                <LazyGuestAlertReturnToast />
                 <BrowserHandoffArrival />
                 <AppHandoffLanding />
                 <KakaoAppOpen />

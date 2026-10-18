@@ -300,6 +300,22 @@ export const QueryGoodPriceSuggestion = graphql(`
   }
 `);
 
+/**
+ * 키워드 미리보기(공개) — 지난 90일 횟수·마지막 딜, 3번 미만이면 넓힐 첫 낱말. web KeywordFrequencyService 와 같은 문서.
+ */
+export const QueryKeywordDealFrequencies = graphql(`
+  query QueryKeywordDealFrequencies($keywords: [String!]!) {
+    keywordDealFrequencies(keywords: $keywords) {
+      keyword
+      dealCount
+      windowDays
+      lastDealAt
+      suggestedKeyword
+      suggestedDealCount
+    }
+  }
+`);
+
 /** 내 키워드를 「좋은 가격만 받기」로 — 하락만 받기 + 단위 기준가(서버가 판정). */
 export const MutationApplyGoodPriceOnly = graphql(`
   mutation MutationApplyGoodPriceOnly($keyword: String!) {

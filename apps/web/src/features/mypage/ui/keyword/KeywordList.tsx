@@ -13,6 +13,7 @@ import Link from '@/shared/ui/Link';
 import { AuthQueries } from '@/entities/auth';
 
 import { useUpdateKeyword } from '../../model/update-keyword';
+import { useKeywordFrequencies } from '../../model/useKeywordFrequencies';
 import { useKeywordList } from '../../model/useKeywordList';
 
 import KeywordItem from './KeywordItem';
@@ -23,6 +24,17 @@ const normalize = (keyword: string) => keyword.trim().toLowerCase();
 const KeywordList = ({ focus }: { focus?: string }) => {
   const { notificationKeywordsByMe, onDeleteKeyword } = useKeywordList();
   const keywords = notificationKeywordsByMe ?? [];
+  const frequencyOf = useKeywordFrequencies(keywords.map((k) => k.keyword));
+  const { toast } = useToast();
+  const promptPushChannel = usePushChannelPrompt();
+  const { mutate: broaden, isPending: broadening } = useUpdateKeyword({
+    source: 'mypage_broaden',
+    onSuccess: ({ keyword }) => {
+      toast.success(`'${keyword}' 키워드 알림도 등록했어요.`);
+      promptPushChannel(keyword);
+    },
+  });
+  const registered = new Set(keywords.map((k) => normalize(k.keyword)));
   // 알림의 키워드 링크에서 왔으면 그 키워드를 맨 앞에 펼쳐 둔다(스크롤 없이 바로 보이게).
   const focused = focus ? normalize(focus) : undefined;
   const ordered = focused
@@ -56,21 +68,31 @@ const KeywordList = ({ focus }: { focus?: string }) => {
             키워드를 누르면 알림 받을 조건을 바꿀 수 있어요.
           </p>
           <ul className="mt-4 flex flex-col gap-2">
-            {ordered.map((keyword) => (
-              <KeywordItem
-                key={keyword.id}
-                defaultOpen={normalize(keyword.keyword) === focused}
-                keyword={{
-                  id: Number(keyword.id),
-                  keyword: keyword.keyword,
-                  priceDropOnly: keyword.priceDropOnly ?? false,
-                  excludeKeywords: keyword.excludeKeywords ?? [],
-                  minPrice: keyword.minPrice ?? null,
-                  maxPrice: keyword.maxPrice ?? null,
-                }}
-                onDelete={() => onDeleteKeyword(keyword.id)}
-              />
-            ))}
+            {ordered.map((keyword) => {
+              const frequency = frequencyOf(keyword.keyword);
+              // 제안 키워드를 이미 갖고 있으면 넓히기를 안 띄운다(등록하면 「이미 등록된 키워드」).
+              const canBroaden =
+                !!frequency?.suggestedKeyword &&
+                !registered.has(normalize(frequency.suggestedKeyword));
+              return (
+                <KeywordItem
+                  key={keyword.id}
+                  defaultOpen={normalize(keyword.keyword) === focused}
+                  keyword={{
+                    id: Number(keyword.id),
+                    keyword: keyword.keyword,
+                    priceDropOnly: keyword.priceDropOnly ?? false,
+                    excludeKeywords: keyword.excludeKeywords ?? [],
+                    minPrice: keyword.minPrice ?? null,
+                    maxPrice: keyword.maxPrice ?? null,
+                  }}
+                  onDelete={() => onDeleteKeyword(keyword.id)}
+                  frequency={frequency}
+                  onBroaden={canBroaden ? (next) => broaden({ keyword: next }) : undefined}
+                  broadening={broadening}
+                />
+              );
+            })}
           </ul>
         </>
       )}

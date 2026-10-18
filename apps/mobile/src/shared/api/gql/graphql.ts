@@ -451,6 +451,8 @@ export type FirstVisitSheetCopyOutput = {
   dealCount?: Maybe<Scalars['Int']['output']>;
   /** 시트가 걸 알림 키워드 — 넓히기가 꺼져 있거나 넓힐 필요가 없으면 받은 키워드 그대로 */
   keyword: Scalars['String']['output'];
+  /** 키워드 넓히기 A/B(first_visit_keyword_fallback_v1) — 넓힐 수 있던 기기만 군(broaden|title). 그 밖·꺼짐은 null. 배정 기록의 층 표시용 */
+  keywordArm?: Maybe<Scalars['String']['output']>;
   /** control(지금 문구) | frequency(「지난 90일에 N번 떴어요」) */
   variant: Scalars['String']['output'];
   windowDays: Scalars['Int']['output'];
@@ -641,6 +643,21 @@ export type KeywordCountOutput = {
   __typename?: 'KeywordCountOutput';
   count: Scalars['Int']['output'];
   keyword: Scalars['String']['output'];
+};
+
+/** 키워드 미리보기 — 지난 90일 딜 횟수(키워드 알림과 같은 매칭)와, 드물면 넓힐 첫 낱말 */
+export type KeywordDealFrequencyOutput = {
+  __typename?: 'KeywordDealFrequencyOutput';
+  /** 지난 windowDays 일 뜬 횟수 — 같은 날 같은 가격(교차 게시)은 한 번 */
+  dealCount: Scalars['Int']['output'];
+  /** 물어본 키워드(앞뒤 공백·겹친 공백 정리) */
+  keyword: Scalars['String']['output'];
+  /** 마지막으로 뜬 딜 게시 시각 */
+  lastDealAt?: Maybe<Scalars['DateTime']['output']>;
+  suggestedDealCount?: Maybe<Scalars['Int']['output']>;
+  /** 3번 미만이면 넓힐 첫 낱말(대개 브랜드) — 그 낱말이 3~60번일 때만 */
+  suggestedKeyword?: Maybe<Scalars['String']['output']>;
+  windowDays: Scalars['Int']['output'];
 };
 
 export type KeywordHubDetailOutput = {
@@ -2311,6 +2328,8 @@ export type Query = {
   hotDealRatioStats: Array<HotDealRatioOutput>;
   /** 어드민) 핫딜 유형별 분포 */
   hotDealTypeDistribution: Array<HotDealTypeCountOutput>;
+  /** 키워드 미리보기 — 지난 90일 딜 횟수·마지막 딜(키워드 알림과 같은 매칭·풀), 3번 미만이면 넓힐 첫 낱말. 한 번에 20개·50자까지 */
+  keywordDealFrequencies: Array<KeywordDealFrequencyOutput>;
   /** 키워드 허브 하나. 목록 밖 slug 는 null */
   keywordHub?: Maybe<KeywordHubDetailOutput>;
   /** 공개 키워드 허브 목록(30일 딜 많은 순) */
@@ -2651,6 +2670,10 @@ export type QueryHotDealTypeDistributionArgs = {
   endDate: Scalars['DateTime']['input'];
   interval?: DateInterval;
   startDate: Scalars['DateTime']['input'];
+};
+
+export type QueryKeywordDealFrequenciesArgs = {
+  keywords: Array<Scalars['String']['input']>;
 };
 
 export type QueryKeywordHubArgs = {
@@ -4277,6 +4300,23 @@ export type QueryGoodPriceSuggestionQuery = {
   } | null;
 };
 
+export type QueryKeywordDealFrequenciesQueryVariables = Exact<{
+  keywords: Array<Scalars['String']['input']> | Scalars['String']['input'];
+}>;
+
+export type QueryKeywordDealFrequenciesQuery = {
+  __typename?: 'Query';
+  keywordDealFrequencies: Array<{
+    __typename?: 'KeywordDealFrequencyOutput';
+    keyword: string;
+    dealCount: number;
+    windowDays: number;
+    lastDealAt?: any | null;
+    suggestedKeyword?: string | null;
+    suggestedDealCount?: number | null;
+  }>;
+};
+
 export type MutationApplyGoodPriceOnlyMutationVariables = Exact<{
   keyword: Scalars['String']['input'];
 }>;
@@ -5758,6 +5798,21 @@ export const QueryGoodPriceSuggestionDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   QueryGoodPriceSuggestionQuery,
   QueryGoodPriceSuggestionQueryVariables
+>;
+export const QueryKeywordDealFrequenciesDocument = new TypedDocumentString(`
+    query QueryKeywordDealFrequencies($keywords: [String!]!) {
+  keywordDealFrequencies(keywords: $keywords) {
+    keyword
+    dealCount
+    windowDays
+    lastDealAt
+    suggestedKeyword
+    suggestedDealCount
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryKeywordDealFrequenciesQuery,
+  QueryKeywordDealFrequenciesQueryVariables
 >;
 export const MutationApplyGoodPriceOnlyDocument = new TypedDocumentString(`
     mutation MutationApplyGoodPriceOnly($keyword: String!) {

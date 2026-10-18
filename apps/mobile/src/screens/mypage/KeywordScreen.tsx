@@ -37,10 +37,21 @@ import StackHeader from '@/features/mypage/ui/StackHeader';
 import {FORM_CTA_BOTTOM} from '@/features/mypage/ui/Rows';
 import {SubscribedThemeRow} from '@/features/mypage/ui/ThemeCards';
 import {useKeywordViewModel} from '@/features/mypage/model/useKeywordViewModel';
+import {
+  useKeywordFrequencies,
+  useSettledValue,
+} from '@/features/mypage/model/useKeywordFrequencies';
+import {
+  broadenSuggestion,
+  describeKeywordFrequency,
+} from '@jirum/domain/keyword-frequency';
 import {useThemeSubscription} from '@/features/mypage/model/useThemeSubscription';
 import {KEYWORD_HELPER_TEXT} from '@/features/mypage/lib/validation';
 import {cn} from '@/shared/lib/styling';
 import PressableOpacity from '@/shared/components/PressableOpacity';
+
+/** 입력이 멈춘 뒤에만 미리보기를 묻는다(web KeywordInput 과 같은 값). */
+const PREVIEW_DELAY_MS = 400;
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -99,10 +110,25 @@ export default function KeywordScreen({navigation, route}: Props) {
     reset,
     submit,
     addDirect,
+    addBroadened,
     isAdding,
     removeKeyword,
   } = useKeywordViewModel();
   const {refreshing, onRefresh} = usePullRefresh(refetch);
+  // 내 키워드별 지난 90일 횟수 — 드물면 첫 낱말로 넓혀 받기(web KeywordList 와 같다).
+  const frequencyOf = useKeywordFrequencies(keywords.map(k => k.keyword));
+  const registered = new Set(keywords.map(k => normalizeKeyword(k.keyword)));
+  // 등록 전 미리보기 — 입력이 멈춘 뒤 «이 키워드로 알림이 얼마나 오나»(web KeywordInput 과 같다).
+  const typed = value.trim();
+  const settled = useSettledValue(typed, PREVIEW_DELAY_MS);
+  const previewing = !!typed && !error && settled === typed;
+  const previewOf = useKeywordFrequencies(
+    previewing ? [typed] : [],
+    previewing,
+  );
+  const preview = previewing ? previewOf(typed) : null;
+  const previewText = preview ? describeKeywordFrequency(preview) : null;
+  const previewSuggestion = preview ? broadenSuggestion(preview) : null;
 
   return (
     <View className="flex-1 bg-white">
@@ -139,6 +165,40 @@ export default function KeywordScreen({navigation, route}: Props) {
               )
             }
           />
+          {previewText ? (
+            <View className="mt-2 items-start gap-2">
+              <Text
+                className={
+                  previewText.sparse
+                    ? 'text-xs text-warning-700'
+                    : 'text-xs text-gray-500'
+                }>
+                {previewText.text}
+              </Text>
+              {previewSuggestion ? (
+                <>
+                  <Text className="text-xs text-gray-500">
+                    {previewSuggestion.text}
+                  </Text>
+                  <PressableScale
+                    disabled={isAdding}
+                    onPress={() => addBroadened(previewSuggestion.keyword)}
+                    accessibilityRole="button"
+                    accessibilityLabel={previewSuggestion.registerButton}
+                    hitSlop={{top: 4, bottom: 4}}
+                    className={cn(
+                      'flex-row items-center gap-1.5',
+                      addChip.box,
+                    )}>
+                    <Text className={addChip.text}>
+                      {previewSuggestion.registerButton}
+                    </Text>
+                    <Text className={addChip.plus}>+</Text>
+                  </PressableScale>
+                </>
+              ) : null}
+            </View>
+          ) : null}
           <View className="h-8" />
 
           {/* 내 키워드 — web KeywordList */}
@@ -185,6 +245,13 @@ export default function KeywordScreen({navigation, route}: Props) {
                   const hub = hubs
                     ? findKeywordHubForQuery(keyword.keyword, hubs)
                     : undefined;
+                  const frequency = frequencyOf(keyword.keyword);
+                  // 제안 키워드를 이미 갖고 있으면 넓히기를 안 띄운다(등록하면 「이미 등록된 키워드」).
+                  const canBroaden =
+                    !!frequency?.suggestedKeyword &&
+                    !registered.has(
+                      normalizeKeyword(frequency.suggestedKeyword),
+                    );
                   return (
                     <KeywordItem
                       key={keyword.id}
@@ -193,6 +260,9 @@ export default function KeywordScreen({navigation, route}: Props) {
                       onDelete={() => removeKeyword(keyword.id)}
                       onOpenDeals={() => openSearch(keyword.keyword)}
                       onOpenHub={hub ? () => openHub(hub) : undefined}
+                      frequency={frequency}
+                      onBroaden={canBroaden ? addBroadened : undefined}
+                      broadening={isAdding}
                     />
                   );
                 })}

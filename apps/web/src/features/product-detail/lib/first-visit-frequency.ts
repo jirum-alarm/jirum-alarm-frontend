@@ -12,9 +12,11 @@ export type FirstVisitSheetCopy = {
   variant: string;
   dealCount: number | null;
   windowDays: number;
-  /** 시트가 걸 알림 키워드 — 제목 키워드가 드물면 서버가 브랜드로 넓힌다(obs_first_visit_brand_fallback). */
+  /** 시트가 걸 알림 키워드 — 제목 키워드가 드물면 서버가 브랜드로 넓힌다(first_visit_keyword_fallback_v1, broaden 군만). */
   keyword?: string;
   broadened?: boolean;
+  /** 넓히기 A/B 대상 층이면 군(broaden|title), 아니면 null — 배정 기록의 층 표시(keywordArmSuffix)용 */
+  keywordArm?: string | null;
 };
 
 /** 새 문구를 띄울 횟수 — 띄우지 않으면 null */
@@ -31,4 +33,14 @@ export function formatDealCount(count: number): string {
 export function sheetStratumSuffix(copy: FirstVisitSheetCopy | null): '' | '_freq' | '_n3' {
   if (copy?.dealCount == null || copy.dealCount < FIRST_VISIT_FREQUENCY_MIN_DEALS) return '';
   return copy.variant === 'frequency' ? '_freq' : '_n3';
+}
+
+/**
+ * 넓히기 A/B `first_visit_keyword_fallback_v1` 층 표시 — `_kb`(broaden 군: 브랜드로 넓힌 시트) · `_kt`(title 군: 넓힐 수 있었지만
+ * 제목 키워드 그대로) · ''(층 밖). 판독은 두 군의 같은 층끼리 비교한다(crawling-server experiment-registry).
+ */
+export function keywordArmSuffix(copy: FirstVisitSheetCopy | null): '' | '_kb' | '_kt' {
+  if (copy?.keywordArm === 'broaden') return '_kb';
+  if (copy?.keywordArm === 'title') return '_kt';
+  return '';
 }
