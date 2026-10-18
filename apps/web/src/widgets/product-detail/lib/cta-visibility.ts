@@ -36,7 +36,7 @@ export const ctaVisibilityOf = ({
   return 'hidden';
 };
 
-export const reportCtaVisibility = (el: HTMLElement): CtaVisibility => {
+export const reportCtaVisibility = (el: HTMLElement, variant?: string | null): CtaVisibility => {
   const vv = window.visualViewport;
   const rect = el.getBoundingClientRect();
   const visibility = ctaVisibilityOf({
@@ -58,6 +58,8 @@ export const reportCtaVisibility = (el: HTMLElement): CtaVisibility => {
       `vs${(vv?.scale ?? 1).toFixed(2)}`,
       `iw${window.innerWidth}`,
       `sw${document.documentElement.scrollWidth}`,
+      // 삼성 인터넷 바 모양 실험 군(samsung-cta-experiment.ts) — 실험 밖이면 붙이지 않는다.
+      ...(variant ? [`v:${variant}`] : []),
     ].join(' '),
   });
   return visibility;
