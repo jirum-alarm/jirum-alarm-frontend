@@ -1,7 +1,8 @@
 /**
  * 상세 «언제 사나» 카드 A/B `wait_card_detail_v1`(crawling-server experiment-registry, 2026-11-05 00:00 KST 자동 시작).
  *
- * 무엇: 이 상품 키워드의 커뮤니티 90일 핫딜가로 본 «좋은 가격 X원 이하(90일 중 N일)» + 지금 판단 + 「이 가격 오면 알려줘」.
+ * 무엇: 이 상품 키워드의 커뮤니티 핫딜가(판정 창, 기본 90일)로 본 «좋은 가격 X원 이하 · 마지막 날» + 지금 판단 + 「이 가격 오면 알려줘」.
+ * «90일 중 N일»은 쓰지 않는다 — 딜 하나만 잘못 읽어도 N 이 틀린다(2026-10-19 claim-audit: 틀린 주장 7장 중 4장이 N 하나 차이).
  * 배정·판정은 서버(waitCardForProduct, X-Device-Id) — 「답」 숨김 군은 excluded, 나머지 50/50. 대조군도 같은 카드를 받아
  * 그리지 않고 «떴을 카드»만 기록한다(판독은 카드가 뜰 수 있던 기기끼리 비교). 시작 전·꺼짐이면 서버가 null — 아무것도 안 한다.
  * 여기는 화면 문장과 기록 표식만 만든다(타입만 import — node --test 가 그대로 읽는다).
@@ -58,38 +59,29 @@ export function formatMonthDay(iso: string | null): string | null {
   return `${kst.getUTCMonth() + 1}/${kst.getUTCDate()}`;
 }
 
-/** 카드 두 줄 — 제목은 기억(좋은 가격), 둘째 줄은 얼마나 자주 + 지금 판단(또는 마지막 날). */
+/**
+ * 카드 두 줄 — 제목은 기억(좋은 가격), 둘째 줄은 판정 창 + 지금 판단(BUY_NOW) 또는 마지막 날.
+ * 서버는 BUY_NOW·STATS 만 낸다(WAIT·RARE «기다리면 온다»는 claim-audit 뒤 뺐다) — 다른 값이 와도 마지막 날로 그린다.
+ */
 export function waitCardCopy(
   card: Pick<
     WaitCard,
-    | 'keyword'
-    | 'unit'
-    | 'goodPrice'
-    | 'goodDays'
-    | 'windowDays'
-    | 'typicalGapDays'
-    | 'lastGoodAt'
-    | 'pageUnitPrice'
+    'keyword' | 'unit' | 'goodPrice' | 'windowDays' | 'lastGoodAt' | 'pageUnitPrice'
   >,
   verdict: WaitCardVerdict,
 ): { title: string; detail: string } | null {
-  if (!card.keyword || card.goodPrice == null || card.goodDays == null) return null;
+  if (!card.keyword || card.goodPrice == null) return null;
   const good = formatUnitPrice(card.goodPrice, card.unit);
   const title = `‘${card.keyword}’ 좋은 가격은 ${good} 이하`;
-  const days = `커뮤니티 핫딜 ${card.windowDays}일 중 ${card.goodDays}일`;
-  const now =
-    card.pageUnitPrice != null ? `지금 ${formatUnitPrice(card.pageUnitPrice, card.unit)}` : null;
-  if (verdict === 'BUY_NOW' && now) return { title, detail: `${days} · ${now}, 좋은 가격이에요` };
-  if (verdict === 'WAIT' && now) {
-    const gap =
-      card.typicalGapDays && card.typicalGapDays > 0
-        ? `, 보통 ${card.typicalGapDays}일에 한 번 와요`
-        : '';
-    return { title, detail: `${days} · ${now}${gap}` };
+  const basis = `커뮤니티 핫딜 ${card.windowDays}일 기준`;
+  if (verdict === 'BUY_NOW' && card.pageUnitPrice != null) {
+    return {
+      title,
+      detail: `${basis} · 지금 ${formatUnitPrice(card.pageUnitPrice, card.unit)}, 좋은 가격이에요`,
+    };
   }
-  if (verdict === 'RARE' && now) return { title, detail: `${days}뿐 · ${now}` };
   const last = formatMonthDay(card.lastGoodAt);
-  return { title, detail: last ? `${days} · 마지막 ${last}` : days };
+  return { title, detail: last ? `${basis} · 마지막 ${last}` : basis };
 }
 
 /** 등록 뒤 토스트 — 「‘삼다수’ 1L당 390원 이하일 때만 알려드릴게요」. */

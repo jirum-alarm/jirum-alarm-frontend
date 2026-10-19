@@ -75,20 +75,20 @@ describe('formatUnitPrice · formatMonthDay', () => {
 });
 
 describe('waitCardCopy', () => {
-  it('BUY_NOW·WAIT·RARE 는 지금 값, STATS 는 마지막 날', () => {
+  it('BUY_NOW 는 지금 값, 나머지는 마지막 날 — «90일 중 N일»은 쓰지 않는다', () => {
     assert.deepEqual(waitCardCopy(card, 'BUY_NOW'), {
       title: '‘삼다수’ 좋은 가격은 1L당 390원 이하',
-      detail: '커뮤니티 핫딜 90일 중 5일 · 지금 1L당 375원, 좋은 가격이에요',
+      detail: '커뮤니티 핫딜 90일 기준 · 지금 1L당 375원, 좋은 가격이에요',
     });
+    assert.equal(waitCardCopy(card, 'STATS')!.detail, '커뮤니티 핫딜 90일 기준 · 마지막 10/10');
+    // 서버가 더는 내지 않는 WAIT·RARE 가 와도 마지막 날로
+    assert.equal(waitCardCopy(card, 'WAIT')!.detail, '커뮤니티 핫딜 90일 기준 · 마지막 10/10');
+  });
+  it('판정 창이 90일보다 짧으면 그 날 수(딜이 많은 키워드는 최신 딜만 본다)', () => {
     assert.equal(
-      waitCardCopy({ ...card, pageUnitPrice: 452 }, 'WAIT')!.detail,
-      '커뮤니티 핫딜 90일 중 5일 · 지금 1L당 452원, 보통 6일에 한 번 와요',
+      waitCardCopy({ ...card, windowDays: 14 }, 'STATS')!.detail,
+      '커뮤니티 핫딜 14일 기준 · 마지막 10/10',
     );
-    assert.equal(
-      waitCardCopy({ ...card, pageUnitPrice: 452, goodDays: 2 }, 'RARE')!.detail,
-      '커뮤니티 핫딜 90일 중 2일뿐 · 지금 1L당 452원',
-    );
-    assert.equal(waitCardCopy(card, 'STATS')!.detail, '커뮤니티 핫딜 90일 중 5일 · 마지막 10/10');
   });
   it('내용이 비면 null(그리지 않음)', () => {
     assert.equal(waitCardCopy({ ...card, keyword: null }, 'STATS'), null);
