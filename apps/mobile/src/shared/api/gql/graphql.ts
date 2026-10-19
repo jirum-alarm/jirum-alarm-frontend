@@ -880,7 +880,7 @@ export type ModelPagePriceVerdictOutput = {
   bestPackLabel?: Maybe<Scalars['String']['output']>;
   bestProductId?: Maybe<Scalars['Int']['output']>;
   bundleProductIds: Array<Scalars['Int']['output']>;
-  buyLine?: Maybe<Scalars['Int']['output']>;
+  buyLine?: Maybe<Scalars['Float']['output']>;
   comparePrice?: Maybe<Scalars['Float']['output']>;
   historyPoints: Scalars['Int']['output'];
   mallPrice?: Maybe<Scalars['Int']['output']>;

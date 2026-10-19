@@ -819,7 +819,7 @@ type ModelPagePriceVerdictOutput {
   bestPackLabel: String
   bestProductId: Int
   bundleProductIds: [Int!]!
-  buyLine: Int
+  buyLine: Float
   comparePrice: Float
   historyPoints: Int!
   mallPrice: Int
