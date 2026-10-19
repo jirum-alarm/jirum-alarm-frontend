@@ -73,6 +73,22 @@ const ModelPageDocument = graphql(`
       lastDealAt
       metaDescription
       payload
+      priceVerdict {
+        tone
+        pendingReason
+        activeDealCount
+        activeProductIds
+        bundleProductIds
+        bestProductId
+        comparePrice
+        activePrice
+        bestPackLabel
+        mallPrice
+        avgPrice
+        savePct
+        buyLine
+        historyPoints
+      }
       keywordHub {
         slug
         name

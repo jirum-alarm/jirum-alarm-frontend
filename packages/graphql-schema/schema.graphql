@@ -806,7 +806,26 @@ type ModelPageOutput {
   metaDescription: String
   modelName: String!
   payload: JSONObject
+  priceVerdict: ModelPagePriceVerdictOutput
   slug: String!
+}
+
+type ModelPagePriceVerdictOutput {
+  activeDealCount: Int!
+  activePrice: Int
+  activeProductIds: [Int!]!
+  avgPrice: Float
+  basisUnitLabel: String
+  bestPackLabel: String
+  bestProductId: Int
+  bundleProductIds: [Int!]!
+  buyLine: Int
+  comparePrice: Float
+  historyPoints: Int!
+  mallPrice: Int
+  pendingReason: String
+  savePct: Int
+  tone: String
 }
 
 type Mutation {

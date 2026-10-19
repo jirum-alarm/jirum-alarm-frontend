@@ -860,7 +860,27 @@ export type ModelPageOutput = {
   metaDescription?: Maybe<Scalars['String']['output']>;
   modelName: Scalars['String']['output'];
   payload?: Maybe<Scalars['JSONObject']['output']>;
+  priceVerdict?: Maybe<ModelPagePriceVerdictOutput>;
   slug: Scalars['String']['output'];
+};
+
+export type ModelPagePriceVerdictOutput = {
+  __typename?: 'ModelPagePriceVerdictOutput';
+  activeDealCount: Scalars['Int']['output'];
+  activePrice?: Maybe<Scalars['Int']['output']>;
+  activeProductIds: Array<Scalars['Int']['output']>;
+  avgPrice?: Maybe<Scalars['Float']['output']>;
+  basisUnitLabel?: Maybe<Scalars['String']['output']>;
+  bestPackLabel?: Maybe<Scalars['String']['output']>;
+  bestProductId?: Maybe<Scalars['Int']['output']>;
+  bundleProductIds: Array<Scalars['Int']['output']>;
+  buyLine?: Maybe<Scalars['Int']['output']>;
+  comparePrice?: Maybe<Scalars['Float']['output']>;
+  historyPoints: Scalars['Int']['output'];
+  mallPrice?: Maybe<Scalars['Int']['output']>;
+  pendingReason?: Maybe<Scalars['String']['output']>;
+  savePct?: Maybe<Scalars['Int']['output']>;
+  tone?: Maybe<Scalars['String']['output']>;
 };
 
 export type Mutation = {
@@ -4488,6 +4508,23 @@ export type ModelPageQuery = {
     lastDealAt?: any | null;
     metaDescription?: string | null;
     payload?: any | null;
+    priceVerdict?: {
+      __typename?: 'ModelPagePriceVerdictOutput';
+      tone?: string | null;
+      pendingReason?: string | null;
+      activeDealCount: number;
+      activeProductIds: Array<number>;
+      bundleProductIds: Array<number>;
+      bestProductId?: number | null;
+      comparePrice?: number | null;
+      activePrice?: number | null;
+      bestPackLabel?: string | null;
+      mallPrice?: number | null;
+      avgPrice?: number | null;
+      savePct?: number | null;
+      buyLine?: number | null;
+      historyPoints: number;
+    } | null;
     keywordHub?: {
       __typename?: 'KeywordHubOutput';
       slug: string;
@@ -5618,6 +5655,22 @@ export const ModelPageDocument = new TypedDocumentString(`
     lastDealAt
     metaDescription
     payload
+    priceVerdict {
+      tone
+      pendingReason
+      activeDealCount
+      activeProductIds
+      bundleProductIds
+      bestProductId
+      comparePrice
+      activePrice
+      bestPackLabel
+      mallPrice
+      avgPrice
+      savePct
+      buyLine
+      historyPoints
+    }
     keywordHub {
       slug
       name

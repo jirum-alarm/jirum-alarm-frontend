@@ -14,7 +14,6 @@ import {
   dealComparePrice,
   HistBasis,
   isForeignPriceDeal,
-  isLikelyBundleDeal,
 } from '@/features/deals/lib/model-page-insights';
 
 function won(n?: number | null): string {
@@ -41,8 +40,10 @@ interface Props {
   histMin: number;
   listTitleSuffix: string;
   currency: 'KRW' | 'USD';
-  /** 다나와가 더 싸면 진행 중 첫 딜에 「지금 추천」을 붙이지 않는다. */
-  suppressPick?: boolean;
+  /** 「지금 추천」 딜 = 서버 판정이 고른 딜. 다나와가 더 싸면 null. */
+  pickProductId: number | null;
+  /** 증정·포인트가 섞여 판정에서 뺀 딜(서버 판정). 배지·추천에서 뺀다. */
+  bundleProductIds: number[];
 }
 
 export default function DealsListSection({
@@ -53,8 +54,10 @@ export default function DealsListSection({
   histMin,
   listTitleSuffix,
   currency,
-  suppressPick = false,
+  pickProductId,
+  bundleProductIds,
 }: Props) {
+  const bundleIds = new Set(bundleProductIds);
   const hasActive = activeDeals.length > 0;
   const [tab, setTab] = useState<Tab>(hasActive ? 'active' : 'history');
   const deals = tab === 'active' ? activeDeals : historyDeals;
@@ -96,7 +99,7 @@ export default function DealsListSection({
       <ul className="flex flex-col gap-2">
         {deals.map((deal) => {
           const comparePrice = dealComparePrice(deal, histBasis, histUnitLabel);
-          const isBundle = isLikelyBundleDeal(deal.title);
+          const isBundle = bundleIds.has(deal.productId);
           // 역대 최저: 이력 탭 + 비번들 + 동일 축. 진행 탭에선 '지금 추천'만.
           const isAllTimeLow =
             tab === 'history' &&
@@ -104,14 +107,7 @@ export default function DealsListSection({
             histMin > 0 &&
             comparePrice != null &&
             comparePrice <= histMin;
-          const isActivePick =
-            tab === 'active' &&
-            !suppressPick &&
-            !deal.isEnd &&
-            !isBundle &&
-            !isForeignPriceDeal(deal, currency) &&
-            comparePrice != null &&
-            deals[0] === deal;
+          const isActivePick = tab === 'active' && deal.productId === pickProductId;
           const title = cleanDealTitle(deal.title);
 
           return (

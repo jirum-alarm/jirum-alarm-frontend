@@ -866,7 +866,27 @@ export type ModelPageOutput = {
   metaDescription?: Maybe<Scalars['String']['output']>;
   modelName: Scalars['String']['output'];
   payload?: Maybe<Scalars['JSONObject']['output']>;
+  priceVerdict?: Maybe<ModelPagePriceVerdictOutput>;
   slug: Scalars['String']['output'];
+};
+
+export type ModelPagePriceVerdictOutput = {
+  __typename?: 'ModelPagePriceVerdictOutput';
+  activeDealCount: Scalars['Int']['output'];
+  activePrice?: Maybe<Scalars['Int']['output']>;
+  activeProductIds: Array<Scalars['Int']['output']>;
+  avgPrice?: Maybe<Scalars['Float']['output']>;
+  basisUnitLabel?: Maybe<Scalars['String']['output']>;
+  bestPackLabel?: Maybe<Scalars['String']['output']>;
+  bestProductId?: Maybe<Scalars['Int']['output']>;
+  bundleProductIds: Array<Scalars['Int']['output']>;
+  buyLine?: Maybe<Scalars['Int']['output']>;
+  comparePrice?: Maybe<Scalars['Float']['output']>;
+  historyPoints: Scalars['Int']['output'];
+  mallPrice?: Maybe<Scalars['Int']['output']>;
+  pendingReason?: Maybe<Scalars['String']['output']>;
+  savePct?: Maybe<Scalars['Int']['output']>;
+  tone?: Maybe<Scalars['String']['output']>;
 };
 
 export type Mutation = {

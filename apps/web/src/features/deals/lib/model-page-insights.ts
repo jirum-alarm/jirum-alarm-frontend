@@ -1,4 +1,4 @@
-/** /deals/[slug] payload에서 구매 판단·목록 우선순위를 프론트에서 파생. */
+/** /deals/[slug] 화면 문구·목록 순서. 구매 판단(지금 살까)은 서버 priceVerdict 를 읽는다. */
 
 export interface Deal {
   productId: number;
@@ -35,16 +35,6 @@ export interface HeroPrice {
 
 export type HistBasis = 'unit' | 'total';
 
-/**
- * 증정·포인트·사은품 등으로 단위가가 왜곡될 수 있는 딜. crawling-server model-page-price-verdict.ts 와 같다.
- * 치킨·버거는 뺐다 — 상품 자체가 치킨(용가리치킨·치킨텐더)이면 모든 딜이 묶음으로 걸러졌다(2026-10-01).
- */
-const BUNDLE_TITLE_RE = /증정|포인트|원권|쿠폰|사은품|라이브|카드.?할|스마일페이|롯데카드/i;
-
-export function isLikelyBundleDeal(title: string): boolean {
-  return BUNDLE_TITLE_RE.test(title);
-}
-
 /** 목록/히어로 비교에 쓸 가격 (단위축이면 동일 unitLabel의 unitPrice). */
 export function dealComparePrice(
   deal: Deal,
@@ -53,16 +43,13 @@ export function dealComparePrice(
 ): number | null {
   if (basis === 'unit' && unitLabel) {
     // 단가 축 페이지에서 단가가 없거나 다른 축인 딜은 비교할 수 없다 — 총액으로 대신하면 「개당 662원」이 100ml당 추이와 비교돼
-    // "1425% 비쌈" 이 나갔다(2026-10-17 삼다수). 백엔드 model-page-price-verdict.ts comparePrice 와 같은 규칙.
+    // "1425% 비쌈" 이 나갔다(2026-10-17 삼다수). 서버 판정(model-page-price-verdict.ts comparePrice)과 같은 축.
     return deal.unitLabel === unitLabel && deal.unitPrice != null ? deal.unitPrice : null;
   }
   return deal.price;
 }
 
-/**
- * 진행 중이라고 부를 게시 후 일수. 종료 표시는 다시 수집될 때만 붙어 믿을 수 없다 — 30일로 두니 /deals 의
- * 진행 중 271개 중 73% 가 7~30일 전 딜이었다(2026-10-13). 백엔드 model-page-price-verdict.ts 와 같은 값.
- */
+/** 최근 딜 목록에서 «종료»로 흐리게 보일 게시 후 일수 — 서버 판정의 «진행 중»(ACTIVE_DEAL_MAX_DAYS)과 같은 값. */
 const ACTIVE_DEAL_MAX_DAYS = 3;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -82,77 +69,6 @@ const sameDealKey = (title: string) =>
     .replace(/\([^)]*\)|\[[^\]]*\]/g, '')
     .replace(/[\d,]+\s*원/g, '')
     .replace(/[\s/·,]+/g, '');
-
-/**
- * 구성 키 — 용량(ml·g 로 맞춤)과 개수. 「350ml 24개」 = 「동원 보성녹차, 350mlx24개」 = 「0.35L 24입」.
- * 백엔드 model-page-price-verdict.ts packKey(같은 딜 서명의 quantities)와 같은 목적 — 대표 상품과 딜을 잇는다.
- */
-export function packKey(text: string): string | null {
-  const t = text.toLowerCase().replace(/\([^)]*\)/g, ' ');
-  const parts = new Set<string>();
-  for (const m of t.matchAll(/(\d+(?:\.\d+)?)\s*(kg|ml|l|g|리터)(?![a-wyz가-힣])/g)) {
-    const n = Number(m[1]);
-    const unit = m[2];
-    parts.add(
-      unit === 'l' || unit === '리터'
-        ? `${n * 1000}ml`
-        : unit === 'kg'
-          ? `${n * 1000}g`
-          : `${n}${unit}`,
-    );
-  }
-  for (const m of t.matchAll(/(\d+)\s*(?:개입|개|입|병|캔|팩|봉|구|롤|포)/g)) {
-    if (Number(m[1]) !== 1) parts.add(`${Number(m[1])}개`);
-  }
-  return parts.size ? [...parts].sort().join('|') : null;
-}
-
-/**
- * 다나와가 핫딜가의 이 배율 미만이면 다나와 쪽을 믿지 않는다(다른 구성에 잘못 붙은 상품). 백엔드 MALL_SANE_MIN_RATIO 와 같다.
- */
-const MALL_SANE_MIN_RATIO = 0.6;
-
-/** 딜과 같은 구성의 대표 상품. 구성을 못 읽거나 안 맞으면 null. */
-export function representativeForDeal(deal: Deal, reps: Representative[]): Representative | null {
-  const key = packKey(deal.title);
-  if (!key) return null;
-  return reps.find((r) => packKey(r.label) === key) ?? null;
-}
-
-/** 같은 구성의 다나와 최저가(믿을 만할 때만). 백엔드 mallPriceForDeal 과 같은 규칙. */
-export function mallPriceForDeal(deal: Deal, reps: Representative[]): number | null {
-  if (deal.price == null || deal.price <= 0) return null;
-  const mall = representativeForDeal(deal, reps)?.danawaPrice;
-  if (mall == null || mall <= 0 || mall < deal.price * MALL_SANE_MIN_RATIO) return null;
-  return mall;
-}
-
-/**
- * 같은 딜이 여러 글로 올라온 것 — 같은 가격·하루 안·같은 제목 키. 진행 중 건수·목록에서 한 번만.
- * (2026-10-19 보성녹차 「진행 중 2건」이 토스 같은 딜 두 글.) 백엔드 isDuplicateActive 와 같은 목적.
- */
-export function dedupeSameDeals(deals: Deal[]): Deal[] {
-  const kept: Deal[] = [];
-  for (const d of deals) {
-    const at = d.postedAt ? Date.parse(d.postedAt) : NaN;
-    const key = sameDealKey(d.title);
-    const dup = kept.some(
-      (k) =>
-        k.price === d.price &&
-        sameDealKey(k.title) === key &&
-        Math.abs(Date.parse(k.postedAt ?? '') - at) < DAY_MS,
-    );
-    if (!dup) kept.push(d);
-  }
-  return kept;
-}
-
-/** 진행 중 = 비종료 + 게시 3일 이내. 판정과 목록 "진행 중" 탭이 같은 기준을 써야 숫자가 맞는다. */
-export function isActiveDeal(d: Deal, now = Date.now()): boolean {
-  if (d.isEnd) return false;
-  const posted = d.postedAt ? Date.parse(d.postedAt) : NaN;
-  return !Number.isNaN(posted) && now - posted <= ACTIVE_DEAL_MAX_DAYS * DAY_MS;
-}
 
 /** 크롤링 제목에 섞여 온 HTML 태그(`<img src=...>`)·엔티티 제거. */
 export function cleanDealTitle(title: string): string {
@@ -174,7 +90,6 @@ export interface TimingInsight {
   current: number;
   avg: number | null;
   buyLine: number | null;
-  saveVsAvg: number | null;
   savePct: number | null;
   basis: HistBasis;
   unitLabel?: string | null;
@@ -191,171 +106,80 @@ export interface TimingInsight {
   historyPoints: number;
 }
 
-function mean(nums: number[]): number | null {
-  if (!nums.length) return null;
-  return nums.reduce((a, b) => a + b, 0) / nums.length;
-}
-
-function median(nums: number[]): number | null {
-  if (!nums.length) return null;
-  const sorted = [...nums].sort((a, b) => a - b);
-  const mid = Math.floor(sorted.length / 2);
-  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
-}
-
-/** "진행 중"이라고 부를 수 있는 게시 후 일수. 상품 상세의 신선도 임계(STALE_AFTER_DAYS)와 같다. */
-/** 추이 중앙값의 이 배율 미만이면 가격 오독(단위가 계산 착오·묶음 일부 가격)으로 본다. 상세의 이력 가드와 같은 0.4. */
-const OUTLIER_MIN_RATIO = 0.4;
-/** 추이 점이 이보다 적으면 판정하지 않는다 — 점 2~3개면 지금 가격이 곧 "역대 최저"가 된다. */
-const MIN_HISTORY_POINTS = 5;
-/** 역대 최저라도 평균보다 이만큼(%) 싸야 그렇게 부른다 — 평평한 추이에서 "역대급(0% 저렴)"이 37건 나왔다(2026-10-01). */
-const LOWEST_MIN_SAVE_PCT = 5;
-/** 역대 최저가 아니면 평균보다 이만큼(%, 반올림) 싸야 "평소보다 저렴". 백엔드 CHEAP_MIN_SAVE_PCT 와 같다. */
-const CHEAP_MIN_SAVE_PCT = 10;
-
 /**
- * 진행 중(비종료) 딜 기준 현재가 + 추이 평균으로 타이밍 판정.
- * 백엔드 신규 필드 없이 payload만으로 동작.
- * ★/deals 목록의 판정(crawling-server model-page-price-verdict.ts)과 규칙이 같아야 한다 — 바꾸면 둘 다.
+ * 서버 판정 — modelPage.priceVerdict(crawling-server model-page-price-verdict.ts buildPriceVerdict). /deals 목록 카드와 같은 계산이다.
+ * 예전엔 같은 규칙을 여기서 따로 들고 있다가 구성 키·같은 딜 묶기가 서버와 어긋났다(2026-10-19). 여기는 문구만 만든다.
  */
-export function buildTimingInsight(input: {
-  deals: Deal[];
-  histPrices: number[];
+export interface PriceVerdict {
+  tone?: string | null;
+  pendingReason?: string | null;
+  activeDealCount: number;
+  activeProductIds: number[];
+  bundleProductIds: number[];
+  bestProductId?: number | null;
+  comparePrice?: number | null;
+  activePrice?: number | null;
+  bestPackLabel?: string | null;
+  mallPrice?: number | null;
+  avgPrice?: number | null;
+  savePct?: number | null;
+  buyLine?: number | null;
+  historyPoints: number;
+}
+
+const TONE_LABEL: Record<string, { tone: TimingTone; label: string }> = {
+  // "역대"라고 부르지 않는다 — 추이는 우리가 모은 핫딜 몇 주치다(점 5개면 판정한다).
+  lowest: { tone: 'good', label: '기록상 최저 · 사기 좋은 구간' },
+  cheap: { tone: 'good', label: '평소보다 저렴 · 사기 좋은 구간' },
+  fair: { tone: 'fair', label: '평소 수준' },
+  high: { tone: 'high', label: '다소 높은 편' },
+  mall_cheaper: { tone: 'mall', label: '다나와가 더 쌈 · 핫딜 아님' },
+};
+
+// 지난 가격으로 "사기 좋은 구간"이라 하면 /deals 목록("핫딜을 기다리는 상품")과 모순된다 — 진행 딜이 없으면 판정하지 않는다.
+const PENDING_LABEL: Record<string, string> = {
+  NOT_COMPARABLE: '진행 중 · 단가 비교 불가',
+  BUNDLE_ONLY: '증정·혜택 딜만 진행 중',
+  NO_ACTIVE: '진행 중인 핫딜 없음',
+  THIN_HISTORY: '추이 대비 판단 불가',
+};
+
+/** 서버 판정을 화면 문구로. 진행 딜이 없으면 히어로가(지난 핫딜 최저)를 보여 주되 "지금"이라 부르지 않는다. */
+export function timingFromVerdict(input: {
+  verdict: PriceVerdict | null | undefined;
   histBasis: HistBasis;
   histUnitLabel?: string | null;
   heroPrice?: HeroPrice | null;
-  representatives?: Representative[];
-  currency?: 'KRW' | 'USD';
-  now?: number;
 }): TimingInsight {
-  const {
-    deals,
-    histPrices,
-    histBasis,
-    histUnitLabel,
-    heroPrice,
-    representatives = [],
-    currency,
-    now = Date.now(),
-  } = input;
-  // "지금 진행 중 최저가" 는 검색결과 설명에 그대로 찍힌다 — 근거 없는 딜은 넣지 않는다.
-  // ① 게시 3일 이내만: 종료 자동 판정이 없어 2024년 딜도 isEnd=false 로 남는다(2026-10-01 실측: "진행 중 24건"에 2024년 딜).
-  // ② 추이 중앙값의 40% 미만은 오독: 신라면 14,454원을 4,454원으로 읽어 "100g당 186원·평균보다 64% 저렴" 이 나갔다.
-  const histMedian = median(histPrices);
-  // 진행 중 건수는 증정 딜도 센다(백엔드 activeDealCount 와 같은 수 — 목록 카드 "진행 N건"과 맞춘다). 판정에서만 뺀다.
-  const active = dedupeSameDeals(deals.filter((d) => isActiveDeal(d, now)));
-  const pool = active.filter((d) => !isLikelyBundleDeal(d.title));
-
-  let best: { price: number; deal: Deal } | null = null;
-  for (const deal of pool) {
-    if (isForeignPriceDeal(deal, currency)) continue;
-    const p = dealComparePrice(deal, histBasis, histUnitLabel);
-    if (p == null || p <= 0) continue;
-    if (histMedian != null && p < histMedian * OUTLIER_MIN_RATIO) continue;
-    if (!best || p < best.price) best = { price: p, deal };
-  }
-
-  // 진행 딜이 없으면 히어로가를 폴백(판정은 unknown에 가깝게).
-  const current =
-    best?.price ??
-    (histBasis === 'unit' && heroPrice?.unitPrice != null
+  const { verdict, histBasis, histUnitLabel, heroPrice } = input;
+  const isActivePrice = verdict?.comparePrice != null;
+  const fallback =
+    histBasis === 'unit' && heroPrice?.unitPrice != null
       ? heroPrice.unitPrice
-      : (heroPrice?.minPrice ?? null));
-
-  const avg = mean(histPrices);
-  const histMin = histPrices.length ? Math.min(...histPrices) : null;
-  // "이하면 사도 됨" — 추이 하위 ~30% 구간(최저~최고 선형).
-  const histMax = histPrices.length ? Math.max(...histPrices) : null;
-  const buyLine =
-    histMin != null && histMax != null ? histMin + (histMax - histMin) * 0.3 : histMin;
-
-  if (current == null) {
-    return {
-      tone: 'unknown',
-      label: '가격 정보 부족',
-      current: 0,
-      avg,
-      buyLine,
-      saveVsAvg: null,
-      savePct: null,
-      basis: histBasis,
-      unitLabel: histUnitLabel,
-      packLabel: heroPrice?.label ?? null,
-      totalPrice: heroPrice?.minPrice ?? null,
-      activeDealCount: active.length,
-      isActivePrice: false,
-      bestPackLabel: null,
-      mallPrice: null,
-      historyPoints: histPrices.length,
-    };
-  }
-
-  const saveVsAvg = avg != null ? avg - current : null;
-  const savePct = avg != null && avg > 0 ? Math.round(((avg - current) / avg) * 100) : null;
-
-  let tone: TimingTone;
-  let label: string;
-  if (!best) {
-    // 지난 가격으로 "사기 좋은 구간"이라 하면 /deals 목록("핫딜을 기다리는 상품")과 모순된다.
-    // 증정·포인트 딜만 진행 중이면 목록은 "진행 중"으로 세니 "없음"이라 하지 않는다(가격엔 사은품이 섞여 판정은 보류).
-    tone = 'unknown';
-    label =
-      pool.length > 0
-        ? '진행 중 · 단가 비교 불가'
-        : active.length > 0
-          ? '증정·혜택 딜만 진행 중'
-          : '진행 중인 핫딜 없음';
-  } else if (histPrices.length < MIN_HISTORY_POINTS) {
-    tone = 'unknown';
-    label = '추이 대비 판단 불가';
-  } else if (
-    histMin != null &&
-    current <= histMin * 1.02 &&
-    savePct != null &&
-    savePct >= LOWEST_MIN_SAVE_PCT
-  ) {
-    tone = 'good';
-    // "역대"라고 부르지 않는다 — 추이는 우리가 모은 핫딜 몇 주치다(점 5개면 판정한다).
-    label = '기록상 최저 · 사기 좋은 구간';
-  } else if (savePct != null && savePct >= CHEAP_MIN_SAVE_PCT) {
-    tone = 'good';
-    label = '평소보다 저렴 · 사기 좋은 구간';
-  } else if (avg != null && current <= avg) {
-    tone = 'fair';
-    label = '평소 수준';
-  } else if (avg != null && current > avg) {
-    tone = 'high';
-    label = '다소 높은 편';
-  } else {
-    tone = 'unknown';
-    label = '추이 대비 판단 불가';
-  }
-
-  const krw = currency !== 'USD';
-  const bestRep = best && krw ? representativeForDeal(best.deal, representatives) : null;
-  const mallPrice = best && krw ? mallPriceForDeal(best.deal, representatives) : null;
-  if (mallPrice != null && best?.deal.price != null && mallPrice <= best.deal.price) {
-    tone = 'mall';
-    label = '다나와가 더 쌈 · 핫딜 아님';
-  }
-
+      : (heroPrice?.minPrice ?? null);
+  const current = isActivePrice ? (verdict?.comparePrice as number) : fallback;
+  const known = verdict?.tone ? TONE_LABEL[verdict.tone] : undefined;
   return {
-    tone,
-    label,
-    current,
-    avg,
-    buyLine,
-    saveVsAvg,
-    savePct,
+    tone: current == null ? 'unknown' : (known?.tone ?? 'unknown'),
+    label:
+      current == null
+        ? '가격 정보 부족'
+        : (known?.label ??
+          PENDING_LABEL[verdict?.pendingReason ?? 'NO_ACTIVE'] ??
+          '추이 대비 판단 불가'),
+    current: current ?? 0,
+    avg: verdict?.avgPrice ?? null,
+    buyLine: verdict?.buyLine ?? null,
+    savePct: verdict?.savePct ?? null,
     basis: histBasis,
     unitLabel: histUnitLabel,
-    packLabel: best?.deal ? undefined : (heroPrice?.label ?? null),
-    totalPrice: best?.deal.price ?? heroPrice?.minPrice ?? null,
-    activeDealCount: active.length,
-    isActivePrice: best != null,
-    bestPackLabel: bestRep?.label ?? null,
-    mallPrice,
-    historyPoints: histPrices.length,
+    packLabel: isActivePrice ? undefined : (heroPrice?.label ?? null),
+    totalPrice: isActivePrice ? (verdict?.activePrice ?? null) : (heroPrice?.minPrice ?? null),
+    activeDealCount: verdict?.activeDealCount ?? 0,
+    isActivePrice,
+    bestPackLabel: isActivePrice ? (verdict?.bestPackLabel ?? null) : null,
+    mallPrice: isActivePrice ? (verdict?.mallPrice ?? null) : null,
+    historyPoints: verdict?.historyPoints ?? 0,
   };
 }
 
@@ -394,16 +218,17 @@ export function rankRepresentatives(reps: Representative[]): RankedRepresentativ
   });
 }
 
+/** 진행 중·증정 딜은 서버 판정이 고른 것(같은 딜 재게시 묶기·3일 기준이 판정과 같다). 여기선 줄 순서만 정한다. */
 export function splitDealsForList(
   deals: Deal[],
   basis: HistBasis,
-  unitLabel?: string | null,
-  now = Date.now(),
+  unitLabel: string | null | undefined,
+  verdict: Pick<PriceVerdict, 'activeProductIds' | 'bundleProductIds'> | null | undefined,
   currency: 'KRW' | 'USD' = 'KRW',
 ): { active: Deal[]; history: Deal[] } {
-  // !isEnd 만 보면 2023년 딜이 "진행 중"에 섞였다 — 종료 자동 판정이 없다(2026-10-05 스팸 진행 중 29건 중 21건이 30일 밖).
-  const active = dedupeSameDeals(deals.filter((d) => isActiveDeal(d, now)));
-  const history = deals;
+  const activeIds = new Set(verdict?.activeProductIds ?? []);
+  const bundleIds = new Set(verdict?.bundleProductIds ?? []);
+  const active = deals.filter((d) => activeIds.has(d.productId));
 
   // 외화 딜은 원 축에서 비교할 수 없으니 뒤로 — 첫 줄이 "지금 추천"이다.
   const foreignLast = (a: Deal, b: Deal) =>
@@ -423,12 +248,12 @@ export function splitDealsForList(
   const activeSorted = [...active].sort((a, b) => {
     const fl = foreignLast(a, b);
     if (fl !== 0) return fl;
-    const ab = Number(isLikelyBundleDeal(a.title)) - Number(isLikelyBundleDeal(b.title));
+    const ab = Number(bundleIds.has(a.productId)) - Number(bundleIds.has(b.productId));
     if (ab !== 0) return ab;
     return byPrice(a, b);
   });
 
-  return { active: activeSorted, history: [...history].sort(byPrice) };
+  return { active: activeSorted, history: [...deals].sort(byPrice) };
 }
 
 /** 숫자 읽기의 종성 유무 — "4060은"(영=ㅇ), "삼다수는". 조사 선택에만 쓴다. */

@@ -6,9 +6,8 @@ const require = createRequire(import.meta.url);
 const {
   withTopicParticle,
   buildDealsLeadSentence,
-  buildTimingInsight: buildTiming,
-  packKey,
   splitDealsForList,
+  timingFromVerdict,
   cleanDealTitle,
 } = require('./model-page-insights.ts') as typeof import('./model-page-insights');
 
@@ -20,7 +19,6 @@ const timing = (over: Partial<Timing> = {}): Timing => ({
   current: 22,
   avg: 151,
   buyLine: 73,
-  saveVsAvg: 129,
   savePct: 85,
   basis: 'unit',
   unitLabel: '100ml당',
@@ -155,240 +153,6 @@ describe('buildModelDisplayName', () => {
   });
 });
 
-describe('buildTimingInsight', () => {
-  const { buildTimingInsight } =
-    require('./model-page-insights.ts') as typeof import('./model-page-insights');
-  const now = Date.parse('2026-10-01T00:00:00Z');
-  const deal = (price: number, postedAt: string | null, extra = {}) => ({
-    productId: price,
-    title: '농심 신라면 120g 40개',
-    price,
-    url: '',
-    providerId: 1,
-    mallName: null,
-    postedAt,
-    thumbnail: null,
-    ...extra,
-  });
-  const histPrices: number[] = [14000, 15000, 16000, 17000];
-
-  it('가격 오독(추이 중앙값의 40% 미만)은 현재가로 쓰지 않는다', () => {
-    const t = buildTimingInsight({
-      deals: [deal(4454, '2026-09-28T00:00:00Z'), deal(14454, '2026-09-29T00:00:00Z')],
-      histPrices,
-      histBasis: 'total',
-      now,
-    });
-    assert.equal(t.current, 14454);
-  });
-
-  it('3일 지난 딜·게시일 모르는 딜은 "진행 중"에서 뺀다', () => {
-    const t = buildTimingInsight({
-      deals: [
-        deal(13000, '2024-05-01T00:00:00Z'),
-        deal(13500, null),
-        // 나흘 전 딜 — 더 싸도 진행 중이 아니다(종료 표시가 안 붙었을 뿐 대개 끝났다).
-        deal(12000, '2026-09-27T00:00:00Z'),
-        deal(15500, '2026-09-30T00:00:00Z'),
-      ],
-      histPrices,
-      histBasis: 'total',
-      now,
-    });
-    assert.equal(t.current, 15500);
-    assert.equal(t.activeDealCount, 1);
-  });
-
-  it('진행 중 딜이 없으면 히어로가로 폴백한다', () => {
-    const t = buildTimingInsight({
-      deals: [deal(13000, '2024-05-01T00:00:00Z')],
-      histPrices,
-      histBasis: 'total',
-      heroPrice: { minPrice: 15900, label: '40개', unitPrice: null, unitLabel: null },
-      now,
-    });
-    assert.equal(t.current, 15900);
-    assert.equal(t.activeDealCount, 0);
-    // 지난 가격으로 "사기 좋은 구간"이라 하지 않는다 — /deals 목록은 이 상품을 "기다리는 상품"에 둔다.
-    assert.equal(t.tone, 'unknown');
-    assert.equal(t.isActivePrice, false);
-  });
-
-  // 백엔드 model-page-price-verdict.ts(buildPriceVerdict)와 같은 규칙 — 목록 카드와 상세가 어긋나지 않게.
-  it('증정 딜도 진행 중 건수엔 세고, 판정에선 뺀다', () => {
-    const t = buildTimingInsight({
-      deals: [
-        deal(9000, '2026-09-30T00:00:00Z', { title: '신라면 40개 + 포인트 증정' }),
-        deal(15500, '2026-09-30T00:00:00Z'),
-      ],
-      histPrices,
-      histBasis: 'total',
-      now,
-    });
-    assert.equal(t.activeDealCount, 2);
-    assert.equal(t.current, 15500);
-  });
-
-  it('증정 딜만 진행 중이면 "없음"이라 하지 않고 판정은 보류한다', () => {
-    const t = buildTimingInsight({
-      deals: [deal(9000, '2026-09-30T00:00:00Z', { title: '신라면 40개 + 포인트 증정' })],
-      histPrices,
-      histBasis: 'total',
-      heroPrice: { minPrice: 15900, label: '40개', unitPrice: null, unitLabel: null },
-      now,
-    });
-    assert.equal(t.activeDealCount, 1);
-    assert.equal(t.tone, 'unknown');
-    assert.equal(t.label, '증정·혜택 딜만 진행 중');
-    assert.equal(t.isActivePrice, false);
-  });
-
-  it('"평소보다 저렴"은 반올림한 절약률 10% 이상 — 백엔드 cheap 과 같은 경계', () => {
-    const t = buildTimingInsight({
-      deals: [deal(9040, '2026-09-30T00:00:00Z')],
-      histPrices: [10000, 10000, 10000, 10000, 8000, 12000],
-      histBasis: 'total',
-      now,
-    });
-    assert.equal(t.savePct, 10);
-    assert.equal(t.label, '평소보다 저렴 · 사기 좋은 구간');
-  });
-
-  it('추이가 평평하면 역대 최저여도 "역대급"이라 하지 않는다', () => {
-    const t = buildTimingInsight({
-      deals: [deal(10000, '2026-09-30T00:00:00Z')],
-      histPrices: [10000, 10000, 10000, 10000, 10000],
-      histBasis: 'total',
-      now,
-    });
-    assert.equal(t.tone, 'fair');
-  });
-
-  // 2026-10-09 WD SN850X: 원화·GB당 페이지에 직구 $219.76 딜 → "지금 진행 최저 GB당 220원 · 135% 비쌈" 이 상세·검색 설명에 나갔다.
-  it('원화 페이지에 섞인 직구 달러 딜(소수 가격)은 "지금 가격"으로 쓰지 않는다 — 백엔드 목록 판정과 같은 규칙', () => {
-    const gb = {
-      histPrices: [80, 90, 93, 95, 110],
-      histBasis: 'unit' as const,
-      histUnitLabel: 'GB당',
-    };
-    const only = buildTimingInsight({ ...gb, deals: [deal(219.76, '2026-09-28T00:00:00Z')], now });
-    assert.equal(only.isActivePrice, false);
-    assert.equal(only.tone, 'unknown');
-
-    const mixed = buildTimingInsight({
-      ...gb,
-      deals: [
-        deal(219.76, '2026-09-28T00:00:00Z'),
-        deal(500000, '2026-09-29T00:00:00Z', { unitLabel: 'GB당', unitPrice: 250 }),
-      ],
-      now,
-    });
-    assert.equal(mixed.current, 250);
-
-    // 달러 추이 페이지는 원래 달러로 판정한다.
-    const usd = buildTimingInsight({
-      deals: [deal(199.99, '2026-09-28T00:00:00Z')],
-      histPrices: [210, 220, 230, 240, 250],
-      histBasis: 'total',
-      currency: 'USD',
-      now,
-    });
-    assert.equal(usd.current, 199.99);
-  });
-
-  // 2026-10-17 삼다수: 「지그재그 삼다수2L 36병 23850원 개당 662원」이 가격 662·단가 없음으로 들어와 100ml당 추이(~43원)와
-  // 비교돼 "지금 진행 최저 100ml당 662원 · 약 1425% 비쌈" 이 나갔다.
-  it('단가 축 페이지에서 단가가 없는(다른 축) 딜은 판정에 안 쓴다 — 진행 중으로만 센다', () => {
-    const ml = {
-      histPrices: [33, 38, 41, 43, 50],
-      histBasis: 'unit' as const,
-      histUnitLabel: '100ml당',
-    };
-    const only = buildTimingInsight({
-      ...ml,
-      deals: [deal(662, '2026-09-30T00:00:00Z')],
-      heroPrice: { minPrice: 7720, label: '2L 12개', unitPrice: 32, unitLabel: '100ml당' },
-      now,
-    });
-    assert.equal(only.activeDealCount, 1);
-    assert.equal(only.isActivePrice, false);
-    assert.equal(only.tone, 'unknown');
-    assert.equal(only.label, '진행 중 · 단가 비교 불가');
-
-    const mixed = buildTimingInsight({
-      ...ml,
-      deals: [
-        deal(662, '2026-09-30T00:00:00Z'),
-        deal(9590, '2026-09-30T00:00:00Z', { unitLabel: '100ml당', unitPrice: 40 }),
-        deal(5000, '2026-09-30T00:00:00Z', { unitLabel: '개당', unitPrice: 30 }),
-      ],
-      now,
-    });
-    assert.equal(mixed.current, 40);
-  });
-
-  it('추이 점이 5개 미만이면 판정하지 않는다', () => {
-    const t = buildTimingInsight({
-      deals: [deal(5000, '2026-09-30T00:00:00Z')],
-      histPrices: [9000, 10000],
-      histBasis: 'total',
-      now,
-    });
-    assert.equal(t.tone, 'unknown');
-  });
-});
-
-describe('splitDealsForList', () => {
-  const now = Date.parse('2026-10-03T00:00:00Z');
-  const deal = (productId: number, postedAt: string, isEnd = false) => ({
-    productId,
-    title: `딜 ${productId}`,
-    price: 1000 + productId,
-    isEnd,
-    url: '',
-    providerId: 1,
-    mallName: null,
-    postedAt,
-    thumbnail: null,
-  });
-
-  it('진행 중 = 비종료 + 3일 이내 (isEnd 가 안 꺼진 옛 딜은 이력에만)', () => {
-    const { active, history } = splitDealsForList(
-      [
-        deal(1, '2026-10-01T00:00:00Z'),
-        deal(2, '2023-08-22T00:00:00Z'),
-        deal(3, '2026-10-02T00:00:00Z', true),
-      ],
-      'total',
-      null,
-      now,
-    );
-    assert.deepEqual(
-      active.map((d) => d.productId),
-      [1],
-    );
-    assert.equal(history.length, 3);
-  });
-
-  it('원화 페이지에서 외화(소수 가격) 딜은 진행 중·이력 모두 뒤로 — 첫 줄이 "지금 추천"이다', () => {
-    const foreign = { ...deal(9, '2026-10-01T00:00:00Z'), price: 219.76 };
-    const { active, history } = splitDealsForList(
-      [foreign, deal(500, '2026-10-02T00:00:00Z')],
-      'total',
-      null,
-      now,
-    );
-    assert.deepEqual(
-      active.map((d) => d.productId),
-      [500, 9],
-    );
-    assert.deepEqual(
-      history.map((d) => d.productId),
-      [500, 9],
-    );
-  });
-});
-
 describe('cleanDealTitle', () => {
   it('크롤링 제목의 HTML 태그·엔티티를 걷어낸다', () => {
     assert.equal(
@@ -477,59 +241,44 @@ describe('buildRecentDeals', () => {
   });
 });
 
-// 2026-10-19 동원 보성녹차 운영 payload — 핫딜 11,750원이 「역대급」인데 같은 구성 다나와가 10,740원이었다.
-describe('같은 구성 다나와가 · 같은 딜 중복', () => {
-  const NOW = Date.parse('2026-10-19T12:00:00Z');
-  const tea = (title: string, postedAt: string) => ({
-    productId: Math.floor(Math.random() * 1e9),
-    title,
-    price: 11750,
-    unitPrice: 140,
-    unitLabel: '100ml당',
-    url: '',
-    providerId: 1,
-    mallName: '토스',
-    postedAt,
-    thumbnail: null,
+describe('timingFromVerdict', () => {
+  type Verdict = NonNullable<Parameters<typeof timingFromVerdict>[0]['verdict']>;
+  const verdict = (over: Partial<Verdict> = {}): Verdict => ({
+    tone: 'lowest',
+    pendingReason: null,
+    activeDealCount: 1,
+    activeProductIds: [1],
+    bundleProductIds: [],
+    bestProductId: 1,
+    comparePrice: 140,
+    activePrice: 11750,
+    bestPackLabel: '350ml 24개',
+    mallPrice: null,
+    avgPrice: 152,
+    savePct: 8,
+    buyLine: 147,
+    historyPoints: 5,
+    ...over,
   });
-  const deals = [
-    tea('동원 보성녹차, 350ml, 24개 11,750원 (무료)', '2026-10-19T09:06:21Z'),
-    tea('동원 보성녹차 350ml 24개 (11,750원/무료)', '2026-10-19T08:24:00Z'),
-  ];
-  const rep = (label: string, danawaPrice: number, unitPrice: number) => ({
-    label,
-    danawaPrice,
-    mallCount: 1,
-    priceRank: null,
-    danawaUrl: null,
-    activeDeals: 0,
-    dealMinPrice: null,
-    unitPrice,
-    unitLabel: '100ml당',
-  });
-  const base = {
-    deals,
-    histPrices: [162, 162, 147, 151, 140],
-    histBasis: 'unit' as const,
-    histUnitLabel: '100ml당',
-    now: NOW,
-  };
+  const heroPrice = { minPrice: 9900, label: '1.5L 12개', unitPrice: 55, unitLabel: '100ml당' };
+  const base = { histBasis: 'unit' as const, histUnitLabel: '100ml당', heroPrice };
 
-  it('구성 키는 표기가 달라도 같다(350mlx24개 · 0.35L 24입)', () => {
-    assert.equal(packKey('350ml 24개'), packKey('동원 보성녹차 350mlx24개 (13,590원/무료)'));
-    assert.equal(packKey('350ml 24개'), packKey('보성녹차 0.35L 24입'));
-    assert.notEqual(packKey('350ml 24개'), packKey('1.5L 12개'));
+  it('서버 판정을 그대로 문구로 — 판정은 다시 계산하지 않는다', () => {
+    const t = timingFromVerdict({ ...base, verdict: verdict() });
+    assert.equal(t.tone, 'good');
+    assert.equal(t.label, '기록상 최저 · 사기 좋은 구간');
+    assert.equal(t.current, 140);
+    assert.equal(t.totalPrice, 11750);
+    assert.equal(t.isActivePrice, true);
+    assert.equal(t.bestPackLabel, '350ml 24개');
   });
 
-  it('같은 구성 다나와가 핫딜 이하면 tone=mall, 진행 중은 1건', () => {
-    const t = buildTiming({
+  it('다나와가 더 싸면 mall — 리드 문장도 다나와가 답이다', () => {
+    const t = timingFromVerdict({
       ...base,
-      representatives: [rep('1.5L 12개', 11270, 63), rep('350ml 24개', 10740, 140)],
+      verdict: verdict({ tone: 'mall_cheaper', mallPrice: 10740 }),
     });
     assert.equal(t.tone, 'mall');
-    assert.equal(t.mallPrice, 10740);
-    assert.equal(t.bestPackLabel, '350ml 24개');
-    assert.equal(t.activeDealCount, 1);
     const lead = buildDealsLeadSentence({
       modelName: '동원F&B 보성녹차',
       timing: t,
@@ -540,22 +289,71 @@ describe('같은 구성 다나와가 · 같은 딜 중복', () => {
       lead ?? '',
       /^동원F&B 보성녹차는 지금 핫딜\(350ml 24개 11,750원\)보다 다나와 최저가\(10,740원\)가 더 쌉니다/,
     );
-    assert.doesNotMatch(lead ?? '', /사도 되는 가격/);
   });
 
-  it('다나와가 더 비싸거나, 다른 구성이거나, 너무 싸서 의심스러우면 추이 판정 그대로', () => {
-    for (const reps of [
-      [rep('350ml 24개', 13900, 165)],
-      [rep('1.5L 12개', 9000, 50)],
-      [rep('350ml 24개', 5000, 60)],
-    ]) {
-      const t = buildTiming({ ...base, representatives: reps });
-      assert.equal(t.tone, 'good');
-      assert.equal(t.label, '기록상 최저 · 사기 좋은 구간');
-    }
+  it('판정 못 한 이유별 문구, 진행 딜이 없으면 히어로가를 "지난 핫딜"로', () => {
+    const pending = (pendingReason: string, over: Partial<Verdict> = {}) =>
+      timingFromVerdict({
+        ...base,
+        verdict: verdict({ tone: null, pendingReason, comparePrice: null, ...over }),
+      });
+    assert.equal(pending('NO_ACTIVE').label, '진행 중인 핫딜 없음');
+    assert.equal(pending('BUNDLE_ONLY').label, '증정·혜택 딜만 진행 중');
+    assert.equal(pending('NOT_COMPARABLE').label, '진행 중 · 단가 비교 불가');
+    assert.equal(pending('THIN_HISTORY', { comparePrice: 140 }).label, '추이 대비 판단 불가');
+    const none = pending('NO_ACTIVE');
+    assert.equal(none.tone, 'unknown');
+    assert.equal(none.isActivePrice, false);
+    assert.equal(none.current, 55);
+    assert.equal(none.totalPrice, 9900);
+    assert.equal(none.packLabel, '1.5L 12개');
+    assert.equal(none.bestPackLabel, null);
   });
 
-  it('진행 중 목록도 같은 딜 두 글을 한 줄로', () => {
-    assert.equal(splitDealsForList(deals, 'unit', '100ml당', NOW).active.length, 1);
+  it('판정이 없으면(옛 응답) 가격 정보만으로 판정 없음', () => {
+    assert.equal(timingFromVerdict({ ...base, verdict: null }).tone, 'unknown');
+    assert.equal(timingFromVerdict({ histBasis: 'total', verdict: null }).label, '가격 정보 부족');
+  });
+});
+
+describe('splitDealsForList', () => {
+  const deal = (productId: number, price = 1000 + productId, title = `딜 ${productId}`) => ({
+    productId,
+    title,
+    price,
+    url: '',
+    providerId: 1,
+    mallName: null,
+    postedAt: '2026-10-01T00:00:00Z',
+    thumbnail: null,
+  });
+
+  it('진행 중은 서버가 센 딜만, 증정 딜은 뒤로', () => {
+    const { active, history } = splitDealsForList(
+      [deal(1, 500), deal(2), deal(3, 900), deal(4)],
+      'total',
+      null,
+      { activeProductIds: [1, 3, 4], bundleProductIds: [1] },
+    );
+    assert.deepEqual(
+      active.map((d) => d.productId),
+      [3, 4, 1],
+    );
+    assert.equal(history.length, 4);
+  });
+
+  it('원화 페이지에서 외화(소수 가격) 딜은 진행 중·이력 모두 뒤로 — 첫 줄이 "지금 추천"이다', () => {
+    const { active, history } = splitDealsForList([deal(9, 219.76), deal(500)], 'total', null, {
+      activeProductIds: [9, 500],
+      bundleProductIds: [],
+    });
+    assert.deepEqual(
+      active.map((d) => d.productId),
+      [500, 9],
+    );
+    assert.deepEqual(
+      history.map((d) => d.productId),
+      [500, 9],
+    );
   });
 });

@@ -23,13 +23,13 @@ import {
   buildDealsLeadSentence,
   buildModelDisplayName,
   buildRecentDeals,
-  buildTimingInsight,
   Deal,
   HeroPrice,
   rankRepresentatives,
   Representative,
   SearchedDeal,
   splitDealsForList,
+  timingFromVerdict,
   withTopicParticle,
 } from '@/features/deals/lib/model-page-insights';
 import { toSeoImageUrl } from '@/features/product-detail/lib/product-seo';
@@ -137,7 +137,7 @@ type ModelPageData = NonNullable<Awaited<ReturnType<typeof ModelPageService.getM
  */
 function deriveModelPageInsights(page: ModelPageData, displayName: string) {
   const payload = (page.payload ?? {}) as ModelPagePayload;
-  const { heroPrice, deals = [], priceHistory, representatives = [] } = payload;
+  const { heroPrice, priceHistory } = payload;
   const histCurrency = priceHistory?.currency ?? 'KRW';
   const histBasis = priceHistory?.basis ?? 'total';
   const histUnitLabel = priceHistory?.unitLabel;
@@ -148,14 +148,11 @@ function deriveModelPageInsights(page: ModelPageData, displayName: string) {
     return histCurrency === 'USD' ? `$${Math.round(n)}` : `${Math.round(n).toLocaleString()}원`;
   };
   const histPrices = (priceHistory?.points ?? []).map((p) => p.price);
-  const timing = buildTimingInsight({
-    deals,
-    histPrices,
+  const timing = timingFromVerdict({
+    verdict: page.priceVerdict,
     histBasis,
     histUnitLabel,
     heroPrice,
-    representatives,
-    currency: histCurrency,
   });
   const fmtWithUnit = (price: number) =>
     histBasis === 'unit' && histUnitLabel ? `${histUnitLabel} ${fmtHist(price)}` : fmtHist(price);
@@ -279,7 +276,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
     deals,
     histBasis,
     histUnitLabel,
-    undefined,
+    page.priceVerdict,
     histCurrency,
   );
 
@@ -757,7 +754,10 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             histMin={histMin}
             listTitleSuffix={listTitleSuffix}
             currency={histCurrency}
-            suppressPick={timing.tone === 'mall'}
+            pickProductId={
+              timing.tone === 'mall' ? null : (page.priceVerdict?.bestProductId ?? null)
+            }
+            bundleProductIds={page.priceVerdict?.bundleProductIds ?? []}
           />
         </div>
 
