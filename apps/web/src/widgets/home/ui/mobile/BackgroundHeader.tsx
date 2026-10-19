@@ -1,9 +1,10 @@
 import { cn } from '@/shared/lib/cn';
-import AlarmLinkButton from '@/shared/ui/AlarmLinkButton';
 import ColorSchemeButton from '@/shared/ui/ColorSchemeButton';
 import LogoLink from '@/shared/ui/common/Logo/LogoLink';
 
 import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
+
+import AlarmLinkButton from '@/widgets/layout/ui/AlarmLinkButton';
 
 import BannerSwiper from './BannerSwiper';
 

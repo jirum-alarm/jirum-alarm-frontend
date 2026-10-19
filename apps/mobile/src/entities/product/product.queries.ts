@@ -11,7 +11,6 @@ import type {
   CategoryProductsQueryVariables,
   LatestSimilarDealsQueryVariables,
   SameProductDealsQueryVariables,
-  MyNotificationKeywordsQueryVariables,
   ProductPriceHistoryQueryVariables,
   ProductDealEvidenceQueryVariables,
   LiveAlternativeDealsQueryVariables,
@@ -39,7 +38,6 @@ export class ProductQueries {
       [...this.keys.detail(id), 'additionalInfo'] as const,
     reactionKeywords: (id: number) =>
       [...this.keys.detail(id), 'reactionKeywords'] as const,
-    myKeywords: () => ['user', 'notificationKeywords'] as const,
     // ★한도도 키에 — 만료 딜 블록(10개)과 관련 상품 화면(50개)이 같은 키면 10개 캐시가 화면을 채운다.
     sameProductDeals: (id: number) =>
       [...this.keys.detail(id), 'sameProductDeals'] as const,
@@ -106,14 +104,6 @@ export class ProductQueries {
     return queryOptions({
       queryKey: this.keys.reactionKeywords(variables.id),
       queryFn: () => ProductService.getReactionKeywords(variables),
-      retry: RETRY,
-    });
-  }
-
-  static myKeywords(variables: MyNotificationKeywordsQueryVariables) {
-    return queryOptions({
-      queryKey: this.keys.myKeywords(),
-      queryFn: () => ProductService.getMyNotificationKeywords(variables),
       retry: RETRY,
     });
   }

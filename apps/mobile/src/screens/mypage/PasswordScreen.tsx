@@ -19,7 +19,7 @@ import StackHeader from '@/features/mypage/ui/StackHeader';
 import {FORM_CTA_BOTTOM} from '@/features/mypage/ui/Rows';
 import {useUpdatePassword} from '@/features/mypage/model/mutations';
 import {usePasswordCheck} from '@/features/mypage/model/usePasswordCheck';
-import {validatePassword} from '@/features/mypage/lib/validation';
+import {validatePassword} from '@/entities/mypage/lib/validation';
 import {showToast} from '@/shared/lib/feedback';
 
 type Props = NativeStackScreenProps<

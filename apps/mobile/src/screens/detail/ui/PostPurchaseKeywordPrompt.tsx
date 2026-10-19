@@ -5,7 +5,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {fixed} from '@jirum/design-system';
 
-import {ProductQueries} from '@/entities/product/product.queries';
+import {MyPageQueries} from '@/entities/mypage';
 import {ProductService} from '@/shared/api/product/product.service';
 import PressableScale from '@/shared/components/PressableScale';
 import {CheckIcon} from '@/shared/components/icons';
@@ -21,7 +21,7 @@ import {PendingActionType} from '@/shared/lib/pending-action';
 import {useAuth} from '@/entities/auth/useAuth';
 
 import {deriveKeyword} from '@jirum/domain/derive-keyword';
-import {invalidateMyKeywords} from '@/features/keyword-prompt/model/myKeywords';
+import {invalidateMyKeywords} from '@/entities/mypage/model/myKeywords';
 
 /** 키워드 등록 최소 길이. web MIN_KEYWORD_LENGTH 와 맞춘다. */
 const MIN_KEYWORD_LENGTH = 2;
@@ -58,7 +58,7 @@ export default function PostPurchaseKeywordPrompt({
   // 이미 등록된 키워드면 권유를 띄우지 않는다 — 눌러야 알려주는 것보다 낫고,
   // 지표도 "등록 가능한 경우"만 세게 되어 등록률이 정확해진다.
   const {data: myKeywords} = useQuery({
-    ...ProductQueries.myKeywords({limit: 20}),
+    ...MyPageQueries.notificationKeywords({limit: 20}),
     enabled: show && hasSession && hasKeyword,
   });
 

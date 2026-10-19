@@ -20,7 +20,7 @@ import {
   normalizeKeyword,
   openKeywordSettings,
   useMyKeywordSet,
-} from '@/features/keyword-prompt/model/myKeywords';
+} from '@/entities/mypage/model/myKeywords';
 
 import {HomeQueries} from '@/entities/home/api/home.queries';
 

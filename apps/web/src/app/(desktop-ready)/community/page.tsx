@@ -4,8 +4,8 @@ import { Suspense } from 'react';
 import { checkDevice } from '@/shared/actions/agent';
 import { getAccessToken } from '@/shared/actions/token';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
+import { NAV_TYPE } from '@/shared/config/nav-type';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
-import { NAV_TYPE } from '@/shared/ui/layout/BottomNav';
 import PageHeader from '@/shared/ui/layout/PageHeader';
 
 import { CommunityHotDeals } from '@/features/community';

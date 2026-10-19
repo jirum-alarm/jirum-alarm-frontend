@@ -10,9 +10,9 @@ import {
   type KeywordRegisterSource,
 } from '@/shared/lib/analytics/keyword-tracking';
 
-import {invalidateMyKeywords} from '@/features/keyword-prompt/model/myKeywords';
+import {invalidateMyKeywords} from '@/entities/mypage/model/myKeywords';
 
-import {isValidKeyword} from '../lib/validation';
+import {isValidKeyword} from '@/entities/mypage/lib/validation';
 
 /**
  * 키워드 알림 화면의 입력 + 목록. web

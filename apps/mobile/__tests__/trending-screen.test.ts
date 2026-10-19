@@ -46,7 +46,7 @@ describe('★웹뷰 주입에 기대던 경로를 전부 옮겼다', () => {
 
   it('★다른 탭에서 발견 탭을 누르면 랭킹 — web 하단 네비(/trending/ranking)와 같다', () => {
     const nav = read('src/navigations/tab/MainTabNavigator.tsx');
-    const webNav = web('shared/ui/layout/BottomNav.tsx');
+    const webNav = web('widgets/layout/ui/BottomNav.tsx');
     // web: 발견이 아닌 페이지에서 누르면 TRENDING_RANKING
     expect(webNav).toContain(
       'pathName === PAGE.TRENDING_RANKING ? PAGE.TRENDING_LIVE : PAGE.TRENDING_RANKING',

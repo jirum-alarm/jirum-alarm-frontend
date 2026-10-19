@@ -4,7 +4,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 
 import AlarmIllustError from '@/shared/components/icons/AlarmIllustError';
 import Button from '@/shared/components/ui/Button';
-import {useMyKeywordSet} from '@/features/keyword-prompt/model/myKeywords';
+import {useMyKeywordSet} from '@/entities/mypage/model/myKeywords';
 
 /**
  * 알림이 하나도 없을 때. web `features/alarm/ui/NoAlerts` 와 같은 문구·버튼.

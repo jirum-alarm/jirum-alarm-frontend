@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 
 import { checkDevice } from '@/shared/actions/agent';
+import { NAV_TYPE } from '@/shared/config/nav-type';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
-import { NAV_TYPE } from '@/shared/ui/layout/BottomNav';
 
 import TrendingPageHeader from '@/widgets/trending/ui/TrendingPageHeader';
 

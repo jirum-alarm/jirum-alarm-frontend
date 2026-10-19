@@ -8,9 +8,6 @@ const {fsdBoundaries} = require('../../packages/eslint/fsd-boundaries.cjs');
 const FSD_ALLOWLIST = {
   // 로그인 요구 훅이 로그인 상태(entities/auth)·내 정보(entities/user) 둘 다 읽고 소비처가 features 여러 슬라이스 — 엔티티 한 곳으로 못 올린다
   'shared/hooks/useRequireLogin.ts': ['@/entities/auth', '@/entities/user'],
-  // 키워드 등록·검증을 마이페이지와 서로 공유 — 공통 부분을 entities/keyword 로 떼는 설계 변경이 필요
-  'features/keyword-prompt/model/useKeywordAlert.ts': ['@/features/mypage'],
-  'features/mypage/model/useKeywordViewModel.ts': ['@/features/keyword-prompt'],
   // 발견 탭 목록이 홈 카드 UI(GridCard·CurationGrid·CarouselList)를 그대로 그린다 — 카드 UI 를 entities/product 로 옮기는 설계 변경 필요
   'entities/trending/ui/LiveList.tsx': ['@/entities/home'],
   'entities/trending/ui/RankingList.tsx': ['@/entities/home'],

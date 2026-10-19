@@ -3,10 +3,11 @@
 import * as m from 'motion/react-m';
 
 import { PAGE } from '@/shared/config/page';
-import { useHasNewAlarm } from '@/shared/hooks/useHasNewAlarm';
 import { trackAlarmLink } from '@/shared/lib/trackAlarmLink';
 import { Alert } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
+
+import { useHasNewAlarm } from '../model/useHasNewAlarm';
 
 /**
  * 알림함 종 — 홈 헤더 우측(검색 옆). 새 알림이 있으면 하단 탭과 같은 빨간 점.

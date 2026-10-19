@@ -8,14 +8,14 @@ import {
 } from '@/shared/lib/analytics/keyword-tracking';
 import {requestPushPermissionIfNeeded} from '@/shared/lib/fcm/push-permission';
 import {showToast} from '@/shared/lib/feedback';
-import {isValidKeyword} from '@/features/mypage/lib/validation';
+import {isValidKeyword} from '@/entities/mypage/lib/validation';
 
 import {
   invalidateMyKeywords,
   normalizeKeyword,
   openKeywordSettings,
   useMyKeywordSet,
-} from './myKeywords';
+} from '@/entities/mypage/model/myKeywords';
 
 /**
  * 이 단어로 **한 번에** 알림을 건다 — 검색 결과 위 한 줄·결과 없음 버튼(KeywordAlertButton)·키워드 허브 버튼이 같이 쓴다.

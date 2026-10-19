@@ -52,7 +52,7 @@ jest.mock('../src/shared/lib/feedback', () => ({
     error: (msg: string) => mockToastError(msg),
   },
 }));
-jest.mock('../src/features/keyword-prompt/model/myKeywords', () => ({
+jest.mock('../src/entities/mypage/model/myKeywords', () => ({
   invalidateMyKeywords: () => mockInvalidate(),
   openKeywordSettings: jest.fn(),
 }));

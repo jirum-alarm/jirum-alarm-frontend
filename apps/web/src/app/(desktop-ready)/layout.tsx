@@ -1,8 +1,8 @@
 import { checkDevice } from '@/shared/actions/agent';
 import { getAccessToken } from '@/shared/actions/token';
-import BottomNav from '@/shared/ui/layout/BottomNav';
 import TopButton from '@/shared/ui/TopButton';
 
+import BottomNav from '@/widgets/layout/ui/BottomNav';
 import DesktopGNB from '@/widgets/layout/ui/desktop/DesktopGNB';
 
 const DesktopReadyLayout = async ({ children }: { children: React.ReactNode }) => {

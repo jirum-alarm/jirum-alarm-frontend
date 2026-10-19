@@ -2,11 +2,11 @@ import {useMemo} from 'react';
 import {StackActions} from '@react-navigation/native';
 import {useQuery, type QueryClient} from '@tanstack/react-query';
 
-import {MyPageQueries} from '@/entities/mypage';
-import {ProductQueries} from '@/entities/product/product.queries';
 import {navigationRef} from '@/shared/lib/navigation/navigation-ref';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {tabStackNavigations} from '@/shared/constant/navigations';
+
+import {MyPageQueries} from '../mypage.queries';
 
 /**
  * 내 키워드는 캐시가 **두 벌**이다 — 키워드 화면(mypage·keywords)과 상세 권유(user·notificationKeywords).
@@ -16,7 +16,9 @@ import {tabStackNavigations} from '@/shared/constant/navigations';
 export const invalidateMyKeywords = (queryClient: QueryClient) =>
   Promise.all([
     queryClient.invalidateQueries({queryKey: MyPageQueries.keys.keywords()}),
-    queryClient.invalidateQueries({queryKey: ProductQueries.keys.myKeywords()}),
+    queryClient.invalidateQueries({
+      queryKey: MyPageQueries.keys.notificationKeywords(),
+    }),
   ]);
 
 /** 서버는 소문자로 저장한다 — 비교도 소문자·앞뒤 공백 없이. */

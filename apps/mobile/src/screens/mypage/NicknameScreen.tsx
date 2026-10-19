@@ -22,7 +22,7 @@ import {useUpdateNickname} from '@/features/mypage/model/mutations';
 import {
   isValidNickname,
   NICKNAME_HELPER_TEXT,
-} from '@/features/mypage/lib/validation';
+} from '@/entities/mypage/lib/validation';
 import PressableOpacity from '@/shared/components/PressableOpacity';
 
 type Props = NativeStackScreenProps<

@@ -4,10 +4,10 @@ import * as m from 'motion/react-m';
 import { usePathname } from 'next/navigation';
 import { createElement, useEffect, useRef } from 'react';
 
+import { NAV_TYPE } from '@/shared/config/nav-type';
 import { PAGE } from '@/shared/config/page';
 import { isTabRootPath } from '@/shared/config/tab-root';
 import { useDevice } from '@/shared/hooks/useDevice';
-import { useHasNewAlarm } from '@/shared/hooks/useHasNewAlarm';
 import { useHeaderVisibility } from '@/shared/hooks/useScrollDirection';
 import { cn } from '@/shared/lib/cn';
 import {
@@ -23,17 +23,11 @@ import {
   MyFill,
 } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
+import TopButton from '@/shared/ui/TopButton';
 
-import TabScrollTopButton from '../TabScrollTopButton';
-import TopButton from '../TopButton';
+import { useHasNewAlarm } from '../model/useHasNewAlarm';
 
-export enum NAV_TYPE {
-  HOME = 'HOME',
-  TRENDING = 'TRENDING',
-  COMMUNITY = 'COMMUNITY',
-  ALARM = 'ALARM',
-  MYPAGE = 'MYPAGE',
-}
+import TabScrollTopButton from './TabScrollTopButton';
 
 const BottomNavList = [
   {

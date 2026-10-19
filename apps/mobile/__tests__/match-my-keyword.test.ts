@@ -1,4 +1,4 @@
-import {matchMyKeyword} from '../src/features/keyword-prompt/model/myKeywords';
+import {matchMyKeyword} from '../src/entities/mypage/model/myKeywords';
 
 /** 알림 keyword 칸 → 내 키워드. web features/alarm/lib/matchMyKeyword 와 같은 규칙(2026-10-07 운영 실측 모양). */
 describe('matchMyKeyword', () => {

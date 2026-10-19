@@ -50,7 +50,6 @@ test('보조 파일·참고 예시 경로도 실제로 있다', () => {
  */
 const NOT_PARTS = {
   // web shared/ui
-  'apps/web/src/shared/ui/AlarmLinkButton.tsx': '헤더 알림 아이콘 동작 — 자리 하나',
   'apps/web/src/shared/ui/ColorSchemeButton.tsx': '헤더 화면 모드 아이콘 동작 — 자리 하나',
   'apps/web/src/shared/ui/DisplayTime.tsx': '시간 글자 포맷(모양 없음)',
   'apps/web/src/shared/ui/ImageComponent.tsx': 'next/image 래퍼(기반 도구)',
@@ -58,7 +57,6 @@ const NOT_PARTS = {
   'apps/web/src/shared/ui/InteractiveMoreLink.tsx': '「더보기」 글자 링크 — 섹션 제목 오른쪽 슬롯',
   'apps/web/src/shared/ui/Link.tsx': 'next/link 래퍼(기반 도구)',
   'apps/web/src/shared/ui/MSW.tsx': '개발용 목 서버',
-  'apps/web/src/shared/ui/TabScrollTopButton.tsx': '탭 다시 누르면 맨 위로(동작만)',
   'apps/web/src/shared/ui/TopButton.tsx': '떠 있는 「맨 위로」 — 상세 한 자리',
   'apps/web/src/shared/ui/app-handoff': '앱 열기 링크·앱 받기 QR 동작(features/app-download 에서 내림 — 모양은 호출부)',
   'apps/web/src/shared/ui/adsense': '애드센스 광고 칸(외부 소재)',
@@ -66,7 +64,6 @@ const NOT_PARTS = {
   'apps/web/src/shared/ui/common/icons': '아이콘·그림 모음',
   'apps/web/src/shared/ui/common/Logo': '브랜드 로고',
   'apps/web/src/shared/ui/layout/BasicLayout.tsx': '페이지 틀(헤더+본문+하단 탭 배치)',
-  'apps/web/src/shared/ui/layout/BottomNav.tsx': '하단 탭 — 앱은 네이티브 탭바',
   // 앱 shared/components
   'apps/mobile/src/shared/components/icons': '아이콘·그림 모음',
   'apps/mobile/src/shared/components/OfflineBanner.tsx': '오프라인 띠 — 앱 전역 한 자리',

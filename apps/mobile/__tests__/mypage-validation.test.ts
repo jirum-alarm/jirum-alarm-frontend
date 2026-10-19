@@ -21,7 +21,7 @@ const {
   isValidKeyword,
   isValidNickname,
   validatePassword,
-} = require('../src/features/mypage/lib/validation');
+} = require('../src/entities/mypage/lib/validation');
 const {
   CATEGORIES,
   MAX_SELECTION_COUNT,

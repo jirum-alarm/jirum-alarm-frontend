@@ -16,7 +16,10 @@ import {showToast} from '@/shared/lib/feedback';
 import {isFirstAlertDue, markFirstAlertShown} from '@/shared/lib/first-alert';
 import {setAsyncStorage} from '@/shared/lib/persistence';
 
-import {invalidateMyKeywords, openKeywordSettings} from '../model/myKeywords';
+import {
+  invalidateMyKeywords,
+  openKeywordSettings,
+} from '@/entities/mypage/model/myKeywords';
 
 // 홈이 먼저 그려지고 숨 돌린 뒤 — PushPermissionPrePrompt 와 같은 박자.
 const SHOW_DELAY_MS = 1500;

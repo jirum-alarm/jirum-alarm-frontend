@@ -25,7 +25,7 @@ import {
 } from '@/shared/constant/navigations';
 import {navigateToNativeRoute} from '@/shared/lib/navigation/navigation-ref';
 import {Analytics} from '@/shared/lib/analytics/ga4';
-import {normalizeKeyword} from '@/features/keyword-prompt/model/myKeywords';
+import {normalizeKeyword} from '@/entities/mypage/model/myKeywords';
 import {findKeywordHubForQuery} from '@/entities/keyword-hub/lib/keyword-hub';
 import {useKeywordHubs} from '@/entities/keyword-hub/model/useKeywordHubs';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
@@ -46,7 +46,7 @@ import {
   describeKeywordFrequency,
 } from '@jirum/domain/keyword-frequency';
 import {useThemeSubscription} from '@/features/mypage/model/useThemeSubscription';
-import {KEYWORD_HELPER_TEXT} from '@/features/mypage/lib/validation';
+import {KEYWORD_HELPER_TEXT} from '@/entities/mypage/lib/validation';
 import {cn} from '@/shared/lib/styling';
 import PressableOpacity from '@/shared/components/PressableOpacity';
 

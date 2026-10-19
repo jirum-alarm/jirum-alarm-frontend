@@ -1,4 +1,4 @@
-import {matchMyKeyword} from '@/features/keyword-prompt/model/myKeywords';
+import {matchMyKeyword} from '@/entities/mypage/model/myKeywords';
 
 /**
  * 알림 한 줄이 **어디서 왔나** — 그 알림을 끄거나 고치는 화면으로 잇는 데 쓴다.

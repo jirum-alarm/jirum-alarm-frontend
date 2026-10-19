@@ -15,7 +15,7 @@ JS 탭바(iOS 26 미만·Android)는 `shared/components/icons` 의 SVG 를 쓴�
 - 빈 문자열을 주면 iOS 에선 **뱃지가 아예 안 뜬다** — `react-native-screens` 문서의
   "빈 문자열 = 작은 점"은 **Android 전용** 동작이다(실측 확인).
 
-규격은 web `shared/ui/layout/BottomNav.tsx` 와 JS 탭바 `badgeDot` 과 같다:
+규격은 web `widgets/layout/ui/BottomNav.tsx` 와 JS 탭바 `badgeDot` 과 같다:
 지름 8pt · `#EB001C` · 아이콘 박스 우상단.
 
 ```bash

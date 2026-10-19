@@ -9,7 +9,10 @@ const SOURCE = readFileSync(new URL('./BottomNav.tsx', import.meta.url), 'utf8')
 
 // 탭 루트 목록은 shared/config/tab-root 로 옮겼다 — root layout(서버)도 같은
 // 판정을 해야 하는데 BottomNav 는 'use client' 라 서버에서 못 읽기 때문.
-const TAB_ROOT_SOURCE = readFileSync(new URL('../../config/tab-root.ts', import.meta.url), 'utf8');
+const TAB_ROOT_SOURCE = readFileSync(
+  new URL('../../../shared/config/tab-root.ts', import.meta.url),
+  'utf8',
+);
 
 // 앱(apps/mobile/.../tab-routing.ts isTabRootUrl)의 tabRootPaths 와 짝을 이루는 목록.
 const TAB_ROOT_PATHS = [

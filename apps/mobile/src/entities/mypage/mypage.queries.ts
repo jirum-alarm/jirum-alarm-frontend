@@ -2,6 +2,8 @@ import {infiniteQueryOptions, queryOptions} from '@tanstack/react-query';
 
 import {MyPageService, MyWishlistService} from '@/shared/api/mypage';
 import {OrderOptionType, WishlistOrderType} from '@/shared/api/gql/graphql';
+import type {MyNotificationKeywordsQueryVariables} from '@/shared/api/gql/graphql.ts';
+import {ProductService} from '@/shared/api/product/product.service.ts';
 
 /** 찜 목록 한 페이지 크기. web /like 와 같은 18. */
 export const WISHLIST_PAGE_SIZE = 18;
@@ -24,6 +26,8 @@ export class MyPageQueries {
     pushSetting: () => [...MyPageQueries.keys.all, 'push-setting'] as const,
     wishlist: () => [...MyPageQueries.keys.all, 'wishlist'] as const,
     wishlistCount: () => [...MyPageQueries.keys.all, 'wishlist-count'] as const,
+    /** 상세 권유가 읽는 두 번째 내 키워드 캐시(키 값은 옛 ProductQueries 그대로 — 'mypage' 접두 밖). */
+    notificationKeywords: () => ['user', 'notificationKeywords'] as const,
   };
 
   static me() {
@@ -37,6 +41,15 @@ export class MyPageQueries {
     return queryOptions({
       queryKey: MyPageQueries.keys.pushSetting(),
       queryFn: MyPageService.getMyPushSetting,
+    });
+  }
+
+  /** 상세 권유용 내 키워드(알림 키워드 API). 상세 쿼리처럼 2번 재시도한다. */
+  static notificationKeywords(variables: MyNotificationKeywordsQueryVariables) {
+    return queryOptions({
+      queryKey: MyPageQueries.keys.notificationKeywords(),
+      queryFn: () => ProductService.getMyNotificationKeywords(variables),
+      retry: 2,
     });
   }
 

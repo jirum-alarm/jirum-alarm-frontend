@@ -35,7 +35,7 @@ import {showToast} from '@/shared/lib/feedback';
 import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';
 import {usePushPermissionStatus} from '@/shared/lib/fcm/usePushPermissionStatus';
 import {useColors} from '@/shared/theme/useColors';
-import {useMyKeywordSet} from '@/features/keyword-prompt/model/myKeywords';
+import {useMyKeywordSet} from '@/entities/mypage/model/myKeywords';
 import {ThemeQueries} from '@/entities/theme';
 import {
   GOOD_PRICE_NUDGE_MIN_ALERTS,

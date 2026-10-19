@@ -6,13 +6,14 @@ import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 
 import { PAGE } from '@/shared/config/page';
-import { useHasNewAlarm } from '@/shared/hooks/useHasNewAlarm';
 import useScrollPosition from '@/shared/hooks/useScrollPosition';
 import { cn } from '@/shared/lib/cn';
 import { trackAlarmLink } from '@/shared/lib/trackAlarmLink';
 import { Alert, Search } from '@/shared/ui/common/icons';
 import LogoLink from '@/shared/ui/common/Logo/LogoLink';
 import Link from '@/shared/ui/Link';
+
+import { useHasNewAlarm } from '../../model/useHasNewAlarm';
 
 import NavLink from './MenuLink';
 

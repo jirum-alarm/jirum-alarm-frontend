@@ -19,7 +19,7 @@ function isScrollTopTabPath(pathName: string) {
 
 const SOURCE = readFileSync(new URL('./TabScrollTopButton.tsx', import.meta.url), 'utf8');
 const HELPER = readFileSync(new URL('./tab-scroll-top.ts', import.meta.url), 'utf8');
-const BOTTOM_NAV = readFileSync(new URL('./layout/BottomNav.tsx', import.meta.url), 'utf8');
+const BOTTOM_NAV = readFileSync(new URL('./BottomNav.tsx', import.meta.url), 'utf8');
 
 describe('isScrollTopTabPath', () => {
   it('홈·발견·커뮤니티·알림 루트에서만 켠다', () => {
