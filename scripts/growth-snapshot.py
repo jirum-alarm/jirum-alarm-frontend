@@ -9,7 +9,7 @@
 - linkmix.json  구매클릭(서버 purchase_link_click, W40~)을 상품의 지금 수익링크 제휴사로 나눈 주간 수 — Mongo + MySQL product
 - nolink_source.json 마지막 완료 주 구매클릭을 딜 출처별로 — 그중 링크 없는 클릭 수·비율
 - list_ctr.json 웹 카드 출처별 최근 7일 화면 노출(post_impression)·출처 붙은 상세 진입(post_view)
-- formula.json 성장 공식(jirum vault domain/growth-loop-formula.md)의 주간 입력 — 검색 신규·검색 구매클릭·카톡 신규·카톡 구매클릭·새 딜 페이지
+- formula.json 성장 공식(jirum vault domain/growth-loop-formula.md)의 주간 입력 — 검색 신규·검색 구매클릭·카톡 신규·카톡 구매클릭·새 딜 페이지·방 10분 표본·구글 검색 노출/클릭
 
 수동: python3 scripts/growth-snapshot.py [주 수=16]  → ~/.local/share/jirum/growth/*.json
 대시보드 https://claude.ai/artifact/QajT8bE1EooG2jHKeujbCj 반영은 Orca 정기 자동화(Claude 세션)가 이 파일들을 올린다
@@ -173,6 +173,26 @@ def room():
     return readings
 
 
+def gsc():
+    """구글 검색 노출·클릭(주별) — Search Console API, GA4 와 같은 서비스 계정(sc-domain:jirum-alarm.com 소유자, 2026-10-19 확인).
+    검색 입구(페이지 재고 → 노출 → CTR → 방문) 고리의 구글 쪽. 네이버는 서치어드바이저 쿠키가 자주 만료돼 자동 수집하지 않는다.
+    Search Console 은 2~3일 늦게 차므로 마지막 주는 덜 찬 값일 수 있다."""
+    cred = service_account.Credentials.from_service_account_file(
+        SA, scopes=["https://www.googleapis.com/auth/webmasters.readonly"])
+    cred.refresh(google.auth.transport.requests.Request())
+    body = {"startDate": str(start), "endDate": str(last_sun), "dimensions": ["date"], "rowLimit": 1000}
+    req = urllib.request.Request(
+        "https://searchconsole.googleapis.com/webmasters/v3/sites/sc-domain%3Ajirum-alarm.com/searchAnalytics/query",
+        data=json.dumps(body).encode(), headers={"Authorization": "Bearer " + cred.token, "Content-Type": "application/json"})
+    out = {}
+    for r in json.load(urllib.request.urlopen(req, timeout=60)).get("rows", []):
+        iso = dt.date.fromisoformat(r["keys"][0]).isocalendar()
+        w = out.setdefault(f"{iso[0]}{iso[1]:02d}", {"impressions": 0, "clicks": 0})
+        w["impressions"] += int(r["impressions"])
+        w["clicks"] += int(r["clicks"])
+    return out
+
+
 def room_flow():
     """핫딜 온리방 10분 표본(2026-10-16~, scripts/kakao-room/record-10m.sh)으로 주별 입장·퇴장 하한을 센다.
     이웃 표본이 20분 안이면 늘어난 수 = 입장, 줄어든 수 = 퇴장(같은 10분에 겹치면 덜 센다). 간격이 더 벌어진 구간
@@ -301,6 +321,7 @@ def link_of(pids):
 log = lambda m: print(f"[{dt.datetime.now():%H:%M:%S}] {m}", file=sys.stderr, flush=True)
 log("GA4"); g = ga4()
 log("카톡방 10분 표본"); flow = room_flow()
+log("Search Console"); google = gsc()
 log("DB"); d = db()
 log("카톡방"); readings = room()
 members = {}
@@ -363,6 +384,7 @@ for k, mon, m in zip(keys, mondays, money):
         # 핫딜 온리방 실측 입장·퇴장(10분 표본, 2026-W42~) — 단골 이탈률을 쿠키 대신 방 인원으로 잰다.
         "room_joins": flow.get(k, {}).get("joins"), "room_leaves": flow.get(k, {}).get("leaves"),
         "room_cover_h": flow.get(k, {}).get("cover_h"), "room_members": flow.get(k, {}).get("members"),
+        "google_impressions": google.get(k, {}).get("impressions"), "google_clicks": google.get(k, {}).get("clicks"),
     })
 
 log("Mongo"); mg = mongo()
