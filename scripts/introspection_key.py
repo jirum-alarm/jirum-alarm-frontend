@@ -7,7 +7,7 @@ release-tag 의 운영 스키마 관문(gql-check.mjs)과 codegen 의 스키마 
 키는 Infisical prod /crawling-server LOCAL_JSON 의 graphql.introspectionKey(dev /crawling-server-dev 도 같은 값).
 env GRAPHQL_INTROSPECTION_KEY 가 있으면 그걸 쓰고, 없으면 Claude 의 isec.sh 로 읽는다.
 
-  GRAPHQL_INTROSPECTION_KEY=$(python3 scripts/introspection_key.py) pnpm -C apps/web generate:schema
+  GRAPHQL_INTROSPECTION_KEY=$(python3 scripts/introspection_key.py) pnpm --filter @jirum/graphql-schema refresh
 """
 import json
 import os

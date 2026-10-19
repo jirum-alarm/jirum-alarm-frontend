@@ -910,6 +910,15 @@ importers:
         specifier: ^8.71.1
         version: 8.71.1(eslint@10.12.0(jiti@2.7.0))(typescript@6.0.3)
 
+  packages/graphql-schema:
+    devDependencies:
+      '@graphql-codegen/cli':
+        specifier: ^6.3.1
+        version: 6.3.1(@parcel/watcher@2.6.0)(@types/node@26.6.4)(graphql@16.14.2)(typescript@6.0.3)
+      '@graphql-codegen/schema-ast':
+        specifier: ^6.1.1
+        version: 6.1.1(graphql@16.14.2)
+
   packages/prettier:
     devDependencies:
       prettier:

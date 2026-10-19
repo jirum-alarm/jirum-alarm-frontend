@@ -2,14 +2,9 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
   overwrite: true,
-  // dev API 는 운영보다 스키마가 뒤처져 있어(인자 누락 시 오퍼레이션이 조용히 드롭) 운영 스키마로 생성한다.
-  // 운영은 x-introspection-key 가 맞을 때만 스키마를 내준다:
-  //   GRAPHQL_INTROSPECTION_KEY=$(python3 ../../scripts/introspection_key.py) pnpm code-gen
-  schema: {
-    'https://jirum-api.kyojs.com/graphql': {
-      headers: { 'x-introspection-key': process.env.GRAPHQL_INTROSPECTION_KEY ?? '' },
-    },
-  },
+  // 운영 스키마 한 벌(packages/graphql-schema)을 web·mobile 과 같이 읽는다 — 어드민 오퍼레이션도 그 안에 있다.
+  // dev API 는 스키마가 뒤처져 쓰지 않는다. 스키마 갱신은 `pnpm --filter @jirum/graphql-schema refresh`.
+  schema: '../../packages/graphql-schema/schema.graphql',
   documents: ['./src/graphql/*.ts'],
   hooks: { afterOneFileWrite: ['prettier --write'] },
   ignoreNoDocuments: true,
@@ -18,12 +13,6 @@ const config: CodegenConfig = {
       preset: 'client',
       config: {
         documentMode: 'string',
-      },
-    },
-    './schema.graphql': {
-      plugins: ['schema-ast'],
-      config: {
-        includeDirectives: true,
       },
     },
   },

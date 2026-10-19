@@ -29,7 +29,7 @@ This app is designed for internal use by administrators, moderators, and content
 - **`.env.development.sample`**: Environment variables template for development
 - **`.env.production.sample`**: Environment variables template for production
 - **`codegen.ts`**: GraphQL code generation configuration
-- **`schema.graphql`**: GraphQL schema for API integration
+- **스키마**: `packages/graphql-schema/schema.graphql`(운영, web·mobile 공용)
 
 ### Build and Runtime
 - **`postcss.config.js`**: PostCSS configuration for Tailwind CSS processing

@@ -15,8 +15,7 @@
     "prettier-fix": "prettier --write \"./**/*.{js,ts,tsx}\" --ignore-path .gitignore --ignore-path .prettierignore ",
     "check-types": "tsc --noEmit",
     "analyze": "ANALYZE=true next build --webpack",
-    "knip": "knip",
-    "generate:schema": "graphql-codegen --config codegen.schema.ts"
+    "knip": "knip"
   },
   "dependencies": {
     "@apollo/client": "^4.3.3",

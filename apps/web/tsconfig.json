@@ -8,7 +8,7 @@
       },
       {
         "name": "@0no-co/graphqlsp",
-        "schema": "./schema.graphql"
+        "schema": "../../packages/graphql-schema/schema.graphql"
       }
     ],
     "paths": {

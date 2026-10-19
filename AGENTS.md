@@ -53,6 +53,7 @@ jirum-alarm-frontend/
 │   ├── eslint/            # ESLint configuration
 │   ├── prettier/          # Prettier configuration  
 │   ├── typescript/        # TypeScript configuration
+│   ├── graphql-schema/    # 운영 GraphQL 스키마 한 벌(web·mobile·admin codegen 공용)
 │   └── design-system/     # 토큰·레시피·조립 규칙·부품 카탈로그·린트(README 필독)
 ├── configs/               # Build and deployment configs
 ├── turbo.json            # Turborepo configuration
@@ -104,7 +105,7 @@ pnpm dev              # Development server
 pnpm dev:mock         # Development with MSW mocking
 pnpm build           # Production build
 pnpm --filter design storybook   # 컴포넌트 놀이터(apps/design 이 web 스토리를 모아 보여 준다)
-pnpm code-gen        # GraphQL code generation
+pnpm code-gen        # GraphQL code generation (스키마 = packages/graphql-schema)
 ```
 
 **운영 배포 = `python3 scripts/release-tag.py`** (손으로 `git tag` 하지 않는다). main 포함 확인 → 직전 태그 이후 포함분·같이 나갈 admin/ai/beauty 배포 →
@@ -135,7 +136,7 @@ src/components/         # 공통: Layouts·Sidebar(메뉴는 MENU 설정 배열)
 ```
 
 **Conventions / 함정:**
-- 새 오퍼레이션: `src/graphql/`에 문서 → `pnpm --filter admin code-gen`(운영 스키마 기준) → 훅에서 생성 타입 사용.
+- 새 오퍼레이션: `src/graphql/`에 문서 → `pnpm --filter admin code-gen`(공용 운영 스키마 `packages/graphql-schema` 기준) → 훅에서 생성 타입 사용.
   dev API 는 스키마가 뒤처져 codegen 소스로 쓰지 않는다.
 - GraphQL 실패는 Apollo 에러 링크가 상단 `QueryErrorBanner` 로 띄운다 — 화면이 `error` 를 안 읽어도 "결과 없음"으로 위장되지 않게.
   인증 에러(FORBIDDEN/UNAUTHENTICATED)만 로그인으로 보낸다.
@@ -162,7 +163,7 @@ src/components/         # 공통: Layouts·Sidebar(메뉴는 MENU 설정 배열)
 ```bash
 pnpm --filter admin dev        # :3000 (운영 API 에 붙는다 — 쓰기 조작 주의)
 pnpm --filter admin build
-pnpm --filter admin code-gen   # 운영 스키마로 타입 생성
+pnpm --filter admin code-gen   # 공용 운영 스키마로 타입 생성
 ```
 
 **Deploy:** main push → 스테이징. 운영은 `v*.*.*` 태그(web·ai 도 함께 나감) 또는 admin 만: `gh workflow run deploy-admin-prod.yml --ref main`.
@@ -346,7 +347,7 @@ Code formatting standards:
 ### Testing and Quality Assurance
 1. **Storybook**: Components should have Storybook stories
 2. **MSW**: Use Mock Service Worker for API mocking in development
-3. **GraphQL**: Run `pnpm code-gen` after schema changes
+3. **GraphQL**: 스키마는 `packages/graphql-schema/schema.graphql` 한 벌(운영). 갱신 `GRAPHQL_INTROSPECTION_KEY=$(python3 scripts/introspection_key.py) pnpm --filter @jirum/graphql-schema refresh` → web·mobile·admin 각각 `pnpm --filter <app> code-gen`
 4. **Knip**: Use Knip to detect unused code and dependencies
 
 ### File Organization

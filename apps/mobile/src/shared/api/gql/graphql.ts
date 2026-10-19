@@ -860,6 +860,8 @@ export type ModelPageOutput = {
   dealCount: Scalars['Int']['output'];
   id?: Maybe<Scalars['Int']['output']>;
   isPublished?: Maybe<Scalars['Boolean']['output']>;
+  /** 이 모델 페이지가 속한 공개 키워드 허브(걸리는 것 중 가장 좁은 것). 없으면 null */
+  keywordHub?: Maybe<KeywordHubOutput>;
   lastDealAt?: Maybe<Scalars['DateTime']['output']>;
   metaDescription?: Maybe<Scalars['String']['output']>;
   modelName: Scalars['String']['output'];
@@ -899,6 +901,8 @@ export type Mutation = {
   addUserReport: Scalars['Boolean']['output'];
   /** 「이 가격 오면 알려줘」(허용 유저만) — 판정을 서버에서 다시 내 그 키워드 알림을 건다. 좋은 가격을 말할 수 있으면 하락만 받기 + 단위 기준가 */
   addWaitWatch: WaitWatchOutput;
+  /** 상세 카드 「이 가격 오면 알려줘」 — 서버가 카드를 다시 꺼내 그 키워드를 좋은 가격 이하만 받게 건다(카드 군 기기만, 게스트 가능) */
+  addWaitWatchForProduct: WaitWatchOutput;
   /** wishlist 추가 */
   addWishlist: Scalars['Boolean']['output'];
   /** 어드민) 로그인 */
@@ -1147,6 +1151,10 @@ export type MutationAddUserReportArgs = {
 
 export type MutationAddWaitWatchArgs = {
   text: Scalars['String']['input'];
+};
+
+export type MutationAddWaitWatchForProductArgs = {
+  productId: Scalars['Int']['input'];
 };
 
 export type MutationAddWishlistArgs = {
@@ -1668,6 +1676,7 @@ export type PriceContext = {
   basePriceAt?: Maybe<Scalars['String']['output']>;
   danawaPrice: Scalars['Float']['output'];
   danawaProductName?: Maybe<Scalars['String']['output']>;
+  danawaTodayPrice?: Maybe<Scalars['Float']['output']>;
   dealPrice: Scalars['Float']['output'];
   dealShippingFee?: Maybe<Scalars['Float']['output']>;
   delta: Scalars['Float']['output'];
@@ -1675,6 +1684,7 @@ export type PriceContext = {
   normalPriceMedian?: Maybe<Scalars['Float']['output']>;
   normalPriceMin?: Maybe<Scalars['Float']['output']>;
   shippingIncluded?: Maybe<Scalars['Boolean']['output']>;
+  usualPriceApplied?: Maybe<Scalars['Boolean']['output']>;
   verificationStatus?: Maybe<Scalars['String']['output']>;
 };
 
@@ -2423,6 +2433,8 @@ export type Query = {
   sameProductDeals: Array<ProductOutput>;
   /** 자동완성용 추천 검색어 목록. prefix로 시작하는 인기 검색어 + 상품 title prefix 매칭. */
   searchSuggestions: Array<Scalars['String']['output']>;
+  /** 웹 시즌 허브 「알리 행사장 가기」 제휴 링크(콜백 dp=season_hub:). 발급 실패면 null — 허브는 일반 링크로 둔다 */
+  seasonAliexpressLink?: Maybe<Scalars['String']['output']>;
   /** 어드민) 서비스 점검 신호 — 매칭 커버리지·LLM 워커 생존·푸시 마지막 발송 */
   serviceHealthSignals: ServiceHealthSignalsOutput;
   /** 유사 상품 목록 조회 */
@@ -2467,6 +2479,8 @@ export type Query = {
   verificationHistory: Array<ProductMappingOutput>;
   /** 검증 통계 조회 (대기/완료/거부 개수) */
   verificationStatistics: VerificationStatistics;
+  /** 웹 상세 «언제 사나» 카드 — 이 상품 키워드의 커뮤니티 90일 좋은 가격·지금 판단(카드 군만 내용). 시작 전·꺼짐이면 null */
+  waitCardForProduct?: Maybe<WaitCardOutput>;
   /** 「언제 사나」(AI 홈 프로토타입, 허용 유저만) — 사려는 상품 한 줄 → 지난 90일 커뮤니티 핫딜로 본 좋은 가격·빈도·지금. 해석 못 하면 null */
   waitEstimate?: Maybe<WaitEstimateOutput>;
   /** 위시리스트 개수 조회 */
@@ -2742,6 +2756,7 @@ export type QueryNotificationListByAdminArgs = {
 export type QueryNotificationThemeDealsArgs = {
   before?: InputMaybe<Scalars['Float']['input']>;
   limit?: Scalars['Int']['input'];
+  offset?: Scalars['Int']['input'];
   themeId: Scalars['Int']['input'];
 };
 
@@ -2825,6 +2840,7 @@ export type QueryProductRegistrationStatsByProviderArgs = {
 
 export type QueryProductsArgs = {
   brandProductId?: InputMaybe<Scalars['Int']['input']>;
+  categoryId?: InputMaybe<Scalars['Int']['input']>;
   categoryIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   endDate?: InputMaybe<Scalars['DateTime']['input']>;
   isApp?: InputMaybe<Scalars['Boolean']['input']>;
@@ -2837,6 +2853,7 @@ export type QueryProductsArgs = {
   mallGroupId?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<ProductOrderType>;
   orderOption?: InputMaybe<OrderOptionType>;
+  providerId?: InputMaybe<Scalars['Int']['input']>;
   providerIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
   startDate?: InputMaybe<Scalars['DateTime']['input']>;
@@ -2982,6 +2999,10 @@ export type QueryVerificationHistoryArgs = {
   target?: InputMaybe<ProductMappingTarget>;
   verificationStatus?: InputMaybe<Array<ProductMappingVerificationStatus>>;
   verifiedBy?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type QueryWaitCardForProductArgs = {
+  productId: Scalars['Int']['input'];
 };
 
 export type QueryWaitEstimateArgs = {
@@ -3300,6 +3321,34 @@ export type VerificationStatistics = {
   rejected: Scalars['Int']['output'];
   total: Scalars['Int']['output'];
   verified: Scalars['Int']['output'];
+};
+
+/** 웹 상세 «언제 사나» 카드(wait_card_detail_v1) — 이 상품 키워드의 커뮤니티 90일 좋은 가격·지금 판단. 시작 전·꺼짐이면 쿼리가 null */
+export type WaitCardOutput = {
+  __typename?: 'WaitCardOutput';
+  /** card(카드를 그린다) | control(그리지 않고 노출만 wait_card_ctl 로 남긴다) | excluded(「답」 숨김 군 — 아무것도 안 함) */
+  arm: Scalars['String']['output'];
+  /** 판정에 쓴 딜 수(같은 품목만, 교차 게시 제거) */
+  dealCount?: Maybe<Scalars['Int']['output']>;
+  /** 이 상품에 카드를 띄울 수 있나(같은 품목 8건+·같은 제품 고르기·단위가 범위 관문 통과) — 두 군 모두 같은 값 */
+  eligible: Scalars['Boolean']['output'];
+  /** 지난 windowDays 중 좋은 가격 이하가 뜬 날 수 */
+  goodDays?: Maybe<Scalars['Int']['output']>;
+  /** 좋은 가격(단위가, 하위 20% 를 보기 좋게 올림) */
+  goodPrice?: Maybe<Scalars['Float']['output']>;
+  /** 알림 키워드 — 「이 가격 오면 알려줘」가 거는 키워드. card 군만 */
+  keyword?: Maybe<Scalars['String']['output']>;
+  lastGoodAt?: Maybe<Scalars['DateTime']['output']>;
+  /** 이 상품 지금 가격의 단위가 */
+  pageUnitPrice?: Maybe<Scalars['Float']['output']>;
+  /** 좋은 가격이 뜬 날 사이 간격(중앙값) */
+  typicalGapDays?: Maybe<Scalars['Int']['output']>;
+  unit?: Maybe<WaitUnit>;
+  /** BUY_NOW(지금 좋은 가격 안) | WAIT(자주 온다) | RARE(드물다) | STATS(지난 딜·같은 제품이 아님 — 기억만). eligible 이면 두 군 모두 */
+  verdict?: Maybe<Scalars['String']['output']>;
+  /** 이 키워드 알림을 이미 「하락만 받기」로 걸어 두었나 — 버튼 대신 「알림 켜짐」 */
+  watching: Scalars['Boolean']['output'];
+  windowDays: Scalars['Int']['output'];
 };
 
 /** 「언제 사나」 판정에 쓴 딜 */
