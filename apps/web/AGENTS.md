@@ -114,7 +114,7 @@ src/
 - **TypeScript 5.8.3**: Type-safe JavaScript development
 
 ### Data Management
-- **Apollo Client 3.13.6**: GraphQL client with Next.js integration
+- **GraphQL**: codegen 문서(`src/shared/api/**/*.service.ts`) + `shared/lib/http-client` + React Query (Apollo 미사용)
 - **TanStack React Query 5.71.10**: Server state management and caching
 - **Jotai 2.12.4**: Client state management for atomic state
 - **GraphQL 16.10.0**: GraphQL query language and runtime

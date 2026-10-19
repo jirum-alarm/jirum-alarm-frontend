@@ -19,7 +19,6 @@
     "generate:schema": "graphql-codegen --config codegen.schema.ts"
   },
   "dependencies": {
-    "@apollo/client": "^4.3.3",
     "@jirum/design-system": "workspace:*",
     "@jirum/domain": "workspace:*",
     "@microsoft/clarity": "^1.0.2",
