@@ -109,7 +109,8 @@ pnpm code-gen        # GraphQL code generation (스키마 = packages/graphql-sch
 
 **운영 배포 = `python3 scripts/release-tag.py`** (손으로 `git tag` 하지 않는다). main 포함 확인 → 직전 태그 이후 포함분·같이 나갈 admin/ai/beauty 배포 →
 feat=minor/그 외 patch → 스테이징 빌드 성공 증거 → 웹·어드민 GraphQL 문서를 **운영 스키마**로 검증(서버 롤아웃 전 태그 차단) →
-원격 기준 번호로 annotated 태그(경합 시 재계산) → deploy-web-prod 결과 → gitops `scripts/deploy-verify.py frontend-web` 까지 한 번에.
+원격 기준 번호로 annotated 태그(경합 시 재계산) → deploy-web-prod 결과 → gitops `scripts/deploy-verify.py frontend-web` →
+봇 UA(구글·네이버)로 운영 HTML 점검(`scripts/seo-check.py` — noindex·h1·canonical·JSON-LD·본문, 같은 점검이 `seo-check.yml` 로 매일) 까지 한 번에.
 `--dry-run` 은 관문까지만. 성공 출력 `RELEASE-TAG DONE vX.Y.Z` 가 «운영 배포됨» 보고의 근거다.
 
 ### 2. **Admin App** (`apps/admin/`)
