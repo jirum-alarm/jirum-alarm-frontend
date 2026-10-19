@@ -1,0 +1,37 @@
+# 공개 레포라 커밋 = 공개. CI(.github/workflows/secret-scan.yml)가 푸시·PR 구간만 검사한다.
+# 기본 룰은 DB 접속 URI 비밀번호를 못 잡는다(2026-10-14 Mongo root 비번 유출이 그 유형) → 아래 커스텀 룰.
+[extend]
+useDefault = true
+
+[[rules]]
+id = "connection-string-password"
+description = "DB/브로커 접속 URI 안의 비밀번호"
+regex = '''(?i)\b(?:mongodb(?:\+srv)?|mysql|mariadb|postgres(?:ql)?|redis|rediss|amqps?)://[^:/\s'"@]+:([^@\s'"/]{4,})@'''
+secretGroup = 1
+keywords = ["://"]
+  [[rules.allowlists]]
+  regexTarget = "secret"
+  regexes = [
+    '''(?i)^(?:password|passwd|pass|secret|changeme|example|xxx+|\*+|<[^>]+>|\$\{[^}]+\}|\$[A-Z_]+)$''',
+    '''^\{[^}]+\}$''',      # f-string·템플릿 변수
+    '''REDACTED''',         # 2026-10-15 이력 재작성이 남긴 자리표시
+  ]
+
+# 공개가 전제인 클라이언트 키·테스트/목 데이터·락파일 체크섬
+[[allowlists]]
+description = "공개 클라이언트 키·테스트 픽스처"
+paths = [
+  '''(^|/)Podfile\.lock$''',
+  '''(^|/)google-services\.json$''',
+  '''(^|/)GoogleService-Info\.plist$''',
+  '''apps/web/public/firebase-messaging-sw\.js$''',
+  '''apps/web/src/shared/config/firebase(\.test)?\.ts$''',
+  '''apps/web/src/shared/config/indexnow\.ts$''',
+  '''apps/web/src/shared/lib/customerservice/customer-service\.ts$''',
+  '''apps/web/src/shared/mocks/''',
+  '''(^|/)__tests__/''',
+  '''\.test\.tsx?$''',
+]
+regexTarget = "line"
+regexes = ['''NEXT_PUBLIC_FIREBASE_''']  # 빌드 인자로 넘기는 Firebase 웹 키(브라우저로 나가는 공개 값)
+condition = "OR"
