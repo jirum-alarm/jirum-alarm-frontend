@@ -1,4 +1,4 @@
-import { infoBox, linkChip, wordTag } from '@jirum/design-system/recipes';
+import { infoBox, linkChip } from '@jirum/design-system/recipes';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -12,6 +12,7 @@ import { IconLogo } from '@/shared/ui/common/icons/Illust';
 
 import DealsMobileHeader from '../deals/[slug]/DealsMobileHeader';
 
+import HelpConcepts from './HelpConcepts';
 import HelpIcon, { type HelpIconName } from './HelpIcons';
 import HelpToc, { type TocItem } from './HelpToc';
 import OpenFaqFromHash from './OpenFaqFromHash';
@@ -247,7 +248,8 @@ const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
     title: '가격 근거',
     items: [
       {
-        id: 'evidence',
+        // #evidence 는 핵심 개념 1(가격 자 그림)이 받는다 — 상세 「가격을 판단하는 법」 링크가 그림으로 떨어지게.
+        id: 'evidence-faq',
         q: '이 가격이 진짜 싼지 어떻게 알 수 있나요?',
         a: '상품 상세의 가격 바로 아래 「왜 핫딜인지」를 보세요. 같은 상품이 예전에 핫딜로 올라온 가격(1년 최저·보통가), 다나와 최저가, 쿠팡의 같은 상품 가격, 커뮤니티 반응(인기글·「싸다」「샀다」 댓글) 중 가장 확실한 근거 하나를 보여드려요. 근거가 없으면 이 칸을 아예 띄우지 않아요.',
       },
@@ -366,7 +368,15 @@ const externalProps = (href: string) =>
  * 모바일은 본문 위 칩, PC 는 왼쪽 고정 목차(HelpToc — 지금 읽는 곳 표시).
  */
 const TOC: TocItem[] = [
-  { id: 'differences', label: '다른 점' },
+  {
+    id: 'concepts',
+    label: '핵심 개념',
+    children: [
+      { id: 'evidence', label: '진짜 싼지' },
+      { id: 'gather', label: '한곳에 모아' },
+      { id: 'alarm', label: '골라서 알림' },
+    ],
+  },
   { id: 'how-to', label: '사용법' },
   { id: 'features', label: '기능' },
   {
@@ -545,47 +555,15 @@ export default async function HelpPage() {
           </aside>
 
           <div className="pc:space-y-20 min-w-0 space-y-14">
-            <section id="differences" aria-labelledby="differences-title" className="scroll-mt-20">
+            {/* 핵심 개념(2026-10-19): 차별점 카드 4장(글)을 그림 셋으로 — 가격 자·모으는 흐름·알림 거름망. DIFFERENCES 는 JSON-LD 답으로 남는다. */}
+            <section id="concepts" aria-labelledby="concepts-title" className="scroll-mt-20">
               <SectionHeading
-                id="differences"
-                eyebrow="다른 점"
-                title="다른 핫딜 커뮤니티와 무엇이 다른가요?"
-                sub="싸게 사는 데 꼭 필요한 것부터 챙겼어요."
+                id="concepts"
+                eyebrow="핵심 개념"
+                title="지름알림은 이렇게 일해요"
+                sub="싸게 사는 데 꼭 필요한 세 가지를 그림으로 보여드릴게요."
               />
-              <ul className="pc:grid-cols-2 grid gap-3">
-                {DIFFERENCES.map((d) => (
-                  <li key={d.title} className="rounded-2xl bg-gray-50 p-5">
-                    <span
-                      className={cn(
-                        'flex size-11 items-center justify-center rounded-xl',
-                        TONE[d.tone],
-                      )}
-                    >
-                      <HelpIcon name={d.icon} className="size-5" />
-                    </span>
-                    <h3 className="mt-4 text-base font-bold text-gray-900">{d.title}</h3>
-                    <p className="mt-1.5 text-sm leading-relaxed text-gray-600">{d.text}</p>
-                    {d.tags ? (
-                      <p className="mt-3 flex flex-wrap gap-1.5">
-                        {d.tags.map((t) => (
-                          <span
-                            key={t}
-                            className={cn(
-                              wordTag.box,
-                              wordTag.text,
-                              wordTag.tone.fill.box,
-                              wordTag.tone.fill.text,
-                            )}
-                          >
-                            {t}
-                          </span>
-                        ))}
-                        <span className="py-1 text-xs text-gray-500">등</span>
-                      </p>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
+              <HelpConcepts communityCount={13} isApp={isJirumAlarmApp} />
             </section>
 
             <section id="how-to" aria-labelledby="how-to-title" className="scroll-mt-20">
