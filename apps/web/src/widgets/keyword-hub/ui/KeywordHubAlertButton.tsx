@@ -10,19 +10,27 @@ import { pushDataLayer, useSearchKeywordAlert } from '@/widgets/search/hooks/use
  * 예전엔 마이페이지 키워드 화면으로 보내기만 해서 키워드를 다시 쳐야 했다. 허브 목록은 알림 구독 상위 키워드라
  * (2026-10-14 구독 상위 50 중 26개) 허브에 온 사람이 알림으로 넘어가는 비율이 이 페이지의 존재 이유에 가장 가깝다.
  * 검색 결과 위 한 줄과 같은 훅(게스트 → 로그인 왕복 뒤 이어서 등록, 이미 등록이면 "받는 중").
- * 계측: keyword_register source=keyword_hub, keyword_prompt_view/click placement=keyword_hub.
+ * 모델 페이지(/deals/{slug})도 같은 버튼을 쓴다 — 모델 페이지의 79%는 허브에 안 걸려(2026-10-17 263/1273)
+ * 검색으로 온 사람이 알림으로 올라갈 길이 이 버튼뿐이다.
+ * 계측: keyword_register source=placement, keyword_prompt_view/click placement=keyword_hub|model_page.
  */
-export default function KeywordHubAlertButton({ keyword }: { keyword: string }) {
+export default function KeywordHubAlertButton({
+  keyword,
+  placement = 'keyword_hub',
+}: {
+  keyword: string;
+  placement?: 'keyword_hub' | 'model_page';
+}) {
   const { trimmed, canRegister, isOn, isPending, register } = useSearchKeywordAlert({
     keyword,
-    source: 'keyword_hub',
+    source: placement,
   });
 
   const visible = canRegister && !isOn;
   useEffect(() => {
     if (!visible) return;
-    pushDataLayer({ event: 'keyword_prompt_view', keyword: trimmed, placement: 'keyword_hub' });
-  }, [visible, trimmed]);
+    pushDataLayer({ event: 'keyword_prompt_view', keyword: trimmed, placement });
+  }, [visible, trimmed, placement]);
 
   if (!canRegister) return null;
 
@@ -44,7 +52,7 @@ export default function KeywordHubAlertButton({ keyword }: { keyword: string }) 
         pushDataLayer({
           event: 'keyword_prompt_click',
           keyword: trimmed,
-          placement: 'keyword_hub',
+          placement,
         });
         register();
       }}

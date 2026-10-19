@@ -22,6 +22,7 @@ export type KeywordRegisterSource =
   | 'kakao_bridge' // 카톡 인앱 — 등록 뒤 「앱에서 받기」로 잇는다(웹만)
   | 'mypage_sentence' // 마이페이지 「문장으로 만들기」(웹만)
   | 'keyword_hub' // 키워드 허브 /keywords/{slug} 알림 버튼(웹만)
+  | 'model_page' // 모델 페이지 /deals/{slug} 알림 버튼(웹만 — 앱은 모델 페이지를 웹으로 연다)
   | 'mypage_broaden'; // 내 키워드·입력칸의 「‘첫 낱말’도 받기」(90일 3번 미만 키워드 넓혀 받기)
 
 export const useUpdateKeyword = (options: {

@@ -34,6 +34,8 @@ import {
 } from '@/features/deals/lib/model-page-insights';
 import { toSeoImageUrl } from '@/features/product-detail/lib/product-seo';
 
+import KeywordHubAlertButton from '@/widgets/keyword-hub/ui/KeywordHubAlertButton';
+
 import DealsListSection from './DealsListSection';
 import DealsMobileHeader from './DealsMobileHeader';
 import DealsTracking from './DealsTracking';
@@ -576,18 +578,11 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                       지금 살 수 있는 딜 보기 →
                     </a>
                   )}
-                  {!timing.isActivePrice && (
-                    // 지금 살 딜이 없으면 이 페이지의 다음 행동은 "기다리기" 뿐 — 키워드 허브와 같은 진입점.
-                    <Link
-                      href={PAGE.MYPAGE_KEYWORD}
-                      rel="nofollow"
-                      className="text-primary-800 mt-3 inline-flex text-sm font-semibold"
-                    >
-                      ‘{displayName}’ 핫딜 알림 받기 →
-                    </Link>
-                  )}
                 </div>
               )}
+              {/* 모델 페이지 → 키워드 알림. 검색으로 온 사람을 북극성(알림 경유 재방문)으로 올리는 자리라
+                  딜 유무와 상관없이 늘 둔다. 키워드는 최근 딜 검색에 쓰는 모델명 그대로(브랜드를 붙이면 제목에 안 걸린다). */}
+              <KeywordHubAlertButton keyword={page.modelName} placement="model_page" />
             </div>
           </header>
 
