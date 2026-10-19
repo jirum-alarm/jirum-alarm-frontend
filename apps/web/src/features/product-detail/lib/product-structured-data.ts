@@ -94,7 +94,8 @@ export function buildProductItemPageJsonLd({
     name,
     ...(description ? { description } : {}),
     inLanguage: 'ko-KR',
-    isPartOf: { '@type': 'WebSite', name: '지름알림', url: serviceUrl },
+    // 레이아웃의 WebSite 블록(shared/config/metadata.ts WEBSITE_LD_ID)을 가리킨다 — 블록마다 새로 선언하면 엔티티가 갈린다.
+    isPartOf: { '@id': `${serviceUrl}/#website` },
     ...(datePublished ? { datePublished } : {}),
     ...(image ? { primaryImageOfPage: { '@type': 'ImageObject', url: image } } : {}),
     breadcrumb: { '@id': `${url}#breadcrumb` },

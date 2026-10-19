@@ -88,6 +88,8 @@ describe('buildProductItemPageJsonLd', () => {
     assert.equal(ld.isBasedOn, 'https://cafe.naver.com/f-e/cafes/29434212/articles/14942284');
     assert.deepEqual(ld.mainEntity, { '@id': `${SERVICE}/products/35426139#product` });
     assert.deepEqual(ld.breadcrumb, { '@id': `${SERVICE}/products/35426139#breadcrumb` });
+    // 사이트는 레이아웃의 WebSite 블록 하나를 가리킨다(블록마다 새로 선언하면 엔티티가 갈린다).
+    assert.deepEqual(ld.isPartOf, { '@id': `${SERVICE}/#website` });
     assert.deepEqual(ld.primaryImageOfPage, {
       '@type': 'ImageObject',
       url: 'https://cdn.jirum-alarm.com/a.webp',

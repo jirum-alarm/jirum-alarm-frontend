@@ -110,10 +110,20 @@ export const defaultMetadata: Metadata = {
   },
 };
 
+// 서비스 이름의 영문 표기 — llms.txt 첫 줄 「지름알림 (Jirum Alarm)」과 같게.
+const alternateName = 'Jirum Alarm';
+// 운영 주체·웹사이트는 레이아웃이 모든 페이지에 한 번 선언하고 다른 블록은 이 @id 로 가리킨다 — 블록마다 이름·URL 로
+// 새로 선언하면 검색엔진·AI 가 같은 실체를 여러 개로 읽는다. 상품 ItemPage.isPartOf 가 같은 값을 쓴다(product-structured-data.ts),
+// 어긋나면 scripts/seo-check.py 가 «@id 참조가 페이지에 없음»으로 잡는다.
+const ORGANIZATION_LD_ID = `${METADATA_SERVICE_URL}/#organization`;
+const WEBSITE_LD_ID = `${METADATA_SERVICE_URL}/#website`;
+
 export const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
+  '@id': WEBSITE_LD_ID,
   name: siteName,
+  alternateName,
   description,
   url: METADATA_SERVICE_URL,
   // 구글은 사이트링크 검색창을 2024-11 에 종료했다. 남겨둔 이유 = 네이버·AI 크롤러가
@@ -135,28 +145,15 @@ export const jsonLd = {
     width: 1200,
     height: 630,
   },
-  publisher: {
-    '@type': 'Organization',
-    name: siteName,
-    logo: {
-      '@type': 'ImageObject',
-      url: iconUrl,
-    },
-    contactPoint: [
-      {
-        '@type': 'ContactPoint',
-        email: contactEmail,
-        contactType: 'customer service',
-        availableLanguage: ['ko'],
-      },
-    ],
-  },
+  publisher: { '@id': ORGANIZATION_LD_ID },
 };
 
 export const organizationLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
+  '@id': ORGANIZATION_LD_ID,
   name: siteName,
+  alternateName,
   url: METADATA_SERVICE_URL,
   logo: {
     '@type': 'ImageObject',
@@ -174,6 +171,8 @@ export const organizationLd = {
     'https://apps.apple.com/kr/app/id6474611420',
     'https://play.google.com/store/apps/details?id=com.solcode.jirmalam',
     'https://www.instagram.com/jirumalarm_',
+    // 공개 GitHub 조직 — 이름 「지름알림」·블로그 주소가 이 사이트라 양쪽에서 같은 실체임을 확인할 수 있다.
+    'https://github.com/jirum-alarm',
   ],
   address: {
     '@type': 'PostalAddress',
