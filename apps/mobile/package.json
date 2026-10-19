@@ -116,7 +116,8 @@
       },
       "reactNativeDirectoryCheck": {
         "exclude": [
-          "@react-native-cookies/cookies"
+          "@react-native-cookies/cookies",
+          "react-native-edge-to-edge"
         ],
         "listUnknownPackages": false
       }
