@@ -44,16 +44,16 @@ type Documents = {
   '\n  query publishedModelPages {\n    publishedModelPages {\n      slug\n      brand\n      modelName\n      dealCount\n      heroImage\n      heroMinPrice\n      unitLabel\n      unitPrice\n      categoryId\n      categoryName\n      lastDealAt\n      activeDealCount\n      activePrice\n      activePostedAt\n      priceTone\n      savePct\n      buyLine\n      buyLineUnitLabel\n      trendPrices\n    }\n  }\n': typeof types.PublishedModelPagesDocument;
   '\n  query modelPage($slug: String!) {\n    modelPage(slug: $slug) {\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n      keywordHub {\n        slug\n        name\n        recentDealCount\n        countCapped\n      }\n    }\n  }\n': typeof types.ModelPageDocument;
   '\n  query product($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      author {\n        id\n        nickname\n      }\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      hotDealType\n      isYearLowest\n      hotDealIndex {\n        id\n        message\n        highestPrice\n        currentPrice\n        lowestPrice\n        visualConfig {\n          markerPct\n          q1Pct\n          q3Pct\n          medianPct\n          isClustered\n        }\n      }\n      isMyLike\n      isMyReported\n      likeCount\n      dislikeCount\n      isMyWishlist\n      categoryName\n    }\n  }\n': typeof types.ProductDocument;
-  '\n  query QueryCommunityRandomRankingProducts($count: Int!, $limit: Int!) {\n    communityRandomRankingProducts(count: $count, limit: $limit) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.QueryCommunityRandomRankingProductsDocument;
   '\n  query QueryReportUserNames($productId: Int!) {\n    reportUserNames(productId: $productId)\n  }\n': typeof types.QueryReportUserNamesDocument;
   '\n  query productGuides($productId: Int!) {\n    productGuides(productId: $productId) {\n      id\n      title\n      content\n    }\n  }\n': typeof types.ProductGuidesDocument;
-  '\n  mutation MutationReportExpiredProduct($productId: Int!) {\n    reportExpiredProduct(productId: $productId)\n  }\n': typeof types.MutationReportExpiredProductDocument;
-  '\n  mutation CreateUserProduct(\n    $title: String!\n    $url: String!\n    $categoryId: Int!\n    $price: String\n    $thumbnail: String\n    $content: String\n  ) {\n    createUserProduct(\n      title: $title\n      url: $url\n      categoryId: $categoryId\n      price: $price\n      thumbnail: $thumbnail\n      content: $content\n    )\n  }\n': typeof types.CreateUserProductDocument;
-  '\n  mutation CreateProductImageUploadUrl($contentType: String!) {\n    createProductImageUploadUrl(contentType: $contentType) {\n      uploadUrl\n      imageUrl\n    }\n  }\n': typeof types.CreateProductImageUploadUrlDocument;
+  '\n  query QueryCommunityRandomRankingProducts($count: Int!, $limit: Int!) {\n    communityRandomRankingProducts(count: $count, limit: $limit) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.QueryCommunityRandomRankingProductsDocument;
   '\n  query QueryProductKeywords {\n    productKeywords\n  }\n': typeof types.QueryProductKeywordsDocument;
   '\n  query QueryProductsByKeyword(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      isYearLowest\n      provider {\n        nameKr\n      }\n      # 토스 하루특가 배지(data.toss.todayDeal*·dealStatus·pageViewCount) — 20개에 ~14KB.\n      data\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.QueryProductsByKeywordDocument;
   '\n  query QueryCategorizedReactionKeywords($id: Int!) {\n    categorizedReactionKeywords(id: $id) {\n      lastUpdatedAt\n      items {\n        type\n        name\n        count\n        tag\n        role\n      }\n    }\n  }\n': typeof types.QueryCategorizedReactionKeywordsDocument;
   '\n  query QueryHotDealRankingProducts($page: Int!, $limit: Int!) {\n    hotDealRankingProducts(page: $page, limit: $limit) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      isYearLowest\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.QueryHotDealRankingProductsDocument;
+  '\n  mutation MutationReportExpiredProduct($productId: Int!) {\n    reportExpiredProduct(productId: $productId)\n  }\n': typeof types.MutationReportExpiredProductDocument;
+  '\n  mutation CreateUserProduct(\n    $title: String!\n    $url: String!\n    $categoryId: Int!\n    $price: String\n    $thumbnail: String\n    $content: String\n  ) {\n    createUserProduct(\n      title: $title\n      url: $url\n      categoryId: $categoryId\n      price: $price\n      thumbnail: $thumbnail\n      content: $content\n    )\n  }\n': typeof types.CreateUserProductDocument;
+  '\n  mutation CreateProductImageUploadUrl($contentType: String!) {\n    createProductImageUploadUrl(contentType: $contentType) {\n      uploadUrl\n      imageUrl\n    }\n  }\n': typeof types.CreateProductImageUploadUrlDocument;
   '\n  query QueryTossCategoryLabels {\n    tossCategoryLabels\n  }\n': typeof types.QueryTossCategoryLabelsDocument;
   '\n  query QueryTossProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n    $tossCategoryLabel: String\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n      tossCategoryLabel: $tossCategoryLabel\n    ) {\n      id\n      title\n      price\n      thumbnail\n      data\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.QueryTossProductsDocument;
   '\n  mutation AddWishlist($productId: Int!) {\n    addWishlist(productId: $productId)\n  }\n': typeof types.AddWishlistDocument;
@@ -125,18 +125,12 @@ const documents: Documents = {
     types.ModelPageDocument,
   '\n  query product($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      author {\n        id\n        nickname\n      }\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      hotDealType\n      isYearLowest\n      hotDealIndex {\n        id\n        message\n        highestPrice\n        currentPrice\n        lowestPrice\n        visualConfig {\n          markerPct\n          q1Pct\n          q3Pct\n          medianPct\n          isClustered\n        }\n      }\n      isMyLike\n      isMyReported\n      likeCount\n      dislikeCount\n      isMyWishlist\n      categoryName\n    }\n  }\n':
     types.ProductDocument,
-  '\n  query QueryCommunityRandomRankingProducts($count: Int!, $limit: Int!) {\n    communityRandomRankingProducts(count: $count, limit: $limit) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n':
-    types.QueryCommunityRandomRankingProductsDocument,
   '\n  query QueryReportUserNames($productId: Int!) {\n    reportUserNames(productId: $productId)\n  }\n':
     types.QueryReportUserNamesDocument,
   '\n  query productGuides($productId: Int!) {\n    productGuides(productId: $productId) {\n      id\n      title\n      content\n    }\n  }\n':
     types.ProductGuidesDocument,
-  '\n  mutation MutationReportExpiredProduct($productId: Int!) {\n    reportExpiredProduct(productId: $productId)\n  }\n':
-    types.MutationReportExpiredProductDocument,
-  '\n  mutation CreateUserProduct(\n    $title: String!\n    $url: String!\n    $categoryId: Int!\n    $price: String\n    $thumbnail: String\n    $content: String\n  ) {\n    createUserProduct(\n      title: $title\n      url: $url\n      categoryId: $categoryId\n      price: $price\n      thumbnail: $thumbnail\n      content: $content\n    )\n  }\n':
-    types.CreateUserProductDocument,
-  '\n  mutation CreateProductImageUploadUrl($contentType: String!) {\n    createProductImageUploadUrl(contentType: $contentType) {\n      uploadUrl\n      imageUrl\n    }\n  }\n':
-    types.CreateProductImageUploadUrlDocument,
+  '\n  query QueryCommunityRandomRankingProducts($count: Int!, $limit: Int!) {\n    communityRandomRankingProducts(count: $count, limit: $limit) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n':
+    types.QueryCommunityRandomRankingProductsDocument,
   '\n  query QueryProductKeywords {\n    productKeywords\n  }\n':
     types.QueryProductKeywordsDocument,
   '\n  query QueryProductsByKeyword(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      isYearLowest\n      provider {\n        nameKr\n      }\n      # 토스 하루특가 배지(data.toss.todayDeal*·dealStatus·pageViewCount) — 20개에 ~14KB.\n      data\n      searchAfter\n      postedAt\n    }\n  }\n':
@@ -145,6 +139,12 @@ const documents: Documents = {
     types.QueryCategorizedReactionKeywordsDocument,
   '\n  query QueryHotDealRankingProducts($page: Int!, $limit: Int!) {\n    hotDealRankingProducts(page: $page, limit: $limit) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      isYearLowest\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n':
     types.QueryHotDealRankingProductsDocument,
+  '\n  mutation MutationReportExpiredProduct($productId: Int!) {\n    reportExpiredProduct(productId: $productId)\n  }\n':
+    types.MutationReportExpiredProductDocument,
+  '\n  mutation CreateUserProduct(\n    $title: String!\n    $url: String!\n    $categoryId: Int!\n    $price: String\n    $thumbnail: String\n    $content: String\n  ) {\n    createUserProduct(\n      title: $title\n      url: $url\n      categoryId: $categoryId\n      price: $price\n      thumbnail: $thumbnail\n      content: $content\n    )\n  }\n':
+    types.CreateUserProductDocument,
+  '\n  mutation CreateProductImageUploadUrl($contentType: String!) {\n    createProductImageUploadUrl(contentType: $contentType) {\n      uploadUrl\n      imageUrl\n    }\n  }\n':
+    types.CreateProductImageUploadUrlDocument,
   '\n  query QueryTossCategoryLabels {\n    tossCategoryLabels\n  }\n':
     types.QueryTossCategoryLabelsDocument,
   '\n  query QueryTossProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n    $tossCategoryLabel: String\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n      tossCategoryLabel: $tossCategoryLabel\n    ) {\n      id\n      title\n      price\n      thumbnail\n      data\n      searchAfter\n      postedAt\n    }\n  }\n':
@@ -354,12 +354,6 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query QueryCommunityRandomRankingProducts($count: Int!, $limit: Int!) {\n    communityRandomRankingProducts(count: $count, limit: $limit) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n',
-): typeof import('./graphql').QueryCommunityRandomRankingProductsDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
   source: '\n  query QueryReportUserNames($productId: Int!) {\n    reportUserNames(productId: $productId)\n  }\n',
 ): typeof import('./graphql').QueryReportUserNamesDocument;
 /**
@@ -372,20 +366,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation MutationReportExpiredProduct($productId: Int!) {\n    reportExpiredProduct(productId: $productId)\n  }\n',
-): typeof import('./graphql').MutationReportExpiredProductDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: '\n  mutation CreateUserProduct(\n    $title: String!\n    $url: String!\n    $categoryId: Int!\n    $price: String\n    $thumbnail: String\n    $content: String\n  ) {\n    createUserProduct(\n      title: $title\n      url: $url\n      categoryId: $categoryId\n      price: $price\n      thumbnail: $thumbnail\n      content: $content\n    )\n  }\n',
-): typeof import('./graphql').CreateUserProductDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: '\n  mutation CreateProductImageUploadUrl($contentType: String!) {\n    createProductImageUploadUrl(contentType: $contentType) {\n      uploadUrl\n      imageUrl\n    }\n  }\n',
-): typeof import('./graphql').CreateProductImageUploadUrlDocument;
+  source: '\n  query QueryCommunityRandomRankingProducts($count: Int!, $limit: Int!) {\n    communityRandomRankingProducts(count: $count, limit: $limit) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n',
+): typeof import('./graphql').QueryCommunityRandomRankingProductsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -410,6 +392,24 @@ export function graphql(
 export function graphql(
   source: '\n  query QueryHotDealRankingProducts($page: Int!, $limit: Int!) {\n    hotDealRankingProducts(page: $page, limit: $limit) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      isYearLowest\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n',
 ): typeof import('./graphql').QueryHotDealRankingProductsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationReportExpiredProduct($productId: Int!) {\n    reportExpiredProduct(productId: $productId)\n  }\n',
+): typeof import('./graphql').MutationReportExpiredProductDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation CreateUserProduct(\n    $title: String!\n    $url: String!\n    $categoryId: Int!\n    $price: String\n    $thumbnail: String\n    $content: String\n  ) {\n    createUserProduct(\n      title: $title\n      url: $url\n      categoryId: $categoryId\n      price: $price\n      thumbnail: $thumbnail\n      content: $content\n    )\n  }\n',
+): typeof import('./graphql').CreateUserProductDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation CreateProductImageUploadUrl($contentType: String!) {\n    createProductImageUploadUrl(contentType: $contentType) {\n      uploadUrl\n      imageUrl\n    }\n  }\n',
+): typeof import('./graphql').CreateProductImageUploadUrlDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
