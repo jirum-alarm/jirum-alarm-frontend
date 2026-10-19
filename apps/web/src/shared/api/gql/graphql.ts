@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = T | null | undefined;
@@ -4391,36 +4390,6 @@ export type QueryExpiringSoonHotDealProductsQuery = {
   }>;
 };
 
-export type QueryTossCategoryLabelsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type QueryTossCategoryLabelsQuery = {
-  __typename?: 'Query';
-  tossCategoryLabels: Array<string>;
-};
-
-export type QueryTossProductsQueryVariables = Exact<{
-  limit: Scalars['Int']['input'];
-  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
-  keyword: Scalars['String']['input'];
-  orderBy: KeywordProductOrderType;
-  orderOption: OrderOptionType;
-  tossCategoryLabel?: InputMaybe<Scalars['String']['input']>;
-}>;
-
-export type QueryTossProductsQuery = {
-  __typename?: 'Query';
-  productsByKeyword: Array<{
-    __typename?: 'ProductOutput';
-    id: string;
-    title: string;
-    price?: string | null;
-    thumbnail?: string | null;
-    data?: any | null;
-    searchAfter?: Array<string> | null;
-    postedAt: any;
-  }>;
-};
-
 export type AddWishlistMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
 }>;
@@ -4558,6 +4527,36 @@ export type QueryProductsByKeywordQuery = {
     searchAfter?: Array<string> | null;
     postedAt: any;
     provider: { __typename?: 'Provider'; nameKr: string };
+  }>;
+};
+
+export type QueryTossCategoryLabelsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type QueryTossCategoryLabelsQuery = {
+  __typename?: 'Query';
+  tossCategoryLabels: Array<string>;
+};
+
+export type QueryTossProductsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  keyword: Scalars['String']['input'];
+  orderBy: KeywordProductOrderType;
+  orderOption: OrderOptionType;
+  tossCategoryLabel?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type QueryTossProductsQuery = {
+  __typename?: 'Query';
+  productsByKeyword: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    price?: string | null;
+    thumbnail?: string | null;
+    data?: any | null;
+    searchAfter?: Array<string> | null;
+    postedAt: any;
   }>;
 };
 
@@ -5530,34 +5529,6 @@ export const QueryExpiringSoonHotDealProductsDocument = new TypedDocumentString(
   QueryExpiringSoonHotDealProductsQuery,
   QueryExpiringSoonHotDealProductsQueryVariables
 >;
-export const QueryTossCategoryLabelsDocument = new TypedDocumentString(`
-    query QueryTossCategoryLabels {
-  tossCategoryLabels
-}
-    `) as unknown as TypedDocumentString<
-  QueryTossCategoryLabelsQuery,
-  QueryTossCategoryLabelsQueryVariables
->;
-export const QueryTossProductsDocument = new TypedDocumentString(`
-    query QueryTossProducts($limit: Int!, $searchAfter: [String!], $keyword: String!, $orderBy: KeywordProductOrderType!, $orderOption: OrderOptionType!, $tossCategoryLabel: String) {
-  productsByKeyword(
-    limit: $limit
-    searchAfter: $searchAfter
-    keyword: $keyword
-    orderBy: $orderBy
-    orderOption: $orderOption
-    tossCategoryLabel: $tossCategoryLabel
-  ) {
-    id
-    title
-    price
-    thumbnail
-    data
-    searchAfter
-    postedAt
-  }
-}
-    `) as unknown as TypedDocumentString<QueryTossProductsQuery, QueryTossProductsQueryVariables>;
 export const AddWishlistDocument = new TypedDocumentString(`
     mutation AddWishlist($productId: Int!) {
   addWishlist(productId: $productId)
@@ -5690,3 +5661,31 @@ export const QueryProductsByKeywordDocument = new TypedDocumentString(`
   QueryProductsByKeywordQuery,
   QueryProductsByKeywordQueryVariables
 >;
+export const QueryTossCategoryLabelsDocument = new TypedDocumentString(`
+    query QueryTossCategoryLabels {
+  tossCategoryLabels
+}
+    `) as unknown as TypedDocumentString<
+  QueryTossCategoryLabelsQuery,
+  QueryTossCategoryLabelsQueryVariables
+>;
+export const QueryTossProductsDocument = new TypedDocumentString(`
+    query QueryTossProducts($limit: Int!, $searchAfter: [String!], $keyword: String!, $orderBy: KeywordProductOrderType!, $orderOption: OrderOptionType!, $tossCategoryLabel: String) {
+  productsByKeyword(
+    limit: $limit
+    searchAfter: $searchAfter
+    keyword: $keyword
+    orderBy: $orderBy
+    orderOption: $orderOption
+    tossCategoryLabel: $tossCategoryLabel
+  ) {
+    id
+    title
+    price
+    thumbnail
+    data
+    searchAfter
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<QueryTossProductsQuery, QueryTossProductsQueryVariables>;

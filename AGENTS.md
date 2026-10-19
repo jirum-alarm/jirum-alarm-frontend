@@ -55,7 +55,6 @@ jirum-alarm-frontend/
 │   ├── typescript/        # TypeScript configuration
 │   ├── graphql-schema/    # 운영 GraphQL 스키마 한 벌(web·mobile·admin codegen 공용)
 │   └── design-system/     # 토큰·레시피·조립 규칙·부품 카탈로그·린트(README 필독)
-├── configs/               # Build and deployment configs
 ├── turbo.json            # Turborepo configuration
 ├── pnpm-workspace.yaml   # PNPM workspace configuration
 └── package.json          # Root package configuration

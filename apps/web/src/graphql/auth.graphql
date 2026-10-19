@@ -1,0 +1,115 @@
+mutation MutationLogin($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      accessToken
+      refreshToken
+    }
+  }
+
+mutation MutationSignup(
+    $email: String!
+    $password: String!
+    $nickname: String!
+    $birthYear: Float
+    $gender: Gender
+    $favoriteCategories: [Int!]
+  ) {
+    signup(
+      email: $email
+      password: $password
+      nickname: $nickname
+      birthYear: $birthYear
+      gender: $gender
+      favoriteCategories: $favoriteCategories
+    ) {
+      accessToken
+      refreshToken
+      user {
+        id
+        email
+        nickname
+        birthYear
+        gender
+        favoriteCategories
+        linkedSocialProviders
+      }
+    }
+  }
+
+mutation MutationUpdateUserProfile(
+    $nickname: String
+    $birthYear: Float
+    $gender: Gender
+    $favoriteCategories: [Int!]
+  ) {
+    updateUserProfile(
+      nickname: $nickname
+      birthYear: $birthYear
+      gender: $gender
+      favoriteCategories: $favoriteCategories
+    )
+  }
+
+query QueryMe {
+    me {
+      id
+      email
+      nickname
+      birthYear
+      gender
+      favoriteCategories
+    }
+  }
+
+query QueryMyCategories {
+    me {
+      favoriteCategories
+    }
+  }
+
+mutation QueryLoginByRefreshToken {
+    loginByRefreshToken {
+      accessToken
+      refreshToken
+    }
+  }
+
+mutation MutationUpdatePassword($password: String!) {
+    updatePassword(password: $password)
+  }
+
+mutation MutationWithdraw {
+    withdraw
+  }
+
+mutation MutationAddUserDevice($deviceId: String!) {
+    addUserDevice(deviceId: $deviceId)
+  }
+
+mutation MutationSocialLogin(
+    $oauthProvider: OauthProvider!
+    $socialAccessToken: String!
+    $email: String
+    $nickname: String
+    $birthYear: Float
+    $gender: Gender
+    $favoriteCategories: [Int!]
+  ) {
+    socialLogin(
+      oauthProvider: $oauthProvider
+      socialAccessToken: $socialAccessToken
+      email: $email
+      nickname: $nickname
+      birthYear: $birthYear
+      gender: $gender
+      favoriteCategories: $favoriteCategories
+    ) {
+      accessToken
+      refreshToken
+      type
+    }
+  }
+
+query QuerySocialAccessToken($code: String!, $oauthProvider: OauthProvider!, $state: String!) {
+    socialAccessToken(code: $code, oauthProvider: $oauthProvider, state: $state)
+  }
+

@@ -1,0 +1,44 @@
+mutation AddWishlist($productId: Int!) {
+    addWishlist(productId: $productId)
+  }
+
+mutation RemoveWishlist($productId: Int!) {
+    removeWishlist(productId: $productId)
+  }
+
+query QueryWishlists(
+    $orderBy: WishlistOrderType!
+    $orderOption: OrderOptionType!
+    $limit: Int!
+    $searchAfter: [String!]
+  ) {
+    wishlists(
+      orderBy: $orderBy
+      orderOption: $orderOption
+      limit: $limit
+      searchAfter: $searchAfter
+    ) {
+      id
+      productId
+      searchAfter
+      product {
+        id
+        title
+        price
+        isHot
+        isEnd
+        isPrivate
+        postedAt
+        hotDealType
+        isYearLowest
+        thumbnail
+        isMyWishlist
+        categoryId
+      }
+    }
+  }
+
+query QueryWishlistCount {
+    wishlistCount
+  }
+

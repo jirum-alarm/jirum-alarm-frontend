@@ -1,0 +1,7 @@
+query QueryCategories {
+    categories {
+      id
+      name
+    }
+  }
+

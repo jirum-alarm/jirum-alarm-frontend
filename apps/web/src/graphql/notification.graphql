@@ -1,0 +1,36 @@
+query QueryNotifications($offset: Int!, $limit: Int!) {
+    notifications(offset: $offset, limit: $limit) {
+      id
+      readAt
+      createdAt
+      message
+      title
+      url
+      keyword
+      product {
+        id
+        thumbnail
+        price
+        isHot
+        isEnd
+        categoryId
+      }
+    }
+  }
+
+query QueryUnreadNotificationsCount {
+    unreadNotificationsCount
+  }
+
+mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {
+    addPushToken(token: $token, tokenType: $tokenType)
+  }
+
+mutation MutationReadNotification($id: Int!) {
+    readNotification(id: $id)
+  }
+
+mutation MutationReadAllNotifications {
+    readAllNotifications
+  }
+
