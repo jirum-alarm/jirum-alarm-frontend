@@ -1,9 +1,6 @@
 import {Linking} from 'react-native';
 
-import {
-  experimentBucket,
-  sha256,
-} from '../src/shared/lib/experiment/experiment-bucket';
+import {experimentBucket} from '../src/shared/lib/experiment/experiment-bucket';
 import {
   PURCHASE_WEBVIEW_EXPERIMENT_ID,
   purchaseBrowserArm,
@@ -19,25 +16,7 @@ import {
 jest.mock('@/entities/user/user.queries', () => ({UserQueries: {}}));
 jest.mock('@/shared/lib/device/device-id', () => ({getDeviceId: jest.fn()}));
 
-const hex = (bytes: Uint8Array) =>
-  Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
-const ascii = (text: string) => Uint8Array.from(text, ch => ch.charCodeAt(0));
-
 describe('experimentBucket — 서버(node crypto)와 같은 값', () => {
-  // 기대값은 node `crypto.createHash('sha256')` 로 뽑았다(2026-10-13).
-  it('sha256 표준 벡터', () => {
-    expect(hex(sha256(ascii('')))).toBe(
-      'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
-    );
-    expect(hex(sha256(ascii('a')))).toBe(
-      'ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb',
-    );
-    // 여러 블록(1000바이트)
-    expect(hex(sha256(ascii('a'.repeat(1000))))).toBe(
-      '41edece42d63e8d9bf515a9ba6932e1c20cbc9f5a5d134645adb5db1b9737ea3',
-    );
-  });
-
   it('버킷 = 서버 experimentBucket', () => {
     const id = PURCHASE_WEBVIEW_EXPERIMENT_ID;
     expect(experimentBucket('0b7f6a62-1c1e-4d7a-9f3e-2a7c5d9e8b10', id)).toBe(

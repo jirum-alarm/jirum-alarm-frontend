@@ -69,17 +69,16 @@ describe('splitPriceNote — 외화 원문 끝의 괄호 메모는 보조 글씨
     });
   });
 
-  it('web 과 같은 정규식이다(같은 상품이 web·앱에서 다르게 보이지 않게)', () => {
+  it('web·앱이 같은 원본(@jirum/domain/price)을 쓴다(같은 상품이 web·앱에서 다르게 보이지 않게)', () => {
     const fs = require('fs');
 
     const path = require('path');
     const read = (p: string) =>
       fs.readFileSync(path.join(__dirname, p), 'utf8');
-    const rx = /\/\^\(\.\+\?\)[^/]*\$\/\.exec/;
-    const web = read('../../web/src/shared/lib/utils/price.ts').match(rx)?.[0];
-    const app = read('../src/shared/lib/format/price.ts').match(rx)?.[0];
-    expect(app).toBeDefined();
-    expect(web).toBe(app);
+    const shared =
+      /export \{\s*parsePrice, splitPriceNote\s*\} from '@jirum\/domain\/price'/;
+    expect(read('../../web/src/shared/lib/utils/price.ts')).toMatch(shared);
+    expect(read('../src/shared/lib/format/price.ts')).toMatch(shared);
   });
 
   it('괄호가 없거나 괄호뿐이면 그대로', () => {

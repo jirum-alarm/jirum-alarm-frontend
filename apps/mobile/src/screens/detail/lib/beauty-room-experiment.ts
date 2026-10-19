@@ -3,21 +3,25 @@ import {useEffect, useState} from 'react';
 import {getDeviceId} from '@/shared/lib/device/device-id';
 import {experimentBucket} from '@/shared/lib/experiment/experiment-bucket';
 
-/**
- * 화장품 상세 → 뷰티 버티컬 실험 `beauty_detail_room_v1`(2026-10-14) — web
- * `features/product-detail/lib/beauty-room-experiment.ts` 와 같은 id·비율·해시(서버 experimentBucket 과 같은 값).
- *
- * 화장품(categoryId 3) 상세만, 기기 단위 50/50. 버킷 < PERCENT 면 b — 상세 카톡 권유(soft·구매 후)가 뷰티방을 권하고
- * 「지름알림 뷰티에서 더 보기」(/beauty 웹뷰)를 단다. a 는 지금 그대로 핫딜방. 두 군 모두 okachat 이벤트에 exp 를 싣는다.
- * ★진행 중인 실험 id 를 바꾸면 배정이 섞인다. 끄려면 PERCENT 를 0 으로(OTA).
- */
-export const BEAUTY_ROOM_EXPERIMENT_ID = 'beauty_detail_room_v1';
-// 2026-10-14 전면 적용(100): 4주 군별 권유 클릭 ~26회(GA4 9/30~10/13 기준선 × 화장품 7.8%)라 검출 가능 최소 2.2배 —
-// 판정이 안 나는 실험이라 접고 화장품 상세 전원에게 뷰티방을 권한다. 효과는 관찰 obs_beauty_kakao_room 으로 본다.
-export const BEAUTY_ROOM_PERCENT = 100;
-export const BEAUTY_CATEGORY_ID = 3;
+import {
+  BEAUTY_CATEGORY_ID,
+  BEAUTY_ROOM_EXPERIMENT_ID,
+  type BeautyRoomArm,
+  beautyRoomArmForBucket,
+  beautyRoomExpTag,
+} from '@jirum/domain/beauty-room-experiment';
 
-export type BeautyRoomArm = 'a' | 'b';
+/**
+ * 화장품 상세 → 뷰티 버티컬 실험 `beauty_detail_room_v1`(2026-10-14). 배정 규칙(id·비율·카테고리·버킷→군)은
+ * @jirum/domain beauty-room-experiment — web 과 같은 원본. 여기엔 기기 id 읽기(앱 저장소)만 둔다.
+ * b 군은 상세 카톡 권유(soft·구매 후)가 뷰티방을 권하고 「지름알림 뷰티에서 더 보기」(/beauty 웹뷰)를 단다.
+ */
+export {
+  BEAUTY_CATEGORY_ID,
+  BEAUTY_ROOM_EXPERIMENT_ID,
+  BEAUTY_ROOM_PERCENT,
+  type BeautyRoomArm,
+} from '@jirum/domain/beauty-room-experiment';
 
 export type BeautyRoomAssignment = {
   arm: BeautyRoomArm;
@@ -29,14 +33,13 @@ export type BeautyRoomAssignment = {
 export function beautyRoomAssignment(
   deviceId: string | null | undefined,
   categoryId: number | null | undefined,
-  percent: number = BEAUTY_ROOM_PERCENT,
+  percent?: number,
 ): BeautyRoomAssignment | null {
-  if (categoryId !== BEAUTY_CATEGORY_ID || !deviceId || percent <= 0) {
-    return null;
-  }
-  const arm: BeautyRoomArm =
-    experimentBucket(deviceId, BEAUTY_ROOM_EXPERIMENT_ID) < percent ? 'b' : 'a';
-  return {arm, exp: `${BEAUTY_ROOM_EXPERIMENT_ID}:${arm}`};
+  const bucket = deviceId
+    ? experimentBucket(deviceId, BEAUTY_ROOM_EXPERIMENT_ID)
+    : null;
+  const arm = beautyRoomArmForBucket(bucket, categoryId, percent);
+  return arm ? {arm, exp: beautyRoomExpTag(arm)} : null;
 }
 
 /**
