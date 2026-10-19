@@ -31,17 +31,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22.18.0
-
-      # 파일만 읽는 검사라 설치 전에 돌려 빨리 실패시킨다.
-      - run: node apps/mobile/scripts/verify-public-contracts.mjs
-
       - uses: pnpm/action-setup@v4
         with:
           version: 10.30.3
           run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.18.0
+          cache: pnpm
+
+      # 파일만 읽는 검사라 설치 전에 돌려 빨리 실패시킨다.
+      - run: node apps/mobile/scripts/verify-public-contracts.mjs
 
       - run: pnpm install --frozen-lockfile
 

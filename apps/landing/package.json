@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
-    "prettier-fix": "prettier --write \"./**/*.{js,ts,tsx}\" --ignore-path .gitignore --ignore-path .prettierignore "
+    "prettier-fix": "prettier --write \"./**/*.{js,ts,tsx}\" --ignore-path .gitignore --ignore-path .prettierignore ",
+    "check-types": "tsc --noEmit",
+    "test": "node --test --experimental-strip-types src/**/*.test.ts"
   },
   "dependencies": {
     "@jirum/design-system": "workspace:*",

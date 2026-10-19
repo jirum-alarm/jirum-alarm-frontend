@@ -1,0 +1,152 @@
+name: _deploy-k8s-image
+
+# ai·beauty-web 운영/스테이징 배포 공통 본체(재사용 워크플로).
+# 방아쇠·concurrency·permissions 는 호출하는 deploy-<app>-<env>.yml 에 남는다 — release-tag.py 가
+# 그 파일들의 on.push.tags/paths 를 읽어 "함께 나가는 배포"를 판정하고, run 이름도 호출 쪽 이름으로 남는다.
+# admin·web 은 빌드 방식(docker CLI·Slack 알림·turbo 빌드 등)이 달라 따로 둔다.
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: GitHub environment (production | staging)
+        required: true
+        type: string
+      image:
+        description: 레지스트리 아래 푸시할 이미지 경로 (예 tjsry0466/jirum-alarm-frontend-ai-dev)
+        required: true
+        type: string
+      manifest-image:
+        description: gitops kustomization images[].name 에서 찾을 이미지 경로(레지스트리 제외)
+        required: true
+        type: string
+      meta-tags:
+        description: docker/metadata-action tags
+        required: true
+        type: string
+      tag-pattern:
+        description: 매니페스트에 박을 커밋별 고유 태그 정규식
+        required: true
+        type: string
+      dockerfile:
+        required: true
+        type: string
+      kustomization:
+        required: true
+        type: string
+      commit-label:
+        description: gitops 커밋 메시지 scope (예 ai-prod)
+        required: true
+        type: string
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: ${{ inputs.environment }}
+    outputs:
+      image-tag: ${{ steps.deploy-tag.outputs.tag }}
+    env:
+      DOCKER_BUILDKIT: 1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKER_REGISTRY }}/${{ inputs.image }}
+          tags: ${{ inputs.meta-tags }}
+
+      - name: Resolve deploy tag
+        id: deploy-tag
+        env:
+          META_TAGS: ${{ steps.meta.outputs.tags }}
+          TAG_PATTERN: ${{ inputs.tag-pattern }}
+        run: |
+          set -euo pipefail
+          # 커밋별 고유 태그를 매니페스트에 박는다 — floating 태그(latest·semver·branch)면 ArgoCD 가 rollout 을 못 본다.
+          tag=$(printf '%s\n' "$META_TAGS" | sed 's#.*:##' | grep -E "$TAG_PATTERN" | head -1)
+          if [ -z "$tag" ]; then echo "::error::could not resolve unique deploy tag"; exit 1; fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ inputs.dockerfile }}
+          platforms: linux/amd64
+          # Harbor v2.10 은 buildx provenance 첨부물(attestation)을 index 자식이자 accessory 로 이중 등록해
+          # 보존 정책·삭제가 412(referenced by others)로 막힌다 — 단일 매니페스트로 올린다.
+          provenance: false
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy to Kubernetes
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: ${{ inputs.environment }}
+    steps:
+      - name: Checkout infrastructure repository
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ secrets.INFRA_GITHUB_REPOSITORY }}
+          ref: main
+          ssh-key: ${{ secrets.GITOPS_DEPLOY_KEY }}
+          path: infra
+
+      - name: Install yq
+        run: |
+          set -euo pipefail
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Update Kubernetes manifest
+        working-directory: infra
+        env:
+          NEW_TAG: ${{ needs.build-and-push.outputs.image-tag }}
+          KUSTOMIZATION: ${{ inputs.kustomization }}
+          IMAGE_NAME: ${{ secrets.DOCKER_REGISTRY }}/${{ inputs.manifest-image }}
+        run: |
+          set -euo pipefail
+          yq eval -i '(.images[] | select(.name == strenv(IMAGE_NAME)) | .newTag) = strenv(NEW_TAG)' "$KUSTOMIZATION"
+          yq eval '.' "$KUSTOMIZATION" > /dev/null
+
+      - name: Commit files
+        working-directory: infra
+        env:
+          NEW_TAG: ${{ needs.build-and-push.outputs.image-tag }}
+          COMMIT_LABEL: ${{ inputs.commit-label }}
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
+          git add .
+          git diff --staged --quiet || git commit -m "chore($COMMIT_LABEL): image tag $NEW_TAG"
+          # 여러 앱 배포가 같은 gitops main 에 동시에 민다 — 뒤처지면 거절된다(2026-10-07 v1.47.0 web 이 admin 과 겹쳐 실패).
+          # 따라잡고 다시 민다. 같은 파일을 동시에 고쳐 충돌이면 그때만 실패.
+          for i in 1 2 3 4 5; do
+            if git push origin main; then exit 0; fi
+            git pull --rebase origin main || { git rebase --abort; exit 1; }
+            sleep $((i * 2))
+          done
+          exit 1

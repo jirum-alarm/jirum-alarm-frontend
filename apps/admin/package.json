@@ -10,7 +10,8 @@
     "prettier-fix": "prettier --write \"./**/*.{js,ts,tsx}\" --ignore-path .gitignore --ignore-path .prettierignore ",
     "check-types": "tsc --noEmit",
     "lint": "eslint . --fix",
-    "lint:check": "eslint ."
+    "lint:check": "eslint .",
+    "test": "node --test --experimental-strip-types src/**/*.test.ts"
   },
   "dependencies": {
     "@apollo/client": "^4.3.3",
