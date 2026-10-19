@@ -1,7 +1,6 @@
-import {emptyText, pageHeader} from '@jirum/design-system/recipes';
-import {cn} from '@/shared/lib/styling/className';
+import {emptyText} from '@jirum/design-system/recipes';
 import {fixed} from '@jirum/design-system';
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -15,37 +14,30 @@ import {useInfiniteQuery, useQueryClient} from '@tanstack/react-query';
 import {useNavigation} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {SystemBars} from 'react-native-edge-to-edge';
 
 import {CommunityQueries, type CommunityTab} from '@/entities/community';
 import CommunityHotDeals from '@/features/community/ui/CommunityHotDeals';
 import CommunityPostCard from '@/features/community/ui/CommunityPostCard';
 import CommunityTabBar from '@/features/community/ui/CommunityTabBar';
 import NoticePostCard from '@/features/community/ui/NoticePostCard';
-import {
-  GLASS_BOTTOM_GAP,
-  getReservedBottomPx,
-} from '@/navigations/tab/tab-bar-metrics';
-import {useRegisterScrollToTop} from '@/navigations/tab/scroll-to-top-store';
+import {GLASS_BOTTOM_GAP} from '@/navigations/tab/tab-bar-metrics';
+import StackHeader from '@/features/mypage/ui/StackHeader';
 import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';
 import {ListRowsSkeleton} from '@/shared/components/Skeletons';
 import type {CommunityPost} from '@/shared/api/community';
-import {
-  tabNavigations,
-  tabStackNavigations,
-} from '@/shared/constant/navigations';
+import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useColors} from '@/shared/theme/useColors';
-
-/** web PageHeader 와 같은 높이(h-14). */
 
 type Nav = NativeStackNavigationProp<TabStackParamList>;
 
 /**
- * 커뮤니티 탭 루트. web `/community`
- * (BasicLayout + PageHeader + CommunityPageClient + CommunityHotDeals) 대응.
+ * 커뮤니티 목록. web `/community`
+ * (BasicLayout hasBackButton + CommunityPageClient + CommunityHotDeals) 대응.
+ * 2026-10-20 하단 탭에서 내려 홈 헤더 말풍선으로 들어오는 화면이 됐다(탭 자리는 키워드) — 그래서 뒤로가기 헤더를 갖고
+ * 탭바가 없으니 바닥 여백은 홈 인디케이터만큼이다.
  *
  * ★옮기지 않은 web 분기 — 앱에서 도달할 수 없어서 옮기면 죽은 코드가 된다:
  *   - 비로그인 분기(`isUserLogin` 으로 글쓰기 버튼을 숨김): `RootNavigator` 가
@@ -76,17 +68,6 @@ export default function CommunityScreen() {
 
   const posts = data?.pages.flat() ?? [];
 
-  /**
-   * 커뮤니티 탭 재탭 → 목록 맨 위로. (웹뷰 시절 injectJavaScript 를 대체 —
-   * 등록하지 않으면 탭바가 웹뷰 주입으로 폴백하고, 이 탭엔 이제 웹뷰가 없어
-   * **아무 반응 없이** 조용히 끝난다.)
-   */
-  const listRef = useRef<FlatList<CommunityPost>>(null);
-  const scrollToTop = useCallback(() => {
-    listRef.current?.scrollToOffset({offset: 0, animated: true});
-  }, []);
-  useRegisterScrollToTop(tabNavigations.COMMUNITY, scrollToTop);
-
   const openPost = useCallback(
     (postId: number) => {
       navigation.push(tabStackNavigations.COMMUNITY_POST, {postId});
@@ -98,7 +79,7 @@ export default function CommunityScreen() {
     navigation.push(tabStackNavigations.COMMUNITY_WRITE, {});
   }, [navigation]);
 
-  const reservedBottom = getReservedBottomPx(insets.bottom);
+  const reservedBottom = insets.bottom;
 
   const renderItem = useCallback(
     ({item, index}: {item: CommunityPost; index: number}) =>
@@ -120,19 +101,8 @@ export default function CommunityScreen() {
   const {refreshing, onRefresh} = usePullRefresh(pullRefresh);
 
   return (
-    <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>
-      <SystemBars style="auto" hidden={false} />
-
-      {/* 헤더 — web PageHeader(title="커뮤니티") */}
-      <View
-        className={cn(
-          'flex-row items-center',
-          pageHeader.bar,
-          pageHeader.height,
-          pageHeader.border,
-        )}>
-        <Text className={pageHeader.title}>커뮤니티</Text>
-      </View>
+    <View className="flex-1 bg-white">
+      <StackHeader title="커뮤니티" onBack={navigation.goBack} />
 
       <CommunityTabBar activeTab={tab} onChange={setTab} />
 
@@ -146,7 +116,6 @@ export default function CommunityScreen() {
         <FlatList
           // ★탭이 바뀌면 목록을 새로 그린다(위 주석 참조).
           key={tab}
-          ref={listRef}
           data={posts}
           keyExtractor={item => String(item.id)}
           renderItem={renderItem}
@@ -200,8 +169,7 @@ export default function CommunityScreen() {
           // 🔴`getFabPaddingPx` 를 쓰지 않는다. 그건 **웹뷰**에 주입하는 값이라
           // iOS 26 에서 safe-area 를 일부러 뺀다(web 이 자기 1rem 을 더한다).
           // 네이티브 화면의 `bottom: 0` 은 홈 인디케이터 **아래**라 safe-area 를
-          // 포함해야 한다 — 안 하면 글래스 탭바와 겹친다(실측: 탭바 상단이
-          // 바닥에서 87pt 인데 FAB 은 69pt 에 있어 21pt 만 보였다).
+          // 포함해야 한다. 탭 위에 쌓인 화면이라 탭바는 없다(2026-10-20).
           {bottom: reservedBottom + GLASS_BOTTOM_GAP},
         ]}>
         <Pressable

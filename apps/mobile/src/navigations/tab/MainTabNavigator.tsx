@@ -26,8 +26,8 @@ import {
   HomeFillIcon,
   FindIcon,
   FindFillIcon,
-  BubbleChatIcon,
-  BubbleChatFillIcon,
+  KeywordIcon,
+  KeywordFillIcon,
   AlertIcon,
   AlertFillIcon,
   MyIcon,
@@ -55,7 +55,7 @@ type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];
 export type MainTabParamList = {
   [tabNavigations.HOME]: undefined;
   [tabNavigations.DISCOVER]: undefined;
-  [tabNavigations.COMMUNITY]: undefined;
+  [tabNavigations.KEYWORDS]: undefined;
   [tabNavigations.ALARM]: undefined;
   [tabNavigations.MYPAGE]: undefined;
 };
@@ -91,16 +91,18 @@ const TAB_CONFIG = [
     },
   },
   {
-    name: tabNavigations.COMMUNITY,
-    label: '커뮤니티',
-    icon: BubbleChatIcon,
-    activeIcon: BubbleChatFillIcon,
-    idlePng: require('../../shared/assets/tab-icons/community.png'),
-    activePng: require('../../shared/assets/tab-icons/community-fill.png'),
+    // 2026-10-20 커뮤니티 자리(28일 앱 사용자 4%)를 넘겨받았다 — 알림을 거는 단위라 북극성(알림 경유 재방문)에 가깝다.
+    // 커뮤니티는 홈 헤더 말풍선으로 간다. web 하단 탭과 같은 순서·이름.
+    name: tabNavigations.KEYWORDS,
+    label: '키워드',
+    icon: KeywordIcon,
+    activeIcon: KeywordFillIcon,
+    idlePng: require('../../shared/assets/tab-icons/keyword.png'),
+    activePng: require('../../shared/assets/tab-icons/keyword-fill.png'),
     // OS 다크모드용 — tinted:false 라 원본 색이 그대로 나가서 따로 둔다(assets/tab-icons/README.md).
     dark: {
-      idlePng: require('../../shared/assets/tab-icons/community-dark.png'),
-      activePng: require('../../shared/assets/tab-icons/community-fill-dark.png'),
+      idlePng: require('../../shared/assets/tab-icons/keyword-dark.png'),
+      activePng: require('../../shared/assets/tab-icons/keyword-fill-dark.png'),
     },
   },
   {
@@ -142,14 +144,14 @@ const TAB_CONFIG = [
 
 const HomeScreen = createTabStack(tabNavigations.HOME);
 const DiscoverScreen = createTabStack(tabNavigations.DISCOVER);
-const CommunityScreen = createTabStack(tabNavigations.COMMUNITY);
+const KeywordsScreen = createTabStack(tabNavigations.KEYWORDS);
 const AlarmScreen = createTabStack(tabNavigations.ALARM);
 const MyPageScreen = createTabStack(tabNavigations.MYPAGE);
 
 const TAB_SCREENS: Record<TabName, React.ComponentType> = {
   [tabNavigations.HOME]: HomeScreen,
   [tabNavigations.DISCOVER]: DiscoverScreen,
-  [tabNavigations.COMMUNITY]: CommunityScreen,
+  [tabNavigations.KEYWORDS]: KeywordsScreen,
   [tabNavigations.ALARM]: AlarmScreen,
   [tabNavigations.MYPAGE]: MyPageScreen,
 };
@@ -293,7 +295,7 @@ function InstantTabButton({
  */
 const PRELOAD_TABS = [
   tabNavigations.DISCOVER,
-  tabNavigations.COMMUNITY,
+  tabNavigations.KEYWORDS,
   tabNavigations.MYPAGE,
 ] as const;
 const PRELOAD_DELAY_MS = 2000;

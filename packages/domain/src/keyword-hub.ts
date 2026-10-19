@@ -132,6 +132,29 @@ export function keywordHubPath(hub: Pick<KeywordHubTerms, 'slug'>): string {
   return `/keywords/${encodeURIComponent(hub.slug)}`;
 }
 
+/** 키워드 목록의 「최근 핫딜이 올라온 키워드」 창 — 마지막 딜이 사흘 안(/deals 의 「최근 핫딜」과 같은 창). */
+export const KEYWORD_HUB_RECENT_WINDOW_MS = 3 * 24 * 60 * 60 * 1000;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * 키워드 목록(web /keywords·앱 키워드 탭)을 「최근 핫딜이 올라온」/「기다리는」 둘로 나눈다. 서버 순서(30일 딜 많은 순)는 그대로.
+ * activeDealCount(진행 중)는 쓰지 않는다 — 종료 표시가 안 찍힌 옛 딜이 많아 물티슈 30일 380건 중 344건이 「진행 중」으로 나왔다
+ * (2026-10-17 운영). 게시 시각은 틀릴 일이 없다.
+ */
+export function splitKeywordHubsByRecency<T extends { lastDealAt?: string | null }>(
+  hubs: readonly T[],
+  now: number,
+): { live: T[]; quiet: T[] } {
+  const isRecent = (h: T) =>
+    h.lastDealAt != null && now - Date.parse(h.lastDealAt) < KEYWORD_HUB_RECENT_WINDOW_MS;
+  return { live: hubs.filter(isRecent), quiet: hubs.filter((h) => !isRecent(h)) };
+}
+
+/** 마지막 딜이 하루 안이면 강조(빨강) — 키워드 칸의 「3시간 전」 배지. */
+export function isKeywordHubToday(lastDealAt: string, now: number): boolean {
+  return now - Date.parse(lastDealAt) < DAY_MS;
+}
+
 /** "76건" / 수집 상한에 걸렸으면 "300건+". */
 export function formatHubCount(hub: KeywordHubCount): string {
   return `${hub.recentDealCount.toLocaleString()}건${hub.countCapped ? '+' : ''}`;

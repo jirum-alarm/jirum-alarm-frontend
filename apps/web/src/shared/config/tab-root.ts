@@ -5,12 +5,13 @@ import { PAGE } from './page';
  *
  * ⚠️ 앱의 `apps/mobile/src/shared/lib/navigation/tab-routing.ts` 의 `tabRootPaths` 와 짝.
  * 한쪽만 고치면 같은 화면이 웹에선 네비가 나오고 앱에선 안 나오는 식으로 갈린다.
+ * 2026-10-20 커뮤니티 탭 자리를 키워드로 바꿨다 — `/community` 는 이제 홈 헤더 말풍선으로 들어가는 하위 화면이다.
  */
 export const TAB_ROOT_PATHS: string[] = [
   PAGE.HOME,
   PAGE.TRENDING_RANKING,
   PAGE.TRENDING_LIVE,
-  PAGE.COMMUNITY,
+  PAGE.KEYWORDS,
   PAGE.ALARM,
   PAGE.MYPAGE,
 ];

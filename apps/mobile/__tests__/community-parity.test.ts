@@ -265,11 +265,13 @@ describe('웹이 하던 일의 인수 — 조용히 사라지는 것들', () => 
    * 네이티브 탭엔 웹뷰 ref 가 없어 그 주입이 **예외도 로그도 없이 no-op** 이다
    * — 등록하지 않으면 재탭이 아무 반응 없이 끝난다.
    */
-  it('탭 재탭 → 맨 위로를 store 에 등록한다', () => {
+  it('탭이 아니라 홈 헤더로 들어오는 화면이다(2026-10-20) — 뒤로가기 헤더가 있고 탭 재탭 등록은 없다', () => {
     expect(listScreen).toMatch(
-      /useRegisterScrollToTop\(\s*tabNavigations\.COMMUNITY/,
+      /<StackHeader title="커뮤니티" onBack=\{navigation\.goBack\}/,
     );
-    expect(listScreen).toMatch(/scrollToOffset\(\{offset: 0/);
+    expect(listScreen).not.toMatch(/useRegisterScrollToTop/);
+    const home = read('src/screens/home/ui/HomeHeader.tsx');
+    expect(home).toMatch(/navigation\.push\(tabStackNavigations\.COMMUNITY\)/);
   });
 
   it('목록이 pull-to-refresh 로 다시 받는다', () => {

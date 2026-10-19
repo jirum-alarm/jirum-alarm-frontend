@@ -19,8 +19,10 @@ export function getTabNameFromUrl(url: string): TabName {
   if (path.startsWith('/trending')) {
     return tabNavigations.DISCOVER;
   }
-  if (path.startsWith('/community')) {
-    return tabNavigations.COMMUNITY;
+  // 키워드 목록·허브. `/deals` 는 그 아래층이지만 앱에선 열지 않으므로(아래 resolveNativeRoute) 넣지 않는다.
+  // `/community` 는 2026-10-20 부터 탭이 아니다 — 홈 헤더 말풍선으로 들어가므로 아래 기본값(홈)에 쌓인다.
+  if (path.startsWith('/keywords')) {
+    return tabNavigations.KEYWORDS;
   }
   if (path.startsWith('/alarm')) {
     return tabNavigations.ALARM;
@@ -61,7 +63,7 @@ export function isTabRootUrl(url: string): boolean {
     '/',
     '/trending/ranking',
     '/trending/live',
-    '/community',
+    '/keywords',
     '/alarm',
     '/mypage',
   ];
@@ -101,7 +103,7 @@ const NATIVE_TAB_ROOTS: ReadonlySet<TabName> = new Set([
   tabNavigations.ALARM,
   // 2026-09-08 — 마지막 두 탭도 네이티브가 됐다. 이제 **모든 탭**이 웹뷰 ref 가
   // 없으므로, 네이티브 화면이 없는 경로는 반드시 아래 웹뷰 라우트로 쌓아야 한다.
-  tabNavigations.COMMUNITY,
+  tabNavigations.KEYWORDS,
   tabNavigations.MYPAGE,
 ]);
 
@@ -119,11 +121,17 @@ const EXACT_ROUTES: ReadonlyMap<
   ['/', {tab: tabNavigations.HOME}],
   ['/alarm', {tab: tabNavigations.ALARM}],
 
-  ['/community', {tab: tabNavigations.COMMUNITY}],
+  ['/keywords', {tab: tabNavigations.KEYWORDS}],
+
+  // 커뮤니티는 탭이 아니다(2026-10-20) — 홈 위에 쌓는다(홈 헤더 말풍선과 같은 자리).
+  [
+    '/community',
+    {tab: tabNavigations.HOME, screen: tabStackNavigations.COMMUNITY},
+  ],
   [
     '/community/write',
     {
-      tab: tabNavigations.COMMUNITY,
+      tab: tabNavigations.HOME,
       screen: tabStackNavigations.COMMUNITY_WRITE,
       params: {},
     },
@@ -275,7 +283,7 @@ export function resolveNativeRoute(
   const postId = path.match(/^\/community\/(\d+)$/)?.[1];
   if (postId) {
     return {
-      tab: tabNavigations.COMMUNITY,
+      tab: tabNavigations.HOME,
       screen: tabStackNavigations.COMMUNITY_POST,
       params: {postId: Number(postId)},
     };
@@ -329,7 +337,7 @@ export function resolveNativeRoute(
   }
 
   // 키워드 허브(`/keywords/{slug}`) — 네이티브 화면(KeywordHubScreen). slug 는 한글이라 인코딩돼 온다.
-  // 목록(`/keywords`)은 네이티브가 없어 아래 웹뷰 폴백으로 간다.
+  // 목록(`/keywords`)은 키워드 탭 루트(위 표, 2026-10-20).
   // https 링크로 앱이 열리려면 AASA·Android 앱 링크 경로에도 `/keywords/*` 가 있어야 한다(아직 없음 — 지금은
   // 푸시·커스텀 스킴·앱 안 이동만 여기로 온다).
   const hubSlug = path.match(/^\/keywords\/([^/]+)\/?$/)?.[1];
@@ -381,8 +389,8 @@ export function getTabBaseUrl(tabName: TabName): string {
       return '/';
     case tabNavigations.DISCOVER:
       return '/trending/ranking';
-    case tabNavigations.COMMUNITY:
-      return '/community';
+    case tabNavigations.KEYWORDS:
+      return '/keywords';
     case tabNavigations.ALARM:
       return '/alarm';
     case tabNavigations.MYPAGE:

@@ -2,7 +2,7 @@
 export enum NAV_TYPE {
   HOME = 'HOME',
   TRENDING = 'TRENDING',
-  COMMUNITY = 'COMMUNITY',
+  KEYWORDS = 'KEYWORDS',
   ALARM = 'ALARM',
   MYPAGE = 'MYPAGE',
 }

@@ -14,7 +14,8 @@ const mainNavigations = {
 const tabNavigations = {
   HOME: 'HomeTab',
   DISCOVER: 'DiscoverTab',
-  COMMUNITY: 'CommunityTab',
+  /** 2026-10-20 커뮤니티 자리를 넘겨받았다(web 하단 탭과 같다). 커뮤니티는 홈 헤더 말풍선 → tabStackNavigations.COMMUNITY. */
+  KEYWORDS: 'KeywordsTab',
   ALARM: 'AlarmTab',
   MYPAGE: 'MyPageTab',
 } as const;
@@ -60,7 +61,8 @@ const tabStackNavigations = {
   THEMES: 'Themes',
   THEME_DETAIL: 'ThemeDetail',
 
-  // ── 커뮤니티 탭 (web /community/**) ──
+  // ── 커뮤니티 (web /community/**) — 탭이 아니라 홈 헤더 말풍선으로 들어가는 화면(2026-10-20) ──
+  COMMUNITY: 'Community',
   COMMUNITY_POST: 'CommunityPost',
   COMMUNITY_WRITE: 'CommunityWrite',
 

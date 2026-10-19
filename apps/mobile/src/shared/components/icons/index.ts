@@ -18,6 +18,8 @@ export {default as FindIcon} from './find.tsx';
 export {default as FindFillIcon} from './find_fill.tsx';
 export {default as BubbleChatIcon} from './bubble_chat.tsx';
 export {default as BubbleChatFillIcon} from './bubble_chat_fill.tsx';
+export {default as KeywordIcon} from './keyword.tsx';
+export {default as KeywordFillIcon} from './keyword_fill.tsx';
 export {default as AIIcon} from './AI';
 export {default as PriceIcon} from './Price';
 export {default as ShopIcon} from './Shop';

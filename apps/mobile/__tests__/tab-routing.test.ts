@@ -46,18 +46,22 @@ describe('getPushablePath', () => {
 });
 
 describe('isTabRootUrl', () => {
-  it('커뮤니티 목록은 루트다', () => {
-    expect(isTabRootUrl('https://jirum-alarm.com/community')).toBe(true);
-    expect(isTabRootUrl('https://jirum-alarm.com/community?tab=all')).toBe(
-      true,
-    );
+  it('키워드 목록은 루트다(2026-10-20 커뮤니티 자리)', () => {
+    expect(isTabRootUrl('https://jirum-alarm.com/keywords')).toBe(true);
+    expect(isTabRootUrl('https://jirum-alarm.com/keywords?utm=x')).toBe(true);
   });
 
   it('트레일링 슬래시도 루트로 본다 — 아니면 탭바가 숨고 safe-area 가 빠진다', () => {
-    expect(isTabRootUrl('https://jirum-alarm.com/community/')).toBe(true);
+    expect(isTabRootUrl('https://jirum-alarm.com/keywords/')).toBe(true);
   });
 
-  it('게시글 상세는 루트가 아니다', () => {
+  it('키워드 허브·커뮤니티는 루트가 아니다 — 커뮤니티는 이제 홈 헤더로 들어간다', () => {
+    expect(
+      isTabRootUrl(
+        'https://jirum-alarm.com/keywords/%EC%82%BC%EB%8B%A4%EC%88%98',
+      ),
+    ).toBe(false);
+    expect(isTabRootUrl('https://jirum-alarm.com/community')).toBe(false);
     expect(isTabRootUrl('https://jirum-alarm.com/community/77')).toBe(false);
   });
 });
@@ -139,7 +143,10 @@ describe('getTabNameFromUrl — 탭 귀속', () => {
   it('기존 귀속은 그대로', () => {
     expect(at('/')).toBe(tabNavigations.HOME);
     expect(at('/trending/ranking')).toBe(tabNavigations.DISCOVER);
-    expect(at('/community')).toBe(tabNavigations.COMMUNITY);
+    expect(at('/keywords')).toBe(tabNavigations.KEYWORDS);
+    expect(at('/keywords/ps5')).toBe(tabNavigations.KEYWORDS);
+    // 커뮤니티는 탭이 아니다 — 홈 위에 쌓인다.
+    expect(at('/community')).toBe(tabNavigations.HOME);
     expect(at('/alarm')).toBe(tabNavigations.ALARM);
     expect(at('/mypage')).toBe(tabNavigations.MYPAGE);
     expect(at('/mypage/keyword')).toBe(tabNavigations.MYPAGE);
@@ -169,7 +176,22 @@ describe('resolveNativeRoute — 상대 경로에 쿼리가 붙어도 네이티�
 
   it('web 목록 링크 꼴(?tab=all)의 커뮤니티 글', () => {
     expect(resolveNativeRoute('/community/80?tab=all')).toMatchObject({
+      tab: tabNavigations.HOME,
       screen: tabStackNavigations.COMMUNITY_POST,
+    });
+  });
+
+  it('커뮤니티 목록·글쓰기는 홈 위 화면, 키워드 목록은 탭 루트(2026-10-20)', () => {
+    expect(resolveNativeRoute('/community')).toEqual({
+      tab: tabNavigations.HOME,
+      screen: tabStackNavigations.COMMUNITY,
+    });
+    expect(resolveNativeRoute('/community/write')).toMatchObject({
+      tab: tabNavigations.HOME,
+      screen: tabStackNavigations.COMMUNITY_WRITE,
+    });
+    expect(resolveNativeRoute('/keywords?utm_source=push')).toEqual({
+      tab: tabNavigations.KEYWORDS,
     });
   });
 

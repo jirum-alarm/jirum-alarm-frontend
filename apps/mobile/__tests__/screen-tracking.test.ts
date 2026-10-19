@@ -15,7 +15,7 @@ describe('focusedScreenName', () => {
             routes: [
               {name: 'HomeTab'},
               {name: 'DiscoverTab'},
-              {name: 'CommunityTab'},
+              {name: 'KeywordsTab'},
               {name: 'AlarmTab', state: {routes: [{name: 'TabRoot'}]}},
             ],
           },

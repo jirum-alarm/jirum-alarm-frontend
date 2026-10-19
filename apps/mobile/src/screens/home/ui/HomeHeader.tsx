@@ -7,6 +7,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import IconLogo from '@/shared/components/icons/IconLogo';
 import AlertIcon from '@/shared/components/icons/alert';
+import BubbleChatIcon from '@/shared/components/icons/bubble_chat';
 import SearchIcon from '@/shared/components/icons/search';
 import {MoonIcon, SunIcon} from '@/shared/components/icons/theme-mode';
 import {tabStackNavigations} from '@/shared/constant/navigations';
@@ -81,7 +82,7 @@ export default function HomeHeader({
   );
 }
 
-/** 로고·부제·화면 모드·검색·알림 한 줄. 두 겹이 같은 내용을 각자의 색으로 그린다. */
+/** 로고·부제·화면 모드·검색·커뮤니티·알림 한 줄. 두 겹이 같은 내용을 각자의 색으로 그린다. */
 function HeaderRow({
   inverted,
   onPressLogo,
@@ -93,6 +94,9 @@ function HeaderRow({
   const navigation =
     useNavigation<NativeStackNavigationProp<TabStackParamList>>();
   const hasNewAlarm = useHasNewAlarm();
+  // 어두운 겹의 바탕(라이트 fixed-900 / 다크 fixed-800, 위 bg 클래스와 같은 값) — 말풍선 속채움이 그 색이어야 덩어리가 안 된다.
+  const invertedBackdrop =
+    useColorScheme() === 'dark' ? fixed[800] : fixed[900];
 
   return (
     <View className="h-14 w-full flex-row items-center justify-between px-5">
@@ -141,6 +145,22 @@ function HeaderRow({
             width={24}
             height={24}
             color={inverted ? fixed.white : c.gray[900]}
+          />
+        </Pressable>
+
+        {/* 커뮤니티 — 2026-10-20 하단 탭 자리를 키워드에 주면서 여기로(web 홈 헤더와 같은 자리). */}
+        <Pressable
+          onPress={() => navigation.push(tabStackNavigations.COMMUNITY)}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="커뮤니티"
+          style={pressedOpacity}
+          className="h-9 w-9 items-center justify-center">
+          <BubbleChatIcon
+            width={24}
+            height={24}
+            color={inverted ? fixed.white : c.gray[900]}
+            backdrop={inverted ? invertedBackdrop : undefined}
           />
         </Pressable>
 

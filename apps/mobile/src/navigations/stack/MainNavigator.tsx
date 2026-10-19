@@ -34,6 +34,7 @@ import LikeScreen from '@/screens/mypage/LikeScreen';
 import ThemesScreen from '@/screens/mypage/ThemesScreen';
 import DesignSystemScreen from '@/screens/design-system/DesignSystemScreen';
 import ThemeDetailScreen from '@/screens/mypage/ThemeDetailScreen';
+import CommunityScreen from '@/screens/community/CommunityScreen';
 import CommunityPostScreen from '@/screens/community/CommunityPostScreen';
 import CommunityWriteScreen from '@/screens/community/CommunityWriteScreen';
 import {PendingLoginRestore} from '@/navigations/stack/PendingLoginRestore';
@@ -223,7 +224,11 @@ function MainStackNavigator() {
           component={ThemeDetailScreen}
         />
 
-        {/* ── 커뮤니티 ── 두 화면 모두 헤더를 스스로 결정한다(setOptions). */}
+        {/* ── 커뮤니티 ── 목록은 홈 헤더 말풍선으로 들어온다(2026-10-20 탭에서 내림). 세 화면 모두 헤더를 스스로 그린다. */}
+        <RootStack.Screen
+          name={tabStackNavigations.COMMUNITY}
+          component={CommunityScreen}
+        />
         <RootStack.Screen
           name={tabStackNavigations.COMMUNITY_POST}
           component={CommunityPostScreen}

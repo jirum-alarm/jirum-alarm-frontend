@@ -7,7 +7,7 @@ import HomeScreen from '@/screens/home/HomeScreen';
 import TrendingScreen from '@/screens/trending/TrendingScreen';
 import AlarmScreen from '@/screens/alarm/AlarmScreen';
 import MyPageScreen from '@/screens/mypage/MyPageScreen';
-import CommunityScreen from '@/screens/community/CommunityScreen';
+import KeywordsTabScreen from '@/screens/keyword-hub/KeywordsTabScreen';
 import {
   tabStackNavigations,
   tabNavigations,
@@ -47,7 +47,7 @@ function useSyncNativeTabBarHidden() {
 }
 
 /**
- * 탭 루트 화면. 홈·발견·알림·커뮤니티·내정보 다섯 탭 모두 네이티브가 정본이다
+ * 탭 루트 화면. 홈·발견·키워드·알림·내정보 다섯 탭 모두 네이티브가 정본이다
  * (2026-09-07 feature-flags 삭제 — 되돌릴 땐 플래그가 아니라 해당 커밋을 eas update).
  * ★2026-09-08 로 다섯 탭 전부 네이티브라 TabWebView 폴백은 도달하지 않는다. 그 웹뷰 ref·
  * 주입 경로(WebViewRefProvider·getWebViewRef)는 별도 정리 대상이라 폴백으로 남긴다.
@@ -56,7 +56,7 @@ const NATIVE_TAB_ROOTS: Partial<Record<TabName, React.ComponentType>> = {
   [tabNavigations.HOME]: HomeScreen,
   [tabNavigations.DISCOVER]: TrendingScreen,
   [tabNavigations.ALARM]: AlarmScreen,
-  [tabNavigations.COMMUNITY]: CommunityScreen,
+  [tabNavigations.KEYWORDS]: KeywordsTabScreen,
   [tabNavigations.MYPAGE]: MyPageScreen,
 };
 const webViewTabRoots = new Map<TabName, React.ComponentType>();

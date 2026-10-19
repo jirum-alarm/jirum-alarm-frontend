@@ -4980,6 +4980,7 @@ export type KeywordHubsQuery = {
     recentDealCount: number;
     countCapped: boolean;
     activeDays: number;
+    lastDealAt?: any | null;
     topSources: Array<{
       __typename?: 'KeywordHubSourceOutput';
       name: string;
@@ -6435,6 +6436,7 @@ export const KeywordHubsDocument = new TypedDocumentString(`
     recentDealCount
     countCapped
     activeDays
+    lastDealAt
     topSources {
       name
       share

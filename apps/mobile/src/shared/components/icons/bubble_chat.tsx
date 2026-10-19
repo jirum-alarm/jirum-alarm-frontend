@@ -2,7 +2,8 @@ import Svg, {Path, type SvgProps} from 'react-native-svg';
 
 import {useColors} from '@/shared/theme/useColors';
 
-const BubbleChat = (props: SvgProps) => {
+/** backdrop = 앞 말풍선 속채움. 바탕이 테마와 무관한 자리(홈 상단 어두운 띠)에서 그 바탕색을 넘긴다. */
+const BubbleChat = ({backdrop, ...props}: SvgProps & {backdrop?: string}) => {
   const c = useColors();
   return (
     <Svg width={28} height={28} viewBox="0 0 28 28" fill="none" {...props}>
@@ -14,7 +15,7 @@ const BubbleChat = (props: SvgProps) => {
       />
       {/* 앞 말풍선 속은 바탕색으로 칠해 뒤 말풍선 선을 가린다 — "white" 고정이면 다크에서 흰 덩어리가 된다. */}
       <Path
-        fill={c.white}
+        fill={backdrop ?? c.white}
         stroke="currentColor"
         strokeWidth={1.5}
         strokeLinejoin="round"

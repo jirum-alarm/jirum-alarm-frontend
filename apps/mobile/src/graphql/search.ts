@@ -77,6 +77,7 @@ export const QueryKeywordHubs = graphql(`
       recentDealCount
       countCapped
       activeDays
+      lastDealAt
       topSources {
         name
         share

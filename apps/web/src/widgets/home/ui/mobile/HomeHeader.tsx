@@ -8,6 +8,7 @@ import LogoLink from '@/shared/ui/common/Logo/LogoLink';
 import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
 
 import AlarmLinkButton from '@/widgets/layout/ui/AlarmLinkButton';
+import CommunityLinkButton from '@/widgets/layout/ui/CommunityLinkButton';
 
 const HomeHeader = () => {
   const scrollThreshold = 90;
@@ -37,6 +38,7 @@ const HomeHeader = () => {
         <div className="flex items-center gap-x-5">
           <ColorSchemeButton color="var(--color-gray-900)" />
           <SearchLinkButton color="var(--color-gray-900)" onClick={handleSearchClick} />
+          <CommunityLinkButton color="var(--color-gray-900)" />
           <AlarmLinkButton color="var(--color-gray-900)" />
         </div>
       </header>

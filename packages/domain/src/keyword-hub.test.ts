@@ -11,7 +11,9 @@ const {
   findKeywordHubsForTitle,
   findThemesForHub,
   formatHubCount,
+  isKeywordHubToday,
   keywordHubPath,
+  splitKeywordHubsByRecency,
 } = require('./keyword-hub.ts') as typeof import('./keyword-hub');
 
 const hubs = [
@@ -123,5 +125,29 @@ describe('findThemesForHub', () => {
   it('테마 키워드가 허브 키워드 자체(별칭 포함)일 때만 잇는다', () => {
     assert.deepEqual(findThemesForHub(hubs[0], themes).map((t) => t.id), [2]);
     assert.deepEqual(findThemesForHub(hubs[1], themes), []);
+  });
+});
+
+describe('splitKeywordHubsByRecency', () => {
+  const now = Date.parse('2026-10-20T12:00:00Z');
+  const hours = (h: number) => new Date(now - h * 3_600_000).toISOString();
+
+  it('마지막 딜이 사흘 안이면 live, 아니거나 없으면 quiet — 서버 순서는 그대로', () => {
+    const { live, quiet } = splitKeywordHubsByRecency(
+      [
+        { slug: 'a', lastDealAt: hours(2) },
+        { slug: 'b', lastDealAt: hours(80) },
+        { slug: 'c', lastDealAt: null },
+        { slug: 'd', lastDealAt: hours(71) },
+      ],
+      now,
+    );
+    assert.deepEqual(live.map((h) => h.slug), ['a', 'd']);
+    assert.deepEqual(quiet.map((h) => h.slug), ['b', 'c']);
+  });
+
+  it('하루 안이면 오늘(강조)', () => {
+    assert.equal(isKeywordHubToday(hours(23), now), true);
+    assert.equal(isKeywordHubToday(hours(25), now), false);
   });
 });

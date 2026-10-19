@@ -19,6 +19,7 @@
     "./price-answer-holdout": "./src/price-answer-holdout.ts",
     "./price": "./src/price.ts",
     "./quiet-hours": "./src/quiet-hours.ts",
+    "./relative-time": "./src/relative-time.ts",
     "./toss-time-deal": "./src/toss-time-deal.ts",
     "./package.json": "./package.json"
   },

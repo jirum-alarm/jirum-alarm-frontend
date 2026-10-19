@@ -4,9 +4,7 @@ import { Suspense } from 'react';
 import { checkDevice } from '@/shared/actions/agent';
 import { getAccessToken } from '@/shared/actions/token';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
-import { NAV_TYPE } from '@/shared/config/nav-type';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
-import PageHeader from '@/shared/ui/layout/PageHeader';
 
 import { CommunityHotDeals } from '@/features/community';
 
@@ -48,11 +46,8 @@ export default async function CommunityPage() {
 
   if (isMobile) {
     return (
-      <BasicLayout
-        hasBottomNav
-        navType={NAV_TYPE.COMMUNITY}
-        header={<PageHeader title="커뮤니티" />}
-      >
+      // 하단 탭이 아니다(2026-10-20 탭 자리를 키워드에 줬다) — 홈 헤더 말풍선으로 들어와 뒤로 나간다.
+      <BasicLayout hasBackButton title="커뮤니티">
         <CommunityPageClient isUserLogin={isUserLogin} />
         <CommunityHotDeals />
       </BasicLayout>

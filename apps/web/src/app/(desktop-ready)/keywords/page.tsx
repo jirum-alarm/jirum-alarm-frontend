@@ -1,6 +1,8 @@
+import { isKeywordHubToday, splitKeywordHubsByRecency } from '@jirum/domain/keyword-hub';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
+import { checkDevice } from '@/shared/actions/agent';
 import type { KeywordHub } from '@/shared/api/keyword-hub/keyword-hub.service';
 import { ModelPageService } from '@/shared/api/model-page';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
@@ -17,8 +19,10 @@ import {
 
 import { relativeTimeLabel } from '@/features/deals/lib/model-page-insights';
 
-import DealsMobileHeader from '../deals/[slug]/DealsMobileHeader';
 import { FoldedGrid, SectionTitle, splitByVerdict } from '../deals/DealsSections';
+
+import KeywordsTabHeader from './KeywordsTabHeader';
+import MyKeywordsSection from './MyKeywordsSection';
 
 // /keywords — 지름알림의 「모아보기」 첫 화면(2026-10-17 상단 메뉴 「최저가」 자리). 키워드가 위층이다: 알림을 거는 단위와 같아서
 // 보다가 그 자리에서 알림으로 이어진다. 모델 페이지(/deals/{slug}, 상품별 가격 판정)는 각 키워드 허브 안의 아래층이고,
@@ -50,27 +54,26 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function KeywordHubIndexPage() {
   // 허브는 30일 딜 많은 순(서버 정렬). 모델 페이지 판정이 실패해도 키워드 목록은 그린다 — 이 화면의 본체는 키워드다.
-  const [hubs, pages] = await Promise.all([
+  const [hubs, pages, { isMobile }] = await Promise.all([
     fetchKeywordHubs(),
     ModelPageService.getPublishedModelPages().catch(() => []),
+    checkDevice(),
   ]);
   const { buyNow } = splitByVerdict(pages);
-  // 나눔은 「마지막 딜이 사흘 안」(/deals 의 「최근 핫딜」과 같은 창). activeDealCount(진행 중)는 쓰지 않는다 — 종료 표시가 안 찍힌
-  // 옛 딜이 많아 물티슈 30일 380건 중 344건이 「진행 중」으로 나왔다(2026-10-17 운영). 게시 시각은 틀릴 일이 없다.
+  // 나눔은 「마지막 딜이 사흘 안」 — 규칙은 앱 키워드 탭과 같은 @jirum/domain 한 곳(activeDealCount 를 안 쓰는 이유도 거기).
   // eslint-disable-next-line react-hooks/purity -- 서버 컴포넌트(force-dynamic)라 요청마다 한 번 렌더된다. 「사흘 안」의 기준 시각.
   const now = Date.now();
-  const isRecent = (h: KeywordHub) =>
-    h.lastDealAt != null && now - Date.parse(h.lastDealAt) < RECENT_WINDOW_MS;
-  const live = hubs.filter(isRecent);
-  const quiet = hubs.filter((h) => !isRecent(h));
+  const { live, quiet } = splitKeywordHubsByRecency(hubs, now);
 
   return (
     <main className="max-w-mobile-max pc:max-w-layout-max pc:pt-24 mx-auto w-full px-5 pt-14 pb-24">
-      <DealsMobileHeader title="키워드별 핫딜" />
+      <KeywordsTabHeader />
       <header className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">키워드별 핫딜 모음</h1>
         <p className="mt-1 text-sm text-gray-600">{buildDescription(hubs.length)}</p>
       </header>
+      {/* 하단 탭 「키워드」(2026-10-20) — 내 키워드부터. 계정·키워드는 브라우저가 알아서 클라에서 그린다(이 페이지는 캐시되는 공개 화면). */}
+      <MyKeywordsSection />
 
       {buyNow.length > 0 && (
         <section className="mb-12">
@@ -78,7 +81,10 @@ export default async function KeywordHubIndexPage() {
             title="지금 사기 좋아요"
             description="진행 중인 핫딜이 그동안의 가격보다 싼 상품이에요."
           />
-          <FoldedGrid items={buyNow} visible={BUY_NOW_VISIBLE_HERE} />
+          <FoldedGrid
+            items={buyNow}
+            visible={isMobile ? BUY_NOW_VISIBLE_MOBILE : BUY_NOW_VISIBLE_HERE}
+          />
         </section>
       )}
 
@@ -118,8 +124,8 @@ export default async function KeywordHubIndexPage() {
 
 /** 이 화면의 본체는 키워드라 판정 카드는 PC 한 줄(5열)만 펼친다 — /deals 처럼 10개면 첫 화면이 상품 카드로 다 찼다(2026-10-17). */
 const BUY_NOW_VISIBLE_HERE = 5;
-const RECENT_WINDOW_MS = 3 * 24 * 60 * 60 * 1000;
-const TODAY_MS = 24 * 60 * 60 * 1000;
+/** 폰은 2열이라 5개면 세 줄 — 하단 탭 「키워드」(2026-10-20)를 눌렀는데 첫 화면이 상품 카드로 찬다. 한 줄만 펼친다. */
+const BUY_NOW_VISIBLE_MOBILE = 2;
 
 /** 키워드 한 칸 — 이름·마지막 딜·「30일 N건 · 30일 중 M일 · 주로 X」. 가격은 쓰지 않는다(키워드 안에 다른 상품이 섞인다). */
 function KeywordHubCards({ hubs, now }: { hubs: KeywordHub[]; now: number }) {
@@ -136,7 +142,7 @@ function KeywordHubCards({ hubs, now }: { hubs: KeywordHub[]; now: number }) {
               {h.lastDealAt && (
                 <Badge
                   pill
-                  tone={now - Date.parse(h.lastDealAt) < TODAY_MS ? 'error' : 'gray'}
+                  tone={isKeywordHubToday(h.lastDealAt, now) ? 'error' : 'gray'}
                   className="shrink-0"
                 >
                   {relativeTimeLabel(h.lastDealAt, now)}

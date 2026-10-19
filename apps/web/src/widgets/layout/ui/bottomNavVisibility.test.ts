@@ -19,7 +19,7 @@ const TAB_ROOT_PATHS = [
   '/',
   '/trending/ranking',
   '/trending/live',
-  '/community',
+  '/keywords',
   '/alarm',
   '/mypage',
 ];
@@ -44,8 +44,10 @@ describe('바텀네비 표시 경로 (앱 탭바와 동일 규칙)', () => {
       '/mypage/keyword',
       '/mypage/categories',
       '/mypage/terms-policies',
+      '/community',
       '/community/77',
       '/community/write',
+      '/keywords/%EC%82%BC%EB%8B%A4%EC%88%98',
       '/alarm/settings',
       '/trending',
     ]) {
@@ -61,13 +63,13 @@ describe('바텀네비 표시 경로 (앱 탭바와 동일 규칙)', () => {
 
   it('트레일링 슬래시도 루트로 본다', () => {
     assert.equal(isTabRootPath('/mypage/'), true);
-    assert.equal(isTabRootPath('/community/'), true);
+    assert.equal(isTabRootPath('/keywords/'), true);
     assert.equal(isTabRootPath('/'), true, "'/' 는 빈 문자열로 죽지 않는다");
   });
 
   it('접두사 오탐이 없다', () => {
     assert.equal(isTabRootPath('/mypagex'), false);
-    assert.equal(isTabRootPath('/communityx'), false);
+    assert.equal(isTabRootPath('/keywordsx'), false);
   });
 });
 
@@ -110,12 +112,14 @@ describe('소스 계약', () => {
       'PAGE.HOME',
       'PAGE.TRENDING_RANKING',
       'PAGE.TRENDING_LIVE',
-      'PAGE.COMMUNITY',
+      'PAGE.KEYWORDS',
       'PAGE.ALARM',
       'PAGE.MYPAGE',
     ]) {
       assert.ok(block.includes(token), `${token} 누락`);
     }
+    // 2026-10-20 커뮤니티는 탭이 아니다(홈 헤더 말풍선) — 되살리면 앱 탭바와 갈린다.
+    assert.ok(!block.includes('PAGE.COMMUNITY'), '커뮤니티가 탭 루트로 되돌아왔다');
   });
 
   it('BottomNav 와 root layout 이 같은 목록을 쓴다 — 두 벌로 갈리면 여백과 렌더가 어긋난다', () => {

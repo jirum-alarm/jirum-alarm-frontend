@@ -11,7 +11,7 @@ const TAB_STATE = {
   routeNames: [
     'HomeTab',
     'DiscoverTab',
-    'CommunityTab',
+    'KeywordsTab',
     'AlarmTab',
     'MyPageTab',
   ],
@@ -218,9 +218,9 @@ describe('푸시·딥링크 → 네이티브 화면', () => {
 describe('커뮤니티·내정보 딥링크 (2026-09-08 네이티브 전환)', () => {
   beforeEach(reset);
 
-  it('탭 루트 두 개', () => {
-    expect(navigateToNativeRoute(url('/community'))).toBe(true);
-    expectTabRoot('CommunityTab');
+  it('탭 루트 두 개(키워드는 2026-10-20 커뮤니티 자리)', () => {
+    expect(navigateToNativeRoute(url('/keywords'))).toBe(true);
+    expectTabRoot('KeywordsTab');
     reset();
     expect(navigateToNativeRoute(url('/mypage'))).toBe(true);
     expectTabRoot('MyPageTab');
@@ -231,8 +231,13 @@ describe('커뮤니티·내정보 딥링크 (2026-09-08 네이티브 전환)', (
     expectTabRoot('MyPageTab');
   });
 
+  it('커뮤니티 목록은 탭이 아니라 홈 위에 쌓는 화면이다', () => {
+    expect(navigateToNativeRoute(url('/community'))).toBe(true);
+    expectScreen('HomeTab', 'Community', undefined);
+  });
+
   it('탭 루트로 가는 링크는 dispatch 를 쓰지 않는다', () => {
-    navigateToNativeRoute(url('/community'));
+    navigateToNativeRoute(url('/keywords'));
     expect(mockNavigate).toHaveBeenCalledTimes(1);
     expect(mockDispatch).not.toHaveBeenCalled();
   });
@@ -240,13 +245,13 @@ describe('커뮤니티·내정보 딥링크 (2026-09-08 네이티브 전환)', (
   it('커뮤니티 글 상세는 postId 를 숫자로 넘긴다', () => {
     // 화면 파라미터 타입이 number 다 — 문자열로 넘기면 조회가 빈다.
     expect(navigateToNativeRoute(url('/community/1234'))).toBe(true);
-    expectScreen('CommunityTab', 'CommunityPost', {postId: 1234});
+    expectScreen('HomeTab', 'CommunityPost', {postId: 1234});
   });
 
   it('/community/write 는 글 상세로 오해되지 않는다', () => {
     // 표를 먼저 보므로 `write` 가 id 자리로 들어가지 않는다.
     expect(navigateToNativeRoute(url('/community/write'))).toBe(true);
-    expectScreen('CommunityTab', 'CommunityWrite', {});
+    expectScreen('HomeTab', 'CommunityWrite', {});
   });
 
   it('내정보 하위 7개가 각자 제 화면으로 간다', () => {

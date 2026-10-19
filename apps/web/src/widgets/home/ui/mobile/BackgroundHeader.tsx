@@ -5,6 +5,7 @@ import LogoLink from '@/shared/ui/common/Logo/LogoLink';
 import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
 
 import AlarmLinkButton from '@/widgets/layout/ui/AlarmLinkButton';
+import CommunityLinkButton from '@/widgets/layout/ui/CommunityLinkButton';
 
 import BannerSwiper from './BannerSwiper';
 
@@ -30,6 +31,10 @@ const BackgroundHeader = async () => {
           <div className="flex items-center gap-x-5">
             <ColorSchemeButton color="var(--color-fixed-white)" />
             <SearchLinkButton color="var(--color-fixed-white)" />
+            <CommunityLinkButton
+              color="var(--color-fixed-white)"
+              background="var(--color-fixed-900)"
+            />
             <AlarmLinkButton color="var(--color-fixed-white)" />
           </div>
         </header>

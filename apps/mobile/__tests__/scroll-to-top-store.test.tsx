@@ -35,7 +35,7 @@ function mount(tab: TabName, onScroll: () => void) {
 
 describe('scroll-to-top-store', () => {
   it('등록 안 된 탭은 false — 부른 쪽이 웹뷰 주입으로 폴백해야 한다', () => {
-    expect(scrollTabToTop(tabNavigations.COMMUNITY)).toBe(false);
+    expect(scrollTabToTop(tabNavigations.KEYWORDS)).toBe(false);
   });
 
   it('등록된 탭은 콜백을 실행하고 true', () => {

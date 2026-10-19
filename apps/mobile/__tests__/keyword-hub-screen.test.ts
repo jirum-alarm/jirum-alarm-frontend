@@ -88,7 +88,7 @@ describe('문장 — @jirum/domain 한 곳(웹 허브와 같은 말)', () => {
 
 describe('딥링크 /keywords/{slug} → 네이티브 허브', () => {
   const expected: NativeRoute = {
-    tab: 'HomeTab',
+    tab: 'KeywordsTab',
     screen: tabStackNavigations.KEYWORD_HUB,
     params: {slug: '삼다수'},
   };
@@ -106,10 +106,10 @@ describe('딥링크 /keywords/{slug} → 네이티브 허브', () => {
     expect(resolveNativeRoute('/keywords/%E')?.params).toEqual({slug: '%E'});
   });
 
-  it('목록(/keywords)은 네이티브가 없다 — 푸시·딥링크면 웹뷰로', () => {
-    expect(
-      resolveNativeRoute('/keywords', {allowWebViewRoute: true})?.screen,
-    ).toBe(tabStackNavigations.WEBVIEW);
+  it('목록(/keywords)은 키워드 탭 루트다(2026-10-20) — 웹뷰로 떨어지지 않는다', () => {
+    expect(resolveNativeRoute('/keywords', {allowWebViewRoute: true})).toEqual({
+      tab: 'KeywordsTab',
+    });
   });
 });
 
