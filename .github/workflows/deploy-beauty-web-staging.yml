@@ -25,112 +25,17 @@ permissions:
   id-token: write
 
 jobs:
-  build-and-push:
-    name: Build and Push Docker Image
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    environment:
-      name: staging
-    outputs:
-      image-tag: ${{ steps.deploy-tag.outputs.tag }}
-    env:
-      DOCKER_BUILDKIT: 1
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to Docker Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ secrets.DOCKER_REGISTRY }}
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ secrets.DOCKER_REGISTRY }}/tjsry0466/jirum-alarm-frontend-beauty-web-dev
-          tags: |
-            type=ref,event=branch
-            type=sha,prefix={{branch}}-,format=short
-
-      - name: Resolve deploy tag
-        id: deploy-tag
-        env:
-          META_TAGS: ${{ steps.meta.outputs.tags }}
-        run: |
-          set -euo pipefail
-          # 커밋별 고유 태그를 매니페스트에 박는다 — floating 태그면 ArgoCD 가 rollout 을 못 본다.
-          tag=$(printf '%s\n' "$META_TAGS" | sed 's#.*:##' | grep -E '^main-[0-9a-f]+$' | head -1)
-          if [ -z "$tag" ]; then echo "::error::could not resolve unique deploy tag"; exit 1; fi
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: apps/beauty-web/deploy/development/Dockerfile
-          platforms: linux/amd64
-          # Harbor v2.10 은 buildx provenance 첨부물(attestation)을 index 자식이자 accessory 로 이중 등록해
-          # 보존 정책·삭제가 412(referenced by others)로 막힌다 — 단일 매니페스트로 올린다.
-          provenance: false
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
   deploy:
-    name: Deploy to Kubernetes
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    environment:
-      name: staging
-    steps:
-      - name: Checkout infrastructure repository
-        uses: actions/checkout@v6
-        with:
-          repository: ${{ secrets.INFRA_GITHUB_REPOSITORY }}
-          ref: main
-          ssh-key: ${{ secrets.GITOPS_DEPLOY_KEY }}
-          path: infra
-
-      - name: Install yq
-        run: |
-          set -euo pipefail
-          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_amd64
-          sudo chmod +x /usr/local/bin/yq
-
-      - name: Update Kubernetes manifest
-        working-directory: infra
-        env:
-          NEW_TAG: ${{ needs.build-and-push.outputs.image-tag }}
-        run: |
-          set -euo pipefail
-          KUSTOMIZATION="apps/frontend-beauty-web/overlays/development/kustomization.yaml"
-          IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/tjsry0466/jirum-alarm-frontend-beauty-web"
-          export IMAGE_NAME NEW_TAG
-          yq eval -i '(.images[] | select(.name == strenv(IMAGE_NAME)) | .newTag) = strenv(NEW_TAG)' "$KUSTOMIZATION"
-          yq eval '.' "$KUSTOMIZATION" > /dev/null
-
-      - name: Commit files
-        working-directory: infra
-        run: |
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "github-actions"
-          git add .
-          git diff --staged --quiet || git commit -m "chore(beauty-web-staging): image tag ${{ needs.build-and-push.outputs.image-tag }}"
-          # 여러 앱 배포가 같은 gitops main 에 동시에 민다 — 뒤처지면 거절된다(2026-10-07 v1.47.0 web 이 admin 과 겹쳐 실패).
-          # 따라잡고 다시 민다. 같은 파일을 동시에 고쳐 충돌이면 그때만 실패.
-          for i in 1 2 3 4 5; do
-            if git push origin main; then exit 0; fi
-            git pull --rebase origin main || { git rebase --abort; exit 1; }
-            sleep $((i * 2))
-          done
-          exit 1
+    uses: ./.github/workflows/_deploy-k8s-image.yml
+    secrets: inherit
+    with:
+      environment: staging
+      image: tjsry0466/jirum-alarm-frontend-beauty-web-dev
+      manifest-image: tjsry0466/jirum-alarm-frontend-beauty-web
+      meta-tags: |
+        type=ref,event=branch
+        type=sha,prefix={{branch}}-,format=short
+      tag-pattern: '^main-[0-9a-f]+$'
+      dockerfile: apps/beauty-web/deploy/development/Dockerfile
+      kustomization: apps/frontend-beauty-web/overlays/development/kustomization.yaml
+      commit-label: beauty-web-staging

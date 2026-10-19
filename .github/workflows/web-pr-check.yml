@@ -1,16 +1,24 @@
 name: web-pr-check
 
-# apps/web 을 PR 단계에서 검증한다(타입·테스트·린트). 웹 배포 워크플로는 main push 에서만 돌아서,
+# 웹 계열 앱을 PR 단계에서 검증한다(타입·테스트·린트). 배포 워크플로는 main push 에서만 돌아서,
 # 이게 없으면 PR(Dependabot 보안 PR 포함)이 타입·테스트 검사 없이 머지될 수 있다.
+# - Web check: apps/web (기존 필수 체크 이름 유지)
+# - Apps check: admin·ai·beauty-web·landing 중 base 이후 바뀐(또는 바뀐 패키지에 기대는) 앱만 turbo 로
+#   (mobile 은 mobile-validation, design 은 design-system 워크플로가 본다)
 on:
   pull_request:
     paths:
       - .github/workflows/web-pr-check.yml
       - apps/web/**
+      - apps/admin/**
+      - apps/ai/**
+      - apps/beauty-web/**
+      - apps/landing/**
       - packages/**
       - package.json
       - pnpm-lock.yaml
       - pnpm-workspace.yaml
+      - turbo.json
 
 permissions:
   contents: read
@@ -28,16 +36,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
           run_install: false
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
 
       - name: Install packages
         run: pnpm install --frozen-lockfile
@@ -55,3 +64,44 @@ jobs:
 
       - name: Lint
         run: pnpm --filter web lint:check
+
+  apps-check:
+    name: Apps check (admin·ai·beauty-web·landing)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # turbo 의 [origin/<base>] 비교에 base 이력이 필요하다.
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Next types
+        run: |
+          for app in admin ai beauty-web landing; do
+            (cd "apps/$app" && pnpm exec next typegen)
+          done
+
+      # 바뀐 패키지 + 그것에 기대는 패키지 중 web(위 job)·mobile·design(각자 워크플로) 을 뺀 나머지.
+      - name: Type check · test · lint
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: >-
+          pnpm turbo run check-types test lint:check --continue
+          --filter="...[origin/${BASE_REF}]"
+          --filter=!web --filter=!mobile --filter=!design

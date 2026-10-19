@@ -1,17 +1,37 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "agentGuidance": false,
+  "globalEnv": ["NODE_ENV", "CI"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "env": [
+        "NEXT_PUBLIC_*",
+        "EXPO_PUBLIC_*",
+        "API_URL",
+        "GRAPHQL_ENDPOINT",
+        "SUBSCRIPTIONS_GRAPHQL_ENDPOINT",
+        "CHAT_API_URL",
+        "LANDING_URL",
+        "ANALYZE",
+        "SENTRY_*"
+      ],
+      "outputs": [".next/**", "!.next/cache/**", "theme.css"]
     },
     "check-types": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": ["^check-types"],
+      "outputs": []
     },
     "prettier-fix": {},
-    "lint": {},
-    "test": {},
+    "lint": {
+      "outputs": []
+    },
+    "lint:check": {
+      "outputs": []
+    },
+    "test": {
+      "outputs": []
+    },
     "mobile#verify:contracts": {},
     "mobile#verify:migration": {},
     "verify:mobile": {
