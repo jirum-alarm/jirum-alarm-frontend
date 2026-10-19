@@ -19,6 +19,8 @@ export const SENTRY_IGNORE_ERRORS: (string | RegExp)[] = [
   'Talisman extension',
   'Non-Error promise rejection captured with value: undefined',
   /Blocked a frame with origin/,
+  'Failed to connect to MetaMask', // 지갑 확장
+  /adsbygoogle\.push\(\) error/, // 애드센스가 같은 슬롯을 두 번 채우려 할 때 — 광고만 빠지고 화면은 정상
 ];
 
 // 맨 위 스택 프레임 주소가 이 중 하나면 버린다(우리 코드가 아닌 스크립트의 에러).

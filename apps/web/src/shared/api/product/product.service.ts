@@ -80,6 +80,9 @@ export type LiveAlternativeDeal = {
   product: ProductListResult['products'][number];
 };
 
+// crawling-server ProductsArgs.keyword @MaxLength(100)
+const KEYWORD_MAX_LENGTH = 100;
+
 export class ProductService {
   static async getProduct(variables: ProductQueryVariables) {
     return execute(QueryProduct, variables).then((res) => res.data);
@@ -111,7 +114,9 @@ export class ProductService {
   }
 
   static async getProducts(variables: ProductListQueryVariables, opts?: ExecuteOptions) {
-    return execute(QueryProducts, variables, opts).then((res) => res.data);
+    // 서버가 keyword 100자 초과를 BAD_REQUEST 로 거절해 상세 렌더가 통째로 실패했다(Sentry 2026-10, 1천여 건).
+    const keyword = variables.keyword?.trim().slice(0, KEYWORD_MAX_LENGTH) || undefined;
+    return execute(QueryProducts, { ...variables, keyword }, opts).then((res) => res.data);
   }
 
   static async getHotDealProductsRandom(

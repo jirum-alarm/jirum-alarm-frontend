@@ -1,7 +1,6 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {
   FlatList,
-  Platform,
   RefreshControl,
   View,
   type ListRenderItemInfo,
@@ -233,7 +232,7 @@ export default function RankingList({
       initialNumToRender={ROWS_PER_BATCH}
       maxToRenderPerBatch={ROWS_PER_BATCH}
       windowSize={GRID_WINDOW_SIZE}
-      removeClippedSubviews={Platform.OS === 'android'}
+      // removeClippedSubviews 는 쓰지 않는다 — Android Fabric 에서 잘라낸 뷰를 다시 붙이다 addViewAt IllegalStateException 으로 앱이 죽었다(Sentry 2026-10, 1.4.7).
       viewabilityConfig={VIEWABILITY_CONFIG}
       onViewableItemsChanged={handleViewableItemsChanged}
       refreshControl={
