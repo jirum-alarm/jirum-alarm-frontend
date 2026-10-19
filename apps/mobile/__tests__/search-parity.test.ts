@@ -90,7 +90,11 @@ const webEndedRescue = web('widgets/search/ui/EndedDealsRescue.tsx');
 const webRegisterSource = web('features/mypage/model/update-keyword.ts');
 const appEndedRescue = read('src/screens/search/ui/EndedDealsRescue.tsx');
 const appRegisterSource = read('src/shared/lib/analytics/keyword-tracking.ts');
-const webCardTracking = web('entities/product-list/model/card-tracking.ts');
+// 진입 경로 유니온은 web·앱 공용 @jirum/domain/card-tracking 이 정본이다.
+const webCardTracking = fs.readFileSync(
+  path.join(__dirname, '../../../packages/domain/src/card-tracking.ts'),
+  'utf8',
+);
 
 /** `[...]` 안의 따옴표 문자열을 순서대로 뽑는다. */
 function stringsInArray(source: string, marker: string): string[] {
