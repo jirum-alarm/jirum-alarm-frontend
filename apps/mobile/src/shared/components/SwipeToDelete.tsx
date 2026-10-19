@@ -1,5 +1,6 @@
 import React from 'react';
-import {Pressable, View} from 'react-native';
+import {View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -36,17 +37,16 @@ export default function SwipeToDelete({
       onSwipeableWillOpen={tick}
       renderRightActions={(_progress, _translation, methods) => (
         <View className={cn('bg-error-500 justify-center', actionClassName)}>
-          <Pressable
+          <PressableOpacity
             onPress={() => {
               methods.close();
               onDelete();
             }}
             accessibilityRole="button"
             accessibilityLabel={accessibilityLabel}
-            className="h-full justify-center px-6"
-            style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+            className="h-full justify-center px-6">
             <Text className="text-sm font-semibold text-fixed-white">삭제</Text>
-          </Pressable>
+          </PressableOpacity>
         </View>
       )}>
       {children}

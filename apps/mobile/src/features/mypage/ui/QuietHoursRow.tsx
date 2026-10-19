@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {FlatList, Pressable, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import BottomSheet from '@/shared/components/BottomSheet';
@@ -112,7 +113,7 @@ export default function QuietHoursRow({
               const isBlocked =
                 hour === (editing === 'start' ? quiet.end : quiet.start);
               return (
-                <Pressable
+                <PressableOpacity
                   disabled={isBlocked}
                   onPress={() => {
                     save({...quiet, [editing]: hour});
@@ -124,7 +125,6 @@ export default function QuietHoursRow({
                     disabled: isBlocked,
                   }}
                   accessibilityLabel={formatHour(hour)}
-                  style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}
                   className="h-12 justify-center px-5">
                   <Text
                     className={
@@ -137,7 +137,7 @@ export default function QuietHoursRow({
                     }>
                     {formatHour(hour)}
                   </Text>
-                </Pressable>
+                </PressableOpacity>
               );
             }}
           />
@@ -157,15 +157,14 @@ function HourButton({
   onPress: () => void;
 }) {
   return (
-    <Pressable
+    <PressableOpacity
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`방해금지 ${label} 시각, ${formatHour(hour)}`}
-      style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}
       className="h-10 flex-1 flex-row items-center justify-between rounded-md border border-gray-300 bg-white px-3">
       <Text className="text-base text-gray-900">{formatHour(hour)}</Text>
       <ArrowRight width={16} height={16} />
-    </Pressable>
+    </PressableOpacity>
   );
 }
 

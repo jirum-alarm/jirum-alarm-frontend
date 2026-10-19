@@ -1,6 +1,6 @@
 import {prefetchProductDetail} from '@/entities/product/prefetch-detail';
 import React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import XSmall from '@/shared/components/icons/XSmall';
@@ -96,11 +96,10 @@ const AlarmItem = React.memo(function AlarmItem({
           // web: 읽은 알림은 opacity-60
           readAt && 'opacity-60',
         )}>
-        <Pressable
+        <PressableOpacity
           // ★행은 화면 폭을 꽉 채우므로 카드처럼 scale 을 주면 어색하다
-          // (PressableScale 은 카드용). 대신 눌린 동안 옅은 배경을 깐다 —
+          // (PressableScale 은 카드용). 대신 눌린 동안 흐려진다(press.dim) —
           // 목록 행의 관행이고, 배경 강조(bg-primary-50)와도 겹치지 않는다.
-          style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
           className="w-full flex-row p-5 pr-14"
           android_ripple={{color: c.gray[100]}}
           // 편집모드에서는 상세로 가지 않는다(web 이 preventDefault 하는 자리).
@@ -140,7 +139,7 @@ const AlarmItem = React.memo(function AlarmItem({
               관심사 → 구독 해제, 좋은 딜 → 알림 설정).
               행 전체(상세 이동) 안에 둔 Pressable 이라 여기를 누르면 이쪽만 반응한다. */}
             {sourceKey && label ? (
-              <Pressable
+              <PressableOpacity
                 onPress={() => {
                   if (!isEditMode) onPressSource?.(sourceKey);
                 }}
@@ -149,12 +148,11 @@ const AlarmItem = React.memo(function AlarmItem({
                 hitSlop={{top: 12, bottom: 0, left: 8, right: 24}}
                 accessibilityRole="button"
                 accessibilityLabel={label}
-                className="-mt-1 self-start py-1"
-                style={({pressed}) => (pressed ? {opacity: 0.6} : null)}>
+                className="-mt-1 self-start py-1">
                 <Text className="text-xs text-gray-500" numberOfLines={1}>
                   {`${label} ›`}
                 </Text>
-              </Pressable>
+              </PressableOpacity>
             ) : null}
             {/* 상품 없는 알림(댓글 답글·좋아요)은 본문만으론 무슨 알림인지 모른다 — 제목을 같이. */}
             {productId == null && title ? (
@@ -190,7 +188,7 @@ const AlarmItem = React.memo(function AlarmItem({
               </Text>
             </View>
           </View>
-        </Pressable>
+        </PressableOpacity>
         {isEditMode ? (
           <PressableOpacity
             accessibilityRole="button"

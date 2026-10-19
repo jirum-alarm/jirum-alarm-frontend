@@ -128,13 +128,12 @@ export default function KeywordItem({
       actionClassName="ml-2 rounded-xl">
       <View className="rounded-xl border border-gray-200 bg-white">
         <View className="flex-row items-center">
-          <Pressable
+          <PressableOpacity
             onPress={toggle}
             accessibilityRole="button"
             accessibilityState={{expanded: open}}
             accessibilityLabel={`${keyword.keyword} 알림 설정`}
-            className="min-w-0 flex-1 py-3.5 pl-4"
-            style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+            className="min-w-0 flex-1 py-3.5 pl-4">
             <Text
               className="text-sm font-semibold text-gray-900"
               numberOfLines={1}>
@@ -154,7 +153,7 @@ export default function KeywordItem({
                 {described.text}
               </Text>
             ) : null}
-          </Pressable>
+          </PressableOpacity>
           {onOpenHub ? (
             <Pressable
               onPress={onOpenHub}
@@ -211,17 +210,16 @@ export default function KeywordItem({
                 </View>
               </View>
             ) : null}
-            <Pressable
+            <PressableOpacity
               onPress={onOpenDeals}
               accessibilityRole="link"
               accessibilityLabel={`${keyword.keyword} 지금 올라온 딜 보기`}
-              className="flex-row items-center justify-between rounded-lg bg-gray-50 px-3 py-2.5"
-              style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+              className="flex-row items-center justify-between rounded-lg bg-gray-50 px-3 py-2.5">
               <Text className="text-sm text-gray-900" numberOfLines={1}>
                 {`‘${keyword.keyword}’ 지금 올라온 딜 보기`}
               </Text>
               <Text className="text-sm text-gray-500">›</Text>
-            </Pressable>
+            </PressableOpacity>
             <View className="gap-2">
               <Text className="mb-1 text-sm font-semibold text-gray-900">
                 어떤 딜을 알려드릴까요?
@@ -321,14 +319,13 @@ export default function KeywordItem({
             </View>
 
             <View className="flex-row items-center gap-2">
-              <Pressable
+              <PressableOpacity
                 onPress={onDelete}
                 accessibilityRole="button"
                 accessibilityLabel={`${keyword.keyword} 키워드 삭제`}
-                className="h-11 justify-center px-3"
-                style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+                className="h-11 justify-center px-3">
                 <Text className="text-sm text-gray-500">키워드 삭제</Text>
-              </Pressable>
+              </PressableOpacity>
               <View className="flex-1">
                 <Button
                   size="md"
@@ -352,15 +349,14 @@ export function PriceKeyboardAccessory() {
   return (
     <InputAccessoryView nativeID={PRICE_ACCESSORY_ID}>
       <View className="flex-row justify-end border-t border-gray-200 bg-gray-50 px-4">
-        <Pressable
+        <PressableOpacity
           onPress={Keyboard.dismiss}
           accessibilityRole="button"
           accessibilityLabel="키보드 닫기"
           hitSlop={8}
-          className="py-2.5"
-          style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+          className="py-2.5">
           <Text className="text-base font-semibold text-gray-900">완료</Text>
-        </Pressable>
+        </PressableOpacity>
       </View>
     </InputAccessoryView>
   );

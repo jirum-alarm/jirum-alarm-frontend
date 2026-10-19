@@ -1,5 +1,6 @@
 import React, {useMemo} from 'react';
-import {Pressable, View} from 'react-native';
+import {View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import SectionHeader from '@/shared/components/ui/SectionHeader';
@@ -36,15 +37,14 @@ export default function RecommendedKeywords({
       <SectionHeader className="h-11" title="추천 검색어" />
       <View className="flex-row flex-wrap gap-2 px-5">
         {keywords.map(keyword => (
-          <Pressable
+          <PressableOpacity
             key={keyword}
             onPress={() => onSelect(keyword)}
             accessibilityRole="button"
             accessibilityLabel={keyword}
-            className="rounded-full bg-gray-50 px-3 py-2"
-            style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+            className="rounded-full bg-gray-50 px-3 py-2">
             <Text className="text-sm text-gray-900">{keyword}</Text>
-          </Pressable>
+          </PressableOpacity>
         ))}
       </View>
     </View>

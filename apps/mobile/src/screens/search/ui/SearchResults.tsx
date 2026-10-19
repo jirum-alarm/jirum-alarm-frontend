@@ -1,6 +1,7 @@
 import {emptyText} from '@jirum/design-system/recipes';
 import React, {useCallback, useMemo, useRef} from 'react';
-import {ActivityIndicator, Pressable, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useInfiniteQuery, useQueryClient} from '@tanstack/react-query';
 
@@ -189,16 +190,15 @@ export default function SearchResults({
             가로지르는 띠가 되고(NoAlerts 에서 겪은 함정), 회색 테두리 색도
             variant 에 없다. web 도 이 자리엔 raw button 을 쓴다.
           */}
-              <Pressable
+              <PressableOpacity
                 onPress={resetFilters}
                 accessibilityRole="button"
                 accessibilityLabel="필터 초기화"
-                className="self-center rounded-full border border-gray-300 px-4 py-2"
-                style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+                className="self-center rounded-full border border-gray-300 px-4 py-2">
                 <Text className="text-sm font-semibold text-gray-700">
                   필터 초기화
                 </Text>
-              </Pressable>
+              </PressableOpacity>
             </View>
           ) : (
             <SearchNotFound

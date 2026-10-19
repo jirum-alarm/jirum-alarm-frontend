@@ -1,11 +1,6 @@
 import React, {useState} from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {ActivityIndicator, ScrollView, StyleSheet, View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useQuery} from '@tanstack/react-query';
@@ -104,23 +99,21 @@ export default function AccountScreen({navigation}: Props) {
               */}
               <View className="justify-end pt-10" style={styles.grow}>
                 <View className="w-full flex-row items-center justify-center">
-                  <Pressable
+                  <PressableOpacity
                     onPress={() => setDialog('logout')}
                     accessibilityRole="button"
                     accessibilityLabel="로그아웃"
-                    style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}
                     className="rounded-lg px-6 py-3">
                     <Text className="text-13 text-gray-500">로그아웃</Text>
-                  </Pressable>
+                  </PressableOpacity>
                   <View className="bg-gray-200" style={styles.divider} />
-                  <Pressable
+                  <PressableOpacity
                     onPress={() => setDialog('withdraw')}
                     accessibilityRole="button"
                     accessibilityLabel="회원탈퇴"
-                    style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}
                     className="rounded-lg px-6 py-3">
                     <Text className="text-13 text-gray-500">회원탈퇴</Text>
-                  </Pressable>
+                  </PressableOpacity>
                 </View>
               </View>
             </View>

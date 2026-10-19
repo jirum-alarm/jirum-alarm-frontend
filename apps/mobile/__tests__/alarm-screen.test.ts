@@ -265,7 +265,8 @@ describe('터치 인터랙션 — web whileTap 대응', () => {
   });
 
   it('★행은 scale 이 아니라 눌림 하이라이트(폭이 화면 전체라 축소가 어색)', () => {
-    expect(alarmItem).toMatch(/pressed \? \{opacity: 0\.6\} : null/);
+    // 흐려짐은 PressableOpacity(press.dim) — 함수형 style 은 className 옆에서 NativeWind 가 버린다.
+    expect(alarmItem).toMatch(/<PressableOpacity[\s\S]{0,400}android_ripple/);
     expect(alarmItem).toContain('android_ripple');
   });
 

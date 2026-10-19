@@ -5,10 +5,10 @@ import {
   BackHandler,
   Linking,
   Platform,
-  Pressable,
   ToastAndroid,
   View,
 } from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import WebView from 'react-native-webview';
 import type {
   ShouldStartLoadRequest,
@@ -227,29 +227,27 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
         <View
           className="flex-row items-center gap-x-1"
           style={{height: HEADER_HEIGHT}}>
-          <Pressable
+          <PressableOpacity
             onPress={close}
             hitSlop={8}
             className="h-11 flex-row items-center gap-x-0.5 pr-1"
             accessibilityRole="button"
-            accessibilityLabel="지름알림으로 돌아가기"
-            style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+            accessibilityLabel="지름알림으로 돌아가기">
             <Close />
             {/* X 만으론 «쇼핑몰을 닫고 지름알림으로 간다»가 안 읽혀서 이름을 붙인다. */}
             <Text className="text-sm font-semibold text-gray-900">
               지름알림
             </Text>
-          </Pressable>
+          </PressableOpacity>
           {canGoBack ? (
-            <Pressable
+            <PressableOpacity
               onPress={() => webviewRef.current?.goBack()}
               hitSlop={8}
               className="size-11 items-center justify-center"
               accessibilityRole="button"
-              accessibilityLabel="이전 페이지"
-              style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+              accessibilityLabel="이전 페이지">
               <CaretLeft width={24} height={24} />
-            </Pressable>
+            </PressableOpacity>
           ) : null}
           <View className="flex-1 px-1">
             <Text
@@ -264,15 +262,14 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
             ) : null}
           </View>
           {/* 쇼핑몰 로그인이 남아 있는 기본 브라우저에서 이어 사고 싶은 사람을 위해. */}
-          <Pressable
+          <PressableOpacity
             onPress={() => Linking.openURL(currentUrl).catch(() => {})}
             hitSlop={8}
             className="h-11 items-center justify-center px-2"
             accessibilityRole="button"
-            accessibilityLabel="브라우저로 열기"
-            style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+            accessibilityLabel="브라우저로 열기">
             <Text className="text-sm text-gray-600">브라우저</Text>
-          </Pressable>
+          </PressableOpacity>
         </View>
         {progress > 0 && progress < 1 ? (
           <View className="absolute bottom-0 left-0 right-0 h-0.5">
@@ -324,16 +321,15 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
                     : '쇼핑몰 앱에서 열었어요'}
                 </Text>
                 {/* 앱이 안 떴거나 여기서 보고 싶은 사람 — 가림막만 걷는다. */}
-                <Pressable
+                <PressableOpacity
                   onPress={() => setCover(null)}
                   hitSlop={8}
                   className="h-11 justify-center px-3"
-                  accessibilityRole="button"
-                  style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+                  accessibilityRole="button">
                   <Text className="text-sm text-gray-600 underline">
                     여기서 계속 보기
                   </Text>
-                </Pressable>
+                </PressableOpacity>
               </>
             )}
           </View>

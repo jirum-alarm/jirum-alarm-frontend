@@ -1,5 +1,6 @@
 import React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import Thumbnail from '@/shared/components/product/Thumbnail';
@@ -36,11 +37,10 @@ export default function CommunityPostCard({
   const view = getPostCardView(post);
 
   return (
-    <Pressable
+    <PressableOpacity
       onPress={() => onPress(Number(post.id))}
       accessibilityRole="button"
       accessibilityLabel={post.title ?? view.displayContent}
-      style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
       android_ripple={{color: c.gray[100]}}
       className="w-full flex-row border-b border-gray-100 bg-white px-5 py-4"
       // gap-x-3
@@ -121,7 +121,7 @@ export default function CommunityPostCard({
           ) : null}
         </View>
       ) : null}
-    </Pressable>
+    </PressableOpacity>
   );
 }
 

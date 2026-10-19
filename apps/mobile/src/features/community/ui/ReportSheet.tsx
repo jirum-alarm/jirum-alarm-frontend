@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text, TextInput} from '@/shared/components/ui/Text/AppText';
 import {useMutation} from '@tanstack/react-query';
 
@@ -67,13 +68,12 @@ export default function ReportSheet({
           {REPORT_REASONS.map(item => {
             const selected = reason === item.value;
             return (
-              <Pressable
+              <PressableOpacity
                 key={item.value}
                 onPress={() => setReason(item.value)}
                 accessibilityRole="radio"
                 accessibilityState={{selected}}
                 accessibilityLabel={item.label}
-                style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
                 className="flex-row items-center py-1">
                 <View
                   className={cn(
@@ -87,7 +87,7 @@ export default function ReportSheet({
                   ) : null}
                 </View>
                 <Text className="pl-3 text-sm text-gray-800">{item.label}</Text>
-              </Pressable>
+              </PressableOpacity>
             );
           })}
         </View>

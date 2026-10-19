@@ -1,5 +1,6 @@
 import React, {useMemo, useState} from 'react';
-import {FlatList, Pressable, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import BottomSheet from '@/shared/components/BottomSheet';
@@ -28,11 +29,10 @@ export default function BirthYearSelect({
   return (
     <View>
       <Text className="pb-2 text-sm text-gray-500">출생 연도</Text>
-      <Pressable
+      <PressableOpacity
         onPress={() => setOpen(true)}
         accessibilityRole="button"
         accessibilityLabel="출생 연도 선택"
-        style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}
         className="flex-row items-center justify-between border-b border-b-gray-400 px-2 py-2.5">
         <Text
           className={
@@ -42,7 +42,7 @@ export default function BirthYearSelect({
         </Text>
         {/* 아래쪽을 가리키는 아이콘이 없어 오른쪽 화살표를 쓴다(행 이동과 같은 신호). */}
         <ArrowRight width={20} height={20} />
-      </Pressable>
+      </PressableOpacity>
 
       <BottomSheet
         visible={open}
@@ -60,7 +60,7 @@ export default function BirthYearSelect({
           renderItem={({item}) => {
             const isSelected = item.value === (value ?? null);
             return (
-              <Pressable
+              <PressableOpacity
                 onPress={() => {
                   onChange(item.value);
                   setOpen(false);
@@ -68,7 +68,6 @@ export default function BirthYearSelect({
                 accessibilityRole="button"
                 accessibilityState={{selected: isSelected}}
                 accessibilityLabel={item.text}
-                style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}
                 className="px-5 py-3">
                 <Text
                   className={
@@ -78,7 +77,7 @@ export default function BirthYearSelect({
                   }>
                   {item.text}
                 </Text>
-              </Pressable>
+              </PressableOpacity>
             );
           }}
         />

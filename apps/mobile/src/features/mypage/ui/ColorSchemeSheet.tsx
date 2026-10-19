@@ -1,5 +1,6 @@
 import React from 'react';
-import {Pressable, View} from 'react-native';
+import {View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import Svg, {Path} from 'react-native-svg';
 
 import BottomSheet from '@/shared/components/BottomSheet';
@@ -36,7 +37,7 @@ export default function ColorSchemeSheet({
         {OPTIONS.map(option => {
           const selected = option === value;
           return (
-            <Pressable
+            <PressableOpacity
               key={option}
               onPress={() => {
                 tick();
@@ -47,7 +48,6 @@ export default function ColorSchemeSheet({
               accessibilityState={{selected}}
               accessibilityLabel={COLOR_SCHEME_LABEL[option]}
               android_ripple={{color: c.gray[100]}}
-              style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}
               className="h-14 flex-row items-center justify-between">
               <Text
                 className={
@@ -68,7 +68,7 @@ export default function ColorSchemeSheet({
                   />
                 </Svg>
               ) : null}
-            </Pressable>
+            </PressableOpacity>
           );
         })}
         <Text className="pt-1 text-xs text-gray-500">

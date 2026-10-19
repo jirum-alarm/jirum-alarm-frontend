@@ -1,5 +1,6 @@
 import React from 'react';
 import {Pressable, View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import {parsePostContent} from '@/entities/community';
@@ -112,7 +113,7 @@ export default function CommunityPostBody({
           viewCount={post.viewCount}
           size="md"
         />
-        <Pressable
+        <PressableOpacity
           onPress={() => {
             tick();
             onPressLike();
@@ -121,7 +122,6 @@ export default function CommunityPostBody({
           accessibilityLabel={`추천 ${post.likeCount ?? 0}`}
           accessibilityState={{selected: !!post.isMyLike}}
           hitSlop={8}
-          style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
           className={cn(
             'flex-row items-center rounded-full border px-4 py-1.5',
             post.isMyLike
@@ -137,7 +137,7 @@ export default function CommunityPostBody({
             )}>
             추천
           </Text>
-        </Pressable>
+        </PressableOpacity>
       </View>
     </View>
   );

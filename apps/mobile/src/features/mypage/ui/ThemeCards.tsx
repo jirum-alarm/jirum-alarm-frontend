@@ -1,5 +1,6 @@
 import React from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import type {ThemeWithKeywords} from '@/shared/api/theme';
@@ -28,11 +29,10 @@ export function ThemeCard({
   onToggleSubscribe: () => void;
 }) {
   return (
-    <Pressable
+    <PressableOpacity
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={theme.name}
-      style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}
       className="rounded-2xl border border-gray-200 p-4">
       <View className="flex-row items-start justify-between">
         <View className="min-w-0" style={styles.grow}>
@@ -97,7 +97,7 @@ export function ThemeCard({
           ))}
         </View>
       ) : null}
-    </Pressable>
+    </PressableOpacity>
   );
 }
 

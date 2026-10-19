@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text, TextInput} from '@/shared/components/ui/Text/AppText';
 
 import Dots from '@/shared/components/icons/Dots';
@@ -67,27 +68,25 @@ export default function CommunityCommentItem({
           accessibilityLabel="댓글 수정"
         />
         <View className="flex-row justify-end" style={gaps.g8}>
-          <Pressable
+          <PressableOpacity
             onPress={onCancelEdit}
             accessibilityRole="button"
             // h-8(32px)이라 44pt 권장 터치 영역에 모자라 위아래로 넓힌다.
             hitSlop={6}
-            style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
             className="h-8 justify-center rounded-lg bg-gray-100 px-4">
             <Text className="text-sm font-medium text-gray-700">취소</Text>
-          </Pressable>
-          <Pressable
+          </PressableOpacity>
+          <PressableOpacity
             onPress={() => onSubmitEdit(draft.trim())}
             disabled={!draft.trim() || isUpdating}
             accessibilityRole="button"
             hitSlop={6}
-            style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
             className={cn(
               'h-8 justify-center rounded-lg px-4',
               !draft.trim() || isUpdating ? 'bg-gray-400' : 'bg-gray-800',
             )}>
             <Text className="text-sm font-semibold text-white">수정</Text>
-          </Pressable>
+          </PressableOpacity>
         </View>
       </View>
     );
@@ -118,7 +117,7 @@ export default function CommunityCommentItem({
       <Text className="pt-1 text-sm text-gray-900">{comment.content}</Text>
 
       <View className="flex-row items-center pt-2">
-        <Pressable
+        <PressableOpacity
           onPress={() => {
             tick();
             onLike();
@@ -126,7 +125,6 @@ export default function CommunityCommentItem({
           accessibilityRole="button"
           accessibilityLabel={`좋아요 ${comment.likeCount ?? 0}`}
           accessibilityState={{selected: !!comment.isMyLike}}
-          style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
           className="flex-row items-center"
           hitSlop={6}>
           <ThumbsupFill width={14} height={14} active={!!comment.isMyLike} />
@@ -137,7 +135,7 @@ export default function CommunityCommentItem({
             )}>
             좋아요 {comment.likeCount}
           </Text>
-        </Pressable>
+        </PressableOpacity>
       </View>
 
       <BottomSheet

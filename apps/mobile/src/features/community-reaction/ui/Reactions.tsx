@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Pressable, View} from 'react-native';
+import {View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import type {ProductCommentSummary} from '@/shared/api/gql/graphql';
@@ -65,16 +66,15 @@ export default function Reactions({
         );
       })}
       {hiddenCount > 0 ? (
-        <Pressable
+        <PressableOpacity
           onPress={() => setExpanded(true)}
           hitSlop={8}
           accessibilityRole="button"
-          className="self-start"
-          style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+          className="self-start">
           <Text className="text-sm font-medium text-gray-600">
             요약 {hiddenCount}개 더 보기
           </Text>
-        </Pressable>
+        </PressableOpacity>
       ) : null}
     </View>
   );

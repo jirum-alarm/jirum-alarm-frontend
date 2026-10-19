@@ -1,5 +1,6 @@
 import React, {forwardRef} from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {TextInput} from '@/shared/components/ui/Text/AppText';
 
 import CaretLeft from '@/shared/components/icons/caret_left';
@@ -89,15 +90,14 @@ const SearchHeader = forwardRef<
             accessibilityLabel="검색어 입력"
           />
           {value.length > 0 ? (
-            <Pressable
+            <PressableOpacity
               onPress={onClear}
               hitSlop={8}
               accessibilityRole="button"
               accessibilityLabel="입력 지우기"
-              className="px-2"
-              style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+              className="px-2">
               <CircleX width={24} height={24} />
-            </Pressable>
+            </PressableOpacity>
           ) : null}
         </View>
       </View>

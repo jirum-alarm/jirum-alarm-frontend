@@ -406,11 +406,10 @@ function AppButton({
   children: React.ReactNode;
 }) {
   return (
-    <Pressable
+    <PressableOpacity
       onPress={onPress}
       disabled={disabled}
       className="flex-1 items-center"
-      style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}
       accessibilityRole="button"
       accessibilityLabel={a11y}>
       <View
@@ -423,7 +422,7 @@ function AppButton({
         numberOfLines={1}>
         {label}
       </Text>
-    </Pressable>
+    </PressableOpacity>
   );
 }
 

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Pressable, View} from 'react-native';
+import {View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text, TextInput} from '@/shared/components/ui/Text/AppText';
 
 import {cn} from '@/shared/lib/styling';
@@ -52,18 +53,17 @@ export default function CommunityCommentInput({
         style={{minHeight: 40, maxHeight: MAX_INPUT_HEIGHT}}
         accessibilityLabel="댓글 입력"
       />
-      <Pressable
+      <PressableOpacity
         onPress={submit}
         disabled={!canSubmit}
         accessibilityRole="button"
         accessibilityLabel="댓글 등록"
-        style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
         className={cn(
           'ml-3 h-10 justify-center rounded-lg px-5',
           canSubmit ? 'bg-gray-800' : 'bg-gray-400',
         )}>
         <Text className="text-sm font-semibold text-white">등록</Text>
-      </Pressable>
+      </PressableOpacity>
     </View>
   );
 }

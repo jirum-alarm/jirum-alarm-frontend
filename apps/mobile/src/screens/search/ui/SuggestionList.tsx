@@ -1,5 +1,6 @@
 import React from 'react';
-import {Pressable, ScrollView, StyleSheet} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import SearchIcon from '@/shared/components/icons/search';
@@ -38,15 +39,12 @@ export default function SuggestionList({
       style={styles.wrap}
       keyboardShouldPersistTaps="handled">
       {suggestions.map((suggestion, index) => (
-        <Pressable
+        <PressableOpacity
           key={`${suggestion}-${index}`}
           onPress={() => onSelect(suggestion)}
           accessibilityRole="button"
           accessibilityLabel={suggestion}
-          className="flex-row items-center gap-2 px-5 py-3"
-          style={({pressed}) => ({
-            backgroundColor: pressed ? c.gray[50] : c.white,
-          })}>
+          className="flex-row items-center gap-2 px-5 py-3">
           <SearchIcon width={18} height={18} color={c.gray[400]} />
           <Text className="text-sm text-gray-700" numberOfLines={1}>
             {splitByPrefix(suggestion, highlight).map((part, i) => (
@@ -59,7 +57,7 @@ export default function SuggestionList({
               </Text>
             ))}
           </Text>
-        </Pressable>
+        </PressableOpacity>
       ))}
     </ScrollView>
   );

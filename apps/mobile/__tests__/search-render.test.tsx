@@ -224,6 +224,8 @@ describe('추천 검색어', () => {
       node =>
         typeof node.props?.onPress === 'function' &&
         [...mockHubNames, '에어컨'].includes(node.props?.accessibilityLabel),
+      // 칩(PressableOpacity)과 그 안의 Pressable 이 같은 props 를 들어 겉만 센다.
+      {deep: false},
     );
 
   it('허브 목록에서 30일 딜 5건+ 인 것만 5개 그린다', async () => {

@@ -1,5 +1,6 @@
 import React from 'react';
-import {Pressable} from 'react-native';
+import {} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useColors} from '@/shared/theme/useColors';
 
@@ -18,12 +19,11 @@ export default function SheetMenuRow({
 }) {
   const c = useColors();
   return (
-    <Pressable
+    <PressableOpacity
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={label}
       android_ripple={{color: c.gray[100]}}
-      style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
       className="h-14 items-center justify-center">
       <Text
         className={
@@ -33,6 +33,6 @@ export default function SheetMenuRow({
         }>
         {label}
       </Text>
-    </Pressable>
+    </PressableOpacity>
   );
 }

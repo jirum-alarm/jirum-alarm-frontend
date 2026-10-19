@@ -1,5 +1,6 @@
 import React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {listRow} from '@jirum/design-system/recipes';
 import {cn} from '@/shared/lib/styling/className';
@@ -26,15 +27,14 @@ function Row({
 }) {
   const c = useColors();
   return (
-    <Pressable
+    <PressableOpacity
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       android_ripple={{color: c.gray[100]}}
-      style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}
       className={className}>
       {children}
-    </Pressable>
+    </PressableOpacity>
   );
 }
 

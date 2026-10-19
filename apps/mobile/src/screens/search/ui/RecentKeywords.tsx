@@ -1,6 +1,7 @@
 import {keywordChip} from '@jirum/design-system/recipes';
 import React from 'react';
 import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import XSmall from '@/shared/components/icons/XSmall';
@@ -65,15 +66,14 @@ export default function RecentKeywords({
         style={styles.strip}
         contentContainerStyle={styles.stripContent}>
         {keywords.map(keyword => (
-          <Pressable
+          <PressableOpacity
             key={keyword}
             onPress={() => onSelect(keyword)}
             accessibilityRole="button"
             accessibilityLabel={keyword}
             // ★높이는 className 으로 — 함수형 style 의 height 는 NativeWind 가 떨궈
             // 칩이 글자 높이(≈21pt)로 납작해졌다. h-9 = 바로 아래 추천 검색어 칩(py-2 + text-sm)과 같은 36pt.
-            className={cn('flex-row items-center gap-x-1', keywordChip.box)}
-            style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+            className={cn('flex-row items-center gap-x-1', keywordChip.box)}>
             <Text className={keywordChip.text} numberOfLines={1}>
               {keyword.slice(0, MAX_CHIP_CHARS)}
               {keyword.length > MAX_CHIP_CHARS ? '...' : ''}
@@ -91,7 +91,7 @@ export default function RecentKeywords({
               style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
               <XSmall width={16} height={16} color={c.gray[500]} />
             </Pressable>
-          </Pressable>
+          </PressableOpacity>
         ))}
       </ScrollView>
     </View>

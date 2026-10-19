@@ -1,5 +1,6 @@
 import React, {useCallback, useState} from 'react';
-import {ActivityIndicator, Pressable, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
+import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useNavigation} from '@react-navigation/native';
 import type {
@@ -133,7 +134,7 @@ function WishlistHeart({
   const [liked, setLiked] = useState(true);
 
   return (
-    <Pressable
+    <PressableOpacity
       onPress={() => {
         const next = !liked;
         tick();
@@ -144,9 +145,8 @@ function WishlistHeart({
       accessibilityRole="button"
       accessibilityState={{selected: liked}}
       accessibilityLabel={liked ? '찜 해제' : '찜하기'}
-      className="p-3"
-      style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+      className="p-3">
       <Heart liked={liked} />
-    </Pressable>
+    </PressableOpacity>
   );
 }
