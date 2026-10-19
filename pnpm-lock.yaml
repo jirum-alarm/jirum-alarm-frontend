@@ -632,9 +632,6 @@ importers:
 
   apps/web:
     dependencies:
-      '@apollo/client':
-        specifier: ^4.3.3
-        version: 4.3.3(graphql-ws@6.3.0(graphql@16.14.2)(ws@8.22.0))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rxjs@7.8.2)
       '@jirum/design-system':
         specifier: workspace:*
         version: link:../../packages/design-system
@@ -18939,9 +18936,7 @@ snapshots:
       metro-runtime: 0.84.6
     transitivePeerDependencies:
       - '@babel/core'
-      - bufferutil
       - supports-color
-      - utf-8-validate
 
   '@react-native/normalize-colors@0.79.6': {}
 

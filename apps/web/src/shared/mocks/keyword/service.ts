@@ -1,7 +1,7 @@
-import { MypageKeyword } from '@/graphql/interface/keyword';
+import { type QueryMypageKeywordQuery } from '@/shared/api/gql/graphql';
 
 class MypageKeywordService {
-  private keyword: MypageKeyword;
+  private keyword: QueryMypageKeywordQuery;
   private rearId: number;
   constructor() {
     this.keyword = {
@@ -9,14 +9,17 @@ class MypageKeywordService {
         {
           id: '0',
           keyword: '키워드 알림!',
+          priceDropOnly: false,
         },
         {
           id: '1',
           keyword: '키워드 알림🔥',
+          priceDropOnly: false,
         },
         {
           id: '2',
           keyword: '키워드 알리미',
+          priceDropOnly: false,
         },
       ],
     };
@@ -36,6 +39,7 @@ class MypageKeywordService {
     this.keyword.notificationKeywordsByMe.push({
       id: String(++this.rearId),
       keyword,
+      priceDropOnly: false,
     });
     return true;
   }

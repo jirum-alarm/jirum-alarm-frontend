@@ -1,5 +1,4 @@
-import { QueryTossCategoryLabels, QueryTossProducts } from '@/graphql/toss';
-
+import { QueryTossCategoryLabels, QueryTossProducts } from '@/shared/api/toss/toss.service';
 import { execute } from '@/shared/lib/http-client';
 
 import { stripPriceFromTitle } from '@/entities/product/lib/from-toss';

@@ -84,7 +84,7 @@ jirum-alarm-frontend/
 - **Framework**: Next.js 16.4 with App Router
 - **UI**: React 19.3, Tailwind CSS 4.3
 - **State Management**: Jotai, React Query (TanStack Query)
-- **Data Fetching**: Apollo Client (GraphQL)
+- **Data Fetching**: React Query + GraphQL codegen 문서(`src/shared/api/**/*.service.ts` → `shared/api/gql`, `shared/lib/http-client` 의 `execute`). Apollo 는 쓰지 않는다(admin 만)
 - **Styling**: Tailwind CSS, Tailwind Merge, Class Variance Authority
 - **Animation**: Motion, Swiper, Tailwind CSS Animate
 - **Analytics**: GA4(웹=GTM dataLayer, 앱=Firebase), Clarity(웹), Sentry. Mixpanel 은 코드가 아니라 GTM 태그
@@ -334,7 +334,7 @@ Code formatting standards:
 ### Architecture Principles
 1. **Monorepo Awareness**: Changes may affect multiple applications
 2. **Shared Dependencies**: Leverage workspace packages for common functionality
-3. **GraphQL**: Use Apollo Client with proper type generation
+3. **GraphQL**: web·앱은 codegen 타입 문서 + React Query, admin 만 Apollo Client
 4. **State Management**: Use Jotai for client state, React Query for server state
 
 ### Development Workflow
@@ -372,7 +372,7 @@ Code formatting standards:
 - **Styling Utils**: Tailwind Merge, Class Variance Authority, CLSX
 
 ### Data & State Management
-- **GraphQL**: Apollo Client 4.x
+- **GraphQL**: codegen(client preset) + React Query(web·앱), Apollo Client 4.x(admin)
 - **State Management**: Jotai 3.x
 - **Server State**: TanStack React Query 5.x
 - **Real-time**: GraphQL WS, Firebase 13.x

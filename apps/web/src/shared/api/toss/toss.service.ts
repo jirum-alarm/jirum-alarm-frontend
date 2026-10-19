@@ -7,7 +7,7 @@ export const QueryTossCategoryLabels = graphql(`
   }
 `);
 
-// 토스 목록 조회 (data=toss 확장정보 포함). codegen 스캔 경로(src/graphql/*)에 둬야 타입 생성됨.
+// 토스 목록 조회 (data=toss 확장정보 포함). codegen 스캔 경로(shared/api/**/*.service.ts)에 둬야 타입 생성됨.
 export const QueryTossProducts = graphql(`
   query QueryTossProducts(
     $limit: Int!

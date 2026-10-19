@@ -1,6 +1,6 @@
 import { HttpResponse } from 'msw/http';
 
-import { INotification, Role } from '@/graphql/interface';
+import { type QueryNotificationsQuery, Role } from '@/shared/api/gql/graphql';
 
 import { api } from './api';
 import * as keyword from './keyword';
@@ -107,7 +107,7 @@ const QueryNotifications = api.query('QueryNotifications', () => {
       groupId: 1,
       receiverId: 1,
       senderId: 2,
-      senderType: Role.ADMIN,
+      senderType: Role.Admin,
       target: '1',
       targetId: '1',
       title: '[스파오공홈] 스파오 플리스 웜테크 경량자켓등 (24,900원~/무료)',
@@ -122,7 +122,7 @@ const QueryNotifications = api.query('QueryNotifications', () => {
       groupId: 2,
       receiverId: 1,
       senderId: 2,
-      senderType: Role.USER,
+      senderType: Role.User,
       target: '1',
       targetId: '1',
       title: '[G마켓] 하이샤파 기차모양 연필깎이 (19,490원/무배)',
@@ -137,7 +137,7 @@ const QueryNotifications = api.query('QueryNotifications', () => {
       groupId: 2,
       receiverId: 1,
       senderId: 3,
-      senderType: Role.USER,
+      senderType: Role.User,
       target: '1',
       targetId: '1',
       title: '[티몬] 삼성전자 갤럭시탭 S9 울트라 WIFI/5G (1,209,000원) (무료)',
@@ -147,9 +147,9 @@ const QueryNotifications = api.query('QueryNotifications', () => {
       createdAt: new Date(Date.now() - (i * 3 + 3) * 60 * 1000),
       readAt: new Date(),
     },
-  ]) as unknown as INotification[];
+  ]) as unknown as QueryNotificationsQuery['notifications'];
 
-  return HttpResponse.json<{ data: { notifications: INotification[] } }>({
+  return HttpResponse.json<{ data: QueryNotificationsQuery }>({
     data: { notifications },
   });
 });
