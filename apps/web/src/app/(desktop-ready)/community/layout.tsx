@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { checkDevice } from '@/app/actions/agent';
+import { checkDevice } from '@/shared/actions/agent';
 
 import Footer from '@/widgets/layout/ui/desktop/Footer';
 

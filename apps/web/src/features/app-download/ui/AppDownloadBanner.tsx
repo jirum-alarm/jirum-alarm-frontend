@@ -1,7 +1,6 @@
 'use client';
 
-import { CheckDeviceResult } from '@/app/actions/agent.types';
-
+import { CheckDeviceResult } from '@/shared/actions/agent.types';
 import useAppDownloadLink from '@/shared/hooks/useAppDownloadLink';
 import { AppIcon } from '@/shared/ui/common/icons/Illust';
 

@@ -2,10 +2,9 @@
 
 import { useHydrateAtoms } from 'jotai/utils';
 
+import type { CheckDeviceResult } from '@/shared/actions/agent.types';
 import { deviceAtom, isDeviceResolvedAtom } from '@/shared/hooks/useDevice';
 import { isAuthResolvedAtom, isGuestAtom, isLoggedInAtom } from '@/shared/hooks/useIsLoggedIn';
-
-import type { CheckDeviceResult } from '@/app/actions/agent.types';
 
 /**
  * 서버가 이미 아는 사실(UA 로 판정한 device, 쿠키로 판정한 로그인 여부)을

@@ -7,11 +7,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/shared/lib/cn';
 
 import PromotionTabs from '@/widgets/home/ui/PromotionTabs';
-
-import { TOSS_SECTIONS, type TossDeal } from './mock';
-import { fetchTossCategoryLabels, fetchTossDeals } from './toss.api';
-import TossCategoryTabs from './TossCategoryTabs';
-import TossDealCard from './TossDealCard';
+import { fetchTossCategoryLabels, fetchTossDeals } from '@/widgets/toss/api/toss.api';
+import { TOSS_SECTIONS, type TossDeal } from '@/widgets/toss/model/mock';
+import TossCategoryTabs from '@/widgets/toss/ui/TossCategoryTabs';
+import TossDealCard from '@/widgets/toss/ui/TossDealCard';
 
 const CATEGORY_SECTION_ID = 'category';
 

@@ -22,7 +22,7 @@ import {
   useMyKeywordSet,
 } from '@/features/keyword-prompt/model/myKeywords';
 
-import {HomeQueries} from '../api/home.queries';
+import {HomeQueries} from '@/entities/home/api/home.queries';
 
 /**
  * 인기 키워드 추천 칩. web: widgets/home/ui/RecommendedKeywordSection.tsx

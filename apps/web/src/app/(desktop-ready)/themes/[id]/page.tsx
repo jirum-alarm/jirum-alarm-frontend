@@ -2,8 +2,7 @@ import { Metadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { Suspense } from 'react';
 
-import { checkDevice } from '@/app/actions/agent';
-
+import { checkDevice } from '@/shared/actions/agent';
 import { themePath, ThemeService } from '@/shared/api/notification/theme.service';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import BackButton from '@/shared/ui/layout/BackButton';

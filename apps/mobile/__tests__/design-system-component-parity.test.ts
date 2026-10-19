@@ -93,7 +93,7 @@ describe('섹션 제목 — web SectionHeader·DetailSectionHeader 와 앱 Secti
 describe('채운 탭 — web 의 각 자리와 앱 TabPill 이 같은 레시피(tab)', () => {
   it.each([
     ['web', 'features/community/ui/TabBar.tsx'],
-    ['web', 'app/(desktop-ready)/toss/TossCategoryTabs.tsx'],
+    ['web', 'widgets/toss/ui/TossCategoryTabs.tsx'],
     ['web', 'app/(desktop-ready)/curation/components/CurationContainer.tsx'],
     ['web', 'widgets/trending/ui/TabbarV2.tsx'],
     ['web', 'features/product-detail/ui/PriceHistorySection.tsx'],
@@ -123,7 +123,7 @@ describe('상품 카드 사진 틀 — web 5종·앱 3종이 같은 cardThumb', 
     ['web', 'entities/product-list/ui/list/ListProductCard.tsx'],
     ['web', 'entities/product-list/ui/card/DoubleRowProductCard.tsx'],
     ['web', 'entities/product-list/ui/carousel/CarouselProductCard.tsx'],
-    ['web', 'app/(desktop-ready)/toss/TossDealCard.tsx'],
+    ['web', 'widgets/toss/ui/TossDealCard.tsx'],
     ['앱', 'shared/components/product/ProductCard.tsx'],
     ['앱', 'entities/home/ui/cards/HomeCardPrimitives.tsx'],
     ['앱', 'entities/home/ui/cards/TossDealCard.tsx'],

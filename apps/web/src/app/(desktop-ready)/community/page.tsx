@@ -1,9 +1,8 @@
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
-import { checkDevice } from '@/app/actions/agent';
-import { getAccessToken } from '@/app/actions/token';
-
+import { checkDevice } from '@/shared/actions/agent';
+import { getAccessToken } from '@/shared/actions/token';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import { NAV_TYPE } from '@/shared/ui/layout/BottomNav';

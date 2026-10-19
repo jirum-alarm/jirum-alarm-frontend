@@ -1,3 +1,5 @@
+import type { GoodPriceUnit } from '@/shared/api/keyword/good-price.service';
+
 /** 서버는 키워드를 소문자로 저장한다 — 비교도 소문자·앞뒤 공백 없이. */
 export const normalizeKeyword = (keyword: string) => keyword.trim().toLowerCase();
 
@@ -103,7 +105,7 @@ export function topKeywordToday(
   return top;
 }
 
-export type GoodPriceUnit = 'LITER' | 'HUNDRED_GRAM' | 'COUNT' | 'FACE_VALUE' | 'TOTAL';
+export type { GoodPriceUnit };
 
 /** 좋은 가격 한 줄: 「1L당 1,400원」·「액면가의 92%」·「289,000원」. ai 앱 features/wait/model/copy.ts unitPriceText 와 같은 문구. */
 export function goodPriceText(unit: GoodPriceUnit, value: number): string {

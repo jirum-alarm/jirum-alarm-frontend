@@ -2,8 +2,7 @@ import { infoBox, linkChip, wordTag } from '@jirum/design-system/recipes';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
-import { checkDevice } from '@/app/actions/agent';
-
+import { checkDevice } from '@/shared/actions/agent';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';

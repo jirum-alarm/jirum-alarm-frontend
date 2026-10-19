@@ -1,5 +1,27 @@
 import designSystem from '@jirum/design-system/eslint';
 import jirum from '@jirum/eslint-config-jirum';
+import fsd from '@jirum/eslint-config-jirum/fsd-boundaries.cjs';
+import path from 'node:path';
+
+const { fsdBoundaries } = fsd;
+
+/**
+ * FSD 경계 예외(옮기기엔 얽힌 것) — 파일(src 기준) → 허용할 import 접두. 늘리지 말고 줄여 갈 목록이다.
+ */
+const FSD_ALLOWLIST = {
+  // shared 공용 UI/훅이 로그인·알림 쿼리를 읽는다 — 소비처가 여러 레이어라 옮기면 import 가 위로 샌다
+  'shared/ui/TabScrollTopButton.tsx': ['@/entities/auth'],
+  'shared/hooks/useHasNewAlarm.ts': ['@/entities/notification'],
+  // 알림함·상세가 앱 열기 링크·키워드 등록·푸시 설정을 그대로 재사용
+  'features/alarm/ui/AlarmContainer.tsx': ['@/features/app-download'],
+  'features/alarm/ui/AlarmList.tsx': ['@/features/mypage'],
+  'features/product-detail/ui/PostPurchaseKeywordPrompt.tsx': [
+    '@/features/app-download',
+    '@/features/mypage',
+  ],
+  // 프로모션 쿼리가 상품 쿼리 키를 공유
+  'entities/promotion/lib/getPromotionQueryOptions.ts': ['@/entities/product'],
+};
 
 const config = [
   ...jirum,
@@ -55,23 +77,13 @@ const config = [
     ignores: ['src/**/*.test.ts'],
     rules: designSystem.rules,
   },
-  // 피처 내부에서 다른 피처 배럴 참조 금지 (교차 의존 방지)
-  {
-    files: ['src/features/**/*.{ts,tsx}'],
-    rules: {
-      'no-restricted-imports': [
-        'warn',
-        {
-          patterns: [
-            {
-              group: ['@features/*', '@/features/*'],
-              message: '피처 내부에서는 다른 피처를 직접 import 하지 마세요.',
-            },
-          ],
-        },
-      ],
-    },
-  },
+  // FSD 경계(app > widgets > features > entities > shared, features·entities 슬라이스끼리 금지) — 위반은 에러.
+  ...fsdBoundaries({
+    srcDir: path.join(import.meta.dirname, 'src'),
+    layers: [['shared'], ['entities'], ['features'], ['widgets'], ['app']],
+    isolatedLayers: ['features', 'entities'],
+    allowlist: FSD_ALLOWLIST,
+  }),
 ];
 
 export default config;

@@ -8,7 +8,7 @@ import ProductThumbnail from '@/shared/ui/ProductThumbnail';
 import ServiceLink from '@/shared/ui/ServiceLink';
 
 /**
- * 토스 뷰티 카드 — web app/(desktop-ready)/toss/TossDealCard 를 옮겼다. 그 코너처럼 **판매가·할인율은 숨기고**
+ * 토스 뷰티 카드 — web widgets/toss/ui/TossDealCard 를 옮겼다. 그 코너처럼 **판매가·할인율은 숨기고**
  * 상세는 `?from=toss` 로 연다(상세가 토스 유입으로 알아본다).
  */
 export default function TossDealCard({

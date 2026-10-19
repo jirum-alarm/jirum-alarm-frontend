@@ -1,8 +1,8 @@
 import { Fragment } from 'react';
 
-import { type TossDeal } from '@/app/(desktop-ready)/toss/mock';
-
 import { PromotionSection } from '@/entities/promotion/model/types';
+
+import { type TossDeal } from '@/widgets/toss/model/mock';
 
 import DynamicProductSection from './DynamicProductSection';
 import HomeEndCta from './HomeEndCta';

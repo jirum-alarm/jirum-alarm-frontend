@@ -1,6 +1,6 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
-import { getQueryClient } from '@/app/(app)/react-query/query-client';
+import { getQueryClient } from '@/shared/lib/react-query/query-client';
 
 import { ProductQueries } from '@/entities/product';
 

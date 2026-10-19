@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
 import { notFound, redirect, RedirectType } from 'next/navigation';
 
-import { checkDevice } from '@/app/actions/agent';
-
+import { checkDevice } from '@/shared/actions/agent';
 import { ProductService } from '@/shared/api/product';
 
 import { parseProductId } from '@/entities/product/lib/product-id';

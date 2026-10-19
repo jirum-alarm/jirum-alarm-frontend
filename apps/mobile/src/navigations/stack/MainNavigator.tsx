@@ -37,7 +37,7 @@ import ThemeDetailScreen from '@/screens/mypage/ThemeDetailScreen';
 import CommunityPostScreen from '@/screens/community/CommunityPostScreen';
 import CommunityWriteScreen from '@/screens/community/CommunityWriteScreen';
 import {PendingLoginRestore} from '@/shared/hooks/PendingLoginRestore';
-import useAlarmDotSync from '@/shared/hooks/useAlarmDotSync';
+import useAlarmDotSync from '@/entities/notification/useAlarmDotSync';
 import {
   mainNavigations,
   tabStackNavigations,

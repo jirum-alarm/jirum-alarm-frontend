@@ -7,7 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental';
 import { useEffect } from 'react';
 
-import { getQueryClient } from '../react-query/query-client';
+import { getQueryClient } from '@/shared/lib/react-query/query-client';
 
 const TICK_MS = 15_000;
 // 낡기 이만큼 전에 미리 받는다. TICK 보다 커야 다음 틱 전에 낡지 않는다.

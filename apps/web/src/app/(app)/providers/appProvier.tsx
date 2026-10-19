@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import Script from 'next/script';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
+import type { CheckDeviceResult } from '@/shared/actions/agent.types';
 import { IS_PRD } from '@/shared/config/env';
 import { GTM_ID } from '@/shared/config/gtm';
 import FCMConfig from '@/shared/lib/firebase/FCMConfig';
@@ -22,8 +23,6 @@ import { ProductCardTracker } from './productCardTracker';
 import { ReactQueryProviders } from './ReactQueryProviders';
 import ServerStateProvider from './ServerStateProvider';
 import { WebVitalsReporter } from './webVitalsReporter';
-
-import type { CheckDeviceResult } from '@/app/actions/agent.types';
 
 const MSW = dynamic(() => import('@/shared/ui/MSW'), {
   ssr: false,

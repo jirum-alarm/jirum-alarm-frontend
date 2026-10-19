@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 
-import { checkDevice } from '@/app/actions/agent';
-
+import { checkDevice } from '@/shared/actions/agent';
 import { PAGE } from '@/shared/config/page';
 import { Search } from '@/shared/ui/common/icons';
 import BackButton from '@/shared/ui/layout/BackButton';

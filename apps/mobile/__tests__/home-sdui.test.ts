@@ -168,7 +168,7 @@ describe('web 소스와 직접 대조', () => {
   });
 
   it('토스 섹션 키워드 매핑이 web 과 같다', () => {
-    const src = readWeb('app/(desktop-ready)/toss/toss.api.ts');
+    const src = readWeb('widgets/toss/api/toss.api.ts');
     const block = src.slice(
       src.indexOf('TOSS_SECTION_KEYWORD'),
       src.indexOf('}', src.indexOf('TOSS_SECTION_KEYWORD')),
@@ -180,7 +180,7 @@ describe('web 소스와 직접 대조', () => {
 
   it('홈 토스 섹션은 공식 Open API 3탭만 노출한다', () => {
     expect([...TOSS_HOME_SECTION_IDS]).toEqual(['daily', 'best', 'category']);
-    expect(readWeb('app/(desktop-ready)/toss/toss.api.ts')).toContain(
+    expect(readWeb('widgets/toss/api/toss.api.ts')).toContain(
       "TOSS_HOME_SECTION_IDS = ['daily', 'best', 'category']",
     );
     expect(readWeb('widgets/home/ui/TossHomeSection.tsx')).toContain(

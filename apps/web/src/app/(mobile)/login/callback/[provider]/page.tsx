@@ -4,8 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { notFound, useParams, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
-import { setAccessToken, setRefreshToken } from '@/app/actions/token';
-
+import { setAccessToken, setRefreshToken } from '@/shared/actions/token';
 import { AuthService } from '@/shared/api/auth';
 import { OauthProvider } from '@/shared/api/gql/graphql';
 import { PAGE } from '@/shared/config/page';

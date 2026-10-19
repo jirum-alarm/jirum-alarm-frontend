@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
 import { cache } from 'react';
 
-import { checkDevice } from '@/app/actions/agent';
-
+import { checkDevice } from '@/shared/actions/agent';
 import { ProductService } from '@/shared/api/product';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 

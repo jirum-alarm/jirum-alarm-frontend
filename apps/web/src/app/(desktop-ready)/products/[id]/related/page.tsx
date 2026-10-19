@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
-import { checkDevice } from '@/app/actions/agent';
+import { checkDevice } from '@/shared/actions/agent';
 
 import { parseProductId } from '@/entities/product/lib/product-id';
 

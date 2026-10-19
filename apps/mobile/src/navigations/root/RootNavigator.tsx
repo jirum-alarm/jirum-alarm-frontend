@@ -3,7 +3,7 @@ import AuthNavigator from '../stack/AuthNavigator.tsx';
 import MainNavigator from '../stack/MainNavigator.tsx';
 import {useAuth} from '@/shared/hooks/useAuth';
 import RNBootSplash from 'react-native-bootsplash';
-import useAppStateTokenRefresh from '@/shared/hooks/useAppStateTokenRefresh';
+import useAppStateTokenRefresh from '@/entities/auth/useAppStateTokenRefresh';
 import useForceUpdate from '@/shared/hooks/useForceUpdate';
 import ForceUpdateScreen from '@/screens/update/ForceUpdateScreen';
 import {useQuery} from '@tanstack/react-query';

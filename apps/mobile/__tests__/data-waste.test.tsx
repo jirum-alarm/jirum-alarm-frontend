@@ -42,7 +42,7 @@ jest.mock('../src/shared/lib/feedback', () => ({
 }));
 
 import {refetchOnFocus} from '../src/provider/ReactQueryProvider';
-import useAppStateTokenRefresh from '../src/shared/hooks/useAppStateTokenRefresh';
+import useAppStateTokenRefresh from '../src/entities/auth/useAppStateTokenRefresh';
 import {useCommunityCommentsViewModel} from '../src/features/community/model/useCommunityCommentsViewModel';
 import {bumpReplyCount} from '../src/features/community/model/optimistic';
 import {CommunityQueries} from '../src/entities/community';

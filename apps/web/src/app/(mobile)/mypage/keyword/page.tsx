@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 
-import { checkDevice } from '@/app/actions/agent';
-
+import { checkDevice } from '@/shared/actions/agent';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
 import GuestKeywordNotice from '@/features/mypage/ui/keyword/GuestKeywordNotice';

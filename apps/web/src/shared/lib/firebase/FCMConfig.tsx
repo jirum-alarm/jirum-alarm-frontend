@@ -2,8 +2,7 @@
 
 import { useEffect } from 'react';
 
-import { setFcmToken as setFcmTokenAction } from '@/app/actions/token';
-
+import { setFcmToken as setFcmTokenAction } from '@/shared/actions/token';
 import { TokenType } from '@/shared/api/gql/graphql';
 import { NotificationService } from '@/shared/api/notification/notification.service';
 import { firebaseConfig, webPushVapidKey } from '@/shared/config/firebase';

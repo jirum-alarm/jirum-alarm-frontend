@@ -28,7 +28,7 @@ import {mapHomePageSections} from '@/entities/home/lib/map-home-page';
 import DynamicProductSection from '@/entities/home/ui/DynamicProductSection';
 import HomeBannerCarousel from '@/entities/home/ui/HomeBannerCarousel';
 import JirumRankingSlider from '@/entities/home/ui/JirumRankingSlider';
-import RecommendedKeywordSection from '@/entities/home/ui/RecommendedKeywordSection';
+import RecommendedKeywordSection from '@/features/keyword-prompt/ui/RecommendedKeywordSection';
 import ThemeHomeSection from '@/entities/home/ui/ThemeHomeSection';
 import {useColors} from '@/shared/theme/useColors';
 import {tick} from '@/shared/lib/feedback/haptic';

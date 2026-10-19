@@ -2,8 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
-import { setAccessToken, setRefreshToken } from '@/app/actions/token';
-
+import { setAccessToken, setRefreshToken } from '@/shared/actions/token';
 import { AuthService } from '@/shared/api/auth/auth.service';
 import { PAGE } from '@/shared/config/page';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';

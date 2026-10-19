@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 
-import { checkDevice } from '@/app/actions/agent';
-
+import { checkDevice } from '@/shared/actions/agent';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import { NAV_TYPE } from '@/shared/ui/layout/BottomNav';
 

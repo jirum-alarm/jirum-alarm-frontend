@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useQueryState } from 'nuqs';
 import { Suspense, useEffect, useState } from 'react';
 
+import { setAccessToken, setRefreshToken } from '@/shared/actions/token';
 import { AuthService } from '@/shared/api/auth/auth.service';
 import { CATEGORIES } from '@/shared/config/categories';
 import useMyRouter from '@/shared/hooks/useMyRouter';
@@ -17,8 +18,6 @@ import Nickname from '@/features/auth/ui/signup/Nickname';
 import Password from '@/features/auth/ui/signup/Password';
 import Personal from '@/features/auth/ui/signup/Personal';
 import TermsOfService from '@/features/auth/ui/signup/TermsOfService';
-
-import { setAccessToken, setRefreshToken } from '../../actions/token';
 
 const COMPLETE_ROUTE = 'signup/complete?method=email';
 

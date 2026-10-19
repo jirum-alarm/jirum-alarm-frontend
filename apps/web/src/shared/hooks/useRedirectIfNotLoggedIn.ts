@@ -3,8 +3,7 @@ import { useAtom } from 'jotai';
 import { PAGE } from '@/shared/config/page';
 import { useDevice } from '@/shared/hooks/useDevice';
 import { savePendingAction } from '@/shared/lib/pending-action';
-
-import { LoginModalMessage, loginModalMessageAtom } from '@/features/auth/model/login/loginModal';
+import { LoginModalMessage, loginModalMessageAtom } from '@/shared/model/loginModal';
 
 import { WebViewBridge, WebViewEventType } from '../lib/webview';
 

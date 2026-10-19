@@ -5,6 +5,8 @@ import { PublicEnvScript } from 'next-runtime-env';
 
 import { AppProvider } from '@/app/(app)/providers';
 
+import { checkDevice } from '@/shared/actions/agent';
+import { getAccessToken, getIsGuest } from '@/shared/actions/token';
 import { COLOR_SCHEME_COOKIE, isDarkCookie, THEME_COLOR } from '@/shared/config/color-scheme';
 import { IS_PRD } from '@/shared/config/env';
 import { defaultMetadata, jsonLd, organizationLd } from '@/shared/config/metadata';
@@ -16,9 +18,6 @@ import { pretendard } from '@/shared/lib/fonts';
 import { PRICE_ANSWER_HOLDOUT_SCRIPT } from '@/features/product-detail/lib/price-answer-holdout';
 
 import { PATHNAME_HEADER } from '../proxy';
-
-import { checkDevice } from './actions/agent';
-import { getAccessToken, getIsGuest } from './actions/token';
 
 import type { Metadata, Viewport } from 'next';
 

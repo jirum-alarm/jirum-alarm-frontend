@@ -1,5 +1,5 @@
 /**
- * UA 판정 정규식 — 서버(app/actions/agent.ts)와 클라이언트(shared/hooks/useDevice.ts)가
+ * UA 판정 정규식 — 서버(shared/actions/agent.ts)와 클라이언트(shared/hooks/useDevice.ts)가
  * 같은 값을 내야 하므로 여기 한 곳에 둔다. 한쪽만 고치면 하이드레이션 직후
  * 판정이 뒤집혀 그 컴포넌트가 한 프레임 다른 걸 그린다.
  */

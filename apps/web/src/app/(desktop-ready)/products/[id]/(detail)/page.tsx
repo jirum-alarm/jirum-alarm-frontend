@@ -3,9 +3,8 @@ import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 
-import { checkDevice } from '@/app/actions/agent';
-import { getAccessToken } from '@/app/actions/token';
-
+import { checkDevice } from '@/shared/actions/agent';
+import { getAccessToken } from '@/shared/actions/token';
 import { UploaderType } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
 import type { ProductModelPageLink } from '@/shared/api/product/product.service';

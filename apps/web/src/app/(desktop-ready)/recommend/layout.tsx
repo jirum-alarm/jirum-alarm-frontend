@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 
-import { checkDevice } from '@/app/actions/agent';
-
+import { checkDevice } from '@/shared/actions/agent';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import SectionHeader from '@/shared/ui/SectionHeader';
 

@@ -1,7 +1,6 @@
 'use client';
 
-import { CheckDeviceResult } from '@/app/actions/agent.types';
-
+import { CheckDeviceResult } from '@/shared/actions/agent.types';
 import {
   ANDROID_STORE_LINK as GooglePlayLink,
   IOS_STORE_LINK as AppStoreLink,
