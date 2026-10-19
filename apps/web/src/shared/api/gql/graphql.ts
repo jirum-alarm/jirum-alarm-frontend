@@ -861,6 +861,7 @@ export type ModelPageOutput = {
   modelName: Scalars['String']['output'];
   payload?: Maybe<Scalars['JSONObject']['output']>;
   priceVerdict?: Maybe<ModelPagePriceVerdictOutput>;
+  recentDeals?: Maybe<Array<ModelPageRecentDealOutput>>;
   slug: Scalars['String']['output'];
 };
 
@@ -881,6 +882,19 @@ export type ModelPagePriceVerdictOutput = {
   pendingReason?: Maybe<Scalars['String']['output']>;
   savePct?: Maybe<Scalars['Int']['output']>;
   tone?: Maybe<Scalars['String']['output']>;
+};
+
+export type ModelPageRecentDealOutput = {
+  __typename?: 'ModelPageRecentDealOutput';
+  isEnd: Scalars['Boolean']['output'];
+  isVerified: Scalars['Boolean']['output'];
+  mallName?: Maybe<Scalars['String']['output']>;
+  postedAt: Scalars['DateTime']['output'];
+  price?: Maybe<Scalars['Float']['output']>;
+  priceCurrency?: Maybe<Scalars['String']['output']>;
+  productId: Scalars['Int']['output'];
+  thumbnail?: Maybe<Scalars['String']['output']>;
+  title: Scalars['String']['output'];
 };
 
 export type Mutation = {
@@ -4525,6 +4539,18 @@ export type ModelPageQuery = {
       buyLine?: number | null;
       historyPoints: number;
     } | null;
+    recentDeals?: Array<{
+      __typename?: 'ModelPageRecentDealOutput';
+      productId: number;
+      title: string;
+      price?: number | null;
+      priceCurrency?: string | null;
+      mallName?: string | null;
+      postedAt: any;
+      thumbnail?: string | null;
+      isEnd: boolean;
+      isVerified: boolean;
+    }> | null;
     keywordHub?: {
       __typename?: 'KeywordHubOutput';
       slug: string;
@@ -5670,6 +5696,17 @@ export const ModelPageDocument = new TypedDocumentString(`
       savePct
       buyLine
       historyPoints
+    }
+    recentDeals {
+      productId
+      title
+      price
+      priceCurrency
+      mallName
+      postedAt
+      thumbnail
+      isEnd
+      isVerified
     }
     keywordHub {
       slug

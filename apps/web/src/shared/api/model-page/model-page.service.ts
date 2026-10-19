@@ -89,6 +89,17 @@ const ModelPageDocument = graphql(`
         buyLine
         historyPoints
       }
+      recentDeals {
+        productId
+        title
+        price
+        priceCurrency
+        mallName
+        postedAt
+        thumbnail
+        isEnd
+        isVerified
+      }
       keywordHub {
         slug
         name

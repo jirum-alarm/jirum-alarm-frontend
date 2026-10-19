@@ -867,6 +867,7 @@ export type ModelPageOutput = {
   modelName: Scalars['String']['output'];
   payload?: Maybe<Scalars['JSONObject']['output']>;
   priceVerdict?: Maybe<ModelPagePriceVerdictOutput>;
+  recentDeals?: Maybe<Array<ModelPageRecentDealOutput>>;
   slug: Scalars['String']['output'];
 };
 
@@ -887,6 +888,19 @@ export type ModelPagePriceVerdictOutput = {
   pendingReason?: Maybe<Scalars['String']['output']>;
   savePct?: Maybe<Scalars['Int']['output']>;
   tone?: Maybe<Scalars['String']['output']>;
+};
+
+export type ModelPageRecentDealOutput = {
+  __typename?: 'ModelPageRecentDealOutput';
+  isEnd: Scalars['Boolean']['output'];
+  isVerified: Scalars['Boolean']['output'];
+  mallName?: Maybe<Scalars['String']['output']>;
+  postedAt: Scalars['DateTime']['output'];
+  price?: Maybe<Scalars['Float']['output']>;
+  priceCurrency?: Maybe<Scalars['String']['output']>;
+  productId: Scalars['Int']['output'];
+  thumbnail?: Maybe<Scalars['String']['output']>;
+  title: Scalars['String']['output'];
 };
 
 export type Mutation = {

@@ -9,11 +9,11 @@ import { RecentDealRow, relativeTimeLabel } from '@/features/deals/lib/model-pag
 
 /**
  * 상세 "최근 올라온 핫딜" — 날짜순. 아래 "핫딜 목록"은 싼 순이라 2024년 딜이 맨 위에 와서
- * 이 상품에 요즘 무슨 딜이 떴는지 안 보였다(2026-10-13). 이름으로 찾은 딜은 확인 전이라 배지로 구분한다.
+ * 이 상품에 요즘 무슨 딜이 떴는지 안 보였다(2026-10-13). 매칭은 됐지만 검수 전인 딜은 배지로 구분한다.
  */
 export default function RecentDealsSection({ rows }: { rows: RecentDealRow[] }) {
   if (rows.length === 0) return null;
-  const hasSearched = rows.some((r) => r.source === 'search');
+  const hasPending = rows.some((r) => r.source === 'pending');
   return (
     <section className="mb-6">
       <div className="mb-3 flex items-baseline justify-between gap-2">
@@ -46,9 +46,9 @@ export default function RecentDealsSection({ rows }: { rows: RecentDealRow[] }) 
                       진행 중
                     </Badge>
                   )}
-                  {r.source === 'search' && (
+                  {r.source === 'pending' && (
                     <Badge size="xs" tone="secondary">
-                      이름으로 찾음
+                      확인 전
                     </Badge>
                   )}
                   <span>{relativeTimeLabel(r.postedAt)}</span>
@@ -69,10 +69,10 @@ export default function RecentDealsSection({ rows }: { rows: RecentDealRow[] }) 
           </li>
         ))}
       </ul>
-      {hasSearched && (
+      {hasPending && (
         <p className="mt-2 text-xs text-gray-500">
-          ‘이름으로 찾음’은 상품 이름으로 찾은 딜이라 용량·구성이 다를 수 있고, 가격 추이에는 넣지
-          않아요.
+          ‘확인 전’은 같은 상품으로 자동 연결됐지만 아직 사람이 확인하지 않은 딜이라, 가격 추이에는
+          넣지 않아요.
         </p>
       )}
     </section>

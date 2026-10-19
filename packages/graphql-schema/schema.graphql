@@ -807,6 +807,7 @@ type ModelPageOutput {
   modelName: String!
   payload: JSONObject
   priceVerdict: ModelPagePriceVerdictOutput
+  recentDeals: [ModelPageRecentDealOutput!]
   slug: String!
 }
 
@@ -826,6 +827,18 @@ type ModelPagePriceVerdictOutput {
   pendingReason: String
   savePct: Int
   tone: String
+}
+
+type ModelPageRecentDealOutput {
+  isEnd: Boolean!
+  isVerified: Boolean!
+  mallName: String
+  postedAt: DateTime!
+  price: Float
+  priceCurrency: String
+  productId: Int!
+  thumbnail: String
+  title: String!
 }
 
 type Mutation {

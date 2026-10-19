@@ -6,6 +6,7 @@ const require = createRequire(import.meta.url);
 const {
   withTopicParticle,
   buildDealsLeadSentence,
+  recentDealRows,
   splitDealsForList,
   timingFromVerdict,
   cleanDealTitle,
@@ -163,81 +164,36 @@ describe('cleanDealTitle', () => {
   });
 });
 
-describe('buildRecentDeals', () => {
-  const { buildRecentDeals, modelNameTokens } =
-    require('./model-page-insights.ts') as typeof import('./model-page-insights');
-  const now = Date.parse('2026-10-13T00:00:00Z');
-  const matched = (productId: number, postedAt: string, isEnd = false) => ({
-    productId,
-    title: 'CJ제일제당 맛밤 60g 20개',
-    price: 19900,
-    url: '',
-    providerId: 1,
+describe('recentDealRows', () => {
+  const now = Date.parse('2026-10-20T00:00:00Z');
+  const d = (over = {}) => ({
+    productId: 1,
+    title: '<img src="x"> 삼다수 2L 12개',
+    price: 9900,
+    priceCurrency: 'KRW',
     mallName: '쿠팡',
-    postedAt,
+    postedAt: '2026-10-19T12:00:00Z',
     thumbnail: null,
-    isEnd,
+    isEnd: false,
+    isVerified: true,
+    ...over,
   });
 
-  it('모델 이름 낱말에서 용량·수량은 빼고 모델 번호는 남긴다', () => {
-    assert.deepEqual(modelNameTokens('펩시콜라 제로슈거 라임향 210ml 30개 + 칠성사이다'), [
-      '펩시콜라',
-      '제로슈거',
-      '라임향',
-      '칠성사이다',
-    ]);
-    assert.deepEqual(modelNameTokens('RTX 4060'), ['rtx', '4060']);
-  });
-
-  it('매칭 딜과 이름 검색 딜을 날짜순으로 합치고, 낱말이 다 안 들어간 검색 결과·겹치는 딜은 뺀다', () => {
-    const rows = buildRecentDeals({
-      deals: [matched(1, '2026-10-12T00:00:00Z'), matched(2, '2026-08-01T00:00:00Z')],
-      searched: [
-        { id: 1, title: '맛밤 60g', postedAt: '2026-10-12T00:00:00Z' },
-        { id: 10, title: 'CJ 맛밤 80g 12개', price: '23,800원', postedAt: '2026-10-12T12:00:00Z' },
-        // 같은 딜이 다른 커뮤니티에도 — 한 줄만
-        { id: 13, title: 'CJ 맛밤 80g 12개 23,800원', postedAt: '2026-10-12T11:00:00Z' },
-        // 브랜드 없는 제목 — 이름이 짧은 상품은 다른 회사 상품이 섞여서 브랜드를 본다
-        { id: 14, title: '윤서의달밤 맛밤 30봉', postedAt: '2026-10-12T15:00:00Z' },
-        { id: 11, title: '해태 맛동산 밤라떼맛', postedAt: '2026-10-12T13:00:00Z' },
-        { id: 12, title: '간편하게 즐기는 달달맛밤 10봉', postedAt: '2026-10-12T14:00:00Z' },
-      ],
-      modelName: '맛밤',
-      brand: 'CJ제일제당',
+  it('서버 판정(검수·검수 전)을 그대로 — 제목 정리·통화 표기만 한다', () => {
+    const [a, b] = recentDealRows(
+      [d(), d({ productId: 2, isVerified: false, price: 219.76, priceCurrency: 'USD' })],
       now,
-    });
-    assert.deepEqual(
-      rows.map((r) => [r.productId, r.source]),
-      [
-        [10, 'search'],
-        [1, 'matched'],
-      ],
     );
-    assert.equal(rows[0].priceText, '23,800원');
-    assert.equal(rows[1].priceText, '19,900원');
+    assert.equal(a.title, '삼다수 2L 12개');
+    assert.equal(a.priceText, '9,900원');
+    assert.equal(a.source, 'verified');
+    assert.equal(b.priceText, '$219.76');
+    assert.equal(b.source, 'pending');
   });
 
-  it('모델 번호가 있으면 브랜드가 제목에 없어도 받는다', () => {
-    const { isSameModelTitle } =
-      require('./model-page-insights.ts') as typeof import('./model-page-insights');
-    assert.equal(
-      isSameModelTitle('에어프라이어 오븐 TOA-70KR 99000원', 'TOA-70KR', '쿠진아트'),
-      true,
-    );
-    assert.equal(isSameModelTitle('로봇 짱구 잠옷세트', '짱구', '삼양식품'), false);
-  });
-
-  it('사흘 지난 딜은 종료 표시가 없어도 끝난 딜로 보여 준다', () => {
-    const rows = buildRecentDeals({
-      deals: [matched(1, '2026-10-12T00:00:00Z'), matched(2, '2026-10-05T00:00:00Z')],
-      searched: [],
-      modelName: '맛밤',
-      now,
-    });
-    assert.deepEqual(
-      rows.map((r) => r.isEnd),
-      [false, true],
-    );
+  it('3일 지난 딜은 종료 표시가 없어도 지난 딜', () => {
+    assert.equal(recentDealRows([d({ postedAt: '2026-10-15T00:00:00Z' })], now)[0].isEnd, true);
+    assert.equal(recentDealRows([d()], now)[0].isEnd, false);
   });
 });
 

@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { ModelPageService } from '@/shared/api/model-page';
-import { ProductService } from '@/shared/api/product';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
@@ -22,12 +21,11 @@ import {
 import {
   buildDealsLeadSentence,
   buildModelDisplayName,
-  buildRecentDeals,
   Deal,
   HeroPrice,
   rankRepresentatives,
+  recentDealRows,
   Representative,
-  SearchedDeal,
   splitDealsForList,
   timingFromVerdict,
   withTopicParticle,
@@ -165,36 +163,6 @@ function deriveModelPageInsights(page: ModelPageData, displayName: string) {
   return { fmtHist, histPrices, timing, leadSentence };
 }
 
-/** 이름 검색으로 찾을 최근 딜 기간. */
-const RECENT_SEARCH_DAYS = 14;
-
-/**
- * 모델 이름으로 최근 딜 검색 — 매칭 안 된 같은 상품 딜을 "최근 올라온 핫딜"에 붙이려고.
- * 시작일을 하루 단위로 내림해 fetch 캐시 키를 하루 동안 같게 둔다(밀리초 시각이면 매 요청 캐시 미스).
- * 검색이 실패해도 페이지는 매칭된 딜만으로 그린다.
- */
-async function searchRecentDeals(modelName: string): Promise<SearchedDeal[]> {
-  const day = 24 * 60 * 60 * 1000;
-  const startDate = new Date(Math.floor(Date.now() / day) * day - RECENT_SEARCH_DAYS * day);
-  try {
-    const res = await ProductService.getProducts(
-      { limit: 30, keyword: modelName, startDate: startDate.toISOString() },
-      { public: true, revalidate: 600 },
-    );
-    return (res.products ?? []).map((p) => ({
-      id: Number(p.id),
-      title: p.title,
-      price: p.price ?? null,
-      mallName: p.mallName ?? null,
-      postedAt: p.postedAt,
-      thumbnail: p.thumbnail ?? null,
-      isEnd: p.isEnd ?? null,
-    }));
-  } catch {
-    return [];
-  }
-}
-
 export async function generateMetadata({
   params,
 }: {
@@ -229,7 +197,6 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   const { slug } = await params;
   const page = await ModelPageService.getModelPage({ slug: decodeURIComponent(slug) });
   if (!page) notFound();
-  const searched = await searchRecentDeals(page.modelName);
   // 이 모델이 속한 키워드 허브(삼다수 2L → 삼다수 핫딜). 구글은 사람을 모델 페이지로 데려오고(10/1~13 착지 53),
   // 허브는 아직 거의 안 데려온다 — 같은 키워드의 다른 상품을 보러 갈 길을 낸다(허브 → 모델 페이지 칩과 짝).
   // 상위 키워드(page.keywordHub)는 서버가 고른 가장 좁은 허브 — 경로 표시의 부모이고 칩도 맨 앞이다(2026-10-17 키워드가 위층).
@@ -280,13 +247,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
     histCurrency,
   );
 
-  const recentRows = buildRecentDeals({
-    deals,
-    searched,
-    modelName: page.modelName,
-    brand: page.brand,
-    currency: histCurrency,
-  });
+  const recentRows = recentDealRows(page.recentDeals ?? []);
 
   const offerPrice = heroPrice?.minPrice ?? null;
   // 진행 중인 딜이 없으면 재고를 주장하지 않고, 가격 유효기간도 마지막 딜 기준으로 잡는다.
