@@ -36,6 +36,8 @@ export type KeywordHubDeal = {
   isHot?: boolean | null;
   hotDealType?: HotDealType | null;
   mallName?: string | null;
+  /** 서버가 같은 딜을 한 장으로 접으며 센 커뮤니티 수. */
+  postedCommunityCount?: number | null;
   provider?: { nameKr?: string | null } | null;
 };
 
@@ -105,6 +107,7 @@ const KeywordHubDocument = new TypedDocumentString<
         hotDealType
         isYearLowest
         mallName
+        postedCommunityCount
         provider {
           nameKr
         }

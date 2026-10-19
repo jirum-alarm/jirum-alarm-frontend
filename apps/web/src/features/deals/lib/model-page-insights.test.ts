@@ -3,8 +3,14 @@ import { createRequire } from 'node:module';
 import { describe, it } from 'node:test';
 
 const require = createRequire(import.meta.url);
-const { withTopicParticle, buildDealsLeadSentence, splitDealsForList, cleanDealTitle } =
-  require('./model-page-insights.ts') as typeof import('./model-page-insights');
+const {
+  withTopicParticle,
+  buildDealsLeadSentence,
+  buildTimingInsight: buildTiming,
+  packKey,
+  splitDealsForList,
+  cleanDealTitle,
+} = require('./model-page-insights.ts') as typeof import('./model-page-insights');
 
 type Timing = Parameters<typeof buildDealsLeadSentence>[0]['timing'];
 
@@ -22,6 +28,9 @@ const timing = (over: Partial<Timing> = {}): Timing => ({
   totalPrice: 14830,
   activeDealCount: 16,
   isActivePrice: true,
+  bestPackLabel: null,
+  mallPrice: null,
+  historyPoints: 9,
   ...over,
 });
 
@@ -465,5 +474,88 @@ describe('buildRecentDeals', () => {
       rows.map((r) => r.isEnd),
       [false, true],
     );
+  });
+});
+
+// 2026-10-19 동원 보성녹차 운영 payload — 핫딜 11,750원이 「역대급」인데 같은 구성 다나와가 10,740원이었다.
+describe('같은 구성 다나와가 · 같은 딜 중복', () => {
+  const NOW = Date.parse('2026-10-19T12:00:00Z');
+  const tea = (title: string, postedAt: string) => ({
+    productId: Math.floor(Math.random() * 1e9),
+    title,
+    price: 11750,
+    unitPrice: 140,
+    unitLabel: '100ml당',
+    url: '',
+    providerId: 1,
+    mallName: '토스',
+    postedAt,
+    thumbnail: null,
+  });
+  const deals = [
+    tea('동원 보성녹차, 350ml, 24개 11,750원 (무료)', '2026-10-19T09:06:21Z'),
+    tea('동원 보성녹차 350ml 24개 (11,750원/무료)', '2026-10-19T08:24:00Z'),
+  ];
+  const rep = (label: string, danawaPrice: number, unitPrice: number) => ({
+    label,
+    danawaPrice,
+    mallCount: 1,
+    priceRank: null,
+    danawaUrl: null,
+    activeDeals: 0,
+    dealMinPrice: null,
+    unitPrice,
+    unitLabel: '100ml당',
+  });
+  const base = {
+    deals,
+    histPrices: [162, 162, 147, 151, 140],
+    histBasis: 'unit' as const,
+    histUnitLabel: '100ml당',
+    now: NOW,
+  };
+
+  it('구성 키는 표기가 달라도 같다(350mlx24개 · 0.35L 24입)', () => {
+    assert.equal(packKey('350ml 24개'), packKey('동원 보성녹차 350mlx24개 (13,590원/무료)'));
+    assert.equal(packKey('350ml 24개'), packKey('보성녹차 0.35L 24입'));
+    assert.notEqual(packKey('350ml 24개'), packKey('1.5L 12개'));
+  });
+
+  it('같은 구성 다나와가 핫딜 이하면 tone=mall, 진행 중은 1건', () => {
+    const t = buildTiming({
+      ...base,
+      representatives: [rep('1.5L 12개', 11270, 63), rep('350ml 24개', 10740, 140)],
+    });
+    assert.equal(t.tone, 'mall');
+    assert.equal(t.mallPrice, 10740);
+    assert.equal(t.bestPackLabel, '350ml 24개');
+    assert.equal(t.activeDealCount, 1);
+    const lead = buildDealsLeadSentence({
+      modelName: '동원F&B 보성녹차',
+      timing: t,
+      dealCount: 8,
+      formatPrice: fmt,
+    });
+    assert.match(
+      lead ?? '',
+      /^동원F&B 보성녹차는 지금 핫딜\(350ml 24개 11,750원\)보다 다나와 최저가\(10,740원\)가 더 쌉니다/,
+    );
+    assert.doesNotMatch(lead ?? '', /사도 되는 가격/);
+  });
+
+  it('다나와가 더 비싸거나, 다른 구성이거나, 너무 싸서 의심스러우면 추이 판정 그대로', () => {
+    for (const reps of [
+      [rep('350ml 24개', 13900, 165)],
+      [rep('1.5L 12개', 9000, 50)],
+      [rep('350ml 24개', 5000, 60)],
+    ]) {
+      const t = buildTiming({ ...base, representatives: reps });
+      assert.equal(t.tone, 'good');
+      assert.equal(t.label, '기록상 최저 · 사기 좋은 구간');
+    }
+  });
+
+  it('진행 중 목록도 같은 딜 두 글을 한 줄로', () => {
+    assert.equal(splitDealsForList(deals, 'unit', '100ml당', NOW).active.length, 1);
   });
 });

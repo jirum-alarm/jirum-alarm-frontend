@@ -82,6 +82,8 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
     isHot: d.isHot,
     hotDealType: d.hotDealType,
     mallName: d.mallName,
+    // 같은 딜을 서버가 한 장으로 접고 센 커뮤니티 수 — 카드에 「외 N곳」.
+    postedCommunityCount: d.postedCommunityCount,
     provider: d.provider,
   }));
 

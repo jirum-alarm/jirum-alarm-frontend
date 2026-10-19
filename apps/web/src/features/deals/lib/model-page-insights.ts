@@ -75,6 +75,78 @@ export function isForeignPriceDeal(deal: Deal, currency: 'KRW' | 'USD' = 'KRW'):
   return currency === 'KRW' && deal.price != null && !Number.isInteger(deal.price);
 }
 
+/** 같은 딜이 여러 커뮤니티에 올라온 것 — 가격 표기·괄호·공백을 지운 제목이 같고 하루 안이면 한 줄로. */
+const sameDealKey = (title: string) =>
+  title
+    .toLowerCase()
+    .replace(/\([^)]*\)|\[[^\]]*\]/g, '')
+    .replace(/[\d,]+\s*원/g, '')
+    .replace(/[\s/·,]+/g, '');
+
+/**
+ * 구성 키 — 용량(ml·g 로 맞춤)과 개수. 「350ml 24개」 = 「동원 보성녹차, 350mlx24개」 = 「0.35L 24입」.
+ * 백엔드 model-page-price-verdict.ts packKey(같은 딜 서명의 quantities)와 같은 목적 — 대표 상품과 딜을 잇는다.
+ */
+export function packKey(text: string): string | null {
+  const t = text.toLowerCase().replace(/\([^)]*\)/g, ' ');
+  const parts = new Set<string>();
+  for (const m of t.matchAll(/(\d+(?:\.\d+)?)\s*(kg|ml|l|g|리터)(?![a-wyz가-힣])/g)) {
+    const n = Number(m[1]);
+    const unit = m[2];
+    parts.add(
+      unit === 'l' || unit === '리터'
+        ? `${n * 1000}ml`
+        : unit === 'kg'
+          ? `${n * 1000}g`
+          : `${n}${unit}`,
+    );
+  }
+  for (const m of t.matchAll(/(\d+)\s*(?:개입|개|입|병|캔|팩|봉|구|롤|포)/g)) {
+    if (Number(m[1]) !== 1) parts.add(`${Number(m[1])}개`);
+  }
+  return parts.size ? [...parts].sort().join('|') : null;
+}
+
+/**
+ * 다나와가 핫딜가의 이 배율 미만이면 다나와 쪽을 믿지 않는다(다른 구성에 잘못 붙은 상품). 백엔드 MALL_SANE_MIN_RATIO 와 같다.
+ */
+const MALL_SANE_MIN_RATIO = 0.6;
+
+/** 딜과 같은 구성의 대표 상품. 구성을 못 읽거나 안 맞으면 null. */
+export function representativeForDeal(deal: Deal, reps: Representative[]): Representative | null {
+  const key = packKey(deal.title);
+  if (!key) return null;
+  return reps.find((r) => packKey(r.label) === key) ?? null;
+}
+
+/** 같은 구성의 다나와 최저가(믿을 만할 때만). 백엔드 mallPriceForDeal 과 같은 규칙. */
+export function mallPriceForDeal(deal: Deal, reps: Representative[]): number | null {
+  if (deal.price == null || deal.price <= 0) return null;
+  const mall = representativeForDeal(deal, reps)?.danawaPrice;
+  if (mall == null || mall <= 0 || mall < deal.price * MALL_SANE_MIN_RATIO) return null;
+  return mall;
+}
+
+/**
+ * 같은 딜이 여러 글로 올라온 것 — 같은 가격·하루 안·같은 제목 키. 진행 중 건수·목록에서 한 번만.
+ * (2026-10-19 보성녹차 「진행 중 2건」이 토스 같은 딜 두 글.) 백엔드 isDuplicateActive 와 같은 목적.
+ */
+export function dedupeSameDeals(deals: Deal[]): Deal[] {
+  const kept: Deal[] = [];
+  for (const d of deals) {
+    const at = d.postedAt ? Date.parse(d.postedAt) : NaN;
+    const key = sameDealKey(d.title);
+    const dup = kept.some(
+      (k) =>
+        k.price === d.price &&
+        sameDealKey(k.title) === key &&
+        Math.abs(Date.parse(k.postedAt ?? '') - at) < DAY_MS,
+    );
+    if (!dup) kept.push(d);
+  }
+  return kept;
+}
+
 /** 진행 중 = 비종료 + 게시 3일 이내. 판정과 목록 "진행 중" 탭이 같은 기준을 써야 숫자가 맞는다. */
 export function isActiveDeal(d: Deal, now = Date.now()): boolean {
   if (d.isEnd) return false;
@@ -93,7 +165,8 @@ export function cleanDealTitle(title: string): string {
     .trim();
 }
 
-export type TimingTone = 'good' | 'fair' | 'high' | 'unknown';
+/** mall = 같은 구성이 상시몰(다나와)에서 더 싸거나 같다 — 추이 판정보다 앞선다(백엔드 mall_cheaper). */
+export type TimingTone = 'good' | 'fair' | 'high' | 'mall' | 'unknown';
 
 export interface TimingInsight {
   tone: TimingTone;
@@ -110,6 +183,12 @@ export interface TimingInsight {
   activeDealCount: number;
   /** current 가 진행 중 딜 가격인가. false 면 히어로가(지난 핫딜) 폴백 — "지금" 이라고 부르면 안 된다. */
   isActivePrice: boolean;
+  /** 판정한 딜의 구성(「350ml 24개」) — 판정이 어느 구성 기준인지 보여 준다. */
+  bestPackLabel: string | null;
+  /** 판정한 딜과 같은 구성의 다나와 최저가. */
+  mallPrice: number | null;
+  /** 추이 점 수 — 판정 근거 표시용. */
+  historyPoints: number;
 }
 
 function mean(nums: number[]): number | null {
@@ -145,6 +224,7 @@ export function buildTimingInsight(input: {
   histBasis: HistBasis;
   histUnitLabel?: string | null;
   heroPrice?: HeroPrice | null;
+  representatives?: Representative[];
   currency?: 'KRW' | 'USD';
   now?: number;
 }): TimingInsight {
@@ -154,6 +234,7 @@ export function buildTimingInsight(input: {
     histBasis,
     histUnitLabel,
     heroPrice,
+    representatives = [],
     currency,
     now = Date.now(),
   } = input;
@@ -162,7 +243,7 @@ export function buildTimingInsight(input: {
   // ② 추이 중앙값의 40% 미만은 오독: 신라면 14,454원을 4,454원으로 읽어 "100g당 186원·평균보다 64% 저렴" 이 나갔다.
   const histMedian = median(histPrices);
   // 진행 중 건수는 증정 딜도 센다(백엔드 activeDealCount 와 같은 수 — 목록 카드 "진행 N건"과 맞춘다). 판정에서만 뺀다.
-  const active = deals.filter((d) => isActiveDeal(d, now));
+  const active = dedupeSameDeals(deals.filter((d) => isActiveDeal(d, now)));
   const pool = active.filter((d) => !isLikelyBundleDeal(d.title));
 
   let best: { price: number; deal: Deal } | null = null;
@@ -203,6 +284,9 @@ export function buildTimingInsight(input: {
       totalPrice: heroPrice?.minPrice ?? null,
       activeDealCount: active.length,
       isActivePrice: false,
+      bestPackLabel: null,
+      mallPrice: null,
+      historyPoints: histPrices.length,
     };
   }
 
@@ -231,7 +315,8 @@ export function buildTimingInsight(input: {
     savePct >= LOWEST_MIN_SAVE_PCT
   ) {
     tone = 'good';
-    label = '역대급 · 사기 좋은 구간';
+    // "역대"라고 부르지 않는다 — 추이는 우리가 모은 핫딜 몇 주치다(점 5개면 판정한다).
+    label = '기록상 최저 · 사기 좋은 구간';
   } else if (savePct != null && savePct >= CHEAP_MIN_SAVE_PCT) {
     tone = 'good';
     label = '평소보다 저렴 · 사기 좋은 구간';
@@ -244,6 +329,14 @@ export function buildTimingInsight(input: {
   } else {
     tone = 'unknown';
     label = '추이 대비 판단 불가';
+  }
+
+  const krw = currency !== 'USD';
+  const bestRep = best && krw ? representativeForDeal(best.deal, representatives) : null;
+  const mallPrice = best && krw ? mallPriceForDeal(best.deal, representatives) : null;
+  if (mallPrice != null && best?.deal.price != null && mallPrice <= best.deal.price) {
+    tone = 'mall';
+    label = '다나와가 더 쌈 · 핫딜 아님';
   }
 
   return {
@@ -260,6 +353,9 @@ export function buildTimingInsight(input: {
     totalPrice: best?.deal.price ?? heroPrice?.minPrice ?? null,
     activeDealCount: active.length,
     isActivePrice: best != null,
+    bestPackLabel: bestRep?.label ?? null,
+    mallPrice,
+    historyPoints: histPrices.length,
   };
 }
 
@@ -306,7 +402,7 @@ export function splitDealsForList(
   currency: 'KRW' | 'USD' = 'KRW',
 ): { active: Deal[]; history: Deal[] } {
   // !isEnd 만 보면 2023년 딜이 "진행 중"에 섞였다 — 종료 자동 판정이 없다(2026-10-05 스팸 진행 중 29건 중 21건이 30일 밖).
-  const active = deals.filter((d) => isActiveDeal(d, now));
+  const active = dedupeSameDeals(deals.filter((d) => isActiveDeal(d, now)));
   const history = deals;
 
   // 외화 딜은 원 축에서 비교할 수 없으니 뒤로 — 첫 줄이 "지금 추천"이다.
@@ -388,8 +484,15 @@ export function buildDealsLeadSentence(input: {
   if (!name) return null;
 
   const sentences: string[] = [];
+  const won = (n: number) => `${Math.round(n).toLocaleString('ko-KR')}원`;
 
-  if (timing.buyLine != null && timing.buyLine > 0) {
+  // 상시몰이 더 싸면 그게 답이다 — "○원 이하면 사도 됨"보다 먼저, 그리고 대신.
+  if (timing.tone === 'mall' && timing.mallPrice != null && timing.totalPrice != null) {
+    const pack = timing.bestPackLabel ? `${timing.bestPackLabel} ` : '';
+    sentences.push(
+      `${withTopicParticle(name)} 지금 핫딜(${pack}${won(timing.totalPrice)})보다 다나와 최저가(${won(timing.mallPrice)})가 더 쌉니다.`,
+    );
+  } else if (timing.buyLine != null && timing.buyLine > 0) {
     sentences.push(
       `${withTopicParticle(name)} ${formatPrice(timing.buyLine)} 이하면 사도 되는 가격입니다.`,
     );
@@ -509,14 +612,6 @@ export function isSameModelTitle(title: string, modelName: string, brand?: strin
   const prefix = brand.toLowerCase().replace(/\s+/g, '').slice(0, 2);
   return title.toLowerCase().replace(/\s+/g, '').includes(prefix);
 }
-
-/** 같은 딜이 여러 커뮤니티에 올라온 것 — 가격 표기·괄호·공백을 지운 제목이 같고 하루 안이면 한 줄로. */
-const sameDealKey = (title: string) =>
-  title
-    .toLowerCase()
-    .replace(/\([^)]*\)|\[[^\]]*\]/g, '')
-    .replace(/[\d,]+\s*원/g, '')
-    .replace(/[\s/·,]+/g, '');
 
 /**
  * 상세 "최근 올라온 핫딜" — 날짜순. 페이지에 묶이는 딜은 매칭 검증을 통과한 것뿐이라(최근 7일 커뮤니티 딜의 3.5%,

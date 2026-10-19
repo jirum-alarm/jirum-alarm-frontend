@@ -30,6 +30,7 @@ import {
   Representative,
   SearchedDeal,
   splitDealsForList,
+  withTopicParticle,
 } from '@/features/deals/lib/model-page-insights';
 import { toSeoImageUrl } from '@/features/product-detail/lib/product-seo';
 
@@ -107,6 +108,24 @@ function won(n?: number | null): string {
   return `${Math.round(n).toLocaleString()}원`;
 }
 
+/** 지금 딜 구성보다 단위가가 20% 넘게 싼 다른 구성(같은 단위 라벨) 중 가장 싼 것. */
+function rankedRepsForHint(
+  reps: Representative[],
+  timing: { current: number; unitLabel?: string | null; bestPackLabel: string | null },
+): Representative | null {
+  const cheaper = reps
+    .filter(
+      (r) =>
+        r.label !== timing.bestPackLabel &&
+        r.unitLabel === timing.unitLabel &&
+        r.unitPrice != null &&
+        r.unitPrice > 0 &&
+        r.unitPrice < timing.current * 0.8,
+    )
+    .sort((a, b) => (a.unitPrice ?? 0) - (b.unitPrice ?? 0));
+  return cheaper[0] ?? null;
+}
+
 type ModelPageData = NonNullable<Awaited<ReturnType<typeof ModelPageService.getModelPage>>>;
 
 /**
@@ -116,7 +135,7 @@ type ModelPageData = NonNullable<Awaited<ReturnType<typeof ModelPageService.getM
  */
 function deriveModelPageInsights(page: ModelPageData, displayName: string) {
   const payload = (page.payload ?? {}) as ModelPagePayload;
-  const { heroPrice, deals = [], priceHistory } = payload;
+  const { heroPrice, deals = [], priceHistory, representatives = [] } = payload;
   const histCurrency = priceHistory?.currency ?? 'KRW';
   const histBasis = priceHistory?.basis ?? 'total';
   const histUnitLabel = priceHistory?.unitLabel;
@@ -133,6 +152,7 @@ function deriveModelPageInsights(page: ModelPageData, displayName: string) {
     histBasis,
     histUnitLabel,
     heroPrice,
+    representatives,
     currency: histCurrency,
   });
   const fmtWithUnit = (price: number) =>
@@ -326,7 +346,19 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
 
   // 판정 색 — 좋음=success·비쌈=warning·평소=gray(/deals 목록 판정 배지와 같다).
   const timingTone =
-    timing.tone === 'good' ? 'success' : timing.tone === 'high' ? 'warning' : 'gray';
+    timing.tone === 'good'
+      ? 'success'
+      : timing.tone === 'high' || timing.tone === 'mall'
+        ? 'warning'
+        : 'gray';
+  // 판정은 지금 딜과 같은 구성 안에서만 한다 — 다른 구성이 단위가로 훨씬 싸면 따로 알려 준다(2026-10-19 보성녹차:
+  // 350ml 24개 100ml당 140원 「사기 좋은 구간」인데 1.5L 12개는 다나와 100ml당 63원). 같은 단위·20% 넘게 쌀 때만.
+  const cheaperPack =
+    timing.isActivePrice && timing.basis === 'unit'
+      ? rankedRepsForHint(representatives, timing)
+      : null;
+  const histSpanLabel =
+    histGranularity === 'day' ? '일' : histGranularity === 'week' ? '주' : '개월';
 
   const listTitleSuffix =
     histBasis === 'unit' && histUnitLabel ? `${histUnitLabel} 싼 순` : '싼 순';
@@ -452,11 +484,18 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                             ? won(heroPrice.unitPrice)
                             : won(heroPrice?.minPrice)}
                       </p>
-                      {heroPrice?.label && (
+                      {timing.isActivePrice && timing.bestPackLabel ? (
                         <p className="text-xs text-gray-500">
-                          {heroPrice.label}
-                          {heroPrice.minPrice != null ? ` · 총액 ${won(heroPrice.minPrice)}` : ''}
+                          {timing.bestPackLabel}
+                          {timing.totalPrice != null ? ` · 총액 ${won(timing.totalPrice)}` : ''}
                         </p>
+                      ) : (
+                        heroPrice?.label && (
+                          <p className="text-xs text-gray-500">
+                            {heroPrice.label}
+                            {heroPrice.minPrice != null ? ` · 총액 ${won(heroPrice.minPrice)}` : ''}
+                          </p>
+                        )
                       )}
                     </div>
                     {timing.avg != null && (
@@ -480,11 +519,55 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                         <p className="text-lg font-semibold text-gray-900">
                           {fmtHist(timing.buyLine)}
                         </p>
-                        <p className="text-xs text-gray-500">추이 하위 구간 기준</p>
+                        <p className="text-xs text-gray-500">추이 최저~최고의 하위 30%</p>
                       </div>
                     )}
                   </div>
 
+                  {/* 판정 근거 — 결론이 어느 구성·몇 점의 추이·어떤 비교에서 나왔는지 한 자리에서 보이게. */}
+                  {timing.isActivePrice && (
+                    <ul className="mt-3 flex flex-col gap-1 border-t border-gray-200 pt-2 text-xs text-gray-600">
+                      {timing.mallPrice != null && timing.totalPrice != null && (
+                        <li>
+                          다나와 같은 구성 최저가{' '}
+                          <span className="font-semibold text-gray-900">
+                            {won(timing.mallPrice)}
+                          </span>
+                          {timing.mallPrice <= timing.totalPrice
+                            ? ` — 핫딜이 ${won(timing.totalPrice - timing.mallPrice)} 더 비싸요`
+                            : ` — 핫딜이 ${won(timing.mallPrice - timing.totalPrice)} 더 싸요`}
+                        </li>
+                      )}
+                      {histPrices.length > 0 && (
+                        <li>
+                          {timing.bestPackLabel ? `${timing.bestPackLabel} 기준 · ` : ''}핫딜 추이{' '}
+                          {timing.historyPoints}
+                          {histSpanLabel}치 (최저 {fmtHist(histMin)} · 최고 {fmtHist(histMax)})
+                          {timing.historyPoints < 5 ? ' — 추이가 짧아 판정하지 않아요' : ''}
+                        </li>
+                      )}
+                      {cheaperPack && cheaperPack.unitPrice != null && (
+                        <li>
+                          다른 구성 {withTopicParticle(cheaperPack.label)} {cheaperPack.unitLabel}{' '}
+                          <span className="font-semibold text-gray-900">
+                            {won(cheaperPack.unitPrice)}
+                          </span>
+                          {cheaperPack.dealMinPrice != null ? '(핫딜)' : '(다나와)'}로 더 싸요
+                        </li>
+                      )}
+                    </ul>
+                  )}
+
+                  {timing.tone === 'mall' && danawa?.danawaUrl && (
+                    <a
+                      href={danawa.danawaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 mr-4 inline-flex text-sm font-semibold text-gray-900 underline-offset-2 hover:underline"
+                    >
+                      다나와 최저가 보기 →
+                    </a>
+                  )}
                   {activeDeals.length > 0 && (
                     <a
                       href="#deals-list"
@@ -679,6 +762,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             histMin={histMin}
             listTitleSuffix={listTitleSuffix}
             currency={histCurrency}
+            suppressPick={timing.tone === 'mall'}
           />
         </div>
 

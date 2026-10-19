@@ -4988,6 +4988,7 @@ export type KeywordHubQuery = {
       isHot?: boolean | null;
       hotDealType?: HotDealType | null;
       mallName?: string | null;
+      postedCommunityCount?: number | null;
       provider: {__typename?: 'Provider'; nameKr: string};
     }>;
     modelPages: Array<{
@@ -6435,6 +6436,7 @@ export const KeywordHubDocument = new TypedDocumentString(`
       isHot
       hotDealType
       mallName
+      postedCommunityCount
       provider {
         nameKr
       }

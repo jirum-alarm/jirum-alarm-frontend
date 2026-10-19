@@ -184,7 +184,7 @@ export function verdictBadge(
   switch (p.priceTone) {
     case 'lowest':
       return {
-        text: `역대 최저 · ${unit}${p.savePct}%↓`,
+        text: `기록상 최저 · ${unit}${p.savePct}%↓`,
         tone: 'success',
       };
     case 'cheap':
@@ -196,6 +196,9 @@ export function verdictBadge(
       return { text: '평소 수준', tone: 'gray' };
     case 'high':
       return { text: '평소보다 비싸요', tone: 'warning' };
+    case 'mall_cheaper':
+      // 같은 구성이 다나와에서 더 싸다 — 추이가 좋아도 핫딜이 아니다(백엔드 model-page-price-verdict.ts).
+      return { text: '다나와가 더 싸요', tone: 'warning' };
     default:
       return null;
   }

@@ -115,6 +115,7 @@ export const QueryKeywordHub = graphql(`
         isHot
         hotDealType
         mallName
+        postedCommunityCount
         provider {
           nameKr
         }

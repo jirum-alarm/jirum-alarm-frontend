@@ -41,6 +41,8 @@ interface Props {
   histMin: number;
   listTitleSuffix: string;
   currency: 'KRW' | 'USD';
+  /** 다나와가 더 싸면 진행 중 첫 딜에 「지금 추천」을 붙이지 않는다. */
+  suppressPick?: boolean;
 }
 
 export default function DealsListSection({
@@ -51,6 +53,7 @@ export default function DealsListSection({
   histMin,
   listTitleSuffix,
   currency,
+  suppressPick = false,
 }: Props) {
   const hasActive = activeDeals.length > 0;
   const [tab, setTab] = useState<Tab>(hasActive ? 'active' : 'history');
@@ -103,6 +106,7 @@ export default function DealsListSection({
             comparePrice <= histMin;
           const isActivePick =
             tab === 'active' &&
+            !suppressPick &&
             !deal.isEnd &&
             !isBundle &&
             !isForeignPriceDeal(deal, currency) &&
