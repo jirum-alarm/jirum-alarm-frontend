@@ -1,0 +1,56 @@
+name: seo-check
+
+# 검색 봇(구글 데스크톱·스마트폰·네이버 Yeti)이 받는 운영 HTML 을 매일 본다 — scripts/seo-check.py.
+# 배포 직후 판정은 release-tag.py ⑧ 이 하고, 이 잡은 배포 없이 깨지는 것(서버 데이터·사이트맵 배치·게이트웨이·robots)을 그날 안에 잡는다.
+# 그동안 이런 회귀는 전부 사람이 우연히 찾았다: 데스크톱 분기 h1 누락(2달, 09-02) · dev 색인 허용(09-03) · 첫 방문 시트가 봇 렌더를 덮음(10-16).
+# 크롤 «수용» 쪽(봇이 새 URL 을 실제로 긁나)은 gitops seo-new-url-watch 가 본다 — 이 잡은 «봇에게 내놓는 HTML» 쪽.
+
+on:
+  schedule:
+    - cron: '50 0 * * *' # 09:50 KST
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts/seo-check.py
+          sparse-checkout-cone-mode: false
+
+      - name: Crawler-eye check
+        id: check
+        run: |
+          set +e
+          python3 scripts/seo-check.py > seo-check.log 2>&1
+          code=$?
+          cat seo-check.log
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+
+      - name: Alert on failure
+        if: steps.check.outputs.code == '1'
+        env:
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
+        run: |
+          set -euo pipefail
+          fails=$(grep '^❌' seo-check.log | head -10)
+          msg="🔎 SEO 점검 실패 — 검색 봇이 받는 운영 HTML 이 깨졌습니다. 그날 배포(git log --since=yesterday -- apps/web)부터 보고, 배포 탓이면 직전 정상 태그로 되돌리세요.
+          ${fails}
+          ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          if [ -n "${MATTERMOST_WEBHOOK_URL:-}" ]; then
+            jq -n --arg text "$msg" '{channel: "alert-deploy", text: $text}' \
+              | curl -fsS -X POST -H 'Content-Type: application/json' -d @- "$MATTERMOST_WEBHOOK_URL" >/dev/null
+          fi
+          echo "::error::SEO 점검 실패 $(grep -c '^❌' seo-check.log)건"
+          exit 1
+
+      - name: Unreachable
+        if: steps.check.outputs.code != '0' && steps.check.outputs.code != '1'
+        run: |
+          echo "::warning::사이트에 닿지 않아 점검 못 함(exit ${{ steps.check.outputs.code }}) — 러너 네트워크·차단 목록 확인"
+          exit 1
