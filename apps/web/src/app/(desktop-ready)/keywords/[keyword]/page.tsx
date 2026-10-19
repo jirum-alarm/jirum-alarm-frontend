@@ -20,6 +20,8 @@ import {
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
 
+import { toSeoImageUrl } from '@/features/product-detail/lib/product-seo';
+
 import KeywordHubAlertButton from '@/widgets/keyword-hub/ui/KeywordHubAlertButton';
 import { searchHref } from '@/widgets/search/lib/search-href';
 
@@ -48,7 +50,9 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!loaded) {
     return { title: '페이지를 찾을 수 없어요 | 지름알림', robots: { index: false, follow: false } };
   }
-  const { hub, seo } = loaded;
+  const { hub, deals, seo } = loaded;
+  // 공유 썸네일 = 이 키워드의 최근 딜 사진(진행 중 먼저) — 기본 로고면 키워드마다 같은 그림이라 공유 글이 구분되지 않는다.
+  const dealImage = toSeoImageUrl(deals.find((d) => d.thumbnail)?.thumbnail);
   const url = `${METADATA_SERVICE_URL}${keywordHubPath(hub)}`;
   return {
     title: seo.title,
@@ -62,7 +66,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
       url,
       type: 'website',
       siteName: '지름알림',
-      images: [{ url: OG_IMAGE, width: 1200, height: 630 }],
+      images: [dealImage ? { url: dealImage } : { url: OG_IMAGE, width: 1200, height: 630 }],
     },
   };
 }

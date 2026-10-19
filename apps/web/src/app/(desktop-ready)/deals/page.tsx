@@ -1,3 +1,4 @@
+import { linkChip } from '@jirum/design-system/recipes';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -5,6 +6,10 @@ import { ModelPageService } from '@/shared/api/model-page';
 import { CATEGORIES } from '@/shared/config/categories';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
+
+import { fetchKeywordHubs } from '@/entities/keyword-hub/api/fetchKeywordHub';
+import { keywordHubPath } from '@/entities/keyword-hub/lib/keyword-hub';
 
 import { buildModelDisplayName } from '@/features/deals/lib/model-page-insights';
 
@@ -52,6 +57,8 @@ export const revalidate = 600; // 10분 ISR — 판정의 '3일 이내'도 이 �
 export default async function DealsIndexPage() {
   const pages = await ModelPageService.getPublishedModelPages();
   const { buyNow, recent, waiting } = splitByVerdict(pages);
+  // 위층(키워드 허브)으로 올라가는 링크 — 아래층 1,300여 링크가 모이는 이 목록에서 허브로 힘을 올려 준다(2026-10-19 SEO 점검: 0개였다).
+  const hubs = await fetchKeywordHubs();
 
   // 구체 수치 = AI 답변 엔진이 인용할 수 있는 유일한 형태. "여러 상품"은 인용되지 않는다.
   const leadSentence =
@@ -185,6 +192,28 @@ export default async function DealsIndexPage() {
             </>
           )}
         </>
+      )}
+
+      {hubs.length > 0 && (
+        <nav aria-labelledby="deals-keyword-hubs" className="mt-12">
+          <h2 id="deals-keyword-hubs" className="mb-3 text-base font-bold text-gray-900">
+            키워드별 핫딜
+          </h2>
+          <ul className="flex flex-wrap gap-2">
+            {hubs.map((h) => (
+              <li key={h.slug}>
+                <Link
+                  href={keywordHubPath(h)}
+                  data-track="keyword-hub-link"
+                  data-source="deals_index"
+                  className={cn('inline-block', linkChip)}
+                >
+                  {h.name} 핫딜
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
       )}
     </main>
   );
