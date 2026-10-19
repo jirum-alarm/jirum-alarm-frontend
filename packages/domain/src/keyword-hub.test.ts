@@ -95,6 +95,23 @@ describe('findKeywordHubsForTitle', () => {
     assert.deepEqual(findKeywordHubsForTitle('저분자 콜라겐 30포', terms), []);
     assert.deepEqual(findKeywordHubsForTitle('[쿠팡] 플스 5 슬림', terms).map((h) => h.slug), ['ps5']);
   });
+
+  // 서버 hubExcludeHit 와 같은 규칙 — 2026-10-20 30일 제목 리플레이에서 진짜 딜인데 빠지던 것
+  it('«본품 + 부속»의 부속 쪽 제외어로는 빠지지 않는다 — 본품 부분이 허브 이름을 부를 때', () => {
+    const coffee = [{ slug: '커피', name: '커피', excludes: ['머그', '증정', '머신'] }];
+    const galaxy = [{ slug: '갤럭시', name: '갤럭시', excludes: ['충전기', '케이스'] }];
+    const cola = [{ slug: '콜라', name: '콜라', excludes: ['프라이', '+콜라'] }];
+    const hit = (title: string, list: typeof coffee) => findKeywordHubsForTitle(title, list).length;
+    assert.equal(hit('스타벅스 캡슐커피 90캡슐+머그 증정 (53,460원/무배)', coffee), 1);
+    assert.equal(hit('스타벅스 캡슐커피 5+4박스 골라담기 (머그 증정)', coffee), 1);
+    assert.equal(hit('갤럭시탭 S12 플러스 + 삼성전자 45W 충전기', galaxy), 1);
+    assert.equal(hit('코카콜라 190ml 30캔 + 스프라이트 제로 24캔', cola), 1);
+    // 본품 부분에 제외어가 있거나, 본품이 허브를 안 부르거나, 모델 이름의 «+» 는 그대로 빠진다
+    assert.equal(hit('돌체구스토 커피머신 지니오 S + 스타벅스 캡슐 1박스', coffee), 0);
+    assert.equal(hit('크리넥스 3겹 24롤 2팩+메가커피 2천원 증정', coffee), 0);
+    assert.equal(hit('갤럭시탭 s10fe+ 북커버 케이스(30,000원/무료)', galaxy), 0);
+    assert.equal(hit('BHC치킨+콜라1.25L 17,480원', cola), 0);
+  });
 });
 
 describe('findThemesForHub', () => {

@@ -55,13 +55,54 @@ export function findKeywordHubForQuery<T extends KeywordHubTerms>(
 /** 제목 매칭용 — 별칭에 더해 제외어(콜라→콜라겐)까지. */
 export type KeywordHubMatchTerms = KeywordHubTerms & { excludes?: readonly string[] | null };
 
+/** 「(… 증정)」 「[사은품 …]」 같은 사은품 괄호 — 본품이 아니라 따라오는 것. */
+const GIFT_PAREN = /[([][^)\]]*(?:증정|사은품)[^)\]]*[)\]]/g;
+
+/**
+ * 제목의 본품 부분(소문자 원문) — 사은품 괄호를 지우고 첫 구분 «+» 앞까지. «+» 가 구분이 아닌 것: 숫자+숫자(1+1·5+4박스),
+ * 영숫자에 붙고 뒤가 비거나 공백·닫는 괄호인 모델 이름(갤럭시탭 S10 FE+).
+ */
+function hubMainPart(title: string): string {
+  const raw = title.toLowerCase().replace(/＋/g, '+').replace(GIFT_PAREN, ' ');
+  for (let i = 0; i < raw.length; i += 1) {
+    if (raw[i] !== '+') continue;
+    const prev = raw[i - 1] ?? '';
+    const next = raw[i + 1] ?? '';
+    if (/\d/.test(prev) && /\d/.test(next)) continue;
+    if (/[a-z0-9]/.test(prev) && (next === '' || /[\s)\]]/.test(next))) continue;
+    return raw.slice(0, i);
+  }
+  return raw;
+}
+
+/**
+ * 허브 제외어에 걸리나 — 서버 hubExcludeHit 와 같은 규칙. 본품 부분이 허브 이름·별칭을 부르면 제외어도 본품 부분에서만 찾는다
+ * («캡슐커피 + 머그 증정»의 머그, «청소기 + 충전거치대»의 거치대는 본품 딜을 지우지 않는다). 한 낱말 이름은 띄어쓰기째,
+ * 여러 낱말 이름은 공백 무시. «+» 로 시작하는 제외어(«+콜라»)는 제목 전체에서 찾는다.
+ */
+function isExcludedByHub(title: string, hub: KeywordHubMatchTerms): boolean {
+  if (!hub.excludes?.length) return false;
+  const t = normalizeHubText(title);
+  const mainRaw = hubMainPart(title);
+  const main = normalizeHubText(mainRaw);
+  const names = [hub.name, ...(hub.aliases ?? [])].map((x) => x.toLowerCase().trim()).filter(Boolean);
+  const mainNamesHub =
+    main !== t &&
+    names.some((x) => (/\s/.test(x) ? main.includes(normalizeHubText(x)) : mainRaw.includes(x)));
+  return hub.excludes.some((exclude) => {
+    const key = normalizeHubText(exclude);
+    if (!key) return false;
+    return (mainNamesHub && !key.startsWith('+') ? main : t).includes(key);
+  });
+}
+
 /**
  * 제목이 이 허브의 상품인가. 서버(crawling-server keyword-hub-match.ts)와 같은 규칙 — 상세에서 링크한 허브에
  * 그 딜이 안 보이면 이상하니, 바꾸면 양쪽을 같이 바꾼다.
  */
 export function matchesKeywordHub(title: string, hub: KeywordHubMatchTerms): boolean {
+  if (isExcludedByHub(title, hub)) return false;
   const t = normalizeHubText(title);
-  if (hub.excludes?.some((x) => t.includes(normalizeHubText(x)))) return false;
   return [hub.name, ...(hub.aliases ?? [])].some((term) => t.includes(normalizeHubText(term)));
 }
 
