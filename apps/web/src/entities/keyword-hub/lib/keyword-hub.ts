@@ -14,11 +14,15 @@ export {
   buildKeywordHubFacts,
   describeKeywordHubRhythm,
   findKeywordHubForQuery,
+  findKeywordHubsForTitle,
+  findThemesForHub,
   formatHubCount,
   KEYWORD_HUB_MIN_DEALS,
   KEYWORD_HUB_WINDOW_DAYS,
   keywordHubPath,
+  matchesKeywordHub,
 } from '@jirum/domain/keyword-hub';
+export type { KeywordHubMatchTerms as KeywordHubTerms } from '@jirum/domain/keyword-hub';
 
 /**
  * 키워드 허브(`/keywords/{slug}`) — "삼다수 핫딜" 같은 검색어 그대로의 모음 페이지.
@@ -32,29 +36,6 @@ export {
  * 걸린다. 서버 배치가 알림 구독 상위에서 후보를 올리고, 30일 딜 표본이 정말 그 상품인지 판정한 것만 공개된다.
  * 이 파일은 그 목록을 받아 쓰는 순수 함수만 둔다.
  */
-export type KeywordHubTerms = Pick<KeywordHub, 'slug' | 'name' | 'aliases' | 'excludes'>;
-
-const norm = (s: string) => s.toLowerCase().replace(/\s+/g, '');
-
-/**
- * 제목이 이 허브의 상품인가. 서버(crawling-server keyword-hub-match.ts)와 같은 규칙 — 상세에서 링크한 허브에
- * 그 딜이 안 보이면 이상하니, 바꾸면 양쪽을 같이 바꾼다.
- */
-export function matchesKeywordHub(title: string, hub: KeywordHubTerms): boolean {
-  const t = norm(title);
-  if (hub.excludes?.some((x) => t.includes(norm(x)))) return false;
-  return [hub.name, ...(hub.aliases ?? [])].some((term) => t.includes(norm(term)));
-}
-
-/** 상세 → 허브 링크용. 제목에 걸리는 허브(최대 n개, 목록 순서 = 30일 딜 많은 순). */
-export function findKeywordHubsForTitle<T extends KeywordHubTerms>(
-  title: string,
-  hubs: T[],
-  max = 2,
-): T[] {
-  return hubs.filter((h) => matchesKeywordHub(title, h)).slice(0, max);
-}
-
 type HubRhythm = Pick<KeywordHub, 'name' | 'activeDays' | 'topSources'>;
 type HubCount = Pick<KeywordHub, 'recentDealCount' | 'countCapped'>;
 

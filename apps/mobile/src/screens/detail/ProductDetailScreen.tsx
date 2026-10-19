@@ -74,6 +74,8 @@ import DetailBand from './ui/DetailBand';
 import ViewerCount, {MIN_VIEWER_COUNT} from './ui/ViewerCount';
 import CommunityReaction from '@/features/community-reaction/ui/CommunityReaction';
 import PressableOpacity from '@/shared/components/PressableOpacity';
+import {findKeywordHubsForTitle} from '@/entities/keyword-hub/lib/keyword-hub';
+import {useKeywordHubs} from '@/entities/keyword-hub/model/useKeywordHubs';
 
 type Props = NativeStackScreenProps<
   ProductFlowParamList,
@@ -277,6 +279,8 @@ function NativeDetail({
     />
   );
 
+  const {data: hubList} = useKeywordHubs();
+
   // 지워진 딜 — 가이드·근거 쿼리가 재시도로 늦게 끝나도 기다리지 않고 바로 알린다.
   if (isNotFoundError(error)) {
     return (
@@ -310,6 +314,9 @@ function NativeDetail({
     ? null
     : formatDealAgeNotice(dealFreshnessAt(product), product.isEnd);
   const showViewerCount = (product.viewCount ?? 0) >= MIN_VIEWER_COUNT;
+  const keywordHubs = hubList
+    ? findKeywordHubsForTitle(product.title, hubList)
+    : [];
 
   return (
     <View className="flex-1 bg-white">
@@ -373,6 +380,35 @@ function NativeDetail({
               /deals 를 열지 않으므로(2026-09-09 결정) 뺐다. */}
           {ageNotice ? (
             <Text className="mx-5 mb-6 text-sm text-gray-500">{ageNotice}</Text>
+          ) : null}
+          {/* web ProductPriceContext 키워드 허브 링크 — 딜에서 한 층 위(「삼다수 핫딜」 모음)로. 제목 매칭은
+              @jirum/domain 한 곳(서버 keyword-hub-match 와 같은 규칙). 목록이 없으면 안 보일 뿐이다. */}
+          {keywordHubs.length > 0 ? (
+            <View className="mx-5 mb-6 flex-row flex-wrap gap-x-3 gap-y-1">
+              {keywordHubs.map(hub => (
+                <PressableOpacity
+                  key={hub.slug}
+                  accessibilityRole="link"
+                  hitSlop={6}
+                  onPress={() => {
+                    Analytics.track('keyword_hub_card_click', {
+                      keyword: hub.slug,
+                      placement: 'detail_price_context',
+                    });
+                    // 상세 스택 타입엔 허브가 없다 — 액션으로 보내 루트(탭) 스택이 받게 한다(아래 도움말 링크와 같은 길).
+                    navigation.dispatch(
+                      StackActions.push(tabStackNavigations.KEYWORD_HUB, {
+                        slug: hub.slug,
+                        name: hub.name,
+                      }),
+                    );
+                  }}>
+                  <Text className="text-sm text-gray-600">
+                    {hub.name} 핫딜 더보기 →
+                  </Text>
+                </PressableOpacity>
+              ))}
+            </View>
           ) : null}
           {/* web ProductPriceContext 「지름알림이 가격을 판단하는 법」 — 근거 칸 밖에 둔다. 그 칸은 「답」 숨김
               실험(price_answer_holdout_v1)이 숨기므로 안에 넣으면 실험 군만 링크가 생긴다. 검색 스택에서 열려도

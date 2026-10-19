@@ -2,6 +2,7 @@
 
 import { wordTag } from '@jirum/design-system/recipes';
 import { useQuery, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 import { type ReactNode, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
@@ -14,6 +15,8 @@ import { LoadingSpinner } from '@/shared/ui/common/icons';
 import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
+import { findKeywordHubForQuery, keywordHubPath } from '@/entities/keyword-hub/lib/keyword-hub';
+import { useKeywordHubs } from '@/entities/keyword-hub/model/useKeywordHubs';
 import { ThemeQueries } from '@/entities/notification';
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
@@ -81,24 +84,37 @@ const ThemeConditions = ({ theme }: { theme: ThemeWithKeywords }) => {
   const keywords = theme.keywords.length ? theme.keywords : theme.representativeKeywords;
   const visible = showAll ? keywords : keywords.slice(0, KEYWORD_PREVIEW_COUNT);
   const hidden = keywords.length - visible.length;
+  // 허브 페이지가 있는 키워드는 그 허브로 잇는다(테마 → 키워드 → 딜 한 층씩 내려가기). 목록이 없으면 글자만.
+  const { data: hubs } = useKeywordHubs();
 
   return (
     <ul className="mt-3 divide-y divide-gray-100 rounded-xl border border-gray-100">
       <ConditionRow icon="🔎" title={`키워드 ${keywords.length}개 중 하나라도 제목에 있으면`}>
         <div className="mt-2 flex flex-wrap gap-1.5">
-          {visible.map((keyword) => (
-            <span
-              key={keyword}
-              className={cn(
-                wordTag.box,
-                wordTag.text,
-                wordTag.tone.fill.box,
-                wordTag.tone.fill.text,
-              )}
-            >
-              {keyword}
-            </span>
-          ))}
+          {visible.map((keyword) => {
+            const hub = hubs ? findKeywordHubForQuery(keyword, hubs) : undefined;
+            const className = cn(
+              wordTag.box,
+              wordTag.text,
+              wordTag.tone.fill.box,
+              wordTag.tone.fill.text,
+            );
+            return hub ? (
+              <Link
+                key={keyword}
+                href={keywordHubPath(hub)}
+                data-track="keyword-hub-link"
+                data-source="notification_theme"
+                className={cn(className, 'hover:bg-gray-200')}
+              >
+                {keyword} ›
+              </Link>
+            ) : (
+              <span key={keyword} className={className}>
+                {keyword}
+              </span>
+            );
+          })}
           {hidden > 0 && (
             <button
               type="button"

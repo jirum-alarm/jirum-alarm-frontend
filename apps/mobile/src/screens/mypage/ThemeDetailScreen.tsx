@@ -12,6 +12,8 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useQuery} from '@tanstack/react-query';
 
 import {ThemeQueries} from '@/entities/theme';
+import {findKeywordHubForQuery} from '@/entities/keyword-hub/lib/keyword-hub';
+import {useKeywordHubs} from '@/entities/keyword-hub/model/useKeywordHubs';
 import {ListCard} from '@/entities/home/ui/cards/HomeProductCards';
 import type {ProductCardType} from '@/entities/home/model/types';
 import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
@@ -64,6 +66,16 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
   const theme = (themes ?? []).find(item => Number(item.id) === themeId);
   const isSubscribed = new Set(subscribedIds ?? []).has(themeId);
 
+  // 허브가 있는 키워드 칩 → 허브 화면(테마 → 키워드 → 딜 한 층씩). web ThemeDetail 과 짝.
+  const openHub = useCallback(
+    (hub: {slug: string; name: string}) => {
+      navigation.push(tabStackNavigations.KEYWORD_HUB, {
+        slug: hub.slug,
+        name: hub.name,
+      });
+    },
+    [navigation],
+  );
   const openDetail = useCallback(
     (id: number) => {
       navigation.push(tabStackNavigations.DETAIL, {path: `/products/${id}`});
@@ -152,7 +164,7 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
             <Text className="mb-2 text-xs text-gray-500">
               딜이 뜰 때마다 울리는 게 아니라, 아래 조건을 다 통과한 딜만 와요.
             </Text>
-            <ThemeConditions theme={theme} />
+            <ThemeConditions theme={theme} onOpenHub={openHub} />
           </View>
 
           {/* 라이브 딜 */}
@@ -198,8 +210,15 @@ const KEYWORD_PREVIEW_COUNT = 12;
  * 숫자는 crawling-server 발송 배치와 같아야 한다 — THEME_MIN_SCORE(상위 ~7%)·
  * THEME_SLOTS_PER_DAY(3)·크론 KST 10·14·20시(util/pick-theme-deals.ts).
  */
-function ThemeConditions({theme}: {theme: ThemeWithKeywords}) {
+function ThemeConditions({
+  theme,
+  onOpenHub,
+}: {
+  theme: ThemeWithKeywords;
+  onOpenHub: (hub: {slug: string; name: string}) => void;
+}) {
   const [showAll, setShowAll] = useState(false);
+  const {data: hubs} = useKeywordHubs();
   const keywords = theme.keywords.length
     ? theme.keywords
     : theme.representativeKeywords;
@@ -213,15 +232,32 @@ function ThemeConditions({theme}: {theme: ThemeWithKeywords}) {
         icon="🔎"
         title={`키워드 ${keywords.length}개 중 하나라도 제목에 있으면`}>
         <View className="mt-2 flex-row flex-wrap gap-1.5">
-          {visible.map(keyword => (
-            <View
-              key={keyword}
-              className={cn(wordTag.box, wordTag.tone.fill.box)}>
-              <Text className={cn(wordTag.text, wordTag.tone.fill.text)}>
-                {keyword}
-              </Text>
-            </View>
-          ))}
+          {visible.map(keyword => {
+            const hub = hubs
+              ? findKeywordHubForQuery(keyword, hubs)
+              : undefined;
+            return hub ? (
+              <PressableOpacity
+                key={keyword}
+                onPress={() => onOpenHub(hub)}
+                accessibilityRole="link"
+                accessibilityLabel={`${hub.name} 핫딜 보기`}
+                hitSlop={4}
+                className={cn(wordTag.box, wordTag.tone.fill.box)}>
+                <Text className={cn(wordTag.text, wordTag.tone.fill.text)}>
+                  {keyword} ›
+                </Text>
+              </PressableOpacity>
+            ) : (
+              <View
+                key={keyword}
+                className={cn(wordTag.box, wordTag.tone.fill.box)}>
+                <Text className={cn(wordTag.text, wordTag.tone.fill.text)}>
+                  {keyword}
+                </Text>
+              </View>
+            );
+          })}
           {hidden > 0 ? (
             <PressableOpacity
               onPress={() => setShowAll(true)}

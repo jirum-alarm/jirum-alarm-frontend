@@ -73,6 +73,7 @@ export const QueryKeywordHubs = graphql(`
       slug
       name
       aliases
+      excludes
       recentDealCount
       countCapped
       activeDays

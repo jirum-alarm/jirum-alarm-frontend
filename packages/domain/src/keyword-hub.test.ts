@@ -8,6 +8,8 @@ const {
   buildKeywordHubLead,
   describeKeywordHubRhythm,
   findKeywordHubForQuery,
+  findKeywordHubsForTitle,
+  findThemesForHub,
   formatHubCount,
   keywordHubPath,
 } = require('./keyword-hub.ts') as typeof import('./keyword-hub');
@@ -80,5 +82,29 @@ describe('문장', () => {
 
   it('경로는 슬러그를 인코딩한다', () => {
     assert.equal(keywordHubPath({ slug: '삼다수' }), '/keywords/%EC%82%BC%EB%8B%A4%EC%88%98');
+  });
+});
+
+describe('findKeywordHubsForTitle', () => {
+  it('제목에 이름·별칭이 들어 있으면 걸리고, 제외어가 있으면 빠진다', () => {
+    const terms = [
+      { slug: '콜라', name: '콜라', excludes: ['콜라겐'] },
+      { slug: 'ps5', name: 'PS5', aliases: ['플스5'] },
+    ];
+    assert.deepEqual(findKeywordHubsForTitle('코카콜라 제로 24캔', terms).map((h) => h.slug), ['콜라']);
+    assert.deepEqual(findKeywordHubsForTitle('저분자 콜라겐 30포', terms), []);
+    assert.deepEqual(findKeywordHubsForTitle('[쿠팡] 플스 5 슬림', terms).map((h) => h.slug), ['ps5']);
+  });
+});
+
+describe('findThemesForHub', () => {
+  const themes = [
+    { id: 1, keywords: ['SSD', '그래픽카드'] },
+    { id: 2, keywords: ['플스5', '닌텐도'] },
+    { id: 3, keywords: ['삼다수 2L'] },
+  ];
+  it('테마 키워드가 허브 키워드 자체(별칭 포함)일 때만 잇는다', () => {
+    assert.deepEqual(findThemesForHub(hubs[0], themes).map((t) => t.id), [2]);
+    assert.deepEqual(findThemesForHub(hubs[1], themes), []);
   });
 });

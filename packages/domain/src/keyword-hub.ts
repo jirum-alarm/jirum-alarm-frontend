@@ -52,6 +52,41 @@ export function findKeywordHubForQuery<T extends KeywordHubTerms>(
   );
 }
 
+/** 제목 매칭용 — 별칭에 더해 제외어(콜라→콜라겐)까지. */
+export type KeywordHubMatchTerms = KeywordHubTerms & { excludes?: readonly string[] | null };
+
+/**
+ * 제목이 이 허브의 상품인가. 서버(crawling-server keyword-hub-match.ts)와 같은 규칙 — 상세에서 링크한 허브에
+ * 그 딜이 안 보이면 이상하니, 바꾸면 양쪽을 같이 바꾼다.
+ */
+export function matchesKeywordHub(title: string, hub: KeywordHubMatchTerms): boolean {
+  const t = normalizeHubText(title);
+  if (hub.excludes?.some((x) => t.includes(normalizeHubText(x)))) return false;
+  return [hub.name, ...(hub.aliases ?? [])].some((term) => t.includes(normalizeHubText(term)));
+}
+
+/** 상세 → 허브 링크용. 제목에 걸리는 허브(최대 n개, 목록 순서 = 30일 딜 많은 순). */
+export function findKeywordHubsForTitle<T extends KeywordHubMatchTerms>(
+  title: string,
+  hubs: readonly T[],
+  max = 2,
+): T[] {
+  return hubs.filter((h) => matchesKeywordHub(title, h)).slice(0, max);
+}
+
+/**
+ * 허브 → 그 키워드를 품은 관심사 묶음(테마). 테마 키워드 중 허브 키워드 **자체**가 있는 것(같음 비교 —
+ * findKeywordHubForQuery 와 같은 규칙). 테마↔허브는 서버에 연결 테이블이 없어 이름으로 잇는다(2026-10-19 실측:
+ * 공개 허브 80개 중 65개가 어느 테마에 들어 있다).
+ */
+export function findThemesForHub<T extends { keywords: readonly string[] }>(
+  hub: KeywordHubTerms,
+  themes: readonly T[],
+  max = 2,
+): T[] {
+  return themes.filter((t) => t.keywords.some((k) => findKeywordHubForQuery(k, [hub]))).slice(0, max);
+}
+
 export function keywordHubPath(hub: Pick<KeywordHubTerms, 'slug'>): string {
   return `/keywords/${encodeURIComponent(hub.slug)}`;
 }

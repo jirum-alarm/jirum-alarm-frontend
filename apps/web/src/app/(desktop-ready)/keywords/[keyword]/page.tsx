@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { themePath, ThemeService } from '@/shared/api/notification/theme.service';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { robotsDirective } from '@/shared/config/metadata';
 import { PAGE } from '@/shared/config/page';
@@ -11,6 +12,7 @@ import { cn } from '@/shared/lib/cn';
 import { fetchKeywordHub, fetchKeywordHubs } from '@/entities/keyword-hub/api/fetchKeywordHub';
 import {
   buildKeywordHubSeo,
+  findThemesForHub,
   formatHubCount,
   KEYWORD_HUB_WINDOW_DAYS,
   keywordHubPath,
@@ -112,6 +114,8 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
   };
 
   const otherHubs = (await fetchKeywordHubs()).filter((h) => h.slug !== hub.slug);
+  // 위층: 이 키워드를 품은 관심사 묶음(테마). 링크는 부가 요소라 실패하면 빼고 그린다.
+  const parentThemes = findThemesForHub(hub, await ThemeService.getThemesPublic().catch(() => []));
 
   // 얼마나 자주·어디에 — 셀 수 있는 사실만(가격은 원값 오독이 많아 쓰지 않는다).
   const { rhythm } = seo;
@@ -209,6 +213,30 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
           </ul>
         </nav>
       )}
+
+      {parentThemes.length > 0 ? (
+        <nav aria-label={`${hub.name} 관심사 묶음`} className="mb-6">
+          <h2 className="mb-1 text-base font-semibold text-gray-900">비슷한 것까지 묶어서 받기</h2>
+          <p className="mb-3 text-sm text-gray-500">
+            {hub.name}처럼 비슷한 키워드를 한꺼번에 — 반응 좋은 딜만 하루 최대 3건 알려드려요.
+          </p>
+          <ul className="flex flex-wrap gap-2">
+            {parentThemes.map((t) => (
+              <li key={t.id}>
+                <Link
+                  href={themePath(t)}
+                  data-track="theme-link"
+                  data-source="keyword_hub"
+                  className={cn('inline-block', linkChip)}
+                >
+                  {t.emoji ? `${t.emoji} ` : ''}
+                  {t.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ) : null}
 
       {cards.length > 0 ? (
         <ProductGridList products={cards} priorityCount={4} />

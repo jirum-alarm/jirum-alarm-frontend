@@ -4942,6 +4942,7 @@ export type KeywordHubsQuery = {
     slug: string;
     name: string;
     aliases: Array<string>;
+    excludes: Array<string>;
     recentDealCount: number;
     countCapped: boolean;
     activeDays: number;
@@ -6396,6 +6397,7 @@ export const KeywordHubsDocument = new TypedDocumentString(`
     slug
     name
     aliases
+    excludes
     recentDealCount
     countCapped
     activeDays

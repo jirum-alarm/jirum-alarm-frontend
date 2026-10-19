@@ -7,6 +7,7 @@ import {
 import React, {useCallback, useLayoutEffect, useState} from 'react';
 import {Pressable, ScrollView, View} from 'react-native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useQuery} from '@tanstack/react-query';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import CurationGrid from '@/entities/home/ui/CurationGrid';
@@ -16,8 +17,10 @@ import {
   buildKeywordHubLead,
   describeKeywordHubRhythm,
   keywordHubPath,
+  findThemesForHub,
 } from '@/entities/keyword-hub/lib/keyword-hub';
 import {useKeywordHub} from '@/entities/keyword-hub/model/useKeywordHub';
+import {ThemeQueries} from '@/entities/theme';
 import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {
   DetailHeaderActions,
@@ -62,6 +65,8 @@ export default function KeywordHubScreen({navigation, route}: Props) {
   const {slug} = route.params;
   const {data, isPending, isError, refetch} = useKeywordHub(slug);
   const hub = data?.hub;
+  // 위층: 이 키워드를 품은 관심사 묶음. 실패·로딩이면 칸만 안 보인다(web 허브 페이지와 같은 규칙).
+  const {data: themes} = useQuery(ThemeQueries.themes());
   const name = hub?.name ?? route.params.name ?? '';
   const title = name ? `${name} 핫딜` : '';
 
@@ -145,6 +150,7 @@ export default function KeywordHubScreen({navigation, route}: Props) {
 
   const deals: ProductCardType[] = data.deals;
   const rhythm = describeKeywordHubRhythm(hub);
+  const parentThemes = themes ? findThemesForHub(hub, themes) : [];
   const header = (
     <View className="px-5 pb-2 pt-4">
       <Text className={cn('leading-relaxed', textRole.body)}>
@@ -194,6 +200,33 @@ export default function KeywordHubScreen({navigation, route}: Props) {
                 </PressableScale>
               );
             })}
+          </View>
+        </View>
+      ) : null}
+
+      {parentThemes.length > 0 ? (
+        <View className="mt-6">
+          <Text className={textRole.subtitle}>비슷한 것까지 묶어서 받기</Text>
+          <Text className={cn('mt-0.5', textRole.caption)}>
+            {`${hub.name}처럼 비슷한 키워드를 한꺼번에 — 반응 좋은 딜만 하루 최대 3건 알려드려요.`}
+          </Text>
+          <View className="mt-2 flex-row flex-wrap gap-2">
+            {parentThemes.map(t => (
+              <PressableScale
+                key={t.id}
+                onPress={() =>
+                  navigation.push(tabStackNavigations.THEME_DETAIL, {
+                    themeId: String(t.id),
+                    title: t.name,
+                  })
+                }
+                accessibilityRole="link"
+                className={modelChip.box}>
+                <Text className={modelChip.text}>
+                  {`${t.emoji ? `${t.emoji} ` : ''}${t.name}`}
+                </Text>
+              </PressableScale>
+            ))}
           </View>
         </View>
       ) : null}

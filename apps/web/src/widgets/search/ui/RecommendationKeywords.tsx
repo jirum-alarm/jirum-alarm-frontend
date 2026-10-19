@@ -9,8 +9,8 @@ import useMyRouter from '@/shared/hooks/useMyRouter';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
 import { KEYWORD_HUB_MIN_DEALS } from '@/entities/keyword-hub/lib/keyword-hub';
+import { useKeywordHubs } from '@/entities/keyword-hub/model/useKeywordHubs';
 
-import { useKeywordHubs } from '../hooks/useKeywordHubs';
 import { navigateToSearch } from '../hooks/useSearchInputViewModel';
 
 /**

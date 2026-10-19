@@ -11,6 +11,8 @@ export {
   buildKeywordHubLead,
   describeKeywordHubRhythm,
   findKeywordHubForQuery,
+  findKeywordHubsForTitle,
+  findThemesForHub,
   formatHubCount,
   keywordHubPath,
   KEYWORD_HUB_MIN_DEALS,

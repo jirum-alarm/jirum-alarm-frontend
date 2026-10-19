@@ -9,8 +9,8 @@ import {
   formatHubCount,
   keywordHubPath,
 } from '@/entities/keyword-hub/lib/keyword-hub';
+import { useKeywordHubs } from '@/entities/keyword-hub/model/useKeywordHubs';
 
-import { useKeywordHubs } from '../hooks/useKeywordHubs';
 import { pushDataLayer } from '../hooks/useSearchKeywordAlert';
 
 /**
