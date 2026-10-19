@@ -11,7 +11,7 @@ Mixpanel 전용 태그 15종(7주, 09-22 발견), 웹 sign_up 35%만 집계(10-0
   D. 웹 user_id — 앱엔 로그인 사용자가 있는데 웹은 0명(GTM v56 에서 붙였다, 2026-10-16)
 
 출처: GA4(속성 394356262) + 운영 MySQL(mysql-0, 읽기) + Mongo user_history(mongodb-1 secondary, 읽기).
-실행 주체 = 맥 launchd(com.seonkyo.jirum-tracking-watch, 매일 09:40). 알림 = macOS 알림 + MATTERMOST_WEBHOOK_URL 이 있으면 Mattermost.
+실행 주체 = 맥 launchd(com.seonkyo.jirum-tracking-watch, 매일 14:00 — GA4 전날 처리가 오전엔 덜 끝나 09:40 은 오경보였다, 2026-10-19). 알림 = macOS 알림 + MATTERMOST_WEBHOOK_URL 이 있으면 Mattermost.
 설치: install -m 0755 scripts/tracking-watch.py ~/.local/bin/  (launchd 는 TCC 로 ~/Documents 를 못 읽는다 — 이 파일이 원본)
 수동: python3 scripts/tracking-watch.py [기준일=어제 YYYY-MM-DD]  → 표준출력 + ~/.local/share/jirum/tracking-watch.md
 알림 판독: 먼저 그날 frontend 커밋(`git log --since=<전날> -- apps/web`)을 본다. 첫 실행(10/15)의 두 건은 둘 다 의도된 변경이었다 —
