@@ -3,8 +3,9 @@ import { Suspense } from 'react';
 
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
-import { TOSS_SECTIONS } from './mock';
-import { fetchTossDeals } from './toss.api';
+import { fetchTossDeals } from '@/widgets/toss/api/toss.api';
+import { TOSS_SECTIONS } from '@/widgets/toss/model/mock';
+
 import TossDailyContainer from './TossDailyContainer';
 
 export const metadata: Metadata = {

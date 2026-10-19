@@ -9,6 +9,7 @@ import { GoodPriceService } from '@/shared/api/keyword/good-price.service';
 import { PAGE } from '@/shared/config/page';
 import { getLastAlarmReadAt, setLastAlarmReadAt } from '@/shared/lib/alarmReadState';
 import { cn } from '@/shared/lib/cn';
+import { pushDataLayer } from '@/shared/lib/data-layer';
 import { useToast } from '@/shared/ui/common/Toast';
 import Link from '@/shared/ui/Link';
 
@@ -16,8 +17,6 @@ import { AuthQueries } from '@/entities/auth';
 import { ThemeQueries } from '@/entities/notification';
 
 import { pushSettingQuery, useUpdatePushSetting } from '@/features/mypage/model/usePushSetting';
-
-import { pushDataLayer } from '@/widgets/search/hooks/useSearchKeywordAlert';
 
 import {
   GOOD_PRICE_NUDGE_MIN_ALERTS,

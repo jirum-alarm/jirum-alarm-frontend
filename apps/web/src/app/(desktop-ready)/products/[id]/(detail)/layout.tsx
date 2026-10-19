@@ -1,5 +1,4 @@
-import { checkDevice } from '@/app/actions/agent';
-
+import { checkDevice } from '@/shared/actions/agent';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
 import { resolveAppDownloadPlatform } from '@/features/app-download/model/resolvePlatform';

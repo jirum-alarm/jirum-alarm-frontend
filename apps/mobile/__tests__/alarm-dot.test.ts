@@ -108,7 +108,7 @@ describe('스냅샷 저장 — 알림함을 보면 꺼진다', () => {
 
 describe('★배선 — 판정이 네이티브 소유인가(브릿지 회귀 방지)', () => {
   const hook = read('src/shared/hooks/useHasNewAlarm.ts');
-  const sync = read('src/shared/hooks/useAlarmDotSync.ts');
+  const sync = read('src/entities/notification/useAlarmDotSync.ts');
   const mainNavigator = read('src/navigations/stack/MainNavigator.tsx');
   const viewModel = read(
     'src/screens/alarm/model/useNotificationsViewModel.ts',

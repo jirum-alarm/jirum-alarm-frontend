@@ -2,10 +2,9 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import { SwiperOptions } from 'swiper/types';
 
-import { getQueryClient } from '@/app/(app)/react-query/query-client';
-
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { PAGE } from '@/shared/config/page';
+import { getQueryClient } from '@/shared/lib/react-query/query-client';
 import { getDayBefore } from '@/shared/lib/utils/date';
 import ApiErrorBoundary from '@/shared/ui/ApiErrorBoundary';
 import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';

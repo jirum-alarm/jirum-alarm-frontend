@@ -2,16 +2,14 @@
 
 import { useAtom } from 'jotai';
 
-import { getFcmToken, setGuestSession } from '@/app/actions/token';
-
+import { getFcmToken, setGuestSession } from '@/shared/actions/token';
 import { AuthService } from '@/shared/api/auth';
 import { TokenType } from '@/shared/api/gql/graphql';
 import { NotificationService } from '@/shared/api/notification/notification.service';
 import { useDevice } from '@/shared/hooks/useDevice';
 import useIsLoggedIn, { isGuestAtom } from '@/shared/hooks/useIsLoggedIn';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
-
-import type { LoginModalMessage } from '@/features/auth/model/login/loginModal';
+import type { LoginModalMessage } from '@/shared/model/loginModal';
 
 /**
  * 키워드·관심사 알림 등록 전에 부른다. 로그인했으면 그대로, 아니면 게스트 계정을 만들어 바로 진행한다.

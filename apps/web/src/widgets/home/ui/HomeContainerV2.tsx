@@ -2,13 +2,10 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { getQueryClient } from '@/app/(app)/react-query/query-client';
-import { TOSS_SECTIONS } from '@/app/(desktop-ready)/toss/mock';
-import { fetchTossCategoryLabels, fetchTossDeals } from '@/app/(desktop-ready)/toss/toss.api';
-import { checkDevice } from '@/app/actions/agent';
-
+import { checkDevice } from '@/shared/actions/agent';
 import { AdvertiseSlotLocation } from '@/shared/api/gql/graphql';
 import { Advertisement } from '@/shared/config/advertisement';
+import { getQueryClient } from '@/shared/lib/react-query/query-client';
 
 import { AdvertisementQueries } from '@/entities/advertisement/api';
 import { AuthQueries } from '@/entities/auth';
@@ -17,6 +14,8 @@ import { getPromotionSections } from '@/entities/promotion/api/getPromotionSecti
 
 import PromotionSectionList from '@/widgets/home/ui/PromotionSectionList';
 import Footer from '@/widgets/layout/ui/desktop/Footer';
+import { fetchTossCategoryLabels, fetchTossDeals } from '@/widgets/toss/api/toss.api';
+import { TOSS_SECTIONS } from '@/widgets/toss/model/mock';
 
 import DesktopHeroSection from './desktop/HeroSection';
 import MobileBackgroundHeader from './mobile/BackgroundHeader';

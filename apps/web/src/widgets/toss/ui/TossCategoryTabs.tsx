@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { cn } from '@/shared/lib/cn';
 
-import { fetchTossCategoryLabels } from './toss.api';
+import { fetchTossCategoryLabels } from '../api/toss.api';
 
 // 카테고리 인기 하위 탭(동적 categoryLabel). 홈/목록 공통.
 // 섹션 탭과 그리드 사이(중간)에 뜨며, 카테고리 인기 섹션일 때만 노출.

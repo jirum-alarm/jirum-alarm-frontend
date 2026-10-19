@@ -6,8 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Drawer } from 'vaul';
 
-import { CheckDeviceResult } from '@/app/actions/agent.types';
-
+import { CheckDeviceResult } from '@/shared/actions/agent.types';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
 import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
 import { Apple, Google } from '@/shared/ui/common/icons';

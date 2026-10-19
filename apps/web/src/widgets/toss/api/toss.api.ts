@@ -3,7 +3,7 @@ import { execute } from '@/shared/lib/http-client';
 
 import { stripPriceFromTitle } from '@/entities/product/lib/from-toss';
 
-import { type TossDeal } from './mock';
+import { type TossDeal } from '../model/mock';
 
 // 섹션 id → 서버 keyword 매핑. 서버 ProductKeywordCollection 과 일치해야 함.
 export const TOSS_SECTION_KEYWORD: Record<string, string> = {

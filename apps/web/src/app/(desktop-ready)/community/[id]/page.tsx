@@ -2,9 +2,8 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cache, Suspense } from 'react';
 
-import { checkDevice } from '@/app/actions/agent';
-import { getAccessToken } from '@/app/actions/token';
-
+import { checkDevice } from '@/shared/actions/agent';
+import { getAccessToken } from '@/shared/actions/token';
 import { CommunityService } from '@/shared/api/community/community.service';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { Skeleton } from '@/shared/ui/common/Skeleton';

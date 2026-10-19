@@ -1,9 +1,8 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
-import { getQueryClient } from '@/app/(app)/react-query/query-client';
-
 import { AdvertiseSlotLocation } from '@/shared/api/gql/graphql';
 import type { ProductService } from '@/shared/api/product/product.service';
+import { getQueryClient } from '@/shared/lib/react-query/query-client';
 
 import { AdvertisementQueries } from '@/entities/advertisement/api';
 import { ProductQueries } from '@/entities/product';

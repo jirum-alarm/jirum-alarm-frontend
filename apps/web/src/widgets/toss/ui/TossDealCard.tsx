@@ -11,7 +11,7 @@ import { tossDetailHref } from '@/entities/product/lib/from-toss';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 import { CardCornerLabel } from '@/entities/product-list/ui/ProductCardStatus';
 
-import { type TossDeal } from './mock';
+import { type TossDeal } from '../model/mock';
 
 // 토스 전용 카드. ProductGridCard 스타일(rounded-lg / aspect-square / gray 팔레트)을 따르되
 // 토스 특가 코너에서는 판매가·할인율을 숨기고 상세는 ?from=toss 로 연다.

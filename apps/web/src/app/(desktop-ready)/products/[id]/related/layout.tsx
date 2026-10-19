@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { checkDevice } from '@/app/actions/agent';
-
+import { checkDevice } from '@/shared/actions/agent';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import SectionHeader from '@/shared/ui/SectionHeader';

@@ -1,4 +1,4 @@
-import { checkDevice } from '@/app/actions/agent';
+import { checkDevice } from '@/shared/actions/agent';
 
 import DesktopSearchLayout from '@/widgets/search/ui/layout/DesktopSearchLayout';
 import MobileSearchLayout from '@/widgets/search/ui/layout/MobileSearchLayout';

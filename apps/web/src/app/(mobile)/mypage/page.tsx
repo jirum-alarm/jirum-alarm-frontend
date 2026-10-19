@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 
-import { checkDevice } from '@/app/actions/agent';
-
+import { checkDevice } from '@/shared/actions/agent';
 import CustomerServiceBoot from '@/shared/lib/customerservice/CustomerServiceBoot';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 

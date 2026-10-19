@@ -3,7 +3,7 @@
 import { atom, useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 
-import { getAccessToken } from '@/app/actions/token';
+import { getAccessToken } from '@/shared/actions/token';
 
 /**
  * 로그인 여부. ServerStateProvider 가 서버 판정 결과를 심는다.

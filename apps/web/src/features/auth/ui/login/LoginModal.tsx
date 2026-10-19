@@ -4,6 +4,7 @@ import { useAtom } from 'jotai';
 import { useState } from 'react';
 
 import { WindowLocation } from '@/shared/lib/window-location';
+import { loginModalMessageAtom } from '@/shared/model/loginModal';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
 import SvgClose from '@/shared/ui/common/icons/Close';
 import LoadingSpinner from '@/shared/ui/common/icons/LoadingSpinner';
@@ -13,7 +14,6 @@ import SvgNaver from '@/shared/ui/common/icons/login/Naver';
 
 import { useKakaoLogin } from '../../lib/use-kakao-login';
 import { useNaverLogin } from '../../lib/use-naver-login';
-import { loginModalMessageAtom } from '../../model/login/loginModal';
 import { getRecentLoginMethod, LoginMethod } from '../../model/login/recentLoginMethod';
 
 const LOGIN_BUTTON_STYLE: Record<LoginMethod, string> = {

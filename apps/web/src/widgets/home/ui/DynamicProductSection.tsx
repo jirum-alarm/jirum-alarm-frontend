@@ -1,7 +1,6 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
-import { getQueryClient } from '@/app/(app)/react-query/query-client';
-
+import { getQueryClient } from '@/shared/lib/react-query/query-client';
 import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
 import SectionHeader from '@/shared/ui/SectionHeader';
 

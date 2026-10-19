@@ -1,9 +1,8 @@
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
-import { checkDevice } from '@/app/actions/agent';
-import { getAccessToken } from '@/app/actions/token';
-
+import { checkDevice } from '@/shared/actions/agent';
+import { getAccessToken } from '@/shared/actions/token';
 import { PAGE } from '@/shared/config/page';
 import BackButton from '@/shared/ui/layout/BackButton';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';

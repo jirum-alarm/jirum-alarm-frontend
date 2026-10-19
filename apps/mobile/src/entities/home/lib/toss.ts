@@ -1,5 +1,5 @@
 /**
- * 토스 딜 변환. web: app/(desktop-ready)/toss/toss.api.ts
+ * 토스 딜 변환. web: widgets/toss/api/toss.api.ts
  *
  * 상품의 `data.toss` 확장정보를 카드가 쓸 모양으로 정규화한다.
  */

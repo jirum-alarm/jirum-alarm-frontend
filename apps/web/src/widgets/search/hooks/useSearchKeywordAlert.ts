@@ -7,6 +7,7 @@ import { PAGE } from '@/shared/config/page';
 import useAlertSession from '@/shared/hooks/useAlertSession';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
+import { pushDataLayer } from '@/shared/lib/data-layer';
 import { getGraphqlErrorMessage } from '@/shared/lib/graphql-error';
 import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
@@ -25,10 +26,7 @@ export const isRegistrableKeyword = (keyword: string) => {
   return length >= MIN_KEYWORD_LENGTH && length <= MAX_KEYWORD_LENGTH;
 };
 
-export const pushDataLayer = (payload: Record<string, unknown>) => {
-  if (typeof window === 'undefined') return;
-  (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push(payload);
-};
+export { pushDataLayer };
 
 /**
  * 검색한 그 단어로 알림을 거는 로직 — 결과 위 한 줄(search_bar)과 0건 화면 버튼(search_no_result)이 같이 쓴다.

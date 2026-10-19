@@ -4,8 +4,7 @@ import { deriveKeyword } from '@jirum/domain/derive-keyword';
 import { useEffect, useState } from 'react';
 import { Drawer } from 'vaul';
 
-import { CheckDeviceResult } from '@/app/actions/agent.types';
-
+import { CheckDeviceResult } from '@/shared/actions/agent.types';
 import { ProductService } from '@/shared/api/product';
 import { PAGE } from '@/shared/config/page';
 import { isAndroidUA, isCrawlerBrowser, isInAppBrowserUA } from '@/shared/config/user-agent';

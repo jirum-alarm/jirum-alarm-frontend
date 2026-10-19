@@ -1,7 +1,7 @@
 import { TypedDocumentString } from '@/shared/api/gql/graphql';
 import { execute } from '@/shared/lib/http-client';
 
-import type { GoodPriceUnit } from '@/features/alarm/lib/notificationSource';
+export type GoodPriceUnit = 'LITER' | 'HUNDRED_GRAM' | 'COUNT' | 'FACE_VALUE' | 'TOTAL';
 
 /**
  * 알림함 「좋은 가격만 받기」(crawling src/wait — 「언제 사나」 엔진). 수기 TypedDocumentString — keyword-setting.service.ts 와

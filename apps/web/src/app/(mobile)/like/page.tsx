@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 
-import { checkDevice } from '@/app/actions/agent';
-
+import { checkDevice } from '@/shared/actions/agent';
 import SmallIllust from '@/shared/ui/common/icons/Illust/SmallIllust';
 import { Skeleton } from '@/shared/ui/common/Skeleton';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';

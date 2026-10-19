@@ -1,5 +1,4 @@
-import { getFcmToken, removeAccessToken, removeRefreshToken } from '@/app/actions/token';
-
+import { getFcmToken, removeAccessToken, removeRefreshToken } from '@/shared/actions/token';
 import { NotificationService } from '@/shared/api/notification/notification.service';
 import { PAGE } from '@/shared/config/page';
 import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';

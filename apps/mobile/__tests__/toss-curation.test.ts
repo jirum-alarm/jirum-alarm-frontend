@@ -83,7 +83,7 @@ describe('토스 섹션·무한스크롤', () => {
 
 describe('토스 특가 코너 가격 미노출', () => {
   it('웹·앱 카드에 판매가·확인 CTA가 없다', () => {
-    const webCard = readWeb('app/(desktop-ready)/toss/TossDealCard.tsx');
+    const webCard = readWeb('widgets/toss/ui/TossDealCard.tsx');
     expect(webCard).not.toContain('토스에서 가격 확인');
     expect(webCard).not.toContain('toLocaleString()}원');
     expect(webCard).toContain('tossDetailHref');
@@ -116,7 +116,7 @@ describe('토스 특가 코너 가격 미노출', () => {
     expect(read('src/entities/home/lib/toss.ts')).toContain(
       'stripPriceFromTitle(p.title)',
     );
-    expect(readWeb('app/(desktop-ready)/toss/toss.api.ts')).toContain(
+    expect(readWeb('widgets/toss/api/toss.api.ts')).toContain(
       'stripPriceFromTitle(p.title)',
     );
   });

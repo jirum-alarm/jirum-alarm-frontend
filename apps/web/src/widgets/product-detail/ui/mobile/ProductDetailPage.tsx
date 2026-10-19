@@ -1,7 +1,6 @@
 import { type ReactNode, Suspense } from 'react';
 
-import { CheckDeviceResult } from '@/app/actions/agent.types';
-
+import { CheckDeviceResult } from '@/shared/actions/agent.types';
 import { AdvertiseSlotLocation, ProductInfoFragment, UploaderType } from '@/shared/api/gql/graphql';
 import type {
   ProductDealEvidence,

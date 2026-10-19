@@ -1,5 +1,5 @@
-import { checkDevice } from '@/app/actions/agent';
-import { getAccessToken, getIsGuest } from '@/app/actions/token';
+import { checkDevice } from '@/shared/actions/agent';
+import { getAccessToken, getIsGuest } from '@/shared/actions/token';
 
 import MyPageSidebar from './MyPageSidebar';
 

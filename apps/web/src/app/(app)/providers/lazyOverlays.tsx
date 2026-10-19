@@ -5,8 +5,7 @@ import dynamic from 'next/dynamic';
 
 import { isGuestAtom } from '@/shared/hooks/useIsLoggedIn';
 import { pushChannelSheetAtom } from '@/shared/lib/push-channel/pushChannel';
-
-import { loginModalMessageAtom } from '@/features/auth/model/login/loginModal';
+import { loginModalMessageAtom } from '@/shared/model/loginModal';
 
 /**
  * 루트에 늘 달려 있지만 대부분의 방문에서 한 번도 안 열리는 모달.

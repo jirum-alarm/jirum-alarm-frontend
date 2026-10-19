@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
-import { checkDevice } from '@/app/actions/agent';
-
+import { checkDevice } from '@/shared/actions/agent';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import SectionHeader from '@/shared/ui/SectionHeader';
 

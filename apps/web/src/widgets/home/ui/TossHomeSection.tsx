@@ -3,17 +3,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { TOSS_SECTIONS, type TossDeal } from '@/app/(desktop-ready)/toss/mock';
+import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
+import SectionHeader from '@/shared/ui/SectionHeader';
+
 import {
   fetchTossCategoryLabels,
   fetchTossDeals,
   TOSS_HOME_SECTION_IDS,
-} from '@/app/(desktop-ready)/toss/toss.api';
-import TossCategoryTabs from '@/app/(desktop-ready)/toss/TossCategoryTabs';
-import TossDealCard from '@/app/(desktop-ready)/toss/TossDealCard';
-
-import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
-import SectionHeader from '@/shared/ui/SectionHeader';
+} from '@/widgets/toss/api/toss.api';
+import { TOSS_SECTIONS, type TossDeal } from '@/widgets/toss/model/mock';
+import TossCategoryTabs from '@/widgets/toss/ui/TossCategoryTabs';
+import TossDealCard from '@/widgets/toss/ui/TossDealCard';
 
 import PromotionTabs from './PromotionTabs';
 
