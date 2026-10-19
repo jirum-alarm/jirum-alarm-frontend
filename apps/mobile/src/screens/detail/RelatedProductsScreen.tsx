@@ -5,8 +5,8 @@ import {useQueries} from '@tanstack/react-query';
 
 import CurationGrid from '@/entities/home/ui/CurationGrid';
 import {ProductQueries} from '@/entities/product/product.queries';
-import type {ProductFlowParamList} from '@/navigations/tab/types';
-import ProductCard from '@/shared/components/product/ProductCard';
+import type {ProductFlowParamList} from '@/shared/lib/navigation/param-list';
+import ProductCard from '@/entities/product/ui/ProductCard';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import {openSearch} from '@/shared/lib/navigation/search-flow';
 import {pushProductDetail} from '@/shared/lib/navigation/detail-chain';

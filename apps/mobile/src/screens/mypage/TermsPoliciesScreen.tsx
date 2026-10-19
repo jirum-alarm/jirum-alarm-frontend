@@ -2,7 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import {TextRow} from '@/features/mypage/ui/Rows';

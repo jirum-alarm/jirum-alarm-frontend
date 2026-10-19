@@ -11,7 +11,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 import {tick} from '@/shared/lib/feedback/haptic';
 import {useQuery} from '@tanstack/react-query';
 
-import type {ProductCardType} from '@/entities/home/model/types';
+import type {ProductCardType} from '@/shared/types/product-card';
 import {CarouselList} from '@/entities/home/ui/DynamicProductList';
 import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
 import type {ProductCardSource} from '@/shared/lib/analytics/card-tracking';

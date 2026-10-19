@@ -44,5 +44,5 @@ iOS 는 범위를 서버(AASA components)가 정하지만 Android 는 앱의 int
 옛 앱(1.5.4 이하)은 모르는 경로를 앱 안 웹뷰로 연다(tab-routing `allowWebViewRoute`). Android 는 매니페스트 `pathPrefix="/keywords/"`
 가 필요한 네이티브 변경이라 `native/1.5.6-batch` 에 넣었다 — 그 빌드가 나가기 전까지 Android 는 브라우저로 열린다.
 
-웹 「앱 열기」 버튼(`features/app-download/model/appHandoff.ts`)은 이 검증과 무관하다 — intent 에 package 를
+웹 「앱 열기」 버튼(`shared/lib/app-handoff/appHandoff.ts`)은 이 검증과 무관하다 — intent 에 package 를
 지정해 검증 없이도 앱으로 간다.

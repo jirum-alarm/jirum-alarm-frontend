@@ -1,11 +1,12 @@
 import {queryOptions} from '@tanstack/react-query';
 
 import {CategoryService} from '@/shared/api/category';
+import type {CategoryItem} from '@/shared/types/category';
 
 /** 발견 탭의 '전체' 는 서버에 없는 합성 카테고리다. id 0 으로 둔다(web 과 같다). */
 export const ALL_CATEGORY = {id: 0, name: '전체'} as const;
 
-export type CategoryItem = {id: number; name: string};
+export type {CategoryItem};
 
 /**
  * 탭바에 쓸 카테고리. web: entities/category/api/category.api.ts

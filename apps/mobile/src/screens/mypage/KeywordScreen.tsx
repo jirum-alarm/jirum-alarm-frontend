@@ -13,7 +13,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MAX_KEYWORD_COUNT} from '@/entities/mypage';
 import {ThemeQueries} from '@/entities/theme';
 import {HomeQueries} from '@/entities/home/api/home.queries';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {CircleXIcon} from '@/shared/components/icons';
 import PressableScale from '@/shared/components/PressableScale';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
@@ -23,7 +23,7 @@ import {
   searchStackNavigations,
   tabStackNavigations,
 } from '@/shared/constant/navigations';
-import {navigateToNativeRoute} from '@/navigations/navigation-ref';
+import {navigateToNativeRoute} from '@/shared/lib/navigation/navigation-ref';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {normalizeKeyword} from '@/features/keyword-prompt/model/myKeywords';
 import {findKeywordHubForQuery} from '@/entities/keyword-hub/lib/keyword-hub';

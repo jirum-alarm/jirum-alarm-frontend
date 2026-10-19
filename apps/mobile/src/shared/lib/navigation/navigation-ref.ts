@@ -15,7 +15,7 @@ import {
 import {
   requestTrendingCategory,
   requestTrendingView,
-} from '@/screens/trending/trending-view-store';
+} from '@/shared/lib/navigation/trending-view-store';
 
 export const navigationRef = createNavigationContainerRef();
 

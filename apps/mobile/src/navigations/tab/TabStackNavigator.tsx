@@ -17,7 +17,7 @@ import {
   setTabBarVisible,
   useTabBarVisibility,
 } from '@/shared/hooks/useTabBarVisibility';
-import type {TabStackParamList} from './types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {useChromeColors} from './native-headers';
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];

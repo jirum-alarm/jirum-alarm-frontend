@@ -4,7 +4,7 @@ import {Linking} from 'react-native';
 import {SERVICE_URL} from '@/constants/env';
 import {normalizeDeepLink} from '@/shared/lib/navigation/deep-link';
 import {readDeferredDeepLink} from '@/shared/lib/navigation/deferred-link';
-import {openWhenNavigatorReady} from '@/navigations/open-when-ready';
+import {openWhenNavigatorReady} from '@/shared/lib/navigation/open-when-ready';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {
   offerWebGuestDeviceId,

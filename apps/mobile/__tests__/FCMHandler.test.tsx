@@ -3,7 +3,7 @@ import messaging from '@react-native-firebase/messaging';
 import * as ReactTestRenderer from 'react-test-renderer';
 declare const __dirname: string;
 import FCMHandler from '../src/components/FCMHandler';
-import {flushPendingRoute} from '../src/navigations/open-when-ready';
+import {flushPendingRoute} from '../src/shared/lib/navigation/open-when-ready';
 import {peekPushOrigin} from '../src/shared/lib/analytics/push-origin';
 import {useWebviewContext} from '../src/provider/WebViewRefProvider';
 import useFCMTokenManager from '../src/shared/hooks/useFCMTokenManager.ts';
@@ -65,7 +65,7 @@ jest.mock('../src/provider/WebViewRefProvider.tsx', () => ({
  */
 const mockNavigateToNativeRoute = jest.fn((_url: string, _o?: object) => false);
 const mockAreNativeTabsMounted = jest.fn(() => true);
-jest.mock('../src/navigations/navigation-ref', () => ({
+jest.mock('../src/shared/lib/navigation/navigation-ref', () => ({
   navigateToNativeRoute: (url: string, o?: object) =>
     mockNavigateToNativeRoute(url, o),
   areNativeTabsMounted: () => mockAreNativeTabsMounted(),

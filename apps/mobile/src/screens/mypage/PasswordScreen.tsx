@@ -10,7 +10,7 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {MyPageQueries} from '@/entities/mypage';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import Button from '@/shared/components/ui/Button';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';

@@ -24,7 +24,7 @@ jest.mock('expo-updates', () => ({
 }));
 
 let mockRootRoutes: unknown[] = [{name: 'MainTabs'}];
-jest.mock('../src/navigations/navigation-ref', () => ({
+jest.mock('../src/shared/lib/navigation/navigation-ref', () => ({
   navigationRef: {
     isReady: () => true,
     getRootState: () => ({routes: mockRootRoutes}),

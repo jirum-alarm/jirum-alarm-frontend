@@ -3,7 +3,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useQueryClient} from '@tanstack/react-query';
 
 import AuthStackNavigator from '@/navigations/stack/AuthNavigator';
-import {useAuth} from '@/shared/hooks/useAuth';
+import {useAuth} from '@/entities/auth/useAuth';
 
 import {LoginModalContext} from './login-modal-context';
 

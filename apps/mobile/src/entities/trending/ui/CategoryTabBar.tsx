@@ -3,7 +3,7 @@ import {ScrollView, View} from 'react-native';
 
 import TabPill from '@/shared/components/ui/TabPill';
 
-import type {CategoryItem} from '@/entities/category/category.queries';
+import type {CategoryItem} from '@/shared/types/category';
 
 /**
  * 카테고리 뱃지 줄. web: widgets/trending/ui/TabbbarV2.tsx (뱃지형)

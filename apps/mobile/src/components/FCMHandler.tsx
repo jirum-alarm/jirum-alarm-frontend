@@ -9,7 +9,7 @@ import {
   rememberPushOpen,
   resolvePushProductId,
 } from '@/shared/lib/analytics/push-origin';
-import {openWhenNavigatorReady} from '@/navigations/open-when-ready.ts';
+import {openWhenNavigatorReady} from '@/shared/lib/navigation/open-when-ready';
 import useDeepLink from '@/shared/hooks/useDeepLink.ts';
 import {queryClient} from '@/provider/ReactQueryProvider.tsx';
 import {NotificationQueries} from '@/entities/notification';

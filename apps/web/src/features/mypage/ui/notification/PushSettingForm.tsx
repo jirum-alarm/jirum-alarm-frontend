@@ -4,7 +4,7 @@ import { Fragment, useId } from 'react';
 
 import Switch from '@/shared/ui/common/Switch';
 
-import { PushSettingKey, usePushSetting } from '../../model/usePushSetting';
+import { PushSettingKey, usePushSetting } from '@/entities/notification/model/usePushSetting';
 
 import QuietHoursRow from './QuietHoursRow';
 

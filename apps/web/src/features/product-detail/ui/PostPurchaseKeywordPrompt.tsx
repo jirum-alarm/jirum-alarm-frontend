@@ -16,13 +16,12 @@ import { shouldUseKakaoBridge } from '@/shared/lib/kakao-bridge-ua';
 import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import { runWhenSeen } from '@/shared/lib/run-when-seen';
+import OpenInAppLink from '@/shared/ui/app-handoff/OpenInAppLink';
 import { Alert } from '@/shared/ui/common/icons';
 import { useToast } from '@/shared/ui/common/Toast';
 
 import { AuthQueries } from '@/entities/auth';
-
-import OpenInAppLink from '@/features/app-download/ui/OpenInAppLink';
-import { useUpdateKeyword } from '@/features/mypage/model';
+import { useUpdateKeyword } from '@/entities/auth/model/update-keyword';
 
 /**
  * 구매 링크를 누른 직후에만 뜨는 알림 등록 배너.

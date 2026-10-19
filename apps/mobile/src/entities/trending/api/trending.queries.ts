@@ -1,7 +1,7 @@
 import {infiniteQueryOptions, queryOptions} from '@tanstack/react-query';
 
 import {HomeService} from '@/shared/api/home/home.service';
-import type {ProductCardType} from '@/entities/home/model/types';
+import type {ProductCardType} from '@/shared/types/product-card';
 
 /**
  * 발견 탭(실시간·랭킹) 데이터.

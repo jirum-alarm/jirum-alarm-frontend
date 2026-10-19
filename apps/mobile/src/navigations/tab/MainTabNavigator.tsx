@@ -47,7 +47,7 @@ import {useChromeColors} from './native-headers';
 import {
   requestTrendingView,
   toggleTrendingView,
-} from '@/screens/trending/trending-view-store';
+} from '@/shared/lib/navigation/trending-view-store';
 import {scrollTabToTop} from '@/navigations/tab/scroll-to-top-store';
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];

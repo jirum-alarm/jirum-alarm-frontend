@@ -24,7 +24,7 @@ import CaretLeft from '@/shared/components/icons/caret_left';
 import WebViewErrorView from '@/shared/components/WebViewErrorView';
 import {HEADER_HEIGHT} from '@/features/mypage/ui/StackHeader';
 import {Analytics} from '@/shared/lib/analytics/ga4';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useColors} from '@/shared/theme/useColors';
 import {

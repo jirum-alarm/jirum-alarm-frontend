@@ -60,6 +60,7 @@ const NOT_PARTS = {
   'apps/web/src/shared/ui/MSW.tsx': '개발용 목 서버',
   'apps/web/src/shared/ui/TabScrollTopButton.tsx': '탭 다시 누르면 맨 위로(동작만)',
   'apps/web/src/shared/ui/TopButton.tsx': '떠 있는 「맨 위로」 — 상세 한 자리',
+  'apps/web/src/shared/ui/app-handoff': '앱 열기 링크·앱 받기 QR 동작(features/app-download 에서 내림 — 모양은 호출부)',
   'apps/web/src/shared/ui/adsense': '애드센스 광고 칸(외부 소재)',
   'apps/web/src/shared/ui/headless': '포커스 가두기·스크롤 잠금 같은 동작(모양 없음)',
   'apps/web/src/shared/ui/common/icons': '아이콘·그림 모음',

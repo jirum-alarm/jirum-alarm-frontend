@@ -15,8 +15,10 @@ import Link from '@/shared/ui/Link';
 
 import { AuthQueries } from '@/entities/auth';
 import { ThemeQueries } from '@/entities/notification';
-
-import { pushSettingQuery, useUpdatePushSetting } from '@/features/mypage/model/usePushSetting';
+import {
+  pushSettingQuery,
+  useUpdatePushSetting,
+} from '@/entities/notification/model/usePushSetting';
 
 import {
   GOOD_PRICE_NUDGE_MIN_ALERTS,

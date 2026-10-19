@@ -8,7 +8,7 @@ import {
   type NativeSyntheticEvent,
 } from 'react-native';
 
-import type {CategoryItem} from '@/entities/category/category.queries';
+import type {CategoryItem} from '@/shared/types/category';
 
 /**
  * 카테고리 좌우 스와이프. web: widgets/trending/ui/trending-container (Swiper slidesPerView 1)

@@ -47,12 +47,12 @@ import {
 } from '@/shared/constant/navigations';
 import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
 import {useRegisterScrollToTop} from '@/navigations/tab/scroll-to-top-store';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
 import {
   requestTrendingView,
   type TrendingView,
-} from '@/screens/trending/trending-view-store';
+} from '@/shared/lib/navigation/trending-view-store';
 
 /**
  * 네이티브 홈. web: app/(desktop-ready)/(home)/page.tsx → HomeContainerV2

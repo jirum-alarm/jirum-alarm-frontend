@@ -10,7 +10,8 @@ import Button from '@/shared/ui/common/Button';
 import { Cancel } from '@/shared/ui/common/icons';
 import Input from '@/shared/ui/common/Input';
 
-import { useUpdateKeyword } from '../../model/update-keyword';
+import { useUpdateKeyword } from '@/entities/auth/model/update-keyword';
+
 import { useKeywordFrequencies } from '../../model/useKeywordFrequencies';
 import { useKeywordInput } from '../../model/useKeywordInput';
 

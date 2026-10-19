@@ -7,14 +7,12 @@ import { useEffect, useState } from 'react';
 import { Drawer } from 'vaul';
 
 import { CheckDeviceResult } from '@/shared/actions/agent.types';
+import { resolveAppDownloadPlatform } from '@/shared/lib/app-handoff/resolvePlatform';
+import AppDownloadQr from '@/shared/ui/app-handoff/AppDownloadQr';
+import OpenInAppLink from '@/shared/ui/app-handoff/OpenInAppLink';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
 import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
 import { Apple, Google } from '@/shared/ui/common/icons';
-
-import { resolveAppDownloadPlatform } from '../model/resolvePlatform';
-
-import AppDownloadQr from './AppDownloadQr';
-import OpenInAppLink from './OpenInAppLink';
 
 // ponytail: 전역 1회 노출. 상품별로 반복 노출하면 이탈만 키움. 재노출 원하면 이 키 삭제 or 만료 추가.
 export const FIRST_VISIT_SEEN_KEY = 'jirum:app-alert-hook-seen';

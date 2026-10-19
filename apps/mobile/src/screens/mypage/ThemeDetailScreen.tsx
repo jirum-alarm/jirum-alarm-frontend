@@ -14,7 +14,7 @@ import {useQuery} from '@tanstack/react-query';
 import {ThemeQueries} from '@/entities/theme';
 import {ListCard} from '@/entities/home/ui/cards/HomeProductCards';
 import type {ProductCardType} from '@/entities/home/model/types';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';

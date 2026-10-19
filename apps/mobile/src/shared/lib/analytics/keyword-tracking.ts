@@ -2,7 +2,7 @@ import {Analytics} from './ga4';
 
 /**
  * 키워드 알림 등록 — 서비스의 핵심 행동이라 어디서 등록했는지까지 남긴다.
- * web `features/mypage/model/update-keyword.ts` 와 같은 이름·값(GA4 에서 합쳐 본다).
+ * web `entities/auth/model/update-keyword.ts` 와 같은 이름·값(GA4 에서 합쳐 본다).
  * 되돌리기(삭제 취소)로 다시 거는 건 새 등록이 아니라 보내지 않는다.
  */
 export type KeywordRegisterSource =

@@ -5,25 +5,9 @@ import type {
   TossPromotionSection,
 } from '../model/types';
 
-export type ServerHomeSection = {
-  id: string;
-  title: string;
-  type: string;
-  displayOrder?: number | null;
-  viewMoreLink?: string | null;
-  dataSource?: {
-    type: string;
-    queryName: string;
-    variables?: Record<string, unknown> | null;
-  } | null;
-  tabs?: Array<{
-    id: string;
-    label: string;
-    variables?: Record<string, unknown> | null;
-    viewMoreLink?: string | null;
-  }> | null;
-  sections?: ServerHomeSection[] | null;
-};
+import type {ServerHomeSection} from '@/shared/api/home/server-home-section';
+
+export type {ServerHomeSection};
 
 const CONTENT_TYPES = new Set([
   'GRID',

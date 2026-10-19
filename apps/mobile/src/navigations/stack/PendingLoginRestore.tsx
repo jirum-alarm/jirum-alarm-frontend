@@ -1,7 +1,7 @@
 import {useEffect, useRef} from 'react';
 
-import {useAuth} from '@/shared/hooks/useAuth';
-import {navigateToNativeRoute} from '@/navigations/navigation-ref';
+import {useAuth} from '@/entities/auth/useAuth';
+import {navigateToNativeRoute} from '@/shared/lib/navigation/navigation-ref';
 import {peekPendingAction} from '@/shared/lib/pending-action';
 import {SERVICE_URL} from '@/constants/env';
 

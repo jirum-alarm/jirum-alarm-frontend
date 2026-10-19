@@ -8,7 +8,7 @@ import {CategoryService} from '@/shared/api/category';
 import {HomeService} from '@/shared/api/home/home.service';
 import {SearchService} from '@/shared/api/search';
 import {ProductOrderType} from '@/shared/api/gql/graphql.ts';
-import type {ProductCardType} from '@/entities/home/model/types';
+import type {ProductCardType} from '@/shared/types/product-card';
 
 import {
   periodStartDate,

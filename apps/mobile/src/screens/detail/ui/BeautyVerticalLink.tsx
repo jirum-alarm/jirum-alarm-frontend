@@ -9,7 +9,7 @@ import ArrowRight from '@/shared/components/icons/ArrowRight';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {cn} from '@/shared/lib/styling';
 import {tabStackNavigations} from '@/shared/constant/navigations';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 
 /** 지름알림 뷰티 경로 — web 과 같은 주소(곧 별도 앱이 받지만 경로는 같다). */
 export const BEAUTY_VERTICAL_PATH = '/beauty';

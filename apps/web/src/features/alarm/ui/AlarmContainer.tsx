@@ -9,14 +9,13 @@ import { PAGE } from '@/shared/config/page';
 import { useDevice } from '@/shared/hooks/useDevice';
 import useIsLoggedIn, { isGuestAtom } from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
+import { resolveAppDownloadPlatform } from '@/shared/lib/app-handoff/resolvePlatform';
+import AppDownloadQr from '@/shared/ui/app-handoff/AppDownloadQr';
+import OpenInAppLink from '@/shared/ui/app-handoff/OpenInAppLink';
 import Button from '@/shared/ui/common/Button';
 import { Apple, ArrowDown, Google, LoadingSpinner } from '@/shared/ui/common/icons';
 import { Illust } from '@/shared/ui/common/icons/Illust';
 import Link from '@/shared/ui/Link';
-
-import { resolveAppDownloadPlatform } from '@/features/app-download/model/resolvePlatform';
-import AppDownloadQr from '@/features/app-download/ui/AppDownloadQr';
-import OpenInAppLink from '@/features/app-download/ui/OpenInAppLink';
 
 import AlarmList from './AlarmList';
 

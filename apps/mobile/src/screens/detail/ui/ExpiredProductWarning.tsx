@@ -5,7 +5,7 @@ import {useQueries} from '@tanstack/react-query';
 
 import {ProductQueries} from '@/entities/product/product.queries';
 import {useRankingImpressionTracker} from '@/entities/trending/model/useRankingImpressionTracker';
-import ProductCard from '@/shared/components/product/ProductCard';
+import ProductCard from '@/entities/product/ui/ProductCard';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 
 import type {ProductDetail} from '../model/types';

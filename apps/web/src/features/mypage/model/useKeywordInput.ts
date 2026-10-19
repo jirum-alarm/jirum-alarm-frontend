@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 
-import { useUpdateKeyword } from './update-keyword';
+import { useUpdateKeyword } from '@/entities/auth/model/update-keyword';
 
 const MIN_KEYWORD_LENGTH = 2;
 const MAX_KEYWORD_LENGTH = 20;

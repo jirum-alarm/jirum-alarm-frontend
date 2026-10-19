@@ -8,7 +8,7 @@ import {
   NavigationContainer,
   type Theme,
 } from '@react-navigation/native';
-import {navigationRef} from '@/navigations/navigation-ref.ts';
+import {navigationRef} from '@/shared/lib/navigation/navigation-ref';
 import RootNavigator from './src/navigations/root/RootNavigator.tsx';
 import './global.css';
 import {KeyboardProvider} from 'react-native-keyboard-controller';

@@ -29,7 +29,7 @@ import {getPushablePath} from '@/shared/lib/navigation/tab-routing';
 import WebViewErrorView from '@/shared/components/WebViewErrorView';
 import {useTokenRemoveEffect} from '@/screens/jirumalarmwebview/hooks/useTokenRemoveEffect';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
-import type {ProductFlowParamList} from '@/navigations/tab/types';
+import type {ProductFlowParamList} from '@/shared/lib/navigation/param-list';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useChromeColors} from '@/navigations/tab/native-headers';
 import {fixed} from '@jirum/design-system';

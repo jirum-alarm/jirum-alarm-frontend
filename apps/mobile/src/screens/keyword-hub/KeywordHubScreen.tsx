@@ -18,7 +18,7 @@ import {
   keywordHubPath,
 } from '@/entities/keyword-hub/lib/keyword-hub';
 import {useKeywordHub} from '@/entities/keyword-hub/model/useKeywordHub';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {
   DetailHeaderActions,
   DetailHeaderBackButton,

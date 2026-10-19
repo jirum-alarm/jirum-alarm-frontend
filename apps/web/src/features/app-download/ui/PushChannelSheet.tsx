@@ -5,18 +5,16 @@ import { useEffect, useState } from 'react';
 
 import { useDevice } from '@/shared/hooks/useDevice';
 import { isGuestAtom } from '@/shared/hooks/useIsLoggedIn';
+import { resolveAppDownloadPlatform } from '@/shared/lib/app-handoff/resolvePlatform';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import {
   pushChannelSheetAtom,
   PushStatus,
   readPushStatus,
 } from '@/shared/lib/push-channel/pushChannel';
+import AppDownloadQr from '@/shared/ui/app-handoff/AppDownloadQr';
+import OpenInAppLink from '@/shared/ui/app-handoff/OpenInAppLink';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
-
-import { resolveAppDownloadPlatform } from '../model/resolvePlatform';
-
-import AppDownloadQr from './AppDownloadQr';
-import OpenInAppLink from './OpenInAppLink';
 
 function pushEvent(event: string, props: Record<string, unknown>) {
   (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({

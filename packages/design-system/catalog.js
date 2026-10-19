@@ -251,7 +251,7 @@ const catalog = [
     use: '딜 하나를 사진·제목·출처·가격으로. 그리드(2·3열, 가격 16px)·캐러셀(120px, 18px)·목록',
     recipe: 'productCard',
     web: `${W}entities/product-list/ui/grid/ProductGridCard.tsx`,
-    app: `${A}shared/components/product/ProductCard.tsx`,
+    app: `${A}entities/product/ui/ProductCard.tsx`,
     story: 'components/ProductCard',
     related: [
       `${W}entities/product-list/ui/carousel/CarouselProductCard.tsx`,
@@ -260,7 +260,7 @@ const catalog = [
       `${W}entities/product-list/ui/card/DisplayProductSource.tsx`,
       `${A}entities/home/ui/cards/HomeCardPrimitives.tsx`,
       `${A}shared/components/product/DisplayProductSource.tsx`,
-      `${A}shared/components/product/ProductCarouselSection.tsx`,
+      `${A}entities/product/ui/ProductCarouselSection.tsx`,
     ],
   },
   {

@@ -42,7 +42,7 @@ const suggestionsModel = read(
 const navigator = read('src/navigations/tab/SearchStackNavigator.tsx');
 const rootStack = read('src/navigations/stack/MainNavigator.tsx');
 const tabStack = read('src/navigations/tab/TabStackNavigator.tsx');
-const navTypes = read('src/navigations/tab/types.ts');
+const navTypes = read('src/shared/lib/navigation/param-list.ts');
 
 const appSources = [
   screen,
@@ -87,7 +87,7 @@ const webNotFound = web('widgets/search/ui/ProductNotFound.tsx');
 const webKeywordAlert = web('widgets/search/hooks/useSearchKeywordAlert.ts');
 const webAlertBar = web('widgets/search/ui/SearchKeywordAlertBar.tsx');
 const webEndedRescue = web('widgets/search/ui/EndedDealsRescue.tsx');
-const webRegisterSource = web('features/mypage/model/update-keyword.ts');
+const webRegisterSource = web('entities/auth/model/update-keyword.ts');
 const appEndedRescue = read('src/screens/search/ui/EndedDealsRescue.tsx');
 const appRegisterSource = read('src/shared/lib/analytics/keyword-tracking.ts');
 // 진입 경로 유니온은 web·앱 공용 @jirum/domain/card-tracking 이 정본이다.

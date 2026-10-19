@@ -18,7 +18,7 @@ import {
 } from '@/graphql/ad';
 import {HttpClient} from '@/shared/lib/client';
 import {TypedDocumentString} from '@/shared/api/gql/graphql.ts';
-import type {ServerHomeSection} from '@/entities/home/lib/map-home-page';
+import type {ServerHomeSection} from '@/shared/api/home/server-home-section';
 import type {
   ActiveAdsQueryVariables,
   CommunityRandomRankingProductsQueryVariables,

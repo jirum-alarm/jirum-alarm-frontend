@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
  * 디퍼드 딥링크(안드로이드) — 웹에서 「앱 열기/받기」를 눌렀는데 앱이 없어 Play 로 간 사람이 설치 후 처음 켜면,
  * 웹에서 보던 화면으로 보낸다.
  *
- * 웹(apps/web/src/features/app-download/model/appHandoff.ts)이 Play 주소의 referrer 에
+ * 웹(apps/web/src/shared/lib/app-handoff/appHandoff.ts)이 Play 주소의 referrer 에
  * `utm_campaign=app_handoff&jirum_path=<경로>` 를 싣고, Play 는 설치 뒤 그 값을 Install Referrer 로 돌려준다.
  * 네이티브 모듈(expo-application — expo-notifications 의존으로 이미 자동 링크돼 있다)만 쓰므로 OTA 로 나간다.
  * iOS 는 같은 통로가 없다(클립보드 방식은 붙여넣기 허락 팝업이 떠서 하지 않는다).

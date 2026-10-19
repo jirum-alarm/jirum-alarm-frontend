@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import AuthNavigator from '../stack/AuthNavigator.tsx';
 import MainNavigator from '../stack/MainNavigator.tsx';
-import {useAuth} from '@/shared/hooks/useAuth';
+import {useAuth} from '@/entities/auth/useAuth';
 import RNBootSplash from 'react-native-bootsplash';
 import useAppStateTokenRefresh from '@/entities/auth/useAppStateTokenRefresh';
 import useForceUpdate from '@/shared/hooks/useForceUpdate';

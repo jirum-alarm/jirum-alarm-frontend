@@ -27,7 +27,7 @@ import {
   getReservedBottomPx,
 } from '@/navigations/tab/tab-bar-metrics';
 import {useRegisterScrollToTop} from '@/navigations/tab/scroll-to-top-store';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';

@@ -2,9 +2,8 @@
 
 import { CheckDeviceResult } from '@/shared/actions/agent.types';
 import useAppDownloadLink from '@/shared/hooks/useAppDownloadLink';
+import OpenInAppLink from '@/shared/ui/app-handoff/OpenInAppLink';
 import { AppIcon } from '@/shared/ui/common/icons/Illust';
-
-import OpenInAppLink from './OpenInAppLink';
 
 type AppDownloadBannerProps = { device: CheckDeviceResult } | { type: 'apple' | 'android' | null };
 

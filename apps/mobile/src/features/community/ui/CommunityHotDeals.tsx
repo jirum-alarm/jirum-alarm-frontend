@@ -7,8 +7,8 @@ import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {CommunityQueries} from '@/entities/community';
 import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
-import {navigateToNativeRoute} from '@/navigations/navigation-ref';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import {navigateToNativeRoute} from '@/shared/lib/navigation/navigation-ref';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 

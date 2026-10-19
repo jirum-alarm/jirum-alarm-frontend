@@ -24,7 +24,7 @@ import {
 } from '@/shared/api/gql/graphql';
 import {ProductQueries} from '@/entities/product/product.queries';
 import {peekDetailPreview} from '@/entities/product/prefetch-detail';
-import ProductCarouselSection from '@/shared/components/product/ProductCarouselSection';
+import ProductCarouselSection from '@/entities/product/ui/ProductCarouselSection';
 import Thumbnail from '@/shared/components/product/Thumbnail';
 import CommentSection from '@/features/comment/ui/CommentSection';
 import PriceHistorySection from '@/features/price-history/ui/PriceHistorySection';
@@ -35,7 +35,7 @@ import {
   getRecentViewedProducts,
   pushRecentViewedProduct,
 } from '@/shared/lib/device/recent-viewed';
-import type {ProductFlowParamList} from '@/navigations/tab/types';
+import type {ProductFlowParamList} from '@/shared/lib/navigation/param-list';
 import WebViewErrorView from '@/shared/components/WebViewErrorView';
 import {isNotFoundError} from '@/shared/lib/client/http-client';
 import {isFromTossPath} from '@/entities/home/lib/toss';
@@ -43,7 +43,7 @@ import {
   tabNavigations,
   tabStackNavigations,
 } from '@/shared/constant/navigations';
-import {useAuth} from '@/shared/hooks/useAuth';
+import {useAuth} from '@/entities/auth/useAuth';
 import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import {goTabHome, openSearch} from '@/shared/lib/navigation/search-flow';
 import {pushProductDetail} from '@/shared/lib/navigation/detail-chain';

@@ -81,7 +81,7 @@ describe('normalizeDeepLink', () => {
 });
 
 /**
- * 웹 「앱 열기·앱 받기」 버튼이 만드는 주소(apps/web/src/features/app-download/model/appHandoff.ts).
+ * 웹 「앱 열기·앱 받기」 버튼이 만드는 주소(apps/web/src/shared/lib/app-handoff/appHandoff.ts).
  * 안드로이드는 intent 로 `jirumalarm:///<경로>?handoff=<출처>`, iOS 는 유니버설 링크로
  * `https://www.jirum-alarm.com<경로>#handoff=<출처>` 가 들어온다. 표시를 달고도 보던 화면이 네이티브로 열려야 한다
  * — 웹뷰 폴백으로 떨어지면 웹 상세가 앱 안에 뜬다.

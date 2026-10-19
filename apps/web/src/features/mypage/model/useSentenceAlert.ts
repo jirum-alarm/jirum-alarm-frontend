@@ -6,7 +6,7 @@ import { getGraphqlErrorMessage } from '@/shared/lib/graphql-error';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import { useToast } from '@/shared/ui/common/Toast';
 
-import { useUpdateKeyword } from './update-keyword';
+import { useUpdateKeyword } from '@/entities/auth/model/update-keyword';
 
 const MIN_TEXT = 2;
 const MAX_TEXT = 100;

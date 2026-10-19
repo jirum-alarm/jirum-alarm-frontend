@@ -18,7 +18,7 @@ import Constants from 'expo-constants';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {MyPageQueries} from '@/entities/mypage';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
 import {useRegisterScrollToTop} from '@/navigations/tab/scroll-to-top-store';
 import ArrowRight from '@/shared/components/icons/ArrowRight';
@@ -45,7 +45,7 @@ import {
 } from '@/features/mypage/ui/icons';
 import {useColors} from '@/shared/theme/useColors';
 import {HELP_PATH} from '@/constants/env';
-import {useAuth} from '@/shared/hooks/useAuth';
+import {useAuth} from '@/entities/auth/useAuth';
 import {useOpenLogin} from '@/shared/hooks/useRequireLogin';
 import {
   COLOR_SCHEME_LABEL,

@@ -72,31 +72,4 @@ export type PromotionSection =
   | GroupPromotionSection
   | TossPromotionSection;
 
-/**
- * 카드가 그리는 상품 형태.
- * web: apps/web/src/entities/product-list/model/types.ts
- */
-export interface ProductCardType {
-  id: string;
-  isEnd?: boolean | null;
-  isHot?: boolean | null;
-  thumbnail?: string | null;
-  title: string;
-  price?: string | null;
-  hotDealType?: string | null;
-  postedAt: string;
-  categoryId?: number | null;
-  earliestExpiryDate?: string | null;
-  /** 판매처(쇼핑몰). 전수 기준 ~70%만 채워짐 — 없으면 슬롯 자체를 렌더하지 않는다. */
-  mallName?: string | null;
-  /** 제보 커뮤니티. 100% 채워지며 판매처와 항상 다른 값(폴백 대상 아님). */
-  provider?: {nameKr?: string | null} | null;
-  /** 이 딜이 올라온 커뮤니티 수. 랭킹 목록에서만 채워진다 — 2 이상이면 「뽐뿌 외 N곳」(web 과 같음). */
-  postedCommunityCount?: number | null;
-  /** 급상승 — 최근 2시간 댓글·추천이 크게 붙은 딜. 랭킹 목록에서만 채워진다(web 과 같음). */
-  isRising?: boolean | null;
-  /** 1년 최저가 — 지난 1년 같은 상품 딜 중 가장 싼 신기록(조건 없는 가격, web 과 같음). */
-  isYearLowest?: boolean | null;
-  /** 상품 확장정보(JSON). 키워드 목록만 싣는다 — 토스 하루특가 배지(@jirum/domain toss-time-deal)가 읽는다. */
-  data?: unknown;
-}
+export type {ProductCardType} from '@/shared/types/product-card';

@@ -76,14 +76,14 @@ describe('★웹뷰 주입에 기대던 경로를 전부 옮겼다', () => {
   });
 
   it('토글이 두 값을 왕복한다', () => {
-    const store = read('src/screens/trending/trending-view-store.ts');
+    const store = read('src/shared/lib/navigation/trending-view-store.ts');
     expect(store).toContain("requestedView === 'live' ? 'ranking' : 'live'");
   });
 
   it('딥링크·푸시(/trending/*)가 네이티브 탭으로 간다', () => {
     // 그대로 두면 FCMHandler 가 활성 탭 웹뷰로 폴백해 **엉뚱한 탭 안에**
     // trending 페이지를 띄운다(탭 아이콘은 홈, 내용은 랭킹).
-    const ref = read('src/navigations/navigation-ref.ts');
+    const ref = read('src/shared/lib/navigation/navigation-ref.ts');
     const fcm = read('src/components/FCMHandler.tsx');
     const routing = read('src/shared/lib/navigation/tab-routing.ts');
     // 판정은 resolveNativeRoute 한 곳, 실행은 navigateToNativeRoute.
@@ -91,7 +91,7 @@ describe('★웹뷰 주입에 기대던 경로를 전부 옮겼다', () => {
     expect(routing).toContain('trendingView');
     expect(ref).toContain('export function navigateToNativeRoute');
     // 푸시·딥링크는 한 입구(openWhenNavigatorReady)를 거쳐 navigateToNativeRoute 로 간다.
-    const ready = read('src/navigations/open-when-ready.ts');
+    const ready = read('src/shared/lib/navigation/open-when-ready.ts');
     const deepLink = read('src/shared/hooks/useDeepLink.ts');
     expect(ready).toContain(
       'navigateToNativeRoute(url, {allowWebViewRoute: true})',

@@ -9,7 +9,7 @@ import {useRecentKeywords} from '@/features/search/model/useRecentKeywords';
 import {useSearchFilters} from '@/features/search/model/useSearchFilters';
 import {useSearchSuggestions} from '@/features/search/model/useSearchSuggestions';
 import {Analytics} from '@/shared/lib/analytics/ga4';
-import type {SearchStackParamList} from '@/navigations/tab/types';
+import type {SearchStackParamList} from '@/shared/lib/navigation/param-list';
 import {
   searchStackNavigations,
   tabStackNavigations,

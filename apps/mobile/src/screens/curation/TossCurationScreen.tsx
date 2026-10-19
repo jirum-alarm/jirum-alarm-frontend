@@ -18,7 +18,7 @@ import ShareSheet from '@/screens/detail/ui/ShareSheet';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {goTabHome, openSearch} from '@/shared/lib/navigation/search-flow';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 
 /**
  * 토스 특가 더보기. web: app/(desktop-ready)/toss

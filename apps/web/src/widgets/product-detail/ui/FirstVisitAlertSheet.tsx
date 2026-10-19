@@ -24,15 +24,16 @@ import {
 } from '@/shared/lib/okachat';
 import { browserHandoffUrl, canHandoffToBrowser } from '@/shared/lib/push-channel/browserHandoff';
 import { readPushStatus, usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
+import OpenInAppLink from '@/shared/ui/app-handoff/OpenInAppLink';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
 import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
 import { useToast } from '@/shared/ui/common/Toast';
 
+import { useUpdateKeyword } from '@/entities/auth/model/update-keyword';
+
 import FirstVisitAppAlertModal, {
   FIRST_VISIT_SEEN_KEY,
 } from '@/features/app-download/ui/FirstVisitAppAlertModal';
-import OpenInAppLink from '@/features/app-download/ui/OpenInAppLink';
-import { useUpdateKeyword } from '@/features/mypage/model/update-keyword';
 import {
   type FirstVisitSheetCopy,
   formatDealCount,

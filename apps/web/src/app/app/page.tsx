@@ -3,9 +3,8 @@ import { headers } from 'next/headers';
 import Image from 'next/image';
 
 import { ANDROID_STORE_LINK, IOS_STORE_LINK } from '@/shared/config/appStore';
-
-import AppDownloadQr from '@/features/app-download/ui/AppDownloadQr';
-import OpenInAppLink from '@/features/app-download/ui/OpenInAppLink';
+import AppDownloadQr from '@/shared/ui/app-handoff/AppDownloadQr';
+import OpenInAppLink from '@/shared/ui/app-handoff/OpenInAppLink';
 
 export const metadata: Metadata = {
   title: '지름알림 앱 설치',

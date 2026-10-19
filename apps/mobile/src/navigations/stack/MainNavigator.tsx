@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import MainTabNavigator from '@/navigations/tab/MainTabNavigator';
-import {flushPendingRoute} from '@/navigations/open-when-ready';
+import {flushPendingRoute} from '@/shared/lib/navigation/open-when-ready';
 import AppStackHeader from '@/navigations/tab/AppStackHeader';
 import SearchStackNavigator from '@/navigations/tab/SearchStackNavigator';
 import {
@@ -11,7 +11,7 @@ import {
   productDetailHeaderOptions,
   useChromeColors,
 } from '@/navigations/tab/native-headers';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import JirumAlarmWebViewScreen from '@/screens/jirumalarmwebview/JirumAlarmWebViewScreen';
 import LoginModalScreen from '@/screens/auth/LoginModalScreen';
 import CurationScreen from '@/screens/curation/CurationScreen';
@@ -36,7 +36,7 @@ import DesignSystemScreen from '@/screens/design-system/DesignSystemScreen';
 import ThemeDetailScreen from '@/screens/mypage/ThemeDetailScreen';
 import CommunityPostScreen from '@/screens/community/CommunityPostScreen';
 import CommunityWriteScreen from '@/screens/community/CommunityWriteScreen';
-import {PendingLoginRestore} from '@/shared/hooks/PendingLoginRestore';
+import {PendingLoginRestore} from '@/navigations/stack/PendingLoginRestore';
 import useAlarmDotSync from '@/entities/notification/useAlarmDotSync';
 import {
   mainNavigations,

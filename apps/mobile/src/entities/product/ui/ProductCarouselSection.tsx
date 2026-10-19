@@ -6,7 +6,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 
 import ProductCard, {
   type ProductCardItem,
-} from '@/shared/components/product/ProductCard';
+} from '@/entities/product/ui/ProductCard';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import type {ProductCardSource} from '@/shared/lib/analytics/card-tracking';
 

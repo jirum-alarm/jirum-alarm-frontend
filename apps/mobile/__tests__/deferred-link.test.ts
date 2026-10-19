@@ -6,7 +6,7 @@ import {
 
 /**
  * Play 가 돌려주는 referrer 는 웹이 Play 주소에 실은 값을 한 번 디코드한 문자열이다
- * (apps/web/src/features/app-download/model/appHandoff.ts playStoreUrl).
+ * (apps/web/src/shared/lib/app-handoff/appHandoff.ts playStoreUrl).
  */
 describe('parseHandoffReferrer', () => {
   const referrer = (path: string, campaign = 'app_handoff'): string =>

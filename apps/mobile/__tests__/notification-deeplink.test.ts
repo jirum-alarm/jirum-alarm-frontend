@@ -34,7 +34,7 @@ jest.mock('@react-navigation/native', () => ({
   },
 }));
 
-jest.mock('../src/screens/trending/trending-view-store', () => ({
+jest.mock('../src/shared/lib/navigation/trending-view-store', () => ({
   requestTrendingView: (...args: unknown[]) => mockRequestTrendingView(...args),
   requestTrendingCategory: (...args: unknown[]) =>
     mockRequestTrendingCategory(...args),
@@ -45,7 +45,7 @@ const {
   openLoginModal,
   navigateToNativeRoute,
   navigateToTrending,
-} = require('../src/navigations/navigation-ref');
+} = require('../src/shared/lib/navigation/navigation-ref');
 
 const url = (path: string) => `https://jirum-alarm.com${path}`;
 const webViewOn = {allowWebViewRoute: true};

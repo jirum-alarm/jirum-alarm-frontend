@@ -3,7 +3,7 @@ import {infiniteQueryOptions, queryOptions} from '@tanstack/react-query';
 import {CommentOrder, OrderOptionType} from '@/shared/api/gql/graphql';
 import {CommunityService} from '@/shared/api/community';
 import {HomeService} from '@/shared/api/home/home.service';
-import type {ProductCardType} from '@/entities/home/model/types';
+import type {ProductCardType} from '@/shared/types/product-card';
 
 /** 커뮤니티 탭 3종. web `entities/community` 의 CommunityTab 과 같은 값. */
 export type CommunityTab = 'all' | 'trending' | 'notice';

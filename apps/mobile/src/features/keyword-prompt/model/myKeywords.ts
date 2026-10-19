@@ -4,7 +4,7 @@ import {useQuery, type QueryClient} from '@tanstack/react-query';
 
 import {MyPageQueries} from '@/entities/mypage';
 import {ProductQueries} from '@/entities/product/product.queries';
-import {navigationRef} from '@/navigations/navigation-ref';
+import {navigationRef} from '@/shared/lib/navigation/navigation-ref';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 

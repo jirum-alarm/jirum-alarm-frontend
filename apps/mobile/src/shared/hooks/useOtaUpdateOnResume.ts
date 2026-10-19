@@ -2,7 +2,7 @@ import {useEffect, useRef} from 'react';
 import {AppState} from 'react-native';
 import * as Updates from 'expo-updates';
 
-import {navigationRef} from '@/navigations/navigation-ref';
+import {navigationRef} from '@/shared/lib/navigation/navigation-ref';
 
 /**
  * 이만큼 백그라운드에 있다 돌아오면 "새 세션"으로 본다 — 받아둔 OTA 를 적용해도

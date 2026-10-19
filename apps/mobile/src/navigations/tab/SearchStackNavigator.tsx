@@ -8,7 +8,7 @@ import {
   searchStackNavigations,
   tabStackNavigations,
 } from '@/shared/constant/navigations';
-import type {SearchStackParamList} from './types';
+import type {SearchStackParamList} from '@/shared/lib/navigation/param-list';
 import {
   commentsHeaderOptions,
   productDetailHeaderOptions,

@@ -4,10 +4,10 @@ import {Platform} from 'react-native';
 import {useQueryClient} from '@tanstack/react-query';
 
 import {AuthQueries} from '@/entities/auth';
-import {openLoginModal} from '@/navigations/navigation-ref';
+import {openLoginModal} from '@/shared/lib/navigation/navigation-ref';
 import {UserQueries} from '@/entities/user/user.queries';
 import {StorageKey} from '@/shared/constant/storage-key';
-import {useAuth} from '@/shared/hooks/useAuth';
+import {useAuth} from '@/entities/auth/useAuth';
 import {setGuest} from '@/shared/lib/auth/guest';
 import {showToast} from '@/shared/lib/feedback';
 import {removeAsyncStorage} from '@/shared/lib/persistence';

@@ -5,16 +5,15 @@ import { type AnchorHTMLAttributes, type MouseEvent, useEffect, useState } from 
 
 import { isJirumAlarmAppUA, isKakaoInAppUA } from '@/shared/config/user-agent';
 import { isGuestAtom, isLoggedInAtom } from '@/shared/hooks/useIsLoggedIn';
-import { appOpenUrl, isAppPath, KAKAO_APP_ATTEMPT_EVENT } from '@/shared/lib/kakao-app-open';
-
-import { wasSuspended } from '../lib/watchAppSwitch';
 import {
   appHandoffHref,
   appStoreUrl,
   type HandoffPlatform,
   type HandoffSource,
   playStoreUrl,
-} from '../model/appHandoff';
+} from '@/shared/lib/app-handoff/appHandoff';
+import { wasSuspended } from '@/shared/lib/app-handoff/watchAppSwitch';
+import { appOpenUrl, isAppPath, KAKAO_APP_ATTEMPT_EVENT } from '@/shared/lib/kakao-app-open';
 
 /** 웹 기기 id 저장 키(useAlertSession·BrowserHandoffArrival 과 같다). */
 const DEVICE_ID_KEY = 'jirum-alarm-device-id';

@@ -6,7 +6,7 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useQuery} from '@tanstack/react-query';
 
 import {MyPageQueries} from '@/entities/mypage';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import type {PushSettingKey} from '@/shared/api/mypage';
 import PressableScale from '@/shared/components/PressableScale';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';

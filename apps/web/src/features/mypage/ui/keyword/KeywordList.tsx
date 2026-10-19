@@ -11,8 +11,8 @@ import { useToast } from '@/shared/ui/common/Toast';
 import Link from '@/shared/ui/Link';
 
 import { AuthQueries } from '@/entities/auth';
+import { useUpdateKeyword } from '@/entities/auth/model/update-keyword';
 
-import { useUpdateKeyword } from '../../model/update-keyword';
 import { useKeywordFrequencies } from '../../model/useKeywordFrequencies';
 import { useKeywordList } from '../../model/useKeywordList';
 

@@ -13,7 +13,7 @@ import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import Setting from '@/shared/components/icons/Setting';
 import TrashBin from '@/shared/components/icons/TrashBin';
-import {navigateToNativeRoute} from '@/navigations/navigation-ref';
+import {navigateToNativeRoute} from '@/shared/lib/navigation/navigation-ref';
 import {
   tabNavigations,
   tabStackNavigations,

@@ -3,7 +3,7 @@ import {useQuery} from '@tanstack/react-query';
 import * as ReactTestRenderer from 'react-test-renderer';
 import {SERVICE_URL} from '../src/constants/env';
 import {StorageKey} from '../src/shared/constant/storage-key';
-import {__resetAuthSyncForTest, useAuth} from '../src/shared/hooks/useAuth';
+import {__resetAuthSyncForTest, useAuth} from '../src/entities/auth/useAuth';
 import {FetchError, isAuthFailure} from '../src/shared/lib/client/http-client';
 import {
   getAsyncStorage,

@@ -1,7 +1,7 @@
 import React from 'react';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-import type {SearchStackParamList} from '@/navigations/tab/types';
+import type {SearchStackParamList} from '@/shared/lib/navigation/param-list';
 import {searchStackNavigations} from '@/shared/constant/navigations';
 
 import NativeSearchScreen from '@/screens/search/SearchScreen';

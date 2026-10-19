@@ -21,7 +21,7 @@ import {openInAppBrowser} from '@/shared/lib/navigation';
 import {resolveEntryScreen} from '@/shared/lib/navigation/entry-screen';
 import {cn} from '@/shared/lib/styling';
 import {tabStackNavigations} from '@/shared/constant/navigations';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 
 import PressableScale from '@/shared/components/PressableScale';
 import {useReduceMotion} from '@/shared/hooks/useReduceMotion';

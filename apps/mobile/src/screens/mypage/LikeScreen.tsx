@@ -10,7 +10,7 @@ import type {
 import CurationGrid from '@/entities/home/ui/CurationGrid';
 import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
 import type {ProductCardType} from '@/entities/home/model/types';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import Heart from '@/shared/components/icons/Heart';
 import {tick} from '@/shared/lib/feedback/haptic';
 import {tabStackNavigations} from '@/shared/constant/navigations';

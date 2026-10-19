@@ -1,7 +1,7 @@
 import React from 'react';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {StackWebView} from '@/screens/detail/ProductDetailWebViewScreen';
 

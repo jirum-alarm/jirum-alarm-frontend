@@ -27,7 +27,7 @@ import TimeDealTimerBar, {
 import {ChipRow} from '@/entities/home/ui/TossHomeSection';
 import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
 import {tabStackNavigations} from '@/shared/constant/navigations';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {
   DetailHeaderActions,
   DetailHeaderBackButton,

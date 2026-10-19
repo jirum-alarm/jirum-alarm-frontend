@@ -28,7 +28,7 @@ import {
 } from '@/shared/constant/navigations';
 import {isInTabStack} from '@/shared/lib/navigation/search-flow';
 import {getPushablePath} from '@/shared/lib/navigation/tab-routing';
-import {navigateToNativeRoute} from '@/navigations/navigation-ref';
+import {navigateToNativeRoute} from '@/shared/lib/navigation/navigation-ref';
 
 export function useCommonWebViewLogic() {
   const insets = useSafeAreaInsets();

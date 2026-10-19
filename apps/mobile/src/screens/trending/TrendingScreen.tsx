@@ -22,13 +22,13 @@ import {
   requestTrendingView,
   useTrendingCategory,
   useTrendingView,
-} from './trending-view-store';
+} from '@/shared/lib/navigation/trending-view-store';
 import {orderTrendingCategories} from './trending-tab-order';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {
   ChipRowSkeleton,
   GridSkeleton,

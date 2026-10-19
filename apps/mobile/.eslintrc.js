@@ -6,38 +6,15 @@ const {fsdBoundaries} = require('../../packages/eslint/fsd-boundaries.cjs');
  * FSD 경계 예외(옮기기엔 얽힌 것) — 파일(src 기준) → 허용할 import 접두. 늘리지 말고 줄여 갈 목록이다.
  */
 const FSD_ALLOWLIST = {
-  // 전역 네비게이션 ref(navigation-ref 가 screens 를 import 해서 shared 로 못 내린다)를 아래 레이어가 직접 쓴다
-  'shared/hooks/PendingLoginRestore.tsx': ['@/navigations/navigation-ref'],
-  'shared/hooks/useDeepLink.ts': ['@/navigations/open-when-ready'],
-  'shared/hooks/useOtaUpdateOnResume.ts': ['@/navigations/navigation-ref'],
-  'features/keyword-prompt/model/myKeywords.ts': [
-    '@/navigations/navigation-ref',
-  ],
-  'features/community/ui/CommunityHotDeals.tsx': [
-    '@/navigations/navigation-ref',
-    '@/navigations/tab',
-  ],
-  // 로그인 상태 훅·상품 카드가 엔티티 쿼리를 읽는다 — 소비처 21곳이 여러 레이어라 옮기면 import 가 위로 샌다
-  'shared/hooks/useAuth.ts': ['@/entities/auth'],
-  'shared/hooks/useRequireLogin.ts': [
-    '@/entities/auth',
-    '@/entities/user',
-    '@/navigations/navigation-ref',
-  ],
-  'shared/components/product/ProductCard.tsx': ['@/entities/product'],
-  // 홈 서버 응답 타입이 map-home-page 에 있다(다른 작업이 그 파일을 옮기는 중)
-  'shared/api/home/home.service.ts': ['@/entities/home'],
-  // 키워드 등록·검증을 마이페이지와 서로 공유
+  // 로그인 요구 훅이 로그인 상태(entities/auth)·내 정보(entities/user) 둘 다 읽고 소비처가 features 여러 슬라이스 — 엔티티 한 곳으로 못 올린다
+  'shared/hooks/useRequireLogin.ts': ['@/entities/auth', '@/entities/user'],
+  // 키워드 등록·검증을 마이페이지와 서로 공유 — 공통 부분을 entities/keyword 로 떼는 설계 변경이 필요
   'features/keyword-prompt/model/useKeywordAlert.ts': ['@/features/mypage'],
   'features/mypage/model/useKeywordViewModel.ts': ['@/features/keyword-prompt'],
-  // 홈 카드·카드 타입(entities/home)을 트렌딩·검색·커뮤니티가 재사용, 홈이 상품 prefetch·테마 쿼리를 쓴다
-  'entities/community/community.queries.ts': ['@/entities/home'],
-  'entities/search/api/search.queries.ts': ['@/entities/home'],
-  'entities/trending/api/trending.queries.ts': ['@/entities/home'],
+  // 발견 탭 목록이 홈 카드 UI(GridCard·CurationGrid·CarouselList)를 그대로 그린다 — 카드 UI 를 entities/product 로 옮기는 설계 변경 필요
   'entities/trending/ui/LiveList.tsx': ['@/entities/home'],
   'entities/trending/ui/RankingList.tsx': ['@/entities/home'],
-  'entities/trending/ui/CategoryPager.tsx': ['@/entities/category'],
-  'entities/trending/ui/CategoryTabBar.tsx': ['@/entities/category'],
+  // 홈 카드가 상품 상세 prefetch(상품 쿼리)·테마 쿼리를 쓴다 — 쿼리라 shared 로 못 내린다
   'entities/home/ui/JirumRankingSlider.tsx': ['@/entities/product'],
   'entities/home/ui/cards/HomeProductCards.tsx': ['@/entities/product'],
   'entities/home/ui/ThemeHomeSection.tsx': ['@/entities/theme'],

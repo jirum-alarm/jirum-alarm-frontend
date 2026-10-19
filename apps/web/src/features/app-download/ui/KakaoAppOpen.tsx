@@ -8,6 +8,8 @@ import { useEffect, useRef, useState } from 'react';
 
 import { isJirumAlarmAppUA, isKakaoInAppUA } from '@/shared/config/user-agent';
 import { isGuestAtom, isLoggedInAtom } from '@/shared/hooks/useIsLoggedIn';
+import { appStoreUrl } from '@/shared/lib/app-handoff/appHandoff';
+import { watchAppSwitch } from '@/shared/lib/app-handoff/watchAppSwitch';
 import { cn } from '@/shared/lib/cn';
 import {
   APP_MISSING_PARAM,
@@ -25,11 +27,7 @@ import {
   shouldInvite,
   writePref,
 } from '@/shared/lib/kakao-app-open';
-
-import { watchAppSwitch } from '../lib/watchAppSwitch';
-import { appStoreUrl } from '../model/appHandoff';
-
-import OpenInAppLink from './OpenInAppLink';
+import OpenInAppLink from '@/shared/ui/app-handoff/OpenInAppLink';
 
 /**
  * 첫 방문 시트를 이미 지난 기기 표시 — FirstVisitAppAlertModal FIRST_VISIT_SEEN_KEY · FirstVisitAlertSheet 숨김 실험 군.

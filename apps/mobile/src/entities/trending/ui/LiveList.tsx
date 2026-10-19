@@ -2,7 +2,7 @@ import React, {useCallback, useMemo, useRef} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useInfiniteQuery, useQueryClient} from '@tanstack/react-query';
 
-import type {ProductCardType} from '@/entities/home/model/types';
+import type {ProductCardType} from '@/shared/types/product-card';
 import CurationGrid from '@/entities/home/ui/CurationGrid';
 import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
 import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import PageQrCode from './PageQrCode';
+import PageQrCode from '@/shared/ui/app-handoff/PageQrCode';
 
 /**
  * PC(비모바일) 전용 앱 설치 QR.

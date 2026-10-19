@@ -18,7 +18,7 @@ import {
   useRequireLogin,
 } from '@/shared/hooks/useRequireLogin';
 import {PendingActionType} from '@/shared/lib/pending-action';
-import {useAuth} from '@/shared/hooks/useAuth';
+import {useAuth} from '@/entities/auth/useAuth';
 
 import {deriveKeyword} from '@jirum/domain/derive-keyword';
 import {invalidateMyKeywords} from '@/features/keyword-prompt/model/myKeywords';

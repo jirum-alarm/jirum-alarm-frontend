@@ -30,12 +30,12 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {navigateToTrending} from '@/navigations/navigation-ref';
+import {navigateToTrending} from '@/shared/lib/navigation/navigation-ref';
 import {
   getPushablePath,
   isTabRootUrl,
 } from '@/shared/lib/navigation/tab-routing';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {setTabBarVisibleFromUrl} from '@/shared/hooks/useHideTabBar';
 import {
   buildNativeTabsInjectJs,

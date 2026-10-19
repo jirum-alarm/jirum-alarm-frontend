@@ -3,7 +3,7 @@ import {ActivityIndicator, FlatList, RefreshControl, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
-import {useAuth} from '@/shared/hooks/useAuth';
+import {useAuth} from '@/entities/auth/useAuth';
 import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {
@@ -21,7 +21,7 @@ import Comment from '@/features/comment/ui/Comment';
 import CommentEmpty from '@/features/comment/ui/CommentEmpty';
 import CommentInput from '@/features/comment/ui/CommentInput';
 import {DetailHeaderBackButton} from '@/screens/detail/ui/ProductDetailHeader';
-import type {ProductFlowParamList} from '@/navigations/tab/types';
+import type {ProductFlowParamList} from '@/shared/lib/navigation/param-list';
 import type {TComment} from '@/shared/api/comment/comment.service';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useColors} from '@/shared/theme/useColors';

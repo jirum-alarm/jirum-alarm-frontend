@@ -28,7 +28,7 @@ import {
   DetailHeaderBackButton,
   HeaderIconButton,
 } from '@/screens/detail/ui/ProductDetailHeader';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import Dots from '@/shared/components/icons/Dots';
 import ShareIcon from '@/shared/components/icons/share';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';

@@ -5,7 +5,7 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useQueryClient} from '@tanstack/react-query';
 
 import {CommunityQueries} from '@/entities/community';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {StackWebView} from '@/screens/detail/ProductDetailWebViewScreen';
 

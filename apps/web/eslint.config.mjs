@@ -9,17 +9,11 @@ const { fsdBoundaries } = fsd;
  * FSD 경계 예외(옮기기엔 얽힌 것) — 파일(src 기준) → 허용할 import 접두. 늘리지 말고 줄여 갈 목록이다.
  */
 const FSD_ALLOWLIST = {
-  // shared 공용 UI/훅이 로그인·알림 쿼리를 읽는다 — 소비처가 여러 레이어라 옮기면 import 가 위로 샌다
+  // shared 공용 UI/훅이 로그인·알림 쿼리를 읽는다 — 소비처(BottomNav·AlarmLinkButton)가 shared 이고 BasicLayout(shared, features 도 씀)이
+  // BottomNav 의 NAV_TYPE 을 읽어, 레이아웃 묶음을 widgets 로 올리려면 NAV_TYPE 분리부터 하는 설계 변경이 필요
   'shared/ui/TabScrollTopButton.tsx': ['@/entities/auth'],
   'shared/hooks/useHasNewAlarm.ts': ['@/entities/notification'],
-  // 알림함·상세가 앱 열기 링크·키워드 등록·푸시 설정을 그대로 재사용
-  'features/alarm/ui/AlarmContainer.tsx': ['@/features/app-download'],
-  'features/alarm/ui/AlarmList.tsx': ['@/features/mypage'],
-  'features/product-detail/ui/PostPurchaseKeywordPrompt.tsx': [
-    '@/features/app-download',
-    '@/features/mypage',
-  ],
-  // 프로모션 쿼리가 상품 쿼리 키를 공유
+  // 프로모션 섹션이 queryName 으로 상품 쿼리(ProductQueries)를 골라 쓴다 — 홈 SDUI 를 product 쪽으로 합치는 설계 변경 필요
   'entities/promotion/lib/getPromotionQueryOptions.ts': ['@/entities/product'],
 };
 

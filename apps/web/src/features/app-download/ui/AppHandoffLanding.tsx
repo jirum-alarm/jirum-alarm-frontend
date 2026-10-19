@@ -3,8 +3,7 @@
 import { useEffect } from 'react';
 
 import { isJirumAlarmAppUA } from '@/shared/config/user-agent';
-
-import { appStoreUrl, readHandoffHash } from '../model/appHandoff';
+import { appStoreUrl, readHandoffHash } from '@/shared/lib/app-handoff/appHandoff';
 
 /**
  * iOS 「앱에서 보기」가 앱을 못 열고 웹으로 떨어진 경우의 착지(#handoff=<source>).
