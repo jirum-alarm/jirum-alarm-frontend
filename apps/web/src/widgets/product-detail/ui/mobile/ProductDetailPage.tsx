@@ -16,6 +16,7 @@ import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
 import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning, LiveAlternativeDeals } from '@/features/product-detail/components';
+import AlertReasonLine from '@/features/product-detail/ui/AlertReasonLine';
 import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuide';
 import NoticeProfitLink from '@/features/product-detail/ui/NoticeProfitUrl';
 import PriceHistorySection from '@/features/product-detail/ui/PriceHistorySection';
@@ -82,6 +83,9 @@ function ProductDetailPage({
           </div>
         </div>
         <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-6">
+          <Suspense>
+            <AlertReasonLine className="mx-5 mb-3" />
+          </Suspense>
           {/* ① 요약 — 상품명·가격·근거·구매 정보. 첫 화면에서 판단에 필요한 것만. */}
           <ProductInfo
             productId={productId}

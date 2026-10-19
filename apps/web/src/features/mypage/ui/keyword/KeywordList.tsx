@@ -12,6 +12,8 @@ import Link from '@/shared/ui/Link';
 
 import { AuthQueries } from '@/entities/auth';
 import { useUpdateKeyword } from '@/entities/auth/model/update-keyword';
+import { findKeywordHubForQuery, keywordHubPath } from '@/entities/keyword-hub/lib/keyword-hub';
+import { useKeywordHubs } from '@/entities/keyword-hub/model/useKeywordHubs';
 
 import { useKeywordFrequencies } from '../../model/useKeywordFrequencies';
 import { useKeywordList } from '../../model/useKeywordList';
@@ -25,6 +27,7 @@ const KeywordList = ({ focus }: { focus?: string }) => {
   const { notificationKeywordsByMe, onDeleteKeyword } = useKeywordList();
   const keywords = notificationKeywordsByMe ?? [];
   const frequencyOf = useKeywordFrequencies(keywords.map((k) => k.keyword));
+  const { data: hubs } = useKeywordHubs();
   const { toast } = useToast();
   const promptPushChannel = usePushChannelPrompt();
   const { mutate: broaden, isPending: broadening } = useUpdateKeyword({
@@ -69,6 +72,7 @@ const KeywordList = ({ focus }: { focus?: string }) => {
           </p>
           <ul className="mt-4 flex flex-col gap-2">
             {ordered.map((keyword) => {
+              const hub = hubs ? findKeywordHubForQuery(keyword.keyword, hubs) : undefined;
               const frequency = frequencyOf(keyword.keyword);
               // 제안 키워드를 이미 갖고 있으면 넓히기를 안 띄운다(등록하면 「이미 등록된 키워드」).
               const canBroaden =
@@ -87,6 +91,7 @@ const KeywordList = ({ focus }: { focus?: string }) => {
                     maxPrice: keyword.maxPrice ?? null,
                   }}
                   onDelete={() => onDeleteKeyword(keyword.id)}
+                  hubHref={hub ? keywordHubPath(hub) : undefined}
                   frequency={frequency}
                   onBroaden={canBroaden ? (next) => broaden({ keyword: next }) : undefined}
                   broadening={broadening}

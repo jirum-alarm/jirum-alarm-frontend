@@ -63,6 +63,7 @@ const sectionTitle = 'text-sm font-semibold text-gray-900';
 const KeywordItem = ({
   keyword,
   onDelete,
+  hubHref,
   defaultOpen = false,
   frequency,
   onBroaden,
@@ -70,6 +71,8 @@ const KeywordItem = ({
 }: {
   keyword: Keyword;
   onDelete: () => void;
+  /** 이 키워드가 공개 키워드 허브 자체면(「삼다수」) 그 30일 모음으로 — 앱 KeywordItem onOpenHub 와 같은 자리. */
+  hubHref?: string;
   /** 알림 한 줄의 키워드 링크에서 들어오면 펼친 채로 시작한다. */
   defaultOpen?: boolean;
   /** 지난 90일 횟수(서버 keywordDealFrequencies) — 아직 없거나 실패하면 null(줄을 안 그린다). */
@@ -120,6 +123,16 @@ const KeywordItem = ({
               </p>
             )}
           </div>
+          {hubHref ? (
+            <Link
+              href={hubHref}
+              data-track="keyword-hub-link"
+              data-source="mypage_keyword"
+              className="shrink-0 px-1 text-xs font-medium text-gray-700 hover:underline"
+            >
+              핫딜 모아보기 ›
+            </Link>
+          ) : null}
           <ArrowDown
             width={20}
             height={20}

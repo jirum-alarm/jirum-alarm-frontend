@@ -59,6 +59,7 @@ import BottomCTA from './ui/BottomCTA';
 import ProductDetailSkeleton from './ui/ProductDetailSkeleton';
 import ProductInfo from './ui/ProductInfo';
 import AffiliateNotice from './ui/AffiliateNotice';
+import AlertReasonLine from './ui/AlertReasonLine';
 import ExpiredProductWarning from './ui/ExpiredProductWarning';
 import MissingDealView from './ui/MissingDealView';
 import LiveAlternativeDeals from './ui/LiveAlternativeDeals';
@@ -117,6 +118,7 @@ export default function ProductDetailScreen(props: Props) {
     <NativeDetail
       productId={productId}
       hidePrice={isFromTossPath(props.route.params.path)}
+      path={props.route.params.path}
     />
   );
 }
@@ -124,9 +126,12 @@ export default function ProductDetailScreen(props: Props) {
 function NativeDetail({
   productId,
   hidePrice,
+  path,
 }: {
   productId: number;
   hidePrice: boolean;
+  /** 들어온 URL(쿼리 포함) — 알림 utm 으로 «왜 왔나» 한 줄을 단다. */
+  path: string;
 }) {
   const scrollRef = useRef<ScrollView>(null);
   const lastScrollY = useRef(0);
@@ -360,6 +365,7 @@ function NativeDetail({
         </View>
         {/* web 처럼 카드가 이미지 아래쪽 24px 을 덮어 둥근 모서리 뒤로 이미지가 보인다. */}
         <View className="-mt-6 rounded-t-3xl border-t border-gray-100 bg-white pt-6">
+          <AlertReasonLine path={path} />
           <ProductInfo
             product={product}
             source={source}

@@ -16,6 +16,7 @@ import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
 import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning, LiveAlternativeDeals } from '@/features/product-detail/components';
+import AlertReasonLine from '@/features/product-detail/ui/AlertReasonLine';
 import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuide';
 import NoticeProfitLink from '@/features/product-detail/ui/NoticeProfitUrl';
 import PriceHistorySection from '@/features/product-detail/ui/PriceHistorySection';
@@ -128,6 +129,9 @@ export default async function DesktopProductDetailPage({
             <div className="sticky top-25 space-y-6">
               {/* 상품명·가격·가이드 = 첫 화면 핵심. 데이터가 전부 프리페치돼 있어
                   Suspense 로 떼어내면 우측 컬럼이 통째로 늦게 그려진다. */}
+              <Suspense>
+                <AlertReasonLine />
+              </Suspense>
               <ProductInfo
                 productId={productId}
                 isUserLogin={isUserLogin}
