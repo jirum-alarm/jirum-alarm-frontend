@@ -43,8 +43,8 @@ Sentry.init({
 
   sendDefaultPii: true,
 
-  // 전송 연결을 재사용한다 — 기본값(keepAlive false)이면 이벤트 묶음마다 새 TLS 연결이라 파드당 초당 ~3번
-  // 핸드셰이크(인증서 수 KB)를 주고받았다(2026-10-20 cni0 캡처: 60초에 SYN 189개).
+  // 전송 연결을 재사용한다 — 기본값(keepAlive false)이면 이벤트 묶음마다 새 TLS 연결이라 초마다 핸드셰이크
+  // (인증서 수 KB)를 새로 주고받았다(2026-10-20 패킷 캡처).
   transportOptions: { keepAlive: true },
 
   // 같은 span 을 사내 Tempo 로도(OTEL_EXPORTER_OTLP_ENDPOINT 있을 때만). 자세한 건 otel-tempo.ts.

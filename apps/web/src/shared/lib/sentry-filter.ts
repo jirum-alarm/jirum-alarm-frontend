@@ -60,11 +60,11 @@ export function createBurstLimiter(now: () => number = Date.now) {
 }
 
 // 받자마자 버려지거나 볼 일 없는 트랜잭션은 보내지 않는다.
-// ★왜(2026-10-20): 할당량 초기화 당일 하루 치가 트랜잭션 수락 3.7만·크롤러로 버림 5.1만, span 수락 21만·버림 39만이었다.
-// 버려질 걸 운영 파드가 매번 새 TLS 연결로 올려 웹 파드 2대가 하루 ~1.9GB 를 집 회선(업로드)으로 내보냈다.
-//  - 크롤러 요청: Sentry 가 «web-crawlers» 인바운드 필터로 버린다.
-//  - 이미지 최적화(GET /_next/image)·미들웨어(op http.server.middleware): 수락된 서버 트랜잭션의 ~45%(6h 표본)인데
-//    페이지 트랜잭션과 겹치고, 지연은 Tempo 에서 본다. 남겨 두면 span 할당량(월 ~500만)이 한 달을 못 간다.
+// ★왜(2026-10-20): 서버가 보낸 트랜잭션·span 의 절반 넘게가 Sentry «web-crawlers» 인바운드 필터로 그 자리에서
+// 버려지고 있었다 — 버려질 것을 운영 파드가 집 회선 업로드로 꾸준히 올렸다.
+//  - 크롤러 요청: Sentry 가 인바운드 필터로 버린다.
+//  - 이미지 최적화(GET /_next/image)·미들웨어(op http.server.middleware): 수락된 서버 트랜잭션의 큰 몫인데
+//    페이지 트랜잭션과 겹치고, 지연은 Tempo 에서 본다. 남겨 두면 span 할당량이 한 달을 못 간다.
 // 샘플러(tracesSampler)가 아니라 전송 직전에 거르는 건, 서버 span 을 사내 Tempo 와 공유해서다 — 봇·이미지 SSR
 // 트레이스는 Tempo 엔 그대로 남는다(봇 부하 분석에 쓴다). UA 는 서버는 요청 헤더, 브라우저는 navigator 에서 본다.
 const requestUserAgent = (event: Event): string => {
