@@ -140,6 +140,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           className="pc:flex bg-fixed-800 mb-5 hidden size-11 shrink-0 items-center justify-center rounded-full disabled:opacity-0"
           onClick={handleSlidePrev}
           name="이전"
+          aria-label="이전 랭킹"
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.1 }}
         >
@@ -175,6 +176,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           className="pc:flex bg-fixed-800 mb-5 hidden size-11 shrink-0 items-center justify-center rounded-full disabled:opacity-0"
           onClick={handleSlideNext}
           name="다음"
+          aria-label="다음 랭킹"
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.1 }}
         >
