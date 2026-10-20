@@ -21,12 +21,15 @@ export const getDayBefore = (type: number) => {
   return dayjs().tz('Asia/Seoul').add(-type, 'day').startOf('day').toDate();
 };
 
+// 「오늘」 판정과 「오전 N시」는 KST 로 — 운영 파드(UTC)가 그리면 「오전 2시 업데이트」, 브라우저는 「오전 11시」라
+// 상품 상세가 하이드레이션 오류(#418)로 통째 다시 그려지고 크롤러는 9시간 틀린 시각을 봤다(10/20 web-screens 로 발견).
 export const getFromNow = (date: string) => {
   const dayjsDate = dayjs(date);
   if (!dayjsDate.isValid()) return null;
 
-  if (dayjsDate.isSame(dayjs(), 'day')) {
-    return dayjsDate.format('A h시');
+  const kst = dayjsDate.tz('Asia/Seoul');
+  if (kst.format('YYYY-MM-DD') === dayjs().tz('Asia/Seoul').format('YYYY-MM-DD')) {
+    return kst.format('A h시');
   }
 
   return dayjsDate.fromNow();

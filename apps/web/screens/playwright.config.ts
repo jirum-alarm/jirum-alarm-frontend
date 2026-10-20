@@ -64,6 +64,8 @@ export default defineConfig({
       timeout: 180_000,
       reuseExistingServer: !process.env.CI,
       env: {
+        // 운영 파드처럼 서버는 UTC, 브라우저는 KST(use.timezoneId) — 시간대로 갈리는 하이드레이션 오류(#418)를 로컬에서도 잡는다.
+        TZ: 'UTC',
         // dev: 서버는 GRAPHQL_ENDPOINT, 브라우저는 /api/graphql 프록시 → 둘 다 고정 데이터 서버.
         GRAPHQL_ENDPOINT: FIXTURE_GRAPHQL,
         // start(운영 빌드): 서버는 ${API_URL}/graphql. 브라우저 주소는 빌드 때 NEXT_PUBLIC_SERVICE_URL=BASE_URL 로 박는다.
