@@ -1,4 +1,9 @@
-import { periodStartDate, SEARCH_PAGE_SIZE } from '@jirum/domain/search';
+import {
+  periodStartDate,
+  SEARCH_PAGE_SIZE,
+  searchFilterVariables,
+  searchOrderBy,
+} from '@jirum/domain/search';
 import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
@@ -41,17 +46,9 @@ export const useProductListViewModel = ({
       ...ProductQueries.infiniteProducts({
         limit,
         keyword: keywordParam || undefined,
-        categoryIds: filters.categoryIds.length > 0 ? filters.categoryIds : undefined,
-        providerIds: filters.providerIds.length > 0 ? filters.providerIds : undefined,
-        startDate,
-        // ended(품절 포함) ON일 때만 isEnd: true — 백엔드에서 true는 '종료 포함' 의미.
-        isEnd: filters.ended ? true : undefined,
-        orderBy:
-          filters.sort === 'relevance'
-            ? ProductOrderType.Relevance
-            : filters.sort === 'comments'
-              ? ProductOrderType.CommentCount
-              : undefined,
+        // 필터 변수(빈 칩 생략·품절 포함·정렬)는 정본 — 앱 검색 목록과 같은 값.
+        ...searchFilterVariables(filters, startDate),
+        orderBy: searchOrderBy(filters.sort) as ProductOrderType | undefined,
       }),
       placeholderData: keepPreviousData,
       // 키워드 없는 /search 랜딩에서도 SearchResult 가 마운트된다. 이때까지 켜 두면

@@ -1,6 +1,6 @@
 'use client';
 
-import { ESTIMATED_TOTAL_CAP } from '@jirum/domain/search';
+import { endedRescueVariables, ESTIMATED_TOTAL_CAP, SEARCH_EVENT } from '@jirum/domain/search';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
@@ -23,7 +23,7 @@ export default function EndedDealsRescue({
   onShowEnded: () => void;
 }) {
   // limit 은 목록과 같은 20 — 서버가 검색 엔진에서 limit 만큼 받은 뒤 걸러 내서, 1로 물으면 첫 행이 걸러질 때 0건으로 오판한다(실측).
-  const variables = { limit: 20, keyword, isEnd: true };
+  const variables = endedRescueVariables(keyword);
   const { data } = useQuery({
     ...ProductQueries.products(variables),
     // '품절 포함' 목록(무한 쿼리)과 변수가 같아 키가 겹친다 — 데이터 모양이 달라 꼬리표로 가른다.
@@ -44,7 +44,7 @@ export default function EndedDealsRescue({
   if (!hasEnded) return null;
 
   const handleClick = () => {
-    pushDataLayer({ event: 'search_ended_rescue_click', keyword, count });
+    pushDataLayer({ event: SEARCH_EVENT.endedRescueClick, keyword, count });
     onShowEnded();
   };
 

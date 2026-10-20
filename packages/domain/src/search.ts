@@ -34,7 +34,10 @@ export const PERIOD_HOURS: Record<Exclude<SearchPeriod, 'all'>, number> = {
  * 기간 → startDate. **지금부터 N시간 전**(롤링) — 자정 절단이 아니다('오늘'에 어제 0시부터가 나오던 것).
  * ⚠️결과를 queryKey 에 넣지 말 것 — 호출 시각이 들어가 렌더마다 키가 바뀐다(web 은 기간이 바뀔 때만 다시 계산).
  */
-export function periodStartDate(period: SearchPeriod, now: number = Date.now()): string | undefined {
+export function periodStartDate(
+  period: SearchPeriod,
+  now: number = Date.now(),
+): string | undefined {
   if (period === 'all') return undefined;
   return new Date(now - PERIOD_HOURS[period] * 60 * 60 * 1000).toISOString();
 }
@@ -83,5 +86,54 @@ export const SEARCH_COPY = {
   placeholder: '핫딜 상품을 검색해주세요',
   noResult: '검색 결과가 없어요',
   /** 필터 때문에 0건 — 두 줄(web <br/>, 앱 \n). 상품이 없다고 말하지 않는다(풀 수 있는 필터가 있다). */
-  noFilteredResult: ['선택한 필터에 맞는 결과가 없어요.', '필터를 조정하면 더 많은 딜을 볼 수 있어요.'],
+  noFilteredResult: [
+    '선택한 필터에 맞는 결과가 없어요.',
+    '필터를 조정하면 더 많은 딜을 볼 수 있어요.',
+  ],
 } as const;
+
+/** 정렬 → 서버 orderBy(ProductOrderType 값). 'recent' 는 안 보낸다(서버 기본이 최신순 — keyword 가 있으면 나머지 orderBy 는 무시된다). */
+export function searchOrderBy(sort: SearchSort): 'RELEVANCE' | 'COMMENT_COUNT' | undefined {
+  if (sort === 'relevance') return 'RELEVANCE';
+  if (sort === 'comments') return 'COMMENT_COUNT';
+  return undefined;
+}
+
+/**
+ * 검색 결과 쿼리의 필터 변수 — web 목록·앱 목록이 같은 값을 보낸다. 빈 칩 목록은 안 보내고,
+ * 「품절 포함」은 ON 일 때만 isEnd: true(서버에서 true 는 «종료 포함»). startDate 는 기간이 바뀔 때만 다시 잡게 밖에서 받는다.
+ */
+export function searchFilterVariables(
+  filters: { categoryIds: number[]; providerIds: number[]; ended: boolean; sort: SearchSort },
+  startDate: string | undefined,
+) {
+  return {
+    categoryIds: filters.categoryIds.length > 0 ? filters.categoryIds : undefined,
+    providerIds: filters.providerIds.length > 0 ? filters.providerIds : undefined,
+    startDate,
+    isEnd: filters.ended ? true : undefined,
+    orderBy: searchOrderBy(filters.sort),
+  };
+}
+
+/**
+ * 진짜 0건일 때 같은 검색어를 종료 포함으로 한 번 더 세는 조회. limit 은 목록과 같은 쪽 크기 —
+ * 서버가 검색 엔진에서 limit 만큼 받은 뒤 걸러 내서, 1로 물으면 첫 행이 걸러질 때 0건으로 오판한다.
+ */
+export const endedRescueVariables = (keyword: string) =>
+  ({ limit: SEARCH_PAGE_SIZE, keyword, isEnd: true }) as const;
+
+/** 검색 계측 이벤트 이름(GA4·GTM 이 이 문자열로 받는다). */
+export const SEARCH_EVENT = {
+  noResult: 'search_no_result',
+  endedRescueClick: 'search_ended_rescue_click',
+} as const;
+
+/** 결과 위 한 줄 「'X' 새 핫딜, 놓치지 마세요 [알림 받기]」 — 키워드 뒤에 붙는 말. */
+export const SEARCH_ALERT_BAR_COPY = {
+  off: ' 새 핫딜, 놓치지 마세요',
+  on: ' 새 핫딜을 알려드리고 있어요',
+} as const;
+
+/** 결과 위 한 줄의 알림 등록 출처(keyword_register source·keyword_prompt placement). */
+export const SEARCH_BAR_SOURCE = 'search_bar' as const;

@@ -1,5 +1,6 @@
 'use client';
 
+import { SEARCH_ALERT_BAR_COPY, SEARCH_BAR_SOURCE } from '@jirum/domain/search';
 import { useEffect } from 'react';
 
 import { pushDataLayer, useSearchKeywordAlert } from '../hooks/useSearchKeywordAlert';
@@ -14,7 +15,7 @@ import { pushDataLayer, useSearchKeywordAlert } from '../hooks/useSearchKeywordA
 export default function SearchKeywordAlertBar({ keyword }: { keyword: string }) {
   const { trimmed, canRegister, isOn, isPending, register } = useSearchKeywordAlert({
     keyword,
-    source: 'search_bar',
+    source: SEARCH_BAR_SOURCE,
   });
 
   const visible = canRegister && !isOn;
@@ -35,7 +36,7 @@ export default function SearchKeywordAlertBar({ keyword }: { keyword: string }) 
     <div className="mb-3 flex items-center gap-x-3 rounded-xl bg-gray-50 py-2 pr-2 pl-4">
       <p className="min-w-0 flex-1 truncate text-sm text-gray-700">
         <span className="font-semibold text-gray-900">&lsquo;{trimmed}&rsquo;</span>
-        {isOn ? ' 새 핫딜을 알려드리고 있어요' : ' 새 핫딜, 놓치지 마세요'}
+        {isOn ? SEARCH_ALERT_BAR_COPY.on : SEARCH_ALERT_BAR_COPY.off}
       </p>
       {isOn ? (
         <span

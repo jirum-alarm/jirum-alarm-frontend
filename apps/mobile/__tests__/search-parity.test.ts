@@ -18,8 +18,6 @@ declare const __dirname: string;
 
 const read = (p: string) =>
   fs.readFileSync(path.join(__dirname, '..', p), 'utf8');
-const web = (p: string) =>
-  fs.readFileSync(path.join(__dirname, '../../web/src', p), 'utf8');
 
 // ── 앱 ──
 const shell = read('src/screens/detail/SearchScreen.tsx');
@@ -69,21 +67,7 @@ function code(source: string): string {
 
 const appCode = appSources.map(code);
 
-// ── web ──
-const webInput = web('widgets/search/ui/SearchInput.tsx');
-const webInputVm = web('widgets/search/hooks/useSearchInputViewModel.ts');
-const webInitial = web('widgets/search/ui/InitialResult.tsx');
-const webResult = web('widgets/search/ui/SearchResult.tsx');
-const webFilterBar = web('widgets/search/ui/SearchFilterBar.tsx');
-const webListVm = web('widgets/search/hooks/useProductListViewModel.ts');
-const webRecent = web('widgets/search/ui/RecentKeywords.tsx');
-const webRecommend = web('widgets/search/ui/RecommendationKeywords.tsx');
-const webNotFound = web('widgets/search/ui/ProductNotFound.tsx');
-// 0건 버튼·결과 위 한 줄이 같이 쓰는 등록 로직(로그인 게이트·keyword_intent 가 여기 있다).
-const webKeywordAlert = web('widgets/search/hooks/useSearchKeywordAlert.ts');
-const webAlertBar = web('widgets/search/ui/SearchKeywordAlertBar.tsx');
-const webEndedRescue = web('widgets/search/ui/EndedDealsRescue.tsx');
-const webRegisterSource = web('entities/auth/model/update-keyword.ts');
+// web 파일은 읽지 않는다 — 같아야 하는 값은 @jirum/domain/search 정본, 실제로 보내는 변수는 search-query-variables.test.
 const appEndedRescue = read('src/screens/search/ui/EndedDealsRescue.tsx');
 const appRegisterSource = read('src/shared/lib/analytics/keyword-tracking.ts');
 // 진입 경로 유니온은 web·앱 공용 @jirum/domain/card-tracking 이 정본이다.
@@ -130,29 +114,21 @@ describe('딥링크 keyword 인수', () => {
   });
 
   it('딥링크로 들어온 검색어도 최근 검색어에 남는다(web 과 같은 규칙)', () => {
-    // web 은 keyword 쿼리만 바뀌었을 때 최근 검색어에 남긴다(필터 클릭마다 다시 쓰지 않음).
-    expect(webInputVm).toContain(
-      "setRecentKeyord(keywordParam ? keywordParam : '')",
-    );
+    // keyword 가 바뀌었을 때만 남긴다(필터 클릭마다 다시 쓰지 않음).
     expect(screen).toContain('if (initialKeyword) recent.push(initialKeyword)');
   });
 
   it('결과를 들고 진입하면 자동 포커스를 주지 않는다', () => {
     // web 운영 실측: 포커스 → 제안어가 결과·필터를 가리고 키보드가 올라온다.
-    // web 은 autoFocus 대신 "빈 검색창이면 포커스" effect 로 같은 규칙을 지킨다.
-    expect(webInput).toContain('if (isEmpty) inputRef.current?.focus()');
     expect(screen).toContain('autoFocus={!initialKeyword}');
   });
 });
 
 describe('web 과 같아야 하는 상수', () => {
   it('추천 검색어는 둘 다 서버 키워드 허브 목록에서 30일 딜 5건+ 만 고른다', () => {
-    expect(webRecommend).toContain('useKeywordHubs');
-    expect(webRecommend).toContain('KEYWORD_HUB_MIN_DEALS');
     expect(recommendedUi).toContain('useKeywordHubs');
     expect(recommendedUi).toContain('pickRecommendedKeywords');
     // 하드코딩 목록이 돌아오면 웹·앱이 다시 따로 놀기 시작한다.
-    expect(webRecommend).not.toContain('const KEYWORDS');
     expect(recommendedUi).not.toContain('RECOMMENDED_KEYWORDS =');
   });
 
@@ -227,7 +203,7 @@ describe('web 과 같아야 하는 상수', () => {
   });
 });
 
-describe('쿼리 변수 — web 이 실제로 보내는 것과 같다', () => {
+describe('쿼리 문서·변수', () => {
   it('검색 쿼리가 필터 6종을 다 보낸다', () => {
     for (const variable of [
       'keyword',
@@ -238,25 +214,14 @@ describe('쿼리 변수 — web 이 실제로 보내는 것과 같다', () => {
       'orderBy',
     ]) {
       expect(gqlDoc).toContain(`$${variable}`);
-      expect(queries).toContain(variable);
     }
+    // 실제로 보내는 값은 search-query-variables.test 가 SearchService 를 가로채 본다.
     // 커서 페이지네이션
     expect(gqlDoc).toContain('$searchAfter');
     expect(queries).toContain('searchAfter: pageParam');
   });
 
-  it('web 목록 queryKey 에 categoryIds/providerIds 가 들어간다', () => {
-    // 변수만 바꾸고 키에서 빼면 React Query 가 같은 캐시를 재사용해서
-    // 칩만 바뀌고 목록은 그대로다.
-    const webProductQueries = code(
-      web('entities/product/api/product.queries.ts'),
-    );
-    expect(webProductQueries).toContain('categoryIds: variables.categoryIds');
-    expect(webProductQueries).toContain('providerIds: variables.providerIds');
-  });
-
   it('키워드 없을 땐 검색 쿼리를 안 쏜다', () => {
-    expect(webListVm).toContain('enabled: !!keywordParam');
     expect(queries).toContain('enabled: keyword.trim().length > 0');
   });
 
@@ -266,29 +231,21 @@ describe('쿼리 변수 — web 이 실제로 보내는 것과 같다', () => {
     expect(results).toContain('products[0]?.estimatedTotal');
   });
 
-  it('정렬은 web 과 같은 3종 — recent 는 orderBy 를 안 보낸다', () => {
-    // ⚠️keyword 가 있으면 orderBy 5종이 무시된다(2026-08-10 실측). web 이
-    // 실제로 보내는 값만 옮겨야 "정렬이 안 먹는" 항목을 새로 만들지 않는다.
-    expect(webListVm).toContain('ProductOrderType.Relevance');
-    expect(webListVm).toContain('ProductOrderType.CommentCount');
-    expect(queries).toContain('ProductOrderType.Relevance');
-    expect(queries).toContain('ProductOrderType.CommentCount');
-    expect(queries).toMatch(/return undefined;\s*}/);
-  });
-
-  it('품절 포함은 ON 일 때만 isEnd: true (web 과 같은 의미)', () => {
-    expect(webListVm).toContain('isEnd: filters.ended ? true : undefined');
-    expect(queries).toContain('isEnd: filters.ended ? true : undefined');
+  it('정렬·품절 포함·칩 변수는 정본 searchFilterVariables(web 목록과 같은 함수) — recent 는 orderBy 를 안 보낸다', () => {
+    // ⚠️keyword 가 있으면 orderBy 5종이 무시된다(2026-08-10 실측). 실제로 보내는 값은 search-query-variables.test.
+    const {searchOrderBy} = require('@jirum/domain/search');
+    expect(searchOrderBy('recent')).toBeUndefined();
+    expect(searchOrderBy('relevance')).toBe('RELEVANCE');
+    expect(searchOrderBy('comments')).toBe('COMMENT_COUNT');
+    expect(queries).toContain('...searchFilterVariables(filters, startDate)');
   });
 
   it('새 검색은 필터·정렬을 리셋한다(web 2026-07-22 결정 6A)', () => {
-    expect(webInputVm).toContain('필터·정렬 리셋은 의도된 동작');
     expect(screen).toContain('resetFilters()');
   });
 
   it('필터의 카테고리는 선호가 아니라 전체다', () => {
     // 발견 탭은 categoriesForUser(선호)지만 검색은 전체여야 필터가 쓸모 있다.
-    expect(webFilterBar).toContain('CategoryQueries.categories()');
     expect(queries).toContain('CategoryService.getCategories()');
     expect(code(queries)).not.toContain('categoriesForUser');
   });
@@ -304,7 +261,6 @@ describe('안 옮긴 것 — 도달 불가/불필요를 못박는다', () => {
   });
 
   it('애드센스 인피드 광고는 옮기지 않는다(네이티브 AdSense 가 없다)', () => {
-    expect(webResult).toContain('SearchInFeedAd');
     for (const source of appCode) {
       expect(source).not.toContain('SearchInFeedAd');
       expect(source).not.toContain('adsense');
@@ -314,8 +270,6 @@ describe('안 옮긴 것 — 도달 불가/불필요를 못박는다', () => {
   it('비로그인 게이트·keyword_intent 는 앱에서 도달 불가다', () => {
     // RootNavigator 가 앱 전체를 로그인(또는 게스트) 뒤에 둔다 → 옮기면 0건짜리 죽은 코드.
     // web 은 2026-10-09 부터 로그인 벽 대신 게스트 계정으로 바로 등록한다(useAlertSession).
-    expect(webKeywordAlert).toContain('useAlertSession');
-    expect(webKeywordAlert).toContain('keyword_intent');
     for (const source of appCode) {
       expect(source).not.toContain('useRedirectIfNotLoggedIn');
       expect(source).not.toContain('keyword_intent');
@@ -327,8 +281,9 @@ describe('안 옮긴 것 — 도달 불가/불필요를 못박는다', () => {
     // ⚠️수단은 2026-09-08 에 Mixpanel → GA4(Firebase Analytics) 로 바뀌었다.
     // 여기서 검사하는 건 **이벤트가 앱에서도 나간다**는 사실이고, 보내는 SDK 는
     // `shared/lib/analytics` 한 곳이 정한다.
-    expect(webNotFound).toContain("event: 'search_no_result'");
-    expect(notFound).toContain("Analytics.track('search_no_result'");
+    const {SEARCH_EVENT} = require('@jirum/domain/search');
+    expect(SEARCH_EVENT.noResult).toBe('search_no_result');
+    expect(notFound).toContain('Analytics.track(SEARCH_EVENT.noResult');
     expect(notFound).toContain("from '@/shared/lib/analytics/ga4'");
   });
 
@@ -341,13 +296,11 @@ describe('안 옮긴 것 — 도달 불가/불필요를 못박는다', () => {
 
   it('최근 검색어의 "검색 내역이 없어요."는 web 에서도 도달 불가라 안 옮겼다', () => {
     // web 은 keywords.length > 0 일 때만 섹션을 그린다 → 그 안의 빈 문구는 죽은 코드.
-    expect(webRecent).toContain('검색 내역이 없어요.');
     expect(recentUi).toContain('if (keywords.length === 0) return null;');
     expect(code(recentUi)).not.toContain('검색 내역이 없어요');
   });
 
   it('키보드 방향키 탐색은 옮기지 않는다(모바일 키보드엔 방향키가 없다)', () => {
-    expect(webInput).toContain("event.key === 'ArrowDown'");
     expect(code(suggestionList)).not.toContain('ArrowDown');
   });
 });
@@ -408,19 +361,16 @@ describe('재사용 — 목록·카드를 새로 만들지 않았다', () => {
     expect(results).toContain("from '@/entities/home/ui/CurationGrid'");
     expect(results).toContain('GridCard');
     // 무한스크롤은 web 의 useInView 센티넬 대신 onEndReached.
-    expect(webListVm).toContain('useInView');
     expect(results).toContain('onEndReached');
   });
 
   it('추천 핫딜 캐러셀은 발견 탭과 같은 쿼리를 쓴다', () => {
     // web 도 검색 초기화면과 발견 탭이 communityRandomRankingProducts 를 공유한다.
-    expect(webInitial).toContain('useHotDealsRandom');
     expect(initial).toContain('TrendingQueries.recommended()');
     expect(notFound).toContain('TrendingQueries.recommended()');
   });
 
   it('필터 전환 중 목록이 비지 않는다(keepPreviousData)', () => {
-    expect(webListVm).toContain('placeholderData: keepPreviousData');
     expect(queries).toContain('placeholderData: keepPreviousData');
     expect(results).toContain('isPlaceholderData');
   });
@@ -428,41 +378,40 @@ describe('재사용 — 목록·카드를 새로 만들지 않았다', () => {
 
 describe('검색어 알림·종료 딜 구제 — web 과 같은 규칙', () => {
   it('결과 위 한 줄은 두 플랫폼 모두 search_bar 로 센다', () => {
-    expect(webAlertBar).toContain("source: 'search_bar'");
-    expect(webRegisterSource).toContain("| 'search_bar'");
+    const {SEARCH_BAR_SOURCE} = require('@jirum/domain/search');
+    expect(SEARCH_BAR_SOURCE).toBe('search_bar');
+    expect(
+      read('src/features/keyword-prompt/ui/KeywordAlertButton.tsx'),
+    ).toContain('SEARCH_BAR_SOURCE');
     expect(appRegisterSource).toContain("| 'search_bar'");
     expect(results).toContain('variant="bar"');
   });
 
-  it('결과 위 한 줄은 같은 문구다', () => {
-    for (const phrase of [
-      ' 새 핫딜, 놓치지 마세요',
-      ' 새 핫딜을 알려드리고 있어요',
-    ]) {
-      expect(webAlertBar).toContain(phrase);
-      expect(
-        read('src/features/keyword-prompt/ui/KeywordAlertButton.tsx'),
-      ).toContain(phrase);
-    }
+  it('결과 위 한 줄은 정본 문구(SEARCH_ALERT_BAR_COPY — web 도 같은 상수)', () => {
+    const {SEARCH_ALERT_BAR_COPY} = require('@jirum/domain/search');
+    expect(SEARCH_ALERT_BAR_COPY).toEqual({
+      off: ' 새 핫딜, 놓치지 마세요',
+      on: ' 새 핫딜을 알려드리고 있어요',
+    });
+    const button = read(
+      'src/features/keyword-prompt/ui/KeywordAlertButton.tsx',
+    );
+    expect(button).toContain('SEARCH_ALERT_BAR_COPY.on');
+    expect(button).toContain('SEARCH_ALERT_BAR_COPY.off');
   });
 
   it('진짜 0건이면 종료 포함으로 한 번 더 세어 「종료된 딜 N건 보기」를 낸다', () => {
     // 종료 포함(isEnd true)으로 한 페이지(20)를 받아 첫 행 estimatedTotal 을 건수로 쓴다.
     // limit 1 은 서버 후처리로 첫 행이 걸러지면 0건으로 오판한다(2026-10-13 실측).
-    expect(webEndedRescue).toContain('limit: 20, keyword, isEnd: true');
+    // 조회 변수는 정본 endedRescueVariables(web 도 같은 함수) — 실제 값은 search-query-variables.test.
     expect(queries).toContain("'ended-count'");
-    expect(queries).toContain(
-      'limit: SEARCH_LIMIT,\n          keyword,\n          isEnd: true',
+    expect(queries).toContain('endedRescueVariables(keyword)');
+    expect(appEndedRescue).toContain('진행 중인 딜은 없어요');
+    expect(appEndedRescue).toMatch(
+      /import \{[^}]*\bESTIMATED_TOTAL_CAP\b[^}]*\} from '@jirum\/domain\/search'/,
     );
-    for (const source of [webEndedRescue, appEndedRescue]) {
-      expect(source).toContain('진행 중인 딜은 없어요');
-      expect(source).toMatch(
-        /import \{\s*ESTIMATED_TOTAL_CAP\s*\} from '@jirum\/domain\/search'/,
-      );
-      expect(source).toContain('search_ended_rescue_click');
-    }
+    expect(appEndedRescue).toContain('SEARCH_EVENT.endedRescueClick');
     // 누르면 '품절 포함'을 켠다. 필터가 하나라도 켜져 있으면 이 화면(SearchNotFound)에 오지 않는다.
-    expect(webResult).toContain('setFilters({ ended: true })');
     expect(results).toContain('setFilters({ended: true})');
     expect(notFound).toContain('<EndedDealsRescue');
   });

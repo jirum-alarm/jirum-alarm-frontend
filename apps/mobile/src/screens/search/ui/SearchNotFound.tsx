@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {SEARCH_COPY} from '@jirum/domain/search';
+import {SEARCH_COPY, SEARCH_EVENT} from '@jirum/domain/search';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useQuery} from '@tanstack/react-query';
@@ -44,7 +44,7 @@ export default function SearchNotFound({
   const {data: hotDeals} = useQuery(TrendingQueries.recommended());
 
   useEffect(() => {
-    Analytics.track('search_no_result', {keyword});
+    Analytics.track(SEARCH_EVENT.noResult, {keyword});
   }, [keyword]);
 
   return (

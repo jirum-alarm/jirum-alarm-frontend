@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
-import {ESTIMATED_TOTAL_CAP} from '@jirum/domain/search';
+import {ESTIMATED_TOTAL_CAP, SEARCH_EVENT} from '@jirum/domain/search';
 
 import {SearchQueries} from '@/entities/search/api/search.queries';
 import PressableScale from '@/shared/components/PressableScale';
@@ -45,7 +45,7 @@ export default function EndedDealsRescue({
       </Text>
       <PressableScale
         onPress={() => {
-          Analytics.track('search_ended_rescue_click', {keyword, count});
+          Analytics.track(SEARCH_EVENT.endedRescueClick, {keyword, count});
           onShowEnded();
         }}
         accessibilityRole="button"

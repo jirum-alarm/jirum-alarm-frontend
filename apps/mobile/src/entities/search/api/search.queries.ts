@@ -1,4 +1,10 @@
-import {SEARCH_PAGE_SIZE, SUGGESTION_LIMIT} from '@jirum/domain/search';
+import {
+  endedRescueVariables,
+  SEARCH_PAGE_SIZE,
+  searchFilterVariables,
+  searchOrderBy,
+  SUGGESTION_LIMIT,
+} from '@jirum/domain/search';
 import {
   infiniteQueryOptions,
   keepPreviousData,
@@ -44,9 +50,7 @@ export type SearchProductCard = ProductCardType & {
  * keyword 검색에서도 결과가 구별되는 값들이다 — 그래서 web 도 이 셋만 쓴다.
  */
 function toOrderBy(sort: SearchSort): ProductOrderType | undefined {
-  if (sort === 'relevance') return ProductOrderType.Relevance;
-  if (sort === 'comments') return ProductOrderType.CommentCount;
-  return undefined;
+  return searchOrderBy(sort) as ProductOrderType | undefined;
 }
 
 export class SearchQueries {
@@ -79,13 +83,8 @@ export class SearchQueries {
           limit: SEARCH_LIMIT,
           searchAfter: pageParam,
           keyword: keyword || undefined,
-          categoryIds:
-            filters.categoryIds.length > 0 ? filters.categoryIds : undefined,
-          providerIds:
-            filters.providerIds.length > 0 ? filters.providerIds : undefined,
-          startDate,
-          // web: ended(품절 포함) ON 일 때만 isEnd: true — 서버에서 true 는 '종료 포함'.
-          isEnd: filters.ended ? true : undefined,
+          // 필터 변수(빈 칩 생략·품절 포함·정렬)는 정본 — web 검색 목록과 같은 값.
+          ...searchFilterVariables(filters, startDate),
           orderBy: toOrderBy(filters.sort),
         }) as Promise<SearchProductCard[]>,
       // 마지막 행의 커서를 다음 시작점으로. 배열째 넘긴다(스키마가 [String!]).
@@ -112,11 +111,9 @@ export class SearchQueries {
       queryFn: async () => {
         // limit 은 목록과 같은 20 — 서버가 검색 엔진에서 limit 만큼 받은 뒤 걸러 내서,
         // 1로 물으면 첫 행이 걸러질 때 0건으로 오판한다(2026-10-13 실측).
-        const rows = (await SearchService.getProducts({
-          limit: SEARCH_LIMIT,
-          keyword,
-          isEnd: true,
-        })) as SearchProductCard[];
+        const rows = (await SearchService.getProducts(
+          endedRescueVariables(keyword),
+        )) as SearchProductCard[];
         return {
           hasEnded: rows.length > 0,
           count: rows[0]?.estimatedTotal ?? null,

@@ -1,4 +1,4 @@
-import { SEARCH_COPY } from '@jirum/domain/search';
+import { SEARCH_COPY, SEARCH_EVENT } from '@jirum/domain/search';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -19,7 +19,7 @@ const ProductNotFound = () => {
   const keyword = searchParams.get('keyword') ?? '';
 
   useEffect(() => {
-    pushDataLayer({ event: 'search_no_result', keyword });
+    pushDataLayer({ event: SEARCH_EVENT.noResult, keyword });
   }, [keyword]);
 
   const { data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();

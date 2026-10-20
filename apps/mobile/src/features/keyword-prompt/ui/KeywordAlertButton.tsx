@@ -1,3 +1,4 @@
+import {SEARCH_ALERT_BAR_COPY, SEARCH_BAR_SOURCE} from '@jirum/domain/search';
 import React from 'react';
 import {View} from 'react-native';
 
@@ -26,7 +27,7 @@ export default function KeywordAlertButton({
   const c = useColors();
   const {trimmed, isOn, canRegister, register} = useKeywordAlert(
     keyword,
-    variant === 'bar' ? 'search_bar' : 'search_no_result',
+    variant === 'bar' ? SEARCH_BAR_SOURCE : 'search_no_result',
   );
 
   // 2~20자 밖이면 키워드로 못 건다 — 버튼을 내밀었다가 거절하느니 안 보인다.
@@ -72,7 +73,7 @@ export default function KeywordAlertButton({
     <View className="mx-5 mb-3 flex-row items-center gap-x-3 rounded-xl bg-gray-50 py-2 pl-4 pr-2">
       <Text className="min-w-0 flex-1 text-sm text-gray-700" numberOfLines={1}>
         <Text className="font-semibold text-gray-900">‘{trimmed}’</Text>
-        {isOn ? ' 새 핫딜을 알려드리고 있어요' : ' 새 핫딜, 놓치지 마세요'}
+        {isOn ? SEARCH_ALERT_BAR_COPY.on : SEARCH_ALERT_BAR_COPY.off}
       </Text>
       <PressableScale
         onPress={onPress}

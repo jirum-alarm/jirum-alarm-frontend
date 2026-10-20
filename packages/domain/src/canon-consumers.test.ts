@@ -86,6 +86,12 @@ const SHARED_BY_BOTH: Record<string, string[]> = {
     'SUGGESTION_LIMIT',
     'ESTIMATED_TOTAL_CAP',
     'SEARCH_COPY',
+    'searchFilterVariables',
+    'searchOrderBy',
+    'endedRescueVariables',
+    'SEARCH_EVENT',
+    'SEARCH_ALERT_BAR_COPY',
+    'SEARCH_BAR_SOURCE',
   ],
 };
 
