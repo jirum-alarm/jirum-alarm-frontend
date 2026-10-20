@@ -1,75 +1,19 @@
 /**
- * 홈 SDUI 섹션 모델.
- * web 정본: apps/web/src/entities/promotion/model/types.ts
+ * 홈 SDUI 섹션 모델 — 정본은 @jirum/domain/home-sections(web 과 같은 타입).
  *
  * 섹션 구성은 서버가 주는 데이터다. 레이아웃을 하드코딩하지 않는다 —
- * OTA 가 없는 앱(mobile-no-ota-store-review-required)에서 섹션 순서·추가를
- * 배포 없이 바꿀 수 있는 유일한 통로다.
- *
- * ★ web 의 'BANNER' 타입은 타입 선언에만 있고 렌더러가 null 을 반환한다.
- *   실제로 안 쓰이므로 여기선 뺐다(쓰게 되면 그때 추가).
+ * 섹션 순서·추가를 앱 배포 없이 바꿀 수 있는 통로다.
  */
-
-export type ContentPromotionSectionType =
-  | 'GRID'
-  | 'HORIZONTAL_SCROLL'
-  | 'LIST'
-  | 'DOUBLE_ROW'
-  | 'GRID_TABBED'
-  | 'PAGINATED_GRID';
-
-export type PromotionSectionType =
-  | ContentPromotionSectionType
-  | 'GROUP'
-  | 'TOSS';
-
-export type PromotionQueryName =
-  | 'hotDealRankingProducts'
-  | 'guestRecommendedHotDeals'
-  | 'productsByKeyword'
-  | 'products'
-  | 'expiringSoonHotDealProducts';
-
-export type PromotionDataSource = {
-  type: 'GRAPHQL_QUERY';
-  queryName: PromotionQueryName;
-  variables: Record<string, unknown>;
-};
-
-export interface PromotionTab {
-  id: string;
-  label: string;
-  variables: Record<string, unknown>;
-  viewMoreLink?: string;
-}
-
-interface BasePromotionSection {
-  id: string;
-  title: string;
-  subTitle?: string;
-  displayOrder: number;
-}
-
-export interface ContentPromotionSection extends BasePromotionSection {
-  type: ContentPromotionSectionType;
-  dataSource: PromotionDataSource;
-  tabs?: PromotionTab[];
-  viewMoreLink?: string;
-}
-
-export interface GroupPromotionSection extends BasePromotionSection {
-  type: 'GROUP';
-  sections: ContentPromotionSection[];
-}
-
-export interface TossPromotionSection extends BasePromotionSection {
-  type: 'TOSS';
-  viewMoreLink?: string;
-}
-
-export type PromotionSection =
-  | ContentPromotionSection
-  | GroupPromotionSection
-  | TossPromotionSection;
+export type {
+  ContentPromotionSection,
+  ContentPromotionSectionType,
+  GroupPromotionSection,
+  PromotionDataSource,
+  PromotionQueryName,
+  PromotionSection,
+  PromotionSectionType,
+  PromotionTab,
+  TossPromotionSection,
+} from '@jirum/domain/home-sections';
 
 export type {ProductCardType} from '@/shared/types/product-card';

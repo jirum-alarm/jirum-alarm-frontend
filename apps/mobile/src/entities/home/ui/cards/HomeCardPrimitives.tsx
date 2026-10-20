@@ -86,11 +86,7 @@ export function DisplayListPrice({
   );
 }
 
-/**
- * 제목 2줄 고정.
- * ★ web 은 `line-clamp-2 h-12` = **48px**. 40px 로 잡으면 2줄이 잘리고
- * 아래 가격 줄이 카드마다 어긋난다(초기 네이티브 카드가 40이었음 — 교정).
- */
+/** 제목 2줄 고정 — 높이는 디자인 시스템 productCard.titleBox(web 과 같은 48px). */
 export function CardTitle({
   title,
   className,
@@ -102,8 +98,11 @@ export function CardTitle({
 }) {
   return (
     <Text
-      className={cn(productCard.title, className)}
-      style={fixedHeight ? {height: 48} : undefined}
+      className={cn(
+        productCard.title,
+        fixedHeight && productCard.titleBox,
+        className,
+      )}
       numberOfLines={2}>
       {title}
     </Text>

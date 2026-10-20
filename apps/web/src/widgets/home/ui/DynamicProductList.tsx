@@ -79,6 +79,10 @@ const DynamicProductList = ({
     );
   }
 
+  // 정본(@jirum/domain/home-sections CONTENT_SECTION_TYPES)에 모양이 늘면 여기서 타입 오류 — 앱 렌더러도 같은 가드.
+  // 런타임에 모르는 값이 와도(서버가 먼저 배포) 그리지 않는다.
+  const unhandled: never = type;
+  void unhandled;
   return null;
 };
 

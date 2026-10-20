@@ -1,6 +1,6 @@
 'use client';
 
-import { cardThumb } from '@jirum/design-system/recipes';
+import { cardThumb, productCard } from '@jirum/design-system/recipes';
 import * as m from 'motion/react-m';
 
 import { cn } from '@/shared/lib/cn';
@@ -57,7 +57,9 @@ export default function TossDealCard({
       </div>
 
       <div className="flex flex-col">
-        <span className="line-clamp-2 h-12 pt-2 text-sm wrap-break-word text-gray-700">
+        <span
+          className={cn('line-clamp-2 wrap-break-word', productCard.title, productCard.titleBox)}
+        >
           {deal.title}
         </span>
 

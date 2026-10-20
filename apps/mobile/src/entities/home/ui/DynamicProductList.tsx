@@ -2,6 +2,7 @@ import React, {useCallback, useMemo, useState} from 'react';
 import {Dimensions, FlatList, Pressable, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
+import {LIST_SECTION_MAX} from '@jirum/domain/home-sections';
 import type {ProductCardSource} from '@/shared/lib/analytics/card-tracking';
 
 import type {
@@ -114,8 +115,13 @@ export default function DynamicProductList({
         </View>
       );
 
-    default:
+    default: {
+      // 정본(@jirum/domain/home-sections CONTENT_SECTION_TYPES)에 모양이 늘면 여기서 타입 오류 — web 렌더러도 같은 가드.
+      // 런타임에 모르는 값이 와도(서버가 먼저 배포) 그리지 않는다 — 문자열을 그대로 돌려주면 RN 이 죽는다.
+      const unhandled: never = type;
+      void unhandled;
       return null;
+    }
   }
 }
 
@@ -335,7 +341,7 @@ function DoubleRowCarousel({
 
 /**
  * LIST — 세로 목록.
- * web ListProductList: `gap-4`(16px) + **slice(0, 4)** — 4개까지만 그린다.
+ * web ListProductList: `gap-4`(16px) + LIST_SECTION_MAX(정본) 개까지만 그린다.
  * limit 이 4 라 대개 같지만, 상한을 안 걸면 데이터가 늘었을 때 웹과 갈린다.
  */
 function ProductList({
@@ -347,7 +353,7 @@ function ProductList({
 }) {
   return (
     <View style={{gap: 16}}>
-      {products.slice(0, 4).map(product => (
+      {products.slice(0, LIST_SECTION_MAX).map(product => (
         <ListCard
           key={product.id}
           product={product}

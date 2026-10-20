@@ -53,7 +53,13 @@ export default function CarouselProductCard({
           <ProductCardStatus product={product} />
         </div>
         <div className="flex flex-col">
-          <span className={cn('line-clamp-2 h-12 w-full break-words', productCard.title)}>
+          <span
+            className={cn(
+              'line-clamp-2 w-full break-words',
+              productCard.title,
+              productCard.titleBox,
+            )}
+          >
             {product.title}
           </span>
           <DisplayProductSource

@@ -1,12 +1,8 @@
 /**
- * 홈 SDUI 의 web 대조 테스트.
+ * 홈 SDUI — 앱이 쓰는 섹션 모델·매핑·폴백 카탈로그(정본 @jirum/domain/home-sections)의 동작.
  *
- * 홈이 네이티브가 돼도 발견·커뮤니티 탭은 웹뷰라 같은 카드가 두 벌로 존재한다.
- * 섹션 구성이나 표기가 갈리면 유저는 버그로 읽는다
- * (partial-ui-rollout-reads-as-bug). 그래서 web 소스를 직접 읽어 대조한다.
- *
- * 컴포넌트를 렌더하면 RN 의존이 줄줄이 딸려오므로 순수 로직과 소스 텍스트만 본다
- * (frontend-test-runner-dayjs-esm-gap 와 같은 이유).
+ * 섹션 구성이나 표기가 web 과 갈리면 유저는 버그로 읽는다(partial-ui-rollout-reads-as-bug).
+ * 예전엔 web 소스를 직접 읽어 대조했지만, 이제 두 앱이 같은 정본을 import 한다.
  */
 const fs = require('fs');
 const path = require('path');
@@ -23,13 +19,9 @@ const {
 const {mapHomePageSections} = require('../src/entities/home/lib/map-home-page');
 const {
   toTossDeal,
-  TOSS_SECTION_KEYWORD,
   TOSS_HOME_SECTION_IDS,
   stripPriceFromTitle,
 } = require('../src/entities/home/lib/toss');
-
-const WEB = path.join(__dirname, '../../web/src');
-const readWeb = (p: string) => fs.readFileSync(path.join(WEB, p), 'utf8');
 
 describe('섹션 구성 — web getPromotionSections 와 동일', () => {
   const empty = {communityProviders: [], mallGroups: []};
@@ -138,54 +130,12 @@ describe('섹션 구성 — web getPromotionSections 와 동일', () => {
   });
 });
 
-describe('web 소스와 직접 대조', () => {
-  it('web 이 쓰는 섹션 id 가 네이티브에도 전부 있다', () => {
-    const src = readWeb('entities/promotion/api/getPromotionSections.ts');
-    const webIds = [...src.matchAll(/^\s{4,6}id: '([a-z0-9-]+)',/gm)].map(
-      (m: RegExpMatchArray) => m[1],
-    );
-    const nativeIds = JSON.stringify(
-      buildPromotionSections({communityProviders: [], mallGroups: []}),
-    );
-    // 폴백 탭 id(ali/coupang/...)까지 포함해 전수 확인
-    for (const id of webIds) {
-      expect(nativeIds).toContain(`"${id}"`);
-    }
-  });
-
-  it('web DynamicProductList 가 다루는 타입을 네이티브도 다룬다', () => {
-    const src = readWeb('widgets/home/ui/DynamicProductList.tsx');
-    const webTypes = [...src.matchAll(/type === '([A-Z_]+)'/g)].map(
-      (m: RegExpMatchArray) => m[1],
-    );
-    const native = fs.readFileSync(
-      path.join(__dirname, '../src/entities/home/ui/DynamicProductList.tsx'),
-      'utf8',
-    );
-    for (const t of webTypes) {
-      expect(native).toContain(`case '${t}'`);
-    }
-  });
-
-  it('토스 섹션 키워드 매핑이 web 과 같다', () => {
-    const src = readWeb('widgets/toss/api/toss.api.ts');
-    const block = src.slice(
-      src.indexOf('TOSS_SECTION_KEYWORD'),
-      src.indexOf('}', src.indexOf('TOSS_SECTION_KEYWORD')),
-    );
-    for (const [id, keyword] of Object.entries(TOSS_SECTION_KEYWORD)) {
-      expect(block).toContain(`${id}: '${keyword}'`);
-    }
-  });
-
-  it('홈 토스 섹션은 공식 Open API 3탭만 노출한다', () => {
+// web 과 같아야 하는 섹션 id·타입·토스 키워드·LIST 개수·제목 높이는 이제 정본에서 둘 다 읽는다
+// (@jirum/domain/home-sections·toss, 디자인 시스템 productCard.titleBox) — web 소스 대조는 지웠다.
+// 렌더러가 정본 타입을 전부 다루는지는 web·앱 DynamicProductList 의 never 가드(tsc)가 본다.
+describe('홈 토스 섹션', () => {
+  it('공식 Open API 3탭만 노출한다', () => {
     expect([...TOSS_HOME_SECTION_IDS]).toEqual(['daily', 'best', 'category']);
-    expect(readWeb('widgets/toss/api/toss.api.ts')).toContain(
-      "TOSS_HOME_SECTION_IDS = ['daily', 'best', 'category']",
-    );
-    expect(readWeb('widgets/home/ui/TossHomeSection.tsx')).toContain(
-      'TOSS_HOME_SECTION_IDS',
-    );
     expect(
       fs.readFileSync(
         path.join(__dirname, '../src/entities/home/ui/TossHomeSection.tsx'),
@@ -193,34 +143,9 @@ describe('web 소스와 직접 대조', () => {
       ),
     ).toContain('homeSections');
   });
-
-  it('LIST 는 web 처럼 4개까지만 그린다', () => {
-    const web = readWeb('entities/product-list/ui/list/ListProductList.tsx');
-    expect(web).toContain('slice(0, 4)');
-    const native = fs.readFileSync(
-      path.join(__dirname, '../src/entities/home/ui/DynamicProductList.tsx'),
-      'utf8',
-    );
-    expect(native).toContain('slice(0, 4)');
-  });
-
-  it('제목 2줄 높이가 web h-12(48px)와 같다', () => {
-    // web 카드가 h-12 를 쓰는데 네이티브가 40 이면 2줄이 잘리고
-    // 아래 가격 줄이 카드마다 어긋난다.
-    const web = readWeb('entities/product-list/ui/grid/ProductGridCard.tsx');
-    expect(web).toContain('line-clamp-2 h-12');
-    const native = fs.readFileSync(
-      path.join(
-        __dirname,
-        '../src/entities/home/ui/cards/HomeCardPrimitives.tsx',
-      ),
-      'utf8',
-    );
-    expect(native).toContain('height: 48');
-  });
 });
 
-describe('토스 딜 변환 — web toss.api.ts 와 동일', () => {
+describe('토스 딜 변환(정본 @jirum/domain/toss)', () => {
   it('salePrice 가 있으면 그걸 쓰고, 없으면 price 문자열에서 숫자를 뽑는다', () => {
     expect(
       toTossDeal({id: '1', title: 'a', price: '12,900원', data: null}).price,

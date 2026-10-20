@@ -79,7 +79,9 @@ export default function ProductGridCard({
           <ProductCardStatus product={product} />
         </div>
         <div className="flex flex-col">
-          <span className={cn('line-clamp-2 h-12 wrap-break-word', productCard.title)}>
+          <span
+            className={cn('line-clamp-2 wrap-break-word', productCard.title, productCard.titleBox)}
+          >
             {product.title}
           </span>
           <DisplayProductSource

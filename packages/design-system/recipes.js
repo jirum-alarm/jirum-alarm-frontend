@@ -330,11 +330,13 @@ const pageHeader = {
 };
 
 /**
- * 상품 카드(그리드·캐러셀·목록) 글자. 제목은 2줄 고정 높이(web line-clamp-2 h-12 · 앱 height 48)를 각자 붙인다.
+ * 상품 카드(그리드·캐러셀·목록) 글자. titleBox = 제목 2줄 고정 높이(48px, pt-2 포함) — 줄 수 자르기는 플랫폼마다
+ * (web line-clamp-2 · 앱 numberOfLines={2}). 앱이 40 이었을 땐 2줄이 잘리고 아래 가격 줄이 카드마다 어긋났다.
  * 가격: list = 캐러셀·목록 18px, grid = 2·3열 그리드 16px. 같은 「종료 딜 대안」 그리드가 web 16·앱 18 로 갈려 있었다.
  */
 const productCard = {
   title: 'pt-2 text-sm text-gray-700',
+  titleBox: 'h-12',
   price: {
     list: 'text-lg font-semibold text-gray-900',
     grid: 'text-base font-semibold text-gray-900',

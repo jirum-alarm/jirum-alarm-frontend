@@ -1,5 +1,7 @@
 'use client';
 
+import { LIST_SECTION_MAX } from '@jirum/domain/home-sections';
+
 import { cn } from '@/shared/lib/cn';
 
 import { type ProductCardSource } from '@/entities/product-list/model/card-tracking';
@@ -23,7 +25,7 @@ export default function ListProductList({
 }: ListProductListProps) {
   return (
     <div className={cn('flex flex-col gap-4', className)}>
-      {products.slice(0, 4).map((product, index) => (
+      {products.slice(0, LIST_SECTION_MAX).map((product, index) => (
         <ListProductCard
           key={product.id}
           product={product}

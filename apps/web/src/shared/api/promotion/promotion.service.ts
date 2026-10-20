@@ -2,6 +2,8 @@ import { execute } from '@/shared/lib/http-client';
 
 import { TypedDocumentString } from '../gql/graphql';
 
+import type { ServerHomeSection } from '@jirum/domain/home-sections';
+
 type HomePageQuery = {
   homePage: {
     experimentId: string;
@@ -10,25 +12,7 @@ type HomePageQuery = {
   };
 };
 
-export type ServerHomeSection = {
-  id: string;
-  title: string;
-  type: string;
-  displayOrder?: number | null;
-  viewMoreLink?: string | null;
-  dataSource?: {
-    type: string;
-    queryName: string;
-    variables?: Record<string, unknown> | null;
-  } | null;
-  tabs?: Array<{
-    id: string;
-    label: string;
-    variables?: Record<string, unknown> | null;
-    viewMoreLink?: string | null;
-  }> | null;
-  sections?: ServerHomeSection[] | null;
-};
+export type { ServerHomeSection } from '@jirum/domain/home-sections';
 
 type CommunityProvidersQuery = {
   communityProviders: Array<{

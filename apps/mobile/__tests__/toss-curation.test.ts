@@ -10,8 +10,6 @@ declare const __dirname: string;
 
 const read = (p: string) =>
   fs.readFileSync(path.join(__dirname, '..', p), 'utf8');
-const readWeb = (p: string) =>
-  fs.readFileSync(path.join(__dirname, '../../web/src', p), 'utf8');
 
 const {TOSS_SECTION_KEYWORD} = require('../src/entities/home/lib/toss');
 
@@ -82,21 +80,14 @@ describe('토스 섹션·무한스크롤', () => {
 });
 
 describe('토스 특가 코너 가격 미노출', () => {
-  it('웹·앱 카드에 판매가·확인 CTA가 없다', () => {
-    const webCard = readWeb('widgets/toss/ui/TossDealCard.tsx');
-    expect(webCard).not.toContain('토스에서 가격 확인');
-    expect(webCard).not.toContain('toLocaleString()}원');
-    expect(webCard).toContain('tossDetailHref');
-
+  // web 쪽 같은 정책은 web tossNoPrice.test.ts 가 본다(앱 테스트가 web 파일을 읽지 않는다).
+  it('앱 카드에 판매가·확인 CTA가 없다', () => {
     const nativeCard = read('src/entities/home/ui/cards/TossDealCard.tsx');
     expect(nativeCard).not.toContain('토스에서 가격 확인');
     expect(nativeCard).not.toContain('toLocaleString()}원');
   });
 
   it('확인 CTA는 상세(from=toss)에만 있다', () => {
-    expect(
-      readWeb('widgets/product-detail/ui/mobile/ProductInfo.tsx'),
-    ).toContain('토스에서 가격 확인');
     expect(read('src/screens/detail/ui/ProductInfo.tsx')).toContain(
       '토스에서 가격 확인',
     );
@@ -112,13 +103,16 @@ describe('토스 특가 코너 가격 미노출', () => {
     );
   });
 
-  it('목록 변환에서 제목 가격을 뗀다', () => {
-    expect(read('src/entities/home/lib/toss.ts')).toContain(
-      'stripPriceFromTitle(p.title)',
-    );
-    expect(readWeb('widgets/toss/api/toss.api.ts')).toContain(
-      'stripPriceFromTitle(p.title)',
-    );
+  it('목록 변환(정본 toTossDeal — web 도 같은 함수)에서 제목 가격을 뗀다', () => {
+    const {toTossDeal} = require('../src/entities/home/lib/toss');
+    const deal = toTossDeal({
+      id: '7',
+      title: '비비고 왕교자 1.05kg 2개 23,800원',
+      price: '23,800원',
+      data: {toss: {salePrice: 23800, unitPrice: '100g당 1,133원'}},
+    });
+    expect(deal.title).toBe('비비고 왕교자 1.05kg 2개');
+    expect(deal.price).toBe(23800);
   });
 });
 
