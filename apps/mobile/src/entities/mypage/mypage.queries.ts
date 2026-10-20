@@ -1,15 +1,13 @@
 import {infiniteQueryOptions, queryOptions} from '@tanstack/react-query';
+import {MAX_KEYWORD_COUNT, WISHLIST_PAGE_SIZE} from '@jirum/domain/mypage';
 
 import {MyPageService, MyWishlistService} from '@/shared/api/mypage';
 import {OrderOptionType, WishlistOrderType} from '@/shared/api/gql/graphql';
 import type {MyNotificationKeywordsQueryVariables} from '@/shared/api/gql/graphql.ts';
 import {ProductService} from '@/shared/api/product/product.service.ts';
 
-/** 찜 목록 한 페이지 크기. web /like 와 같은 18. */
-export const WISHLIST_PAGE_SIZE = 18;
-
-/** 키워드 상한. web KeywordList 가 `n/20` 으로 보여주는 값과 같아야 한다. */
-export const MAX_KEYWORD_COUNT = 20;
+// 찜 페이지 크기·키워드 상한은 web 과 같은 @jirum/domain/mypage 정본.
+export {MAX_KEYWORD_COUNT, WISHLIST_PAGE_SIZE};
 
 /**
  * 내정보 조회. web `entities/auth/api/auth.queries.ts` + `entities/wishlist`.

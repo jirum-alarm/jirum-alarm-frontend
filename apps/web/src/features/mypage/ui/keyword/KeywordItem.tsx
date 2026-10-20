@@ -7,6 +7,8 @@ import {
 } from '@jirum/domain/keyword-frequency';
 import {
   formatPriceInput,
+  KEYWORD_ALERT_LABELS,
+  KEYWORD_DEAL_CHOICES,
   parseExcludeKeywords,
   parsePrice,
   summarizeKeywordAlert,
@@ -32,19 +34,6 @@ type Keyword = {
 
 const inputClass =
   'focus:border-primary-500 w-full min-w-0 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none';
-
-const DEAL_CHOICES = [
-  {
-    value: false,
-    label: '새 핫딜 모두',
-    hint: (k: string) => `‘${k}’ 핫딜이 올라올 때마다 알려드려요`,
-  },
-  {
-    value: true,
-    label: '최근 딜보다 쌀 때만',
-    hint: () => '최근 올라온 딜보다 싸게 뜬 딜만 알려드려요',
-  },
-] as const;
 
 const sectionTitle = 'text-sm font-semibold text-gray-900';
 
@@ -169,9 +158,9 @@ const KeywordItem = ({
             <span className="text-gray-500">›</span>
           </Link>
           <fieldset className="flex flex-col gap-2">
-            <legend className={cn(sectionTitle, 'mb-2')}>어떤 딜을 알려드릴까요?</legend>
+            <legend className={cn(sectionTitle, 'mb-2')}>{KEYWORD_ALERT_LABELS.deals}</legend>
             <div className="pc:grid-cols-2 grid gap-2">
-              {DEAL_CHOICES.map((choice) => {
+              {KEYWORD_DEAL_CHOICES.map((choice) => {
                 const selected = priceDropOnly === choice.value;
                 return (
                   <label
@@ -213,7 +202,8 @@ const KeywordItem = ({
 
           <div className="flex flex-col gap-2">
             <span className={sectionTitle}>
-              가격 범위 <span className="text-xs font-normal text-gray-500">(선택)</span>
+              {KEYWORD_ALERT_LABELS.priceRange}{' '}
+              <span className="text-xs font-normal text-gray-500">(선택)</span>
             </span>
             <div className="flex items-center gap-2">
               <input
@@ -241,7 +231,8 @@ const KeywordItem = ({
 
           <label className="flex flex-col gap-2">
             <span className={sectionTitle}>
-              빼고 싶은 단어 <span className="text-xs font-normal text-gray-500">(선택)</span>
+              {KEYWORD_ALERT_LABELS.exclude}{' '}
+              <span className="text-xs font-normal text-gray-500">(선택)</span>
             </span>
             <input
               value={excludeInput}

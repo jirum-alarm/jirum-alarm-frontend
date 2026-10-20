@@ -26,7 +26,12 @@ const ALLOWED: Record<string, string> = {
   'won@apps/web/src/features/deals/lib/model-page-insights.ts': '함수 안 지역 헬퍼(ko-KR)',
   'won@apps/web/src/features/mypage/ui/keyword/SentenceAlertBuilder.tsx': '반올림 없음(입력값 그대로)',
   'won@apps/web/src/features/product-list/ui/ClusteredPriceSection.tsx': "null → '-'",
+  // 정본 목록에 web 아이콘·주소를 붙인 것(정본을 map 한다 — 다시 적은 게 아니다).
+  'MYPAGE_MENU@apps/web/src/features/mypage/model/menu.tsx': '정본 + 아이콘·주소',
 };
+
+/** 뜻이 하나뿐인 단위 상수 — 어디서 다시 적어도 값이 갈라질 일이 없다. */
+const UNIT_CONSTANTS = new Set(['DAY_MS']);
 
 const exportedFunctionNames = (): Map<string, string> => {
   const names = new Map<string, string>();
@@ -35,6 +40,8 @@ const exportedFunctionNames = (): Map<string, string> => {
     const src = fs.readFileSync(path.join(here, file), 'utf8');
     for (const m of src.matchAll(/^export (?:async )?function (\w+)/gm)) names.set(m[1], file);
     for (const m of src.matchAll(/^export const (\w+) = (?:\([^)]*\)|\w+) =>/gm)) names.set(m[1], file);
+    // 대문자 상수(메뉴 목록·상한·문구 묶음)도 — 같은 이름으로 앱에 다시 적으면 값이 갈라지기 시작한다.
+    for (const m of src.matchAll(/^export const ([A-Z][A-Z0-9_]+)\b/gm)) names.set(m[1], file);
   }
   return names;
 };
@@ -58,8 +65,11 @@ test('@jirum/domain 의 함수를 web·앱이 다시 정의하지 않는다', ()
       const src = fs.readFileSync(file, 'utf8');
       const rel = path.relative(repo, file);
       for (const [name, origin] of names) {
+        if (UNIT_CONSTANTS.has(name)) continue;
         const def = new RegExp(
-          `^\\s*(?:export )?(?:(?:async )?function ${name}\\b|const ${name} = (?:\\([^)]*\\)|\\w+) =>)`,
+          /^[A-Z]/.test(name) && name === name.toUpperCase()
+            ? `^\\s*(?:export )?const ${name}\\b`
+            : `^\\s*(?:export )?(?:(?:async )?function ${name}\\b|const ${name} = (?:\\([^)]*\\)|\\w+) =>)`,
           'm',
         );
         if (def.test(src) && !ALLOWED[`${name}@${rel}`]) copies.push(`${rel} — ${name} (정본 ${origin})`);

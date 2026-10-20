@@ -10,6 +10,12 @@ import {
 } from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {pageHeader} from '@jirum/design-system/recipes';
+import {
+  CUSTOMER_SERVICE_TITLE,
+  MYPAGE_GROUPS,
+  mobileMenuOf,
+  type MypageMobileMenuKey,
+} from '@jirum/domain/mypage';
 import {cn} from '@/shared/lib/styling/className';
 import {useNavigation} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -101,6 +107,47 @@ export default function MyPageScreen() {
     [navigation],
   );
 
+  /**
+   * 정본 메뉴 키 → 앱 아이콘·이동. `Record` 라 정본에 메뉴가 늘면 여기서 타입체크가 막는다
+   * (web 에만 메뉴가 생기는 «안 옮김»을 컴파일이 잡는다).
+   */
+  const appMenu: Record<
+    MypageMobileMenuKey,
+    {icon: React.ReactNode; onPress: () => void; hidden?: boolean}
+  > = {
+    like: {
+      icon: <Heart width={24} height={24} />,
+      onPress: () => (isGuest ? leaveGuest() : push(tabStackNavigations.LIKE)),
+    },
+    keyword: {
+      icon: <HashtagMenuIcon />,
+      onPress: () => push(tabStackNavigations.MYPAGE_KEYWORD),
+    },
+    // 관심 카테고리는 회원 프로필(favoriteCategories)에 저장돼 게스트는 못 바꾼다.
+    categories: {
+      icon: <GridMenuIcon />,
+      onPress: () => push(tabStackNavigations.MYPAGE_CATEGORIES),
+      hidden: isGuest,
+    },
+    notification: {
+      icon: <FilterMenuIcon />,
+      onPress: () => push(tabStackNavigations.MYPAGE_NOTIFICATION),
+    },
+    // 본문은 web /help(약관과 같은 방식 — 정본 하나, 고칠 때 OTA·스토어 불필요).
+    help: {
+      icon: <HelpMenuIcon />,
+      onPress: () =>
+        navigation.push(tabStackNavigations.WEBVIEW, {
+          uri: HELP_PATH,
+          title: '사용법 · 자주 묻는 질문',
+        }),
+    },
+    terms: {
+      icon: <DescriptionMenuIcon />,
+      onPress: () => push(tabStackNavigations.MYPAGE_TERMS),
+    },
+  };
+
   return (
     <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>
       {/* 헤더 — web BasicLayout title="마이페이지"(뒤로가기 없음). web 처럼 제목 왼쪽 — 예전엔 앱만 가운데였다. */}
@@ -185,80 +232,54 @@ export default function MyPageScreen() {
           </View>
         </View>
 
-        {/* 메뉴 — web MenuList. PC 사이드바와 같은 묶음(내 핫딜 · 맞춤 설정 · 지원).
-            화면 모드는 앱에만 있는 설정이라 맞춤 설정 끝. */}
+        {/* 메뉴 — 항목·이름·묶음·순서는 @jirum/domain/mypage(web 목록·PC 사이드바와 같은 정본).
+            여기선 키마다 아이콘·이동만 붙인다. 앱에만 있는 줄(화면 모드·앱 평가하기)은 묶음 끝. */}
         <View className="gap-4 px-5 py-4">
-          <MenuGroup label="내 핫딜">
-            <MenuRow
-              icon={<Heart width={24} height={24} />}
-              title="찜 목록"
-              onPress={() =>
-                isGuest ? leaveGuest() : push(tabStackNavigations.LIKE)
-              }
-            />
-          </MenuGroup>
-          <MenuGroup label="맞춤 설정">
-            <MenuRow
-              icon={<HashtagMenuIcon />}
-              title="키워드 알림"
-              onPress={() => push(tabStackNavigations.MYPAGE_KEYWORD)}
-            />
-            {/* 관심 카테고리는 회원 프로필(favoriteCategories)에 저장돼 게스트는 못 바꾼다. */}
-            {!isGuest && (
-              <MenuRow
-                icon={<GridMenuIcon />}
-                title="관심 카테고리"
-                onPress={() => push(tabStackNavigations.MYPAGE_CATEGORIES)}
-              />
-            )}
-            <MenuRow
-              icon={<FilterMenuIcon />}
-              title="알림 설정"
-              onPress={() => push(tabStackNavigations.MYPAGE_NOTIFICATION)}
-            />
-            <MenuRow
-              icon={<ThemeMenuIcon />}
-              title="화면 모드"
-              value={COLOR_SCHEME_LABEL[colorScheme]}
-              onPress={() => setColorSchemeOpen(true)}
-            />
-          </MenuGroup>
-          <MenuGroup label="지원">
-            {/* 본문은 web /help(약관과 같은 방식 — 정본 하나, 고칠 때 OTA·스토어 불필요). */}
-            <MenuRow
-              icon={<HelpMenuIcon />}
-              title="사용법 · 자주 묻는 질문"
-              onPress={() =>
-                navigation.push(tabStackNavigations.WEBVIEW, {
-                  uri: HELP_PATH,
-                  title: '사용법 · 자주 묻는 질문',
-                })
-              }
-            />
-            <MenuRow
-              icon={<DescriptionMenuIcon />}
-              title="약관 및 정책"
-              onPress={() => push(tabStackNavigations.MYPAGE_TERMS)}
-            />
-            <MenuRow
-              icon={<HeadsetMenuIcon />}
-              title="고객센터"
-              onPress={() => setCustomerServiceOpen(true)}
-            />
-            <MenuRow
-              icon={<Thumbsup width={24} height={24} />}
-              title="앱 평가하기"
-              onPress={() => Linking.openURL(reviewUrl()).catch(() => {})}
-            />
-            {/* 개발 빌드에서만 — 운영은 딥링크 jirumalarm://design-system 으로 연다. */}
-            {__DEV__ ? (
-              <MenuRow
-                icon={<GridMenuIcon />}
-                title="디자인 시스템(개발)"
-                onPress={() => push(tabStackNavigations.DESIGN_SYSTEM)}
-              />
-            ) : null}
-          </MenuGroup>
+          {MYPAGE_GROUPS.map(group => (
+            <MenuGroup key={group.key} label={group.label}>
+              {mobileMenuOf(group.key).map(item => {
+                const row = appMenu[item.key];
+                return row.hidden ? null : (
+                  <MenuRow
+                    key={item.key}
+                    icon={row.icon}
+                    title={item.title}
+                    onPress={row.onPress}
+                  />
+                );
+              })}
+              {group.key === 'custom' && (
+                <MenuRow
+                  icon={<ThemeMenuIcon />}
+                  title="화면 모드"
+                  value={COLOR_SCHEME_LABEL[colorScheme]}
+                  onPress={() => setColorSchemeOpen(true)}
+                />
+              )}
+              {group.key === 'support' && (
+                <>
+                  <MenuRow
+                    icon={<HeadsetMenuIcon />}
+                    title={CUSTOMER_SERVICE_TITLE}
+                    onPress={() => setCustomerServiceOpen(true)}
+                  />
+                  <MenuRow
+                    icon={<Thumbsup width={24} height={24} />}
+                    title="앱 평가하기"
+                    onPress={() => Linking.openURL(reviewUrl()).catch(() => {})}
+                  />
+                  {/* 개발 빌드에서만 — 운영은 딥링크 jirumalarm://design-system 으로 연다. */}
+                  {__DEV__ ? (
+                    <MenuRow
+                      icon={<GridMenuIcon />}
+                      title="디자인 시스템(개발)"
+                      onPress={() => push(tabStackNavigations.DESIGN_SYSTEM)}
+                    />
+                  ) : null}
+                </>
+              )}
+            </MenuGroup>
+          ))}
           <Text className="text-xs text-gray-500">
             앱 버전 {Constants.expoConfig?.version}
           </Text>

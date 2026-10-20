@@ -1,5 +1,6 @@
 'use client';
 
+import { CUSTOMER_SERVICE_TITLE } from '@jirum/domain/mypage';
 import { useQuery } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
 
@@ -64,7 +65,7 @@ export default function MyPageSidebar() {
                     onClick={() => customerService.onShowMessenger()}
                   >
                     <Headset />
-                    고객센터
+                    {CUSTOMER_SERVICE_TITLE}
                   </button>
                 </li>
               )}

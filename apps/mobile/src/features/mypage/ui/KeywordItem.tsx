@@ -23,24 +23,13 @@ import {
 import {
   parseExcludeKeywords,
   formatPriceInput,
+  KEYWORD_ALERT_LABELS,
+  KEYWORD_DEAL_CHOICES,
   parsePrice,
   summarizeKeywordAlert,
 } from '@jirum/domain/keyword-options';
 import {useUpdateKeywordOptions} from '../model/mutations';
 import PressableOpacity from '@/shared/components/PressableOpacity';
-
-const DEAL_CHOICES = [
-  {
-    value: false,
-    label: '새 핫딜 모두',
-    hint: (k: string) => `‘${k}’ 핫딜이 올라올 때마다 알려드려요`,
-  },
-  {
-    value: true,
-    label: '최근 딜보다 쌀 때만',
-    hint: () => '최근 올라온 딜보다 싸게 뜬 딜만 알려드려요',
-  },
-] as const;
 
 /** iOS 숫자 키패드엔 리턴 키가 없어 닫을 길이 없다 — 키보드 위 「완료」 줄. 모든 카드가 같이 쓴다. */
 const PRICE_ACCESSORY_ID = 'keyword-price-done';
@@ -222,10 +211,10 @@ export default function KeywordItem({
             </PressableOpacity>
             <View className="gap-2">
               <Text className="mb-1 text-sm font-semibold text-gray-900">
-                어떤 딜을 알려드릴까요?
+                {KEYWORD_ALERT_LABELS.deals}
               </Text>
               <View className="gap-2" accessibilityRole="radiogroup">
-                {DEAL_CHOICES.map(choice => {
+                {KEYWORD_DEAL_CHOICES.map(choice => {
                   const selected = priceDropOnly === choice.value;
                   return (
                     <PressableOpacity
@@ -267,7 +256,7 @@ export default function KeywordItem({
 
             <View className="gap-2">
               <Text className="text-sm font-semibold text-gray-900">
-                가격 범위{' '}
+                {KEYWORD_ALERT_LABELS.priceRange}{' '}
                 <Text className="text-xs font-normal text-gray-500">
                   (선택)
                 </Text>
@@ -303,7 +292,7 @@ export default function KeywordItem({
 
             <View className="gap-2">
               <Text className="text-sm font-semibold text-gray-900">
-                빼고 싶은 단어{' '}
+                {KEYWORD_ALERT_LABELS.exclude}{' '}
                 <Text className="text-xs font-normal text-gray-500">
                   (선택)
                 </Text>
@@ -313,7 +302,7 @@ export default function KeywordItem({
                 onChangeText={setExcludeInput}
                 placeholder="예: 케이스, 필름"
                 maxLength={220}
-                accessibilityLabel="빼고 싶은 단어"
+                accessibilityLabel={KEYWORD_ALERT_LABELS.exclude}
                 helperText="제목에 이 단어가 있으면 알리지 않아요. 여러 개는 쉼표로 구분해요."
               />
             </View>

@@ -16,6 +16,7 @@
     "./keyword-frequency": "./src/keyword-frequency.ts",
     "./keyword-options": "./src/keyword-options.ts",
     "./live-alternatives": "./src/live-alternatives.ts",
+    "./mypage": "./src/mypage.ts",
     "./price-answer-holdout": "./src/price-answer-holdout.ts",
     "./price-chart": "./src/price-chart.ts",
     "./price": "./src/price.ts",

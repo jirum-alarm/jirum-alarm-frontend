@@ -23,6 +23,33 @@ const formatWon = (price: number) =>
     : `${price.toLocaleString('ko-KR')}원`;
 
 /**
+ * 키워드 카드를 펼친 설정 3개의 제목 — web·앱 KeywordItem 이 같은 말을 쓴다(2026-10-20 정본화,
+ * 전엔 앱 테스트가 두 파일을 문자열로 대조했다).
+ */
+export const KEYWORD_ALERT_LABELS = {
+  deals: '어떤 딜을 알려드릴까요?',
+  priceRange: '가격 범위',
+  exclude: '빼고 싶은 단어',
+} as const;
+
+/** 「받을 딜」 두 갈래(priceDropOnly). 요약 줄(summarizeKeywordAlert)도 같은 이름을 쓴다. */
+export const KEYWORD_DEAL_CHOICES = [
+  {
+    value: false,
+    label: '새 핫딜 모두',
+    hint: (k: string) => `‘${k}’ 핫딜이 올라올 때마다 알려드려요`,
+  },
+  {
+    value: true,
+    label: '최근 딜보다 쌀 때만',
+    hint: () => '최근 올라온 딜보다 싸게 뜬 딜만 알려드려요',
+  },
+] as const;
+
+const dealChoiceLabel = (priceDropOnly: boolean) =>
+  KEYWORD_DEAL_CHOICES.find((choice) => choice.value === priceDropOnly)!.label;
+
+/**
  * 키워드 카드에 늘 보이는 한 줄 — "지금 이 키워드로 어떤 알림이 오는지"를 말로 적는다.
  * 예: "최근 딜보다 쌀 때만 · 100만원 이하 · ‘케이스’ 외 1개 제외"
  */
@@ -37,7 +64,7 @@ export const summarizeKeywordAlert = ({
   minPrice: number | null;
   maxPrice: number | null;
 }) => {
-  const parts = [priceDropOnly ? '최근 딜보다 쌀 때만' : '새 핫딜 모두'];
+  const parts: string[] = [dealChoiceLabel(priceDropOnly)];
   if (minPrice != null && maxPrice != null)
     parts.push(`${formatWon(minPrice)}~${formatWon(maxPrice)}`);
   else if (maxPrice != null) parts.push(`${formatWon(maxPrice)} 이하`);

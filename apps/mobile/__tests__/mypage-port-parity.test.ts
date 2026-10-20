@@ -85,38 +85,36 @@ describe('라우트 13개가 전부 있다 — 절반만 네이티브면 같은 
   });
 });
 
-describe('메뉴 — web MenuList 의 6줄이 전부 있다', () => {
-  // 메뉴 항목은 web 이 model/menu.tsx(사이드바·목록 공용)로 옮겼다(d81f0ade) — 둘 다 읽는다.
-  const web =
-    readWeb('features/mypage/ui/MenuList.tsx') +
-    readWeb('features/mypage/model/menu.tsx');
-
-  /**
-   * ⚠️`toContain('찜 목록')` 처럼 **낱말만** 보면 안 된다 — 이 파일 주석에
-   * 메뉴 5개 이름이 나열돼 있어서, 행을 지워도 통과한다(되돌려 실패시키는
-   * 확인에서 실제로 걸렸다). `title="..."` **속성 형태**로 못박는다.
-   */
+/**
+ * 메뉴 항목·이름·묶음·순서는 @jirum/domain/mypage 정본 하나를 web·앱이 같이 돈다(2026-10-20).
+ * 항목이 늘면 앱 `appMenu: Record<MypageMobileMenuKey, …>` 에서 타입체크가 막으므로
+ * web 소스를 읽어 대조할 일이 없다. 여기선 «앱이 정본을 도는가»만 본다.
+ */
+describe('메뉴 — 정본(@jirum/domain/mypage)을 돈다', () => {
   const rootCode = stripComments(SCREENS.root);
+  const {MYPAGE_MENU} = require('@jirum/domain/mypage');
 
-  it.each([
-    ['찜 목록', 'LIKE'],
-    ['관심 카테고리', 'MYPAGE_CATEGORIES'],
-    ['키워드 알림', 'MYPAGE_KEYWORD'],
-    ['알림 설정', 'MYPAGE_NOTIFICATION'],
-    ['약관 및 정책', 'MYPAGE_TERMS'],
-  ])('"%s" 이 web 에 있고 앱에서 %s 로 간다', (title, route) => {
-    expect(web).toContain(title);
-    expect(rootCode).toContain(`title="${title}"`);
-    expect(rootCode).toContain(route);
+  it('묶음·목록을 정본에서 그리고, 정본 메뉴 이름을 손으로 다시 적지 않는다', () => {
+    expect(rootCode).toContain("from '@jirum/domain/mypage'");
+    expect(rootCode).toContain('MYPAGE_GROUPS.map(');
+    expect(rootCode).toContain('mobileMenuOf(group.key)');
+    expect(rootCode).toMatch(/Record<\s*MypageMobileMenuKey/);
+    for (const item of MYPAGE_MENU) {
+      expect(rootCode).not.toContain(`title="${item.title}"`);
+    }
   });
 
-  /** 순서도 web 과 같다 — 키워드 알림이 가장 자주 여는 설정이라 맞춤 설정 맨 위. */
-  it('키워드 알림이 관심 카테고리보다 위다(web·앱)', () => {
-    expect(web.indexOf("title: '키워드 알림'")).toBeLessThan(
-      web.indexOf("title: '관심 카테고리'"),
-    );
-    expect(rootCode.indexOf('title="키워드 알림"')).toBeLessThan(
-      rootCode.indexOf('title="관심 카테고리"'),
+  it.each([
+    ['like', 'LIKE'],
+    ['keyword', 'MYPAGE_KEYWORD'],
+    ['categories', 'MYPAGE_CATEGORIES'],
+    ['notification', 'MYPAGE_NOTIFICATION'],
+    ['terms', 'MYPAGE_TERMS'],
+  ])('%s → %s 로 간다', (key, route) => {
+    const at = rootCode.indexOf(`    ${key}: {`);
+    expect(at).toBeGreaterThan(-1);
+    expect(rootCode.slice(at, at + 300)).toContain(
+      `tabStackNavigations.${route}`,
     );
   });
 
@@ -126,8 +124,7 @@ describe('메뉴 — web MenuList 의 6줄이 전부 있다', () => {
    * 유저는 문의 창구를 잃는다.
    */
   it('"고객센터" 행이 있고 채널톡 시트를 연다', () => {
-    expect(web).toContain('고객센터');
-    expect(rootCode).toContain('title="고객센터"');
+    expect(rootCode).toContain('title={CUSTOMER_SERVICE_TITLE}');
     expect(rootCode).toContain('setCustomerServiceOpen(true)');
     expect(rootCode).toContain('<CustomerServiceSheet');
   });
@@ -187,21 +184,22 @@ describe('키워드 화면 — web 이 한 화면에서 관리하는 3덩어리'
    * 받을 딜은 키워드별 설정이다(유저 전역이 아니다) — 빠뜨리면 web 에서 켠 설정을
    * 앱에서 볼 수도 끌 수도 없다.
    */
-  it('키워드 카드의 설정 3개가 web 과 같다', () => {
-    const webItem = readWeb('features/mypage/ui/keyword/KeywordItem.tsx');
-    const appItem = read('src/features/mypage/ui/KeywordItem.tsx');
-    for (const label of [
-      '어떤 딜을 알려드릴까요?',
-      '새 핫딜 모두',
-      '최근 딜보다 쌀 때만',
-      '가격 범위',
-      '빼고 싶은 단어',
+  // 설정 제목·「받을 딜」 두 갈래·요약 줄은 @jirum/domain/keyword-options 정본(web KeywordItem 도 같은 것을 import).
+  it('키워드 카드의 설정 3개를 정본에서 그린다', () => {
+    const appItem = stripComments(
+      read('src/features/mypage/ui/KeywordItem.tsx'),
+    );
+    for (const name of [
+      'KEYWORD_ALERT_LABELS.deals',
+      'KEYWORD_ALERT_LABELS.priceRange',
+      'KEYWORD_ALERT_LABELS.exclude',
+      'KEYWORD_DEAL_CHOICES.map(',
       'summarizeKeywordAlert',
       'priceDropOnly',
     ]) {
-      expect(webItem).toContain(label);
-      expect(appItem).toContain(label);
+      expect(appItem).toContain(name);
     }
+    expect(appItem).not.toContain("label: '새 핫딜 모두'");
     expect(SCREENS.keyword).toContain('KeywordItem');
   });
 
@@ -484,22 +482,13 @@ describe('레포 함정 가드', () => {
 });
 
 describe('데이터 계층', () => {
-  it('키워드 상한이 web(20)과 같다', () => {
-    const web = readWeb('features/mypage/ui/keyword/KeywordList.tsx');
-    expect(web).toContain('/20</span>');
-    expect(read('src/entities/mypage/mypage.queries.ts')).toContain(
-      'MAX_KEYWORD_COUNT = 20',
+  // 키워드 상한·찜 페이지 크기는 web 과 같은 @jirum/domain/mypage 정본을 쓴다(값을 다시 적지 않는다).
+  it('키워드 상한·찜 페이지 크기를 정본에서 가져온다', () => {
+    const queries = read('src/entities/mypage/mypage.queries.ts');
+    expect(queries).toContain(
+      "import {MAX_KEYWORD_COUNT, WISHLIST_PAGE_SIZE} from '@jirum/domain/mypage'",
     );
-  });
-
-  it('찜 목록 페이지 크기가 web(18)과 같다', () => {
-    const web = readWeb(
-      'app/(mobile)/like/components/ProductLikeContainer.tsx',
-    );
-    expect(web).toContain('LIMIT = 18');
-    expect(read('src/entities/mypage/mypage.queries.ts')).toContain(
-      'WISHLIST_PAGE_SIZE = 18',
-    );
+    expect(queries).not.toMatch(/(MAX_KEYWORD_COUNT|WISHLIST_PAGE_SIZE) = \d/);
   });
 
   /** 관심 카테고리는 발견 탭 칩 줄(categoriesForUser)도 같이 무효화해야 한다. */

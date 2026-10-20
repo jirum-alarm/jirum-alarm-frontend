@@ -1,6 +1,7 @@
 'use client';
 
 import { listRow } from '@jirum/design-system/recipes';
+import { CUSTOMER_SERVICE_TITLE } from '@jirum/domain/mypage';
 import * as m from 'motion/react-m';
 
 import { cn } from '@/shared/lib/cn';
@@ -51,7 +52,9 @@ const MenuList = () => {
                     {/* 위 Link 행들은 px 이 없다 — px-2 를 두면 고객센터만 8px 들여써진다. */}
                     <div className={cn('flex', listRow.row)}>
                       {<Headset />}
-                      <span className={cn('flex-1 text-left', listRow.title)}>고객센터</span>
+                      <span className={cn('flex-1 text-left', listRow.title)}>
+                        {CUSTOMER_SERVICE_TITLE}
+                      </span>
                     </div>
                   </m.button>
                 </li>

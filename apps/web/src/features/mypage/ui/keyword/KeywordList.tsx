@@ -1,6 +1,7 @@
 'use client';
 
 import { addChip } from '@jirum/design-system/recipes';
+import { MAX_KEYWORD_COUNT } from '@jirum/domain/mypage';
 import { useQuery } from '@tanstack/react-query';
 
 import { PAGE } from '@/shared/config/page';
@@ -52,7 +53,9 @@ const KeywordList = ({ focus }: { focus?: string }) => {
       <div className="flex items-baseline justify-between">
         <h2 className="text-base font-semibold text-gray-900">내 키워드</h2>
         <div className="flex items-baseline gap-x-3">
-          <span className="text-xs text-gray-500">{keywords.length}/20</span>
+          <span className="text-xs text-gray-500">
+            {keywords.length}/{MAX_KEYWORD_COUNT}
+          </span>
           {/* 키워드 화면이 막다른 길이던 자리 — 등록한 키워드로 받은 알림을 바로 본다. */}
           <Link
             href={PAGE.ALARM}
