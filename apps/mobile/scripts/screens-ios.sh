@@ -162,6 +162,7 @@ def changed(a, b):
 lines = ['# 앱 화면 하네스 결과', '', '| 화면 | 라이트 | 다크 | 문제 |', '|---|---|---|---|']
 failed = False
 home = {}
+same_as_home = 0
 for name in names:
     issues = []
     got = {}
@@ -184,6 +185,7 @@ for name in names:
         elif name != 'first-launch' and theme in home and changed(px, home[theme]) < 0.1:
             # 딥링크가 화면을 못 바꾸면 홈이 그대로 찍힌다 — 처음 만들 때 실제로 이렇게 «통과»했다.
             issues.append(f'❌ {theme}: 홈과 거의 같은 그림 — 그 화면으로 못 갔다')
+            same_as_home += 1
             failed = True
     if len(got) == 2:
         diff = changed(got['light'][0], got['dark'][0])
@@ -191,6 +193,11 @@ for name in names:
             issues.append(f'⚠️ 라이트·다크가 거의 같다(다른 픽셀 {diff:.0%}) — 다크 미적용')
     dark = '—' if name == 'first-launch' else f'`dark/{name}.png`'
     lines.append(f'| {name} | `light/{name}.png` | {dark} | {"<br>".join(issues) or "—"} |')
+# 거의 전부(3/4 이상) 홈과 같으면 딥링크 하나하나가 아니라 앱이 메인 전(로그인 첫 화면)에서 멈춘 것이다. 첫 실행의 게스트 생성은
+# 운영 API 쓰기라, 점검(읽기 전용)·장애 중이면 모든 화면이 로그인 화면으로 찍힌다(10/20 운영 점검 중 실측).
+if same_as_home and same_as_home >= 0.75 * 2 * (len(names) - 2):
+    lines[1:1] = ['', '❌ **거의 모든 화면이 홈과 같다 — 앱이 메인 전에서 멈췄다.** `light/home.png` 가 로그인 첫 화면이면 게스트 생성'
+                  '(운영 API 쓰기) 실패다 — API 점검·장애 시간인지부터 보고, 끝난 뒤 이 잡을 다시 돌린다.']
 fatal = open(os.environ['FATAL_LOG']).read().strip() if os.path.exists(os.environ['FATAL_LOG']) else ''
 if fatal:
     lines += ['', '## ❌ 치명 JS 예외', '```', fatal[:1500], '```']
