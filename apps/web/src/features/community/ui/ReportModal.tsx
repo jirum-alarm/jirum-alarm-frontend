@@ -1,5 +1,6 @@
 'use client';
 
+import { REPORT_REASON_OPTIONS } from '@jirum/domain/community';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Drawer } from 'vaul';
@@ -10,13 +11,10 @@ import { cn } from '@/shared/lib/cn';
 import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
 import { useToast } from '@/shared/ui/common/Toast';
 
-const REPORT_REASONS: { label: string; value: UserReportReason }[] = [
-  { label: '불법 정보', value: UserReportReason.Abuse },
-  { label: '스팸', value: UserReportReason.Spam },
-  { label: '욕설 / 혐오 표현', value: UserReportReason.Inappropriate },
-  { label: '개인정보 침해', value: UserReportReason.Privacy },
-  { label: '기타', value: UserReportReason.Other },
-];
+// 사유 순서·문구·값은 정본 @jirum/domain/community(앱 신고 시트와 같은 표).
+const REPORT_REASONS: { label: string; value: UserReportReason }[] = REPORT_REASON_OPTIONS.map(
+  (r) => ({ label: r.label, value: r.value as UserReportReason }),
+);
 
 export default function ReportModal({
   postId,

@@ -1,5 +1,6 @@
 'use client';
 
+import { COMMUNITY_COPY } from '@jirum/domain/community';
 import {
   useMutation,
   useQuery,
@@ -200,7 +201,7 @@ function CommunityCommentList({
   const { mutate: removeComment } = useMutation({
     mutationFn: (id: number) => CommunityService.removeComment(id),
     onSuccess: () => {
-      toast.success('댓글이 삭제되었어요.');
+      toast.success(COMMUNITY_COPY.commentDeleted);
       queryClient.invalidateQueries({ queryKey: CommunityQueries.comments(postId).queryKey });
     },
     onError: () => toast.error('삭제에 실패했어요.'),

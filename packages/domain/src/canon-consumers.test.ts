@@ -32,6 +32,8 @@ const SHARED_BY_BOTH: Record<string, string[]> = {
   share: ['SHARE_CHANNEL_COPY'],
   'community-post': ['parsePostContent', 'isAllowedPostImageUrl', 'MAX_POST_IMAGES', 'getPostDisplayContent'],
   image: ['convertToWebp'],
+  'go-back': ['NATIVE_STACK_DATASET_KEY'],
+  community: ['REPORT_REASON_OPTIONS', 'COMMUNITY_COPY'],
   price: ['parsePrice', 'splitPriceNote'],
   'keyword-hub': ['KEYWORD_PROMPT_EVENT', 'buildKeywordHubLead', 'describeKeywordHubRhythm', 'KEYWORD_HUB_MIN_DEALS'],
   categories: ['INTEREST_CATEGORIES', 'MAX_INTEREST_CATEGORIES'],

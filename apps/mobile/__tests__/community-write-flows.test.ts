@@ -17,8 +17,6 @@ declare const __dirname: string;
 
 const read = (p: string) =>
   fs.readFileSync(path.join(__dirname, '..', p), 'utf8');
-const readWeb = (p: string) =>
-  fs.readFileSync(path.join(__dirname, '../../web/src', p), 'utf8');
 
 const {
   applyPostLike,
@@ -138,10 +136,8 @@ describe('댓글 삭제·수정·작성', () => {
     expect(commentsViewModel).toMatch(/삭제에 실패했어요/);
   });
 
-  it('삭제 성공 토스트 문구가 web 과 같다', () => {
-    const web = readWeb('features/community/ui/CommunityCommentSection.tsx');
-    expect(web).toContain('댓글이 삭제되었어요.');
-    expect(commentsViewModel).toContain('댓글이 삭제되었어요.');
+  it('삭제 성공 토스트 문구는 정본 COMMUNITY_COPY(web 도 같은 상수)', () => {
+    expect(commentsViewModel).toContain('COMMUNITY_COPY.commentDeleted');
   });
 
   it('수정은 기존 UpdateComment 뮤테이션을 쓴다(문서를 새로 안 만든다)', () => {
@@ -202,11 +198,13 @@ describe('글 신고', () => {
     ).toBeUndefined();
   });
 
-  it('사유 목록·문구·순서가 web ReportModal 과 같다', () => {
-    const web = readWeb('features/community/ui/ReportModal.tsx');
-    const webLabels = [...web.matchAll(/label: '([^']+)'/g)].map(m => m[1]);
-    expect(REPORT_REASONS.map((r: {label: string}) => r.label)).toEqual(
-      webLabels,
+  it('사유 목록·문구·순서·값은 정본 REPORT_REASON_OPTIONS(web 신고 창도 같은 표)', () => {
+    const {REPORT_REASON_OPTIONS} = require('@jirum/domain/community');
+    expect(REPORT_REASONS).toEqual(
+      REPORT_REASON_OPTIONS.map((r: {label: string; value: string}) => ({
+        label: r.label,
+        value: r.value,
+      })),
     );
   });
 

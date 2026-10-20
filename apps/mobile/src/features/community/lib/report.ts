@@ -1,17 +1,13 @@
+import {REPORT_REASON_OPTIONS} from '@jirum/domain/community';
 import {UserReportReason, UserReportTarget} from '@/shared/api/gql/graphql';
 import type {AddUserReportMutationVariables} from '@/shared/api/gql/graphql';
 
-/**
- * 신고 사유. **순서·문구가 web `ReportModal` 의 REPORT_REASONS 와 같아야 한다** —
- * 같은 글을 웹에서 신고할 때와 앱에서 신고할 때 선택지가 다르면 유저는 버그로 읽는다.
- */
-export const REPORT_REASONS: {label: string; value: UserReportReason}[] = [
-  {label: '불법 정보', value: UserReportReason.Abuse},
-  {label: '스팸', value: UserReportReason.Spam},
-  {label: '욕설 / 혐오 표현', value: UserReportReason.Inappropriate},
-  {label: '개인정보 침해', value: UserReportReason.Privacy},
-  {label: '기타', value: UserReportReason.Other},
-];
+/** 신고 사유 — 순서·문구·값은 정본 @jirum/domain/community(web 신고 창과 같은 표). */
+export const REPORT_REASONS: {label: string; value: UserReportReason}[] =
+  REPORT_REASON_OPTIONS.map(r => ({
+    label: r.label,
+    value: r.value as UserReportReason,
+  }));
 
 /**
  * 신고 뮤테이션 변수.

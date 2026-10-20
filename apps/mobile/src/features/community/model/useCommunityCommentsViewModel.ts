@@ -1,3 +1,4 @@
+import {COMMUNITY_COPY} from '@jirum/domain/community';
 import {
   useInfiniteQuery,
   useMutation,
@@ -103,7 +104,7 @@ export function useCommunityCommentsViewModel(postId: number) {
     mutationFn: (id: number) => CommentService.removeComment({id}),
     onMutate: (id: number) => optimistic(page => removeCommentById(page, id)),
     onSuccess: () => {
-      showToast.success('댓글이 삭제되었어요.');
+      showToast.success(COMMUNITY_COPY.commentDeleted);
       afterCountChange(-1);
     },
     onError: (_err, _id, context) => {

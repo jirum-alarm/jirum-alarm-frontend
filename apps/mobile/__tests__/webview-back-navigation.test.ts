@@ -16,45 +16,21 @@ declare const __dirname: string;
 
 const read = (p: string) =>
   fs.readFileSync(path.join(__dirname, '..', p), 'utf8');
-const readWeb = (p: string) =>
-  fs.readFileSync(path.join(__dirname, '../../web/src', p), 'utf8');
 
 const webviewScreen = read(
   'src/screens/jirumalarmwebview/JirumAlarmWebViewScreen.tsx',
 );
 const detailWebview = read('src/screens/detail/ProductDetailWebViewScreen.tsx');
 const script = read('src/shared/lib/webview/native-stack-script.ts');
-const goBack = readWeb('shared/hooks/useGoBack.ts');
+const {
+  decideGoBack: goBackDecision,
+  NATIVE_STACK_DATASET_KEY,
+} = require('@jirum/domain/go-back');
 
-/** web useGoBack 의 3갈래 판정을 그대로 재현한다. */
-function goBackDecision({
-  nativeStack,
-  isInApp,
-  referrer,
-  historyLength,
-}: {
-  nativeStack?: string;
-  isInApp: boolean;
-  referrer: string;
-  historyLength: number;
-}) {
-  if (nativeStack === 'true' && isInApp) return 'native-pop';
-  if (
-    (referrer && referrer.indexOf('jirum-alarm.com') !== -1) ||
-    historyLength > 1
-  ) {
-    return 'router-back';
-  }
-  return 'router-push-home';
-}
-
-describe('web useGoBack 의 3갈래 — 재현 로직이 소스와 맞나', () => {
-  it('소스가 세 갈래를 그대로 갖고 있다', () => {
-    expect(goBack).toContain('nativeStack');
-    expect(goBack).toContain('PRESS_BACKBUTTON');
-    expect(goBack).toMatch(/router\.back\(\)/);
-    expect(goBack).toMatch(/router\.push\(backTo\)/);
-    expect(goBack).toMatch(/window\.history\.length > 1/);
+describe('web 「뒤로」 3갈래 — 정본 decideGoBack(web useGoBack 이 쓰는 그 함수)', () => {
+  it('앱이 심는 신호가 정본 키와 같다', () => {
+    expect(NATIVE_STACK_DATASET_KEY).toBe('nativeStack');
+    expect(script).toContain('dataset.${NATIVE_STACK_DATASET_KEY}');
   });
 
   it('★주입이 없으면 새 웹뷰는 홈을 그린다(이번 회귀의 정체)', () => {
@@ -65,7 +41,7 @@ describe('web useGoBack 의 3갈래 — 재현 로직이 소스와 맞나', () =
         referrer: '',
         historyLength: 1,
       }),
-    ).toBe('router-push-home');
+    ).toBe('push-fallback');
   });
 
   it('주입이 있으면 네이티브 pop 으로 간다', () => {
@@ -172,7 +148,11 @@ describe('★★뒤로가기 pop 은 정확히 한 번만 — 실측 회귀', ()
 
 describe('주입 스크립트 자체', () => {
   it('dataset.nativeStack 을 켜고 뒤로가기 버튼을 가로챈다', () => {
-    expect(script).toContain("dataset.nativeStack = 'true'");
+    // 실제로 주입되는 문자열(키는 정본에서 채워진다).
+    const {
+      NATIVE_STACK_SCRIPT,
+    } = require('../src/shared/lib/webview/native-stack-script');
+    expect(NATIVE_STACK_SCRIPT).toContain("dataset.nativeStack = 'true'");
     expect(script).toContain('aria-label="뒤로 가기"');
     expect(script).toContain('PRESS_BACKBUTTON');
   });

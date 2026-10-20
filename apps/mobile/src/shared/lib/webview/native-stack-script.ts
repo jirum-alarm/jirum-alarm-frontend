@@ -1,7 +1,9 @@
+import {NATIVE_STACK_DATASET_KEY} from '@jirum/domain/go-back';
+
 /**
  * 웹뷰가 **네이티브 스택 위에** 올라가 있다고 웹에 알려주는 주입 스크립트.
  *
- * ★왜 필요한가 — web `useGoBack` 은 세 갈래로 갈린다:
+ * ★왜 필요한가 — web `useGoBack`(판정은 정본 @jirum/domain/go-back decideGoBack)은 세 갈래로 갈린다:
  *   1. `dataset.nativeStack === 'true'` → `PRESS_BACKBUTTON` 브릿지(네이티브가 pop)
  *   2. history 가 쌓여 있으면 → `router.back()`
  *   3. 둘 다 아니면 → **`router.push('/')`**
@@ -24,7 +26,7 @@ export const NATIVE_STACK_SCRIPT = `
   // DOM 이 생길 때까지 미뤄서 두 플랫폼이 같게 동작하게 한다.
   function start() {
     if (!document.documentElement) { setTimeout(start, 50); return; }
-    document.documentElement.dataset.nativeStack = 'true';
+    document.documentElement.dataset.${NATIVE_STACK_DATASET_KEY} = 'true';
     // ★중복 등록 가드를 **DOM(dataset)** 에 둔다.
     //
     // 이 스크립트는 injectedJavaScriptBeforeContentLoaded(문서 로드 전)와

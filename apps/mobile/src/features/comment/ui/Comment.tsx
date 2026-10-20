@@ -1,3 +1,4 @@
+import {COMMUNITY_COPY} from '@jirum/domain/community';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -108,7 +109,7 @@ export default function Comment({
     onSuccess: () => {
       setMenuOpen(false);
       clearEditingComment();
-      showToast.success('댓글이 삭제되었어요.');
+      showToast.success(COMMUNITY_COPY.commentDeleted);
       invalidate();
     },
     onError: () => showToast.error('댓글을 삭제하지 못했어요.'),
