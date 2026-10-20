@@ -11,31 +11,31 @@
     "data": {
       "products": [
         {
-          "id": "35805804",
-          "title": "AMD RYZEN 9800X3D CPU 체감가 53만",
-          "mallId": 15,
-          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993455",
-          "isHot": false,
+          "id": "36103852",
+          "title": "올화이트 9950X3D + 윙치킨 RTX 5090 + 64GB + 2TB",
+          "mallId": 35,
+          "url": "https://www.fmkorea.com/10465538501",
+          "isHot": true,
           "isEnd": false,
-          "price": "￦ 592,450 (KRW)",
-          "providerId": 5,
+          "price": "14,900,160원",
+          "providerId": 7,
           "categoryId": 1,
-          "category": "PC/하드웨어",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993455.webp",
-          "mallName": "지마켓",
-          "hotDealType": "SUPER_DEAL",
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465538501.webp",
+          "mallName": "11번가",
+          "hotDealType": "HOT_DEAL",
           "isYearLowest": false,
           "provider": {
-            "nameKr": "퀘이사존"
+            "nameKr": "에펨코리아"
           },
           "searchAfter": [
-            "117.22",
-            "35805804"
+            "180.47",
+            "36103852"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": 1,
-          "isRising": null,
-          "postedAt": "2026-10-17T11:07:31.000Z"
+          "isRising": true,
+          "postedAt": "2026-10-20T05:29:00.000Z"
         },
         {
           "id": "35677917",
@@ -63,6 +63,33 @@
           "postedCommunityCount": 1,
           "isRising": null,
           "postedAt": "2026-10-16T04:59:00.000Z"
+        },
+        {
+          "id": "35805804",
+          "title": "AMD RYZEN 9800X3D CPU 체감가 53만",
+          "mallId": 15,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993455",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 592,450 (KRW)",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993455.webp",
+          "mallName": "지마켓",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "116.93",
+            "35805804"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-17T11:07:31.000Z"
         },
         {
           "id": "35191312",
@@ -200,33 +227,6 @@
           "postedAt": "2026-10-12T04:23:00.000Z"
         },
         {
-          "id": "35042132",
-          "title": "VGN 잠자리3세대 MASTER+ 무선 게이밍 마우스 8K PAW3950 EXTREME 53,900원",
-          "mallId": 15,
-          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1991784",
-          "isHot": false,
-          "isEnd": false,
-          "price": "￦ 53,900원 (KRW)",
-          "providerId": 5,
-          "categoryId": 1,
-          "category": "PC/하드웨어",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1991784.webp",
-          "mallName": "지마켓",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "퀘이사존"
-          },
-          "searchAfter": [
-            "77.89",
-            "35042132"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": 1,
-          "isRising": null,
-          "postedAt": "2026-10-10T07:03:13.000Z"
-        },
-        {
           "id": "35349961",
           "title": "인텔 코어 울트라 7 270K Plus 역대가",
           "mallId": 15,
@@ -281,31 +281,31 @@
           "postedAt": "2026-10-13T05:07:00.000Z"
         },
         {
-          "id": "36003445",
-          "title": "컴백쇼 9800X3D / 9070XT / 2TB / 32G",
-          "mallId": 530,
-          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993697",
-          "isHot": false,
+          "id": "36113823",
+          "title": "9800X3D + RTX5070Ti + 32G + 1TB 완본체",
+          "mallId": 35,
+          "url": "https://www.fmkorea.com/10465836585",
+          "isHot": null,
           "isEnd": false,
-          "price": "￦ 3,008,000 (KRW)",
-          "providerId": 5,
+          "price": "3,499,360원",
+          "providerId": 7,
           "categoryId": 1,
-          "category": "PC/하드웨어",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993697.webp",
-          "mallName": "컴퓨존",
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465836585.webp",
+          "mallName": "11번가",
           "hotDealType": null,
           "isYearLowest": false,
           "provider": {
-            "nameKr": "퀘이사존"
+            "nameKr": "에펨코리아"
           },
           "searchAfter": [
-            "72.35",
-            "36003445"
+            "72.33",
+            "36113823"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": 1,
-          "isRising": null,
-          "postedAt": "2026-10-19T03:10:25.000Z"
+          "isRising": true,
+          "postedAt": "2026-10-20T07:19:00.000Z"
         },
         {
           "id": "35573606",
@@ -333,33 +333,6 @@
           "postedCommunityCount": 1,
           "isRising": null,
           "postedAt": "2026-10-15T07:57:23.000Z"
-        },
-        {
-          "id": "36005183",
-          "title": "DW500 우드 MESH RGB (블랙)",
-          "mallId": null,
-          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993710",
-          "isHot": false,
-          "isEnd": false,
-          "price": "￦ 34,900 (KRW)",
-          "providerId": 5,
-          "categoryId": 1,
-          "category": "PC/하드웨어",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993710.webp",
-          "mallName": "darkflash",
-          "hotDealType": "SUPER_DEAL",
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "퀘이사존"
-          },
-          "searchAfter": [
-            "70.26",
-            "36005183"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": 1,
-          "isRising": null,
-          "postedAt": "2026-10-19T05:34:27.000Z"
         },
         {
           "id": "35336275",
@@ -414,6 +387,60 @@
           "postedCommunityCount": 2,
           "isRising": null,
           "postedAt": "2026-10-14T02:46:00.000Z"
+        },
+        {
+          "id": "36003445",
+          "title": "컴백쇼 9800X3D / 9070XT / 2TB / 32G",
+          "mallId": 530,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993697",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 3,008,000 (KRW)",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993697.webp",
+          "mallName": "컴퓨존",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "57.51",
+            "36003445"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-19T03:10:25.000Z"
+        },
+        {
+          "id": "36102108",
+          "title": "14400F + RTX 5060 Ti + RAM 32GB + Y50 블랙체리 게이밍 PC 특가",
+          "mallId": 8,
+          "url": "https://coolenjoy.net/bbs/jirum/3571099",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 2,
+          "categoryId": 1,
+          "category": "PC관련",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coolnjoy/3571099.webp",
+          "mallName": "롯데온",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿨엔조이"
+          },
+          "searchAfter": [
+            "57.28",
+            "36102108"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:23.000Z"
         },
         {
           "id": "35575165",
@@ -522,33 +549,6 @@
           "postedCommunityCount": 1,
           "isRising": null,
           "postedAt": "2026-10-15T01:58:24.000Z"
-        },
-        {
-          "id": "35552752",
-          "title": "7800X3D + RTX5070 + 32G + 2TB 완본체",
-          "mallId": 15,
-          "url": "https://www.fmkorea.com/10448513523",
-          "isHot": null,
-          "isEnd": false,
-          "price": "2,529,080원",
-          "providerId": 7,
-          "categoryId": 1,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10448513523.webp",
-          "mallName": "지마켓",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "에펨코리아"
-          },
-          "searchAfter": [
-            "47.65",
-            "35552752"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": 1,
-          "isRising": null,
-          "postedAt": "2026-10-15T02:33:00.000Z"
         }
       ]
     }

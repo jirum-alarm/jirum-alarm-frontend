@@ -8,6 +8,58 @@
     "data": {
       "products": [
         {
+          "id": "35482753",
+          "title": "홈스타 락스와세제 후로랄 파인 750ml 2개 9,290원",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/91683827",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,290원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/91683827.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "120"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-14T14:05:56.000Z"
+        },
+        {
+          "id": "35481848",
+          "title": "애경 울샴푸 아웃도어 전용세제 800ml+1L 리필",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/82376477",
+          "isHot": false,
+          "isEnd": false,
+          "price": "22,750원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/82376477.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "120"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-14T14:00:54.000Z"
+        },
+        {
           "id": "35481541",
           "title": "민티드 중성 드라이 세제 240g 2개",
           "mallId": 4800,
@@ -474,58 +526,6 @@
           "postedCommunityCount": null,
           "isRising": null,
           "postedAt": "2026-10-13T08:12:43.000Z"
-        },
-        {
-          "id": "35321687",
-          "title": "참그린 구연산 뽀드득 주방세제 레몬향 용기 1kg 4개 13,440원",
-          "mallId": 15,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=739743",
-          "isHot": false,
-          "isEnd": false,
-          "price": "13,440원",
-          "providerId": 1,
-          "categoryId": 2,
-          "category": "기타",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/739743.webp",
-          "mallName": "지마켓",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "120"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-13T03:07:00.000Z"
-        },
-        {
-          "id": "35318950",
-          "title": "유한양행 해피홈 트리플 프로 초고농축 3in1 캡슐세제 32입x4개+5입x12개",
-          "mallId": 28,
-          "url": "https://www.fmkorea.com/10441512813",
-          "isHot": null,
-          "isEnd": false,
-          "price": "35,460원",
-          "providerId": 7,
-          "categoryId": 2,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10441512813.webp",
-          "mallName": "카카오",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "에펨코리아"
-          },
-          "searchAfter": [
-            "120"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-13T01:33:00.000Z"
         }
       ]
     }

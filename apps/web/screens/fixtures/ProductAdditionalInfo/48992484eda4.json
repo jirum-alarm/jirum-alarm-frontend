@@ -7,8 +7,8 @@
       "product": {
         "id": "36089133",
         "url": "https://arca.live/b/hotdeal/186459565",
-        "positiveCommunityReactionCount": 13,
-        "negativeCommunityReactionCount": 1,
+        "positiveCommunityReactionCount": 16,
+        "negativeCommunityReactionCount": 2,
         "provider": {
           "id": "12",
           "name": "arca",
@@ -31,13 +31,13 @@
         "isYearLowest": false,
         "hotDealIndex": null,
         "commentSummary": {
-          "additionalInfo": "X3D CPU는 일반 CPU에 비해 고장 확률 빈도가 높다는 의견이 있고, 직구품은 AS가 없으며 불량률이 약 1~2% 정도 있다는 내용이 언급되고 있습니다.",
+          "additionalInfo": "7900번대 CPU는 초기 불량이 발생할 수 있다는 의견이 있으며, 고장 시 부품을 새로 갈아 끼워야 했다는 사례도 있습니다.",
           "option": null,
-          "price": "와 이건 진짜 싸다는 의견이 있고, 코스트를 생각하면 가격이 좋다는 평가가 있어요.",
+          "price": "가성비가 좋다는 의견과 함께 '무료 나눔 수준'이라는 평가도 있습니다.",
           "productId": "36089133",
-          "purchaseMethod": "직구는 AS가 없는 중고를 사는 것과 같다고 언급되며, 컴퓨존을 통해 2년 보증 리퍼 제품을 구매하는 것이 좋다는 조언이 있어요.",
-          "satisfaction": "7500f에서 7800x3d로 넘어가니 만족스럽다는 후기가 있으며, 성능 체감이 크지 않다는 의견도 있습니다.",
-          "summary": "댓글에서는 가격적인 메리트가 크다고 평가하지만, 직구 시 AS가 없고 X3D의 고장 확률이 높을 수 있다는 리스크를 함께 고려해야 한다고 이야기하고 있어요."
+          "purchaseMethod": "현재 핫딜 기간에 대한 고민과 함께 중고 판매를 통한 차액 고려가 언급되고 있습니다.",
+          "satisfaction": "X3D로 업그레이드했을 때 만족도가 높다는 의견이 있으며, CPU 요구량이 많은 게임에서 1% LOW 개선이 많다고 합니다.",
+          "summary": "댓글에서는 X3D의 체감이 크다는 평가가 있지만, 7900번대 CPU의 초기 불량이나 고장 위험에 대한 우려도 함께 언급되고 있습니다."
         }
       }
     }

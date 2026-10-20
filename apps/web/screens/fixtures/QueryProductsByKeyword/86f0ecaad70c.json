@@ -1,0 +1,501 @@
+{
+  "variables": {
+    "limit": 20,
+    "keyword": "만원이하",
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "searchAfter": "1792481025000"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36113824",
+          "title": "테조 1450 고불소 구취케어 치약 120g 5개",
+          "mallId": 4800,
+          "url": "https://eomisae.co.kr/rt/206993894",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,820원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206993894.webp",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792480863000"
+          ],
+          "postedAt": "2026-10-20T07:21:03.000Z"
+        },
+        {
+          "id": "36113807",
+          "title": "케어미 손세정용 물티슈 20매 x 20팩 99.9% 리필형",
+          "mallId": 1,
+          "url": "https://www.fmkorea.com/10465824395",
+          "isHot": null,
+          "isEnd": false,
+          "price": "8,900원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465824395.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792480200000"
+          ],
+          "postedAt": "2026-10-20T07:10:00.000Z"
+        },
+        {
+          "id": "36113811",
+          "title": "오발 대왕발16번지 10개 외 1종",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102343",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,822원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102343.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792480200000"
+          ],
+          "postedAt": "2026-10-20T07:10:00.000Z"
+        },
+        {
+          "id": "36113804",
+          "title": "예감 찍먹 스모키홀그레인맛소스맛 20개",
+          "mallId": 1,
+          "url": "https://bbs.ruliweb.com/market/board/1020/read/108185",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,900원",
+          "providerId": 4,
+          "categoryId": 2,
+          "category": "음식",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/108185.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "루리웹"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792480061000"
+          ],
+          "postedAt": "2026-10-20T07:07:41.000Z"
+        },
+        {
+          "id": "36113797",
+          "title": "폴햄키즈 기본 레이어드 긴팔티셔츠",
+          "mallId": 1,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9517011",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,400원",
+          "providerId": 107,
+          "categoryId": 4,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9517011.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792479900000"
+          ],
+          "postedAt": "2026-10-20T07:05:00.000Z"
+        },
+        {
+          "id": "36113460",
+          "title": "GS25 사전예약 (0원/무료)",
+          "mallId": null,
+          "url": "https://arca.live/b/hotdeal/186488750",
+          "isHot": false,
+          "isEnd": false,
+          "price": "0원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186488750.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792479360000"
+          ],
+          "postedAt": "2026-10-20T06:56:00.000Z"
+        },
+        {
+          "id": "36113459",
+          "title": "카누 미니 마일드 120개입 2개 총240개입",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741611",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741611.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792479180000"
+          ],
+          "postedAt": "2026-10-20T06:53:00.000Z"
+        },
+        {
+          "id": "36113454",
+          "title": "아브카 시어버터 핸드크림 머스크향 50ml 3개 6,930원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14954760?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,930원",
+          "providerId": 18,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14954760.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792479055000"
+          ],
+          "postedAt": "2026-10-20T06:50:55.000Z"
+        },
+        {
+          "id": "36113455",
+          "title": "Tenui 트리트먼트, 바디스크럽 7,600원",
+          "mallId": null,
+          "url": "https://eomisae.co.kr/rt/206990081",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,600원",
+          "providerId": 11,
+          "categoryId": 3,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206990081.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792479050000"
+          ],
+          "postedAt": "2026-10-20T06:50:50.000Z"
+        },
+        {
+          "id": "36113437",
+          "title": "가베 교구용 도형 색종이 90매입 6900원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14954740?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,900원",
+          "providerId": 18,
+          "categoryId": 10,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14954740.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792478716000"
+          ],
+          "postedAt": "2026-10-20T06:45:16.000Z"
+        },
+        {
+          "id": "36113408",
+          "title": "보노하우스 정리함 수납 바스켓 M 4개 5,800원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14954735?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,800원",
+          "providerId": 18,
+          "categoryId": 6,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14954735.webp",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792478636000"
+          ],
+          "postedAt": "2026-10-20T06:43:56.000Z"
+        },
+        {
+          "id": "36113407",
+          "title": "로메인 1kg 4,990원",
+          "mallId": 8,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14954732?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,990원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14954732.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792478531000"
+          ],
+          "postedAt": "2026-10-20T06:42:11.000Z"
+        },
+        {
+          "id": "36113395",
+          "title": "강원도 양구 펀치볼 무청 삶은 시래기 200g 5팩",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741608",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,400원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741608.webp",
+          "hotDealType": null,
+          "isYearLowest": true,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792478340000"
+          ],
+          "postedAt": "2026-10-20T06:39:00.000Z"
+        },
+        {
+          "id": "36113393",
+          "title": "나이아신아마이드 미백 토너 150ml",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741607",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,990원",
+          "providerId": 1,
+          "categoryId": 3,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741607.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792478040000"
+          ],
+          "postedAt": "2026-10-20T06:34:00.000Z"
+        },
+        {
+          "id": "36113389",
+          "title": "크리오 퍼펙션 초극세모 비비드 콤팩트헤드 칫솔 10입 3세트",
+          "mallId": 35,
+          "url": "https://www.fmkorea.com/10465710448",
+          "isHot": null,
+          "isEnd": false,
+          "price": "9,900원",
+          "providerId": 7,
+          "categoryId": 3,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465710448.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792477680000"
+          ],
+          "postedAt": "2026-10-20T06:28:00.000Z"
+        },
+        {
+          "id": "36113401",
+          "title": "토스알닷 하나 나라사랑 71GB+ 나라사랑카드 할인 7개월 1,500원",
+          "mallId": 45172,
+          "url": "https://www.dogdrip.net/730580758",
+          "isHot": false,
+          "isEnd": false,
+          "price": "1,500원",
+          "providerId": 108,
+          "categoryId": 8,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730580758.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792477400000"
+          ],
+          "postedAt": "2026-10-20T06:23:20.000Z"
+        },
+        {
+          "id": "36113114",
+          "title": "자유시간 미니 쿠키앤크림 272g",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14954646?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,840원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14954646.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792476501000"
+          ],
+          "postedAt": "2026-10-20T06:08:21.000Z"
+        },
+        {
+          "id": "36113082",
+          "title": "슈퍼딥큐 3겹 뽑아쓰는 키친타올 100매 9팩",
+          "mallId": 1,
+          "url": "https://arca.live/b/hotdeal/186484833",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,900원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "생활용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186484833.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792476284000"
+          ],
+          "postedAt": "2026-10-20T06:04:44.000Z"
+        },
+        {
+          "id": "36106782",
+          "title": "문밑 문틈 바람막이 빛 틈새 차단 4colors",
+          "mallId": 592,
+          "url": "https://store.ohou.se/goods/1392032",
+          "isHot": false,
+          "isEnd": false,
+          "price": "1,500원",
+          "providerId": 102,
+          "categoryId": 6,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ohou/1392032.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "오늘의집"
+          },
+          "data": {
+            "ohou": {
+              "rating": 4.6,
+              "salePrice": 1500,
+              "scrapCount": 3279,
+              "sellerName": "무타공마켓",
+              "reviewCount": 478,
+              "discountRate": 21,
+              "benefitBadges": [
+                "최대 7% 결제할인"
+              ],
+              "originalPrice": 1900
+            }
+          },
+          "searchAfter": [
+            "1792476133000"
+          ],
+          "postedAt": "2026-10-20T06:02:13.000Z"
+        },
+        {
+          "id": "36108037",
+          "title": "이중으로 강력한 침대 패드 매트리스 커버 고정밴드 클립 집게 2colors",
+          "mallId": 592,
+          "url": "https://store.ohou.se/goods/2138165",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,500원",
+          "providerId": 102,
+          "categoryId": 6,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ohou/2138165.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "오늘의집"
+          },
+          "data": {
+            "ohou": {
+              "rating": 4.7,
+              "salePrice": 4500,
+              "scrapCount": 310,
+              "sellerName": "무타공마켓",
+              "reviewCount": 116,
+              "discountRate": 25,
+              "benefitBadges": [
+                "최대 7% 결제할인"
+              ],
+              "originalPrice": 6000
+            }
+          },
+          "searchAfter": [
+            "1792476133000"
+          ],
+          "postedAt": "2026-10-20T06:02:13.000Z"
+        }
+      ]
+    }
+  }
+}

@@ -7,6 +7,8 @@ export type ScreenPage = {
   states?: boolean;
   /** PC 레이아웃이 따로 있는 화면만 데스크톱도 찍는다((mobile) 그룹은 PC 에서도 같은 틀). */
   desktop?: boolean;
+  /** 'user' = 로그인한 화면(ACCESS_TOKEN 쿠키 + screens/user-fixtures.ts). */
+  auth?: 'user';
 };
 
 export const PRODUCT_ID = '36089133';
@@ -37,4 +39,13 @@ export const PAGES: ScreenPage[] = [
   { name: 'mypage', path: '/mypage' },
   { name: 'alarm', path: '/alarm' },
   { name: 'login', path: '/login' },
+  // 로그인한 화면 — 데이터는 user-fixtures.ts(손 데이터)와 녹화의 공개 쿼리.
+  { name: 'home-user', path: '/', auth: 'user', desktop: true },
+  { name: 'mypage-user', path: '/mypage', auth: 'user' },
+  { name: 'mypage-keyword', path: '/mypage/keyword', auth: 'user', states: true },
+  { name: 'mypage-notification', path: '/mypage/notification', auth: 'user' },
+  { name: 'mypage-categories', path: '/mypage/categories', auth: 'user' },
+  { name: 'mypage-account', path: '/mypage/account', auth: 'user' },
+  { name: 'alarm-user', path: '/alarm', auth: 'user', states: true },
+  { name: 'like-user', path: '/like', auth: 'user', states: true },
 ];

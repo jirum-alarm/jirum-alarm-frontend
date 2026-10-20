@@ -8,6 +8,58 @@
     "data": {
       "products": [
         {
+          "id": "35963116",
+          "title": "쉼표365 마마프랑 베이킹소다 주방세제 석류향 1L 2개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9513153",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,560원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9513153.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "40"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-18T15:16:00.000Z"
+        },
+        {
+          "id": "35963062",
+          "title": "리퀴드 라이트 고농축 실내건조 액체세탁세제 2.5L 4개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9513103",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,900원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9513103.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "40"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-18T15:12:00.000Z"
+        },
+        {
           "id": "35961005",
           "title": "골드럽 세탁세제 용기 3.2L 2개(파워딥클린) + 섬유유연제 용기 3.2L 2개(자스민블루)",
           "mallId": 4800,
@@ -474,58 +526,6 @@
           "postedCommunityCount": null,
           "isRising": null,
           "postedAt": "2026-10-17T13:58:18.000Z"
-        },
-        {
-          "id": "35831687",
-          "title": "홈스타 락스와세제 후로랄 파인 750ml 4개 15,600원",
-          "mallId": 4800,
-          "url": "https://shopping.toss.im/c/150753795",
-          "isHot": false,
-          "isEnd": false,
-          "price": "15,600원",
-          "providerId": 21,
-          "categoryId": 2,
-          "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/150753795.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "토스쇼핑"
-          },
-          "searchAfter": [
-            "40"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-17T14:15:03.000Z"
-        },
-        {
-          "id": "35825462",
-          "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개 12,930원",
-          "mallId": 15,
-          "url": "https://etoland.co.kr/b/hotdeal/article/9510292",
-          "isHot": false,
-          "isEnd": false,
-          "price": "12,930원",
-          "providerId": 107,
-          "categoryId": 2,
-          "category": "",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9510292.webp",
-          "mallName": "지마켓",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "이토랜드"
-          },
-          "searchAfter": [
-            "40"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-17T14:05:00.000Z"
         }
       ]
     }

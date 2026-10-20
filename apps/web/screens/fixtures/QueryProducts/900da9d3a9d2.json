@@ -8,6 +8,58 @@
     "data": {
       "products": [
         {
+          "id": "36114106",
+          "title": "액츠 세탁세제 퍼펙트 실내건조(일반/드럼겸용) 3L 용기 x 1개+2.2L 리필 x 1개",
+          "mallId": 8,
+          "url": "https://www.fmkorea.com/10465907746",
+          "isHot": null,
+          "isEnd": false,
+          "price": "14,900원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465907746.webp",
+          "mallName": "롯데온",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "20"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T07:45:00.000Z"
+        },
+        {
+          "id": "36103146",
+          "title": "슈퍼딥큐 캡슐세제 42개입 2개 오션브리즈 3,900원",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741575",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741575.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "20"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T04:31:00.000Z"
+        },
+        {
           "id": "36102105",
           "title": "맘스럽 워싱소다 버킷 5kg 탄산소다 100% 프리미엄 세탁세제 1등급품질 초강력 세탁보조제 100% 탈취인증 찌든때 박살 전문세탁소용",
           "mallId": 48,
@@ -474,58 +526,6 @@
           "postedCommunityCount": null,
           "isRising": null,
           "postedAt": "2026-10-18T19:34:00.000Z"
-        },
-        {
-          "id": "35963116",
-          "title": "쉼표365 마마프랑 베이킹소다 주방세제 석류향 1L 2개",
-          "mallId": 4800,
-          "url": "https://etoland.co.kr/b/hotdeal/article/9513153",
-          "isHot": false,
-          "isEnd": false,
-          "price": "7,560원",
-          "providerId": 107,
-          "categoryId": 2,
-          "category": "",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9513153.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "이토랜드"
-          },
-          "searchAfter": [
-            "20"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-18T15:16:00.000Z"
-        },
-        {
-          "id": "35963062",
-          "title": "리퀴드 라이트 고농축 실내건조 액체세탁세제 2.5L 4개",
-          "mallId": 4800,
-          "url": "https://etoland.co.kr/b/hotdeal/article/9513103",
-          "isHot": false,
-          "isEnd": false,
-          "price": "6,900원",
-          "providerId": 107,
-          "categoryId": 2,
-          "category": "",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9513103.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "이토랜드"
-          },
-          "searchAfter": [
-            "20"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-18T15:12:00.000Z"
         }
       ]
     }

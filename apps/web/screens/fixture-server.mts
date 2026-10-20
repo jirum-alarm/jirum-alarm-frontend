@@ -4,6 +4,7 @@
 //   record     : 쿼리를 운영 API 로 넘겨 받은 응답을 저장한다(인증 헤더는 빼고 — 공개 데이터만 녹화된다).
 //
 // 뮤테이션은 어느 모드에서도 운영으로 넘기지 않는다(게스트 생성·조회수 같은 부작용). MUTATIONS 표 또는 null 로 답한다.
+// 로그인: Authorization 이 USER_TOKEN 이면 user-fixtures.ts 부터 찾는다. 녹화가 FORBIDDEN 인 쿼리에 손 데이터가 없으면 «녹화 안 된 쿼리»로.
 // 시나리오(POST /__scenario {"name"})는 응답을 덮어 빈 목록·에러 상태를 만든다 — 하네스가 페이지마다 바꾼다.
 // 녹화 시각과 지금의 차이만큼 날짜 문자열을 밀어서, 몇 주 전 녹화도 「3분 전」·「진행 중」으로 보이게 한다.
 import { createHash } from 'node:crypto';
@@ -11,6 +12,8 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import { USER_FIXTURES, USER_TOKEN } from './user-fixtures.ts';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const FIXTURES = join(HERE, 'fixtures');
@@ -129,10 +132,19 @@ const readBody = async (req: IncomingMessage) => {
   return Buffer.concat(chunks).toString('utf8');
 };
 
-const answerQuery = async (body: GraphQLBody): Promise<{ data?: Json; errors?: Json }> => {
+const isForbidden = (json: { errors?: Json }) =>
+  Array.isArray(json.errors) &&
+  json.errors.some((e) => JSON.stringify(e).includes('FORBIDDEN') || JSON.stringify(e).includes('UNAUTHENTICATED'));
+
+const answerQuery = async (body: GraphQLBody, user: boolean): Promise<{ data?: Json; errors?: Json }> => {
   const { name } = opInfo(body.query);
   const variables = (body.variables ?? {}) as Json;
   let file = fixturePath(name, variables);
+
+  // 녹화 때도 — 로그인 쿼리는 운영으로 넘겨 봐야 FORBIDDEN 이고, 그 화면이 깨지면 이어지는 공개 쿼리를 못 녹화한다.
+  if (user && USER_FIXTURES[name]) {
+    return { data: USER_FIXTURES[name]((variables ?? {}) as Record<string, unknown>) as Json };
+  }
 
   if (MODE === 'record') {
     const res = await fetch(UPSTREAM, {
@@ -159,10 +171,13 @@ const answerQuery = async (body: GraphQLBody): Promise<{ data?: Json; errors?: J
     }
   }
   if (!existsSync(file)) {
-    missing.set(`${name} ${stable(variables)}`, variables);
+    missing.set(`${name} ${stable(variables)}${user ? ' (로그인)' : ''}`, variables);
     return { errors: [{ message: `fixture missing: ${name} — pnpm --filter web screens:record` }] };
   }
   const { response } = JSON.parse(readFileSync(file, 'utf8')) as { response: { data?: Json; errors?: Json } };
+  if (user && isForbidden(response)) {
+    missing.set(`${name} (로그인 데이터 없음 — screens/user-fixtures.ts)`, variables);
+  }
   return shiftDates(response as Json, DELTA) as { data?: Json; errors?: Json };
 };
 
@@ -190,7 +205,8 @@ const server = createServer(async (req, res) => {
     if (scenario === 'error' && MODE === 'replay') {
       return send(res, 200, { data: null, errors: [{ message: 'fixture scenario: error' }] });
     }
-    const json = await answerQuery(body);
+    const user = req.headers.authorization === `Bearer ${USER_TOKEN}`;
+    const json = await answerQuery(body, user);
     if (scenario === 'empty' && MODE === 'replay' && json.data) {
       return send(res, 200, { ...json, data: emptyLists(json.data) });
     }

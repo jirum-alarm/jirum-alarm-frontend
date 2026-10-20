@@ -46,4 +46,6 @@ web 의 서버 렌더(GRAPHQL_ENDPOINT·API_URL)와 브라우저 프록시(`/api
 ## 화면 추가
 
 `pages.ts` 에 한 줄(`states` = 빈·에러도 찍기, `desktop` = PC 레이아웃이 따로 있음) → `screens:record` → `screens`.
-로그인한 화면(마이페이지 키워드·알림함 내용 등)은 아직 없다 — 녹화가 비로그인이라 `me` 류는 FORBIDDEN 으로 녹화된다.
+로그인한 화면은 `auth: 'user'` — 하네스가 `ACCESS_TOKEN` 쿠키에 `USER_TOKEN` 을 심고, 고정 데이터 서버는 그 토큰이 오면
+`user-fixtures.ts`(생성 타입으로 쓴 손 데이터: me·내 키워드·알림함·찜·알림 설정…)부터 찾는다. 녹화는 비로그인이라 이런 쿼리는
+FORBIDDEN 으로만 남는다 — 새 로그인 화면이 «로그인 데이터 없음»으로 막히면 그 오퍼레이션을 `user-fixtures.ts` 에 추가한다.

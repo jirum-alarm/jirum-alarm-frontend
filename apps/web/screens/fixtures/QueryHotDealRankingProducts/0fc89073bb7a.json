@@ -24,10 +24,33 @@
             "nameKr": "아카"
           },
           "searchAfter": [
-            "422.93",
+            "305.47",
             "36089133"
           ],
           "postedAt": "2026-10-19T23:19:37.000Z"
+        },
+        {
+          "id": "36103851",
+          "title": "레이저 Viper V3 Pro SE 유무선 게이밍 마우스",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10465533857",
+          "isHot": null,
+          "isEnd": false,
+          "price": "109,000원",
+          "providerId": 7,
+          "categoryId": 1,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465533857.webp",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "295.75",
+            "36103851"
+          ],
+          "postedAt": "2026-10-20T05:21:00.000Z"
         },
         {
           "id": "36089062",
@@ -47,33 +70,56 @@
             "nameKr": "어미새"
           },
           "searchAfter": [
-            "257.68",
+            "277.61",
             "36089062"
           ],
           "postedAt": "2026-10-19T22:57:29.000Z"
         },
         {
-          "id": "36099392",
-          "title": "농심 닭다리 너겟 후라이드 치킨맛 130g 4개 6,400원",
-          "mallId": 48,
-          "url": "https://www.fmkorea.com/10464832499",
-          "isHot": null,
+          "id": "36102914",
+          "title": "벤션 CCC 45W 20000mAh 보조배터리",
+          "mallId": 143,
+          "url": "https://eomisae.co.kr/rt/206968905",
+          "isHot": true,
           "isEnd": false,
-          "price": "6,400원",
-          "providerId": 7,
-          "categoryId": 2,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10464832499.webp",
-          "hotDealType": null,
+          "price": "19,842원",
+          "providerId": 11,
+          "categoryId": 9,
+          "category": "기타해외",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206968905.webp",
+          "hotDealType": "HOT_DEAL",
           "isYearLowest": false,
           "provider": {
-            "nameKr": "에펨코리아"
+            "nameKr": "어미새"
           },
           "searchAfter": [
-            "220.84",
-            "36099392"
+            "228.02",
+            "36102914"
           ],
-          "postedAt": "2026-10-20T00:38:00.000Z"
+          "postedAt": "2026-10-20T04:18:08.000Z"
+        },
+        {
+          "id": "36103495",
+          "title": "크리넥스 3겹 데코앤소프트 와이드 33MX24롤 2팩 두루마리 화장지 28,900원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741583",
+          "isHot": true,
+          "isEnd": false,
+          "price": "28,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741583.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "224.7",
+            "36103495"
+          ],
+          "postedAt": "2026-10-20T05:02:00.000Z"
         },
         {
           "id": "36036015",
@@ -93,56 +139,10 @@
             "nameKr": "어미새"
           },
           "searchAfter": [
-            "131.81",
+            "141",
             "36036015"
           ],
           "postedAt": "2026-10-19T11:56:18.000Z"
-        },
-        {
-          "id": "36004526",
-          "title": "베이스어스 Inspire XC1 black 97,512원",
-          "mallId": 143,
-          "url": "https://arca.live/b/hotdeal/186386143",
-          "isHot": false,
-          "isEnd": false,
-          "price": "97,512원",
-          "providerId": 12,
-          "categoryId": 9,
-          "category": "전자제품",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186386143.webp",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "아카"
-          },
-          "searchAfter": [
-            "182.51",
-            "36004526"
-          ],
-          "postedAt": "2026-10-19T04:53:10.000Z"
-        },
-        {
-          "id": "36025873",
-          "title": "자바나스 익스트림 오버핏 스웨트셔츠 16,060원",
-          "mallId": 8,
-          "url": "https://www.fmkorea.com/10463463659",
-          "isHot": true,
-          "isEnd": false,
-          "price": "16,060원",
-          "providerId": 7,
-          "categoryId": 4,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10463463659.webp",
-          "hotDealType": "HOT_DEAL",
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "에펨코리아"
-          },
-          "searchAfter": [
-            "190.34",
-            "36025873"
-          ],
-          "postedAt": "2026-10-19T11:38:00.000Z"
         }
       ]
     }

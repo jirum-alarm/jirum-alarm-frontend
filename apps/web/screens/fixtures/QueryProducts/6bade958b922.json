@@ -8,6 +8,58 @@
     "data": {
       "products": [
         {
+          "id": "35617730",
+          "title": "대쉬 올인원 버블 시트 세제 함유 수세미 블루 30매입 1박스",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/1455943233",
+          "isHot": false,
+          "isEnd": false,
+          "price": "31,800원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1455943233.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "100"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-15T14:06:41.000Z"
+        },
+        {
+          "id": "35613641",
+          "title": "LG생활건강 세이프 천연미네랄 주방세제 725ml 1개 11,100원",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/656225531",
+          "isHot": false,
+          "isEnd": false,
+          "price": "11,100원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/656225531.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "100"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-15T14:56:55.000Z"
+        },
+        {
           "id": "35608767",
           "title": "프로쉬 올인원 베이킹소다 식기세척기 세제 18g 72개입",
           "mallId": 4800,
@@ -474,58 +526,6 @@
           "postedCommunityCount": null,
           "isRising": null,
           "postedAt": "2026-10-14T14:05:52.000Z"
-        },
-        {
-          "id": "35482753",
-          "title": "홈스타 락스와세제 후로랄 파인 750ml 2개 9,290원",
-          "mallId": 4800,
-          "url": "https://shopping.toss.im/c/91683827",
-          "isHot": false,
-          "isEnd": false,
-          "price": "9,290원",
-          "providerId": 21,
-          "categoryId": 2,
-          "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/91683827.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "토스쇼핑"
-          },
-          "searchAfter": [
-            "100"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-14T14:05:56.000Z"
-        },
-        {
-          "id": "35481848",
-          "title": "애경 울샴푸 아웃도어 전용세제 800ml+1L 리필",
-          "mallId": 4800,
-          "url": "https://shopping.toss.im/c/82376477",
-          "isHot": false,
-          "isEnd": false,
-          "price": "22,750원",
-          "providerId": 21,
-          "categoryId": 2,
-          "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/82376477.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "토스쇼핑"
-          },
-          "searchAfter": [
-            "100"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-14T14:00:54.000Z"
         }
       ]
     }

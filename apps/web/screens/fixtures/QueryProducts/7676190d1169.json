@@ -8,6 +8,58 @@
     "data": {
       "products": [
         {
+          "id": "35831687",
+          "title": "홈스타 락스와세제 후로랄 파인 750ml 4개 15,600원",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/150753795",
+          "isHot": false,
+          "isEnd": false,
+          "price": "15,600원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/150753795.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "60"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-17T14:15:03.000Z"
+        },
+        {
+          "id": "35825462",
+          "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개 12,930원",
+          "mallId": 15,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9510292",
+          "isHot": false,
+          "isEnd": false,
+          "price": "12,930원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9510292.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "60"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-17T14:05:00.000Z"
+        },
+        {
           "id": "35817021",
           "title": "슈퍼딥큐 캡슐세제 42개입 2개",
           "mallId": 1,
@@ -474,58 +526,6 @@
           "postedCommunityCount": null,
           "isRising": null,
           "postedAt": "2026-10-16T14:16:09.000Z"
-        },
-        {
-          "id": "35733031",
-          "title": "애경 스파크 세탁세제 3kg 1개 6,990원",
-          "mallId": 4800,
-          "url": "https://shopping.toss.im/c/2548781811",
-          "isHot": false,
-          "isEnd": false,
-          "price": "6,990원",
-          "providerId": 21,
-          "categoryId": 2,
-          "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2548781811.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "토스쇼핑"
-          },
-          "searchAfter": [
-            "60"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-16T14:16:01.000Z"
-        },
-        {
-          "id": "35725168",
-          "title": "비트 제로 드럼용 리필형 액체세제 2L 6개",
-          "mallId": 4800,
-          "url": "https://shopping.toss.im/c/161189715",
-          "isHot": false,
-          "isEnd": false,
-          "price": "31,500원",
-          "providerId": 21,
-          "categoryId": 2,
-          "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/161189715.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "토스쇼핑"
-          },
-          "searchAfter": [
-            "60"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-16T14:15:59.000Z"
         }
       ]
     }

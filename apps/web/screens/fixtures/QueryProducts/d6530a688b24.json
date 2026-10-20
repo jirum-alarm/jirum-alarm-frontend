@@ -1,0 +1,535 @@
+{
+  "variables": {
+    "limit": 20,
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "categoryId": null,
+    "searchAfter": "1792485199000"
+  },
+  "response": {
+    "data": {
+      "products": [
+        {
+          "id": "36114871",
+          "title": "국내산 횟감 활 흰다리새우 1kg 1팩 19,800원",
+          "mallId": 4800,
+          "url": "https://www.dogdrip.net/730608774",
+          "isHot": false,
+          "isEnd": false,
+          "price": "19,800원",
+          "providerId": 108,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730608774.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "searchAfter": [
+            "1792485195000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:33:15.000Z"
+        },
+        {
+          "id": "36114831",
+          "title": "지이크 F/W 프리미엄 이태리 수입 원단 울 수트 3종 택1 143,680원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741654",
+          "isHot": false,
+          "isEnd": false,
+          "price": "143,680원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "의류/잡화",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741654.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792485180000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:33:00.000Z"
+        },
+        {
+          "id": "36114829",
+          "title": "오뚜기 진라면 매운맛 120g 20개+오동통면 120g 20개",
+          "mallId": 241,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741653",
+          "isHot": false,
+          "isEnd": false,
+          "price": "22,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741653.webp",
+          "mallName": "옥션",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792485120000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:32:00.000Z"
+        },
+        {
+          "id": "36114738",
+          "title": "마이멜로디,헬로카봇 바로인 운동화",
+          "mallId": 51376,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14954990?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 18,
+          "categoryId": 4,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14954990.webp",
+          "mallName": "보리보리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792485016000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:30:16.000Z"
+        },
+        {
+          "id": "36114771",
+          "title": "나랑드사이다 제로 345ml 24캔",
+          "mallId": 592,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741652",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,449원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741652.webp",
+          "mallName": "오늘의집",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792484940000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:29:00.000Z"
+        },
+        {
+          "id": "36114737",
+          "title": "비비고 한우사골곰탕 1,180원 와우무배(1개만)",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14954984?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "1,180원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14954984.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792484885000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:28:05.000Z"
+        },
+        {
+          "id": "36114580",
+          "title": "쿠쿠 인스퓨어 실속형 IPX5 방수 비데 99,445원",
+          "mallId": 51166,
+          "url": "https://www.fmkorea.com/10466060791",
+          "isHot": null,
+          "isEnd": false,
+          "price": "99,445원",
+          "providerId": 7,
+          "categoryId": 6,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10466060791.webp",
+          "mallName": "W컨셉",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792484880000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:28:00.000Z"
+        },
+        {
+          "id": "36114578",
+          "title": "해담별 제주 흑돼지 왕구이 1.2kg 2개",
+          "mallId": 4800,
+          "url": "https://arca.live/b/hotdeal/186496878",
+          "isHot": false,
+          "isEnd": false,
+          "price": "16,030원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품광고",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186496878.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792484879000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:27:59.000Z"
+        },
+        {
+          "id": "36114577",
+          "title": "나긋 맛병아리콩 20g×20포",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186496691",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,900원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186496691.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792484766000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:26:06.000Z"
+        },
+        {
+          "id": "36114581",
+          "title": "중고 추천도서",
+          "mallId": 28,
+          "url": "https://www.fmkorea.com/10466062606",
+          "isHot": null,
+          "isEnd": false,
+          "price": "3,900원부터",
+          "providerId": 7,
+          "categoryId": 5,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10466062606.webp",
+          "mallName": "카카오",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792484700000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:25:00.000Z"
+        },
+        {
+          "id": "36114576",
+          "title": "곱창파는청년들 소곱창 170g 5,800원",
+          "mallId": 1,
+          "url": "https://eomisae.co.kr/rt/207002692",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,800원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207002692.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792484634000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:23:54.000Z"
+        },
+        {
+          "id": "36114870",
+          "title": "클래파 초경량 무선청소기 + 먼지봉투 5장 127,000원",
+          "mallId": 28,
+          "url": "https://www.dogdrip.net/730607048",
+          "isHot": false,
+          "isEnd": false,
+          "price": "127,000원",
+          "providerId": 108,
+          "categoryId": 6,
+          "category": "생활용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730607048.webp",
+          "mallName": "카카오",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "searchAfter": [
+            "1792484595000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:23:15.000Z"
+        },
+        {
+          "id": "36114572",
+          "title": "파워링크 USB A to C타입 고속충전 패브릭 케이블 1+1",
+          "mallId": 48,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741650",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,870원",
+          "providerId": 1,
+          "categoryId": 9,
+          "category": "디지털",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741650.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792484580000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:23:00.000Z"
+        },
+        {
+          "id": "36114573",
+          "title": "농심 포테토칩 엽떡로제맛 55g 10봉 9,300원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741651",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,300원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741651.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792484580000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:23:00.000Z"
+        },
+        {
+          "id": "36114570",
+          "title": "국산 볶음김치 1kg",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741648",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,990원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741648.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792484520000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:22:00.000Z"
+        },
+        {
+          "id": "36114571",
+          "title": "데비하우스 진공 흡착 자동센서 스팀다리미 DB-SV7",
+          "mallId": 28,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741649",
+          "isHot": false,
+          "isEnd": false,
+          "price": "65,700원",
+          "providerId": 1,
+          "categoryId": 6,
+          "category": "가전/가구",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741649.webp",
+          "mallName": "카카오",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792484520000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:22:00.000Z"
+        },
+        {
+          "id": "36114569",
+          "title": "빙수하임 말차팥빙수 284g 2개 7,860원",
+          "mallId": 4800,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741647",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,860원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741647.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792484460000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:21:00.000Z"
+        },
+        {
+          "id": "36114574",
+          "title": "플레이스테이션 스토어 기프트카드 5만원권 45,120원",
+          "mallId": 8,
+          "url": "https://arca.live/b/hotdeal/186496138",
+          "isHot": false,
+          "isEnd": false,
+          "price": "45,120원",
+          "providerId": 12,
+          "categoryId": 8,
+          "category": "상품권/쿠폰",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186496138.webp",
+          "mallName": "롯데온",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792484423000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:20:23.000Z"
+        },
+        {
+          "id": "36114568",
+          "title": "곶자왈 산책 하이드라 브라이트 마스크 30ml 8매 15,900원",
+          "mallId": 1,
+          "url": "https://www.dealbada.com/bbs/board.php?bo_table=deal_domestic&wr_id=572212",
+          "isHot": false,
+          "isEnd": false,
+          "price": "15,900원",
+          "providerId": 104,
+          "categoryId": 3,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dealbada/572212.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "딜바다"
+          },
+          "searchAfter": [
+            "1792484378000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:19:38.000Z"
+        },
+        {
+          "id": "36114553",
+          "title": "MoM 차이코스 궐련형 전담 AIO 올인원 71,000원",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741645",
+          "isHot": false,
+          "isEnd": false,
+          "price": "71,000원",
+          "providerId": 1,
+          "categoryId": 11,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741645.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792484340000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T08:19:00.000Z"
+        }
+      ]
+    }
+  }
+}

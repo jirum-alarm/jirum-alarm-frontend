@@ -1,0 +1,39 @@
+{
+  "variables": {
+    "keywords": [
+      "7800X3D",
+      "세제",
+      "아주 긴 키워드로 줄바꿈이 어떻게 되는지 보는 칸"
+    ]
+  },
+  "response": {
+    "data": {
+      "keywordDealFrequencies": [
+        {
+          "keyword": "7800X3D",
+          "dealCount": 58,
+          "windowDays": 90,
+          "lastDealAt": "2026-10-20T04:08:00.000Z",
+          "suggestedKeyword": null,
+          "suggestedDealCount": null
+        },
+        {
+          "keyword": "세제",
+          "dealCount": 584,
+          "windowDays": 90,
+          "lastDealAt": "2026-10-20T07:45:00.000Z",
+          "suggestedKeyword": null,
+          "suggestedDealCount": null
+        },
+        {
+          "keyword": "아주 긴 키워드로 줄바꿈이 어떻게 되는지 보는 칸",
+          "dealCount": 0,
+          "windowDays": 90,
+          "lastDealAt": null,
+          "suggestedKeyword": "아주",
+          "suggestedDealCount": 6
+        }
+      ]
+    }
+  }
+}

@@ -9,6 +9,13 @@
         "items": [
           {
             "type": "POSITIVE",
+            "name": "좋아했어요",
+            "count": 5,
+            "tag": "긍정",
+            "role": "QUALITY"
+          },
+          {
+            "type": "POSITIVE",
             "name": "구매했어요",
             "count": 5,
             "tag": "구매",
@@ -22,17 +29,17 @@
             "role": "QUALITY"
           },
           {
-            "type": "POSITIVE",
-            "name": "좋아했어요",
-            "count": 3,
-            "tag": "긍정",
+            "type": "NEGATIVE",
+            "name": "비싸요",
+            "count": 2,
+            "tag": "가격",
             "role": "QUALITY"
           },
           {
-            "type": "NEGATIVE",
-            "name": "비싸요",
+            "type": "POSITIVE",
+            "name": "맛있어요",
             "count": 1,
-            "tag": "가격",
+            "tag": "상품",
             "role": "QUALITY"
           }
         ]
