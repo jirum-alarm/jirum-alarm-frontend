@@ -4,7 +4,7 @@
 // 버려졌다. 앱 에러도 같은 조직 할당량이라 함께 사라졌다. 채운 건 대부분 고칠 게 없는 것들이었다 —
 // 요청 도중 사용자가 떠남(aborted·stream closed early), 없는 딜(404 화면이 정상 흐름), 광고·확장 스크립트,
 // 그리고 백엔드·검색엔진이 잠깐 죽을 때 같은 에러가 요청마다 수천 건.
-import type { ErrorEvent } from '@sentry/nextjs';
+import type { ErrorEvent, Event } from '@sentry/nextjs';
 
 // 에러 표본 비율 — 거르고 남은 웹 에러가 아직 하루 ~650건이었다(10/16 stats_v2, 앱 ~25건). 무료 할당량은 앱과 합쳐
 // 월 5천이고 매달 20일에 초기화되는데, 7~9월 내내 4~19일 만에 바닥나 나머지 기간은 장애가 하나도 안 보였다.
@@ -56,5 +56,32 @@ export function createBurstLimiter(now: () => number = Date.now) {
     }
     entry.count += 1;
     return entry.count <= BURST_MAX ? event : null;
+  };
+}
+
+// 받자마자 버려지거나 볼 일 없는 트랜잭션은 보내지 않는다.
+// ★왜(2026-10-20): 할당량 초기화 당일 하루 치가 트랜잭션 수락 3.7만·크롤러로 버림 5.1만, span 수락 21만·버림 39만이었다.
+// 버려질 걸 운영 파드가 매번 새 TLS 연결로 올려 웹 파드 2대가 하루 ~1.9GB 를 집 회선(업로드)으로 내보냈다.
+//  - 크롤러 요청: Sentry 가 «web-crawlers» 인바운드 필터로 버린다.
+//  - 이미지 최적화(GET /_next/image)·미들웨어(op http.server.middleware): 수락된 서버 트랜잭션의 ~45%(6h 표본)인데
+//    페이지 트랜잭션과 겹치고, 지연은 Tempo 에서 본다. 남겨 두면 span 할당량(월 ~500만)이 한 달을 못 간다.
+// 샘플러(tracesSampler)가 아니라 전송 직전에 거르는 건, 서버 span 을 사내 Tempo 와 공유해서다 — 봇·이미지 SSR
+// 트레이스는 Tempo 엔 그대로 남는다(봇 부하 분석에 쓴다). UA 는 서버는 요청 헤더, 브라우저는 navigator 에서 본다.
+const requestUserAgent = (event: Event): string => {
+  const headers =
+    event.request?.headers ?? event.sdkProcessingMetadata?.normalizedRequest?.headers ?? {};
+  return (
+    headers['user-agent'] ??
+    headers['User-Agent'] ??
+    (typeof navigator !== 'undefined' ? navigator.userAgent : '')
+  );
+};
+
+// 크롤러 판정은 shared/config/user-agent 의 isCrawlerUA 를 넘긴다(이 파일은 node --test 가 바로 읽게 의존 없이 둔다).
+export function createTransactionFilter(isCrawler: (ua: string) => boolean) {
+  return <T extends Event>(event: T): T | null => {
+    if (event.transaction === 'GET /_next/image') return null;
+    if (event.contexts?.trace?.op === 'http.server.middleware') return null;
+    return isCrawler(requestUserAgent(event)) ? null : event;
   };
 }
