@@ -223,9 +223,7 @@
                 "label": "뽐뿌",
                 "variables": {
                   "providerId": 1,
-                  "providerIds": [
-                    1
-                  ]
+                  "providerIds": [1]
                 },
                 "viewMoreLink": "/curation/provider-1"
               },
@@ -234,9 +232,7 @@
                 "label": "쿨엔조이",
                 "variables": {
                   "providerId": 2,
-                  "providerIds": [
-                    2
-                  ]
+                  "providerIds": [2]
                 },
                 "viewMoreLink": "/curation/provider-2"
               },
@@ -245,9 +241,7 @@
                 "label": "루리웹",
                 "variables": {
                   "providerId": 4,
-                  "providerIds": [
-                    4
-                  ]
+                  "providerIds": [4]
                 },
                 "viewMoreLink": "/curation/provider-4"
               },
@@ -256,9 +250,7 @@
                 "label": "퀘이사존",
                 "variables": {
                   "providerId": 5,
-                  "providerIds": [
-                    5
-                  ]
+                  "providerIds": [5]
                 },
                 "viewMoreLink": "/curation/provider-5"
               },
@@ -267,9 +259,7 @@
                 "label": "에펨코리아",
                 "variables": {
                   "providerId": 7,
-                  "providerIds": [
-                    7
-                  ]
+                  "providerIds": [7]
                 },
                 "viewMoreLink": "/curation/provider-7"
               },
@@ -278,9 +268,7 @@
                 "label": "어미새",
                 "variables": {
                   "providerId": 11,
-                  "providerIds": [
-                    11
-                  ]
+                  "providerIds": [11]
                 },
                 "viewMoreLink": "/curation/provider-11"
               },
@@ -289,9 +277,7 @@
                 "label": "아카",
                 "variables": {
                   "providerId": 12,
-                  "providerIds": [
-                    12
-                  ]
+                  "providerIds": [12]
                 },
                 "viewMoreLink": "/curation/provider-12"
               },
@@ -300,9 +286,7 @@
                 "label": "조드",
                 "variables": {
                   "providerId": 16,
-                  "providerIds": [
-                    16
-                  ]
+                  "providerIds": [16]
                 },
                 "viewMoreLink": "/curation/provider-16"
               },
@@ -311,9 +295,7 @@
                 "label": "맘이베베",
                 "variables": {
                   "providerId": 18,
-                  "providerIds": [
-                    18
-                  ]
+                  "providerIds": [18]
                 },
                 "viewMoreLink": "/curation/provider-18"
               }

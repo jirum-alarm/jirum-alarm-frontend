@@ -1,8 +1,6 @@
 {
   "variables": {
-    "categoryIds": [
-      1
-    ],
+    "categoryIds": [1],
     "limit": 20,
     "orderBy": "COMMUNITY_RANKING",
     "orderOption": "DESC"

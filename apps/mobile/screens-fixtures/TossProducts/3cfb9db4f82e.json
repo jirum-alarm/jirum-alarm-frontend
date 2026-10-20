@@ -33,9 +33,7 @@
               "todayDealStartAt": "2026-10-20T00:00:00"
             }
           },
-          "searchAfter": [
-            "0"
-          ],
+          "searchAfter": ["0"],
           "postedAt": "2026-10-19T15:01:17.000Z"
         },
         {
@@ -68,9 +66,7 @@
               "todayDealStartAt": "2026-10-20T00:00:00"
             }
           },
-          "searchAfter": [
-            "1"
-          ],
+          "searchAfter": ["1"],
           "postedAt": "2026-10-19T15:00:33.000Z"
         },
         {
@@ -102,9 +98,7 @@
               "todayDealStartAt": "2026-10-20T00:00:00"
             }
           },
-          "searchAfter": [
-            "2"
-          ],
+          "searchAfter": ["2"],
           "postedAt": "2026-09-14T03:00:45.000Z"
         },
         {
@@ -134,9 +128,7 @@
               "todayDealStartAt": "2026-10-20T00:00:00"
             }
           },
-          "searchAfter": [
-            "3"
-          ],
+          "searchAfter": ["3"],
           "postedAt": "2026-09-07T09:01:02.000Z"
         },
         {
@@ -165,9 +157,7 @@
               "todayDealStartAt": "2026-10-20T00:00:00"
             }
           },
-          "searchAfter": [
-            "4"
-          ],
+          "searchAfter": ["4"],
           "postedAt": "2026-07-19T03:11:03.000Z"
         },
         {
@@ -194,9 +184,7 @@
               "todayDealStartAt": "2026-10-20T00:00:00"
             }
           },
-          "searchAfter": [
-            "5"
-          ],
+          "searchAfter": ["5"],
           "postedAt": "2026-10-19T15:01:17.000Z"
         }
       ]

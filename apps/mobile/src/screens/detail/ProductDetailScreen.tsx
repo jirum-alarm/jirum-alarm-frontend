@@ -48,6 +48,7 @@ import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import {goTabHome, openSearch} from '@/shared/lib/navigation/search-flow';
 import {pushProductDetail} from '@/shared/lib/navigation/detail-chain';
 import {buildProductShareDescription} from '@/shared/lib/share';
+import {noteDealViewed} from '@/shared/lib/store-review';
 import {hotdealTextMap} from '@/shared/components/product/HotdealBadge';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
 
@@ -239,6 +240,7 @@ function NativeDetail({
   useEffect(() => {
     if (collectedRef.current === productId) return;
     collectedRef.current = productId;
+    noteDealViewed();
     void ProductService.collectProduct({
       productId,
       source: 'app_detail',

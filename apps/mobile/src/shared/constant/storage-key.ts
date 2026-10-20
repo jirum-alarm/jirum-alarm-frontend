@@ -32,4 +32,8 @@ export const StorageKey = {
   UPDATE_OFFERED_VERSION: 'updateOfferedVersion',
   /** 내정보 > 화면 모드('system' | 'light' | 'dark'). 없으면 시스템 설정. */
   COLOR_SCHEME: 'colorScheme',
+  /** 앱을 쓴 날(KST 'YYYY-MM-DD', 최근 30개) — 스토어 평점은 여러 날 쓴 사람에게만 묻는다(store-review). */
+  REVIEW_ACTIVE_DAYS: 'reviewActiveDays',
+  /** 마지막으로 OS 평점 시트를 띄운 시각(ms). */
+  REVIEW_REQUESTED_AT: 'reviewRequestedAt',
 } as const;

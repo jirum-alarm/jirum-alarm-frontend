@@ -49,6 +49,11 @@ jest.mock('../src/shared/hooks/useOtaUpdateOnResume.ts', () => ({
   __esModule: true,
   default: () => {},
 }));
+// expo(requireOptionalNativeModule)도 같은 이유. 쓴 날 기록·평점 요청 규칙은 store-review.test 가 본다.
+jest.mock('../src/shared/hooks/useRecordActiveDay', () => ({
+  __esModule: true,
+  default: () => {},
+}));
 jest.mock('../src/shared/components/OfflineBanner.tsx', () => ({
   __esModule: true,
   default: () => null,

@@ -4,9 +4,7 @@
     "orderBy": "POSTED_AT",
     "orderOption": "DESC",
     "providerId": 1,
-    "providerIds": [
-      1
-    ]
+    "providerIds": [1]
   },
   "response": {
     "data": {
@@ -29,9 +27,7 @@
           "provider": {
             "nameKr": "뽐뿌"
           },
-          "searchAfter": [
-            "1792506240000"
-          ],
+          "searchAfter": ["1792506240000"],
           "postedCommunityCount": null,
           "isRising": null,
           "postedAt": "2026-10-20T14:24:00.000Z"
@@ -54,9 +50,7 @@
           "provider": {
             "nameKr": "뽐뿌"
           },
-          "searchAfter": [
-            "1792506180000"
-          ],
+          "searchAfter": ["1792506180000"],
           "postedCommunityCount": null,
           "isRising": null,
           "postedAt": "2026-10-20T14:23:00.000Z"
@@ -79,9 +73,7 @@
           "provider": {
             "nameKr": "뽐뿌"
           },
-          "searchAfter": [
-            "1792506060000"
-          ],
+          "searchAfter": ["1792506060000"],
           "postedCommunityCount": null,
           "isRising": null,
           "postedAt": "2026-10-20T14:21:00.000Z"
@@ -104,9 +96,7 @@
           "provider": {
             "nameKr": "뽐뿌"
           },
-          "searchAfter": [
-            "1792506060000"
-          ],
+          "searchAfter": ["1792506060000"],
           "postedCommunityCount": null,
           "isRising": null,
           "postedAt": "2026-10-20T14:21:00.000Z"
@@ -129,9 +119,7 @@
           "provider": {
             "nameKr": "뽐뿌"
           },
-          "searchAfter": [
-            "1792506000000"
-          ],
+          "searchAfter": ["1792506000000"],
           "postedCommunityCount": null,
           "isRising": null,
           "postedAt": "2026-10-20T14:20:00.000Z"
@@ -154,9 +142,7 @@
           "provider": {
             "nameKr": "뽐뿌"
           },
-          "searchAfter": [
-            "1792505820000"
-          ],
+          "searchAfter": ["1792505820000"],
           "postedCommunityCount": null,
           "isRising": null,
           "postedAt": "2026-10-20T14:17:00.000Z"

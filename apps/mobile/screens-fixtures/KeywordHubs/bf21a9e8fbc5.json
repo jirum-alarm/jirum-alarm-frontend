@@ -74,12 +74,7 @@
           "slug": "물티슈",
           "name": "물티슈",
           "aliases": [],
-          "excludes": [
-            "케이스",
-            "뚜껑",
-            "워머",
-            "홀더"
-          ],
+          "excludes": ["케이스", "뚜껑", "워머", "홀더"],
           "recentDealCount": 400,
           "countCapped": false,
           "activeDays": 30,
@@ -213,12 +208,7 @@
           "slug": "보조배터리",
           "name": "보조배터리",
           "aliases": [],
-          "excludes": [
-            "파우치",
-            "케이스",
-            "거치대",
-            "흡착"
-          ],
+          "excludes": ["파우치", "케이스", "거치대", "흡착"],
           "recentDealCount": 275,
           "countCapped": false,
           "activeDays": 30,
@@ -238,13 +228,7 @@
           "slug": "프로틴",
           "name": "프로틴",
           "aliases": [],
-          "excludes": [
-            "클리닉",
-            "샴푸",
-            "트리트먼트",
-            "헤어",
-            "치즈"
-          ],
+          "excludes": ["클리닉", "샴푸", "트리트먼트", "헤어", "치즈"],
           "recentDealCount": 266,
           "countCapped": false,
           "activeDays": 28,
@@ -289,11 +273,7 @@
           "slug": "사이다",
           "name": "사이다",
           "aliases": [],
-          "excludes": [
-            "비니거",
-            "애플사이다",
-            "식초"
-          ],
+          "excludes": ["비니거", "애플사이다", "식초"],
           "recentDealCount": 232,
           "countCapped": false,
           "activeDays": 29,
@@ -312,10 +292,7 @@
         {
           "slug": "계란",
           "name": "계란",
-          "aliases": [
-            "달걀",
-            "유정란"
-          ],
+          "aliases": ["달걀", "유정란"],
           "excludes": [
             "팬",
             "찜기",
@@ -367,9 +344,7 @@
         {
           "slug": "나이키",
           "name": "나이키",
-          "aliases": [
-            "NIKE"
-          ],
+          "aliases": ["NIKE"],
           "excludes": [],
           "recentDealCount": 223,
           "countCapped": false,
@@ -390,13 +365,7 @@
           "slug": "삼겹살",
           "name": "삼겹살",
           "aliases": [],
-          "excludes": [
-            "그릴",
-            "팬",
-            "시즈닝",
-            "불판",
-            "그릴팬"
-          ],
+          "excludes": ["그릴", "팬", "시즈닝", "불판", "그릴팬"],
           "recentDealCount": 216,
           "countCapped": false,
           "activeDays": 30,
@@ -491,11 +460,7 @@
           "slug": "펩시",
           "name": "펩시",
           "aliases": [],
-          "excludes": [
-            "선풍기",
-            "시계",
-            "충전기"
-          ],
+          "excludes": ["선풍기", "시계", "충전기"],
           "recentDealCount": 206,
           "countCapped": false,
           "activeDays": 29,
@@ -672,9 +637,7 @@
         {
           "slug": "휴지",
           "name": "휴지",
-          "aliases": [
-            "화장지"
-          ],
+          "aliases": ["화장지"],
           "excludes": [
             "휴지통",
             "케이스",
@@ -1064,9 +1027,7 @@
         {
           "slug": "나랑드",
           "name": "나랑드사이다",
-          "aliases": [
-            "나랑드"
-          ],
+          "aliases": ["나랑드"],
           "excludes": [],
           "recentDealCount": 99,
           "countCapped": false,
@@ -1086,18 +1047,8 @@
         {
           "slug": "ps5",
           "name": "PS5",
-          "aliases": [
-            "플스5",
-            "플레이스테이션5"
-          ],
-          "excludes": [
-            "sps5",
-            "wps5",
-            "콜라보",
-            "스테이션5만",
-            "ps56",
-            "ps58"
-          ],
+          "aliases": ["플스5", "플레이스테이션5"],
+          "excludes": ["sps5", "wps5", "콜라보", "스테이션5만", "ps56", "ps58"],
           "recentDealCount": 92,
           "countCapped": false,
           "activeDays": 25,
@@ -1112,14 +1063,8 @@
         {
           "slug": "메가커피",
           "name": "메가커피",
-          "aliases": [
-            "메가MGC",
-            "메가 MGC"
-          ],
-          "excludes": [
-            "증정",
-            "면도"
-          ],
+          "aliases": ["메가MGC", "메가 MGC"],
+          "excludes": ["증정", "면도"],
           "recentDealCount": 90,
           "countCapped": false,
           "activeDays": 22,
@@ -1193,13 +1138,7 @@
           "slug": "선풍기",
           "name": "선풍기",
           "aliases": [],
-          "excludes": [
-            "커버",
-            "콘센트",
-            "조끼",
-            "브러쉬",
-            "청소"
-          ],
+          "excludes": ["커버", "콘센트", "조끼", "브러쉬", "청소"],
           "recentDealCount": 75,
           "countCapped": false,
           "activeDays": 16,
@@ -1215,10 +1154,7 @@
           "slug": "탄산수",
           "name": "탄산수",
           "aliases": [],
-          "excludes": [
-            "샴푸",
-            "제조기"
-          ],
+          "excludes": ["샴푸", "제조기"],
           "recentDealCount": 69,
           "countCapped": false,
           "activeDays": 23,
@@ -1290,9 +1226,7 @@
         {
           "slug": "에디파이어",
           "name": "에디파이어",
-          "aliases": [
-            "edifier"
-          ],
+          "aliases": ["edifier"],
           "excludes": [],
           "recentDealCount": 61,
           "countCapped": false,
@@ -1369,9 +1303,7 @@
         {
           "slug": "스위치2",
           "name": "스위치2",
-          "aliases": [
-            "스위치 2"
-          ],
+          "aliases": ["스위치 2"],
           "excludes": [
             "멀티탭",
             "콘센트",
@@ -1414,14 +1346,7 @@
           "slug": "닌텐도",
           "name": "닌텐도",
           "aliases": [],
-          "excludes": [
-            "케이스",
-            "파우치",
-            "호환",
-            "그립",
-            "필름",
-            "강화유리"
-          ],
+          "excludes": ["케이스", "파우치", "호환", "그립", "필름", "강화유리"],
           "recentDealCount": 42,
           "countCapped": false,
           "activeDays": 19,
@@ -1441,9 +1366,7 @@
           "slug": "초록매실",
           "name": "초록매실",
           "aliases": [],
-          "excludes": [
-            "빅토리아"
-          ],
+          "excludes": ["빅토리아"],
           "recentDealCount": 42,
           "countCapped": false,
           "activeDays": 13,
@@ -1462,9 +1385,7 @@
         {
           "slug": "포카리",
           "name": "포카리스웨트",
-          "aliases": [
-            "포카리"
-          ],
+          "aliases": ["포카리"],
           "excludes": [],
           "recentDealCount": 41,
           "countCapped": false,
@@ -1501,10 +1422,7 @@
           "slug": "요금제",
           "name": "요금제",
           "aliases": [],
-          "excludes": [
-            "제미나이",
-            "폰슐랭"
-          ],
+          "excludes": ["제미나이", "폰슐랭"],
           "recentDealCount": 38,
           "countCapped": false,
           "activeDays": 21,
@@ -1523,9 +1441,7 @@
         {
           "slug": "rtx5080",
           "name": "RTX 5080",
-          "aliases": [
-            "5080"
-          ],
+          "aliases": ["5080"],
           "excludes": [
             "완본체",
             "조립pc",
@@ -1672,9 +1588,7 @@
         {
           "slug": "아이폰",
           "name": "아이폰",
-          "aliases": [
-            "iphone"
-          ],
+          "aliases": ["iphone"],
           "excludes": [
             "케이스",
             "필름",

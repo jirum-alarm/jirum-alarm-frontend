@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SystemBars} from 'react-native-edge-to-edge';
@@ -33,6 +33,7 @@ import RecommendedKeywordSection from '@/features/keyword-prompt/ui/RecommendedK
 import ThemeHomeSection from '@/entities/home/ui/ThemeHomeSection';
 import {useColors} from '@/shared/theme/useColors';
 import {tick} from '@/shared/lib/feedback/haptic';
+import {maybeRequestReview} from '@/shared/lib/store-review';
 import TossHomeSection from '@/entities/home/ui/TossHomeSection';
 import {tossDetailPath} from '@/entities/home/lib/toss';
 import HomeHeader from '@/screens/home/ui/HomeHeader';
@@ -86,6 +87,16 @@ export default function HomeScreen() {
   // 로고 탭 말고 **홈 탭 재탭**도 같은 동작이어야 한다(웹뷰 시절 injectJavaScript).
   // 탭바는 이 화면의 부모가 아니라 ref 를 내려줄 수 없어 store 로 등록한다.
   useRegisterScrollToTop(tabNavigations.HOME, scrollToTop);
+
+  // 스토어 평점 — 딜을 몇 개 보고 홈으로 돌아온 순간에만, 조건은 store-review 가 본다(네이티브 모듈 전엔 아무것도 안 함).
+  useFocusEffect(
+    useCallback(() => {
+      const timer = setTimeout(() => {
+        maybeRequestReview().catch(() => {});
+      }, 1500);
+      return () => clearTimeout(timer);
+    }, []),
+  );
 
   const [refreshing, setRefreshing] = useState(false);
 

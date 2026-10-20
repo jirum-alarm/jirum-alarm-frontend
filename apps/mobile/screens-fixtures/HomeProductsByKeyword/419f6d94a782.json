@@ -26,9 +26,7 @@
             "nameKr": "개드립"
           },
           "data": null,
-          "searchAfter": [
-            "1792494748000"
-          ],
+          "searchAfter": ["1792494748000"],
           "postedAt": "2026-10-20T11:12:28.000Z"
         },
         {
@@ -49,9 +47,7 @@
             "nameKr": "뽐뿌"
           },
           "data": null,
-          "searchAfter": [
-            "1792494480000"
-          ],
+          "searchAfter": ["1792494480000"],
           "postedAt": "2026-10-20T11:08:00.000Z"
         },
         {
@@ -72,9 +68,7 @@
             "nameKr": "에펨코리아"
           },
           "data": null,
-          "searchAfter": [
-            "1792494060000"
-          ],
+          "searchAfter": ["1792494060000"],
           "postedAt": "2026-10-20T11:01:00.000Z"
         },
         {
@@ -95,9 +89,7 @@
             "nameKr": "아카"
           },
           "data": null,
-          "searchAfter": [
-            "1792490575000"
-          ],
+          "searchAfter": ["1792490575000"],
           "postedAt": "2026-10-20T10:02:55.000Z"
         }
       ]

@@ -34,6 +34,7 @@ import {
   wrapApp,
 } from '@/shared/lib/monitoring/sentry.ts';
 import useOtaUpdateOnResume from '@/shared/hooks/useOtaUpdateOnResume.ts';
+import useRecordActiveDay from '@/shared/hooks/useRecordActiveDay';
 import {useColors} from '@/shared/theme/useColors';
 import {restoreColorSchemePreference} from '@/shared/theme/color-scheme-preference';
 import {useWebViewColorSchemeCookie} from '@/shared/theme/webview-color-scheme-cookie';
@@ -75,6 +76,7 @@ function App(): React.JSX.Element {
   const webViewRefManager = useWebViewRefManager();
   const navigationTheme = useNavigationTheme();
   useOtaUpdateOnResume();
+  useRecordActiveDay();
   // 웹뷰(글쓰기·약관·고객센터)도 앱과 같은 라이트/다크로 — web 이 읽는 쿠키를 맞춰 둔다.
   useWebViewColorSchemeCookie();
 

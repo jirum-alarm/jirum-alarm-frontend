@@ -69,11 +69,7 @@
             "풀모듈러",
             "마이크로닉스"
           ],
-          "excludeKeywords": [
-            "쿨러백",
-            "캔쿨러",
-            "보냉"
-          ],
+          "excludeKeywords": ["쿨러백", "캔쿨러", "보냉"],
           "weeklyAlertCount": 19
         },
         {
@@ -151,9 +147,7 @@
             "마운틴듀",
             "밀크티"
           ],
-          "excludeKeywords": [
-            "슬라이스"
-          ],
+          "excludeKeywords": ["슬라이스"],
           "weeklyAlertCount": 21
         },
         {
@@ -244,9 +238,7 @@
             "베베숲",
             "뽀로로"
           ],
-          "excludeKeywords": [
-            "부분유료"
-          ],
+          "excludeKeywords": ["부분유료"],
           "weeklyAlertCount": 20
         },
         {
@@ -594,11 +586,7 @@
             "헤어팩",
             "데오드란트"
           ],
-          "excludeKeywords": [
-            "요리에센스",
-            "복합기",
-            "프린터"
-          ],
+          "excludeKeywords": ["요리에센스", "복합기", "프린터"],
           "weeklyAlertCount": 18
         },
         {
@@ -705,10 +693,7 @@
             "레깅스",
             "속옷"
           ],
-          "excludeKeywords": [
-            "밀레니즈",
-            "타미야"
-          ],
+          "excludeKeywords": ["밀레니즈", "타미야"],
           "weeklyAlertCount": 21
         },
         {
@@ -764,10 +749,7 @@
             "하이패스",
             "워셔액"
           ],
-          "excludeKeywords": [
-            "아이스박스포장",
-            "공구특가"
-          ],
+          "excludeKeywords": ["아이스박스포장", "공구특가"],
           "weeklyAlertCount": 15
         },
         {
@@ -870,12 +852,7 @@
             "키크론",
             "레오폴드"
           ],
-          "excludeKeywords": [
-            "복합기",
-            "프린터",
-            "클리커",
-            "클릭커"
-          ],
+          "excludeKeywords": ["복합기", "프린터", "클리커", "클릭커"],
           "weeklyAlertCount": 19
         },
         {
@@ -956,11 +933,7 @@
             "스마트워치",
             "가민"
           ],
-          "excludeKeywords": [
-            "다이버즈",
-            "버즈릭슨",
-            "케이블니트"
-          ],
+          "excludeKeywords": ["다이버즈", "버즈릭슨", "케이블니트"],
           "weeklyAlertCount": 21
         },
         {
@@ -1132,9 +1105,7 @@
             "떡갈비",
             "밀키트"
           ],
-          "excludeKeywords": [
-            "스윙칩"
-          ],
+          "excludeKeywords": ["스윙칩"],
           "weeklyAlertCount": 21
         },
         {
