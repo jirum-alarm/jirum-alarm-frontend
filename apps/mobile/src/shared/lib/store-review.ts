@@ -11,8 +11,8 @@ import {getAsyncStorage, setAsyncStorage} from '@/shared/lib/persistence';
  * 왜: 웹→앱 넘기기가 사람들을 스토어로 보내는데 iOS 평점이 3.4(평가 12개)고, 리뷰 14건 중 7건이 옛 버그 제보다
  * (2026-10-21 실측). 잘 쓰는 사람에게 좋은 순간에 물어 평점을 지금 상태에 맞춘다.
  *
- * 네이티브 모듈(expo-store-review)은 다음 네이티브 묶음에 들어간다. 그 전 바이너리엔 없어 null 이라
- * 자동 요청은 조용히 아무것도 안 한다 — 지금 넣어도 옛 바이너리가 죽지 않는다(universal-link 와 같은 방식).
+ * 네이티브 모듈(expo-store-review)은 1.5.7 바이너리부터 있다. 그 전 바이너리엔 없어 null 이라
+ * 자동 요청은 조용히 아무것도 안 한다 — 옛 바이너리가 이 코드를 받아도 죽지 않는다(universal-link 와 같은 방식).
  */
 type StoreReviewNativeModule = {
   isAvailableAsync(): Promise<boolean>;
