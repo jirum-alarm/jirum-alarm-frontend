@@ -1,0 +1,65 @@
+name: trivy-web
+
+# 운영 웹 이미지 취약점 스캔 — 하루 한 번, 지금 운영에 나간 이미지(최신 v 태그)를 본다.
+# ★왜(2026-10-20): 전엔 스테이징·운영 빌드마다 호스티드 러너가 방금 올린 이미지를 레지스트리에서 통째로 다시 받아
+#   스캔했다. 결과는 Security 탭 기록뿐(배포를 막지 않음)인데 그 다운로드가 전부 레지스트리 쪽 회선의 업로드였다.
+#   하루 한 번이면 Security 탭은 운영 이미지 기준으로 유지되고, 이미지가 그대로여도 새로 나온 CVE 를 잡는다.
+on:
+  schedule:
+    - cron: "40 0 * * *" # 09:40 KST
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  scan:
+    name: Trivy scan (production image)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # 운영 태그 목록
+
+      - name: Log in to Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 웹 변경이 없는 태그는 deploy-web-prod 가 이미지를 안 만든다(paths 필터) → 최신 태그부터 이미지가 있는 것을 고른다.
+      - name: Resolve production image
+        id: image
+        env:
+          REPO: ${{ secrets.DOCKER_REGISTRY }}/tjsry0466/jirum-alarm-frontend-web
+        run: |
+          set -euo pipefail
+          for tag in $(git tag -l 'v*.*.*' --sort=-v:refname | head -20); do
+            if docker buildx imagetools inspect "$REPO:${tag#v}" >/dev/null 2>&1; then
+              echo "ref=$REPO:${tag#v}" >> "$GITHUB_OUTPUT"
+              echo "scan $tag"
+              exit 0
+            fi
+          done
+          echo "::error::최근 v 태그 20개 중 레지스트리에 이미지가 있는 것이 없다"
+          exit 1
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ steps.image.outputs.ref }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '0'
+        continue-on-error: true
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v4
+        if: always() && hashFiles('trivy-results.sarif') != ''
+        with:
+          sarif_file: 'trivy-results.sarif'
