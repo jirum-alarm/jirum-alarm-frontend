@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 평문 HTTP 는 막고(기본), 이 기기 안 주소만 연다 — 앱 화면 하네스가 녹화한 고정 데이터 서버(screens-android.sh)에 붙는 길.
+     하네스는 adb reverse 로 에뮬레이터의 localhost:<포트>를 호스트로 잇는다. 외부 주소는 그대로 HTTPS 만. -->
+<network-security-config>
+  <domain-config cleartextTrafficPermitted="true">
+    <domain includeSubdomains="false">localhost</domain>
+    <domain includeSubdomains="false">127.0.0.1</domain>
+  </domain-config>
+</network-security-config>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- debug 빌드는 Metro(LAN IP 포함)에 평문으로 붙어야 한다 — 전부 허용(src/debug 의 usesCleartextTraffic 와 같은 뜻).
+     networkSecurityConfig 가 있으면 usesCleartextTraffic 은 무시되므로 같은 이름의 파일로 덮는다. -->
+<network-security-config>
+  <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

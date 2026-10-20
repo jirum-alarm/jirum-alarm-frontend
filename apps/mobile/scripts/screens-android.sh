@@ -13,7 +13,10 @@
 #     root 가 안 되면 두 번째 화면부터 운영 OTA 가 덮을 수 있어 실패로 멈춘다.
 #   - 다크는 `cmd uimode night yes|no`(앱이 OS 설정을 따른다).
 # 준비(번들 갈아 끼우기·재서명)는 boot-check-android.sh 와 같다 — 바꾸면 둘 다. SCREENS_SKIP_EXPORT=1 이면 APK 의 번들을 그대로 쓴다.
-# 데이터는 iOS 와 같이 운영 API — 첫 실행 게스트 생성(쓰기)이 막히면 모든 화면이 로그인 첫 화면으로 찍힌다(판정이 한 줄로 알려 준다).
+# 데이터: 기본은 운영 API — 첫 실행 게스트 생성(쓰기)이 막히면 모든 화면이 로그인 첫 화면으로 찍힌다(판정이 한 줄로 알려 준다).
+#   SCREENS_API=fixture 면 iOS 와 같은 고정 데이터 서버(녹화 apps/mobile/screens-fixtures)에 붙는다 — `adb reverse` 로 에뮬레이터의
+#   localhost:<포트>를 맥으로 잇고, 앱 저장소(RKStorage)에 jirum:screens-api-url 을 첫 실행 전에 넣는다. Release 앱은 평문 HTTP 를
+#   localhost 만 허용한다(res/xml/network_security_config.xml — 1.5.7 부터). 그 전 바이너리는 평문이 막혀 쿼리가 전부 실패한다.
 set -euo pipefail
 
 APK_SRC=${1:?사용법: screens-android.sh <Release .apk>}
@@ -23,7 +26,8 @@ OUT=${SCREENS_OUT:-$ROOT/screens-out-android}
 WAIT=${SCREENS_WAIT:-15}
 BT=$(ls -d "${ANDROID_HOME:?ANDROID_HOME 필요}"/build-tools/* | sort -V | tail -1)
 WORK=$(mktemp -d)
-trap 'rm -rf "$WORK"' EXIT
+FIXPID=""
+trap 'kill $FIXPID 2>/dev/null; rm -rf "$WORK"' EXIT
 
 # 화면 이름 → 딥링크(커스텀 스킴). screens-ios.sh 와 같은 목록 — 화면을 더하면 둘 다.
 SCREENS=(
@@ -64,6 +68,25 @@ adb uninstall "$PKG" >/dev/null 2>&1 || true
 adb install "$WORK/app.apk" >/dev/null
 ACTIVITY=$(adb shell cmd package resolve-activity --brief "$PKG" | tail -1 | tr -d '\r')
 DATA=/data/data/$PKG
+
+API_URL=""
+if [ "${SCREENS_API:-}" = fixture ]; then
+  PORT=${SCREENS_FIXTURE_PORT:-9190}
+  REPO=$(cd "$ROOT/../.." && pwd)
+  echo "▶ 고정 데이터 서버(:$PORT, ${SCREENS_MODE:-replay})"
+  SCREENS_FIXTURES_DIR="$ROOT/screens-fixtures" SCREENS_GUEST_AS_USER=1 SCREENS_MODE="${SCREENS_MODE:-replay}" \
+    SCREENS_FIXTURE_PORT="$PORT" node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \
+    "$REPO/apps/web/screens/fixture-server.mts" >"$WORK/fixture.log" 2>&1 &
+  FIXPID=$!
+  for _ in $(seq 1 30); do curl -sf "http://localhost:$PORT/__missing" >/dev/null && break; sleep 1; done
+  curl -sf "http://localhost:$PORT/__missing" >/dev/null || { echo "✗ 고정 데이터 서버가 안 뜸"; cat "$WORK/fixture.log"; exit 1; }
+  adb reverse "tcp:$PORT" "tcp:$PORT" >/dev/null
+  API_URL="http://localhost:$PORT/graphql"
+  # 첫 실행 전에 넣는다 — 안 그러면 첫 실행이 운영에 게스트를 만든다. 표는 AsyncStorage(legacy) 그대로, user_version 1 이어야
+  # 앱이 표를 다시 만들려다 죽지 않는다. 소유자·SELinux 라벨을 앱 것으로 돌려놓는다. 알림 권한 안내 시트는 iOS 처럼 이미 본 것으로.
+  APP_UID=$(adb shell stat -c %u "$DATA" | tr -d '\r')
+  adb shell "mkdir -p $DATA/databases && sqlite3 $DATA/databases/RKStorage \"CREATE TABLE IF NOT EXISTS catalystLocalStorage (key TEXT PRIMARY KEY, value TEXT NOT NULL); INSERT OR REPLACE INTO catalystLocalStorage VALUES ('jirum:screens-api-url', '$API_URL'), ('pushPrePromptShown', 'true'); PRAGMA user_version = 1;\" && chown -R $APP_UID:$APP_UID $DATA/databases && restorecon -R $DATA/databases"
+fi
 
 rm -rf "$OUT"
 mkdir -p "$OUT/light" "$OUT/dark"
@@ -118,5 +141,21 @@ for f in "$OUT"/*/*.png; do
 done
 FATAL_LOG="$WORK/fatal.txt" SCREENS_TITLE="앱 화면 하네스 결과 (Android)" python3 "$(dirname "$0")/screens-judge.py" "$OUT" "${SCREENS[@]}" || FAILED=1
 rm -f "$OUT"/*/*.bmp
+
+
+# 고정 데이터 재생인데 녹화에 없던 쿼리가 있으면 그 화면은 빈 데이터로 찍힌 것 — 실패로 본다(새 쿼리면 SCREENS_MODE=record).
+if [ -n "$API_URL" ] && [ "${SCREENS_MODE:-replay}" != record ]; then
+  MISSING=$(curl -sf "http://localhost:$PORT/__missing" || echo '["(고정 데이터 서버 응답 없음)"]')
+  if [ "$MISSING" != "[]" ]; then
+    echo "✗ 녹화 안 된 쿼리: $MISSING" | cut -c1-500
+    MISSING="$MISSING" python3 -c '
+import json, os, sys
+items = json.loads(os.environ["MISSING"])
+with open(sys.argv[1], "a") as f:
+    f.write("\n## ❌ 녹화 안 된 쿼리 — SCREENS_API=fixture SCREENS_MODE=record 로 다시 녹화\n\n")
+    f.writelines(f"- {m}\n" for m in items)' "$OUT/report.md"
+    FAILED=1
+  fi
+fi
 
 [ "$FAILED" = 0 ] && echo "앱 화면 하네스(Android) 통과" || { echo "앱 화면 하네스(Android) 실패 — $OUT/report.md"; exit 1; }
