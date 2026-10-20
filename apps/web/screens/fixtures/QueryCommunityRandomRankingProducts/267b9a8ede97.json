@@ -1,0 +1,192 @@
+{
+  "variables": {
+    "count": 20,
+    "limit": 10
+  },
+  "response": {
+    "data": {
+      "communityRandomRankingProducts": [
+        {
+          "id": "36001200",
+          "title": "배스킨라빈스 70% 할인쿠폰 알림신청하세유",
+          "mallId": 1,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14951548?menuid=2&referrerAllArticles=false",
+          "isHot": true,
+          "isEnd": false,
+          "price": null,
+          "providerId": 18,
+          "categoryId": 8,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14951548.webp",
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-19T01:11:17.000Z"
+        },
+        {
+          "id": "36023044",
+          "title": "라이필 더마콜라겐 바이탈리포좀C 10포",
+          "mallId": 1,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14952651?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "0원",
+          "providerId": 18,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14952651.webp",
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-19T08:46:38.000Z"
+        },
+        {
+          "id": "35994423",
+          "title": "네이버 번쩍위크 랜덤쿠폰",
+          "mallId": 1,
+          "url": "https://www.fmkorea.com/10461573866",
+          "isHot": true,
+          "isEnd": false,
+          "price": "무료",
+          "providerId": 7,
+          "categoryId": 8,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10461573866.webp",
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-19T00:13:00.000Z"
+        },
+        {
+          "id": "36024247",
+          "title": "5060~5080 가격대별 완본체 추천",
+          "mallId": 15,
+          "url": "https://www.fmkorea.com/10463010763",
+          "isHot": true,
+          "isEnd": false,
+          "price": "다양",
+          "providerId": 7,
+          "categoryId": 11,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10463010763.webp",
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-19T09:10:00.000Z"
+        },
+        {
+          "id": "35963044",
+          "title": "메가커피 20% 23% 할인",
+          "mallId": 28,
+          "url": "https://www.fmkorea.com/10460783959",
+          "isHot": null,
+          "isEnd": false,
+          "price": "1,600원",
+          "providerId": 7,
+          "categoryId": 8,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10460783959.webp",
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-18T15:09:00.000Z"
+        },
+        {
+          "id": "35913469",
+          "title": "2026년 햅쌀 특등급 경기미 쌀 10kg 27,810원",
+          "mallId": 28,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14950484?menuid=2&referrerAllArticles=false",
+          "isHot": true,
+          "isEnd": false,
+          "price": "27,810원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14950484.webp",
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-18T08:39:49.000Z"
+        },
+        {
+          "id": "35916109",
+          "title": "육식토끼 소스 닭다리살 30팩 외 한입 닭다리살·닭가슴살 소시지",
+          "mallId": 51268,
+          "url": "https://www.fmkorea.com/10459883547",
+          "isHot": true,
+          "isEnd": false,
+          "price": "옵션별상이",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10459883547.webp",
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-18T11:50:00.000Z"
+        },
+        {
+          "id": "35934771",
+          "title": "생분해 비데물티슈 48매 캡 10팩",
+          "mallId": 1,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14950896?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14950896.webp",
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-18T13:21:53.000Z"
+        },
+        {
+          "id": "35934660",
+          "title": "포카칩 오리지널 10개 + 어니언 10개",
+          "mallId": 28,
+          "url": "https://www.fmkorea.com/10460312052",
+          "isHot": true,
+          "isEnd": false,
+          "price": "카페18,360원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10460312052.webp",
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-18T12:58:00.000Z"
+        },
+        {
+          "id": "35963436",
+          "title": "네이버 쿠폰 9시 등",
+          "mallId": 1,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14951118?menuid=2&referrerAllArticles=false",
+          "isHot": true,
+          "isEnd": false,
+          "price": null,
+          "providerId": 18,
+          "categoryId": 11,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14951118.webp",
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-18T15:43:53.000Z"
+        }
+      ]
+    }
+  }
+}

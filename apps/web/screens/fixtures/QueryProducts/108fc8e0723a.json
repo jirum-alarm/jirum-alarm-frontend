@@ -1,0 +1,535 @@
+{
+  "variables": {
+    "limit": 20,
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "categoryId": null,
+    "searchAfter": null
+  },
+  "response": {
+    "data": {
+      "products": [
+        {
+          "id": "36102112",
+          "title": "하이뮨 울트라 49g 블랙초코 400ml X 12개 15,840원 재입고",
+          "mallId": 51813,
+          "url": "https://eomisae.co.kr/rt/206959624",
+          "isHot": false,
+          "isEnd": false,
+          "price": "15,840원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206959624.webp",
+          "mallName": "후디스몰",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792466155000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:15:55.000Z"
+        },
+        {
+          "id": "36102111",
+          "title": "워커힐 고메 바나나 티라미수 360g (120g X 3ea) 2개",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741555",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741555.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792465980000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:13:00.000Z"
+        },
+        {
+          "id": "36102110",
+          "title": "천재가 되다 국어 학습만화 30종 선택",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741554",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,560원",
+          "providerId": 1,
+          "categoryId": 5,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741554.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792465860000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:11:00.000Z"
+        },
+        {
+          "id": "36102108",
+          "title": "14400F + RTX 5060 Ti + RAM 32GB + Y50 블랙체리 게이밍 PC 특가",
+          "mallId": 8,
+          "url": "https://coolenjoy.net/bbs/jirum/3571099",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 2,
+          "categoryId": 1,
+          "category": "PC관련",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coolnjoy/3571099.webp",
+          "mallName": "롯데온",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿨엔조이"
+          },
+          "searchAfter": [
+            "1792465823000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:23.000Z"
+        },
+        {
+          "id": "36102087",
+          "title": "이영순 삶은 스지 수육 절단 국탕 찜용",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/36467889?itemId=22699437398&vendorItemId=89735077805",
+          "isHot": false,
+          "isEnd": false,
+          "price": "48,710원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/36467889.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102089",
+          "title": "설성목장 무항생제 한우 1등급 이상 목심 샤브샤브용 (냉동) 15,900원",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/6475676617?itemId=14152425134&vendorItemId=81398925782",
+          "isHot": false,
+          "isEnd": false,
+          "price": "15,900원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "로켓프레시",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/6475676617.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102090",
+          "title": "하이뮨 프로틴 밸런스 L",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/7127545378?itemId=24377331092&vendorItemId=88559627052",
+          "isHot": false,
+          "isEnd": false,
+          "price": "36,000원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/7127545378.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102091",
+          "title": "삼진어묵 오동통 모듬어묵 + 스프",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/7324843040?itemId=18794089984&vendorItemId=85925085814",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,110원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "로켓프레시",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/7324843040.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102092",
+          "title": "맘스럽 과탄산소다 버킷 초대용량 프리미엄 1등급원료 산소계표백제 14,980원",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/7504247455?itemId=26026353842&vendorItemId=86723986722",
+          "isHot": false,
+          "isEnd": false,
+          "price": "14,980원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "생활용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/7504247455.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102093",
+          "title": "듀플렉스 탄소열선 무자계 워셔블 전기요",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/7621067463?itemId=20205500778&vendorItemId=87295841471",
+          "isHot": false,
+          "isEnd": false,
+          "price": "62,800원",
+          "providerId": 109,
+          "categoryId": 6,
+          "category": "가전디지털",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/7621067463.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102094",
+          "title": "스카치브라이트 베이킹소다 톡톡 크린스틱 시트타입 본품 27,900원",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/7759292294?itemId=18873881336&vendorItemId=77044648585",
+          "isHot": false,
+          "isEnd": false,
+          "price": "27,900원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "생활용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/7759292294.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102098",
+          "title": "포트메리온 보타닉가든 머그컵 4종 세트 24,100원",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/8364002397?itemId=24165640586&vendorItemId=91184040994",
+          "isHot": false,
+          "isEnd": false,
+          "price": "24,100원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "주방용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/8364002397.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102099",
+          "title": "gorogoro 반려동물 대용량 동결건조 간식",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/9336218677?itemId=29079489876&vendorItemId=96005372391",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,520원",
+          "providerId": 109,
+          "categoryId": 12,
+          "category": "반려/애완용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/9336218677.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102101",
+          "title": "나우푸드 울트라 오메가 3 500 EPA 250 DHA 소프트젤",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/9392378613?itemId=12932887739&vendorItemId=70393847077",
+          "isHot": false,
+          "isEnd": false,
+          "price": "35,210원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/9392378613.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102102",
+          "title": "에이수스 2026 TUF 게이밍 F16 코어i7 인텔 14세대 지포스 RTX 5060",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/9522048433?itemId=28386851360&vendorItemId=95338396732",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,499,000원",
+          "providerId": 109,
+          "categoryId": 1,
+          "category": "가전디지털",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/9522048433.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102104",
+          "title": "Lydsto 자동 분수 스마트 창문 로봇청소기 수납 케이스 증정",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/9633585405?itemId=28778026694&vendorItemId=96031636875",
+          "isHot": false,
+          "isEnd": false,
+          "price": "168,000원",
+          "providerId": 109,
+          "categoryId": 6,
+          "category": "가전디지털",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/9633585405.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102105",
+          "title": "맘스럽 워싱소다 버킷 5kg 탄산소다 100% 프리미엄 세탁세제 1등급품질 초강력 세탁보조제 100% 탈취인증 찌든때 박살 전문세탁소용",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/9700797458?itemId=29019008394&vendorItemId=92424463296",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,000원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "생활용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/9700797458.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102106",
+          "title": "숲 여성용 세미 터틀넥 울 스웨터 SCWLKC1 35,900원",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/9721579106?itemId=29092897324&vendorItemId=96018302496",
+          "isHot": false,
+          "isEnd": false,
+          "price": "35,900원",
+          "providerId": 109,
+          "categoryId": 4,
+          "category": "패션의류",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/9721579106.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102109",
+          "title": "사조 해표 올리브유 900ml x 2개+키친타올 1롤",
+          "mallId": 8,
+          "url": "https://www.fmkorea.com/10465173675",
+          "isHot": null,
+          "isEnd": false,
+          "price": "19,900원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465173675.webp",
+          "mallName": "롯데온",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792465680000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:08:00.000Z"
+        },
+        {
+          "id": "36102107",
+          "title": "농심 신라면 선물용 20개",
+          "mallId": 1,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993966",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 12,240 (KRW)",
+          "providerId": 5,
+          "categoryId": 2,
+          "category": "생활/식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993966.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "1792465470000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:04:30.000Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "variables": {
+    "id": 36089133
+  },
+  "response": {
+    "data": {
+      "product": {
+        "id": "36089133",
+        "categoryId": 1,
+        "categoryName": "컴퓨터",
+        "title": "7800X3D 302,469원",
+        "url": "https://arca.live/b/hotdeal/186459565",
+        "detailUrl": "https://s.click.aliexpress.com/e/_c32p68zj?cv=36089133&dp=36089133%3A",
+        "isProfitUrl": true,
+        "profitLinkProvider": "ali_express",
+        "isHot": true,
+        "isEnd": false,
+        "price": "302,469원",
+        "postedAt": "2026-10-19T23:19:37.000Z",
+        "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186459565.webp",
+        "uploaderType": "CRAWLED",
+        "content": "할인 적용 방법1) 토스에서 토스페이 알리 1.5퍼 할인을 키고 들어간다2) '7800X3D' 검색 후 35.5만짜리 상품에 진입3) 할인코드 35만원 구매시 4만원짜리 사용(KLWC04)4) 토스페이 8천원 할인 적용부가세 포함 33만원에 구매 가능. 직구품이라 AS가 제한적인게 아쉬워서 이돈이면 3만원 더주고 컴퓨존 직구가 낫지만 약간이라도 아끼고싶다면 못 고를 선택지는 아니지않나 싶음.",
+        "author": null,
+        "provider": {
+          "id": "12",
+          "name": "arca",
+          "nameKr": "아카",
+          "host": "arca.live"
+        },
+        "hotDealType": "SUPER_DEAL",
+        "isYearLowest": false,
+        "viewCount": 5500,
+        "mallName": "알리",
+        "data": null
+      }
+    }
+  }
+}

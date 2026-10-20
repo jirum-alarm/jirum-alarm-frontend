@@ -1,0 +1,27 @@
+{
+  "variables": {},
+  "response": {
+    "errors": [
+      {
+        "message": "Forbidden",
+        "locations": [
+          {
+            "line": 3,
+            "column": 5
+          }
+        ],
+        "path": [
+          "mySubscribedThemeIds"
+        ],
+        "extensions": {
+          "code": "FORBIDDEN",
+          "originalError": {
+            "message": "Forbidden",
+            "statusCode": 403
+          }
+        }
+      }
+    ],
+    "data": null
+  }
+}

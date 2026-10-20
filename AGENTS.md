@@ -330,6 +330,10 @@ Code formatting standards:
 2. **ESLint**: Follow `@jirum/eslint-config-jirum` rules
 3. **Prettier**: Use `@jirum/prettier` for consistent formatting
 4. **Design System**: 색·글자 크기·모서리·그림자는 토큰만 쓴다(`bg-[#…]`·`text-[13px]`·`text-emerald-700` 금지 — 린트가 막는다). 의미별 색은 `packages/design-system/README.md`
+5. **디자인 시스템이 정본 — 틀렸으면 거기부터 고친다**(2026-10-20). 화면 모양(색·간격·글자·부품 모양)이 이상하면 화면에서 값을 손으로 맞추기 전에
+   원인이 `packages/design-system`(tokens·recipes·layout·catalog 부품)에 있는지 먼저 본다. 정본이 틀렸거나 비었으면 **정본을 먼저 고치고**(web·앱이 함께 바뀐다),
+   화면은 정본을 쓰도록만 고친다. 화면 한 곳의 국소 보정은 같은 깨짐이 다른 화면·다른 플랫폼에 남고, 다음 사람이 정본과 화면 중 무엇이 맞는지 모르게 만든다.
+   web↔앱 «같아야 하는 것»도 서로의 소스를 대조하지 말고 각자 정본(design-system·`packages/domain`)을 쓰는지로 검사한다.
 
 ### Architecture Principles
 1. **Monorepo Awareness**: Changes may affect multiple applications
@@ -344,9 +348,27 @@ Code formatting standards:
 4. **Linting**: Use `pnpm lint` for code quality checks
 5. **Building**: Use `pnpm build` for production builds
 
+### 검증 레시피 — 바꾼 것 → 완료 보고 전에 돌릴 것
+커밋 훅(lint-staged)이 바뀐 앱의 타입·린트·node 테스트를 이미 돌린다. 그건 «로직이 맞나»까지만 본다 — 버그가 실제로 나는 층은 «그려진 화면»이라
+화면을 바꿨으면 아래 화면 검증까지 하고 결과(통과 수·report 요약·본 png)를 보고에 붙인다.
+
+| 바꾼 것 | 돌릴 것 | 무엇을 보나 |
+|---|---|---|
+| 순수 로직(`lib/`·`model/`·`packages/domain`) | 훅이 돌리는 테스트 + 새 동작의 테스트 | 입력→출력 |
+| web 화면·컴포넌트 | `pnpm --filter web screens -g <화면>` → `apps/web/screens/.out/report.md` → 그 화면 png 를 직접 본다 | 오류·넘침·겹침·대비, 라이트·다크·모바일·PC·빈·에러 상태 |
+| web 새 화면·새 쿼리 | `apps/web/screens/pages.ts` 한 줄 + `pnpm --filter web screens:record` | 위와 같음(고정 데이터로) |
+| web 공용 부품(`shared/ui`) | 스토리 + `pnpm --filter design test:stories` | 라이트·다크 렌더·조작·axe |
+| 디자인 시스템(tokens·recipes·layout) | `pnpm --filter @jirum/design-system test` + `test:stories` + `screens` | 정본 변경이 모든 화면에서 맞나 |
+| 앱 JS 화면 | `pnpm --filter mobile exec jest <관련>` + 큰 변경은 `boot-check.sh` 후 화면 진입 | 기동·렌더 |
+| 앱 네이티브 | 위 Mobile App 배포 규칙(버전·`native:write`·Release 시뮬) | |
+| GraphQL 문서 | `node scripts/gql-check.mjs`(운영 스키마) — `release-tag.py` 가 태그 때도 본다 | 서버 롤아웃 전 필드 |
+| 운영 반영 | `python3 scripts/release-tag.py` → `RELEASE-TAG DONE` | 배포 판정 |
+
+CI: `web-screens`(main·PR, 운영 빌드로 같은 하네스, 아티팩트 `web-screens`) · `design-system`(스토리) · `mobile-validation`→`mobile-ota`(boot-check).
+
 ### Testing and Quality Assurance
 1. **Storybook**: Components should have Storybook stories
-2. **MSW**: Use Mock Service Worker for API mocking in development
+2. **MSW**: `dev:mock` 의 손 핸들러는 일부 쿼리만 다룬다 — 화면 검증은 녹화 데이터를 쓰는 `apps/web/screens`(README)로
 3. **GraphQL**: 스키마는 `packages/graphql-schema/schema.graphql` 한 벌(운영). 갱신 `GRAPHQL_INTROSPECTION_KEY=$(python3 scripts/introspection_key.py) pnpm --filter @jirum/graphql-schema refresh` → web·mobile·admin 각각 `pnpm --filter <app> code-gen`
 4. **Knip**: Use Knip to detect unused code and dependencies
 

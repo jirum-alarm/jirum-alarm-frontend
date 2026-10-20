@@ -1,0 +1,150 @@
+{
+  "variables": {
+    "page": 0,
+    "limit": 6
+  },
+  "response": {
+    "data": {
+      "hotDealRankingProducts": [
+        {
+          "id": "36089133",
+          "title": "7800X3D 302,469원",
+          "mallId": 143,
+          "url": "https://arca.live/b/hotdeal/186459565",
+          "isHot": true,
+          "isEnd": false,
+          "price": "302,469원",
+          "providerId": 12,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186459565.webp",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "422.93",
+            "36089133"
+          ],
+          "postedAt": "2026-10-19T23:19:37.000Z"
+        },
+        {
+          "id": "36089062",
+          "title": "포켓몬스터 모션감지 센서등 무드등",
+          "mallId": 4800,
+          "url": "https://eomisae.co.kr/rt/206921816",
+          "isHot": true,
+          "isEnd": false,
+          "price": null,
+          "providerId": 11,
+          "categoryId": 6,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206921816.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "257.68",
+            "36089062"
+          ],
+          "postedAt": "2026-10-19T22:57:29.000Z"
+        },
+        {
+          "id": "36099392",
+          "title": "농심 닭다리 너겟 후라이드 치킨맛 130g 4개 6,400원",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10464832499",
+          "isHot": null,
+          "isEnd": false,
+          "price": "6,400원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10464832499.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "220.84",
+            "36099392"
+          ],
+          "postedAt": "2026-10-20T00:38:00.000Z"
+        },
+        {
+          "id": "36036015",
+          "title": "뉴발란스 992 MADE IN USA",
+          "mallId": null,
+          "url": "https://eomisae.co.kr/os/206873143",
+          "isHot": true,
+          "isEnd": false,
+          "price": null,
+          "providerId": 11,
+          "categoryId": 4,
+          "category": "패션해외",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206873143.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "131.81",
+            "36036015"
+          ],
+          "postedAt": "2026-10-19T11:56:18.000Z"
+        },
+        {
+          "id": "36004526",
+          "title": "베이스어스 Inspire XC1 black 97,512원",
+          "mallId": 143,
+          "url": "https://arca.live/b/hotdeal/186386143",
+          "isHot": false,
+          "isEnd": false,
+          "price": "97,512원",
+          "providerId": 12,
+          "categoryId": 9,
+          "category": "전자제품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186386143.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "182.51",
+            "36004526"
+          ],
+          "postedAt": "2026-10-19T04:53:10.000Z"
+        },
+        {
+          "id": "36025873",
+          "title": "자바나스 익스트림 오버핏 스웨트셔츠 16,060원",
+          "mallId": 8,
+          "url": "https://www.fmkorea.com/10463463659",
+          "isHot": true,
+          "isEnd": false,
+          "price": "16,060원",
+          "providerId": 7,
+          "categoryId": 4,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10463463659.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "190.34",
+            "36025873"
+          ],
+          "postedAt": "2026-10-19T11:38:00.000Z"
+        }
+      ]
+    }
+  }
+}

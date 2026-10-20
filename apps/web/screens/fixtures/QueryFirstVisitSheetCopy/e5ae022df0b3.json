@@ -1,0 +1,18 @@
+{
+  "variables": {
+    "keyword": "7800X3D",
+    "productId": 36089133
+  },
+  "response": {
+    "data": {
+      "firstVisitSheetCopy": {
+        "variant": "control",
+        "dealCount": 58,
+        "windowDays": 90,
+        "keyword": "7800X3D",
+        "broadened": false,
+        "keywordArm": null
+      }
+    }
+  }
+}

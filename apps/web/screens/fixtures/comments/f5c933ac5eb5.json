@@ -1,0 +1,14 @@
+{
+  "variables": {
+    "productId": 36089133,
+    "limit": 10,
+    "orderBy": "ID",
+    "orderOption": "DESC",
+    "searchAfter": null
+  },
+  "response": {
+    "data": {
+      "comments": []
+    }
+  }
+}

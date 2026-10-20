@@ -1,0 +1,390 @@
+{
+  "variables": {
+    "limit": 20,
+    "orderBy": "ID",
+    "orderOption": "DESC",
+    "searchAfter": [
+      "16",
+      "0",
+      "16"
+    ]
+  },
+  "response": {
+    "data": {
+      "comments": [
+        {
+          "id": "15",
+          "productId": 14990999,
+          "parentId": null,
+          "title": null,
+          "content": "끝났어요.",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "15",
+            "0",
+            "15"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 356,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "72",
+            "nickname": "이명우"
+          },
+          "taggedProduct": {
+            "id": "14990999",
+            "title": "유기농 레몬즙 NFC 박스 5",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/655340.webp",
+            "price": "14,900원",
+            "postedAt": "2025-10-06T11:06:29.000Z",
+            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=655340"
+          }
+        },
+        {
+          "id": "14",
+          "productId": 14425618,
+          "parentId": null,
+          "title": null,
+          "content": "나 살땐 27000원이더니 다시 내렸네",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "14",
+            "0",
+            "14"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 296,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "72",
+            "nickname": "이명우"
+          },
+          "taggedProduct": {
+            "id": "14425618",
+            "title": "피코크 떡갈비 450g 6팩",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/arca/147960408.jpg",
+            "price": "25,900원",
+            "postedAt": "2025-09-15T06:45:36.000Z",
+            "url": "https://arca.live/b/hotdeal/147960408?p=1"
+          }
+        },
+        {
+          "id": "13",
+          "productId": 14190152,
+          "parentId": null,
+          "title": null,
+          "content": "와씨 갖고싶다 초딩도 살 수 있나요?",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "13",
+            "0",
+            "13"
+          ],
+          "isNotice": false,
+          "likeCount": 1,
+          "replyCount": 0,
+          "viewCount": 207,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "117",
+            "nickname": "만결숭"
+          },
+          "taggedProduct": {
+            "id": "14190152",
+            "title": "성인용 전동 물총 $7.80, 로켓 버블 건 $2.24",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/69650.jpg",
+            "price": null,
+            "postedAt": "2025-09-05T04:13:41.000Z",
+            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=69650"
+          }
+        },
+        {
+          "id": "12",
+          "productId": 13327136,
+          "parentId": null,
+          "title": null,
+          "content": "좋아요",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "12",
+            "0",
+            "12"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 274,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "693",
+            "nickname": "모찌"
+          },
+          "taggedProduct": {
+            "id": "13327136",
+            "title": "신대장 국물떡볶이 4팩 6,900원",
+            "thumbnail": null,
+            "price": "6,900원",
+            "postedAt": "2025-07-29T13:15:16.000Z",
+            "url": "https://eomisae.co.kr/fs/158540758"
+          }
+        },
+        {
+          "id": "11",
+          "productId": 13131534,
+          "parentId": null,
+          "title": null,
+          "content": "잘 먹었어요",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "11",
+            "0",
+            "11"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 385,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "508",
+            "nickname": "짠짠"
+          },
+          "taggedProduct": {
+            "id": "13131534",
+            "title": "메가커피 ~23% 할인",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/157772244.png",
+            "price": null,
+            "postedAt": "2025-07-20T15:02:58.000Z",
+            "url": "https://eomisae.co.kr/fs/157772244"
+          }
+        },
+        {
+          "id": "10",
+          "productId": 12974108,
+          "parentId": null,
+          "title": null,
+          "content": "감사해요",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "10",
+            "0",
+            "10"
+          ],
+          "isNotice": false,
+          "likeCount": 1,
+          "replyCount": 0,
+          "viewCount": 440,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "508",
+            "nickname": "짠짠"
+          },
+          "taggedProduct": {
+            "id": "12974108",
+            "title": "하이볼 4캔 2000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/635891.jpg",
+            "price": null,
+            "postedAt": "2025-07-13T07:52:01.000Z",
+            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&hotlist_flag=999&no=635891"
+          }
+        },
+        {
+          "id": "6",
+          "productId": 12348909,
+          "parentId": null,
+          "title": null,
+          "content": "?❤️",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "6",
+            "0",
+            "6"
+          ],
+          "isNotice": false,
+          "likeCount": 2,
+          "replyCount": 0,
+          "viewCount": 132,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "508",
+            "nickname": "짠짠"
+          },
+          "taggedProduct": {
+            "id": "12348909",
+            "title": "마운틴듀 제로슈거, 펩시제로 490ml, 탐스 쥬시, 오트몬드 프로틴, 칠성사이다 제로 오렌지 (다양/무료)",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/627047.jpg",
+            "price": null,
+            "postedAt": "2025-06-09T03:36:51.000Z",
+            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=627047"
+          }
+        },
+        {
+          "id": "5",
+          "productId": 12765146,
+          "parentId": null,
+          "title": null,
+          "content": "https://www.enuri.com/detail.jsp?modelno=133659150\n최저가 27,360",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "5",
+            "0",
+            "5"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 213,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "358",
+            "nickname": "포딩"
+          },
+          "taggedProduct": {
+            "id": "12765146",
+            "title": "톡딜)[갤러리아][닥스] 3단 양우산 (포장,쇼핑백 포함) 30,980원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/13565241.jpg",
+            "price": "30,980원",
+            "postedAt": "2025-06-30T01:21:19.000Z",
+            "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/13565241?menuid=2&referrerAllArticles=false"
+          }
+        },
+        {
+          "id": "4",
+          "productId": 12614591,
+          "parentId": null,
+          "title": null,
+          "content": "쿠폰 적용 되나요? ㅡㅠ",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "4",
+            "0",
+            "4"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 104,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "530",
+            "nickname": "뿌류"
+          },
+          "taggedProduct": {
+            "id": "12614591",
+            "title": "마르디 플립플랍 0원 무배",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/155281101.png",
+            "price": "0원",
+            "postedAt": "2025-06-22T10:19:24.000Z",
+            "url": "https://eomisae.co.kr/fs/155281101"
+          }
+        },
+        {
+          "id": "3",
+          "productId": 12520879,
+          "parentId": null,
+          "title": null,
+          "content": "끝났어요.",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "3",
+            "0",
+            "3"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 135,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "72",
+            "nickname": "이명우"
+          },
+          "taggedProduct": {
+            "id": "12520879",
+            "title": "뽑아쓰는 키친타올 100매 9팩 6,900원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/154943007.jpg",
+            "price": "6,900원",
+            "postedAt": "2025-06-18T05:53:55.000Z",
+            "url": "https://eomisae.co.kr/fs/154943007"
+          }
+        },
+        {
+          "id": "2",
+          "productId": 12290083,
+          "parentId": null,
+          "title": null,
+          "content": "https://link.gmarket.co.kr/oxOP146Jz\n\n링크오류이뜸",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "2",
+            "0",
+            "2"
+          ],
+          "isNotice": false,
+          "likeCount": 1,
+          "replyCount": 0,
+          "viewCount": 99,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "527",
+            "nickname": "레딧씌"
+          },
+          "taggedProduct": {
+            "id": "12290083",
+            "title": "3M 변기청소 크린스틱 리필 24개 +핸들 1개 + 핸들걸이 (11,410원/무료)",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/arca/138773424.jpg",
+            "price": "11,410원",
+            "postedAt": "2025-06-05T15:13:19.000Z",
+            "url": "https://arca.live/b/hotdeal/138773424?p=1"
+          }
+        },
+        {
+          "id": "1",
+          "productId": 12251486,
+          "parentId": null,
+          "title": null,
+          "content": "좋네요",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "1",
+            "0",
+            "1"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 174,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "66",
+            "nickname": "닉네임바뀌??"
+          },
+          "taggedProduct": {
+            "id": "12251486",
+            "title": "나트랑&달랏 5일/6일 패키지",
+            "thumbnail": null,
+            "price": "267,730원",
+            "postedAt": "2025-06-03T10:57:00.000Z",
+            "url": "https://www.fmkorea.com/8471511072"
+          }
+        }
+      ]
+    }
+  }
+}

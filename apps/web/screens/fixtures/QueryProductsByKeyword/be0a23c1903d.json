@@ -1,0 +1,428 @@
+{
+  "variables": {
+    "limit": 12,
+    "keyword": "만원이하",
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "searchAfter": null
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36102110",
+          "title": "천재가 되다 국어 학습만화 30종 선택",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741554",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,560원",
+          "providerId": 1,
+          "categoryId": 5,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741554.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792465860000"
+          ],
+          "postedAt": "2026-10-20T03:11:00.000Z"
+        },
+        {
+          "id": "36102091",
+          "title": "삼진어묵 오동통 모듬어묵 + 스프",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/7324843040?itemId=18794089984&vendorItemId=85925085814",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,110원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "로켓프레시",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/7324843040.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "data": {
+            "coupangGoldbox": {
+              "rank": 11,
+              "isRocket": true,
+              "productId": 7324843040,
+              "categoryName": "로켓프레시"
+            }
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102099",
+          "title": "gorogoro 반려동물 대용량 동결건조 간식",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/9336218677?itemId=29079489876&vendorItemId=96005372391",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,520원",
+          "providerId": 109,
+          "categoryId": 12,
+          "category": "반려/애완용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/9336218677.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "data": {
+            "coupangGoldbox": {
+              "rank": 23,
+              "isRocket": true,
+              "productId": 9336218677,
+              "categoryName": "반려/애완용품"
+            }
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102105",
+          "title": "맘스럽 워싱소다 버킷 5kg 탄산소다 100% 프리미엄 세탁세제 1등급품질 초강력 세탁보조제 100% 탈취인증 찌든때 박살 전문세탁소용",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/9700797458?itemId=29019008394&vendorItemId=92424463296",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,000원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "생활용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/9700797458.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "data": {
+            "coupangGoldbox": {
+              "rank": 10,
+              "isRocket": false,
+              "productId": 9700797458,
+              "categoryName": "생활용품"
+            }
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36102055",
+          "title": "크라운 크림블 순크림 300g 1개",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10465187895",
+          "isHot": null,
+          "isEnd": false,
+          "price": "3,710원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465187895.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792465260000"
+          ],
+          "postedAt": "2026-10-20T03:01:00.000Z"
+        },
+        {
+          "id": "36101572",
+          "title": "얼굴시림방패 방한마스크 4종 2세트",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/831737751",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,900원",
+          "providerId": 21,
+          "categoryId": 11,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/831737751.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4.3,
+              "section": "conversion",
+              "delivery": "무료배송 · 내일도착",
+              "salePrice": 9900,
+              "unitPrice": "1세트당 4,950원",
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T03:00:35.645Z",
+              "sellerName": "주식회사 새벽농부",
+              "deliveryFee": 0,
+              "reviewCount": 4,
+              "discountRate": 72,
+              "campaignEndAt": "2026-10-31T23:59:00",
+              "originalPrice": 35900,
+              "pageViewCount": 371,
+              "couponDiscount": 1000,
+              "lowestIn30Days": true,
+              "detailCheckedAt": "2026-10-20T03:00:35.645Z"
+            }
+          },
+          "searchAfter": [
+            "1792465236000"
+          ],
+          "postedAt": "2026-10-20T03:00:36.000Z"
+        },
+        {
+          "id": "36101862",
+          "title": "국내산 제주 구좌 햇 흙당근 특상 3kg",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2651613815",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,640원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2651613815.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/455111086acd0871512a08cdae35d31aaaad85c1.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/bd78bb47851977866acc8dbe3109bca7025f0cec.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/63270c1572e90b4a996f3342e0a6f86d8a5712f0.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/fc16795782f264d97636919317ae077f193a9474.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/cab9400093caa9ad07ebfb0acfcca4ac857e1a2d.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/4a309467e4521a00f65c108020a419e8fcd58fc8.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/db970c4a4bf90636776052be2028cfd89c3d54a5.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/3c25b5263977aaaf33e4a396bb7fb0860a362335.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/2367cf9f289a6373998310610025d0fd005747f3.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/948d1d8219b68e4dacb945708c2ec5bed105d2c9.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/48556d25e81debbd7d2d3091438ab96009b123bf.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/0ee2aa859ea86c396032c4006ed3ff0f865d47a9.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/16d34b147537b4098773ddc0bfdfae22f0580138.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/24c586fe2f46f3ef0ce01ec2260cf5f14b36602f.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/7c17bb740b875ae9fe8565eb292d01b776e54cd1.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/bf476fb2389fe173d8b84fa6c834a7a7c4ba4d0f.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/1e319d15db4a1283174e6509bd447f13c9b49dd5.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/cd64f83cc96a16277cbc319fb65be4adfcd6822d.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/afd0858a9741dd9c8126044ea7acfdbd7dea3ad6.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/17784b20ed2830f6df61269f415124e3072134b2.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/786fa6a36aba9e63c50349eb766f2da2c8b1b0bd.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/7f48c8b0a9f833a79011f30dcd0108e3c70b71e6.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/f4dda0707ed91d1fb944ab6016f160b7d9ab65fb.webp"
+              ],
+              "rating": 4.2,
+              "section": "conversion",
+              "delivery": "무료배송 · 내일도착",
+              "salePrice": 8640,
+              "unitPrice": "100g당 288원",
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T03:00:31.067Z",
+              "sellerName": "(주)봉이네 농업회사법인",
+              "deliveryFee": 0,
+              "reviewCount": 16,
+              "discountRate": 58,
+              "campaignEndAt": "2026-10-28T23:59:59",
+              "originalPrice": 20900,
+              "pageViewCount": 1562,
+              "couponDiscount": 1300,
+              "lowestIn30Days": true
+            }
+          },
+          "searchAfter": [
+            "1792465231000"
+          ],
+          "postedAt": "2026-10-20T03:00:31.000Z"
+        },
+        {
+          "id": "36101946",
+          "title": "온누리잡곡 캘리포니아 황금빛 찰기장쌀 소포장 500g 4봉",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2681402791",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,800원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2681402791.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 5,
+              "section": "conversion",
+              "delivery": "무료배송 · 내일도착",
+              "salePrice": 9800,
+              "unitPrice": "100g당 490원",
+              "bestSeller": true,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T03:00:28.590Z",
+              "sellerName": "주식회사새마을농산",
+              "deliveryFee": 0,
+              "reviewCount": 2,
+              "discountRate": 41,
+              "campaignEndAt": "2026-11-13T00:00:00",
+              "originalPrice": 16800,
+              "pageViewCount": 314,
+              "lowestIn30Days": true,
+              "detailCheckedAt": "2026-10-20T03:00:28.590Z"
+            }
+          },
+          "searchAfter": [
+            "1792465229000"
+          ],
+          "postedAt": "2026-10-20T03:00:29.000Z"
+        },
+        {
+          "id": "36101959",
+          "title": "잎담 HACCP 인증 구운란 대란 30개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2686789697",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,780원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2686789697.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/7ed06ca2bf1c992a15fa17ef8352a6c127323365.gif",
+                "https://cdn.jirum-alarm.com/community/toss/u/f78e98e0063393353b32456144519f15645c5da8.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/a4c9c9c4cb1248952866cfe9eb2b23257fdde028.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/5ceeaef7a1588d210555b2b247c54f9bfac9c551.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/356ce0d5dc91156caf065e452bff83977d279cf8.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/526d200e61bbbcb76a84ba722c59208af462e8f3.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/a670d201efc4ebd162b8f4a0c18005f4762fe7ab.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/817cc6cd053e339783432cb4f5920fa3adddeb52.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/126f85d5683fe656397f7ecd5b2d96f857b8c760.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/d85fbeaf8ab906a25bc1ce1deca594f0e1c4e6cc.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/216ee30f46a2085f756b3f7f2bdab2444855342f.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/7387f0b08207a2479bfebdd120a0e695cdcfb611.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/894a9ff14e1be543b9dd13fec5d62966014d8c60.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/10a3ad8d7a13ac95379abdcf8c2674b594c57f9f.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/fd3108517d0c45b950bb86c1f715b5025cd148b7.webp"
+              ],
+              "section": "conversion",
+              "delivery": "무료배송",
+              "salePrice": 9780,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T03:00:27.689Z",
+              "sellerName": "잎담",
+              "deliveryFee": 0,
+              "discountRate": 50,
+              "campaignEndAt": "2026-10-23T23:59:59",
+              "originalPrice": 19800,
+              "pageViewCount": 109,
+              "lowestIn30Days": true
+            }
+          },
+          "searchAfter": [
+            "1792465228000"
+          ],
+          "postedAt": "2026-10-20T03:00:28.000Z"
+        },
+        {
+          "id": "36102057",
+          "title": "트렉스타 머렐 外 아웃도어 캐주얼 골프 시즌 의류",
+          "mallId": 15,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9516484",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,790원",
+          "providerId": 107,
+          "categoryId": 7,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9516484.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792465200000"
+          ],
+          "postedAt": "2026-10-20T03:00:00.000Z"
+        },
+        {
+          "id": "36100975",
+          "title": "버거킹 와퍼주니어+비프불고기버거세트 7,980원",
+          "mallId": 15,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14954190?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,980원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14954190.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792465152000"
+          ],
+          "postedAt": "2026-10-20T02:59:12.000Z"
+        },
+        {
+          "id": "36101840",
+          "title": "닥터클로 고체탈취제 200g",
+          "mallId": 8,
+          "url": "https://eomisae.co.kr/rt/206957618",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,600원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206957618.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792465031000"
+          ],
+          "postedAt": "2026-10-20T02:57:11.000Z"
+        }
+      ]
+    }
+  }
+}

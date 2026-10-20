@@ -1,0 +1,28 @@
+{
+  "variables": {},
+  "response": {
+    "errors": [
+      {
+        "message": "Forbidden resource",
+        "locations": [
+          {
+            "line": 3,
+            "column": 3
+          }
+        ],
+        "path": [
+          "unreadNotificationsCount"
+        ],
+        "extensions": {
+          "code": "FORBIDDEN",
+          "originalError": {
+            "message": "Forbidden resource",
+            "error": "Forbidden",
+            "statusCode": 403
+          }
+        }
+      }
+    ],
+    "data": null
+  }
+}

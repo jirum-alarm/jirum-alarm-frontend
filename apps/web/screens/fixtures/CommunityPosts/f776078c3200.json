@@ -1,0 +1,17 @@
+{
+  "variables": {
+    "limit": 20,
+    "orderBy": "ID",
+    "orderOption": "DESC",
+    "searchAfter": [
+      "1",
+      "0",
+      "1"
+    ]
+  },
+  "response": {
+    "data": {
+      "comments": []
+    }
+  }
+}

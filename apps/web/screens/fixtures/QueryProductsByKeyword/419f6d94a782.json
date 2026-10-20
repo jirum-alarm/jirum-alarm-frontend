@@ -1,0 +1,113 @@
+{
+  "variables": {
+    "keyword": "백만원이상",
+    "limit": 4,
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36102102",
+          "title": "에이수스 2026 TUF 게이밍 F16 코어i7 인텔 14세대 지포스 RTX 5060",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/9522048433?itemId=28386851360&vendorItemId=95338396732",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,499,000원",
+          "providerId": 109,
+          "categoryId": 1,
+          "category": "가전디지털",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/9522048433.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "data": {
+            "coupangGoldbox": {
+              "rank": 5,
+              "isRocket": true,
+              "productId": 9522048433,
+              "categoryName": "가전디지털"
+            }
+          },
+          "searchAfter": [
+            "1792465810000"
+          ],
+          "postedAt": "2026-10-20T03:10:10.000Z"
+        },
+        {
+          "id": "36101207",
+          "title": "삼성 75인치 네오QLED TV KQ75QNH70AFXKR 1,743,430원",
+          "mallId": 1,
+          "url": "https://www.dogdrip.net/730536604",
+          "isHot": false,
+          "isEnd": false,
+          "price": "1,743,430원",
+          "providerId": 108,
+          "categoryId": 6,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730536604.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792464695000"
+          ],
+          "postedAt": "2026-10-20T02:51:35.000Z"
+        },
+        {
+          "id": "36100934",
+          "title": "삼성 75인치 네오QLED TV KQ75QNH70AFXKR",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741549",
+          "isHot": false,
+          "isEnd": false,
+          "price": "1,743,430원",
+          "providerId": 1,
+          "categoryId": 6,
+          "category": "가전/가구",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741549.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792463820000"
+          ],
+          "postedAt": "2026-10-20T02:37:00.000Z"
+        },
+        {
+          "id": "36100955",
+          "title": "LG그램 프로 AI 16인치 256GB 램16GB",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10465125762",
+          "isHot": null,
+          "isEnd": false,
+          "price": "1,634,530원",
+          "providerId": 7,
+          "categoryId": 1,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465125762.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792463820000"
+          ],
+          "postedAt": "2026-10-20T02:37:00.000Z"
+        }
+      ]
+    }
+  }
+}

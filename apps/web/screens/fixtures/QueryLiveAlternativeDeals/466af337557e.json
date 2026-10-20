@@ -1,0 +1,36 @@
+{
+  "variables": {
+    "id": 36089133,
+    "limit": 3
+  },
+  "response": {
+    "data": {
+      "liveAlternativeDeals": [
+        {
+          "kind": "same",
+          "priceDiff": -385,
+          "product": {
+            "id": "36089428",
+            "title": "AMD Ryzen 7 7800X3D CPU 직구 302,084원",
+            "mallId": 143,
+            "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993895",
+            "isHot": false,
+            "isEnd": false,
+            "price": "￦ 302,084 (KRW)",
+            "providerId": 5,
+            "categoryId": 1,
+            "category": "PC/하드웨어",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993895.webp",
+            "mallName": "알리",
+            "hotDealType": "SUPER_DEAL",
+            "isYearLowest": false,
+            "provider": {
+              "nameKr": "퀘이사존"
+            },
+            "postedAt": "2026-10-19T23:45:20.000Z"
+          }
+        }
+      ]
+    }
+  }
+}

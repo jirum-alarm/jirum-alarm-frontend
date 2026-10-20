@@ -1,0 +1,170 @@
+{
+  "variables": {
+    "limit": 6,
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "mallGroupId": 118
+  },
+  "response": {
+    "data": {
+      "products": [
+        {
+          "id": "36101572",
+          "title": "얼굴시림방패 방한마스크 4종 2세트",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/831737751",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,900원",
+          "providerId": 21,
+          "categoryId": 11,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/831737751.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "1792465236000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:00:36.000Z"
+        },
+        {
+          "id": "36101948",
+          "title": "담과원 햇 시나노골드 3kg 1박스",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2682107201",
+          "isHot": false,
+          "isEnd": false,
+          "price": "11,500원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2682107201.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "1792465233000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:00:33.000Z"
+        },
+        {
+          "id": "36101724",
+          "title": "천연사이다 제로 250ml 30개 23,400원",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2348865049",
+          "isHot": false,
+          "isEnd": false,
+          "price": "23,400원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2348865049.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "1792465232000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:00:32.000Z"
+        },
+        {
+          "id": "36101862",
+          "title": "국내산 제주 구좌 햇 흙당근 특상 3kg",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2651613815",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,640원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2651613815.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "1792465231000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:00:31.000Z"
+        },
+        {
+          "id": "36101946",
+          "title": "온누리잡곡 캘리포니아 황금빛 찰기장쌀 소포장 500g 4봉",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2681402791",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,800원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2681402791.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "1792465229000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:00:29.000Z"
+        },
+        {
+          "id": "36101959",
+          "title": "잎담 HACCP 인증 구운란 대란 30개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2686789697",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,780원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2686789697.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "1792465228000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:00:28.000Z"
+        }
+      ]
+    }
+  }
+}

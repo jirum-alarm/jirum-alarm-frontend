@@ -1,0 +1,10 @@
+{
+  "variables": {
+    "slotLocation": "product_main_banner"
+  },
+  "response": {
+    "data": {
+      "activeAds": []
+    }
+  }
+}

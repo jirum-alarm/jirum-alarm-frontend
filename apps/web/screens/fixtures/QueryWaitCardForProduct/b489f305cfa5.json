@@ -1,0 +1,10 @@
+{
+  "variables": {
+    "productId": 36089133
+  },
+  "response": {
+    "data": {
+      "waitCardForProduct": null
+    }
+  }
+}

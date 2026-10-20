@@ -1,0 +1,422 @@
+{
+  "variables": {
+    "keyword": "타임특가",
+    "limit": 10,
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36072555",
+          "title": "압도적 소갈비탕 1.5kg 2개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/182824883",
+          "isHot": false,
+          "isEnd": false,
+          "price": "18,520원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/182824883.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/064947c4a0df0aada0fa38376c02f0125e554310.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/ad5e099263660a2ac406519de75b2970d92f925a.webp"
+              ],
+              "rating": 4.1,
+              "section": "daily",
+              "delivery": "오늘출발",
+              "dealEndAt": "2026-10-21T00:00:00",
+              "salePrice": 18520,
+              "unitPrice": "100g당 618원",
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T03:00:19.475Z",
+              "reviewCount": 84,
+              "discountRate": 28,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "originalPrice": 25800,
+              "pageViewCount": 4091,
+              "todayDealRank": 1,
+              "lowestIn30Days": true,
+              "todayDealEndAt": "2026-10-21T00:00:00",
+              "todayDealStartAt": "2026-10-20T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "0"
+          ],
+          "postedAt": "2026-10-19T15:00:33.000Z"
+        },
+        {
+          "id": "36072507",
+          "title": "비오엠 원더프루프 펜 아이라이너 01 원더 블랙 0.5g 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/34328177",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,590원",
+          "providerId": 21,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/34328177.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "section": "daily",
+              "delivery": "내일도착",
+              "dealEndAt": "2026-10-21T00:00:00",
+              "salePrice": 7590,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T03:00:19.953Z",
+              "discountRate": 49,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "originalPrice": 15000,
+              "pageViewCount": 283,
+              "todayDealRank": 1,
+              "lowestIn30Days": true,
+              "todayDealEndAt": "2026-10-21T00:00:00",
+              "detailCheckedAt": "2026-10-19T15:30:47.408Z",
+              "todayDealStartAt": "2026-10-20T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "1"
+          ],
+          "postedAt": "2026-10-19T15:01:17.000Z"
+        },
+        {
+          "id": "36100932",
+          "title": "쿠팡이츠 선착순 1만원 할인쿠폰 대기 (매일 진행)",
+          "mallId": null,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14954132?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,000원",
+          "providerId": 18,
+          "categoryId": 8,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14954132.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "2"
+          ],
+          "postedAt": "2026-10-20T02:36:50.000Z"
+        },
+        {
+          "id": "34154989",
+          "title": "퍼니트 80만 역가수치 파인애플 브로멜라인 효소 3g 100포 1박스",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/273929733",
+          "isHot": false,
+          "isEnd": false,
+          "price": "23,900원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/273929733.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4.7,
+              "section": "daily",
+              "delivery": "오늘출발",
+              "dealEndAt": "2026-10-21T00:00:00",
+              "salePrice": 23900,
+              "unitPrice": "1포당 239원",
+              "bestSeller": true,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T03:00:19.782Z",
+              "reviewCount": 66,
+              "discountRate": 52,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "originalPrice": 49900,
+              "pageViewCount": 597,
+              "todayDealRank": 1,
+              "lowestIn30Days": true,
+              "todayDealEndAt": "2026-10-21T00:00:00",
+              "detailCheckedAt": "2026-10-19T15:30:42.493Z",
+              "todayDealStartAt": "2026-10-20T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "3"
+          ],
+          "postedAt": "2026-09-29T14:27:23.000Z"
+        },
+        {
+          "id": "32018487",
+          "title": "AHC 프리미어 앰플 인 아이크림 코어리프팅 12ml 6개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2636765689",
+          "isHot": false,
+          "isEnd": false,
+          "price": "11,000원",
+          "providerId": 21,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2636765689.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4.7,
+              "section": "daily",
+              "delivery": "내일도착",
+              "dealEndAt": "2026-10-21T00:00:00",
+              "salePrice": 11000,
+              "unitPrice": "10ml당 1,528원",
+              "bestSeller": true,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T03:00:19.091Z",
+              "sellerName": "총 6개",
+              "reviewCount": 4856,
+              "discountRate": 84,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "categoryLabel": "뷰티",
+              "originalPrice": 72000,
+              "pageViewCount": 152247,
+              "todayDealRank": 1,
+              "todayDealEndAt": "2026-10-21T00:00:00",
+              "detailCheckedAt": "2026-10-19T15:30:10.729Z",
+              "todayDealStartAt": "2026-10-20T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "4"
+          ],
+          "postedAt": "2026-09-14T03:00:45.000Z"
+        },
+        {
+          "id": "36099830",
+          "title": "푸드페스타 선착순 쿠폰",
+          "mallId": 1,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993927",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 0 (KRW)",
+          "providerId": 5,
+          "categoryId": 8,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993927.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "data": null,
+          "searchAfter": [
+            "5"
+          ],
+          "postedAt": "2026-10-20T01:07:21.000Z"
+        },
+        {
+          "id": "31053071",
+          "title": "리퀴드 주방세제 레몬향 4L 2개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2637047977",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,890원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2637047977.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4.4,
+              "section": "daily",
+              "delivery": "오늘출발",
+              "dealEndAt": "2026-10-21T00:00:00",
+              "salePrice": 6890,
+              "bestSeller": true,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T03:00:19.347Z",
+              "reviewCount": 137,
+              "discountRate": 59,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "originalPrice": 16900,
+              "pageViewCount": 4842,
+              "todayDealRank": 1,
+              "lowestIn30Days": true,
+              "todayDealEndAt": "2026-10-21T00:00:00",
+              "detailCheckedAt": "2026-10-19T15:30:17.696Z",
+              "todayDealStartAt": "2026-10-20T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "6"
+          ],
+          "postedAt": "2026-09-07T09:01:02.000Z"
+        },
+        {
+          "id": "26753554",
+          "title": "리퍼, 로보락 아쿠아청소기 F25 ACE, 화이트, 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2140137355",
+          "isHot": false,
+          "isEnd": false,
+          "price": "322,000원",
+          "providerId": 21,
+          "categoryId": 6,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2140137355.jpeg",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/6f98debbd75fa66709d2f73b1f4c77ed053edb99.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/650eee5d3ed1bc9e5a1c50428cef25c16edb6fc6.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/79f182202ddaf264f5ec37a67d4081e0882ed9fa.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/a6578a8f1a516fd5fff8c47fd1b135b04a2dd3f6.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/3bfa326ff0ec2119dfc389be1e4a1c3e4417b284.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/8fe6be4b1178127e19211eb2277c36e16d28477b.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/aef40dab5f2f4c6fbf6e37e776519ea9ddd959c2.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/4b914c6157c93e6ea4f3c9c61076c805e2fafb50.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/b0d731b21e1b579509c05437c800e1d54e7688fa.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/060229f3df9c53d5b1640c046f62c5ce88fac3a8.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/acff9327d6f61dfdd77c8020531734389cfbecc1.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/121db5ae403172e2b11ed1daae66412df8040e13.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/5132661fd497e823b3f0a90d81676a94693c88a4.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/a251c9f23170a03dd880015ba3a2e0b95c57d447.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/5a5d50c1e2aa1a99372ea331586fdd0933600594.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/8b64d127233c3e5a3bcb2d163648ac5fe54e94b0.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/81f83bd22c2e568cd5829f0528c77c1cc6a29206.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/c84cf9393a8d5268a4a0c871d67920545ec95ca6.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/9068580ab1a7a4b48d79c71add4684cd70d12b23.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/0dd6366c1c8754ce109f783c67d2019c34ccb51e.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/9e8cb30766add0707dfcd9733a02d3eb9ae28c78.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/aa5817c18db00be3baa94ebe700d22db8abb98e5.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/aa5817c18db00be3baa94ebe700d22db8abb98e5.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/6238b11e3675619ac2b788e5315ddac119c2551e.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/6dead2f1566565cafc6a3307d5b60b31609a7881.webp"
+              ],
+              "rating": 4.4,
+              "section": "daily",
+              "delivery": "내일도착",
+              "dealEndAt": "2026-10-21T00:00:00",
+              "salePrice": 322000,
+              "bestSeller": true,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T03:00:19.672Z",
+              "sellerName": "S급 리퍼",
+              "reviewCount": 19,
+              "discountRate": 59,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "originalPrice": 799000,
+              "pageViewCount": 3352,
+              "todayDealRank": 1,
+              "lowestIn30Days": true,
+              "todayDealEndAt": "2026-10-21T00:00:00",
+              "todayDealStartAt": "2026-10-20T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "7"
+          ],
+          "postedAt": "2026-08-03T13:45:50.000Z"
+        },
+        {
+          "id": "36099461",
+          "title": "푸드페스타 10시 선착순 쿠폰",
+          "mallId": 1,
+          "url": "https://www.fmkorea.com/10464850330",
+          "isHot": null,
+          "isEnd": false,
+          "price": "0원",
+          "providerId": 7,
+          "categoryId": 8,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10464850330.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "8"
+          ],
+          "postedAt": "2026-10-20T00:48:00.000Z"
+        },
+        {
+          "id": "31621765",
+          "title": "영광 모싯잎 모시송편 찐송편 통동부 50g 40개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/141384759",
+          "isHot": false,
+          "isEnd": false,
+          "price": "19,190원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/141384759.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4.7,
+              "section": "daily",
+              "delivery": "내일도착",
+              "dealEndAt": "2026-10-21T00:00:00",
+              "salePrice": 19190,
+              "unitPrice": "10g당 96원",
+              "bestSeller": true,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T03:00:19.784Z",
+              "reviewCount": 65,
+              "discountRate": 33,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "originalPrice": 29000,
+              "pageViewCount": 541,
+              "todayDealRank": 2,
+              "lowestIn30Days": true,
+              "todayDealEndAt": "2026-10-21T00:00:00",
+              "detailCheckedAt": "2026-10-19T15:30:38.031Z",
+              "todayDealStartAt": "2026-10-20T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "9"
+          ],
+          "postedAt": "2026-09-11T12:01:10.000Z"
+        }
+      ]
+    }
+  }
+}

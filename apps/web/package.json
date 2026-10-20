@@ -13,9 +13,11 @@
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
     "prettier-fix": "prettier --write \"./**/*.{js,ts,tsx}\" --ignore-path .gitignore --ignore-path .prettierignore ",
-    "check-types": "tsc --noEmit",
+    "check-types": "tsc --noEmit && tsc -p screens",
     "analyze": "ANALYZE=true next build --webpack",
-    "knip": "knip"
+    "knip": "knip",
+    "screens": "playwright test -c screens/playwright.config.ts",
+    "screens:record": "SCREENS_MODE=record playwright test -c screens/playwright.config.ts --project=mobile-light --project=desktop-light"
   },
   "dependencies": {
     "@jirum/design-system": "workspace:*",
@@ -66,6 +68,7 @@
     "@msw/serve": "^0.11.0",
     "@next/bundle-analyzer": "^16.4.0",
     "@parcel/watcher": "^2.6.0",
+    "@playwright/test": "1.64.1",
     "@storybook/react": "^10.6.1",
     "@svgr/cli": "^8.1.0",
     "@tailwindcss/postcss": "^4.3.3",
@@ -76,6 +79,7 @@
     "@types/react-dom": "^19.3.0",
     "@types/react-scroll": "^1.8.10",
     "@types/react-swipeable-views": "^0.13.6",
+    "axe-core": "4.14.0",
     "concurrently": "^10.0.6",
     "eslint": "^10.12.0",
     "eslint-plugin-storybook": "^10.6.1",

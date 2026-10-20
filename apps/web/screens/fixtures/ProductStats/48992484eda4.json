@@ -1,0 +1,19 @@
+{
+  "variables": {
+    "id": 36089133
+  },
+  "response": {
+    "data": {
+      "product": {
+        "id": "36089133",
+        "isHot": true,
+        "isEnd": false,
+        "wishlistCount": 0,
+        "isMyLike": null,
+        "isMyReported": false,
+        "likeCount": 0,
+        "isMyWishlist": false
+      }
+    }
+  }
+}

@@ -1,0 +1,291 @@
+{
+  "variables": {
+    "limit": 12,
+    "keyword": "만원이하",
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "searchAfter": "1792465031000"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36100961",
+          "title": "아이웍스 X-0288 (4545P/R9700) 미니 AI PC",
+          "mallId": 530,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993961",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,545원",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993961.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792464389000"
+          ],
+          "postedAt": "2026-10-20T02:46:29.000Z"
+        },
+        {
+          "id": "36100932",
+          "title": "쿠팡이츠 선착순 1만원 할인쿠폰 대기 (매일 진행)",
+          "mallId": null,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14954132?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,000원",
+          "providerId": 18,
+          "categoryId": 8,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14954132.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792463810000"
+          ],
+          "postedAt": "2026-10-20T02:36:50.000Z"
+        },
+        {
+          "id": "36100935",
+          "title": "농심 브랜드쿠폰 (0원/무료)",
+          "mallId": 1,
+          "url": "https://arca.live/b/hotdeal/186469457",
+          "isHot": false,
+          "isEnd": false,
+          "price": "0원",
+          "providerId": 12,
+          "categoryId": 8,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186469457.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792463601000"
+          ],
+          "postedAt": "2026-10-20T02:33:21.000Z"
+        },
+        {
+          "id": "36100944",
+          "title": "의정부식 부대찌개 700g×2팩 총 1.4kg 7,900원",
+          "mallId": 1,
+          "url": "https://www.dogdrip.net/730532284",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,900원",
+          "providerId": 108,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730532284.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792463540000"
+          ],
+          "postedAt": "2026-10-20T02:32:20.000Z"
+        },
+        {
+          "id": "36100893",
+          "title": "양구 펀치볼 삶은 시래기 200g 5팩 9,400원",
+          "mallId": 1,
+          "url": "https://www.fmkorea.com/10465081860",
+          "isHot": null,
+          "isEnd": false,
+          "price": "9,400원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465081860.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792463340000"
+          ],
+          "postedAt": "2026-10-20T02:29:00.000Z"
+        },
+        {
+          "id": "36100898",
+          "title": "생면식감 매운맛 95.9g 4개",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10465101304",
+          "isHot": null,
+          "isEnd": false,
+          "price": "2,680원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465101304.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792463340000"
+          ],
+          "postedAt": "2026-10-20T02:29:00.000Z"
+        },
+        {
+          "id": "36100616",
+          "title": "감자옹심이 800g 9900원",
+          "mallId": 1186,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14954091?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,900원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14954091.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792463076000"
+          ],
+          "postedAt": "2026-10-20T02:24:36.000Z"
+        },
+        {
+          "id": "36100617",
+          "title": "민물장어 초벌 370g",
+          "mallId": 1158,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741542",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,430원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741542.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792463040000"
+          ],
+          "postedAt": "2026-10-20T02:24:00.000Z"
+        },
+        {
+          "id": "36100622",
+          "title": "유정란 무항생제 자연방목 계란 20구 8620원",
+          "mallId": 1,
+          "url": "https://eomisae.co.kr/rt/206947027",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,620원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206947027.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792463005000"
+          ],
+          "postedAt": "2026-10-20T02:23:25.000Z"
+        },
+        {
+          "id": "36100962",
+          "title": "종로식 닭한마리 국내산 닭볶음탕 1.1kg 양념 닭도리탕 7,500원",
+          "mallId": 1,
+          "url": "https://damoang.net/economy/81870",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,500원",
+          "providerId": 106,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/damoang/81870.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "다모앙"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792462740000"
+          ],
+          "postedAt": "2026-10-20T02:19:00.000Z"
+        },
+        {
+          "id": "36100594",
+          "title": "보이는 물티슈 베이지 100매 5팩+5팩 캡형",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741538",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741538.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792462560000"
+          ],
+          "postedAt": "2026-10-20T02:16:00.000Z"
+        },
+        {
+          "id": "36100589",
+          "title": "의정부식 부대찌개 700g×2팩 7,900원",
+          "mallId": 1,
+          "url": "https://www.city.kr/ln/43184334",
+          "isHot": null,
+          "isEnd": false,
+          "price": "7,900원",
+          "providerId": 6,
+          "categoryId": 2,
+          "category": "음식",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/city/43184334.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "시티"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792462420000"
+          ],
+          "postedAt": "2026-10-20T02:13:40.000Z"
+        }
+      ]
+    }
+  }
+}

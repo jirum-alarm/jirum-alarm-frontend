@@ -1,0 +1,42 @@
+{
+  "variables": {
+    "id": 36089133
+  },
+  "response": {
+    "data": {
+      "categorizedReactionKeywords": {
+        "lastUpdatedAt": "2026-10-20T02:00:35.590Z",
+        "items": [
+          {
+            "type": "POSITIVE",
+            "name": "구매했어요",
+            "count": 5,
+            "tag": "구매",
+            "role": "QUALITY"
+          },
+          {
+            "type": "POSITIVE",
+            "name": "가격이 싸요",
+            "count": 5,
+            "tag": "가격",
+            "role": "QUALITY"
+          },
+          {
+            "type": "POSITIVE",
+            "name": "좋아했어요",
+            "count": 3,
+            "tag": "긍정",
+            "role": "QUALITY"
+          },
+          {
+            "type": "NEGATIVE",
+            "name": "비싸요",
+            "count": 1,
+            "tag": "가격",
+            "role": "QUALITY"
+          }
+        ]
+      }
+    }
+  }
+}

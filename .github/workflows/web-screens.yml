@@ -1,0 +1,91 @@
+name: web-screens
+
+# 화면 하네스(apps/web/screens): 녹화된 고정 데이터로 web 운영 빌드를 띄워 주요 화면을
+# 모바일·데스크톱 × 라이트·다크(+ 빈·에러 상태)로 찍고 점검한다 — JS 오류·오류 경계·가로 넘침·녹화 안 된 쿼리는 막고,
+# 글자 겹침·접근성은 report.md 로 보고. 타입·단위 테스트가 못 보는 «그려진 화면» 층을 맡는다.
+# 결과(스크린샷 + report.md)는 아티팩트 web-screens(7일) — `gh run download <run> -n web-screens`.
+on:
+  push:
+    branches: [main]
+    paths: &paths
+      - .github/workflows/web-screens.yml
+      - apps/web/**
+      - packages/**
+      - pnpm-lock.yaml
+  pull_request:
+    paths: *paths
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-screens-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 22.18.0
+  PNPM_VERSION: 10.30.3
+
+jobs:
+  screens:
+    name: Web screens
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile --filter=web...
+
+      - name: Next build cache
+        uses: actions/cache@v4
+        with:
+          path: apps/web/.next/cache
+          key: next-web-screens-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            next-web-screens-${{ hashFiles('pnpm-lock.yaml') }}-
+            next-web-screens-
+
+      # 브라우저가 부를 주소(NEXT_PUBLIC_SERVICE_URL)는 빌드에 박힌다 — 하네스의 web 주소와 같아야 한다.
+      - name: Build web
+        env:
+          NODE_ENV: production
+          NEXT_PUBLIC_SERVICE_URL: http://localhost:3010
+        run: pnpm turbo run build --filter=web...
+
+      - name: Install Chromium
+        working-directory: apps/web
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Screens
+        working-directory: apps/web
+        env:
+          SCREENS_SERVER: start
+        run: pnpm screens
+
+      - name: Report summary
+        if: always()
+        run: |
+          if [ -f apps/web/screens/.out/report.md ]; then
+            sed -n '1,/^### /p' apps/web/screens/.out/report.md | sed '$d' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: web-screens
+          path: |
+            apps/web/screens/.out
+            !apps/web/screens/.out/test-results/**/trace.zip
+          retention-days: 7

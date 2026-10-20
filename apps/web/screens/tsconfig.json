@@ -1,0 +1,6 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": { "noEmit": true, "allowImportingTsExtensions": true, "lib": ["dom", "dom.iterable", "esnext"] },
+  "include": ["./**/*.ts", "./**/*.mts"],
+  "exclude": [".out"]
+}

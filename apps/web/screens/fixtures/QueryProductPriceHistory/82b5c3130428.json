@@ -1,0 +1,229 @@
+{
+  "variables": {
+    "id": 36089133,
+    "days": 90
+  },
+  "response": {
+    "data": {
+      "product": {
+        "id": "36089133",
+        "priceHistory": {
+          "basis": "MAPPING",
+          "confidence": "HIGH",
+          "currency": "KRW",
+          "rangeDays": 90,
+          "pointCount": 6,
+          "sampleCount": 8,
+          "disclaimer": null,
+          "holdout": false,
+          "priceAxis": "TOTAL",
+          "unitLabel": null,
+          "points": [
+            {
+              "date": "2026-04-13",
+              "price": 363870,
+              "deal": {
+                "id": 23713908,
+                "title": "7800x3d 국내정발 코인조금 필요 역대  (363,870원/무료)",
+                "displayTitle": null,
+                "parsedPrice": 363870,
+                "price": "363,870원",
+                "priceCurrency": "KRW",
+                "postedAt": "2026-04-13T06:05:47.000Z",
+                "thumbnail": "https://cdn.jirum-alarm.com/community/arca/167548918.jpg",
+                "providerId": 12,
+                "providerName": "아카",
+                "url": "https://arca.live/b/hotdeal/167548918?p=1",
+                "categoryId": 1,
+                "isSeed": false
+              },
+              "deals": [
+                {
+                  "id": 23713908,
+                  "title": "7800x3d 국내정발 코인조금 필요 역대  (363,870원/무료)",
+                  "displayTitle": null,
+                  "parsedPrice": 363870,
+                  "postedAt": "2026-04-13T06:05:47.000Z",
+                  "thumbnail": "https://cdn.jirum-alarm.com/community/arca/167548918.jpg",
+                  "providerName": "아카",
+                  "isSeed": false
+                }
+              ]
+            },
+            {
+              "date": "2026-04-30",
+              "price": 354804,
+              "deal": {
+                "id": 24058293,
+                "title": "7800X3D 멀티팩 국내정품 (역대가, 5/1 자정부터)",
+                "displayTitle": "AMD 라이젠7 7800X3D 멀티팩 5월 1일 자정부터",
+                "parsedPrice": 354804,
+                "price": "￦ 354,804 (KRW)",
+                "priceCurrency": "KRW",
+                "postedAt": "2026-04-30T08:26:00.000Z",
+                "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1947021.jpg",
+                "providerId": 5,
+                "providerName": "퀘이사존",
+                "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1947021",
+                "categoryId": 1,
+                "isSeed": false
+              },
+              "deals": [
+                {
+                  "id": 24058293,
+                  "title": "7800X3D 멀티팩 국내정품 (역대가, 5/1 자정부터)",
+                  "displayTitle": "AMD 라이젠7 7800X3D 멀티팩 5월 1일 자정부터",
+                  "parsedPrice": 354804,
+                  "postedAt": "2026-04-30T08:26:00.000Z",
+                  "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1947021.jpg",
+                  "providerName": "퀘이사존",
+                  "isSeed": false
+                }
+              ]
+            },
+            {
+              "date": "2026-05-03",
+              "price": 317830,
+              "deal": {
+                "id": 24107667,
+                "title": "7800X3D 멀티팩 정품",
+                "displayTitle": null,
+                "parsedPrice": 317830,
+                "price": "￦ 317,830 (KRW)",
+                "priceCurrency": "KRW",
+                "postedAt": "2026-05-02T15:48:00.000Z",
+                "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1947890.jpg",
+                "providerId": 5,
+                "providerName": "퀘이사존",
+                "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1947890",
+                "categoryId": 1,
+                "isSeed": false
+              },
+              "deals": [
+                {
+                  "id": 24107667,
+                  "title": "7800X3D 멀티팩 정품",
+                  "displayTitle": null,
+                  "parsedPrice": 317830,
+                  "postedAt": "2026-05-02T15:48:00.000Z",
+                  "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1947890.jpg",
+                  "providerName": "퀘이사존",
+                  "isSeed": false
+                }
+              ]
+            },
+            {
+              "date": "2026-08-02",
+              "price": 346392,
+              "deal": {
+                "id": 26636148,
+                "title": "AMD 라이젠7 7800X3D 정품 직구 (346,392원/무료)",
+                "displayTitle": null,
+                "parsedPrice": 346392,
+                "price": "346,392원",
+                "priceCurrency": "KRW",
+                "postedAt": "2026-08-01T15:05:28.000Z",
+                "thumbnail": "https://cdn.jirum-alarm.com/community/arca/178694728.png",
+                "providerId": 12,
+                "providerName": "아카",
+                "url": "https://arca.live/b/hotdeal/178694728?p=1",
+                "categoryId": 1,
+                "isSeed": false
+              },
+              "deals": [
+                {
+                  "id": 26636148,
+                  "title": "AMD 라이젠7 7800X3D 정품 직구 (346,392원/무료)",
+                  "displayTitle": null,
+                  "parsedPrice": 346392,
+                  "postedAt": "2026-08-01T15:05:28.000Z",
+                  "thumbnail": "https://cdn.jirum-alarm.com/community/arca/178694728.png",
+                  "providerName": "아카",
+                  "isSeed": false
+                }
+              ]
+            },
+            {
+              "date": "2026-08-17",
+              "price": 315000,
+              "deal": {
+                "id": 28535729,
+                "title": "AMD Ryzen 7 7800X3D (315,000원/무료)",
+                "displayTitle": null,
+                "parsedPrice": 315000,
+                "price": "315,000원",
+                "priceCurrency": "KRW",
+                "postedAt": "2026-08-16T15:26:42.000Z",
+                "thumbnail": "https://cdn.jirum-alarm.com/community/arca/180110104.jpg",
+                "providerId": 12,
+                "providerName": "아카",
+                "url": "https://arca.live/b/hotdeal/180110104?p=1",
+                "categoryId": 2,
+                "isSeed": false
+              },
+              "deals": [
+                {
+                  "id": 28535729,
+                  "title": "AMD Ryzen 7 7800X3D (315,000원/무료)",
+                  "displayTitle": null,
+                  "parsedPrice": 315000,
+                  "postedAt": "2026-08-16T15:26:42.000Z",
+                  "thumbnail": "https://cdn.jirum-alarm.com/community/arca/180110104.jpg",
+                  "providerName": "아카",
+                  "isSeed": false
+                }
+              ]
+            },
+            {
+              "date": "2026-10-20",
+              "price": 302084,
+              "deal": {
+                "id": 36089428,
+                "title": "AMD Ryzen 7 7800X3D CPU 직구",
+                "displayTitle": "AMD Ryzen 7 7800X3D CPU 직구 302,084원",
+                "parsedPrice": 302084,
+                "price": "￦ 302,084 (KRW)",
+                "priceCurrency": "KRW",
+                "postedAt": "2026-10-19T23:45:20.000Z",
+                "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993895.webp",
+                "providerId": 5,
+                "providerName": "퀘이사존",
+                "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993895",
+                "categoryId": 1,
+                "isSeed": false
+              },
+              "deals": [
+                {
+                  "id": 36089428,
+                  "title": "AMD Ryzen 7 7800X3D CPU 직구",
+                  "displayTitle": "AMD Ryzen 7 7800X3D CPU 직구 302,084원",
+                  "parsedPrice": 302084,
+                  "postedAt": "2026-10-19T23:45:20.000Z",
+                  "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993895.webp",
+                  "providerName": "퀘이사존",
+                  "isSeed": false
+                },
+                {
+                  "id": 36089133,
+                  "title": "7800X3D (302,469원/30,246원)",
+                  "displayTitle": "7800X3D 302,469원",
+                  "parsedPrice": 302469,
+                  "postedAt": "2026-10-19T23:19:37.000Z",
+                  "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186459565.webp",
+                  "providerName": "아카",
+                  "isSeed": true
+                }
+              ]
+            }
+          ]
+        },
+        "modelPage": {
+          "slug": "amd-라이젠7-5세대-7800x3d-라파엘",
+          "modelName": "라이젠7-5세대 7800X3D (라파엘)",
+          "brand": "AMD",
+          "dealCount": 42
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+# 화면 하네스 (`apps/web/screens`)
+
+타입·단위 테스트는 «그려진 화면»을 못 본다. 겹침·안 보임·다크 대비·가로 넘침 같은 깨짐은 실제로 그려 봐야 보이는데,
+운영 API 로 띄우면 데이터가 매번 달라 같은 상태를 다시 만들 수 없다. 그래서 운영 응답을 한 번 녹화해 두고(`fixtures/`),
+그 데이터로 web 을 띄워 주요 화면을 찍고 점검한다. AI 가 화면 변경을 «직접 보고» 확인하는 길이다.
+
+```bash
+pnpm --filter web screens                 # next dev + 녹화 데이터로 전부 (2~3분)
+pnpm --filter web screens -g keyword-hub  # 화면 하나만 (-g 는 테스트 이름 grep)
+pnpm --filter web screens --project=mobile-dark
+pnpm --filter web screens:record          # 운영 API 로 fixtures 새로 녹화 (pages.ts 를 바꿨거나 새 쿼리를 쓸 때)
+
+# CI 와 같은 운영 빌드로:
+NEXT_PUBLIC_SERVICE_URL=http://localhost:3010 NODE_ENV=production pnpm --filter web exec next build --webpack
+SCREENS_SERVER=start pnpm --filter web screens
+```
+
+결과는 `screens/.out/`:
+- `report.md` — 맨 위 종류별 개수, 아래 화면별 문제. **여기부터 읽는다.**
+- `<project>/<화면>.png` — 첫 화면(고정 헤더·탭바 포함, 사용자가 처음 보는 그대로)
+- `<project>/<화면>.full.png` — 아래로 4화면(고정 요소는 숨김)
+- project = `mobile-light`·`mobile-dark`·`desktop-light`·`desktop-dark`. 빈·에러 상태는 `mobile-light/<화면>.empty.png`·`.error.png`
+
+## 무엇을 막고 무엇을 보고하나
+
+| 점검 | 기본 데이터 | 빈·에러 상태 |
+|---|---|---|
+| 페이지 JS 오류(pageerror·console.error) | ❌ 막음 | ⚠️ 보고 |
+| 오류 경계(「서버에러가 발생했습니다」)·HTTP 5xx | ❌ 막음 | — (에러 상태에선 정상일 수 있음) |
+| 녹화 안 된 쿼리 | ❌ 막음 → `screens:record` | ⚠️ 보고 |
+| 가로 넘침(폰에서 옆으로 밀림) | ❌ 막음 | ❌ 막음 |
+| 글자끼리 겹침 | ⚠️ 보고 | ⚠️ 보고 |
+| 접근성(대비·이름 없는 링크/버튼/이미지, axe) | ⚠️ 보고 | ⚠️ 보고 |
+
+⚠️ 는 이미 있는 것이 남아 있어 보고만 한다. 0 으로 줄인 항목은 막는 쪽(❌)으로 올린다.
+
+## 고정 데이터 서버 (`fixture-server.mts`)
+
+web 의 서버 렌더(GRAPHQL_ENDPOINT·API_URL)와 브라우저 프록시(`/api/graphql`) 요청이 전부 여기로 온다.
+- 쿼리는 `fixtures/<오퍼레이션>/<변수 해시>.json` 에서. 녹화 시각과 지금의 차이만큼 날짜를 밀어 「3분 전」·「진행 중」이 유지된다.
+- 뮤테이션은 운영으로 절대 넘기지 않는다(게스트 생성·조회수 부작용) — `MUTATIONS` 표 또는 null.
+- 녹화는 인증 없이 — 공개 데이터만 들어간다. 토큰·이메일 모양 값은 지우고, 긴 목록은 60개로 자른다(공개 레포).
+- 시나리오: `empty`(객체 배열 전부 비움)·`error`(모든 쿼리 errors). 화면마다 하네스가 `POST /__scenario` 로 바꾼다.
+- 녹화보다 더 스크롤해 부른 다음 쪽은 «목록 끝»으로 답한다.
+
+## 화면 추가
+
+`pages.ts` 에 한 줄(`states` = 빈·에러도 찍기, `desktop` = PC 레이아웃이 따로 있음) → `screens:record` → `screens`.
+로그인한 화면(마이페이지 키워드·알림함 내용 등)은 아직 없다 — 녹화가 비로그인이라 `me` 류는 FORBIDDEN 으로 녹화된다.

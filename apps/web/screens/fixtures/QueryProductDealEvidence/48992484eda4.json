@@ -1,0 +1,25 @@
+{
+  "variables": {
+    "id": 36089133
+  },
+  "response": {
+    "data": {
+      "product": {
+        "id": "36089133",
+        "dealEvidence": {
+          "headline": {
+            "kind": "HISTORY",
+            "strength": "STRONG",
+            "title": "보통가보다 39,378원 싸요 (11%)",
+            "highlight": "39,378원",
+            "detail": "좋은 딜 · 지난 1년 핫딜 7건 중 85%보다 싸요"
+          },
+          "support": "아카 인기글 · 댓글 5명 구매 · ‘가격이 싸요’ 5",
+          "caveat": null,
+          "condition": null,
+          "hiddenGuideIds": []
+        }
+      }
+    }
+  }
+}

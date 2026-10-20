@@ -1,0 +1,627 @@
+{
+  "variables": {
+    "limit": 20,
+    "orderBy": "ID",
+    "orderOption": "DESC",
+    "searchAfter": null
+  },
+  "response": {
+    "data": {
+      "comments": [
+        {
+          "id": "80",
+          "productId": null,
+          "parentId": null,
+          "title": "(종료)지름알림에서 토스쇼핑 상품 링크를 눌러 들어가면, 첫 구매 고객에게 3,000원 쿠폰이 발급돼요 🎉",
+          "content": ":::jirum-images\nhttps://cdn.jirum-alarm.com/user-product/c5ebfda7-871e-45e5-9c1e-fd914dfa1e77.png\n:::\n이 쿠폰은 토스쇼핑에 직접 들어가면 받을 수 없고, 지름알림 링크를 통해 들어간 경우에만 받을 수 있는 혜택이에요.\n\n✅ 링크 클릭 시 바로 발급\n✅ 토스쇼핑 모든 상품에 사용 가능\n✅ 상품이 올리온 후 24시간 이내, 3,100원 이상 구매 시 사용 가능\n\n지름알림 핫딜에서 토스쇼핑 상품을 찾아 더 저렴하게 구매해 보세요!\n\n※ 본 이벤트는 사전 공지 없이 종료될 수 있어요.",
+          "createdAt": "2026-09-01T11:33:40.834Z",
+          "searchAfter": [
+            "80",
+            "0",
+            "80"
+          ],
+          "isNotice": true,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 667,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "9",
+            "nickname": "피릿"
+          },
+          "taggedProduct": null
+        },
+        {
+          "id": "77",
+          "productId": 26376552,
+          "parentId": null,
+          "title": "상품에 가격 그래프 나오는거 보셨나요??",
+          "content": ":::jirum-images\nhttps://cdn.jirum-alarm.com/user-product/46c03a56-afd0-4710-990d-94cdbce30f25.png\n:::\n핫딜인지 한눈에 알 수 있어서 엄청 유용하네요!!",
+          "createdAt": "2026-07-30T16:02:46.453Z",
+          "searchAfter": [
+            "77",
+            "0",
+            "77"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 952,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "9",
+            "nickname": "피릿"
+          },
+          "taggedProduct": {
+            "id": "26376552",
+            "title": "잘풀리는집 순수클로버 천연펄프 화장지 27m 30롤 2팩 (20,865원/무료)",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/arca/178282485.jpg",
+            "price": "20,865원",
+            "postedAt": "2026-07-28T16:02:36.000Z",
+            "url": "https://arca.live/b/hotdeal/178282485?p=1"
+          }
+        },
+        {
+          "id": "76",
+          "productId": 25152650,
+          "parentId": null,
+          "title": null,
+          "content": "30-50%까지 득템기회인듯해요👍",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "76",
+            "0",
+            "76"
+          ],
+          "isNotice": false,
+          "likeCount": 1,
+          "replyCount": 1,
+          "viewCount": 977,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "1471",
+            "nickname": "목마른감자489"
+          },
+          "taggedProduct": {
+            "id": "25152650",
+            "title": "스탠리 텀블러 1.18L 32,000원, 887mL 24,500원 외 다양",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/714803.jpg",
+            "price": null,
+            "postedAt": "2026-06-23T15:25:00.000Z",
+            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=714803"
+          }
+        },
+        {
+          "id": "72",
+          "productId": 24317002,
+          "parentId": null,
+          "title": null,
+          "content": "저렴하네요 감사합니다",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "72",
+            "0",
+            "72"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 1,
+          "viewCount": 886,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "325",
+            "nickname": "유유탱5"
+          },
+          "taggedProduct": {
+            "id": "24317002",
+            "title": "닭 절단육 외 다양, 자포니카 민물장어, 광천김, 카누, 콩기름, 오레오 12개",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/703649.jpg",
+            "price": null,
+            "postedAt": "2026-05-13T04:34:00.000Z",
+            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&hotlist_flag=999&no=703649"
+          }
+        },
+        {
+          "id": "71",
+          "productId": 22067701,
+          "parentId": null,
+          "title": null,
+          "content": "지금 재고가 있나요",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "71",
+            "0",
+            "71"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 910,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "1429",
+            "nickname": "긴장한라면410"
+          },
+          "taggedProduct": {
+            "id": "22067701",
+            "title": "로지텍G PRO X2 SUPERSTRIKE 무선 마우스 259,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/101304.jpg",
+            "price": "259,000원",
+            "postedAt": "2026-01-29T07:10:48.000Z",
+            "url": "https://bbs.ruliweb.com/market/board/1020/read/101304"
+          }
+        },
+        {
+          "id": "69",
+          "productId": 24268440,
+          "parentId": null,
+          "title": null,
+          "content": "15종류 2개씩해서 총 30개인데 웬 60개?",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "69",
+            "0",
+            "69"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 1,
+          "viewCount": 921,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "875",
+            "nickname": "목마른라면54"
+          },
+          "taggedProduct": {
+            "id": "24268440",
+            "title": "아이스크림 다양 외 30개 총 60개",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/702692.jpg",
+            "price": "17,860원",
+            "postedAt": "2026-05-10T08:10:00.000Z",
+            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=702692"
+          }
+        },
+        {
+          "id": "68",
+          "productId": 22023111,
+          "parentId": null,
+          "title": null,
+          "content": "손녀 어린이날 선물로 무엇을 할까 고민하다가 유모차가 디럭스는 너무 무거워서\n며느리가 가지고 다니기에는 힘들어\n절충형 유모차를 알아보다가\n리뷰가 엄청많은 지니에스3를 구입햏어요",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "68",
+            "0",
+            "68"
+          ],
+          "isNotice": false,
+          "likeCount": 1,
+          "replyCount": 0,
+          "viewCount": 863,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "1411",
+            "nickname": "배고픈참기름280"
+          },
+          "taggedProduct": {
+            "id": "22023111",
+            "title": "2026 휴대용유모차 와이업 지니에스3 런칭라이브 런칭사은품 이벤트",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14273603.png",
+            "price": null,
+            "postedAt": "2026-01-28T01:40:30.000Z",
+            "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14273603?menuid=2&referrerAllArticles=false"
+          }
+        },
+        {
+          "id": "67",
+          "productId": 23498450,
+          "parentId": null,
+          "title": "두끼 맛있겠다",
+          "content": "먹고싶어요",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "67",
+            "0",
+            "67"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 756,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "9",
+            "nickname": "피릿"
+          },
+          "taggedProduct": {
+            "id": "23498450",
+            "title": "두끼 1인 식사권 (9,600원/무료)",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/694174.jpg",
+            "price": "9,600원",
+            "postedAt": "2026-04-03T02:53:00.000Z",
+            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=694174"
+          }
+        },
+        {
+          "id": "66",
+          "productId": 23480111,
+          "parentId": null,
+          "title": null,
+          "content": "가격 잘 쓰세요",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "66",
+            "0",
+            "66"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 720,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "990",
+            "nickname": "목마른무252"
+          },
+          "taggedProduct": {
+            "id": "23480111",
+            "title": "구운란 60구 대란 2판 (토스 13,963원/무배)",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/693928.png",
+            "price": "13,963원",
+            "postedAt": "2026-04-02T06:10:00.000Z",
+            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=693928"
+          }
+        },
+        {
+          "id": "65",
+          "productId": 23418384,
+          "parentId": null,
+          "title": null,
+          "content": "이런건 신고 못하나",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "65",
+            "0",
+            "65"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 811,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "1282",
+            "nickname": "지름추적짜"
+          },
+          "taggedProduct": {
+            "id": "23418384",
+            "title": "모두의식탁 베이글칩 시나몬맛 60g 10봉 (7,30원~/무료)",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/693213.jpeg",
+            "price": null,
+            "postedAt": "2026-03-30T10:18:00.000Z",
+            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=693213"
+          }
+        },
+        {
+          "id": "35",
+          "productId": 23236984,
+          "parentId": null,
+          "title": null,
+          "content": "잘 샀습니다",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "35",
+            "0",
+            "35"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 739,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "1282",
+            "nickname": "지름추적짜"
+          },
+          "taggedProduct": {
+            "id": "23236984",
+            "title": "코인딜 무농약 유러피안 모듬 채소 1kg (4,455원/무료)",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/102641.webp",
+            "price": "4,455원",
+            "postedAt": "2026-03-21T12:00:58.000Z",
+            "url": "https://bbs.ruliweb.com/market/board/1020/read/102641"
+          }
+        },
+        {
+          "id": "34",
+          "productId": 23167232,
+          "parentId": null,
+          "title": null,
+          "content": "5707은 뭔가요?",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "34",
+            "0",
+            "34"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 2394,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "1282",
+            "nickname": "지름추적짜"
+          },
+          "taggedProduct": {
+            "id": "23167232",
+            "title": "제우스랩 Z18S 18.5인치 포터블 모니터",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1933792.jpg",
+            "price": "5707",
+            "postedAt": "2026-03-18T05:04:00.000Z",
+            "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1933792"
+          }
+        },
+        {
+          "id": "33",
+          "productId": 22986481,
+          "parentId": null,
+          "title": null,
+          "content": "확인 좀 하고 올려주세요",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "33",
+            "0",
+            "33"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 618,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "1077",
+            "nickname": "당황한고추장251"
+          },
+          "taggedProduct": {
+            "id": "22986481",
+            "title": "엘포인트 컴포즈 아메 100원 가나초콜릿 100원 11시오픈",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14398725.jpg",
+            "price": null,
+            "postedAt": "2026-03-10T00:07:29.000Z",
+            "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14398725?menuid=2&referrerAllArticles=false"
+          }
+        },
+        {
+          "id": "32",
+          "productId": 22986481,
+          "parentId": null,
+          "title": null,
+          "content": "어제꺼에요",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "32",
+            "0",
+            "32"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 573,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "1077",
+            "nickname": "당황한고추장251"
+          },
+          "taggedProduct": {
+            "id": "22986481",
+            "title": "엘포인트 컴포즈 아메 100원 가나초콜릿 100원 11시오픈",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14398725.jpg",
+            "price": null,
+            "postedAt": "2026-03-10T00:07:29.000Z",
+            "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14398725?menuid=2&referrerAllArticles=false"
+          }
+        },
+        {
+          "id": "31",
+          "productId": 22341495,
+          "parentId": null,
+          "title": null,
+          "content": "품절",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "31",
+            "0",
+            "31"
+          ],
+          "isNotice": false,
+          "likeCount": 1,
+          "replyCount": 0,
+          "viewCount": 544,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "1185",
+            "nickname": "화난사과374"
+          },
+          "taggedProduct": {
+            "id": "22341495",
+            "title": "글라스락 본사 운영 스마트스토어 스포티핸들 텀블러 2개 11900원 베이비바우처",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14307865.jpg",
+            "price": "11,900원",
+            "postedAt": "2026-02-07T04:25:25.000Z",
+            "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14307865?menuid=2&referrerAllArticles=false"
+          }
+        },
+        {
+          "id": "25",
+          "productId": 21616170,
+          "parentId": null,
+          "title": null,
+          "content": "29900원임",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "25",
+            "0",
+            "25"
+          ],
+          "isNotice": false,
+          "likeCount": 1,
+          "replyCount": 0,
+          "viewCount": 520,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "1061",
+            "nickname": "감동받은오이808"
+          },
+          "taggedProduct": {
+            "id": "21616170",
+            "title": "제주 달지않은 오메기떡 3종 60g 30개",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/677697.jpg",
+            "price": "29,900원",
+            "postedAt": "2026-01-18T10:36:24.000Z",
+            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=677697"
+          }
+        },
+        {
+          "id": "20",
+          "productId": 21086030,
+          "parentId": null,
+          "title": null,
+          "content": "냠\n",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "20",
+            "0",
+            "20"
+          ],
+          "isNotice": false,
+          "likeCount": 1,
+          "replyCount": 0,
+          "viewCount": 502,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "597",
+            "nickname": "매력적인간장123"
+          },
+          "taggedProduct": {
+            "id": "21086030",
+            "title": "흑돼지 100% 순살감자탕 600g 1팩",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/674933.jpg",
+            "price": "4,900원",
+            "postedAt": "2026-01-05T02:18:26.000Z",
+            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=674933"
+          }
+        },
+        {
+          "id": "19",
+          "productId": 21054367,
+          "parentId": null,
+          "title": null,
+          "content": "80원이라니",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "19",
+            "0",
+            "19"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 524,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "1077",
+            "nickname": "당황한고추장251"
+          },
+          "taggedProduct": {
+            "id": "21054367",
+            "title": "타미힐피거 소프트 터치 쿼터집업 5",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/674705.png",
+            "price": "80,855원",
+            "postedAt": "2026-01-04T02:09:15.000Z",
+            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&hotlist_flag=999&no=674705"
+          }
+        },
+        {
+          "id": "17",
+          "productId": 16321791,
+          "parentId": null,
+          "title": null,
+          "content": "와 맛있겠다",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "17",
+            "0",
+            "17"
+          ],
+          "isNotice": false,
+          "likeCount": 1,
+          "replyCount": 0,
+          "viewCount": 515,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "325",
+            "nickname": "유유탱5"
+          },
+          "taggedProduct": {
+            "id": "16321791",
+            "title": "다이롱 케오데오 망고젤리 600g",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14022451.jpg",
+            "price": "7,500원",
+            "postedAt": "2025-11-12T08:05:04.000Z",
+            "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14022451?menuid=2&referrerAllArticles=false"
+          }
+        },
+        {
+          "id": "16",
+          "productId": 15288437,
+          "parentId": null,
+          "title": null,
+          "content": "페이코 할인 어떻게 해요??",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "16",
+            "0",
+            "16"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 529,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "815",
+            "nickname": "감사한토마토355"
+          },
+          "taggedProduct": {
+            "id": "15288437",
+            "title": "프로쉬 식기세척기 세제 30개입 x 4개 + 세척기 클리너 + 커팅케이스 + 쇼핑백",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/657472.jpg",
+            "price": "35,120원",
+            "postedAt": "2025-10-19T08:04:29.000Z",
+            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=657472"
+          }
+        }
+      ]
+    }
+  }
+}

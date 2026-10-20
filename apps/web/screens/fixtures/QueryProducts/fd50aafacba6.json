@@ -1,0 +1,302 @@
+{
+  "variables": {
+    "limit": 11,
+    "categoryId": 1,
+    "thumbnailType": "MALL",
+    "isEnd": false,
+    "orderBy": "ID",
+    "orderOption": "DESC"
+  },
+  "response": {
+    "data": {
+      "products": [
+        {
+          "id": "36102116",
+          "title": "레토 짱구 블루투스 무선 버티컬 마우스 27,810원",
+          "mallId": 28,
+          "url": "https://www.dogdrip.net/730539478",
+          "isHot": false,
+          "isEnd": false,
+          "price": "27,810원",
+          "providerId": 108,
+          "categoryId": 1,
+          "category": "전자",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730539478.webp",
+          "mallName": "카카오",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "searchAfter": [
+            "36102116"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:03:21.000Z"
+        },
+        {
+          "id": "36102108",
+          "title": "14400F + RTX 5060 Ti + RAM 32GB + Y50 블랙체리 게이밍 PC 특가",
+          "mallId": 8,
+          "url": "https://coolenjoy.net/bbs/jirum/3571099",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 2,
+          "categoryId": 1,
+          "category": "PC관련",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coolnjoy/3571099.webp",
+          "mallName": "롯데온",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿨엔조이"
+          },
+          "searchAfter": [
+            "36102108"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T03:10:23.000Z"
+        },
+        {
+          "id": "36100965",
+          "title": "LG 32U631A 32인치 IPS QHD 모니터 219,000원 컴백쇼 원데이 초특가",
+          "mallId": 530,
+          "url": "https://coolenjoy.net/bbs/jirum/3571093",
+          "isHot": false,
+          "isEnd": false,
+          "price": "219,000원",
+          "providerId": 2,
+          "categoryId": 1,
+          "category": "PC관련",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coolnjoy/3571093.webp",
+          "mallName": "컴퓨존",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿨엔조이"
+          },
+          "searchAfter": [
+            "36100965"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T02:50:09.000Z"
+        },
+        {
+          "id": "36100961",
+          "title": "아이웍스 X-0288 (4545P/R9700) 미니 AI PC",
+          "mallId": 530,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993961",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,545원",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993961.webp",
+          "mallName": "컴퓨존",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "36100961"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T02:46:29.000Z"
+        },
+        {
+          "id": "36100901",
+          "title": "짱구/피카츄 블루투스 무선 버티컬 마우스 27,810원",
+          "mallId": 28,
+          "url": "https://www.fmkorea.com/10465111638",
+          "isHot": null,
+          "isEnd": false,
+          "price": "27,810원",
+          "providerId": 7,
+          "categoryId": 1,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465111638.webp",
+          "mallName": "카카오",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "36100901"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T02:33:00.000Z"
+        },
+        {
+          "id": "36100625",
+          "title": "LG 게이밍모니터 LIVE특가🔥 4세대 OLED 27GX700A 64만 | 300Hz 27G550B 28만 | 스마트모니터 세트 27만",
+          "mallId": 1,
+          "url": "https://coolenjoy.net/bbs/jirum/3571080",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 2,
+          "categoryId": 1,
+          "category": "PC관련",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coolnjoy/3571080.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿨엔조이"
+          },
+          "searchAfter": [
+            "36100625"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T02:25:14.000Z"
+        },
+        {
+          "id": "36100580",
+          "title": "키오시아 EXCERIA PLUS G4 M.2 NVMe SSD 2TB",
+          "mallId": 51797,
+          "url": "https://www.fmkorea.com/10465014177",
+          "isHot": null,
+          "isEnd": false,
+          "price": "419,000원",
+          "providerId": 7,
+          "categoryId": 1,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465014177.webp",
+          "mallName": "아이코다몰",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "36100580"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T02:06:00.000Z"
+        },
+        {
+          "id": "36100573",
+          "title": "아틱 P12, P14 리퍼",
+          "mallId": 39781,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993947",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 6,000 (KRW)",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993947.webp",
+          "mallName": "서린몰",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "36100573"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T02:11:34.000Z"
+        },
+        {
+          "id": "36100209",
+          "title": "VXE R1 Pro MAX 무선 게이밍 마우스 PAW3395 54g",
+          "mallId": 15,
+          "url": "https://www.fmkorea.com/10464957875",
+          "isHot": null,
+          "isEnd": false,
+          "price": "39,990원",
+          "providerId": 7,
+          "categoryId": 1,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10464957875.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "36100209"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T01:39:00.000Z"
+        },
+        {
+          "id": "36100205",
+          "title": "225F + RTX5060 + 16G + 1TB 완본체 외 1종",
+          "mallId": 1179,
+          "url": "https://www.fmkorea.com/10464944809",
+          "isHot": null,
+          "isEnd": false,
+          "price": "1,358,990원",
+          "providerId": 7,
+          "categoryId": 1,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10464944809.webp",
+          "mallName": "하이마트",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "36100205"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T01:36:00.000Z"
+        },
+        {
+          "id": "36099901",
+          "title": "LG 게이밍 모니터 특집 25·27·32형 라이브 사전 안내",
+          "mallId": 1,
+          "url": "https://coolenjoy.net/bbs/jirum/3571062",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 2,
+          "categoryId": 1,
+          "category": "PC관련",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coolnjoy/3571062.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿨엔조이"
+          },
+          "searchAfter": [
+            "36099901"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T01:27:53.000Z"
+        }
+      ]
+    }
+  }
+}

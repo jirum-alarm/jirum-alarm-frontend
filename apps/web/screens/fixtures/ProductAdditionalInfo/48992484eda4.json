@@ -1,0 +1,45 @@
+{
+  "variables": {
+    "id": 36089133
+  },
+  "response": {
+    "data": {
+      "product": {
+        "id": "36089133",
+        "url": "https://arca.live/b/hotdeal/186459565",
+        "positiveCommunityReactionCount": 13,
+        "negativeCommunityReactionCount": 1,
+        "provider": {
+          "id": "12",
+          "name": "arca",
+          "nameKr": "아카",
+          "host": "arca.live"
+        },
+        "prices": [],
+        "priceContext": {
+          "dealPrice": 302469,
+          "danawaPrice": 406200,
+          "delta": 0.18090841949778436,
+          "normalPriceMin": null,
+          "normalPriceMax": null,
+          "normalPriceMedian": null,
+          "danawaProductName": null,
+          "verificationStatus": "verified",
+          "shippingIncluded": true
+        },
+        "hotDealType": "SUPER_DEAL",
+        "isYearLowest": false,
+        "hotDealIndex": null,
+        "commentSummary": {
+          "additionalInfo": "X3D CPU는 일반 CPU에 비해 고장 확률 빈도가 높다는 의견이 있고, 직구품은 AS가 없으며 불량률이 약 1~2% 정도 있다는 내용이 언급되고 있습니다.",
+          "option": null,
+          "price": "와 이건 진짜 싸다는 의견이 있고, 코스트를 생각하면 가격이 좋다는 평가가 있어요.",
+          "productId": "36089133",
+          "purchaseMethod": "직구는 AS가 없는 중고를 사는 것과 같다고 언급되며, 컴퓨존을 통해 2년 보증 리퍼 제품을 구매하는 것이 좋다는 조언이 있어요.",
+          "satisfaction": "7500f에서 7800x3d로 넘어가니 만족스럽다는 후기가 있으며, 성능 체감이 크지 않다는 의견도 있습니다.",
+          "summary": "댓글에서는 가격적인 메리트가 크다고 평가하지만, 직구 시 AS가 없고 X3D의 고장 확률이 높을 수 있다는 리스크를 함께 고려해야 한다고 이야기하고 있어요."
+        }
+      }
+    }
+  }
+}

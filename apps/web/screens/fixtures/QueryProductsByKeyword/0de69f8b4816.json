@@ -1,0 +1,531 @@
+{
+  "variables": {
+    "limit": 20,
+    "keyword": "만원이하",
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "searchAfter": "1792456560000"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36099386",
+          "title": "의정부식 1960 부대찌개 700g 2팩",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741484",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741484.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792456500000"
+          ],
+          "postedAt": "2026-10-20T00:35:00.000Z"
+        },
+        {
+          "id": "36099126",
+          "title": "폴햄 여성 터틀넥 긴팔 티셔츠 8,420원",
+          "mallId": 28,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741481",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,420원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "의류/잡화",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741481.webp",
+          "hotDealType": "ULTRA_DEAL",
+          "isYearLowest": true,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792456080000"
+          ],
+          "postedAt": "2026-10-20T00:28:00.000Z"
+        },
+        {
+          "id": "36099119",
+          "title": "템포 라이트 탐폰 10p 1990원",
+          "mallId": null,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14953671?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "1,990원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14953671.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792455851000"
+          ],
+          "postedAt": "2026-10-20T00:24:11.000Z"
+        },
+        {
+          "id": "36099688",
+          "title": "국밥 간편식 캠핑 냉동 순대국밥 245g 1개",
+          "mallId": 1,
+          "url": "https://damoang.net/economy/81862",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,990원",
+          "providerId": 106,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/damoang/81862.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "다모앙"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792455840000"
+          ],
+          "postedAt": "2026-10-20T00:24:00.000Z"
+        },
+        {
+          "id": "36099120",
+          "title": "콘푸라이트 600g 3개 + 크리치오 에코백 or 키링파우치",
+          "mallId": 35,
+          "url": "https://www.fmkorea.com/10464792535",
+          "isHot": null,
+          "isEnd": false,
+          "price": "9,940원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10464792535.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792455300000"
+          ],
+          "postedAt": "2026-10-20T00:15:00.000Z"
+        },
+        {
+          "id": "36099102",
+          "title": "토스쇼핑 온새미로농산 국내산 양파 중 5kg 6,881원",
+          "mallId": null,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14953647?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,881원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14953647.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792455086000"
+          ],
+          "postedAt": "2026-10-20T00:11:26.000Z"
+        },
+        {
+          "id": "36099101",
+          "title": "오리온 예감 오리지널 12p 192g 2개",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10464781838",
+          "isHot": null,
+          "isEnd": false,
+          "price": "5,500원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10464781838.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792455000000"
+          ],
+          "postedAt": "2026-10-20T00:10:00.000Z"
+        },
+        {
+          "id": "36099093",
+          "title": "갤럭시스토어 폰트 할인 3,120원",
+          "mallId": null,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14953639?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,120원",
+          "providerId": 18,
+          "categoryId": 9,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14953639.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792454991000"
+          ],
+          "postedAt": "2026-10-20T00:09:51.000Z"
+        },
+        {
+          "id": "36099092",
+          "title": "피크닉 사과맛 음료 200ml 24개 8,130원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14953638?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,130원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14953638.webp",
+          "hotDealType": null,
+          "isYearLowest": true,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792454950000"
+          ],
+          "postedAt": "2026-10-20T00:09:10.000Z"
+        },
+        {
+          "id": "36099103",
+          "title": "알림받기 100원",
+          "mallId": null,
+          "url": "https://bbs.ruliweb.com/market/board/1020/read/108171",
+          "isHot": false,
+          "isEnd": true,
+          "price": "100원",
+          "providerId": 4,
+          "categoryId": 8,
+          "category": "상품권",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/108171.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "루리웹"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792454920000"
+          ],
+          "postedAt": "2026-10-20T00:08:40.000Z"
+        },
+        {
+          "id": "36099088",
+          "title": "오리온 예감 오리지널 192g 2개 5,500원",
+          "mallId": 48,
+          "url": "https://eomisae.co.kr/rt/206930397",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,500원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206930397.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792454853000"
+          ],
+          "postedAt": "2026-10-20T00:07:33.000Z"
+        },
+        {
+          "id": "36095625",
+          "title": "봄내푸드 춘천닭갈비 500g 2개 8,500원",
+          "mallId": 4800,
+          "url": "https://eomisae.co.kr/rt/206929115",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,500원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206929115.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792454562000"
+          ],
+          "postedAt": "2026-10-20T00:02:42.000Z"
+        },
+        {
+          "id": "36090341",
+          "title": "360도 폴딩 진공흡착식 맥세이프 호환 차량용 휴대폰 거치대 화이트 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2667735355",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,900원",
+          "providerId": 21,
+          "categoryId": 9,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2667735355.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 1,
+              "delivery": "오늘출발",
+              "salePrice": 6900,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T03:00:42.049Z",
+              "reviewCount": 1,
+              "discountRate": 48,
+              "campaignEndAt": "2026-10-25T23:59:59",
+              "categoryLabel": "자동차용품",
+              "originalPrice": 13400,
+              "pageViewCount": 104,
+              "lowestIn30Days": true,
+              "detailCheckedAt": "2026-10-20T00:00:41.585Z"
+            }
+          },
+          "searchAfter": [
+            "1792454442000"
+          ],
+          "postedAt": "2026-10-20T00:00:42.000Z"
+        },
+        {
+          "id": "36089992",
+          "title": "벽걸이 에어컨 커버 듀얼 스판 나뭇잎 3P",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/931202309",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,410원",
+          "providerId": 21,
+          "categoryId": 6,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/931202309.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/9baad461a29935735be37ea2e5c6d0353d4ddb48.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/0dd5f795f0fe9c9f7bac7d91cf46461ce8d8d3d8.webp"
+              ],
+              "rating": 4,
+              "delivery": "오늘출발",
+              "salePrice": 7410,
+              "unitPrice": "1개당 2,470원",
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T03:00:37.065Z",
+              "reviewCount": 1,
+              "discountRate": 45,
+              "campaignEndAt": "2026-10-22T23:59:00",
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 13480,
+              "pageViewCount": 42,
+              "lowestIn30Days": true
+            }
+          },
+          "searchAfter": [
+            "1792454437000"
+          ],
+          "postedAt": "2026-10-20T00:00:37.000Z"
+        },
+        {
+          "id": "36090335",
+          "title": "션리 스테인드 무드 벨벳 립틴트 스테이 코지 3.3g 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2666743725",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,500원",
+          "providerId": 21,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2666743725.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/8faa82d441e7540cb1ac5d108aa218ed61161744.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/5c346077926ee89664451e14d5068a5b979dae35.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/e69019aac9f4ddf1763c63536276773cd132f619.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/12bc4ae6cbd205166b44c28d42214bde27a6514c.webp"
+              ],
+              "section": "lowest",
+              "delivery": "무료배송",
+              "salePrice": 6500,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T00:00:30.819Z",
+              "sellerName": "(주)신안코스메틱",
+              "deliveryFee": 0,
+              "discountRate": 61,
+              "originalPrice": 17000,
+              "pageViewCount": 168,
+              "lowestIn30Days": true
+            }
+          },
+          "searchAfter": [
+            "1792454431000"
+          ],
+          "postedAt": "2026-10-20T00:00:31.000Z"
+        },
+        {
+          "id": "36090370",
+          "title": "봄내푸드 춘천닭갈비 500g 2개 8,500원",
+          "mallId": null,
+          "url": "https://www.fmkorea.com/10461523209",
+          "isHot": null,
+          "isEnd": false,
+          "price": "8,500원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10461523209.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792454040000"
+          ],
+          "postedAt": "2026-10-19T23:54:00.000Z"
+        },
+        {
+          "id": "36089419",
+          "title": "26년 신동진쌀 백미 단일미 10kg 외 다수",
+          "mallId": 51388,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741470",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,600원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741470.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792453020000"
+          ],
+          "postedAt": "2026-10-19T23:37:00.000Z"
+        },
+        {
+          "id": "36089138",
+          "title": "생면식감 매운맛 95.9g 4개 2,680원",
+          "mallId": 48,
+          "url": "https://eomisae.co.kr/rt/206925146",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,680원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206925146.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792452414000"
+          ],
+          "postedAt": "2026-10-19T23:26:54.000Z"
+        },
+        {
+          "id": "36089135",
+          "title": "크런키초콜릿 34g 12개 9210원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14953552?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,210원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14953552.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792452120000"
+          ],
+          "postedAt": "2026-10-19T23:22:00.000Z"
+        },
+        {
+          "id": "36089134",
+          "title": "클룹 오프아워 자몽피즈 6개 8,000원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14953551?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,000원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14953551.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792452108000"
+          ],
+          "postedAt": "2026-10-19T23:21:48.000Z"
+        }
+      ]
+    }
+  }
+}
