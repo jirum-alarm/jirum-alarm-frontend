@@ -23,7 +23,7 @@ import {
   useTrendingCategory,
   useTrendingView,
 } from '@/shared/lib/navigation/trending-view-store';
-import {orderTrendingCategories} from './trending-tab-order';
+import {orderTrendingCategories} from '@jirum/domain/ranking';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';

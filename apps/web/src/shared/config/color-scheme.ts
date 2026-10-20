@@ -1,9 +1,10 @@
-/** 웹 다크모드 — 기본은 라이트, 사용자가 켰을 때만 이 쿠키가 'dark'. 서버가 읽어 <html class="dark"> 를 심는다. */
-export const COLOR_SCHEME_COOKIE = 'COLOR_SCHEME';
+import { COLOR_SCHEME_COOKIE } from '@jirum/domain/color-scheme';
+
+/** 웹 다크모드 — 기본은 라이트, 사용자가 켰을 때만 이 쿠키가 'dark'. 서버가 읽어 <html class="dark"> 를 심는다.
+ *  쿠키 이름·값은 앱 웹뷰와 같은 @jirum/domain/color-scheme 계약. */
+export { COLOR_SCHEME_COOKIE, isDarkCookie } from '@jirum/domain/color-scheme';
 
 export const THEME_COLOR = { light: '#FFFFFF', dark: '#0C111D' } as const;
-
-export const isDarkCookie = (value: string | undefined) => value === 'dark';
 
 /** 브라우저에서 즉시 적용 + 1년 쿠키. 새로고침 없이 토큰 값이 바뀐다. */
 export const setColorScheme = (dark: boolean) => {

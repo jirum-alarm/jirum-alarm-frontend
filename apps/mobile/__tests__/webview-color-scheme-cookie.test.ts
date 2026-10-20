@@ -42,13 +42,13 @@ describe('웹뷰 다크 쿠키', () => {
     await expect(syncWebViewColorScheme(true)).resolves.toBe(false);
   });
 
-  it('web 이 읽는 이름·값과 같다', () => {
-    const web = read('../web/src/shared/config/color-scheme.ts');
-    expect(web).toContain(
-      `export const COLOR_SCHEME_COOKIE = '${COLOR_SCHEME_COOKIE}'`,
-    );
-    expect(web).toMatch(
-      /isDarkCookie = \(value: string \| undefined\) => value === 'dark'/,
+  // 이름·값은 web 서버와 같은 @jirum/domain/color-scheme 계약 — web 파일을 읽어 대조하지 않는다.
+  it('쓰는 값을 web 이 다크로 읽는다(같은 계약)', () => {
+    const {isDarkCookie} = require('@jirum/domain/color-scheme');
+    expect(isDarkCookie('dark')).toBe(true);
+    expect(isDarkCookie('light')).toBe(false);
+    expect(read('src/shared/theme/webview-color-scheme-cookie.ts')).toContain(
+      "from '@jirum/domain/color-scheme'",
     );
   });
 

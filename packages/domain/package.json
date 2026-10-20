@@ -8,6 +8,7 @@
     "./alert-reason": "./src/alert-reason.ts",
     "./beauty-room-experiment": "./src/beauty-room-experiment.ts",
     "./card-tracking": "./src/card-tracking.ts",
+    "./color-scheme": "./src/color-scheme.ts",
     "./deal-status-reaction": "./src/deal-status-reaction.ts",
     "./derive-keyword": "./src/derive-keyword.ts",
     "./experiment-bucket": "./src/experiment-bucket.ts",

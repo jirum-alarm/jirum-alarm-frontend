@@ -2,16 +2,21 @@ import CookieManager from '@react-native-cookies/cookies';
 import {useEffect} from 'react';
 import {useColorScheme} from 'react-native';
 
+import {
+  COLOR_SCHEME_COOKIE,
+  colorSchemeCookieValue,
+} from '@jirum/domain/color-scheme';
+
 import {SERVICE_URL} from '@/constants/env.ts';
 
-/** web 과 같은 이름·값 — web 은 서버가 이 쿠키가 'dark' 일 때만 `<html class="dark">` 로 그린다(web shared/config/color-scheme.ts). */
-export const COLOR_SCHEME_COOKIE = 'COLOR_SCHEME';
+/** 이름·값은 web 과 같은 @jirum/domain/color-scheme 계약 — web 서버가 'dark' 일 때만 `<html class="dark">` 로 그린다. */
+export {COLOR_SCHEME_COOKIE};
 
 /** 웹뷰 쿠키 저장소에 지금 모드를 적는다. 로그인 쿠키(useAuth)와 같은 저장소라 웹뷰 요청에 같이 실린다. */
 export function syncWebViewColorScheme(dark: boolean) {
   return CookieManager.set(SERVICE_URL, {
     name: COLOR_SCHEME_COOKIE,
-    value: dark ? 'dark' : 'light',
+    value: colorSchemeCookieValue(dark),
     path: '/',
   }).catch(() => false);
 }
