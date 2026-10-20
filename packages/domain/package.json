@@ -22,6 +22,7 @@
     "./price": "./src/price.ts",
     "./product-card": "./src/product-card.ts",
     "./quiet-hours": "./src/quiet-hours.ts",
+    "./ranking": "./src/ranking.ts",
     "./relative-time": "./src/relative-time.ts",
     "./search": "./src/search.ts",
     "./toss-time-deal": "./src/toss-time-deal.ts",

@@ -86,7 +86,7 @@ export function kstStartOfDayBefore(days: number, now: number = Date.now()): str
   return new Date(kst.getTime() - KST_OFFSET_MS - days * DAY_MS).toISOString();
 }
 
-/** 화장품은 딜이 드물어 랭킹을 60일까지 본다 — web widgets/trending/lib/rankingQuery.ts 의 EXTEND_START_DATE_CATEGORIES. */
+/** 화장품은 딜이 드물어 랭킹을 60일까지 본다 — web·앱 정본 @jirum/domain/ranking 의 rankingWindowDays(3) 과 같은 값. */
 const RANKING_WINDOW_DAYS = 60;
 
 /**

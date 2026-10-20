@@ -28,6 +28,7 @@ const SHARED_BY_BOTH: Record<string, string[]> = {
   'keyword-options': ['KEYWORD_ALERT_LABELS', 'KEYWORD_DEAL_CHOICES', 'summarizeKeywordAlert'],
   'price-chart': ['buildChartGeometry', 'shortWon', 'won'],
   'product-card': ['visibleHotDealType'],
+  ranking: ['rankingWindowDays'],
   search: [
     'SEARCH_SORTS',
     'SEARCH_PERIODS',

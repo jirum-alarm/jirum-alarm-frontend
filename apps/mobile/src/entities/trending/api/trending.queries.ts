@@ -1,4 +1,5 @@
 import {infiniteQueryOptions, queryOptions} from '@tanstack/react-query';
+import {rankingWindowDays} from '@jirum/domain/ranking';
 
 import {HomeService} from '@/shared/api/home/home.service';
 import type {ProductCardType} from '@/shared/types/product-card';
@@ -23,13 +24,6 @@ const HOT_DEAL_COUNT_RANDOM = 20;
 const HOT_DEAL_LIMIT_RANDOM = 10;
 
 /**
- * 랭킹 기준 시작일. web adjustStartDate 와 같은 규칙 —
- * 물량이 적은 카테고리는 3일로 자르면 목록이 비어 60일까지 넓힌다.
- */
-//NOTE: 3 : 화장품 , 5 : 도서 , 7 : 등산레저 , 8 : 상품권 , 10 : 육아
-const EXTEND_START_DATE_CATEGORIES = [3, 5, 7, 8, 10];
-
-/**
  * web `getDayBefore(n)` 과 같다(로컬 자정 기준).
  * dayjs 를 쓰지 않는 이유는 home.queries.ts 의 같은 함수 주석 참조
  * (테스트 러너가 dayjs ESM 을 못 읽는다).
@@ -44,12 +38,9 @@ function getDayBeforeStartOfDay(days: number): string {
   return d.toISOString();
 }
 
+/** 랭킹 기준 시작일 — 며칠 볼지(물량 적은 카테고리 60일)는 web 과 같은 @jirum/domain/ranking. */
 function rankingStartDate(categoryId: number | null): string {
-  return getDayBeforeStartOfDay(
-    categoryId !== null && EXTEND_START_DATE_CATEGORIES.includes(categoryId)
-      ? 60
-      : 3,
-  );
+  return getDayBeforeStartOfDay(rankingWindowDays(categoryId));
 }
 
 /**
