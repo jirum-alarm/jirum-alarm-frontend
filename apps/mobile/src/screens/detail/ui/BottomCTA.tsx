@@ -219,11 +219,20 @@ export default function BottomCTA({
           onPress={handlePurchase}
           disabled={!product.detailUrl}
           accessibilityRole="button"
-          accessibilityLabel="구매하러 가기">
-          {/* 라임 버튼 위 글자는 테마와 무관 — gray-900 은 다크에서 밝은 회색으로 뒤집혀 1.6:1 이었다. */}
-          <Text className="text-base font-semibold text-fixed-900">
-            구매하러 가기
-          </Text>
+          accessibilityLabel={
+            product.detailUrl ? '구매하러 가기' : '구매 링크 준비 중'
+          }>
+          {/* 라임 버튼 위 글자는 테마와 무관 — gray-900 은 다크에서 밝은 회색으로 뒤집혀 1.6:1 이었다.
+              링크가 없으면(수집 중) 회색 비활성 면 + 상태 문구 — web BottomCTA 와 같다(전엔 같은 문구로 눌러도 무반응). */}
+          {product.detailUrl ? (
+            <Text className="text-base font-semibold text-fixed-900">
+              구매하러 가기
+            </Text>
+          ) : (
+            <Text className="text-base font-semibold text-fixed-white">
+              구매 링크 준비 중
+            </Text>
+          )}
         </Button>
       </View>
     </View>

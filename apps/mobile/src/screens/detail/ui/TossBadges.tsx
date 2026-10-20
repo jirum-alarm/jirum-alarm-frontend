@@ -1,6 +1,12 @@
 import React from 'react';
 import {View} from 'react-native';
 import Badge, {type BadgeProps} from '@/shared/components/ui/Badge';
+import {
+  TOSS_BADGE_EXPLAIN,
+  type TossBadgeKey,
+} from '@jirum/domain/badge-explain';
+
+import ExplainedBadge from './ExplainedBadge';
 
 import type {TossData} from '../model/types';
 
@@ -17,7 +23,8 @@ export default function TossBadges({
 }) {
   if (!toss) return null;
 
-  const badges: {key: string; label: string; tone: BadgeProps['tone']}[] = [];
+  const badges: {key: TossBadgeKey; label: string; tone: BadgeProps['tone']}[] =
+    [];
   if (!hidePriceSignals && toss.lowestPriceCompensation) {
     badges.push({key: 'lpc', label: '최저가 보상', tone: 'secondary'});
   }
@@ -35,10 +42,16 @@ export default function TossBadges({
 
   return (
     <View className="flex-row flex-wrap gap-1.5 pt-2">
+      {/* 누르면 뜻(정본 @jirum/domain/badge-explain — web 과 같은 문구). */}
       {badges.map(b => (
-        <Badge key={b.key} size="md" tone={b.tone}>
-          {b.label}
-        </Badge>
+        <ExplainedBadge
+          key={b.key}
+          label={b.label}
+          lines={TOSS_BADGE_EXPLAIN[b.key]}>
+          <Badge size="md" tone={b.tone}>
+            {b.label}
+          </Badge>
+        </ExplainedBadge>
       ))}
     </View>
   );
