@@ -178,6 +178,61 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
+  # 화면 하네스 — boot-check 가 만든(캐시한) Release 앱으로 주요 화면을 딥링크로 열어 라이트·다크로 찍는다(scripts/screens-ios.sh).
+  # 발행(publish)은 이 잡을 기다리지 않는다 — 운영 API 를 읽어서 그쪽이 느리면 흔들릴 수 있다. 실패(빈 화면·치명 예외·화면 못 감)는
+  # 빨간 잡으로 보이고, 찍은 화면은 아티팩트 app-screens-ios(`gh run download <run> -n app-screens-ios` → report.md 부터).
+  app-screens:
+    needs: boot-check
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Xcode version
+        id: xcode
+        run: echo "version=$(xcodebuild -version | head -1 | tr ' ' '-')" >> "$GITHUB_OUTPUT"
+
+      - name: Restore Release simulator app
+        uses: actions/cache/restore@v4
+        with:
+          path: apps/mobile/ios/build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app
+          key: ios-release-sim-${{ steps.xcode.outputs.version }}-${{ hashFiles('apps/mobile/native-fingerprint.json') }}
+          fail-on-cache-miss: true
+
+      - name: Screens (deep links × light/dark)
+        run: bash apps/mobile/scripts/screens-ios.sh apps/mobile/ios/build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app
+
+      - name: Report summary
+        if: always()
+        run: |
+          [ -f apps/mobile/screens-out/report.md ] && cat apps/mobile/screens-out/report.md >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: Upload screens
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-screens-ios
+          path: apps/mobile/screens-out
+          retention-days: 7
+          if-no-files-found: ignore
+
   # 안드로이드판 — APK 의 번들만 바꿔 끼워 에뮬레이터에서 켠다(scripts/boot-check-android.sh). APK 는 지문으로 캐시.
   boot-check-android:
     needs: changes

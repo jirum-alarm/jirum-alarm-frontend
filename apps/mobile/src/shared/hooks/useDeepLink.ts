@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useEffect, useRef} from 'react';
 import {Linking} from 'react-native';
 
@@ -10,6 +11,22 @@ import {
   offerWebGuestDeviceId,
   offerWebGuestHandoff,
 } from '@/shared/lib/auth/web-guest-handoff';
+
+/**
+ * 화면 하네스(scripts/screens-ios.sh)의 입구 — `simctl openurl` 은 매번 «'지름알림'에서 열겠습니까?» 확인 창이 떠서
+ * 화면이 바뀌지 않는다. 그래서 하네스가 앱 저장소에 열 주소를 넣고 콜드 스타트하면 딥링크와 같은 길로 연다.
+ * 앱 저장소는 앱 샌드박스라 앱 밖에서는 이 키를 쓸 수 없다. 한 번 읽으면 지운다.
+ */
+const SCREENS_HARNESS_KEY = 'jirum:screens-harness-url';
+async function takeScreensHarnessUrl(): Promise<string | null> {
+  try {
+    const url = await AsyncStorage.getItem(SCREENS_HARNESS_KEY);
+    if (url) await AsyncStorage.removeItem(SCREENS_HARNESS_KEY);
+    return url;
+  } catch {
+    return null;
+  }
+}
 
 /**
  * 외부 딥링크(카톡 공유·유니버설 링크·커스텀 스킴)로 앱을 여는 경로.
@@ -55,6 +72,11 @@ export default function useDeepLink(openInWebView: (url: string) => void) {
       if (cancelled) return;
       if (url) {
         open(url, 'cold');
+        return;
+      }
+      const harnessUrl = await takeScreensHarnessUrl();
+      if (harnessUrl && !cancelled) {
+        open(harnessUrl, 'cold');
         return;
       }
       const deferred = await readDeferredDeepLink();

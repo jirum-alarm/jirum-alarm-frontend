@@ -359,7 +359,7 @@ Code formatting standards:
 | web 새 화면·새 쿼리 | `apps/web/screens/pages.ts` 한 줄 + `pnpm --filter web screens:record` | 위와 같음(고정 데이터로) |
 | web 공용 부품(`shared/ui`) | 스토리 + `pnpm --filter design test:stories` | 라이트·다크 렌더·조작·axe |
 | 디자인 시스템(tokens·recipes·layout) | `pnpm --filter @jirum/design-system test` + `test:stories` + `screens` | 정본 변경이 모든 화면에서 맞나 |
-| 앱 JS 화면 | `pnpm --filter mobile exec jest <관련>` + 큰 변경은 `boot-check.sh` 후 화면 진입 | 기동·렌더 |
+| 앱 JS 화면 | `pnpm --filter mobile exec jest <관련>` + `bash apps/mobile/scripts/screens-ios.sh <Release .app>` → `apps/mobile/screens-out/report.md` → png 를 직접 본다(새 화면은 스크립트 SCREENS 에 딥링크 한 줄). CI `mobile-ota` 의 app-screens 잡·아티팩트 `app-screens-ios` | 화면별 라이트·다크, 빈 화면·치명 예외·딥링크로 못 감 |
 | 앱 네이티브 | 위 Mobile App 배포 규칙(버전·`native:write`·Release 시뮬) | |
 | GraphQL 문서 | `node scripts/gql-check.mjs`(운영 스키마) — `release-tag.py` 가 태그 때도 본다 | 서버 롤아웃 전 필드 |
 | 운영 반영 | `python3 scripts/release-tag.py` → `RELEASE-TAG DONE` | 배포 판정 |
