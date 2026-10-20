@@ -33,6 +33,8 @@ import type {ProductCardType} from '../model/types';
 import {DisplayListPrice} from './cards/HomeCardPrimitives';
 import {useColors} from '@/shared/theme/useColors';
 import {brand} from '@jirum/design-system';
+import {layout} from '@jirum/design-system/layout';
+import {productCard} from '@jirum/design-system/recipes';
 
 /**
  * 지름알림 랭킹 슬라이더. web: widgets/home/ui/JirumRankingSlider.tsx
@@ -57,8 +59,9 @@ import {brand} from '@jirum/design-system';
  *   기간 만료 배너라 옮기지 않는다. 자체 광고 슬롯(ActiveAds)과는 다른 물건이다.
  */
 
-const CARD_HEIGHT = 352; // web h-[352px]
-const THUMB_HEIGHT = 240; // web h-60
+const CARD_HEIGHT = layout.rankingCard.height;
+const THUMB_HEIGHT = layout.rankingCard.thumbHeight;
+const INACTIVE_SCALE = layout.rankingCard.inactiveScale;
 const CARD_WIDTH = 240; // web style width 240px (mobile)
 const GAP = 4; // web spaceBetween: 4
 const SNAP = CARD_WIDTH + GAP;
@@ -233,7 +236,7 @@ const RankingCard = React.memo(function RankingCard({
     const scale = interpolate(
       distance,
       [0, SNAP],
-      [1, 0.9],
+      [1, INACTIVE_SCALE],
       Extrapolation.CLAMP,
     );
     // 가운데에서 멀수록 그림자를 옅게 — 작아진 카드에 짙은 그림자가 남으면
@@ -300,7 +303,9 @@ const RankingCard = React.memo(function RankingCard({
           style={{height: THUMB_HEIGHT}}
           className="w-full overflow-hidden bg-gray-50">
           <View className="absolute top-0 left-0 z-10 h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-fixed-900">
-            <Text className="text-primary-500 text-sm font-medium">{rank}</Text>
+            <Text className={cn('text-primary-500', productCard.ranking.rank)}>
+              {rank}
+            </Text>
           </View>
           <Thumbnail
             uri={product.thumbnail}
@@ -313,8 +318,8 @@ const RankingCard = React.memo(function RankingCard({
         {/* web `p-3 pb-0` — 위에서부터 쌓고 하단 패딩은 없다.
             ★앞서 justify-between + pb-3 을 넣었더니 제목·메타·가격 사이가
             벌어져 어색했다(사용자 지적). web 처럼 붙여 쌓는 게 맞다. */}
-        <View className="px-3 pt-3">
-          <Text className="text-sm text-gray-700" numberOfLines={2}>
+        <View className={productCard.ranking.body}>
+          <Text className={productCard.ranking.title} numberOfLines={2}>
             {product.title}
           </Text>
           <DisplayProductSource

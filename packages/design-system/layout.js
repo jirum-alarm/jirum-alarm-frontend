@@ -39,6 +39,16 @@ const layout = {
    *   row 20 = 목록 행·버튼 안 아이콘·토스트   inline 16 = 글자 옆(text-sm 과 같은 줄)
    */
   icon: {nav: 28, action: 24, row: 20, inline: 16},
+  /**
+   * 홈 랭킹 슬라이더 카드(모바일) — 카드 352 · 사진 240 · 가운데에서 먼 카드 90%. 앱은 숫자로(Animated·스켈레톤),
+   * web 은 같은 값의 클래스(h-[352px]·h-60·scale-90)로 쓴다 — 둘이 이 값과 같은지는 consumers.test 가 본다.
+   */
+  rankingCard: {height: 352, thumbHeight: 240, inactiveScale: 0.9},
+  /**
+   * 홈 상단바(모바일): 이만큼 내려가면 어두운 띠 → 흰 헤더로, 전환 시간. 앱은 숫자로, web 은 scrollThreshold 숫자 +
+   * 같은 값의 클래스(duration-300) — 클래스가 이 값과 같은지는 consumers.test 가 본다.
+   */
+  homeHeader: {scrollThreshold: 90, transitionMs: 300},
   /** 손가락으로 누르는 것의 최소 크기(px). 아이콘이 작으면 겉 영역(hitSlop·패딩)으로 채운다. */
   minTouch: 44,
   /**

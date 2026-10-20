@@ -1,3 +1,4 @@
+import {layout} from '@jirum/design-system/layout';
 import React, {
   Fragment,
   useCallback,
@@ -109,7 +110,9 @@ export default function HomeScreen() {
         useNativeDriver: true,
         // web HomeHeader: 스크롤 90px 넘으면 흰 헤더가 내려온다.
         listener: (e: {nativeEvent: {contentOffset: {y: number}}}) =>
-          homeScrolledStore.set(e.nativeEvent.contentOffset.y > 90),
+          homeScrolledStore.set(
+            e.nativeEvent.contentOffset.y > layout.homeHeader.scrollThreshold,
+          ),
       }),
     [scrollY],
   );

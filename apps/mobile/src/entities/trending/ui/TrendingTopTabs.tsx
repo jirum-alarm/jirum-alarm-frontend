@@ -1,3 +1,4 @@
+import {pageHeader} from '@jirum/design-system/recipes';
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import Animated, {
@@ -9,6 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import PressableScale from '@/shared/components/PressableScale';
+import {cn} from '@/shared/lib/styling';
 import {useColors} from '@/shared/theme/useColors';
 
 /**
@@ -63,7 +65,11 @@ export default function TrendingTopTabs({
     // 실제 높이가 56px 이다(자체 py-3 는 그 안에서 남는다). 같은 높이로 맞춘다.
     // 경계선은 web PageTabNavigation 자신의 값(border-gray-200)을 쓴다 —
     // PageHeader 의 gray-100 이 아니다(탭 줄이 헤더 하단을 덮는다).
-    <View className="h-14 w-full border-b border-gray-200 bg-white">
+    <View
+      className={cn(
+        pageHeader.height,
+        'w-full border-b border-gray-200 bg-white',
+      )}>
       <View className="h-full w-full flex-row">
         {TABS.map((tab, index) => (
           <TabLabel

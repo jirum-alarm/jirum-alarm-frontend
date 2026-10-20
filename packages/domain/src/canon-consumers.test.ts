@@ -28,7 +28,8 @@ const SHARED_BY_BOTH: Record<string, string[]> = {
   'keyword-options': ['KEYWORD_ALERT_LABELS', 'KEYWORD_DEAL_CHOICES', 'summarizeKeywordAlert'],
   'price-chart': ['buildChartGeometry', 'shortWon', 'won'],
   'product-card': ['visibleHotDealType'],
-  ranking: ['rankingWindowDays', 'orderTrendingCategories'],
+  ranking: ['rankingWindowDays', 'orderTrendingCategories', 'nextTrendingView', 'RANKING_CARD_SOURCE'],
+  share: ['SHARE_CHANNEL_COPY'],
   'color-scheme': ['COLOR_SCHEME_COOKIE'],
   'home-sections': [
     'mapHomePageSections',
@@ -42,6 +43,7 @@ const SHARED_BY_BOTH: Record<string, string[]> = {
     'toTossDeal',
     'stripPriceFromTitle',
     'isPriceGuideTitle',
+    'tossCornerPath',
   ],
   search: [
     'SEARCH_SORTS',

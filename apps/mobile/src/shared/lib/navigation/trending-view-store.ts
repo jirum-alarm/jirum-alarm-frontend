@@ -1,3 +1,4 @@
+import {nextTrendingView, type TrendingView} from '@jirum/domain/ranking';
 import {useSyncExternalStore} from 'react';
 
 /**
@@ -12,7 +13,7 @@ import {useSyncExternalStore} from 'react';
  * 신호가 먼저 도착하는 홈 CTA 경로에서 필요하다.
  */
 
-export type TrendingView = 'live' | 'ranking';
+export type {TrendingView};
 
 /**
  * 신호가 한 번도 없을 때의 값. web /trending 이 /trending/live 로 리다이렉트하는 것과 같다.
@@ -61,7 +62,7 @@ export function requestTrendingView(view: TrendingView) {
  * "지금 무엇을 보고 있나"를 탭바가 알 수 없어 토글을 만들 수 없다.
  */
 export function toggleTrendingView() {
-  requestedView = requestedView === 'live' ? 'ranking' : 'live';
+  requestedView = nextTrendingView(requestedView);
   emitChange();
 }
 

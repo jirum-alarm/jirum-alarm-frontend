@@ -337,6 +337,8 @@ const pageHeader = {
 const productCard = {
   title: 'pt-2 text-sm text-gray-700',
   titleBox: 'h-12',
+  /** 홈 랭킹 카드(모바일): 사진 위 순위칩 글자 · 제목(2줄은 플랫폼마다) · 글자 묶음 여백(아래 여백 없음). 크기는 layout.rankingCard. */
+  ranking: {rank: 'text-sm font-medium', title: 'text-sm text-gray-700', body: 'px-3 pt-3'},
   price: {
     list: 'text-lg font-semibold text-gray-900',
     grid: 'text-base font-semibold text-gray-900',

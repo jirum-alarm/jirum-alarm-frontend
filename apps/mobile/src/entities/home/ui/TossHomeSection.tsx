@@ -1,3 +1,4 @@
+import {tossCornerPath} from '@jirum/domain/toss';
 import React, {useMemo, useState} from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
@@ -37,7 +38,7 @@ export default function TossHomeSection({
   onPressViewMore,
 }: {
   onPressProduct: (id: number) => void;
-  /** web `/toss?tab={activeId}` — 지금 보고 있는 탭 그대로 연다. */
+  /** 정본 tossCornerPath — 지금 보고 있는 탭 그대로 연다(web 도 같은 함수). */
   onPressViewMore?: (link: string, title: string) => void;
 }) {
   const [activeId, setActiveId] = useState<string>(TOSS_HOME_SECTION_IDS[0]);
@@ -84,7 +85,7 @@ export default function TossHomeSection({
         title="토스 특가"
         onPressMore={
           onPressViewMore
-            ? () => onPressViewMore(`/toss?tab=${activeId}`, '토스 특가')
+            ? () => onPressViewMore(tossCornerPath(activeId), '토스 특가')
             : undefined
         }
       />

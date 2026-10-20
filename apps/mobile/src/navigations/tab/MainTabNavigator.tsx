@@ -44,6 +44,7 @@ import {
 } from '@/navigations/tab/tab-bar-metrics';
 import {useTabBarVisibility} from '@/shared/hooks/useTabBarVisibility';
 import {useChromeColors} from './native-headers';
+import {nextTrendingView} from '@jirum/domain/ranking';
 import {
   requestTrendingView,
   toggleTrendingView,
@@ -218,7 +219,7 @@ function useTabActions() {
   const handleNavigateToRoot = useCallback(
     (tabName: TabName) => {
       if (tabName === tabNavigations.DISCOVER) {
-        requestTrendingView('ranking');
+        requestTrendingView(nextTrendingView(null));
         return;
       }
       const ref = getWebViewRef(tabName);

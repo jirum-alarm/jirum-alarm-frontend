@@ -111,6 +111,9 @@ export function toTossDeal(p: {
   };
 }
 
+/** 홈 토스 섹션 「더보기」 → 토스 특가 코너(지금 보고 있는 탭 그대로). */
+export const tossCornerPath = (tab: string): string => `/toss?tab=${tab}`;
+
 /** 토스 특가 코너 → 상세. referrer 는 앱·인앱웹뷰에서 비는 경우가 많아 쿼리로 경로를 명시한다. */
 export const tossDetailPath = (productId: number): string => `/products/${productId}?from=toss`;
 

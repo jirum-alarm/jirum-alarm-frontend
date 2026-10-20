@@ -12,8 +12,6 @@ declare const __dirname: string;
 
 const read = (p: string) =>
   fs.readFileSync(path.join(__dirname, '..', p), 'utf8');
-const web = (p: string) =>
-  fs.readFileSync(path.join(__dirname, '../../web/src', p), 'utf8');
 
 const screen = read('src/screens/trending/TrendingScreen.tsx');
 const queries = read('src/entities/trending/api/trending.queries.ts');
@@ -45,18 +43,21 @@ describe('★웹뷰 주입에 기대던 경로를 전부 옮겼다', () => {
   });
 
   it('★다른 탭에서 발견 탭을 누르면 랭킹 — web 하단 네비(/trending/ranking)와 같다', () => {
+    // 규칙은 정본 nextTrendingView 하나 — web 하단 네비 링크도 같은 함수를 쓴다.
+    const {nextTrendingView} = require('@jirum/domain/ranking');
+    expect(nextTrendingView(null)).toBe('ranking');
+    expect(nextTrendingView('live')).toBe('ranking');
+    expect(nextTrendingView('ranking')).toBe('live');
     const nav = read('src/navigations/tab/MainTabNavigator.tsx');
-    const webNav = web('widgets/layout/ui/BottomNav.tsx');
-    // web: 발견이 아닌 페이지에서 누르면 TRENDING_RANKING
-    expect(webNav).toContain(
-      'pathName === PAGE.TRENDING_RANKING ? PAGE.TRENDING_LIVE : PAGE.TRENDING_RANKING',
-    );
     const block = nav.slice(
       nav.indexOf('const handleNavigateToRoot'),
       nav.indexOf('const onTabPress'),
     );
-    expect(block).toContain("requestTrendingView('ranking')");
-    expect(block).not.toContain("requestTrendingView('live')");
+    expect(block).toContain('requestTrendingView(nextTrendingView(null))');
+    // 재탭 전환도 같은 규칙.
+    expect(read('src/shared/lib/navigation/trending-view-store.ts')).toContain(
+      'nextTrendingView(requestedView)',
+    );
   });
 
   it('★카테고리도 store 가 정본 — 밖(?tab=N)에서 지정할 수 있다', () => {
@@ -77,7 +78,7 @@ describe('★웹뷰 주입에 기대던 경로를 전부 옮겼다', () => {
 
   it('토글이 두 값을 왕복한다', () => {
     const store = read('src/shared/lib/navigation/trending-view-store.ts');
-    expect(store).toContain("requestedView === 'live' ? 'ranking' : 'live'");
+    expect(store).toContain('nextTrendingView(requestedView)');
   });
 
   it('딥링크·푸시(/trending/*)가 네이티브 탭으로 간다', () => {
@@ -146,11 +147,11 @@ describe('web 과 같은 데이터 규칙', () => {
 });
 
 describe('CTR 계측 (web 과 같은 출처·규칙)', () => {
-  it("랭킹 출처가 web 과 같은 'ranking_tab'", () => {
+  it("랭킹 출처는 정본 RANKING_CARD_SOURCE('ranking_tab') — web 목록도 같은 상수", () => {
     // 백엔드 집계가 이 문자열로 필터한다. 갈리면 분모가 사라진다.
-    const webList = web('widgets/trending/ui/TrendingList.tsx');
-    expect(webList).toContain("'ranking_tab'");
-    expect(rankingList).toContain("'ranking_tab'");
+    const {RANKING_CARD_SOURCE} = require('@jirum/domain/ranking');
+    expect(RANKING_CARD_SOURCE).toBe('ranking_tab');
+    expect(rankingList).toContain('RANKING_CARD_SOURCE');
   });
 
   it('노출은 화면에 보인 카드만 — 50개를 다 세지 않는다', () => {
@@ -189,7 +190,6 @@ describe('CTR 계측 (web 과 같은 출처·규칙)', () => {
 
 describe('상단 실시간/랭킹 탭 — web 대조', () => {
   const tabs = read('src/entities/trending/ui/TrendingTopTabs.tsx');
-  const webTabs = web('widgets/trending/ui/PageTabNavigation.tsx');
 
   it('★★flex 를 className 이 아니라 style 로 준다 — 안 그러면 탭이 안 보인다', () => {
     // 🔴 실제로 겪은 버그: PressableScale 의 className 은 **안쪽** View 가 받으므로
@@ -204,13 +204,10 @@ describe('상단 실시간/랭킹 탭 — web 대조', () => {
     expect(block).not.toContain('className="flex-1');
   });
 
-  it('web 과 같은 라벨·경계선', () => {
+  it('라벨·경계선(web PageTabNavigation 과 같은 gray-200 — PageHeader 의 gray-100 아님)', () => {
     for (const label of ['실시간', '랭킹']) {
-      expect(webTabs).toContain(label);
       expect(tabs).toContain(label);
     }
-    // 경계선은 PageTabNavigation 자신의 값(gray-200). PageHeader 의 gray-100 아님.
-    expect(webTabs).toContain('border-b border-gray-200');
     expect(tabs).toContain('border-b border-gray-200');
   });
 
@@ -218,13 +215,10 @@ describe('상단 실시간/랭킹 탭 — web 대조', () => {
     // 애니메이션 때문에 Animated 컴포넌트를 쓰고, NativeWind 4 는 Animated 에
     // 준 className 을 **조용히 무시**하므로 style 로 쓴다. 그래서 대조 대상은
     // 클래스 문자열이 아니라 색상 값이다.
-    // web: text-gray-900, text-gray-500 — 앱은 같은 토큰 값을 palette(useColors)에서 받는다(다크모드).
-    expect(webTabs).toContain('text-gray-900');
-    expect(webTabs).toContain('text-gray-500');
+    // web 과 같은 gray-900(선택)·gray-500 — 앱은 같은 토큰 값을 palette(useColors)에서 받는다(다크모드).
     expect(tabs).toContain('[c.gray[900], c.gray[500]]');
 
-    // 밑줄: web h-0.5(2px) + bg-gray-900
-    expect(webTabs).toContain('h-0.5 bg-gray-900');
+    // 밑줄: web 과 같은 2px gray-900
     expect(tabs).toContain('height: 2');
     expect(tabs).toContain('backgroundColor: c.gray[900]');
   });
@@ -251,14 +245,9 @@ describe('상단 실시간/랭킹 탭 — web 대조', () => {
     }
   });
 
-  it('★헤더 높이가 web PageHeader(h-14)와 같다', () => {
-    // web 은 탭 줄이 PageHeader 의 유일한 children 이라 실제 높이가 56px 이다.
-    const header = fs.readFileSync(
-      path.join(__dirname, '../../web/src', 'shared/ui/layout/PageHeader.tsx'),
-      'utf8',
-    );
-    expect(header).toContain("PAGE_HEADER_HEIGHT_CLASS = 'h-14'");
-    expect(tabs).toContain('h-14');
+  it('★헤더 높이는 web PageHeader 와 같은 레시피(pageHeader.height)', () => {
+    // web 은 탭 줄이 PageHeader 의 유일한 children 이라 실제 높이가 그 높이다.
+    expect(tabs).toContain('pageHeader.height');
   });
 });
 

@@ -1,3 +1,4 @@
+import {layout} from '@jirum/design-system/layout';
 import React, {useEffect, useRef} from 'react';
 import {Animated, Pressable, useColorScheme, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -25,8 +26,8 @@ const LOGO_SUBTITLE = '커뮤니티 핫딜 모아보기';
 /** 새 알림 점 — 탭바·web BottomNav 와 같은 빨강. 테마와 무관하게 같은 색. */
 const ALARM_DOT = light.error[500];
 
-/** web `transition-all duration-300` 과 같은 전환 시간. */
-const TRANSITION_MS = 300;
+/** 전환 시간 — 정본 layout.homeHeader(web duration-300 과 같은 값). */
+const TRANSITION_MS = layout.homeHeader.transitionMs;
 
 /**
  * 홈 헤더. 스크롤 90px 을 넘으면 다크 → 흰색으로 **색만** 부드럽게 바뀐다.

@@ -1,5 +1,6 @@
 'use client';
 
+import { RANKING_CARD_SOURCE } from '@jirum/domain/ranking';
 import { memo } from 'react';
 
 import { CarouselProductsSection } from '@/entities/product-list/ui/carousel';
@@ -15,7 +16,7 @@ interface TrendingListProps {
 
 const SIZE = 10;
 // 랭킹 탭 노출/클릭 출처. 백엔드 CTR 집계가 이 값으로 필터한다.
-const RANKING_SOURCE = 'ranking_tab' as const;
+const RANKING_SOURCE = RANKING_CARD_SOURCE;
 
 const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
   const { products, liveProducts, hotDeals } = useTrendingViewModel({

@@ -1,5 +1,6 @@
 'use client';
 
+import { tossCornerPath } from '@jirum/domain/toss';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -67,7 +68,7 @@ export default function TossHomeSection({ initialDeals }: { initialDeals?: TossD
         <SectionHeader
           title="토스 특가"
           right={
-            <InteractiveMoreLink href={`/toss?tab=${activeId}`} aria-label="토스 특가 더보기">
+            <InteractiveMoreLink href={tossCornerPath(activeId)} aria-label="토스 특가 더보기">
               더보기
             </InteractiveMoreLink>
           }

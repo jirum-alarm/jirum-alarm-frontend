@@ -24,7 +24,7 @@ interface PageHeaderProps {
   children?: React.ReactNode;
 }
 
-export const PAGE_HEADER_HEIGHT_CLASS = 'h-14';
+export const PAGE_HEADER_HEIGHT_CLASS = pageHeader.height;
 
 export default function PageHeader({
   leading,

@@ -15,8 +15,6 @@ declare const __dirname: string;
 
 const read = (p: string) =>
   fs.readFileSync(path.join(__dirname, '..', p), 'utf8');
-const readWeb = (p: string) =>
-  fs.readFileSync(path.join(__dirname, '../../web/src', p), 'utf8');
 
 const header = read('src/screens/home/ui/HomeHeader.tsx');
 const screen = read('src/screens/home/HomeScreen.tsx');
@@ -45,10 +43,11 @@ describe('로고 탭', () => {
 });
 
 describe('상단바 전환 — web 과 같은 방식', () => {
-  it('전환 시간은 web 과 같은 300ms', () => {
-    const web = readWeb('widgets/home/ui/mobile/HomeHeader.tsx');
-    expect(web).toContain('duration-300');
-    expect(header).toContain('TRANSITION_MS = 300');
+  it('전환 시간·스크롤 임계값은 정본 layout.homeHeader(web 도 같은 값)', () => {
+    const {layout} = require('@jirum/design-system/layout');
+    expect(layout.homeHeader).toEqual({scrollThreshold: 90, transitionMs: 300});
+    expect(header).toContain('layout.homeHeader.transitionMs');
+    expect(screen).toContain('layout.homeHeader.scrollThreshold');
   });
 
   it('★슬라이드가 아니라 색만 바뀐다 — translateY 를 쓰지 않는다', () => {
@@ -69,12 +68,6 @@ describe('상단바 전환 — web 과 같은 방식', () => {
   it('opacity 만 쓰므로 네이티브 드라이버로 돈다', () => {
     // JS 드라이버면 스크롤 중 프레임이 튄다.
     expect(header).toContain('useNativeDriver: true');
-  });
-
-  it('스크롤 임계값이 web 과 같은 90px', () => {
-    const web = readWeb('widgets/home/ui/mobile/HomeHeader.tsx');
-    expect(web).toContain('scrollThreshold = 90');
-    expect(screen).toContain('y > 90');
   });
 
   it('상태바는 전환 중간에 바꾼다', () => {

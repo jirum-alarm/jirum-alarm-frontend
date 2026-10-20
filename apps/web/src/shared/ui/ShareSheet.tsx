@@ -2,6 +2,7 @@
 
 import { layout } from '@jirum/design-system/layout';
 import { sheet, text } from '@jirum/design-system/recipes';
+import { SHARE_CHANNEL_COPY } from '@jirum/domain/share';
 import { Dialog, VisuallyHidden } from 'radix-ui';
 import { useEffect, useState } from 'react';
 import { Drawer } from 'vaul';
@@ -129,7 +130,7 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
 
   // 카톡은 앱 줄 첫 칸(국내 1순위) — 앱 ShareSheet 와 같은 위계: 무엇을 → 어디로 → 링크.
   // X·Threads 공식 배경은 검정이지만 다크에선 시트 바탕에 묻혀 회색 원(gray-100)으로 둔다.
-  // a11y = 화면 읽기 이름. 조사까지 적는다(예전 「스레드 으 로 공유」).
+  // label·a11y(화면 읽기 이름, 조사까지)는 정본 SHARE_CHANNEL_COPY — 앱 공유 시트와 같은 문구.
   const channels: {
     c: Exclude<ShareChannel, 'copy'>;
     label: string;
@@ -139,22 +140,19 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
   }[] = [
     {
       c: 'kakao',
-      label: '카카오톡',
-      a11y: '카카오톡으로 공유',
+      ...SHARE_CHANNEL_COPY.kakao,
       icon: <SvgKakao width={26} height={26} />,
       badge: 'bg-kakao',
     },
     {
       c: 'x',
-      label: 'X',
-      a11y: 'X로 공유',
+      ...SHARE_CHANNEL_COPY.x,
       icon: <ShareX width={20} height={20} className="text-fixed-white" />,
       badge: 'bg-black dark:bg-gray-100',
     },
     {
       c: 'threads',
-      label: '스레드',
-      a11y: '스레드로 공유',
+      ...SHARE_CHANNEL_COPY.threads,
       icon: <ShareThreads width={22} height={22} className="text-fixed-white" />,
       badge: 'bg-black dark:bg-gray-100',
     },
@@ -164,8 +162,7 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
       ? ([
           {
             c: 'native' as const,
-            label: '다른 앱',
-            a11y: '다른 앱으로 공유',
+            ...SHARE_CHANNEL_COPY.native,
             icon: <Share width={20} height={20} className="text-gray-700" />,
             badge: 'bg-gray-100',
           },

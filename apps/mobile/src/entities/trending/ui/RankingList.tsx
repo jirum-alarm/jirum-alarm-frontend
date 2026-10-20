@@ -7,6 +7,7 @@ import {
   type ViewToken,
 } from 'react-native';
 import {sectionTitle} from '@jirum/design-system/recipes';
+import {RANKING_CARD_SOURCE} from '@jirum/domain/ranking';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {tick} from '@/shared/lib/feedback/haptic';
 import {useQuery} from '@tanstack/react-query';
@@ -35,7 +36,7 @@ import {GRID_WINDOW_SIZE} from '@/entities/home/ui/CurationGrid';
  */
 
 /** 랭킹 탭 노출/클릭 출처. 백엔드 CTR 집계가 이 값으로 필터한다. */
-const RANKING_SOURCE = 'ranking_tab';
+const RANKING_SOURCE = RANKING_CARD_SOURCE;
 const COLUMNS = 2;
 const GRID_GAP_X = 12; // web gap-x-3
 const GRID_GAP_Y = 20; // web gap-y-5

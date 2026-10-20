@@ -1,5 +1,6 @@
 'use client';
 
+import { productCard } from '@jirum/design-system/recipes';
 import * as m from 'motion/react-m';
 
 import { PAGE } from '@/shared/config/page';
@@ -53,7 +54,12 @@ export default function ProductRankingImageCard({
       >
         <m.div className="h-full w-full" whileTap={{ scale: 0.96 }} transition={{ duration: 0.1 }}>
           <div className="pc:aspect-square pc:h-auto relative h-60 w-full bg-gray-50">
-            <div className="text-primary-500 pc:text-fixed-white pc:bg-fixed-600/80 bg-fixed-900 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg text-sm font-medium">
+            <div
+              className={cn(
+                'text-primary-500 pc:text-fixed-white pc:bg-fixed-600/80 bg-fixed-900 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg',
+                productCard.ranking.rank,
+              )}
+            >
               {rank ?? index + 1}
             </div>
             <ProductThumbnail
@@ -69,8 +75,8 @@ export default function ProductRankingImageCard({
             {/* 랭킹 1~10위는 홈에서 가장 많이 보이는데 「왜 좋은 딜인지」가 없었다 — 다른 카드와 같은 배지(핫딜·대박딜·초대박딜). */}
             <ProductCardStatus product={product} squareThumb />
           </div>
-          <div className="pc:h-[132px] p-3 pb-0">
-            <div className="xl:pc:text-base line-clamp-2 text-sm text-gray-700">
+          <div className={cn('pc:h-[132px]', productCard.ranking.body)}>
+            <div className={cn('xl:pc:text-base line-clamp-2', productCard.ranking.title)}>
               {product.title}
             </div>
             <DisplayProductSource

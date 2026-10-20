@@ -1,3 +1,4 @@
+import {SHARE_CHANNEL_COPY} from '@jirum/domain/share';
 import React, {useEffect, useRef, useState} from 'react';
 import {
   Animated,
@@ -212,8 +213,7 @@ export default function ShareSheet({
 
   if (!mounted) return null;
 
-  // a11y = 화면 읽기 이름(web ShareSheet 와 같은 문구). 예전엔 라벨 뒤에 괄호 조사 「(으)로」를 붙여
-  // VoiceOver 가 「카카오톡 으 로 공유」로 읽었다 → 조사까지 적는다.
+  // label·a11y(화면 읽기 이름, 조사까지)는 정본 SHARE_CHANNEL_COPY — web 공유 시트와 같은 문구.
   const apps: {
     c: Exclude<ShareChannel, 'copy'>;
     label: string;
@@ -223,29 +223,25 @@ export default function ShareSheet({
   }[] = [
     {
       c: 'kakao',
-      label: '카카오톡',
-      a11y: '카카오톡으로 공유',
+      ...SHARE_CHANNEL_COPY.kakao,
       icon: <KaKaoIcon width={28} height={28} />,
       bg: brand.kakao,
     },
     {
       c: 'x',
-      label: 'X',
-      a11y: 'X로 공유',
+      ...SHARE_CHANNEL_COPY.x,
       icon: <ShareX width={22} height={22} />,
       bg: brandDark,
     },
     {
       c: 'threads',
-      label: '스레드',
-      a11y: '스레드로 공유',
+      ...SHARE_CHANNEL_COPY.threads,
       icon: <ShareThreads width={24} height={24} />,
       bg: brandDark,
     },
     {
       c: 'native',
-      label: '다른 앱',
-      a11y: '다른 앱으로 공유',
+      ...SHARE_CHANNEL_COPY.native,
       icon: <ShareIcon width={22} height={22} color={c.gray[700]} />,
       bg: c.gray[100],
     },

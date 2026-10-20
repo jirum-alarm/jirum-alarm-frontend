@@ -1,3 +1,4 @@
+import {layout} from '@jirum/design-system/layout';
 import React from 'react';
 import {Animated, Dimensions, View} from 'react-native';
 
@@ -50,10 +51,12 @@ export function RankingSkeleton() {
             key={i}
             style={{
               width: 240,
-              height: 352,
+              height: layout.rankingCard.height,
               marginRight: 4,
               // 가운데 카드만 100%, 옆은 90% — 실제 슬라이더와 같은 비율
-              transform: [{scale: i === 0 ? 1 : 0.9}],
+              transform: [
+                {scale: i === 0 ? 1 : layout.rankingCard.inactiveScale},
+              ],
               opacity,
             }}
             className="rounded-lg bg-gray-100"

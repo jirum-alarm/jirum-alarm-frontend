@@ -1,5 +1,7 @@
 'use client';
 
+import { layout } from '@jirum/design-system/layout';
+
 import useScrollPosition from '@/shared/hooks/useScrollPosition';
 import { cn } from '@/shared/lib/cn';
 import ColorSchemeButton from '@/shared/ui/ColorSchemeButton';
@@ -11,7 +13,7 @@ import AlarmLinkButton from '@/widgets/layout/ui/AlarmLinkButton';
 import CommunityLinkButton from '@/widgets/layout/ui/CommunityLinkButton';
 
 const HomeHeader = () => {
-  const scrollThreshold = 90;
+  const scrollThreshold = layout.homeHeader.scrollThreshold;
 
   const isScrolled = useScrollPosition(scrollThreshold);
 

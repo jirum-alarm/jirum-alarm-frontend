@@ -34,3 +34,16 @@ const tabRankOf = (id: number) => {
 export function orderTrendingCategories<T extends { id: number }>(categories: readonly T[]): T[] {
   return [...categories].sort((a, b) => tabRankOf(a.id) - tabRankOf(b.id));
 }
+
+/** 발견 탭이 보여 주는 두 화면. */
+export type TrendingView = 'live' | 'ranking';
+
+/**
+ * 하단 「발견」을 눌렀을 때 갈 화면 — 랭킹을 보고 있으면 실시간, 그 밖(실시간·다른 탭)이면 랭킹.
+ * web 하단 네비 링크와 앱 탭바(재탭 = 전환, 다른 탭에서 = 랭킹)가 이 규칙 하나를 쓴다.
+ */
+export const nextTrendingView = (current: TrendingView | null): TrendingView =>
+  current === 'ranking' ? 'live' : 'ranking';
+
+/** 랭킹 목록 카드의 노출·클릭 출처. 백엔드 CTR 집계가 이 문자열로 거른다 — 갈리면 분모가 사라진다. */
+export const RANKING_CARD_SOURCE = 'ranking_tab' as const;

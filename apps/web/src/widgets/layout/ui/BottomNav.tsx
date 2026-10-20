@@ -1,5 +1,6 @@
 'use client';
 
+import { nextTrendingView } from '@jirum/domain/ranking';
 import * as m from 'motion/react-m';
 import { usePathname } from 'next/navigation';
 import { createElement, useEffect, useRef } from 'react';
@@ -41,7 +42,9 @@ const BottomNavList = [
   {
     type: NAV_TYPE.TRENDING,
     getLink: (pathName: string) =>
-      pathName === PAGE.TRENDING_RANKING ? PAGE.TRENDING_LIVE : PAGE.TRENDING_RANKING,
+      nextTrendingView(pathName === PAGE.TRENDING_RANKING ? 'ranking' : null) === 'live'
+        ? PAGE.TRENDING_LIVE
+        : PAGE.TRENDING_RANKING,
     text: '발견',
     icon: Find,
     activeIcon: FindFill,

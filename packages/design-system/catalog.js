@@ -318,6 +318,12 @@ const catalog = [
       `${A}shared/components/product/DisplayProductSource.tsx`,
       `${A}entities/product/ui/ProductCarouselSection.tsx`,
     ],
+    // 홈 랭킹 카드(productCard.ranking · 크기는 layout.rankingCard).
+    sites: [
+      `${W}entities/product-list/ui/ranking/ProductRankingImageCard.tsx`,
+      `${W}entities/product-list/ui/ranking/ADProductRankingImageCard.tsx`,
+      `${A}entities/home/ui/JirumRankingSlider.tsx`,
+    ],
   },
   {
     id: 'thumbnail',

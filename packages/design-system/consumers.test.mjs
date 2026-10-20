@@ -157,6 +157,35 @@ test('web 어디에도 칩·태그 모양을 손으로 다시 적지 않는다(�
   assert.deepEqual(offenders, []);
 });
 
+test('홈 랭킹 카드 크기 — web 클래스·앱 숫자가 layout.rankingCard 와 같다', () => {
+  // 앱은 layout 숫자를 import 하고(Animated·스켈레톤), web 은 같은 값의 클래스를 쓴다(PC 에선 pc:h-auto 로 풀어야 해 style 로 못 옮긴다).
+  const {layout} = require('./layout.js');
+  const {height, thumbHeight, inactiveScale} = layout.rankingCard;
+  const web = [
+    'apps/web/src/entities/product-list/ui/ranking/ProductRankingImageCard.tsx',
+    'apps/web/src/entities/product-list/ui/ranking/ADProductRankingImageCard.tsx',
+    'apps/web/src/widgets/home/ui/mobile/RankingSkeleton.tsx',
+  ];
+  for (const f of web) {
+    const src = readPart(f);
+    assert.ok(src.includes(`h-[${height}px]`), `${f}: 카드 h-[${height}px] 아님`);
+    assert.ok(src.includes(`h-${thumbHeight / 4}`), `${f}: 사진 h-${thumbHeight / 4} 아님`);
+    assert.ok(src.includes(`scale-${inactiveScale * 100}`), `${f}: 옆 카드 scale-${inactiveScale * 100} 아님`);
+  }
+  for (const f of ['apps/mobile/src/entities/home/ui/JirumRankingSlider.tsx', 'apps/mobile/src/screens/home/ui/HomeSkeletons.tsx']) {
+    const src = readPart(f);
+    assert.match(src, /layout\.rankingCard\./, `${f}: layout.rankingCard 를 안 읽는다`);
+    assert.doesNotMatch(src, /height: 352|\[1, 0\.9\]|\? 1 : 0\.9/, `${f}: 랭킹 카드 숫자를 손으로 적었다`);
+  }
+});
+
+test('홈 상단바 — web 전환 클래스가 layout.homeHeader.transitionMs 와 같다', () => {
+  const {layout} = require('./layout.js');
+  const src = readPart('apps/web/src/widgets/home/ui/mobile/HomeHeader.tsx');
+  assert.ok(src.includes(`duration-${layout.homeHeader.transitionMs}`), 'web 상단바 duration 이 정본과 다르다');
+  assert.match(src, /layout\.homeHeader\.scrollThreshold/);
+});
+
 test('카탈로그 sites 경로가 있다(빈 검사로 통과하지 않게)', () => {
   const sites = catalog.flatMap((e) => e.sites ?? []);
   assert.ok(sites.length >= 40, `sites ${sites.length}개`);
