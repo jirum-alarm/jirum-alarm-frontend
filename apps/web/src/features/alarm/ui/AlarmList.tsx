@@ -1,6 +1,7 @@
 'use client';
 
 import { button } from '@jirum/design-system/recipes';
+import { ALARM_COPY } from '@jirum/domain/alarm';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
@@ -144,7 +145,7 @@ export default function AlarmList() {
               }}
               className="px-1 text-sm font-medium text-gray-600"
             >
-              전체 삭제
+              {ALARM_COPY.deleteAll}
             </button>
             <button
               type="button"
@@ -156,7 +157,7 @@ export default function AlarmList() {
                 button.tone.neutralOutline.text,
               )}
             >
-              완료
+              {ALARM_COPY.done}
             </button>
           </div>
         </div>
@@ -205,7 +206,7 @@ export default function AlarmList() {
                 type="button"
                 onClick={() => {
                   updatePushSetting({ keywordAlertLevel: 'HOT' });
-                  toast('이제 핫딜이 된 딜만 알려드려요. 알림 설정에서 되돌릴 수 있어요');
+                  toast(ALARM_COPY.hotDealOnlyToast);
                 }}
                 className={cn(
                   'flex items-center justify-center',
@@ -215,14 +216,12 @@ export default function AlarmList() {
                   button.tone.neutralOutline.text,
                 )}
               >
-                핫딜만 받기
+                {ALARM_COPY.hotDealOnly}
               </button>
             </div>
           ) : (
             <div className="flex h-11 items-center justify-between px-5">
-              <span className="text-sm font-medium text-gray-600">
-                지금 다양한 핫딜 알림을 받아보세요!
-              </span>
+              <span className="text-sm font-medium text-gray-600">{ALARM_COPY.promo}</span>
               <Link
                 href={PAGE.MYPAGE_KEYWORD}
                 className={cn(
@@ -233,7 +232,7 @@ export default function AlarmList() {
                   button.tone.neutralOutline.text,
                 )}
               >
-                키워드 알림
+                {ALARM_COPY.keywordSettings}
               </Link>
             </div>
           )}

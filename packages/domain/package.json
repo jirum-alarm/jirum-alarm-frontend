@@ -5,6 +5,7 @@
   "description": "web·앱이 같은 결과를 내야 하는 순수 도메인 규칙(TS 원본). 한쪽 앱에 복사하지 말고 여기서 import 한다.",
   "type": "module",
   "exports": {
+    "./alarm": "./src/alarm.ts",
     "./alert-reason": "./src/alert-reason.ts",
     "./beauty-room-experiment": "./src/beauty-room-experiment.ts",
     "./card-tracking": "./src/card-tracking.ts",

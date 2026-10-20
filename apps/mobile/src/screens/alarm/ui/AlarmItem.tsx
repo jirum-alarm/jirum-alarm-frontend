@@ -1,3 +1,4 @@
+import {ALARM_COPY} from '@jirum/domain/alarm';
 import {prefetchProductDetail} from '@/entities/product/prefetch-detail';
 import {notificationRow} from '@jirum/design-system/recipes';
 import React from 'react';
@@ -178,11 +179,11 @@ const AlarmItem = React.memo(function AlarmItem({
             <View className="flex-row items-center gap-x-3 pt-2">
               {isEnd ? (
                 <Badge size="tag" variant="outline" tone="gray">
-                  판매종료
+                  {ALARM_COPY.soldOut}
                 </Badge>
               ) : isHot ? (
                 <Badge size="tag" variant="solid" tone="error">
-                  핫딜
+                  {ALARM_COPY.hotDeal}
                 </Badge>
               ) : null}
               {price ? (

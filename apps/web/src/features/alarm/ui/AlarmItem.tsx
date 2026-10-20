@@ -1,4 +1,5 @@
 import { notificationRow } from '@jirum/design-system/recipes';
+import { ALARM_COPY } from '@jirum/domain/alarm';
 import { useAtomValue } from 'jotai';
 import { memo, type ReactNode } from 'react';
 
@@ -121,11 +122,11 @@ const AlarmItem = ({
           <div className="flex items-center gap-x-3 pt-2">
             {isEnd ? (
               <Badge size="tag" variant="outline" tone="gray">
-                판매종료
+                {ALARM_COPY.soldOut}
               </Badge>
             ) : isHot ? (
               <Badge size="tag" variant="solid" tone="error">
-                핫딜
+                {ALARM_COPY.hotDeal}
               </Badge>
             ) : null}
             {price && (

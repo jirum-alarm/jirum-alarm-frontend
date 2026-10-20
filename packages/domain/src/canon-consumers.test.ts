@@ -38,6 +38,7 @@ const SHARED_BY_BOTH: Record<string, string[]> = {
     'RANKING_CARD_SOURCE',
   ],
   share: ['SHARE_CHANNEL_COPY'],
+  alarm: ['ALARM_COPY'],
   'community-post': [
     'parsePostContent',
     'isAllowedPostImageUrl',

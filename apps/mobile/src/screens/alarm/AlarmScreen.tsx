@@ -1,3 +1,4 @@
+import {ALARM_COPY} from '@jirum/domain/alarm';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, FlatList, RefreshControl, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -346,7 +347,7 @@ export default function AlarmScreen() {
               hitSlop={8}
               onPress={() => setConfirmRemoveAll(true)}>
               <Text className="px-1 text-sm font-medium text-gray-600">
-                전체 삭제
+                {ALARM_COPY.deleteAll}
               </Text>
             </PressableScale>
             <PressableScale
@@ -363,7 +364,7 @@ export default function AlarmScreen() {
                   button.size.xs.text,
                   button.tone.neutralOutline.text,
                 )}>
-                완료
+                {ALARM_COPY.done}
               </Text>
             </PressableScale>
           </View>
@@ -448,23 +449,21 @@ export default function AlarmScreen() {
                     updatePushSetting({
                       keywordAlertLevel: KeywordAlertLevel.Hot,
                     });
-                    showToast.success(
-                      '이제 핫딜이 된 딜만 알려드려요. 알림 설정에서 되돌릴 수 있어요',
-                    );
+                    showToast.success(ALARM_COPY.hotDealOnlyToast);
                   }}>
                   <Text
                     className={cn(
                       button.size.xs.text,
                       button.tone.neutralOutline.text,
                     )}>
-                    핫딜만 받기
+                    {ALARM_COPY.hotDealOnly}
                   </Text>
                 </PressableScale>
               </>
             ) : (
               <>
                 <Text className="text-sm font-medium text-gray-600">
-                  지금 다양한 핫딜 알림을 받아보세요!
+                  {ALARM_COPY.promo}
                 </Text>
                 <PressableScale
                   accessibilityRole="button"
@@ -480,7 +479,7 @@ export default function AlarmScreen() {
                       button.size.xs.text,
                       button.tone.neutralOutline.text,
                     )}>
-                    키워드 알림
+                    {ALARM_COPY.keywordSettings}
                   </Text>
                 </PressableScale>
               </>

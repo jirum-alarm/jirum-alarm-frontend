@@ -1,3 +1,4 @@
+import {ALARM_COPY} from '@jirum/domain/alarm';
 import React from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -21,12 +22,12 @@ export default function NoAlerts({
       <AlarmIllustError />
       <View className="pb-8 pt-4">
         <Text className="pb-2 text-2xl font-semibold text-gray-900">
-          아직 도착한 알림이 없어요
+          {ALARM_COPY.emptyTitle}
         </Text>
         <Text className="text-center text-gray-500">
           {watching > 0
             ? `키워드 ${watching}개를 지켜보고 있어요.\n새 핫딜이 올라오면 바로 알려드릴게요.`
-            : '키워드를 등록하고 알림을 받아보세요.'}
+            : ALARM_COPY.emptyBody}
         </Text>
       </View>
       {/*
@@ -39,7 +40,7 @@ export default function NoAlerts({
         size="md"
         onPress={onPressKeyword}
         className="h-12 w-auto self-center px-6">
-        {watching > 0 ? '키워드 관리' : '키워드 등록'}
+        {watching > 0 ? '키워드 관리' : ALARM_COPY.emptyCta}
       </Button>
     </View>
   );

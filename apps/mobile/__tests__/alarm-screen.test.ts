@@ -14,8 +14,6 @@ declare const __dirname: string;
 
 const read = (p: string) =>
   fs.readFileSync(path.join(__dirname, '..', p), 'utf8');
-const readWeb = (p: string) =>
-  fs.readFileSync(path.join(__dirname, '../../web/src', p), 'utf8');
 
 const {
   splitByKeyword,
@@ -120,19 +118,13 @@ describe('★배지 인수인계 — 웹뷰가 하던 일을 네이티브가 이
   });
 });
 
-describe('web 과 같은 쓰기 4종을 모두 갖췄나', () => {
-  const webViewModel = readWeb(
-    'features/alarm/model/useNotificationsViewModel.ts',
-  );
-
+describe('쓰기 4종(읽음·전체 읽음·삭제·전체 삭제)을 모두 갖췄나', () => {
   it.each([
     ['readNotification', '개별 읽음'],
     ['readAllNotifications', '전체 읽음'],
     ['removeNotification', '개별 삭제'],
     ['removeAllNotifications', '전체 삭제'],
   ])('%s (%s)', (method: string) => {
-    // web 에 있는 흐름이 네이티브에도 있어야 한다
-    expect(webViewModel).toContain(method);
     expect(viewModel).toContain(method);
   });
 
@@ -143,17 +135,15 @@ describe('web 과 같은 쓰기 4종을 모두 갖췄나', () => {
   });
 });
 
-describe('표시 규칙이 web 과 같은가', () => {
-  const webItem = readWeb('features/alarm/ui/AlarmItem.tsx');
-  const webList = readWeb('features/alarm/ui/AlarmList.tsx');
-  const webEmpty = readWeb('features/alarm/ui/NoAlerts.tsx');
+// 문구는 @jirum/domain/alarm 정본(web 알림함도 같은 상수 — domain canon-consumers 가 본다).
+describe('표시 규칙 — 정본 문구·모양', () => {
   const empty = read('src/screens/alarm/ui/NoAlerts.tsx');
+  const {ALARM_COPY} = require('@jirum/domain/alarm');
 
-  it('판매종료·핫딜 뱃지 문구가 같다', () => {
-    for (const label of ['판매종료', '핫딜']) {
-      expect(webItem).toContain(label);
-      expect(item).toContain(label);
-    }
+  it('판매종료·핫딜 뱃지는 정본 문구', () => {
+    expect(ALARM_COPY.soldOut).toBe('판매종료');
+    expect(item).toContain('ALARM_COPY.soldOut');
+    expect(item).toContain('ALARM_COPY.hotDeal');
   });
 
   // 읽음·안 읽음 모양은 디자인 시스템 notificationRow 가 정본(web·앱 같은 값). 줄 전체 opacity 재발은
@@ -163,26 +153,21 @@ describe('표시 규칙이 web 과 같은가', () => {
     expect(item).toMatch(/notificationRow\.(?:text|thumb)\.read/);
   });
 
-  it('안내 줄 문구가 web AlarmList 와 같다', () => {
-    for (const copy of [
-      '지금 다양한 핫딜 알림을 받아보세요!',
-      '키워드 알림',
-      '전체 삭제',
-      '완료',
+  it('안내 줄·편집 버튼은 정본 문구', () => {
+    for (const key of [
+      'promo',
+      'keywordSettings',
+      'deleteAll',
+      'done',
+      'hotDealOnly',
     ]) {
-      expect(webList).toContain(copy);
-      expect(screen).toContain(copy);
+      expect(screen).toContain(`ALARM_COPY.${key}`);
     }
   });
 
-  it('빈 상태 문구가 web NoAlerts 와 같다', () => {
-    for (const copy of [
-      '아직 도착한 알림이 없어요',
-      '키워드를 등록하고 알림을 받아보세요.',
-      '키워드 등록',
-    ]) {
-      expect(webEmpty).toContain(copy);
-      expect(empty).toContain(copy);
+  it('빈 상태는 정본 문구', () => {
+    for (const key of ['emptyTitle', 'emptyBody', 'emptyCta']) {
+      expect(empty).toContain(`ALARM_COPY.${key}`);
     }
   });
 });
@@ -224,19 +209,12 @@ describe('탭 배선', () => {
   });
 });
 
-describe('★옮기지 않은 것 — web 전용 분기', () => {
-  const webContainer = readWeb('features/alarm/ui/AlarmContainer.tsx');
-
+describe('★옮기지 않은 것 — web 전용 분기(앱다운로드·로그인 유도)', () => {
   /**
    * web AlarmContainer 는 비로그인·비앱 분기를 갖지만 앱에서는 도달할 수 없다.
    * RootNavigator 가 비로그인을 AuthNavigator 로 보내고, isJirumAlarmApp 은
    * 앱에서 항상 참이다. 옮기면 영원히 안 뜨는 코드가 된다 — 일부러 뺐다는 기록.
    */
-  it('web 에는 앱다운로드·로그인 유도 분기가 있다', () => {
-    expect(webContainer).toContain('AppDownloadGuide');
-    expect(webContainer).toContain('LoginGuide');
-  });
-
   it('네이티브 화면은 그 둘을 옮기지 않았다', () => {
     // ⚠️단순 substring 은 못 쓴다 — 화면 주석이 "왜 안 옮겼는지" 설명하며
     // 두 이름을 언급한다. 주석을 걷어낸 코드에서만 찾는다.
