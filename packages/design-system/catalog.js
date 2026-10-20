@@ -248,6 +248,16 @@ const catalog = [
     story: '레시피/면·상자',
   },
   {
+    id: 'notificationRow',
+    name: '알림함 줄',
+    use: '알림함 한 줄의 안 읽음 면·읽음 상태(사진만 흐리고 글자는 한 단계 낮춤 — 줄 전체 opacity 금지)',
+    recipe: 'notificationRow',
+    web: null,
+    app: null,
+    story: '레시피/면·상자',
+    sites: [`${W}features/alarm/ui/AlarmItem.tsx`, `${A}screens/alarm/ui/AlarmItem.tsx`],
+  },
+  {
     id: 'dealRow',
     name: '딜 줄',
     use: '같은 상품 다른 가격 목록의 한 줄. web 만',

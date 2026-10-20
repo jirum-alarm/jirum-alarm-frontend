@@ -230,6 +230,10 @@ const recipePairs = () => [
     [`promptCard ${k} action`, {box: t.action.box + ' bg-white', text: t.action.text}],
   ]),
   ['listRow group', {box: '', text: recipes.listRow.group}],
+  ...Object.entries(recipes.notificationRow.text).flatMap(([k, text]) => [
+    [`notificationRow ${k}`, {box: '', text}],
+    [`notificationRow ${k} on unread`, {box: recipes.notificationRow.unread, text}],
+  ]),
   ['listRow value', {box: '', text: recipes.listRow.value}],
 ];
 

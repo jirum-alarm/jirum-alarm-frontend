@@ -45,7 +45,8 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: 'node --experimental-strip-types screens/fixture-server.mts',
+      command:
+        'node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON screens/fixture-server.mts',
       cwd: join(HERE, '..'),
       url: `http://localhost:${FIXTURE_PORT}/__missing`,
       reuseExistingServer: false,

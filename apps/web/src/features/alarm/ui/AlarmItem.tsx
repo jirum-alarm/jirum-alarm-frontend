@@ -1,3 +1,4 @@
+import { notificationRow } from '@jirum/design-system/recipes';
 import { useAtomValue } from 'jotai';
 import { memo, type ReactNode } from 'react';
 
@@ -53,13 +54,10 @@ const AlarmItem = ({
     }
   };
 
+  const textTone = readAt ? notificationRow.text.read : notificationRow.text.unread;
+
   return (
-    <li
-      className={cn('relative', {
-        'bg-primary-50': isNew && !readAt,
-        'opacity-60': !!readAt,
-      })}
-    >
+    <li className={cn('relative', isNew && !readAt && notificationRow.unread)}>
       {isEditMode && (
         <button
           type="button"
@@ -100,7 +98,12 @@ const AlarmItem = ({
         isEditMode={isEditMode}
         onActivate={handleClick}
       >
-        <div className="h-14 w-14 overflow-hidden rounded-sm border border-gray-200">
+        <div
+          className={cn(
+            'h-14 w-14 overflow-hidden rounded-sm border border-gray-200',
+            readAt && notificationRow.thumb.read,
+          )}
+        >
           <ImageWithFallback
             src={convertToWebp(thumbnail)}
             fallbackSrc={thumbnail ?? ''}
@@ -110,9 +113,9 @@ const AlarmItem = ({
         <div className="flex-1 pl-3">
           {/* 상품 없는 알림(댓글 답글·좋아요 등)은 본문만으론 무슨 알림인지 모른다 — 제목을 같이 보여준다. */}
           {!hasProduct && title && (
-            <p className="line-clamp-1 text-sm font-semibold text-gray-900">{title}</p>
+            <p className={cn('line-clamp-1 text-sm font-semibold', textTone)}>{title}</p>
           )}
-          <p className="line-clamp-2 w-full text-sm text-gray-900">
+          <p className={cn('line-clamp-2 w-full text-sm', textTone)}>
             <HighlightText message={message} keyword={keyword?.split(' ')[0] ?? ''} />
           </p>
           <div className="flex items-center gap-x-3 pt-2">
@@ -127,7 +130,7 @@ const AlarmItem = ({
             ) : null}
             {price && (
               <>
-                <span className="line-clamp-1 max-w-56 font-semibold text-gray-900">{price}</span>
+                <span className={cn('line-clamp-1 max-w-56 font-semibold', textTone)}>{price}</span>
                 <span className="inline-block h-2.5 border-l border-gray-400"></span>
               </>
             )}

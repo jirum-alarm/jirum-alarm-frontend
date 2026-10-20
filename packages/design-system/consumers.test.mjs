@@ -88,6 +88,7 @@ const HAND_WRITTEN = {
   infoBox: /rounded-xl border border-gray-200 bg-gray-50/,
   dealRow: /rounded-lg border border-gray-100 p-3/,
   linkChip: /rounded-full border border-gray-200 px-\d/,
+  notificationRow: /opacity-60/,
 };
 
 test('레시피를 읽는 부품·자리에 옛 손글씨 모양이 없다', () => {

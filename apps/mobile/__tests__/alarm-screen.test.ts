@@ -156,9 +156,11 @@ describe('표시 규칙이 web 과 같은가', () => {
     }
   });
 
-  it('읽은 알림은 흐리게, 새 알림은 배경 강조', () => {
-    expect(item).toMatch(/opacity-60/);
-    expect(item).toMatch(/bg-primary-50/);
+  // 읽음·안 읽음 모양은 디자인 시스템 notificationRow 가 정본(web·앱 같은 값). 줄 전체 opacity 재발은
+  // packages/design-system consumers.test 가 막는다.
+  it('읽은 알림·새 알림 모양을 정본(notificationRow)에서 읽는다', () => {
+    expect(item).toMatch(/notificationRow\.unread/);
+    expect(item).toMatch(/notificationRow\.(?:text|thumb)\.read/);
   });
 
   it('안내 줄 문구가 web AlarmList 와 같다', () => {

@@ -364,6 +364,16 @@ const promptCard = {
  * 설정·메뉴 목록 행(내정보 메뉴·가입 정보·약관) — 작은 회색 묶음 제목 + 아이콘·제목·값·화살표 행.
  * web MenuList 와 앱 Rows 가 같은 값을 손으로 적고 있었다. 눌림(앱 opacity·ripple)·배치는 플랫폼마다.
  */
+/**
+ * 알림함 한 줄. unread = 새로 온 안 읽은 알림의 옅은 면. 읽은 알림은 사진만 흐리고(thumb.read) 본문·가격 글자는 한 단계 낮춘다(text.read).
+ * 예전엔 줄 전체에 opacity-60 이라 이미 회색인 작은 글자(시각·출처 라벨)가 대비 2.35 로, 핫딜 배지도 3.0 으로 떨어졌다(10/20 web-screens axe).
+ */
+const notificationRow = {
+  unread: 'bg-primary-50',
+  text: {unread: 'text-gray-900', read: 'text-gray-500'},
+  thumb: {read: 'opacity-60'},
+};
+
 const listRow = {
   group: 'pb-1 text-xs font-medium text-gray-500',
   row: 'items-center gap-3 py-3',
@@ -388,4 +398,4 @@ const press = {
   haptic: {toggle: 'selection', select: 'selection', add: 'success', remove: 'light', error: 'error'},
 };
 
-module.exports = {press, adLabel, addChip, badge, button, buttonTone, chip, tab, toggle, sectionTitle, cardThumb, dealRow, detailInfo, infoBox, keywordChip, linkChip, wordTag, sheet, skeleton, toast, emptyText, cardLabel, text, pageHeader, productCard, promptCard, listRow};
+module.exports = {notificationRow, press, adLabel, addChip, badge, button, buttonTone, chip, tab, toggle, sectionTitle, cardThumb, dealRow, detailInfo, infoBox, keywordChip, linkChip, wordTag, sheet, skeleton, toast, emptyText, cardLabel, text, pageHeader, productCard, promptCard, listRow};

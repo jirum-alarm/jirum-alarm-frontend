@@ -1,4 +1,5 @@
 import {prefetchProductDetail} from '@/entities/product/prefetch-detail';
+import {notificationRow} from '@jirum/design-system/recipes';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -23,14 +24,16 @@ import PressableOpacity from '@/shared/components/PressableOpacity';
 function HighlightedMessage({
   message,
   keyword,
+  textClassName,
 }: {
   message: string;
   keyword: string;
+  textClassName: string;
 }) {
   const parts = splitByKeyword(message, keyword);
 
   return (
-    <Text className="text-sm text-gray-900" numberOfLines={2}>
+    <Text className={cn('text-sm', textClassName)} numberOfLines={2}>
       {parts.map((part, i) =>
         part.match ? (
           <Text key={i} className="font-bold">
@@ -78,6 +81,9 @@ const AlarmItem = React.memo(function AlarmItem({
     notification;
   const productId = product?.id != null ? Number(product.id) : null;
   const {thumbnail, price, isHot, isEnd} = product ?? {};
+  const textTone = readAt
+    ? notificationRow.text.read
+    : notificationRow.text.unread;
 
   const highlightKeyword = firstKeyword(keyword);
   const label = sourceKey ? sourceLabel(parseSourceKey(sourceKey)) : undefined;
@@ -92,9 +98,7 @@ const AlarmItem = React.memo(function AlarmItem({
       <View
         className={cn(
           'relative',
-          isNew && !readAt ? 'bg-primary-50' : 'bg-white',
-          // web: 읽은 알림은 opacity-60
-          readAt && 'opacity-60',
+          isNew && !readAt ? notificationRow.unread : 'bg-white',
         )}>
         <PressableOpacity
           // ★행은 화면 폭을 꽉 채우므로 카드처럼 scale 을 주면 어색하다
@@ -131,7 +135,11 @@ const AlarmItem = React.memo(function AlarmItem({
               onPressSource?.(sourceKey);
             }
           }}>
-          <View className="h-14 w-14 overflow-hidden rounded-sm border border-gray-200">
+          <View
+            className={cn(
+              'h-14 w-14 overflow-hidden rounded-sm border border-gray-200',
+              readAt && notificationRow.thumb.read,
+            )}>
             <Thumbnail uri={thumbnail} fallback={<AlarmItemNoImage />} />
           </View>
           <View className="flex-1 pl-3">
@@ -157,12 +165,16 @@ const AlarmItem = React.memo(function AlarmItem({
             {/* 상품 없는 알림(댓글 답글·좋아요)은 본문만으론 무슨 알림인지 모른다 — 제목을 같이. */}
             {productId == null && title ? (
               <Text
-                className="text-sm font-semibold text-gray-900"
+                className={cn('text-sm font-semibold', textTone)}
                 numberOfLines={1}>
                 {title}
               </Text>
             ) : null}
-            <HighlightedMessage message={message} keyword={highlightKeyword} />
+            <HighlightedMessage
+              message={message}
+              keyword={highlightKeyword}
+              textClassName={textTone}
+            />
             <View className="flex-row items-center gap-x-3 pt-2">
               {isEnd ? (
                 <Badge size="tag" variant="outline" tone="gray">
@@ -176,7 +188,7 @@ const AlarmItem = React.memo(function AlarmItem({
               {price ? (
                 <>
                   <Text
-                    className="shrink font-semibold text-gray-900"
+                    className={cn('shrink font-semibold', textTone)}
                     numberOfLines={1}>
                     {price}
                   </Text>

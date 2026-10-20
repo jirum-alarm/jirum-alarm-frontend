@@ -11,6 +11,7 @@ import { expect, test } from '@playwright/test';
 
 import { accessibility, errorBoundary, horizontalOverflow, textOverlap } from './checks';
 import { PAGES } from './pages';
+import { USER_TOKEN } from './user-fixtures';
 
 const HERE = __dirname;
 const OUT = join(HERE, '.out');
@@ -46,6 +47,11 @@ for (const page of PAGES) {
       });
       await fetch(`${FIXTURE}/__missing/reset`, { method: 'POST' });
 
+      if (page.auth === 'user') {
+        await context.addCookies([
+          { name: 'ACCESS_TOKEN', value: USER_TOKEN, url: info.project.use.baseURL! },
+        ]);
+      }
       if (project.endsWith('dark')) {
         await context.addCookies([
           { name: 'COLOR_SCHEME', value: 'dark', url: info.project.use.baseURL! },
@@ -79,8 +85,10 @@ for (const page of PAGES) {
         window.scrollTo(0, 0);
       });
       await tab.waitForLoadState('networkidle', { timeout: 5_000 }).catch(() => undefined);
-      // next dev 의 개발 표시(왼쪽 아래 N)·포털은 화면이 아니다.
-      await tab.addStyleTag({ content: 'nextjs-portal{display:none!important}' });
+      // next dev 의 개발 표시(왼쪽 아래 N)·React Query 개발 도구 버튼(오른쪽 아래 둥근 아이콘 — 마지막 탭을 덮어 버그로 착각했다)은 화면이 아니다.
+      await tab.addStyleTag({
+        content: 'nextjs-portal,.tsqd-parent-container{display:none!important}',
+      });
 
       // 두 장: 첫 화면(사용자가 처음 보는 그대로, 고정 헤더·탭바 포함) + 아래로 4화면(고정 요소는 숨김 —
       // 전체 캡처에선 고정 요소가 첫 화면 위치에 박혀 본문 한가운데 떠 보인다).
@@ -117,7 +125,7 @@ for (const page of PAGES) {
 
       // 빈·에러 시나리오는 일부러 데이터를 깨뜨린 것 — 그 결과 생기는 콘솔 오류·추가 쿼리는 보고만 하고,
       // 막는 건 «화면이 무너졌나»(가로 넘침)뿐. 기본 시나리오는 전부 막는다.
-      const strict = scenario === 'default';
+      const strict = scenario === 'default' && !RECORDING; // 녹화는 데이터를 모으는 실행 — 판정은 재생에서.
       const mark = strict ? '❌' : '⚠️';
       const lines = [
         `### ${project} · ${page.name}${scenario === 'default' ? '' : ` [${scenario}]`} — \`${page.path}\``,
