@@ -1,5 +1,6 @@
 'use client';
 
+import { ACCOUNT_COPY } from '@jirum/domain/mypage';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { AuthQueries } from '@/entities/auth';
@@ -34,13 +35,17 @@ const AccountContainer = () => {
   return (
     <div className="pc:min-h-0 flex min-h-[calc(100vh-56px-max(56px,var(--bottom-nav-padding,0px)))] flex-col px-5 pb-4">
       <div className="pc:pt-0 border-b border-b-gray-200 pt-6 pb-8">
-        <MovePage to="/mypage/account/nickname" title="닉네임" subtitle={me?.nickname} />
-        <MovePage to="/mypage/account/personal" title="개인정보" />
-        <MovePage to="/mypage/account/password" title="비밀번호" />
+        <MovePage
+          to="/mypage/account/nickname"
+          title={ACCOUNT_COPY.nickname}
+          subtitle={me?.nickname}
+        />
+        <MovePage to="/mypage/account/personal" title={ACCOUNT_COPY.personal} />
+        <MovePage to="/mypage/account/password" title={ACCOUNT_COPY.password} />
       </div>
       <div className="flex flex-1 flex-col pt-8">
         <div className="pb-[22px]">
-          <span className="text-sm text-gray-500">이메일 주소</span>
+          <span className="text-sm text-gray-500">{ACCOUNT_COPY.email}</span>
         </div>
         <div>
           <span className="text-gray-900">{me?.email}</span>

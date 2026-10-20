@@ -1,3 +1,5 @@
+import { POLICY_DOCS } from '@jirum/domain/mypage';
+
 import { ArrowRight } from '@/shared/ui/common/icons';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import Link from '@/shared/ui/Link';
@@ -7,15 +9,15 @@ const TermsPoliciesPage = () => {
     <BasicLayout hasBackButton title="약관 및 정책">
       {/* 이동하는 행은 chevron 을 준다 — 마이페이지의 다른 행들과 같은 규칙. */}
       <div className="pc:pt-0 h-full py-6">
-        <Link className="w-full" href={'/policies/terms'}>
+        <Link className="w-full" href={POLICY_DOCS.terms.path}>
           <div className="flex items-center px-5 py-3">
-            <span className="flex-1 text-left text-gray-900">서비스 이용약관</span>
+            <span className="flex-1 text-left text-gray-900">{POLICY_DOCS.terms.title}</span>
             <ArrowRight />
           </div>
         </Link>
-        <Link className="w-full" href={'/policies/privacy'}>
+        <Link className="w-full" href={POLICY_DOCS.privacy.path}>
           <div className="flex items-center px-5 py-3">
-            <span className="flex-1 text-left text-gray-900">개인정보 처리방침</span>
+            <span className="flex-1 text-left text-gray-900">{POLICY_DOCS.privacy.title}</span>
             <ArrowRight />
           </div>
         </Link>

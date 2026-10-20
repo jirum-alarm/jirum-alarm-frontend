@@ -17,8 +17,6 @@ declare const __dirname: string;
 
 const read = (p: string) =>
   fs.readFileSync(path.join(__dirname, '..', p), 'utf8');
-const readWeb = (p: string) =>
-  fs.readFileSync(path.join(__dirname, '../../web/src', p), 'utf8');
 
 /** 라우트 13개 ↔ 화면 파일. 이름을 규칙으로 만들지 않고 명시한다(오타가 곧 버그다). */
 const SCREEN_FILES: Record<string, string> = {
@@ -130,14 +128,14 @@ describe('메뉴 — 정본(@jirum/domain/mypage)을 돈다', () => {
   });
 });
 
-describe('가입 정보 — web AccountContainer 의 4줄 + 계정 관리 2개', () => {
-  const web = readWeb('features/mypage/ui/account/AccountContainer.tsx');
+// 줄 이름·확인창 문구·관심사 문구·약관 목차는 @jirum/domain/mypage 정본(web 도 같은 상수 — domain canon-consumers 가 본다).
+const {ACCOUNT_COPY, THEME_COPY, POLICY_DOCS} = require('@jirum/domain/mypage');
 
-  it.each(['닉네임', '개인정보', '비밀번호', '이메일 주소'])(
-    '"%s" 줄이 web·앱 양쪽에 있다',
-    label => {
-      expect(web).toContain(label);
-      expect(SCREENS.account).toContain(label);
+describe('가입 정보 — 4줄 + 계정 관리 2개', () => {
+  it.each(['nickname', 'personal', 'password', 'email'])(
+    '"%s" 줄을 정본 이름으로 그린다',
+    key => {
+      expect(SCREENS.account).toContain(`ACCOUNT_COPY.${key}`);
     },
   );
 
@@ -148,34 +146,25 @@ describe('가입 정보 — web AccountContainer 의 4줄 + 계정 관리 2개',
     expect(SCREENS.account).toContain('useWithdraw');
   });
 
-  it('둘 다 확인창을 거친다 — web AlertDialog 대응(바로 실행하면 사고다)', () => {
-    const logout = readWeb('features/mypage/ui/account/Logout.tsx');
-    const remove = readWeb('features/mypage/ui/account/DeleteAccount.tsx');
-    expect(logout).toContain('AlertDialog');
-    expect(remove).toContain('AlertDialog');
+  it('둘 다 확인창을 거친다(바로 실행하면 사고다)', () => {
     expect(SCREENS.account.match(/<ConfirmSheet/g) ?? []).toHaveLength(2);
     // 되돌릴 수 없는 탈퇴만 빨간 확인 버튼(로그아웃은 다시 하면 된다).
     expect(SCREENS.account.match(/tone="danger"/g) ?? []).toHaveLength(1);
   });
 
-  it('web 문구를 그대로 쓴다', () => {
-    expect(SCREENS.account).toContain('로그아웃 시 알림을 받을 수 없어요.');
-    expect(SCREENS.account).toContain('회원탈퇴 시 모든 계정 정보가 삭제돼요.');
+  it('확인창 경고는 정본 문구', () => {
+    expect(ACCOUNT_COPY.logoutWarning).toBe(
+      '로그아웃 시 알림을 받을 수 없어요.',
+    );
+    expect(SCREENS.account).toContain('ACCOUNT_COPY.logoutWarning');
+    expect(SCREENS.account).toContain('ACCOUNT_COPY.withdrawWarning');
   });
 });
 
-describe('키워드 화면 — web 이 한 화면에서 관리하는 3덩어리', () => {
-  const webPage = readWeb('app/(mobile)/mypage/keyword/page.tsx');
-
-  it('web 페이지가 입력·목록·구독묶음 3개를 렌더한다(전제 확인)', () => {
-    expect(webPage).toContain('KeywordInput');
-    expect(webPage).toContain('MySubscribedThemes');
-    expect(webPage).toContain('KeywordList');
-  });
-
-  it('앱도 3개를 다 그린다', () => {
+describe('키워드 화면 — 한 화면에서 관리하는 3덩어리(입력·구독 관심사·내 키워드)', () => {
+  it('앱이 3개를 다 그린다', () => {
     expect(SCREENS.keyword).toContain('알림 받을 상품 이름');
-    expect(SCREENS.keyword).toContain('받고 있는 관심사 알림');
+    expect(SCREENS.keyword).toContain('THEME_COPY.mySubscribedTitle');
     expect(SCREENS.keyword).toContain('내 키워드');
   });
 
@@ -204,36 +193,18 @@ describe('키워드 화면 — web 이 한 화면에서 관리하는 3덩어리'
   });
 
   // web 9/27 개편에서 "묶음" → "관심사". 제목·링크 문구를 web 과 같이 둔다.
-  it('받고 있는 관심사 알림 + 더 둘러보기 링크(web MySubscribedThemes)', () => {
-    const webThemes = readWeb(
-      'features/mypage/ui/theme/MySubscribedThemes.tsx',
-    );
-    expect(webThemes).toContain('받고 있는 관심사 알림');
-    expect(webThemes).toContain('더 둘러보기');
-    expect(SCREENS.keyword).toContain('받고 있는 관심사 알림');
-    expect(SCREENS.keyword).toContain('더 둘러보기');
+  it('받고 있는 관심사 알림 + 더 둘러보기 링크(정본 문구)', () => {
+    expect(THEME_COPY.mySubscribedTitle).toBe('받고 있는 관심사 알림');
+    expect(SCREENS.keyword).toContain('THEME_COPY.browseMore');
   });
 });
 
 describe('묶음(테마) — 목록·상세의 조각이 다 있다', () => {
-  it('목록: 설명문 + 구독 버튼 + 대표 키워드 미리보기', () => {
-    const web = readWeb('features/mypage/ui/theme/ThemeList.tsx');
-    expect(web).toContain('representativeKeywords');
-    // 설명문은 web /themes 의 소개 문장과 같다.
-    const webPage = readWeb('app/(desktop-ready)/themes/page.tsx');
-    expect(webPage).toContain(
-      '관심사를 고르면 키워드를 하나하나 등록하지 않아도',
-    );
-    expect(SCREENS.themes).toContain(
-      '관심사를 고르면 키워드를 하나하나 등록하지 않아도',
-    );
-    expect(read('src/features/mypage/ui/ThemeCards.tsx')).toContain(
-      'representativeKeywords',
-    );
-    expect(web).toContain("'받는 중'");
-    expect(read('src/features/mypage/ui/ThemeCards.tsx')).toContain(
-      "'받는 중'",
-    );
+  it('목록: 설명문 + 구독 버튼 + 대표 키워드 미리보기(문구는 정본)', () => {
+    expect(SCREENS.themes).toContain('THEME_COPY.intro');
+    const cards = read('src/features/mypage/ui/ThemeCards.tsx');
+    expect(cards).toContain('representativeKeywords');
+    expect(cards).toContain('THEME_COPY.subscribedShort');
   });
 
   /**
@@ -241,24 +212,24 @@ describe('묶음(테마) — 목록·상세의 조각이 다 있다', () => {
    * 앱은 지금 뜬 라이브 딜이다. 데이터가 달라 web 제목을 그대로 쓰면 틀린 말이 되므로
    * 딜 섹션 제목만 앱 고유 문구로 둔다(구성 이식은 별도).
    */
-  it('상세: 고르는 조건 + 딜 + 알림 토글 문구가 web 과 같다', () => {
-    const web = readWeb('features/mypage/ui/theme/ThemeDetail.tsx');
+  it('상세: 고르는 조건 + 딜 + 알림 토글 문구는 정본(THEME_COPY — web 도 같은 상수)', () => {
     // 조건 카드 — 숫자(상위 7%·하루 3건·발송 시각)가 한쪽만 바뀌면 둘이 다른 말을 한다.
-    for (const copy of [
-      '이렇게 골라서 보내드려요',
-      '중 하나라도 제목에 있으면',
-      '조회·추천·댓글이 몰린 커뮤니티 상위 약 7% 딜만 골라요.',
-      '오전 10시 · 오후 2시 · 오후 8시에 그때 가장 좋은 딜 1건씩.',
-      '키워드 알림이나 앞선 시간에 이미 받은 딜은 건너뛰고 다음 딜로.',
-      '여러 상품을 늘어놓은 모음 글, 사은품 문구에만 키워드가 걸린 딜은 빼요.',
-      '개 더 보기',
-      '이런 단어가 들어간 딜도 빼요',
+    expect(THEME_COPY.criteriaKeywords(3)).toBe(
+      '키워드 3개 중 하나라도 제목에 있으면',
+    );
+    for (const key of [
+      'criteriaTitle',
+      'criteriaQuality',
+      'criteriaSchedule',
+      'criteriaSkip',
+      'criteriaExcludeRoundups',
+      'criteriaExcludeWords',
+      'subscribedToggle',
     ]) {
-      expect(web).toContain(copy);
-      expect(SCREENS.themeDetail).toContain(copy);
+      expect(SCREENS.themeDetail).toContain(`THEME_COPY.${key}`);
     }
-    expect(web).toContain("'알림 받는 중 · 끄기'");
-    expect(SCREENS.themeDetail).toContain("'알림 받는 중 · 끄기'");
+    expect(SCREENS.themeDetail).toContain('THEME_COPY.criteriaKeywords(');
+    expect(SCREENS.themeDetail).toContain('개 더 보기');
     expect(SCREENS.themeDetail).toContain('지금 이 관심사에 뜬 딜');
     expect(SCREENS.themeDetail).toContain('지금은 뜬 딜이 없어요.');
   });
@@ -274,17 +245,11 @@ describe('묶음(테마) — 목록·상세의 조각이 다 있다', () => {
 
 describe('찜 목록 — web /like', () => {
   it('전체 개수 줄이 있다', () => {
-    const web = readWeb(
-      'app/(mobile)/like/components/ProductLikeContainer.tsx',
-    );
-    expect(web).toContain('wishlistCount');
     expect(SCREENS.like).toContain('전체 ');
     expect(SCREENS.like).toContain('count');
   });
 
   it('카드마다 찜 해제 하트가 있다(web ProductLikeAction)', () => {
-    const web = readWeb('app/(mobile)/like/components/ProductLikeGridList.tsx');
-    expect(web).toContain('actionIcon');
     expect(SCREENS.like).toContain('WishlistHeart');
     // 실제 해제 뮤테이션은 뷰모델이 쥐고 있다.
     expect(read('src/features/mypage/model/useWishlistViewModel.ts')).toContain(
@@ -298,12 +263,11 @@ describe('찜 목록 — web /like', () => {
 });
 
 describe('약관 — web 두 문서로 갈린다', () => {
-  it('목차 두 줄이 각각 다른 문서로 간다', () => {
-    const web = readWeb('app/(mobile)/mypage/terms-policies/page.tsx');
-    expect(web).toContain('서비스 이용약관');
-    expect(web).toContain('개인정보 처리방침');
-    expect(SCREENS.terms).toContain('서비스 이용약관');
-    expect(SCREENS.terms).toContain('개인정보 처리방침');
+  it('목차 두 줄이 각각 다른 문서로 간다(이름·주소는 정본 POLICY_DOCS)', () => {
+    expect(POLICY_DOCS.terms.title).toBe('서비스 이용약관');
+    expect(POLICY_DOCS.privacy.path).toBe('/policies/privacy');
+    expect(SCREENS.terms).toContain('POLICY_DOCS.terms.title');
+    expect(SCREENS.terms).toContain('POLICY_DOCS.privacy.title');
     expect(SCREENS.terms).toContain("{kind: 'terms'}");
     expect(SCREENS.terms).toContain("{kind: 'privacy'}");
   });
@@ -315,8 +279,7 @@ describe('약관 — web 두 문서로 갈린다', () => {
    */
   it('웹뷰 껍데기이고, 화면이 직접 pop 하지 않는다', () => {
     expect(SCREENS.policy).toContain('StackWebView');
-    expect(SCREENS.policy).toContain('/policies/privacy');
-    expect(SCREENS.policy).toContain('/policies/terms');
+    expect(SCREENS.policy).toContain('POLICY_DOCS[');
     expect(SCREENS.policy).not.toMatch(/navigation\.goBack\(\)/);
     expect(SCREENS.policy).not.toMatch(/navigation\.pop\(/);
   });
@@ -328,16 +291,6 @@ describe('옮기면 안 되는 web 분기 — 옮기면 영원히 안 뜨는 죽
    * 뒤에 둔다. 그래서 비로그인 유도(`useRedirectIfNotLoggedIn` → ROUTE_CHANGED)는
    * 이 화면들에 도달할 수 없다.
    */
-  it('web 묶음 화면엔 비로그인 분기가 있다(전제 확인)', () => {
-    // 2026-10-09: 로그인 유도 → 게스트 계정으로 바로 구독(useAlertSession). 앱은 RootNavigator 가 가른다.
-    expect(readWeb('features/mypage/ui/theme/ThemeList.tsx')).toContain(
-      'useAlertSession',
-    );
-    expect(readWeb('features/mypage/ui/theme/ThemeDetail.tsx')).toContain(
-      'useAlertSession',
-    );
-  });
-
   it('앱엔 그 분기가 없다', () => {
     expect(ALL_CODE).not.toContain('checkAndRedirect');
     // 비회원 게이트(requireLogin)는 없다. 게스트가 내정보에 들어오므로(2026-10-09) 로그인 권유만
@@ -346,9 +299,6 @@ describe('옮기면 안 되는 web 분기 — 옮기면 영원히 안 뜨는 죽
   });
 
   it('PC 전용 분기(isMobile)도 안 옮긴다', () => {
-    expect(readWeb('app/(desktop-ready)/themes/page.tsx')).toContain(
-      'isMobile',
-    );
     expect(ALL_CODE).not.toContain('isMobile');
   });
 });
@@ -493,8 +443,6 @@ describe('데이터 계층', () => {
 
   /** 관심 카테고리는 발견 탭 칩 줄(categoriesForUser)도 같이 무효화해야 한다. */
   it('카테고리 저장이 CategoryQueries 도 무효화한다(web update-category 와 같다)', () => {
-    const web = readWeb('features/mypage/model/update-category.ts');
-    expect(web).toContain('CategoryQueries');
     expect(read('src/features/mypage/model/mutations.ts')).toContain(
       'CategoryQueries',
     );

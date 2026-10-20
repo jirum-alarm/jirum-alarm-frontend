@@ -92,3 +92,39 @@ export const WISHLIST_PAGE_SIZE = 18;
 
 /** 채널톡 상담 — 지원 묶음 맨 끝. 이동이 아니라 상담창을 여는 버튼이라 메뉴 목록과 따로 둔다. */
 export const CUSTOMER_SERVICE_TITLE = '고객센터';
+
+/** 가입 정보 화면 — 줄 이름·로그아웃/탈퇴 확인창의 경고 한 줄(web AlertDialog·앱 ConfirmSheet). */
+export const ACCOUNT_COPY = {
+  nickname: '닉네임',
+  personal: '개인정보',
+  password: '비밀번호',
+  email: '이메일 주소',
+  logoutWarning: '로그아웃 시 알림을 받을 수 없어요.',
+  withdrawWarning: '회원탈퇴 시 모든 계정 정보가 삭제돼요.',
+} as const;
+
+/**
+ * 관심사(테마) 알림 — 소개·버튼·고르는 조건 문구. 조건 카드의 숫자(상위 7%·하루 3건·발송 시각)는 서버 발송 규칙과
+ * 같은 말이어야 해서 한쪽만 바뀌면 두 플랫폼이 다른 말을 한다.
+ */
+export const THEME_COPY = {
+  intro:
+    '관심사를 고르면 키워드를 하나하나 등록하지 않아도, 반응 좋은 핫딜만 하루 최대 3건 보내드려요.',
+  mySubscribedTitle: '받고 있는 관심사 알림',
+  browseMore: '더 둘러보기',
+  subscribedShort: '받는 중',
+  subscribedToggle: '알림 받는 중 · 끄기',
+  criteriaTitle: '이렇게 골라서 보내드려요',
+  criteriaKeywords: (count: number) => `키워드 ${count}개 중 하나라도 제목에 있으면`,
+  criteriaQuality: '조회·추천·댓글이 몰린 커뮤니티 상위 약 7% 딜만 골라요.',
+  criteriaSchedule: '오전 10시 · 오후 2시 · 오후 8시에 그때 가장 좋은 딜 1건씩.',
+  criteriaSkip: '키워드 알림이나 앞선 시간에 이미 받은 딜은 건너뛰고 다음 딜로.',
+  criteriaExcludeRoundups: '여러 상품을 늘어놓은 모음 글, 사은품 문구에만 키워드가 걸린 딜은 빼요.',
+  criteriaExcludeWords: '이런 단어가 들어간 딜도 빼요',
+} as const;
+
+/** 약관 두 문서 — 목차 이름과 web 주소(앱은 같은 web 페이지를 웹뷰로 띄운다 — 법무 문서를 복사하지 않는다). */
+export const POLICY_DOCS = {
+  terms: { title: '서비스 이용약관', path: '/policies/terms' },
+  privacy: { title: '개인정보 처리방침', path: '/policies/privacy' },
+} as const;

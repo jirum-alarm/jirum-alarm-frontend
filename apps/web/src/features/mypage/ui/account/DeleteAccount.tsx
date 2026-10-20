@@ -1,5 +1,6 @@
 'use client';
 
+import { ACCOUNT_COPY } from '@jirum/domain/mypage';
 import { useMutation } from '@tanstack/react-query';
 import * as m from 'motion/react-m';
 
@@ -43,7 +44,7 @@ const DeleteAccount = () => {
           </AlertDialog.Title>
           <AlertDialog.Description>
             <p className="text-gray-700">
-              회원탈퇴 시 모든 계정 정보가 삭제돼요.
+              {ACCOUNT_COPY.withdrawWarning}
               <br />
               지름알림에서 <span className="font-semibold">회원탈퇴</span>
               할까요?

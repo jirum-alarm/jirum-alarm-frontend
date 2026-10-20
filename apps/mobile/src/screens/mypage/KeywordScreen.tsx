@@ -1,3 +1,4 @@
+import {THEME_COPY} from '@jirum/domain/mypage';
 import {addChip} from '@jirum/design-system/recipes';
 import React from 'react';
 import {ActivityIndicator, Pressable, RefreshControl, View} from 'react-native';
@@ -356,7 +357,7 @@ function SubscribedThemes({
     <View className="pb-6">
       <View className="mb-4 flex-row items-center justify-between">
         <Text className="text-base font-semibold text-gray-900">
-          받고 있는 관심사 알림
+          {THEME_COPY.mySubscribedTitle}
         </Text>
         <Pressable
           onPress={onOpenThemes}
@@ -364,7 +365,9 @@ function SubscribedThemes({
           accessibilityRole="button"
           accessibilityLabel="관심사 더 둘러보기"
           style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-          <Text className="text-xs text-gray-500">더 둘러보기 ›</Text>
+          <Text className="text-xs text-gray-500">
+            {THEME_COPY.browseMore} ›
+          </Text>
         </Pressable>
       </View>
       <View className="gap-2">

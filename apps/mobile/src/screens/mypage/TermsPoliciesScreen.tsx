@@ -1,3 +1,4 @@
+import {POLICY_DOCS} from '@jirum/domain/mypage';
 import React from 'react';
 import {View} from 'react-native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -19,13 +20,13 @@ export default function TermsPoliciesScreen({navigation}: Props) {
       <StackHeader title="약관 및 정책" onBack={navigation.goBack} />
       <View className="py-6">
         <TextRow
-          title="서비스 이용약관"
+          title={POLICY_DOCS.terms.title}
           onPress={() =>
             navigation.push(tabStackNavigations.POLICY, {kind: 'terms'})
           }
         />
         <TextRow
-          title="개인정보 처리방침"
+          title={POLICY_DOCS.privacy.title}
           onPress={() =>
             navigation.push(tabStackNavigations.POLICY, {kind: 'privacy'})
           }

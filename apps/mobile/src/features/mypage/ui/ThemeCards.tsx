@@ -1,3 +1,4 @@
+import {THEME_COPY} from '@jirum/domain/mypage';
 import React from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
 import PressableOpacity from '@/shared/components/PressableOpacity';
@@ -81,7 +82,7 @@ export function ThemeCard({
                 ? 'text-sm font-medium text-gray-500'
                 : 'text-sm font-medium text-fixed-900'
             }>
-            {isSubscribed ? '받는 중' : '알림 받기'}
+            {isSubscribed ? THEME_COPY.subscribedShort : '알림 받기'}
           </Text>
         </Pressable>
       </View>

@@ -1,5 +1,6 @@
 'use client';
 
+import { THEME_COPY } from '@jirum/domain/mypage';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 
@@ -61,7 +62,7 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
                   else subscribe(themeId);
                 }}
               >
-                {isSubscribed ? '받는 중' : '알림 받기'}
+                {isSubscribed ? THEME_COPY.subscribedShort : '알림 받기'}
               </Button>
             </Link>
           </li>

@@ -1,3 +1,4 @@
+import {ACCOUNT_COPY} from '@jirum/domain/mypage';
 import React, {useState} from 'react';
 import {ActivityIndicator, ScrollView, StyleSheet, View} from 'react-native';
 import PressableOpacity from '@/shared/components/PressableOpacity';
@@ -63,20 +64,20 @@ export default function AccountScreen({navigation}: Props) {
           <View className="px-5" style={styles.grow}>
             <View className="border-b border-b-gray-200 pt-6 pb-8">
               <MovePageRow
-                title="닉네임"
+                title={ACCOUNT_COPY.nickname}
                 subtitle={me?.nickname}
                 onPress={() =>
                   navigation.push(tabStackNavigations.MYPAGE_NICKNAME)
                 }
               />
               <MovePageRow
-                title="개인정보"
+                title={ACCOUNT_COPY.personal}
                 onPress={() =>
                   navigation.push(tabStackNavigations.MYPAGE_PERSONAL)
                 }
               />
               <MovePageRow
-                title="비밀번호"
+                title={ACCOUNT_COPY.password}
                 onPress={() =>
                   navigation.push(tabStackNavigations.MYPAGE_PASSWORD)
                 }
@@ -85,7 +86,9 @@ export default function AccountScreen({navigation}: Props) {
 
             <View className="pt-8" style={styles.grow}>
               <View className="pb-[22px]">
-                <Text className="text-sm text-gray-500">이메일 주소</Text>
+                <Text className="text-sm text-gray-500">
+                  {ACCOUNT_COPY.email}
+                </Text>
               </View>
               <Text className="text-gray-900">{me?.email}</Text>
 
@@ -126,7 +129,8 @@ export default function AccountScreen({navigation}: Props) {
         title="로그아웃"
         description={
           <Text className="text-center text-sm text-gray-600">
-            로그아웃 시 알림을 받을 수 없어요.{'\n'}
+            {ACCOUNT_COPY.logoutWarning}
+            {'\n'}
             지름알림에서 <Text className="font-semibold">로그아웃</Text>할까요?
           </Text>
         }
@@ -144,7 +148,8 @@ export default function AccountScreen({navigation}: Props) {
         title="회원탈퇴"
         description={
           <Text className="text-center text-sm text-gray-600">
-            회원탈퇴 시 모든 계정 정보가 삭제돼요.{'\n'}
+            {ACCOUNT_COPY.withdrawWarning}
+            {'\n'}
             지름알림에서 <Text className="font-semibold">회원탈퇴</Text>할까요?
           </Text>
         }

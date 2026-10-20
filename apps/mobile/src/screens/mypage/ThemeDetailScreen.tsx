@@ -1,3 +1,4 @@
+import {THEME_COPY} from '@jirum/domain/mypage';
 import {emptyText, wordTag} from '@jirum/design-system/recipes';
 import React, {useCallback, useState} from 'react';
 import {
@@ -149,7 +150,7 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
             color={isSubscribed ? 'secondary' : 'primary'}
             className="mt-4"
             accessibilityLabel={isSubscribed ? '알림 끄기' : '알림 받기'}>
-            {isSubscribed ? '알림 받는 중 · 끄기' : '알림 받기'}
+            {isSubscribed ? THEME_COPY.subscribedToggle : '알림 받기'}
           </Button>
           <Text className="mt-2 text-xs text-gray-500">
             키워드를 하나하나 등록하지 않아도, 반응 좋은 딜만 하루 최대 3건
@@ -159,7 +160,7 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
           {/* 고르는 조건 — web ThemeDetail 의 ThemeConditions */}
           <View className="mt-6">
             <Text className="mb-0.5 text-sm font-medium text-gray-900">
-              이렇게 골라서 보내드려요
+              {THEME_COPY.criteriaTitle}
             </Text>
             <Text className="mb-2 text-xs text-gray-500">
               딜이 뜰 때마다 울리는 게 아니라, 아래 조건을 다 통과한 딜만 와요.
@@ -230,7 +231,7 @@ function ThemeConditions({
       <ConditionRow
         first
         icon="🔎"
-        title={`키워드 ${keywords.length}개 중 하나라도 제목에 있으면`}>
+        title={THEME_COPY.criteriaKeywords(keywords.length)}>
         <View className="mt-2 flex-row flex-wrap gap-1.5">
           {visible.map(keyword => {
             const hub = hubs
@@ -272,27 +273,19 @@ function ThemeConditions({
         </View>
       </ConditionRow>
       <ConditionRow icon="🔥" title="반응 좋은 딜만">
-        <ConditionText>
-          조회·추천·댓글이 몰린 커뮤니티 상위 약 7% 딜만 골라요.
-        </ConditionText>
+        <ConditionText>{THEME_COPY.criteriaQuality}</ConditionText>
       </ConditionRow>
       <ConditionRow icon="⏰" title="하루 최대 3건">
-        <ConditionText>
-          오전 10시 · 오후 2시 · 오후 8시에 그때 가장 좋은 딜 1건씩.
-        </ConditionText>
+        <ConditionText>{THEME_COPY.criteriaSchedule}</ConditionText>
       </ConditionRow>
       <ConditionRow icon="🔁" title="받은 딜은 다시 안 보내요">
-        <ConditionText>
-          키워드 알림이나 앞선 시간에 이미 받은 딜은 건너뛰고 다음 딜로.
-        </ConditionText>
+        <ConditionText>{THEME_COPY.criteriaSkip}</ConditionText>
       </ConditionRow>
       <ConditionRow icon="🧹" title="엉뚱한 딜은 걸러요">
-        <ConditionText>
-          여러 상품을 늘어놓은 모음 글, 사은품 문구에만 키워드가 걸린 딜은 빼요.
-        </ConditionText>
+        <ConditionText>{THEME_COPY.criteriaExcludeRoundups}</ConditionText>
         {theme.excludeKeywords.length > 0 ? (
           <>
-            <ConditionText>이런 단어가 들어간 딜도 빼요</ConditionText>
+            <ConditionText>{THEME_COPY.criteriaExcludeWords}</ConditionText>
             <View className="mt-1.5 flex-row flex-wrap gap-1.5">
               {theme.excludeKeywords.map(word => (
                 <View

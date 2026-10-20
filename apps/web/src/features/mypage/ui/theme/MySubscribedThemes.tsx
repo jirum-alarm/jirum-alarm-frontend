@@ -1,5 +1,6 @@
 'use client';
 
+import { THEME_COPY } from '@jirum/domain/mypage';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 
@@ -24,9 +25,9 @@ const MySubscribedThemes = () => {
   return (
     <div className="pb-6">
       <div className="mb-4 flex items-baseline justify-between">
-        <h2 className="text-base font-semibold text-gray-900">받고 있는 관심사 알림</h2>
+        <h2 className="text-base font-semibold text-gray-900">{THEME_COPY.mySubscribedTitle}</h2>
         <Link href="/themes" className="text-xs text-gray-500 hover:text-gray-700">
-          더 둘러보기 ›
+          {THEME_COPY.browseMore} ›
         </Link>
       </div>
       <ul className="flex flex-col gap-2">

@@ -1,3 +1,4 @@
+import {THEME_COPY} from '@jirum/domain/mypage';
 import {emptyText} from '@jirum/design-system/recipes';
 import React from 'react';
 import {
@@ -105,12 +106,7 @@ export default function ThemesScreen({navigation}: Props) {
 }
 
 function ThemesListHeader() {
-  return (
-    <Text className="mb-5 text-sm text-gray-500">
-      관심사를 고르면 키워드를 하나하나 등록하지 않아도, 반응 좋은 핫딜만 하루
-      최대 3건 보내드려요.
-    </Text>
-  );
+  return <Text className="mb-5 text-sm text-gray-500">{THEME_COPY.intro}</Text>;
 }
 
 function ThemeSeparator() {

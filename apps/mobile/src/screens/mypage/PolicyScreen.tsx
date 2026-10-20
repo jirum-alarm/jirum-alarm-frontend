@@ -1,3 +1,4 @@
+import {POLICY_DOCS} from '@jirum/domain/mypage';
 import React from 'react';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
@@ -27,7 +28,7 @@ type Props = NativeStackScreenProps<
  */
 export default function PolicyScreen({route, navigation}: Props) {
   const path =
-    route.params.kind === 'privacy' ? '/policies/privacy' : '/policies/terms';
+    POLICY_DOCS[route.params.kind === 'privacy' ? 'privacy' : 'terms'].path;
 
   return (
     <StackWebView

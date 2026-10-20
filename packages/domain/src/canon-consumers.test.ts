@@ -19,7 +19,15 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const repo = path.resolve(here, '../../..');
 
 const SHARED_BY_BOTH: Record<string, string[]> = {
-  mypage: ['MYPAGE_GROUPS', 'CUSTOMER_SERVICE_TITLE', 'MAX_KEYWORD_COUNT', 'WISHLIST_PAGE_SIZE'],
+  mypage: [
+    'MYPAGE_GROUPS',
+    'CUSTOMER_SERVICE_TITLE',
+    'MAX_KEYWORD_COUNT',
+    'WISHLIST_PAGE_SIZE',
+    'ACCOUNT_COPY',
+    'THEME_COPY',
+    'POLICY_DOCS',
+  ],
   'keyword-options': ['KEYWORD_ALERT_LABELS', 'KEYWORD_DEAL_CHOICES', 'summarizeKeywordAlert'],
   'price-chart': ['buildChartGeometry', 'shortWon', 'won'],
   'product-card': ['visibleHotDealType'],

@@ -1,6 +1,7 @@
 'use client';
 
 import { wordTag } from '@jirum/design-system/recipes';
+import { THEME_COPY } from '@jirum/domain/mypage';
 import { useQuery, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { type ReactNode, useMemo, useState } from 'react';
@@ -89,7 +90,7 @@ const ThemeConditions = ({ theme }: { theme: ThemeWithKeywords }) => {
 
   return (
     <ul className="mt-3 divide-y divide-gray-100 rounded-xl border border-gray-100">
-      <ConditionRow icon="🔎" title={`키워드 ${keywords.length}개 중 하나라도 제목에 있으면`}>
+      <ConditionRow icon="🔎" title={THEME_COPY.criteriaKeywords(keywords.length)}>
         <div className="mt-2 flex flex-wrap gap-1.5">
           {visible.map((keyword) => {
             const hub = hubs ? findKeywordHubForQuery(keyword, hubs) : undefined;
@@ -133,19 +134,19 @@ const ThemeConditions = ({ theme }: { theme: ThemeWithKeywords }) => {
         </div>
       </ConditionRow>
       <ConditionRow icon="🔥" title="반응 좋은 딜만">
-        조회·추천·댓글이 몰린 커뮤니티 상위 약 7% 딜만 골라요.
+        {THEME_COPY.criteriaQuality}
       </ConditionRow>
       <ConditionRow icon="⏰" title="하루 최대 3건">
-        오전 10시 · 오후 2시 · 오후 8시에 그때 가장 좋은 딜 1건씩.
+        {THEME_COPY.criteriaSchedule}
       </ConditionRow>
       <ConditionRow icon="🔁" title="받은 딜은 다시 안 보내요">
-        키워드 알림이나 앞선 시간에 이미 받은 딜은 건너뛰고 다음 딜로.
+        {THEME_COPY.criteriaSkip}
       </ConditionRow>
       <ConditionRow icon="🧹" title="엉뚱한 딜은 걸러요">
-        여러 상품을 늘어놓은 모음 글, 사은품 문구에만 키워드가 걸린 딜은 빼요.
+        {THEME_COPY.criteriaExcludeRoundups}
         {theme.excludeKeywords.length > 0 && (
           <>
-            <p className="mt-2">이런 단어가 들어간 딜도 빼요</p>
+            <p className="mt-2">{THEME_COPY.criteriaExcludeWords}</p>
             <div className="mt-1.5 flex flex-wrap gap-1.5">
               {theme.excludeKeywords.map((word) => (
                 <span
@@ -232,7 +233,7 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
             else subscribe(themeId);
           }}
         >
-          {isSubscribed ? '알림 받는 중 · 끄기' : '알림 받기'}
+          {isSubscribed ? THEME_COPY.subscribedToggle : '알림 받기'}
         </Button>
         <p className="mt-2 text-xs text-gray-500">
           키워드를 하나하나 등록하지 않아도, 반응 좋은 딜만 하루 최대 3건 보내드려요.
@@ -242,7 +243,7 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
       <section className="mt-8">
         <DetailSectionHeader
           as="h3"
-          title="이렇게 골라서 보내드려요"
+          title={THEME_COPY.criteriaTitle}
           subtitle="딜이 뜰 때마다 울리는 게 아니라, 아래 조건을 다 통과한 딜만 와요."
         />
         <ThemeConditions theme={theme} />

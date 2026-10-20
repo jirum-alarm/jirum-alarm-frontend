@@ -1,5 +1,6 @@
 'use client';
 
+import { ACCOUNT_COPY } from '@jirum/domain/mypage';
 import * as m from 'motion/react-m';
 
 import { useLogout } from '@/shared/hooks/useLogout';
@@ -26,7 +27,7 @@ const Logout = () => {
           </AlertDialog.Title>
           <AlertDialog.Description>
             <p className="text-gray-700">
-              로그아웃 시 알림을 받을 수 없어요.
+              {ACCOUNT_COPY.logoutWarning}
               <br />
               지름알림에서 <span className="font-semibold">로그아웃</span>
               할까요?
