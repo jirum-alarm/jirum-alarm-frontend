@@ -13,10 +13,13 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { USER_FIXTURES, USER_TOKEN } from './user-fixtures.ts';
+import { GUEST_TOKEN, USER_FIXTURES, USER_TOKEN } from './user-fixtures.ts';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const FIXTURES = join(HERE, 'fixtures');
+// 녹화 묶음 자리 — 녹화는 이 폴더를 통째로 비우므로 web(기본)과 앱(apps/mobile/screens-fixtures)이 각자 쓴다.
+const FIXTURES = process.env.SCREENS_FIXTURES_DIR ?? join(HERE, 'fixtures');
+// 앱 하네스는 첫 실행에 게스트를 만들고 그 토큰으로 로그인한 사용자처럼 돈다 — 그 토큰도 로그인 데이터로 답한다.
+const GUEST_AS_USER = process.env.SCREENS_GUEST_AS_USER === '1';
 const META = join(FIXTURES, '_meta.json');
 const PORT = Number(process.env.SCREENS_FIXTURE_PORT ?? 9090);
 const MODE = process.env.SCREENS_MODE === 'record' ? 'record' : 'replay';
@@ -27,7 +30,10 @@ type GraphQLBody = { query?: string; variables?: Record<string, Json> | null; op
 type Scenario = 'default' | 'empty' | 'error';
 
 const MUTATIONS: Record<string, Json> = {
-  MutationGuestLogin: { guestLogin: { accessToken: 'fixture-guest-token' } },
+  MutationGuestLogin: { guestLogin: { accessToken: GUEST_TOKEN, refreshToken: GUEST_TOKEN } },
+  // 앱 콜드 스타트의 토큰 갱신(web 프록시는 같은 문서를 QueryLoginByRefreshToken 이라는 이름으로 보낸다).
+  MutationLoginByRefreshToken: { loginByRefreshToken: { accessToken: GUEST_TOKEN, refreshToken: GUEST_TOKEN } },
+  QueryLoginByRefreshToken: { loginByRefreshToken: { accessToken: GUEST_TOKEN, refreshToken: GUEST_TOKEN } },
 };
 
 let scenario: Scenario = 'default';
@@ -205,7 +211,8 @@ const server = createServer(async (req, res) => {
     if (scenario === 'error' && MODE === 'replay') {
       return send(res, 200, { data: null, errors: [{ message: 'fixture scenario: error' }] });
     }
-    const user = req.headers.authorization === `Bearer ${USER_TOKEN}`;
+    const auth = req.headers.authorization;
+    const user = auth === `Bearer ${USER_TOKEN}` || (GUEST_AS_USER && auth === `Bearer ${GUEST_TOKEN}`);
     const json = await answerQuery(body, user);
     if (scenario === 'empty' && MODE === 'replay' && json.data) {
       return send(res, 200, { ...json, data: emptyLists(json.data) });

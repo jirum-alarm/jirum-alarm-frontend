@@ -5,8 +5,10 @@
 #   → screens-out/<light|dark>/<화면>.png + screens-out/report.md  (AI 는 report.md → png 순으로 본다)
 #
 # 왜: boot-check 는 «켜지나»만 본다. 화면이 비었는지·다크에서 흰 판이 남았는지는 찍어 봐야 안다(web 의 apps/web/screens 와 같은 목적).
-# 데이터: 운영 API 를 그대로 읽는다 — 앱 GraphQL 주소가 빌드 상수(shared/constant/endpoint.ts)라 web 하네스의 고정 데이터 서버에
-#   붙이지 않는다. 그래서 화면 내용은 실행마다 다르다(판정은 내용이 아니라 «비었나·죽었나·다크가 먹었나»).
+# 데이터: SCREENS_API=fixture 면 web 하네스의 고정 데이터 서버(apps/web/screens/fixture-server.mts)에 붙인다 — 녹화는
+#   apps/mobile/screens-fixtures/(web 녹화와 따로), 앱은 저장소 키 jirum:screens-api-url 로 그 주소를 쓴다(shared/lib/client/screens-api.ts,
+#   localhost 만 받음). 첫 실행 게스트도 로그인 데이터(user-fixtures.ts)로 답한다. 화면이 실행마다 같고 운영 점검·장애와 무관하다.
+#   SCREENS_MODE=record 면 운영에서 새로 녹화한다(새 화면·새 쿼리를 쓸 때). 그 밖(기본)은 운영 API 를 그대로 읽는다.
 # 판정(❌ = 실패): 프로세스 종료 · 치명 JS 예외(boot-check 와 같은 로그 패턴) · 화면이 거의 한 색(빈 화면·흰 화면).
 # 보고(⚠️): 다크인데 밝은 면이 화면 대부분 · 라이트와 다크가 거의 같은 그림(다크 미적용).
 # 준비는 boot-check.sh 와 같다(번들만 갈아 끼우기·업데이트 끔·분석 끔·깨끗한 전용 기기·iOS 27 제외) — 바꾸면 둘 다.
@@ -21,8 +23,10 @@ WAIT=${SCREENS_WAIT:-12}
 WORK=$(mktemp -d)
 DEV=""
 LOGPID=""
+FIXPID=""
 cleanup() {
   [ -n "$LOGPID" ] && kill "$LOGPID" 2>/dev/null
+  [ -n "$FIXPID" ] && kill "$FIXPID" 2>/dev/null
   [ -n "$DEV" ] && xcrun simctl delete "$DEV" >/dev/null 2>&1
   rm -rf "$WORK"
 }
@@ -67,6 +71,20 @@ xcrun simctl install "$DEV" "$APP"
 
 rm -rf "$OUT"
 mkdir -p "$OUT/light" "$OUT/dark"
+
+API_URL=""
+if [ "${SCREENS_API:-}" = fixture ]; then
+  PORT=${SCREENS_FIXTURE_PORT:-9190}
+  REPO=$(cd "$ROOT/../.." && pwd)
+  echo "▶ 고정 데이터 서버(:$PORT, ${SCREENS_MODE:-replay})"
+  SCREENS_FIXTURES_DIR="$ROOT/screens-fixtures" SCREENS_GUEST_AS_USER=1 SCREENS_MODE="${SCREENS_MODE:-replay}" \
+    SCREENS_FIXTURE_PORT="$PORT" node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \
+    "$REPO/apps/web/screens/fixture-server.mts" >"$WORK/fixture.log" 2>&1 &
+  FIXPID=$!
+  for _ in $(seq 1 30); do curl -sf "http://localhost:$PORT/__missing" >/dev/null && break; sleep 1; done
+  curl -sf "http://localhost:$PORT/__missing" >/dev/null || { echo "✗ 고정 데이터 서버가 안 뜸"; cat "$WORK/fixture.log"; exit 1; }
+  API_URL="http://localhost:$PORT/graphql"
+fi
 LOG="$WORK/app.log"
 xcrun simctl spawn "$DEV" log stream --style compact --predicate 'process == "jirumAlarmMobile"' >"$LOG" 2>&1 &
 LOGPID=$!
@@ -81,13 +99,15 @@ mkdir -p "$STORE"
 capture() { # <theme> <name> [url]
   local pid
   xcrun simctl terminate "$DEV" "$BUNDLE_ID" >/dev/null 2>&1 || true
-  HARNESS_URL="${3:-}" python3 -c '
+  HARNESS_URL="${3:-}" API_URL="$API_URL" python3 -c '
 import json, os, sys
 path = os.path.join(sys.argv[1], "manifest.json")
 data = json.load(open(path)) if os.path.exists(path) else {}
 data.pop("jirum:screens-harness-url", None)
 if os.environ["HARNESS_URL"]:
     data["jirum:screens-harness-url"] = os.environ["HARNESS_URL"]
+if os.environ["API_URL"]:
+    data["jirum:screens-api-url"] = os.environ["API_URL"]
 json.dump(data, open(path, "w"))' "$STORE"
   pid=$(xcrun simctl launch "$DEV" "$BUNDLE_ID" | awk '{print $NF}')
   sleep "$WAIT"
@@ -126,5 +146,20 @@ for f in "$OUT"/*/*.png; do
 done
 FATAL_LOG="$WORK/fatal.txt" SCREENS_TITLE="앱 화면 하네스 결과 (iOS)" python3 "$(dirname "$0")/screens-judge.py" "$OUT" "${SCREENS[@]}" || FAILED=1
 rm -f "$OUT"/*/*.bmp
+
+# 고정 데이터 재생인데 녹화에 없던 쿼리가 있으면 그 화면은 빈 데이터로 찍힌 것 — 실패로 본다(새 쿼리면 SCREENS_MODE=record).
+if [ -n "$API_URL" ] && [ "${SCREENS_MODE:-replay}" != record ]; then
+  MISSING=$(curl -sf "http://localhost:$PORT/__missing" || echo '["(고정 데이터 서버 응답 없음)"]')
+  if [ "$MISSING" != "[]" ]; then
+    echo "✗ 녹화 안 된 쿼리: $MISSING" | cut -c1-500
+    MISSING="$MISSING" python3 -c '
+import json, os, sys
+items = json.loads(os.environ["MISSING"])
+with open(sys.argv[1], "a") as f:
+    f.write("\n## ❌ 녹화 안 된 쿼리 — SCREENS_API=fixture SCREENS_MODE=record 로 다시 녹화\n\n")
+    f.writelines(f"- {m}\n" for m in items)' "$OUT/report.md"
+    FAILED=1
+  fi
+fi
 
 [ "$FAILED" = 0 ] && echo "앱 화면 하네스 통과" || { echo "앱 화면 하네스 실패 — $OUT/report.md"; exit 1; }

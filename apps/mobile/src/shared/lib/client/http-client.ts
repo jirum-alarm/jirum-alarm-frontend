@@ -4,6 +4,7 @@ import {getAsyncStorage} from '@/shared/lib/persistence';
 import {getDeviceId} from '@/shared/lib/device/device-id';
 import {StorageKey} from '@/shared/constant/storage-key.ts';
 import {GRAPHQL_ENDPOINT} from '@/shared/constant/endpoint.ts';
+import {graphqlEndpoint} from './screens-api';
 import {waitForInitialAuth} from './initial-auth';
 import {isAccessTokenUsable} from './token-expiry';
 
@@ -46,7 +47,12 @@ export class HttpClient {
     query: TypedDocumentString<TResult, TVariables>,
     ...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
   ) {
-    const response = await this.fetchWithAuth(this.baseUrl, {
+    // 운영 주소면 화면 하네스가 넣은 고정 데이터 서버 주소로 바뀔 수 있다(screens-api.ts).
+    const url =
+      this.baseUrl === GRAPHQL_ENDPOINT
+        ? await graphqlEndpoint()
+        : this.baseUrl;
+    const response = await this.fetchWithAuth(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

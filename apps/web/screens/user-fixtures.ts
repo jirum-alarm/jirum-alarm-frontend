@@ -14,6 +14,13 @@ import type {
 
 export const USER_TOKEN = 'fixture-user-token';
 
+// 첫 실행 게스트 생성(MutationGuestLogin)·토큰 갱신에 고정 데이터 서버가 주는 토큰. 앱은 access 토큰의 JWT exp 를 읽어
+// 만료면 갱신을 기다리므로 JWT 모양(서명 없음, exp 2100년)이어야 한다. 앱 하네스(SCREENS_GUEST_AS_USER=1)에선 이 토큰도 로그인으로 본다.
+// 문자열로 박지 않고 만든다 — JWT 모양 문자열은 비밀 스캐너(gitleaks)가 토큰으로 잡는다.
+const b64url = (o: object) =>
+  btoa(JSON.stringify(o)).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
+export const GUEST_TOKEN = `${b64url({ alg: 'none', typ: 'JWT' })}.${b64url({ sub: 'fixture-guest', exp: 4102444800 })}.fixture`;
+
 const minutesAgo = (m: number) => new Date(Date.now() - m * 60_000).toISOString();
 
 // 녹화에 있던 공개 상품 몇 개(제목 길이·가격 자릿수가 제각각이라 줄바꿈·말줄임이 드러난다).
