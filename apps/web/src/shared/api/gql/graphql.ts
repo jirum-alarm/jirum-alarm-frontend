@@ -134,7 +134,7 @@ export enum AdvertiseSlotType {
 
 export type AffiliateSalesDailyOutput = {
   __typename?: 'AffiliateSalesDailyOutput';
-  /** localCommission 합 (KRW, GROSS 추정 — 추세용) */
+  /** 합계 */
   commissionSum: Scalars['Float']['output'];
   count: Scalars['Int']['output'];
   date: Scalars['String']['output'];
@@ -971,11 +971,11 @@ export type Mutation = {
   guestLogin: TokenOutput;
   /** 어드민) 상품 hard delete */
   hardDeleteProductByAdmin: Scalars['Boolean']['output'];
-  /** 어드민) 카카오쇼핑 상품 URL을 추천리워드 링크(clink.kakao.com/sp/…)로 발급. product 에는 쓰지 않고 링크만 반환. */
+  /** 어드민) 카카오쇼핑 상품 URL 로 링크 발급(product 에는 쓰지 않음) */
   issueKakaoProfitLink: KakaoProfitLinkOutput;
-  /** 어드민) 오늘의집 상품 URL을 큐레이터 제휴 링크(?af)로 발급. product 에는 쓰지 않고 링크만 반환. */
+  /** 어드민) 오늘의집 상품 URL 로 링크 발급(product 에는 쓰지 않음) */
   issueOhouProfitLink: OhouProfitLinkOutput;
-  /** 어드민) 토스 상품 URL(또는 tacaItemId)을 우리 publisher 수익링크로 발급. product 에는 쓰지 않고 링크만 반환. /c/{id}·/t/{id}·toss.im/_m/… 지원, /p/ 불가. */
+  /** 어드민) 토스 상품 URL 로 링크 발급(product 에는 쓰지 않음) */
   issueTossProfitLink: TossProfitLinkOutput;
   /** 로그인 */
   login: TokenOutput;
@@ -1025,19 +1025,19 @@ export type Mutation = {
   sendNotificationByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 광고 on/off (킬스위치) */
   setAdActive: Scalars['Boolean']['output'];
-  /** 어드민) 카카오쇼핑 추천리워드 세션 갱신. store.kakao.com 로그인 후 공유하기 → affiliate-link 요청 Copy as cURL. 성공 시 kakao:no_session·기존 disabled(store.kakao.com) 미발급건을 retry 큐에 재진입시킨다. */
+  /** 어드민) 카카오쇼핑 세션 갱신 */
   setKakaoSession: Scalars['Boolean']['output'];
   /** 어드민) 모델 페이지 발행 토글 */
   setModelPagePublishedByAdmin: Scalars['Boolean']['output'];
-  /** 어드민) 네이버 브랜드커넥트 세션 쿠키 갱신. brandconnect.naver.com 로그인 → DevTools 요청 Cookie 헤더 원문(NID_AUT/NID_SES 포함) 붙여넣기. 성공 시 nv:no_token 미발급건을 retry 큐에 재진입시킨다. */
+  /** 어드민) 네이버 세션 갱신 */
   setNaverBcSession: Scalars['Boolean']['output'];
-  /** 어드민) 오늘의집 큐레이터 세션 갱신. 로그인 후 상품 공유하기 → sharelink 요청 Copy as cURL. cookie+userId 를 저장하고, curl에 contentId가 있으면 ?af 발급으로 검증한다. */
+  /** 어드민) 오늘의집 세션 갱신 */
   setOhouSession: Scalars['Boolean']['output'];
   /** 대표 매핑 지정 (id 기준) */
   setPrimaryProductMapping: Scalars['Boolean']['output'];
-  /** 어드민) 세시간전(3hoursahead) refresh 쿠키 갱신. 3hoursahead.com 구글 로그인 → DevTools > Application > Cookies 의 `r` 값(JWT 원문) 붙여넣기. 쿠키는 7일 만료라 주 1회 갱신 필요. 성공 시 3ha:no_token 미발급건을 retry 큐에 재진입시킨다. */
+  /** 어드민) 세시간전 세션 갱신 */
   setThreeHaSession: Scalars['Boolean']['output'];
-  /** 어드민) 토스 세션 토큰(TBIZAUTH) 갱신. TBIZAUTH 원문, Cookie 헤더, 또는 curl(-b/-H cookie)을 붙여넣으면 TBIZAUTH만 저장. 성공 시 toss:no_token 미발급건을 retry 큐에 재진입시킨다. */
+  /** 어드민) 토스 세션 갱신 */
   setTossSession: Scalars['Boolean']['output'];
   /** 회원가입 */
   signup: SignupOutput;
@@ -2190,18 +2190,18 @@ export type ProfitLinkMissedProductOutput = {
 
 export type ProfitLinkProviderHealthOutput = {
   __typename?: 'ProfitLinkProviderHealthOutput';
-  /** 90일 중 판매가 있던 날 수 — 희소 provider 판별 */
+  /** 90일 중 활동이 있던 날 수 */
   activeDays90d: Scalars['Int']['output'];
-  /** 최근 7d localCommission 합 (KRW, GROSS 추정 — 추세용) */
+  /** 최근 7d 합계 */
   commission7d?: Maybe<Scalars['Float']['output']>;
-  /** 최근 30d localCommission 합 (KRW, GROSS 추정). 7d 는 희소 provider 를 0원으로 보이게 해서(쿠팡 7d 0원 / 30d 26,537원) 표시 기본값은 이쪽. */
+  /** 최근 30d 합계 */
   commission30d?: Maybe<Scalars['Float']['output']>;
   /** 마지막 판매 row 도착 이후 경과일 — 침묵 판정 입력 */
   daysSinceLastSale?: Maybe<Scalars['Float']['output']>;
   issued7d: Scalars['Int']['output'];
   /** 최근 24h 발급 딜 수 (딜 생성시각 기준 근사) */
   issued24h: Scalars['Int']['output'];
-  /** 최근 30d 발급 딜 수 — 발급당 수익 분모 */
+  /** 최근 30d 발급 딜 수 */
   issued30d: Scalars['Int']['output'];
   /** 발급 보유 딜의 마지막 생성 시각 */
   lastIssuedProductAt?: Maybe<Scalars['DateTime']['output']>;
@@ -2211,7 +2211,7 @@ export type ProfitLinkProviderHealthOutput = {
   sales7d: Scalars['Int']['output'];
   sales24h: Scalars['Int']['output'];
   sales30d: Scalars['Int']['output'];
-  /** 판매 파이프 판정: ok | silent(콜백 끊김=사고) | sparse(원래 드물어 감시 제외). 배치 알람과 같은 기준(common/lib/affiliate-sales-health) — 프론트가 자체 판정하지 않는다. */
+  /** 상태: ok | silent | sparse */
   salesHealth: Scalars['String']['output'];
 };
 
@@ -2287,7 +2287,7 @@ export type Query = {
   adminUsersWithRole: Array<AdminUserRoleOutput>;
   /** 어드민) 광고 목록 */
   adsByAdmin: Array<AdvertiseCreative>;
-  /** 어드민) provider별 일간 판매 추이 (건수 + localCommission 합, 추세 감시용) */
+  /** 어드민) provider별 일간 추이 */
   affiliateSalesTrend: Array<AffiliateSalesDailyOutput>;
   /** BrandItem 단위 매칭된 전체 개수 조회 */
   brandItemsByMatchCountTotalCount: Scalars['Int']['output'];
@@ -2338,15 +2338,15 @@ export type Query = {
   goodPriceSuggestion?: Maybe<WaitSuggestionOutput>;
   /** 게스트 카테고리 선호 기반 추천 핫딜 (비로그인 허용, 선호 없으면 인기순 폴백) */
   guestRecommendedHotDeals: Array<ProductOutput>;
-  /** 어드민) 카카오쇼핑 추천리워드 세션 저장 여부(true면 발급 가동중) */
+  /** 어드민) 카카오쇼핑 세션 저장 여부 */
   hasKakaoSession: Scalars['Boolean']['output'];
-  /** 어드민) 네이버 브랜드커넥트 세션 저장 여부(true면 발급 가동중) */
+  /** 어드민) 네이버 세션 저장 여부 */
   hasNaverBcSession: Scalars['Boolean']['output'];
-  /** 어드민) 오늘의집 큐레이터 세션이 실제로 ?af 링크를 주는지 */
+  /** 어드민) 오늘의집 세션 유효 여부 */
   hasOhouSession: Scalars['Boolean']['output'];
-  /** 어드민) 세시간전 세션 저장 여부(true면 폴백 발급 가동중) */
+  /** 어드민) 세시간전 세션 저장 여부 */
   hasThreeHaSession: Scalars['Boolean']['output'];
-  /** 어드민) 토스 TBIZAUTH 가 정산 API 에 실제 유효한지. 키만 있고 AUTH_EXPIRED 면 false(키 삭제). 발급은 공식 OAuth2 라 이 값과 무관. */
+  /** 어드민) 토스 세션 유효 여부 */
   hasTossSession: Scalars['Boolean']['output'];
   /** 홈 섹션 목록 + 히어로 슬롯 실험 배정. deviceId(X-Device-Id) 기준 고정 해시. 프론트는 sections 순서를 그대로 그린다. */
   homePage: HomePage;
@@ -2438,9 +2438,9 @@ export type Query = {
   profitLinkErrorStats: Array<ProfitLinkErrorCountOutput>;
   /** 어드민) 일별 발급 퍼널 (생성 딜 → 발급/pending/parked/terminal) */
   profitLinkFunnelDaily: Array<ProfitLinkFunnelDailyOutput>;
-  /** 어드민) 노출 가능(최근 30일·미종료)한데 수익링크 없는 딜 — 고가·랭킹 스코어 순 작업 큐 */
+  /** 어드민) 링크 없는 딜 작업 큐 */
   profitLinkMissedProducts: Array<ProfitLinkMissedProductOutput>;
-  /** 어드민) 수익링크 provider별 생존 신호 (발급 24h/7d + 판매 24h/7d/30d + 마지막 시각) */
+  /** 어드민) 링크 provider별 상태 */
   profitLinkProviderHealth: Array<ProfitLinkProviderHealthOutput>;
   /** 어드민) retry 큐 건강도 (깊이/backoff 대기/parked/terminal + attempts 분포) */
   profitLinkQueueHealth: ProfitLinkQueueHealthOutput;
@@ -2455,7 +2455,7 @@ export type Query = {
   recommendedNotificationKeywords: Array<Scalars['String']['output']>;
   /** 신고한 사용자 목록 조회 (마스킹) */
   reportUserNames: Array<Scalars['String']['output']>;
-  /** 어드민) 일별 세후 수익 — 제휴(netCommission, 취소 제외) + 애드센스(GA4 추정치) */
+  /** 어드민) 일별 통계 */
   revenueTrend: Array<RevenueDailyOutput>;
   /** 같은 상품(동일상품 그룹)의 진행 중 딜 조회 (최신순, 최대 20) */
   sameProductDeals: Array<ProductOutput>;
@@ -3047,9 +3047,9 @@ export type QueryWishlistsArgs = {
 export type RevenueDailyOutput = {
   __typename?: 'RevenueDailyOutput';
   date: Scalars['String']['output'];
-  /** 세후 KRW. 제휴=netCommission(취소 제외·결제일 기준), adsense=GA4 추정치 */
+  /** 금액(KRW) */
   revenue: Scalars['Float']['output'];
-  /** affiliate_sales.provider 또는 'adsense' */
+  /** 출처 */
   source: Scalars['String']['output'];
 };
 
