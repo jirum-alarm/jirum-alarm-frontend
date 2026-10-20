@@ -161,11 +161,22 @@ const toggle = {
   knob: 'h-5 w-5 rounded-full bg-fixed-white',
 };
 
-/** 섹션 제목 — page = 홈·목록 섹션(SectionHeader), detail = 상세 안 섹션(DetailSectionHeader, 한 단계 덜 굵게). */
+/**
+ * 섹션 제목 — page = 홈·목록 섹션(SectionHeader), detail = 상세 안 섹션(DetailSectionHeader, 한 단계 덜 굵게).
+ * more = 제목 줄 오른쪽 「더보기」(web·앱 SectionHeader·홈 섹션들이 같은 클래스를 손으로 쓰고 있었다). hover 는 web 만.
+ * onDark = 테마와 무관하게 늘 어두운 띠(PC 홈 상단 랭킹) 위의 제목 줄. 여기에 gray-* 를 쓰면 다크에서 값이 뒤집혀
+ * 어두운 띠 위 어두운 글자가 된다 — PC 홈 「더보기」가 text-gray-100 이라 다크에서 대비 1.46 으로 안 보였다(10/20 web-screens).
+ */
 const sectionTitle = {
   page: 'text-lg font-bold text-gray-900',
   detail: 'text-lg font-semibold text-gray-900',
   subtitle: 'text-sm text-gray-500',
+  more: {text: 'text-sm text-gray-500', hover: 'hover:text-gray-700'},
+  onDark: {
+    band: 'bg-fixed-900',
+    page: 'text-fixed-white',
+    more: {text: 'text-sm text-fixed-200', hover: 'hover:text-fixed-white'},
+  },
 };
 
 /** 상품 카드 사진 틀 — 사진이 늦거나 투명 PNG 여도 카드 자리가 보이게 옅은 면 + 테두리. */

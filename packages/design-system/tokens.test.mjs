@@ -200,7 +200,12 @@ const recipePairs = () => [
   ...['neutral', 'brand', 'segment'].flatMap((v) =>
     ['selected', 'idle'].map((state) => [`tab ${v}/${state}`, recipes.tab[v][state]]),
   ),
-  ...Object.entries(recipes.sectionTitle).map(([k, text]) => [`sectionTitle ${k}`, {box: '', text}]),
+  ...Object.entries(recipes.sectionTitle)
+    .filter(([, text]) => typeof text === 'string')
+    .map(([k, text]) => [`sectionTitle ${k}`, {box: '', text}]),
+  ['sectionTitle more', {box: '', text: recipes.sectionTitle.more.text}],
+  ['sectionTitle onDark page', {box: recipes.sectionTitle.onDark.band, text: recipes.sectionTitle.onDark.page}],
+  ['sectionTitle onDark more', {box: recipes.sectionTitle.onDark.band, text: recipes.sectionTitle.onDark.more.text}],
   ['toast text', {box: recipes.toast.box, text: recipes.toast.text}],
   ['toast action', {box: recipes.toast.box, text: recipes.toast.action}],
   ['emptyText', {box: '', text: recipes.emptyText}],

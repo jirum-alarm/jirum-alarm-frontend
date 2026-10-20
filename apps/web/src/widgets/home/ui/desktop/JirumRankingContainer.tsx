@@ -1,9 +1,11 @@
+import { sectionTitle } from '@jirum/design-system/recipes';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import { SwiperOptions } from 'swiper/types';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
 import { getQueryClient } from '@/shared/lib/react-query/query-client';
 import { getDayBefore } from '@/shared/lib/utils/date';
 import ApiErrorBoundary from '@/shared/ui/ApiErrorBoundary';
@@ -49,10 +51,10 @@ const JirumRankingContainer = async () => {
       <div className="max-w-slider-max mx-auto mt-9">
         <SectionHeader
           title="지름알림 랭킹"
-          titleClassName="text-fixed-white"
+          titleClassName={sectionTitle.onDark.page}
           right={
             <InteractiveMoreLink
-              className="px-3 text-sm text-gray-100"
+              className={cn('px-3', sectionTitle.onDark.more.text, sectionTitle.onDark.more.hover)}
               href={PAGE.TRENDING_RANKING}
               aria-label="지름알림 랭킹 더보기"
             >

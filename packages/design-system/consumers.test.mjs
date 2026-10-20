@@ -82,7 +82,7 @@ const HAND_WRITTEN = {
   button: RAW_COLOR,
   toast: /bg-fixed-\d00/,
   // 자리마다 다른 것과 섞이는 레시피 — 예전 손글씨 그대로만 막는다.
-  sectionTitle: /text-lg font-(?:bold|semibold) text-gray-900/,
+  sectionTitle: /text-lg font-(?:bold|semibold) text-gray-900|text-sm text-gray-500 hover:text-gray-700|titleClassName="text-fixed-white"/,
   tab: /\bbg-(?:gray-900|fixed-800)\b/,
   cardThumb: /border-gray-200 bg-gray-50/,
   infoBox: /rounded-xl border border-gray-200 bg-gray-50/,

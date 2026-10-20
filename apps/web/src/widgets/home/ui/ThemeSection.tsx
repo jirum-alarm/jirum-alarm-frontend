@@ -28,11 +28,7 @@ const ThemeSection = ({ isMobile }: { isMobile: boolean }) => {
         <SectionHeader
           title="관심사별 핫딜 알림"
           right={
-            <InteractiveMoreLink
-              href="/themes"
-              className="text-sm text-gray-500 hover:text-gray-700"
-              aria-label="관심사별 핫딜 알림 더보기"
-            >
+            <InteractiveMoreLink href="/themes" aria-label="관심사별 핫딜 알림 더보기">
               더보기
             </InteractiveMoreLink>
           }

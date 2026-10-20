@@ -67,11 +67,7 @@ export default function TossHomeSection({ initialDeals }: { initialDeals?: TossD
         <SectionHeader
           title="토스 특가"
           right={
-            <InteractiveMoreLink
-              href={`/toss?tab=${activeId}`}
-              className="text-sm text-gray-500 hover:text-gray-700"
-              aria-label="토스 특가 더보기"
-            >
+            <InteractiveMoreLink href={`/toss?tab=${activeId}`} aria-label="토스 특가 더보기">
               더보기
             </InteractiveMoreLink>
           }

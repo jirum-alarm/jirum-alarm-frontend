@@ -1,5 +1,6 @@
 'use client';
 
+import { sectionTitle } from '@jirum/design-system/recipes';
 import * as m from 'motion/react-m';
 import { ReactNode } from 'react';
 
@@ -21,7 +22,11 @@ export default function InteractiveMoreLink({
 }: InteractiveMoreLinkProps) {
   return (
     <m.div whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }} className="rounded-lg">
-      <Link href={href} className={cn('px-2 py-1', className)} aria-label={ariaLabel}>
+      <Link
+        href={href}
+        className={cn('px-2 py-1', sectionTitle.more.text, sectionTitle.more.hover, className)}
+        aria-label={ariaLabel}
+      >
         {children}
       </Link>
     </m.div>

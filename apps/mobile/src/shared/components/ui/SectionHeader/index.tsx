@@ -37,7 +37,7 @@ export default function SectionHeader({
           hitSlop={12}
           accessibilityRole="button"
           accessibilityLabel={`${title} 더보기`}>
-          <Text className="text-sm text-gray-500">더보기</Text>
+          <Text className={sectionTitle.more.text}>더보기</Text>
         </PressableScale>
       ) : (
         right

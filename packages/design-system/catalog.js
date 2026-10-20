@@ -207,13 +207,16 @@ const catalog = [
   {
     id: 'sectionTitle',
     name: '섹션 제목',
-    use: 'page = 홈·목록 섹션(굵게, 더보기 자리), detail = 상세 안 섹션',
+    use: 'page = 홈·목록 섹션(굵게, 더보기 자리), detail = 상세 안 섹션, more = 「더보기」(web 은 InteractiveMoreLink 가 기본으로), onDark = 늘 어두운 띠 위',
     recipe: 'sectionTitle',
     web: `${W}shared/ui/SectionHeader.tsx`,
     app: `${A}shared/components/ui/SectionHeader`,
     story: 'components/SectionHeader',
     sites: [
       `${W}shared/ui/DetailSectionHeader.tsx`,
+      `${W}shared/ui/InteractiveMoreLink.tsx`,
+      `${W}widgets/home/ui/TabbedDynamicProductSection.tsx`,
+      `${W}widgets/home/ui/desktop/JirumRankingContainer.tsx`,
       `${A}features/price-history/ui/PriceHistorySection.tsx`,
       `${A}features/comment/ui/CommentSection.tsx`,
       `${A}features/community-reaction/ui/CommunityReaction.tsx`,

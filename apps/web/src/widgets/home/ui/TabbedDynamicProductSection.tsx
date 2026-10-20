@@ -1,9 +1,11 @@
 'use client';
 
+import { sectionTitle } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import * as m from 'motion/react-m';
 import { useState } from 'react';
 
+import { cn } from '@/shared/lib/cn';
 import Link from '@/shared/ui/Link';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
@@ -93,7 +95,7 @@ const TabbedDynamicProductSection = ({ section, isMobile }: TabbedDynamicProduct
               >
                 <Link
                   href={activeTab.viewMoreLink}
-                  className="px-2 py-1 text-sm text-gray-500 hover:text-gray-700"
+                  className={cn('px-2 py-1', sectionTitle.more.text, sectionTitle.more.hover)}
                   aria-label={`${section.title} 더보기`}
                 >
                   더보기
