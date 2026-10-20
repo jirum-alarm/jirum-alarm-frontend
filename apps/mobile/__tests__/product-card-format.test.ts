@@ -1,5 +1,4 @@
 export {};
-declare const __dirname: string;
 
 /**
  * 카드가 쓰는 두 규칙. 화면 렌더 없이 로직만 검사한다.
@@ -69,16 +68,9 @@ describe('splitPriceNote — 외화 원문 끝의 괄호 메모는 보조 글씨
     });
   });
 
-  it('web·앱이 같은 원본(@jirum/domain/price)을 쓴다(같은 상품이 web·앱에서 다르게 보이지 않게)', () => {
-    const fs = require('fs');
-
-    const path = require('path');
-    const read = (p: string) =>
-      fs.readFileSync(path.join(__dirname, p), 'utf8');
-    const shared =
-      /export \{\s*parsePrice, splitPriceNote\s*\} from '@jirum\/domain\/price'/;
-    expect(read('../../web/src/shared/lib/utils/price.ts')).toMatch(shared);
-    expect(read('../src/shared/lib/format/price.ts')).toMatch(shared);
+  it('앱이 정본(@jirum/domain/price)을 그대로 쓴다 — web 도 같은지는 domain canon-consumers 가 본다', () => {
+    const canon = require('@jirum/domain/price');
+    expect(splitPriceNote).toBe(canon.splitPriceNote);
   });
 
   it('괄호가 없거나 괄호뿐이면 그대로', () => {

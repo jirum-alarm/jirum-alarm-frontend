@@ -8,16 +8,8 @@ export {};
  * 이미지가 본문 텍스트로 새거나 통째로 사라진다 — 그래서 여기서는
  * "함수가 있나"가 아니라 **실제 문자열을 넣고 결과를 확인**한다.
  *
- * 앱은 읽기만 하고 쓰기는 web 웹뷰가 하므로, 포맷이 갈릴 위험은 web 이
- * 정본을 바꿀 때다. 그래서 web 소스도 같이 읽어 상수를 대조한다.
+ * 앱은 읽기만 하고 쓰기는 web 웹뷰가 한다. 둘 다 정본 @jirum/domain/community-post 를 쓴다.
  */
-const fs = require('fs');
-const path = require('path');
-
-declare const __dirname: string;
-
-const readWeb = (p: string) =>
-  fs.readFileSync(path.join(__dirname, '../../web/src', p), 'utf8');
 
 const {
   parsePostContent,
@@ -27,8 +19,6 @@ const {
   isAllowedPostImageUrl,
   MAX_POST_IMAGES,
 } = require('../src/entities/community/post-content');
-
-const webPostContent = readWeb('features/community/lib/postContent.ts');
 
 const CDN = 'https://cdn.jirum-alarm.com';
 
@@ -124,33 +114,23 @@ describe('CDN 허용 판정', () => {
     );
   });
 
-  it('대소문자는 web(URL 정규화)처럼 무시한다', () => {
+  it('대소문자는 URL 처럼 무시한다', () => {
     expect(isAllowedPostImageUrl('https://CDN.JIRUM-ALARM.COM/a.jpg')).toBe(
       true,
     );
   });
 });
 
-/**
- * web 이 포맷을 바꾸면 이 테스트가 깨져서 알려준다.
- * (web 을 직접 실행할 수는 없으니 — Next/ESM — 소스 문자열을 대조한다)
- */
-describe('web 정본과 상수 대조', () => {
-  it('마커 문자열이 같다', () => {
-    expect(webPostContent).toContain(':::jirum-images');
+/** web·앱이 같은 정본(@jirum/domain/community-post)을 쓴다 — web 소스 문자열 대조 대신 정본 동일성. */
+describe('정본 @jirum/domain/community-post', () => {
+  it('앱 파서가 정본 함수 그대로다', () => {
+    const canon = require('@jirum/domain/community-post');
+    expect(parsePostContent).toBe(canon.parsePostContent);
+    expect(MAX_POST_IMAGES).toBe(canon.MAX_POST_IMAGES);
   });
 
-  it('CDN 호스트가 같다', () => {
-    expect(webPostContent).toContain("CDN_HOST = 'cdn.jirum-alarm.com'");
-  });
-
-  it('최대 장수가 같다', () => {
-    const match = webPostContent.match(/MAX_POST_IMAGES = (\d+)/);
-    expect(match).not.toBeNull();
-    expect(Number(match[1])).toBe(MAX_POST_IMAGES);
-  });
-
-  it('web 도 블록을 문서 맨 앞에서만 찾는다(^ 앵커)', () => {
-    expect(webPostContent).toContain('/^:::jirum-images');
+  it('블록은 문서 맨 앞에서만 찾는다(본문 중간의 마커는 글자다)', () => {
+    const raw = `본문\n:::jirum-images\n${CDN}/a.jpg\n:::\n`;
+    expect(parsePostContent(raw)).toEqual({content: raw, images: []});
   });
 });

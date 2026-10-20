@@ -1,4 +1,2 @@
-export const convertToWebp = (url?: string | null): string | undefined => {
-  if (!url) return undefined;
-  return url.replace(/\.(jpg|jpeg|png)(\?.*)?$/i, '.webp$2');
-};
+// CDN 이미지 → webp 규칙은 정본 @jirum/domain/image(앱과 같은 규칙).
+export { convertToWebp } from '@jirum/domain/image';

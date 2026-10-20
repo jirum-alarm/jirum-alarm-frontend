@@ -18,7 +18,7 @@ const read = (p: string) =>
 
 const {convertToWebp} = require('../src/shared/lib/format/image');
 
-describe('convertToWebp — web shared/lib/utils/image.ts 와 같은 규칙', () => {
+describe('convertToWebp — 정본 @jirum/domain/image', () => {
   it('jpg·jpeg·png 를 webp 로 바꾼다(대소문자 무시)', () => {
     expect(convertToWebp('https://x/a.jpg')).toBe('https://x/a.webp');
     expect(convertToWebp('https://x/a.JPEG')).toBe('https://x/a.webp');
@@ -43,14 +43,9 @@ describe('convertToWebp — web shared/lib/utils/image.ts 와 같은 규칙', ()
     expect(convertToWebp('')).toBeUndefined();
   });
 
-  it('web 과 정규식이 같다', () => {
-    const web = fs.readFileSync(
-      path.join(__dirname, '../../web/src/shared/lib/utils/image.ts'),
-      'utf8',
-    );
-    const pattern = /\/\\\.\(jpg\|jpeg\|png\)\(\\\?\.\*\)\?\$\/i/;
-    expect(web).toMatch(pattern);
-    expect(read('src/shared/lib/format/image.ts')).toMatch(pattern);
+  it('정본 @jirum/domain/image 를 그대로 쓴다(web 도 같은 함수)', () => {
+    const {convertToWebp: canon} = require('@jirum/domain/image');
+    expect(convertToWebp).toBe(canon);
   });
 });
 
