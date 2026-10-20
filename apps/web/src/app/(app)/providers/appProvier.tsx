@@ -22,6 +22,7 @@ import { LazyGuestAlertReturnToast, LazyLoginModal, LazyPushChannelSheet } from 
 import { ProductCardTracker } from './productCardTracker';
 import { ReactQueryProviders } from './ReactQueryProviders';
 import ServerStateProvider from './ServerStateProvider';
+import { UxSignalsReporter } from './uxSignalsReporter';
 import { WebVitalsReporter } from './webVitalsReporter';
 
 const MSW = dynamic(() => import('@/shared/ui/MSW'), {
@@ -70,6 +71,7 @@ export const AppProvider = ({ children, device, isLoggedIn, isGuest }: Props) =>
                 {IS_PRD ? <DeviceId /> : null}
                 <ClarityProvider />
                 <EntryTracker />
+                <UxSignalsReporter />
                 <WebVitalsReporter />
                 <ProductCardTracker />
                 <NuqsAdapter>{children}</NuqsAdapter>
