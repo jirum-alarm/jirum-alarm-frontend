@@ -47,6 +47,13 @@ for (const page of PAGES) {
       });
       await fetch(`${FIXTURE}/__missing/reset`, { method: 'POST' });
 
+      // 브라우저 시계도 서버와 같은 «녹화 시각 + 지난 시간»으로(playwright.config 의 SCREENS_PIN_NOW).
+      const pinNow = Number(process.env.SCREENS_PIN_NOW);
+      if (pinNow > 0) {
+        await context.clock.setSystemTime(
+          Date.now() + (pinNow - Number(process.env.SCREENS_PIN_START)),
+        );
+      }
       if (page.auth === 'user') {
         await context.addCookies([
           { name: 'ACCESS_TOKEN', value: USER_TOKEN, url: info.project.use.baseURL! },

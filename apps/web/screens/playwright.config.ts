@@ -1,6 +1,7 @@
 // 화면 하네스 설정. 사용법은 screens/README.md.
 //   SCREENS_SERVER=dev(기본) — next dev 를 띄운다(빠른 반복). start — 미리 만든 운영 빌드(next start, CI).
 //   SCREENS_MODE=record — 운영 API 로 넘겨 fixtures 를 새로 녹화한다.
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { defineConfig, devices } from '@playwright/test';
@@ -11,6 +12,19 @@ const FIXTURE_PORT = Number(process.env.SCREENS_FIXTURE_PORT ?? 9090);
 const BASE_URL = `http://localhost:${WEB_PORT}`;
 const FIXTURE_GRAPHQL = `http://localhost:${FIXTURE_PORT}/graphql`;
 const SERVER = process.env.SCREENS_SERVER === 'start' ? 'start' : 'dev';
+
+// 재생은 시계를 녹화 시각에 맞춘다(pin-clock.cjs) — «오늘»로 쿼리를 고르는 화면이 날이 바뀌어도 녹화와 같은 쿼리를 부르게.
+// 서버(web·고정 데이터)는 env 로, 브라우저는 spec 이 context.clock 으로. 워커도 이 파일을 다시 읽으니 처음 정한 값을 env 로 넘긴다.
+const META = join(HERE, 'fixtures', '_meta.json');
+if (process.env.SCREENS_MODE !== 'record' && !process.env.SCREENS_PIN_NOW && existsSync(META)) {
+  process.env.SCREENS_PIN_NOW = String(
+    Date.parse((JSON.parse(readFileSync(META, 'utf8')) as { recordedAt: string }).recordedAt),
+  );
+  process.env.SCREENS_PIN_START = String(Date.now());
+}
+const PIN_ENV = process.env.SCREENS_PIN_NOW
+  ? { SCREENS_PIN_NOW: process.env.SCREENS_PIN_NOW }
+  : ({} as Record<string, string>);
 
 const mobile = {
   ...devices['iPhone 14'],
@@ -53,6 +67,7 @@ export default defineConfig({
       env: {
         SCREENS_FIXTURE_PORT: String(FIXTURE_PORT),
         SCREENS_MODE: process.env.SCREENS_MODE ?? 'replay',
+        ...PIN_ENV,
       },
     },
     {
@@ -73,6 +88,13 @@ export default defineConfig({
         API_URL: `http://localhost:${FIXTURE_PORT}`,
         SUBSCRIPTIONS_GRAPHQL_ENDPOINT: `ws://localhost:${FIXTURE_PORT}/graphql`,
         NEXT_PUBLIC_SERVICE_URL: BASE_URL,
+        ...PIN_ENV,
+        ...(process.env.SCREENS_PIN_NOW
+          ? {
+              NODE_OPTIONS:
+                `${process.env.NODE_OPTIONS ?? ''} --require ${join(HERE, 'pin-clock.cjs')}`.trim(),
+            }
+          : {}),
       },
     },
   ],

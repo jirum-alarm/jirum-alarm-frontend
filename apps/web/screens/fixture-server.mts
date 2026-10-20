@@ -8,7 +8,7 @@
 // 시나리오(POST /__scenario {"name"})는 응답을 덮어 빈 목록·에러 상태를 만든다 — 하네스가 페이지마다 바꾼다.
 // 녹화 시각과 지금의 차이만큼 날짜 문자열을 밀어서, 몇 주 전 녹화도 「3분 전」·「진행 중」으로 보이게 한다.
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -26,14 +26,22 @@ const MODE = process.env.SCREENS_MODE === 'record' ? 'record' : 'replay';
 const UPSTREAM = process.env.SCREENS_UPSTREAM ?? 'https://jirum-api.kyojs.com/graphql';
 
 type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
-type GraphQLBody = { query?: string; variables?: Record<string, Json> | null; operationName?: string };
+type GraphQLBody = {
+  query?: string;
+  variables?: Record<string, Json> | null;
+  operationName?: string;
+};
 type Scenario = 'default' | 'empty' | 'error';
 
 const MUTATIONS: Record<string, Json> = {
   MutationGuestLogin: { guestLogin: { accessToken: GUEST_TOKEN, refreshToken: GUEST_TOKEN } },
   // 앱 콜드 스타트의 토큰 갱신(web 프록시는 같은 문서를 QueryLoginByRefreshToken 이라는 이름으로 보낸다).
-  MutationLoginByRefreshToken: { loginByRefreshToken: { accessToken: GUEST_TOKEN, refreshToken: GUEST_TOKEN } },
-  QueryLoginByRefreshToken: { loginByRefreshToken: { accessToken: GUEST_TOKEN, refreshToken: GUEST_TOKEN } },
+  MutationLoginByRefreshToken: {
+    loginByRefreshToken: { accessToken: GUEST_TOKEN, refreshToken: GUEST_TOKEN },
+  },
+  QueryLoginByRefreshToken: {
+    loginByRefreshToken: { accessToken: GUEST_TOKEN, refreshToken: GUEST_TOKEN },
+  },
 };
 
 let scenario: Scenario = 'default';
@@ -57,7 +65,11 @@ const stable = (value: Json): string => {
 };
 
 const fixturePath = (name: string, variables: Json) =>
-  join(FIXTURES, name, `${createHash('sha1').update(stable(variables)).digest('hex').slice(0, 12)}.json`);
+  join(
+    FIXTURES,
+    name,
+    `${createHash('sha1').update(stable(variables)).digest('hex').slice(0, 12)}.json`,
+  );
 
 // 녹화 파일은 커밋된다 — 토큰·이메일 모양 값은 녹화 때 지운다.
 // 객체 배열은 앞 MAX_LIST 개만 — 전체 목록 쿼리(publishedModelPages 1.2MB) 하나가 녹화의 대부분을 차지했다. 화면 검증엔 충분하다.
@@ -71,7 +83,8 @@ const scrub = (value: Json, key = ''): Json => {
     return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, scrub(v, k)]));
   }
   if (typeof value === 'string' && /token|secret|password/i.test(key)) return 'fixture-redacted';
-  if (typeof value === 'string' && /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(value)) return 'user@example.com';
+  if (typeof value === 'string' && /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(value))
+    return 'user@example.com';
   return value;
 };
 
@@ -110,7 +123,11 @@ const recordedAt = (): number => {
 };
 
 // 서버가 뜰 때 한 번 정한다 — 요청마다 바뀌면 화면이 밀린 날짜로 만든 커서(searchAfter)를 되돌릴 수 없다.
-const DELTA = MODE === 'replay' ? Math.round((Date.now() - recordedAt()) / 1000) * 1000 : 0;
+// 시계를 녹화 시각에 맞춘 재생(web 하네스, SCREENS_PIN_NOW)은 날짜를 밀 필요가 없다.
+const DELTA =
+  MODE === 'replay' && !process.env.SCREENS_PIN_NOW
+    ? Math.round((Date.now() - recordedAt()) / 1000) * 1000
+    : 0;
 
 // 화면이 밀린 날짜로 만든 변수(무한 스크롤 커서의 epoch ms·ISO 날짜)를 녹화 당시 값으로 되돌린다.
 const EPOCH_MS = /^\d{13}$/;
@@ -140,9 +157,50 @@ const readBody = async (req: IncomingMessage) => {
 
 const isForbidden = (json: { errors?: Json }) =>
   Array.isArray(json.errors) &&
-  json.errors.some((e) => JSON.stringify(e).includes('FORBIDDEN') || JSON.stringify(e).includes('UNAUTHENTICATED'));
+  json.errors.some(
+    (e) => JSON.stringify(e).includes('FORBIDDEN') || JSON.stringify(e).includes('UNAUTHENTICATED'),
+  );
 
-const answerQuery = async (body: GraphQLBody, user: boolean): Promise<{ data?: Json; errors?: Json }> => {
+const withoutDates = (value: Json): Json => {
+  if (Array.isArray(value)) return value.map(withoutDates);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, withoutDates(v)]));
+  }
+  return typeof value === 'string' && (ISO_DATETIME.test(value) || ISO_DATE.test(value))
+    ? '<date>'
+    : value;
+};
+
+const datesOf = (value: Json): number[] => {
+  if (Array.isArray(value)) return value.flatMap(datesOf);
+  if (value && typeof value === 'object') return Object.values(value).flatMap(datesOf);
+  if (typeof value === 'string' && ISO_DATETIME.test(value)) return [Date.parse(value)];
+  if (typeof value === 'string' && ISO_DATE.test(value)) return [Date.parse(`${value}T00:00:00Z`)];
+  return [];
+};
+
+// 날짜 값만 다른 녹화 중 날짜가 가장 가까운 것.
+const sameExceptDates = (name: string, variables: Json): string | null => {
+  const dir = join(FIXTURES, name);
+  if (!existsSync(dir)) return null;
+  const want = stable(withoutDates(variables));
+  const wantDates = datesOf(variables);
+  let best: { file: string; distance: number } | null = null;
+  for (const f of readdirSync(dir)) {
+    const recorded = (JSON.parse(readFileSync(join(dir, f), 'utf8')) as { variables: Json })
+      .variables;
+    if (stable(withoutDates(recorded)) !== want) continue;
+    const got = datesOf(recorded);
+    const distance = got.reduce((sum, d, i) => sum + Math.abs(d - (wantDates[i] ?? d)), 0);
+    if (!best || distance < best.distance) best = { file: join(dir, f), distance };
+  }
+  return best?.file ?? null;
+};
+
+const answerQuery = async (
+  body: GraphQLBody,
+  user: boolean,
+): Promise<{ data?: Json; errors?: Json }> => {
   const { name } = opInfo(body.query);
   const variables = (body.variables ?? {}) as Json;
   let file = fixturePath(name, variables);
@@ -156,7 +214,11 @@ const answerQuery = async (body: GraphQLBody, user: boolean): Promise<{ data?: J
     const res = await fetch(UPSTREAM, {
       method: 'POST',
       headers: { 'content-type': 'application/json', accept: 'application/graphql-response+json' },
-      body: JSON.stringify({ query: body.query, variables: body.variables, operationName: body.operationName }),
+      body: JSON.stringify({
+        query: body.query,
+        variables: body.variables,
+        operationName: body.operationName,
+      }),
     });
     const json = scrub((await res.json()) as Json) as { data?: Json; errors?: Json };
     mkdirSync(dirname(file), { recursive: true });
@@ -165,11 +227,17 @@ const answerQuery = async (body: GraphQLBody, user: boolean): Promise<{ data?: J
   }
 
   if (!existsSync(file)) file = fixturePath(name, unshiftVariables(variables));
+  // «오늘 기준 N일 전 자정» 같은 날짜 변수는 날이 바뀌면 녹화와 달라진다(앱 랭킹 startDate — 자정 넘어 돈 CI 가 놓쳤다, 10/21).
+  // 날짜 값을 빼고 같은 녹화가 있으면 그걸 쓴다.
+  if (!existsSync(file)) file = sameExceptDates(name, variables) ?? file;
   // 녹화 때보다 더 내려 스크롤해 다음 쪽을 부르면 «목록 끝»으로 답한다(첫 쪽 모양에서 목록만 비움).
   const vars = variables as Record<string, Json>;
   if (!existsSync(file) && vars && typeof vars === 'object' && vars.searchAfter) {
     const first = fixturePath(name, { ...vars, searchAfter: null });
-    const firstWithout = fixturePath(name, Object.fromEntries(Object.entries(vars).filter(([k]) => k !== 'searchAfter')));
+    const firstWithout = fixturePath(
+      name,
+      Object.fromEntries(Object.entries(vars).filter(([k]) => k !== 'searchAfter')),
+    );
     const base = [first, firstWithout].find((f) => existsSync(f));
     if (base) {
       const { response } = JSON.parse(readFileSync(base, 'utf8')) as { response: { data?: Json } };
@@ -180,7 +248,9 @@ const answerQuery = async (body: GraphQLBody, user: boolean): Promise<{ data?: J
     missing.set(`${name} ${stable(variables)}${user ? ' (로그인)' : ''}`, variables);
     return { errors: [{ message: `fixture missing: ${name} — pnpm --filter web screens:record` }] };
   }
-  const { response } = JSON.parse(readFileSync(file, 'utf8')) as { response: { data?: Json; errors?: Json } };
+  const { response } = JSON.parse(readFileSync(file, 'utf8')) as {
+    response: { data?: Json; errors?: Json };
+  };
   if (user && isForbidden(response)) {
     missing.set(`${name} (로그인 데이터 없음 — screens/user-fixtures.ts)`, variables);
   }
@@ -212,7 +282,8 @@ const server = createServer(async (req, res) => {
       return send(res, 200, { data: null, errors: [{ message: 'fixture scenario: error' }] });
     }
     const auth = req.headers.authorization;
-    const user = auth === `Bearer ${USER_TOKEN}` || (GUEST_AS_USER && auth === `Bearer ${GUEST_TOKEN}`);
+    const user =
+      auth === `Bearer ${USER_TOKEN}` || (GUEST_AS_USER && auth === `Bearer ${GUEST_TOKEN}`);
     const json = await answerQuery(body, user);
     if (scenario === 'empty' && MODE === 'replay' && json.data) {
       return send(res, 200, { ...json, data: emptyLists(json.data) });
