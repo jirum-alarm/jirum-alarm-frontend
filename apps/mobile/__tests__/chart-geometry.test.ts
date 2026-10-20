@@ -5,7 +5,7 @@ const {
   shortWon,
   withAxisBuffer,
   parsePointDateMs,
-} = require('../src/features/price-history/model/chart-geometry');
+} = require('@jirum/domain/price-chart');
 
 const PAD = {top: 40, right: 20, bottom: 28, left: 44};
 const W = 640;
@@ -131,9 +131,7 @@ describe('shortWon — 한 축에 표기가 섞이면 안 된다', () => {
 
 describe('곡선 — 두 점 값 밖으로 넘치지 않는다(monotone)', () => {
   // 2026-10-11 감자면 1개월: 4,750원 4일 → 4,250원. Catmull-Rom 은 마지막 4,750 뒤에서 위로 솟았다.
-  const {
-    monotonePath,
-  } = require('../src/features/price-history/model/chart-geometry');
+  const {monotonePath} = require('@jirum/domain/price-chart');
   const ctrlYs = (d: string) =>
     [
       ...d.matchAll(
@@ -162,9 +160,7 @@ describe('곡선 — 두 점 값 밖으로 넘치지 않는다(monotone)', () =>
 });
 
 describe('Y축 눈금 — 떨어지는 값, 축 범위는 그대로', () => {
-  const {
-    niceTicks,
-  } = require('../src/features/price-history/model/chart-geometry');
+  const {niceTicks} = require('@jirum/domain/price-chart');
   it.each([
     [3600, 4900],
     [8806.8, 10592.4],
@@ -182,5 +178,20 @@ describe('Y축 눈금 — 떨어지는 값, 축 범위는 그대로', () => {
       expect(Math.abs(p / step - Math.round(p / step))).toBeLessThan(1e-6);
     }
     expect(prices).toEqual([...prices].sort((a, b) => b - a));
+  });
+});
+
+// 2026-10-12 — 앱에서 누른 점 위 가격이 k 반올림(10,600원 → 「11k」)이었다. web 처럼 전체 금액.
+// (축·곡선·눈금은 web 과 같은 @jirum/domain/price-chart 를 import 해 대조 테스트가 필요 없다 — 2026-10-20)
+describe('누른 점 가격 — web 과 같은 전체 금액', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const src: string = fs.readFileSync(
+    path.join(__dirname, '../src/features/price-history/ui/PriceChart.tsx'),
+    'utf8',
+  );
+  it('selected 라벨은 won() 이고 shortWon 이 아니다', () => {
+    expect(src).toContain('{won(selected.price, currency)}');
+    expect(src).not.toMatch(/shortWon\(selected\./);
   });
 });

@@ -18,7 +18,7 @@ import {
   resolveContentRangeMs,
   withAxisBuffer,
   won,
-} from '../model/chart-geometry';
+} from '@jirum/domain/price-chart';
 import {
   isSeedDeal,
   postedAtToKstDate,

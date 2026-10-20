@@ -1,40 +1,27 @@
+import {
+  DAY_MS,
+  DEFAULT_PERIOD_DAYS,
+  MIN_DEFAULT_POINTS,
+  parsePointDateMs,
+  PERIODS,
+} from '@jirum/domain/price-chart';
+
 import type {
   PriceHistoryDeal,
   PriceHistoryPoint,
   ProductPriceHistory,
 } from '@/shared/api/product/product.service';
 
-import { monotonePath, niceTicks } from './price-chart';
-
-/** API는 최대 구간 한 번만 받고, 탭은 FE에서 자른다 */
-export const MAX_DAYS = 730;
-const DAY_MS = 24 * 60 * 60 * 1000;
-
-/** 기본 노출 기간 — 3개월 */
-const DEFAULT_PERIOD_DAYS = 90;
-/** 기본 탭 점 수가 이보다 적으면 더 긴 기간으로 확장 */
-const MIN_DEFAULT_POINTS = 5;
-/** 차트 X축 좌우 여백 (콘텐츠 구간 대비) */
-const X_AXIS_BUFFER_RATIO = 0.08;
-/**
- * Y축 최소 스팬 — 가격대의 15%.
- * 실제 변동폭이 이보다 작으면 축을 15%로 벌려 소폭 변동이 폭락처럼 안 보이게 한다.
- * ponytail: 고정 비율. 카테고리별(고가 가전 vs 생활용품) 튜닝이 필요하면 그때 분기.
- */
-const MIN_Y_SPAN_RATIO = 0.15;
-
-const PERIODS = [
-  { label: '1개월', days: 30 },
-  { label: '3개월', days: 90 },
-  { label: '6개월', days: 180 },
-  { label: '12개월', days: 365 },
-  { label: '24개월', days: 730 },
-] as const;
-
-export function won(price: number, currency?: string | null): string {
-  if (currency === 'USD') return `$${Math.round(price).toLocaleString()}`;
-  return `${Math.round(price).toLocaleString()}원`;
-}
+// 축·곡선·눈금·기간 상수는 앱과 같은 @jirum/domain/price-chart 한 곳(2026-10-20 통합) — 여기선 web 화면용 나머지만.
+export {
+  buildChartGeometry,
+  MAX_DAYS,
+  parsePointDateMs,
+  resolveContentRangeMs,
+  resolvePeriodStartMs,
+  withAxisBuffer,
+  won,
+} from '@jirum/domain/price-chart';
 
 export function formatAxisDate(date: string, withYear = false): string {
   const parts = date.split('-');
@@ -43,24 +30,9 @@ export function formatAxisDate(date: string, withYear = false): string {
   return withYear ? `${parts[0].slice(2)}.${md}` : md;
 }
 
-function formatAxisDateFromMs(ms: number, withYear = false): string {
-  const d = new Date(ms);
-  const yy = String(d.getFullYear()).slice(2);
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
-  return withYear ? `${yy}.${mm}.${dd}` : `${mm}.${dd}`;
-}
-
 export function formatRangeLabel(from: string, to: string): string {
   const crossYear = from.slice(0, 4) !== to.slice(0, 4);
   return `${formatAxisDate(from, crossYear)} ~ ${formatAxisDate(to, crossYear)}`;
-}
-
-export function parsePointDateMs(date: string): number {
-  // YYYY-MM-DD → local midnight
-  const parts = date.split('-').map(Number);
-  if (parts.length !== 3 || parts.some((n) => !Number.isFinite(n))) return NaN;
-  return new Date(parts[0], parts[1] - 1, parts[2]).getTime();
 }
 
 export function dealTitle(deal: PriceHistoryDeal): string {
@@ -258,121 +230,4 @@ export function pickDefaultDays(
     if (s.points.length >= MIN_DEFAULT_POINTS) return s.days;
   }
   return fromPreferred[fromPreferred.length - 1]?.days ?? preferred;
-}
-
-/** 점 필터용 — 선택 기간의 왼쪽 경계(오늘 기준) */
-export function resolvePeriodStartMs(nowMs: number, days: number): number {
-  return nowMs - days * DAY_MS;
-}
-
-/**
- * 차트 콘텐츠 구간 = 선택한 기간만.
- * (과거 seed 때문에 축을 늘리지 않음 — 3개월 탭이면 최근 3개월만)
- */
-export function resolveContentRangeMs(
-  nowMs: number,
-  days: number,
-): { contentStartMs: number; contentEndMs: number } {
-  return {
-    contentStartMs: resolvePeriodStartMs(nowMs, days),
-    contentEndMs: nowMs,
-  };
-}
-
-/** 점이 축 끝에 붙지 않도록 콘텐츠 구간 양옆에 버퍼 */
-export function withAxisBuffer(contentStartMs: number, contentEndMs: number) {
-  const span = Math.max(contentEndMs - contentStartMs, DAY_MS);
-  const buffer = span * X_AXIS_BUFFER_RATIO;
-  return {
-    axisStartMs: contentStartMs - buffer,
-    axisEndMs: contentEndMs + buffer,
-  };
-}
-
-export function buildChartGeometry(
-  points: PriceHistoryPoint[],
-  width: number,
-  height: number,
-  pad: { top: number; right: number; bottom: number; left: number },
-  axisStartMs: number,
-  axisEndMs: number,
-  contentStartMs: number,
-  contentEndMs: number,
-  extraPrices: number[] = [],
-) {
-  const prices = [...points.map((p) => p.price), ...extraPrices];
-  const minP = Math.min(...prices);
-  const maxP = Math.max(...prices);
-  // 변동폭이 가격대의 MIN_Y_SPAN_RATIO 미만이면 축을 그만큼 넓혀 완만하게 보이게 한다.
-  // (9600→9800 같은 2% 변동이 화면 전체를 쓰며 폭락처럼 보이는 것 방지)
-  const mid = (minP + maxP) / 2;
-  const span = Math.max(maxP - minP, mid * MIN_Y_SPAN_RATIO, 1);
-  // 가격은 음수가 될 수 없다. 변동폭이 큰 상품(예: 3,000~32,960원)에서 아래 여백이
-  // 0을 파고들어 축에 '-1k'가 찍히던 것 방지 — 잘린 만큼 위로 넘기지 않고 0에서 멈춘다.
-  const yMin = Math.max(0, mid - span / 2 - span * 0.12);
-  const yMax = mid + span / 2 + span * 0.12;
-
-  const plotW = width - pad.left - pad.right;
-  const plotH = height - pad.top - pad.bottom;
-  const axisSpanMs = Math.max(axisEndMs - axisStartMs, 1);
-  const contentSpanMs = Math.max(contentEndMs - contentStartMs, 1);
-
-  const projectMs = (ms: number, price: number) => {
-    const ratio = (ms - axisStartMs) / axisSpanMs;
-    const x = pad.left + Math.min(1, Math.max(0, ratio)) * plotW;
-    const y = pad.top + (1 - (price - yMin) / (yMax - yMin)) * plotH;
-    return { x, y };
-  };
-
-  const project = (date: string, price: number) => {
-    const t = parsePointDateMs(date);
-    return projectMs(Number.isFinite(t) ? t : axisStartMs, price);
-  };
-
-  const coords = points.map((p) => {
-    const { x, y } = project(p.date, p.price);
-    return { x, y, ...p };
-  });
-
-  // 시간순 정렬된 좌표로 곡선 (points는 보통 정렬되어 있지만 방어)
-  const ordered = [...coords].sort((a, b) => parsePointDateMs(a.date) - parsePointDateMs(b.date));
-
-  const d = monotonePath(ordered);
-
-  const nice = niceTicks(yMin, yMax);
-  const tickStep = nice.step;
-  const ticks = nice.prices.map((price) => ({
-    price,
-    y: pad.top + (1 - (price - yMin) / (yMax - yMin)) * plotH,
-  }));
-
-  // X축 라벨은 콘텐츠 구간 기준. 오른쪽 끝은 항상 '오늘'
-  const xLabelCount = 4;
-  const withYear = contentSpanMs > 370 * DAY_MS;
-  const xLabels = Array.from({ length: xLabelCount }, (_, i) => {
-    const ratio = i / (xLabelCount - 1);
-    const ms = contentStartMs + ratio * contentSpanMs;
-    const isLast = i === xLabelCount - 1;
-    return {
-      x: pad.left + ((ms - axisStartMs) / axisSpanMs) * plotW,
-      label: isLast ? '오늘' : formatAxisDateFromMs(ms, withYear),
-    };
-  });
-
-  return {
-    coords: ordered,
-    d,
-    ticks,
-    tickStep,
-    yMax,
-    xLabels,
-    minP,
-    maxP,
-    pad,
-    plotW,
-    plotH,
-    width,
-    height,
-    project,
-  };
 }

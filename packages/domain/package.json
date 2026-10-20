@@ -17,6 +17,7 @@
     "./keyword-options": "./src/keyword-options.ts",
     "./live-alternatives": "./src/live-alternatives.ts",
     "./price-answer-holdout": "./src/price-answer-holdout.ts",
+    "./price-chart": "./src/price-chart.ts",
     "./price": "./src/price.ts",
     "./quiet-hours": "./src/quiet-hours.ts",
     "./relative-time": "./src/relative-time.ts",

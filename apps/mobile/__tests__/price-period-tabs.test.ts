@@ -1,8 +1,6 @@
 export {};
 
-const {
-  parsePointDateMs,
-} = require('../src/features/price-history/model/chart-geometry');
+const {parsePointDateMs} = require('@jirum/domain/price-chart');
 
 const PERIODS = [
   {label: '1개월', days: 30},

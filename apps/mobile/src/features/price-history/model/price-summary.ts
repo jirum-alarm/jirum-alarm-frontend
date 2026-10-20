@@ -7,7 +7,7 @@ import {
   DAY_MS,
   DEFAULT_PERIOD_DAYS,
   MIN_DEFAULT_POINTS,
-} from './chart-geometry';
+} from '@jirum/domain/price-chart';
 
 export function resolveSubtitle(history: {
   basis?: string | null;

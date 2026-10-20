@@ -1,12 +1,12 @@
 'use client';
 
 import { chartVar } from '@jirum/design-system';
+import { shortWon } from '@jirum/domain/price-chart';
 import { useMemo, useRef, useState } from 'react';
 
 import type { PriceHistoryPoint } from '@/shared/api/product/product.service';
 
 import { useRenderedWidth } from '../hooks/useRenderedWidth';
-import { shortWon } from '../lib/price-chart';
 import {
   buildChartGeometry,
   type CurrentProductMarker,

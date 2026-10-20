@@ -19,7 +19,7 @@ import {
   type ChartPoint,
   shortWon,
   won,
-} from '../model/chart-geometry';
+} from '@jirum/domain/price-chart';
 import type {CurrentProductMarker} from '../model/seed-marker';
 import {useColors, type Colors} from '@/shared/theme/useColors';
 
