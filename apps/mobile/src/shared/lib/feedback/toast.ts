@@ -1,12 +1,14 @@
 import Toast from 'react-native-toast-message';
 import * as Haptics from 'expo-haptics';
+import {layout} from '@jirum/design-system/layout';
 
 // 탭바·상세 하단 CTA(둘 다 ~90px) 위로 띄운다. 66 이면 토스트가 버튼 윗부분을 덮고,
 // 토스트가 떠 있는 동안 그 자리 터치를 가져가서 "눌렀는데 반응이 없는" 구간이 생겼다.
 const TOAST_BOTTOM_OFFSET = 110;
 // 라이브러리 기본 4초는 길다 — 그동안 하단 터치를 가린다. 되돌리기가 있으면 누를 시간을 준다.
-const VISIBILITY_MS = 2500;
-const VISIBILITY_WITH_ACTION_MS = 4000;
+// 값은 web 과 같은 디자인 시스템 layout.duration.
+const VISIBILITY_MS = layout.duration.toast;
+const VISIBILITY_WITH_ACTION_MS = layout.duration.toastWithAction;
 
 export type ToastAction = {label: string; onPress: () => void};
 type ToastOptions = {

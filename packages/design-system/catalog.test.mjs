@@ -38,9 +38,9 @@ test('적힌 경로가 실제로 있다(옮기면 카탈로그도 고친다)', (
   }
 });
 
-test('보조 파일·참고 예시 경로도 실제로 있다', () => {
+test('보조 파일·참고 예시·레시피를 읽는 자리 경로도 실제로 있다', () => {
   for (const e of catalog) {
-    for (const p of [...(e.related ?? []), ...(e.examples ?? [])]) assert.ok(existsSync(join(root, p)), `${e.id}: ${p} 없음`);
+    for (const p of [...(e.related ?? []), ...(e.examples ?? []), ...(e.sites ?? [])]) assert.ok(existsSync(join(root, p)), `${e.id}: ${p} 없음`);
   }
 });
 

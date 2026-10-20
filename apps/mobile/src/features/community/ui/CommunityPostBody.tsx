@@ -1,5 +1,6 @@
 import React from 'react';
 import {Pressable, View} from 'react-native';
+import {chip} from '@jirum/design-system/recipes';
 import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
@@ -123,7 +124,9 @@ export default function CommunityPostBody({
           accessibilityState={{selected: !!post.isMyLike}}
           hitSlop={8}
           className={cn(
-            'flex-row items-center rounded-full border px-4 py-1.5',
+            // 모양은 고르는 칩 md(디자인 시스템), 색은 추천 전용(라임) — web CommunityPostDetail 과 같다.
+            'flex-row items-center',
+            chip.size.md.box,
             post.isMyLike
               ? 'border-primary-500 bg-primary-50'
               : 'border-gray-200',

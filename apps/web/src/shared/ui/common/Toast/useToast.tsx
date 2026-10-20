@@ -1,3 +1,4 @@
+import { layout } from '@jirum/design-system/layout';
 import { useEffect, useState } from 'react';
 
 /**
@@ -18,8 +19,9 @@ interface ToastItem {
   show: boolean;
 }
 
-const VISIBLE_MS = 2500;
-const VISIBLE_WITH_ACTION_MS = 4000;
+// 머무는 시간은 앱과 같은 디자인 시스템 값(layout.duration).
+const VISIBLE_MS = layout.duration.toast;
+const VISIBLE_WITH_ACTION_MS = layout.duration.toastWithAction;
 
 let toasts: ToastItem[] = [];
 let count = 0;

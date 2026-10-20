@@ -1,5 +1,6 @@
 'use client';
 
+import { chip } from '@jirum/design-system/recipes';
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 
 import { CommunityService } from '@/shared/api/community/community.service';
@@ -148,7 +149,10 @@ export default function CommunityPostDetailClient({
         <button
           onClick={() => isUserLogin && likePost(post.isMyLike ? undefined : true)}
           className={cn(
-            'flex items-center gap-x-2 rounded-full border px-4 py-1.5 text-sm font-medium transition-colors',
+            // 모양은 고르는 칩 md(디자인 시스템), 색은 추천 전용(라임) — 앱 CommunityPostBody 와 같다.
+            'flex items-center gap-x-2',
+            chip.size.md.box,
+            'text-sm font-medium transition-colors',
             'transition-transform active:scale-95',
             post.isMyLike
               ? 'border-primary-500 bg-primary-50 text-primary-800'

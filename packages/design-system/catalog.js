@@ -14,13 +14,15 @@
  *   web     apps/web 의 구현 경로(폴더 또는 파일). 없으면 null
  *   app     apps/mobile 의 구현 경로. 없으면 null
  *   story   놀이터 스토리 제목(`components/Badge`). web 이 null 이면 레시피 갤러리 제목
+ *   sites    (선택) 이 레시피를 컴포넌트 밖에서 직접 읽어 그리는 자리(web·앱). 각 자리는 레시피를 import 해야 한다
+ *            — consumers.test 가 본다. 전엔 앱 테스트가 web 경로를 따로 들고 대조했다(2026-10-20 이리로).
  *   related  (선택) 같은 부품의 보조 파일 — 뒤로 버튼·사진 없음 그림 등. 「공용 폴더의 파일은 지도에 있다」 검사가 본다
  *   examples (선택) 컴포넌트로 묶지 않는 패턴(빈 화면)의 참고 예시 경로
  *
  * 경로는 레포 루트 기준. 레시피만 있고 컴포넌트가 없는 것(사진 틀·정보 상자 등)은 자리마다 클래스를 직접 읽는다.
  */
 
-/** @typedef {{id: string, name: string, use: string, recipe: string | null, web: string | null, app: string | null, story: string, related?: string[], examples?: string[]}} CatalogEntry */
+/** @typedef {{id: string, name: string, use: string, recipe: string | null, web: string | null, app: string | null, story: string, related?: string[], examples?: string[], sites?: string[]}} CatalogEntry */
 
 const W = 'apps/web/src/';
 const A = 'apps/mobile/src/';
@@ -64,6 +66,14 @@ const catalog = [
     web: null,
     app: `${A}shared/components/ui/TabPill`,
     story: '레시피/탭',
+    sites: [
+      `${W}features/community/ui/TabBar.tsx`,
+      `${W}widgets/toss/ui/TossCategoryTabs.tsx`,
+      `${W}app/(desktop-ready)/curation/components/CurationContainer.tsx`,
+      `${W}widgets/trending/ui/TabbarV2.tsx`,
+      `${W}features/product-detail/ui/PriceHistorySection.tsx`,
+      `${A}features/price-history/ui/PriceHistorySection.tsx`,
+    ],
   },
   {
     id: 'toggle',
@@ -82,6 +92,11 @@ const catalog = [
     web: null,
     app: null,
     story: '레시피/칩 모양 링크·태그',
+    sites: [
+      `${W}app/(desktop-ready)/keywords/[keyword]/page.tsx`,
+      `${W}app/(desktop-ready)/guide/hotdeal-alarm/page.tsx`,
+      `${W}app/(desktop-ready)/deals/[slug]/page.tsx`,
+    ],
   },
   {
     id: 'keywordChip',
@@ -91,6 +106,10 @@ const catalog = [
     web: null,
     app: null,
     story: '레시피/칩 모양 링크·태그',
+    sites: [
+      `${W}widgets/search/ui/RecentKeywords.tsx`,
+      `${A}screens/search/ui/RecentKeywords.tsx`,
+    ],
   },
   {
     id: 'addChip',
@@ -100,6 +119,10 @@ const catalog = [
     web: null,
     app: null,
     story: '레시피/칩 모양 링크·태그',
+    sites: [
+      `${W}features/mypage/ui/keyword/KeywordList.tsx`,
+      `${A}screens/mypage/KeywordScreen.tsx`,
+    ],
   },
   // ── 입력
   {
@@ -138,6 +161,10 @@ const catalog = [
     web: null,
     app: null,
     story: '레시피/칩 모양 링크·태그',
+    sites: [
+      `${W}features/mypage/ui/theme/ThemeDetail.tsx`,
+      `${A}screens/mypage/ThemeDetailScreen.tsx`,
+    ],
   },
   {
     id: 'hotdealBadge',
@@ -165,6 +192,16 @@ const catalog = [
     web: null,
     app: null,
     story: '레시피/면·상자',
+    sites: [
+      `${W}entities/product-list/ui/grid/ProductGridCard.tsx`,
+      `${W}entities/product-list/ui/list/ListProductCard.tsx`,
+      `${W}entities/product-list/ui/card/DoubleRowProductCard.tsx`,
+      `${W}entities/product-list/ui/carousel/CarouselProductCard.tsx`,
+      `${W}widgets/toss/ui/TossDealCard.tsx`,
+      `${A}entities/product/ui/ProductCard.tsx`,
+      `${A}entities/home/ui/cards/HomeCardPrimitives.tsx`,
+      `${A}entities/home/ui/cards/TossDealCard.tsx`,
+    ],
   },
   // ── 묶음·면
   {
@@ -175,6 +212,13 @@ const catalog = [
     web: `${W}shared/ui/SectionHeader.tsx`,
     app: `${A}shared/components/ui/SectionHeader`,
     story: 'components/SectionHeader',
+    sites: [
+      `${W}shared/ui/DetailSectionHeader.tsx`,
+      `${A}features/price-history/ui/PriceHistorySection.tsx`,
+      `${A}features/comment/ui/CommentSection.tsx`,
+      `${A}features/community-reaction/ui/CommunityReaction.tsx`,
+      `${A}entities/product/ui/ProductCarouselSection.tsx`,
+    ],
     related: [`${W}shared/ui/DetailSectionHeader.tsx`],
   },
   {
@@ -185,6 +229,11 @@ const catalog = [
     web: null,
     app: null,
     story: '레시피/면·상자',
+    sites: [
+      `${W}features/product-detail/ui/DealEvidenceBlock.tsx`,
+      `${W}app/(desktop-ready)/deals/[slug]/page.tsx`,
+      `${A}screens/detail/ui/DealEvidenceBlock.tsx`,
+    ],
   },
   {
     id: 'detailInfo',
@@ -203,6 +252,10 @@ const catalog = [
     web: null,
     app: null,
     story: '레시피/면·상자',
+    sites: [
+      `${W}features/product-list/ui/ClusteredPriceSection.tsx`,
+      `${W}app/(desktop-ready)/deals/[slug]/DealsListSection.tsx`,
+    ],
   },
   {
     id: 'adLabel',
@@ -328,6 +381,9 @@ const catalog = [
     web: `${W}shared/ui/common/BottomSheet`,
     app: `${A}shared/components/BottomSheet.tsx`,
     story: 'components/BottomSheet',
+    sites: [
+      `${A}screens/detail/ui/ShareSheet.tsx`,
+    ],
   },
   {
     id: 'tooltip',
@@ -356,6 +412,24 @@ const catalog = [
     web: null,
     app: null,
     story: '레시피/면·상자',
+    sites: [
+      `${W}widgets/product-detail/ui/CommunityReaction.tsx`,
+      `${W}widgets/search/ui/RecentKeywords.tsx`,
+      `${W}app/(desktop-ready)/keywords/[keyword]/page.tsx`,
+      `${W}features/community/ui/CommunityList.tsx`,
+      `${W}app/(desktop-ready)/deals/[slug]/DealsListSection.tsx`,
+      `${W}app/(desktop-ready)/toss/TossDailyContainer.tsx`,
+      `${W}app/(desktop-ready)/products/[id]/related/RelatedProductsView.tsx`,
+      `${W}app/(desktop-ready)/curation/components/CurationProductList.tsx`,
+      `${W}widgets/search/ui/SearchResult.tsx`,
+      `${W}features/community/ui/ProductTagModal.tsx`,
+      `${A}screens/community/CommunityScreen.tsx`,
+      `${A}features/community-reaction/ui/CommunityReaction.tsx`,
+      `${A}screens/mypage/ThemesScreen.tsx`,
+      `${A}screens/mypage/ThemeDetailScreen.tsx`,
+      `${A}entities/home/ui/CurationGrid.tsx`,
+      `${A}screens/search/ui/SearchResults.tsx`,
+    ],
   },
   {
     id: 'emptyState',

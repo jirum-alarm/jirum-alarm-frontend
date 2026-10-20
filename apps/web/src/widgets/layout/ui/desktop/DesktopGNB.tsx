@@ -1,5 +1,6 @@
 'use client';
 
+import { chip } from '@jirum/design-system/recipes';
 import * as m from 'motion/react-m';
 import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
@@ -112,7 +113,8 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           <Link
             href={PAGE.PRODUCT_NEW}
             className={cn(
-              'rounded-full border px-4 py-1.5 text-sm font-semibold transition-colors duration-300',
+              chip.size.md.box,
+              'text-sm font-semibold transition-colors duration-300',
               {
                 'border-fixed-white/40 text-fixed-white hover:bg-fixed-white/10': isInHomeHero,
                 'border-gray-300 text-gray-700 hover:bg-gray-50': !isInHomeHero,

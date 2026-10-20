@@ -51,6 +51,11 @@ const layout = {
    */
   layer: {sticky: 40, header: 50, nav: 60, dropdown: 70, overlay: 80, toast: 90},
   layerClass: {sticky: 'z-40', header: 'z-50', nav: 'z-60', dropdown: 'z-70', overlay: 'z-80', toast: 'z-90'},
+  /**
+   * 머무는 시간(ms). toast = 결과 알림 2.5초, toastWithAction = 동작 버튼(되돌리기 등)이 있으면 누를 틈을 주려고 4초.
+   * web useToast·앱 feedback/toast 가 이 값을 읽는다(전엔 두 앱이 숫자를 따로 적고 앱 테스트가 대조했다, 2026-10-20).
+   */
+  duration: {toast: 2500, toastWithAction: 4000},
 };
 
 module.exports = {layout};

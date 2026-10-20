@@ -1,5 +1,6 @@
 'use client';
 
+import { listRow } from '@jirum/design-system/recipes';
 import { CUSTOMER_SERVICE_TITLE } from '@jirum/domain/mypage';
 import { useQuery } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
@@ -43,7 +44,7 @@ export default function MyPageSidebar() {
       <nav className="flex flex-col gap-5 pt-6">
         {MYPAGE_GROUPS.map((group) => (
           <section key={group.key}>
-            <h2 className="px-3 pb-1 text-xs font-medium text-gray-500">{group.label}</h2>
+            <h2 className={cn('px-3', listRow.group)}>{group.label}</h2>
             <ul className="flex flex-col gap-0.5">
               {MYPAGE_MENU.filter((menu) => menu.group === group.key).map((menu) => (
                 <li key={menu.url}>

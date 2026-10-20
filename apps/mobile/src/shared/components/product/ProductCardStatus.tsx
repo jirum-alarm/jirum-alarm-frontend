@@ -1,6 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {cardLabel} from '@jirum/design-system/recipes';
+import {visibleHotDealType} from '@jirum/domain/product-card';
 import {
   getTimeDealOpening,
   getTossTimeDeal,
@@ -65,6 +66,7 @@ export default function ProductCardStatus({
 }) {
   const {isEnd, hotDealType, earliestExpiryDate, isRising, isYearLowest} =
     product;
+  const badgeType = visibleHotDealType(hotDealType, earliestExpiryDate);
   // 토스 하루특가는 핫딜 배지 자리에 토스 앱 배지를 그대로 단다(web ProductCardStatus 와 같다).
   // 선착순이 끝나면 crawler 가 isEnd 도 켠다 — 「판매종료」보다 「선착순 마감」이 무슨 일인지 말해 주므로 먼저 본다.
   const timeDeal = getTossTimeDeal(product.data);
@@ -109,10 +111,10 @@ export default function ProductCardStatus({
         <CardCornerLabel squareThumb={squareThumb} tone="dark">
           {opening.label}
         </CardCornerLabel>
-      ) : showHotdealBadge && hotDealType && !earliestExpiryDate ? (
+      ) : showHotdealBadge && badgeType ? (
         <View className="absolute bottom-0 left-0">
           <HotdealBadge
-            hotdealType={hotDealType as HotDealType}
+            hotdealType={badgeType as HotDealType}
             badgeVariant={squareThumb ? 'cardSquare' : 'card'}
           />
         </View>
