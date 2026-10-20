@@ -1,4 +1,5 @@
 import {emptyText} from '@jirum/design-system/recipes';
+import {ESTIMATED_TOTAL_CAP, SEARCH_COPY} from '@jirum/domain/search';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import PressableOpacity from '@/shared/components/PressableOpacity';
@@ -35,9 +36,6 @@ import {cn} from '@/shared/lib/styling';
 
 /** 검색 결과 카드의 노출/클릭 출처. web `ProductCardSource` 의 'search' 와 같은 값. */
 const SEARCH_SOURCE = 'search';
-
-/** web: estimatedTotal 은 Meili 5000 캡이라 그 이상은 '+' 를 붙인다. */
-const ESTIMATED_TOTAL_CAP = 5000;
 
 const keyOf = (item: SearchProductCard) => String(item.id);
 
@@ -181,9 +179,7 @@ export default function SearchResults({
             // 필터 때문에 0건인 경우. 상품이 없다고 말하면 안 된다 — 풀 수 있는 필터가 있다.
             <View className="items-center px-5 pt-10" style={styles.emptyBox}>
               <Text className={cn('text-center', emptyText)}>
-                {
-                  '선택한 필터에 맞는 결과가 없어요.\n필터를 조정하면 더 많은 딜을 볼 수 있어요.'
-                }
+                {SEARCH_COPY.noFilteredResult.join('\n')}
               </Text>
               {/*
             ★공용 `Button` 을 쓰지 않는다 — base 클래스가 `w-full` 이라 화면을

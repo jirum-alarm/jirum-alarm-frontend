@@ -1,3 +1,4 @@
+import {SEARCH_PAGE_SIZE, SUGGESTION_LIMIT} from '@jirum/domain/search';
 import {
   infiniteQueryOptions,
   keepPreviousData,
@@ -20,11 +21,9 @@ import {
 const RETRY = 2;
 const STALE_TIME = 1000 * 60;
 
-/** web limit. 한 페이지 20개. */
-export const SEARCH_LIMIT = 20;
-
-/** 제안어: web DEBOUNCE·캐시 값과 같다. */
-export const SUGGESTION_LIMIT = 10;
+// 한 페이지 크기·제안어 개수는 web 과 같은 @jirum/domain/search 정본.
+export const SEARCH_LIMIT = SEARCH_PAGE_SIZE;
+export {SUGGESTION_LIMIT};
 const SUGGESTION_STALE_TIME = 60_000;
 const SUGGESTION_GC_TIME = 300_000;
 

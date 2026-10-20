@@ -1,14 +1,12 @@
 'use client';
 
+import { ESTIMATED_TOTAL_CAP } from '@jirum/domain/search';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
 import { ProductQueries } from '@/entities/product';
 
 import { pushDataLayer } from '../hooks/useSearchKeywordAlert';
-
-/** estimatedTotal 은 Meili estimatedTotalHits(5000 캡) — 그 이상은 '+'. */
-const ESTIMATED_TOTAL_CAP = 5000;
 
 /**
  * 진짜 0건(필터 없음·종료 제외)일 때 같은 검색어를 종료 포함으로 한 번 더 세어, 있으면 "종료된 딜 N건 보기".

@@ -1,5 +1,6 @@
 'use client';
 
+import { isPrefixValid, SUGGESTION_LIMIT } from '@jirum/domain/search';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 
@@ -8,19 +9,6 @@ import { SearchService } from '@/shared/api/search/search.service';
 const DEBOUNCE_MS = 200;
 // 한글 IME 조합 중에는 살짝 더 긴 디바운스로 조합 도중 폭주만 방지
 const DEBOUNCE_MS_COMPOSING = 350;
-const MIN_PREFIX_LENGTH_KOREAN = 1;
-const MIN_PREFIX_LENGTH_OTHER = 2;
-const SUGGESTION_LIMIT = 10;
-
-const HAS_KOREAN = /[가-힣]/;
-
-function isPrefixValid(p: string): boolean {
-  const trimmed = p.trim();
-  if (!trimmed) return false;
-  return HAS_KOREAN.test(trimmed)
-    ? trimmed.length >= MIN_PREFIX_LENGTH_KOREAN
-    : trimmed.length >= MIN_PREFIX_LENGTH_OTHER;
-}
 
 interface UseSearchAutocompleteParams {
   /** 입력 현재 값 */

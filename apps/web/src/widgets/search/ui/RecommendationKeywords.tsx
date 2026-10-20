@@ -1,5 +1,6 @@
 'use client';
 
+import { RECOMMENDED_KEYWORD_COUNT } from '@jirum/domain/search';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -26,7 +27,7 @@ export default function RecommendationKeywords() {
     if (!hubs) return;
     const pool = hubs.filter((h) => h.recentDealCount >= KEYWORD_HUB_MIN_DEALS).map((h) => h.name);
     // eslint-disable-next-line react-hooks/set-state-in-effect -- 무작위 추천은 서버와 브라우저 결과가 달라 하이드레이션 뒤에 한 번 뽑는다.
-    setKeywords([...pool].sort(() => 0.5 - Math.random()).slice(0, 5));
+    setKeywords([...pool].sort(() => 0.5 - Math.random()).slice(0, RECOMMENDED_KEYWORD_COUNT));
   }, [hubs]);
 
   if (keywords.length === 0) return null;

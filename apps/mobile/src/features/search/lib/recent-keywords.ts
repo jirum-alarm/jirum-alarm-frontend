@@ -1,3 +1,4 @@
+import {RECENT_KEYWORDS_LIMIT} from '@jirum/domain/search';
 import {
   getAsyncStorage,
   removeAsyncStorage,
@@ -19,8 +20,8 @@ import {
  */
 const RECENT_KEYWORDS_KEY = 'recentSearchKeywords';
 
-/** web RECENT_KEYWORDS_LIMIT 과 같은 10개. */
-export const RECENT_KEYWORDS_LIMIT = 10;
+// 보관 개수는 web 과 같은 @jirum/domain/search 정본.
+export {RECENT_KEYWORDS_LIMIT};
 
 /**
  * 검색어 하나를 목록 맨 앞에 넣는다(순수 함수 — 테스트에서 바로 돌린다).

@@ -1,14 +1,12 @@
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
+import {ESTIMATED_TOTAL_CAP} from '@jirum/domain/search';
 
 import {SearchQueries} from '@/entities/search/api/search.queries';
 import PressableScale from '@/shared/components/PressableScale';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {Analytics} from '@/shared/lib/analytics/ga4';
-
-/** web 과 같다 — estimatedTotal 은 Meili 5000 캡이라 그 이상은 '+'. */
-const ESTIMATED_TOTAL_CAP = 5000;
 
 /**
  * 진짜 0건(필터 없음·종료 제외)일 때 "종료된 딜 N건 보기". web: widgets/search/ui/EndedDealsRescue.tsx

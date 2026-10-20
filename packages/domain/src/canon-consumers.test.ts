@@ -28,6 +28,21 @@ const SHARED_BY_BOTH: Record<string, string[]> = {
   'keyword-options': ['KEYWORD_ALERT_LABELS', 'KEYWORD_DEAL_CHOICES', 'summarizeKeywordAlert'],
   'price-chart': ['buildChartGeometry', 'shortWon', 'won'],
   'product-card': ['visibleHotDealType'],
+  search: [
+    'SEARCH_SORTS',
+    'SEARCH_PERIODS',
+    'SORT_LABELS',
+    'PERIOD_LABELS',
+    'periodStartDate',
+    'hasActiveSearchFilters',
+    'isPrefixValid',
+    'SEARCH_PAGE_SIZE',
+    'RECENT_KEYWORDS_LIMIT',
+    'RECOMMENDED_KEYWORD_COUNT',
+    'SUGGESTION_LIMIT',
+    'ESTIMATED_TOTAL_CAP',
+    'SEARCH_COPY',
+  ],
 };
 
 const walk = (dir: string, out: string[] = []): string[] => {

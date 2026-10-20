@@ -1,5 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 import {useQuery} from '@tanstack/react-query';
+import {isPrefixValid} from '@jirum/domain/search';
 
 import {SearchQueries} from '@/entities/search/api/search.queries';
 
@@ -12,20 +13,9 @@ import {SearchQueries} from '@/entities/search/api/search.queries';
  * change 를 쏘는 걸 막으려던 것이라 앱엔 해당 사항이 없다.
  */
 const DEBOUNCE_MS = 200;
-/** web 과 같은 최소 길이 — 한글은 1자, 그 외는 2자부터 호출한다. */
-const MIN_PREFIX_LENGTH_KOREAN = 1;
-const MIN_PREFIX_LENGTH_OTHER = 2;
 
-const HAS_KOREAN = /[가-힣]/;
-
-/** web isPrefixValid 와 같은 판정. */
-export function isPrefixValid(prefix: string): boolean {
-  const trimmed = prefix.trim();
-  if (!trimmed) return false;
-  return HAS_KOREAN.test(trimmed)
-    ? trimmed.length >= MIN_PREFIX_LENGTH_KOREAN
-    : trimmed.length >= MIN_PREFIX_LENGTH_OTHER;
-}
+// 최소 길이 판정(isPrefixValid)은 web 과 같은 @jirum/domain/search.
+export {isPrefixValid};
 
 export function useSearchSuggestions({
   value,

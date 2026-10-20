@@ -1,5 +1,6 @@
 'use client';
 
+import { PERIOD_LABELS, SORT_LABELS } from '@jirum/domain/search';
 import { useQuery } from '@tanstack/react-query';
 
 import { cn } from '@/shared/lib/cn';
@@ -9,19 +10,6 @@ import { CategoryQueries } from '@/entities/category';
 import { ProviderQueries } from '@/entities/provider';
 
 import { SEARCH_PERIODS, SEARCH_SORTS, SearchFiltersController } from '../hooks/useSearchFilters';
-
-const SORT_LABELS: Record<(typeof SEARCH_SORTS)[number], string> = {
-  recent: '최신순',
-  comments: '댓글 많은 순',
-  relevance: '정확도순',
-};
-
-const PERIOD_LABELS: Record<(typeof SEARCH_PERIODS)[number], string> = {
-  all: '전체 기간',
-  '1d': '오늘',
-  '7d': '이번 주',
-  '30d': '한 달',
-};
 
 /** 필터 행 그룹 라벨 — 어떤 칩 줄이 어떤 필터인지 구분(전부 '전체'로 시작해 라벨 없인 식별 불가). */
 function FilterRow({ label, children }: { label: string; children: React.ReactNode }) {

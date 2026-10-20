@@ -1,3 +1,4 @@
+import { SEARCH_COPY } from '@jirum/domain/search';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -47,7 +48,7 @@ const ProductNotFound = () => {
         <div className="flex justify-center pb-4">
           <ErrorIllust className="size-25" />
         </div>
-        <p className="pb-2 text-2xl font-semibold text-gray-900">검색 결과가 없어요</p>
+        <p className="pb-2 text-2xl font-semibold text-gray-900">{SEARCH_COPY.noResult}</p>
         <p className="text-gray-500">키워드를 등록하고 알림을 받아보세요</p>
       </div>
       <div className="w-full pb-16 text-center">

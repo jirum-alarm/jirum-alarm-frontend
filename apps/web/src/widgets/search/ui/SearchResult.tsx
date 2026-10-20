@@ -1,4 +1,5 @@
 import { emptyText } from '@jirum/design-system/recipes';
+import { ESTIMATED_TOTAL_CAP, SEARCH_COPY } from '@jirum/domain/search';
 import { Suspense, useEffect, useRef } from 'react';
 
 import { cn } from '@/shared/lib/cn';
@@ -75,9 +76,9 @@ export default function SearchResult({ show }: { show: boolean }) {
             {hasActiveFilters ? (
               <div className="flex flex-col items-center gap-4 pt-5 text-center">
                 <p className={emptyText}>
-                  선택한 필터에 맞는 결과가 없어요.
+                  {SEARCH_COPY.noFilteredResult[0]}
                   <br />
-                  필터를 조정하면 더 많은 딜을 볼 수 있어요.
+                  {SEARCH_COPY.noFilteredResult[1]}
                 </p>
                 <button
                   type="button"
@@ -112,7 +113,7 @@ export default function SearchResult({ show }: { show: boolean }) {
             <p className="pb-3 text-sm text-gray-500">
               약{' '}
               <span className="font-semibold text-gray-900">{estimatedTotal.toLocaleString()}</span>
-              건{estimatedTotal >= 5000 && '+'}
+              건{estimatedTotal >= ESTIMATED_TOTAL_CAP && '+'}
             </p>
           )}
           {/* 결과를 보는 그 자리에서 이 단어로 알림을 건다(0건 화면엔 큰 버튼). 앱 SearchResults 와 같은 자리. */}

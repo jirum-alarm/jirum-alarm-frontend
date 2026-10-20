@@ -1,4 +1,5 @@
 import React, {forwardRef} from 'react';
+import {SEARCH_COPY} from '@jirum/domain/search';
 import {Pressable, StyleSheet, View} from 'react-native';
 import PressableOpacity from '@/shared/components/PressableOpacity';
 import {TextInput} from '@/shared/components/ui/Text/AppText';
@@ -76,7 +77,7 @@ const SearchHeader = forwardRef<
             // ★결과 화면에서는 autoFocus 금지 — 포커스가 걸리면 제안어 목록이
             // 결과·필터를 가리고 키보드가 올라온다(web 운영 실측 주석과 같은 이유).
             autoFocus={autoFocus}
-            placeholder="핫딜 상품을 검색해주세요"
+            placeholder={SEARCH_COPY.placeholder}
             placeholderTextColor={c.gray[500]}
             returnKeyType="search"
             // 검색어는 사람 이름이 아니다 — 자동 대문자·교정이 켜지면 영문

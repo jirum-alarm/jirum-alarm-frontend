@@ -1,3 +1,4 @@
+import { periodStartDate, SEARCH_PAGE_SIZE } from '@jirum/domain/search';
 import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
@@ -9,9 +10,7 @@ import { ProductQueries } from '@/entities/product';
 
 import { SearchFiltersController } from './useSearchFilters';
 
-const limit = 20;
-
-const PERIOD_HOURS = { '1d': 24, '7d': 24 * 7, '30d': 24 * 30 } as const;
+const limit = SEARCH_PAGE_SIZE;
 
 /**
  * filters는 인자로 받는다 — 필터 상태 소유자는 SearchResult 하나뿐(인스턴스 중복 방지).
@@ -32,9 +31,9 @@ export const useProductListViewModel = ({
 
   // period가 바뀔 때만 재계산 — 렌더마다 new Date()를 만들면 queryKey가 매번 달라져 무한 refetch.
   const startDate = useMemo(() => {
-    if (filters.period === 'all') return undefined;
-    // eslint-disable-next-line react-hooks/purity -- 위 주석대로 기간이 바뀔 때만 "지금" 기준 시작 시각을 다시 잡는다(useMemo 로 렌더마다 바뀌지 않음).
-    return new Date(Date.now() - PERIOD_HOURS[filters.period] * 60 * 60 * 1000).toISOString();
+    // 기간이 바뀔 때만 "지금" 기준 시작 시각을 다시 잡는다(useMemo 로 렌더마다 바뀌지 않음).
+    // eslint-disable-next-line react-hooks/purity
+    return periodStartDate(filters.period, Date.now());
   }, [filters.period]);
 
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isLoading, isPlaceholderData } =

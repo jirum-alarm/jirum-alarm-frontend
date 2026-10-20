@@ -1,4 +1,5 @@
 import React, {useMemo} from 'react';
+import {RECOMMENDED_KEYWORD_COUNT} from '@jirum/domain/search';
 import {View} from 'react-native';
 import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -14,7 +15,7 @@ import {useKeywordHubs} from '@/entities/keyword-hub/model/useKeywordHubs';
  * 등록부를 읽어 같은 목록이 보장된다. 허브는 「30일 딜이 충분하고 제목이 그 상품」인 것만 판정해 둔 목록이라 누르면
  * 결과가 비거나 엉뚱할 일이 적고, 결과 위에 허브 요약 줄이 뜬다. 목록을 못 받으면 섹션을 숨긴다.
  */
-export const RECOMMENDED_KEYWORD_COUNT = 5;
+export {RECOMMENDED_KEYWORD_COUNT};
 
 export default function RecommendedKeywords({
   onSelect,

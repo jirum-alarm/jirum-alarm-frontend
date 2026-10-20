@@ -1,5 +1,6 @@
 'use client';
 
+import { hasActiveSearchFilters, SEARCH_PERIODS, SEARCH_SORTS } from '@jirum/domain/search';
 import {
   parseAsArrayOf,
   parseAsBoolean,
@@ -8,11 +9,13 @@ import {
   useQueryStates,
 } from 'nuqs';
 
-export const SEARCH_SORTS = ['recent', 'comments', 'relevance'] as const;
-export type SearchSort = (typeof SEARCH_SORTS)[number];
-
-export const SEARCH_PERIODS = ['all', '1d', '7d', '30d'] as const;
-export type SearchPeriod = (typeof SEARCH_PERIODS)[number];
+// 필터 후보·라벨·규칙은 앱과 같은 @jirum/domain/search 정본. 여기선 web 의 URL 상태(nuqs)만.
+export {
+  SEARCH_PERIODS,
+  SEARCH_SORTS,
+  type SearchPeriod,
+  type SearchSort,
+} from '@jirum/domain/search';
 
 /**
  * 검색 필터 상태. URL 쿼리스트링이 단일 소스 — 공유/뒤로가기에도 필터가 유지된다.
@@ -33,11 +36,7 @@ export const useSearchFilters = () => {
     { history: 'replace', shallow: true, scroll: false },
   );
 
-  const hasActiveFilters =
-    filters.categoryIds.length > 0 ||
-    filters.providerIds.length > 0 ||
-    filters.ended ||
-    filters.period !== 'all';
+  const hasActiveFilters = hasActiveSearchFilters(filters);
 
   const resetFilters = () =>
     setFilters({

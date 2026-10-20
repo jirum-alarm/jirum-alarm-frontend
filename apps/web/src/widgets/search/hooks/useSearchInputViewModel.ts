@@ -1,5 +1,6 @@
 'use client';
 
+import { RECENT_KEYWORDS_LIMIT } from '@jirum/domain/search';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -9,7 +10,6 @@ import useMyRouter, { type MyRouter } from '@/shared/hooks/useMyRouter';
 import { searchHref } from '../lib/search-href';
 
 const RECENT_KEYWORDS_KEY = 'gr-recent-keywords';
-const RECENT_KEYWORDS_LIMIT = 10;
 
 export const useSearchInputViewModel = () => {
   const searchParams = useSearchParams();

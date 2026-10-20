@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import {SEARCH_COPY} from '@jirum/domain/search';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useQuery} from '@tanstack/react-query';
@@ -66,7 +67,7 @@ export default function SearchNotFound({
         */}
         <AlarmIllustError />
         <Text className="pt-4 pb-2 text-2xl font-semibold text-gray-900">
-          검색 결과가 없어요
+          {SEARCH_COPY.noResult}
         </Text>
         <Text className="text-center text-gray-500">
           {'지금은 없지만, 올라오면 바로 알려드릴게요'}

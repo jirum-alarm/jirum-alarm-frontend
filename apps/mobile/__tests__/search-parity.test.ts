@@ -75,11 +75,7 @@ const webInputVm = web('widgets/search/hooks/useSearchInputViewModel.ts');
 const webInitial = web('widgets/search/ui/InitialResult.tsx');
 const webResult = web('widgets/search/ui/SearchResult.tsx');
 const webFilterBar = web('widgets/search/ui/SearchFilterBar.tsx');
-const webFilters = web('widgets/search/hooks/useSearchFilters.ts');
 const webListVm = web('widgets/search/hooks/useProductListViewModel.ts');
-const webAutocomplete = web(
-  'widgets/search/hooks/useSearchAutocompleteViewModel.ts',
-);
 const webRecent = web('widgets/search/ui/RecentKeywords.tsx');
 const webRecommend = web('widgets/search/ui/RecommendationKeywords.tsx');
 const webNotFound = web('widgets/search/ui/ProductNotFound.tsx');
@@ -95,33 +91,6 @@ const webCardTracking = fs.readFileSync(
   path.join(__dirname, '../../../packages/domain/src/card-tracking.ts'),
   'utf8',
 );
-
-/** `[...]` 안의 따옴표 문자열을 순서대로 뽑는다. */
-function stringsInArray(source: string, marker: string): string[] {
-  const start = source.indexOf(marker);
-  expect(start).toBeGreaterThan(-1);
-  const open = source.indexOf('[', start);
-  const close = source.indexOf(']', open);
-  return (source.slice(open, close).match(/'([^']*)'/g) ?? []).map(s =>
-    s.slice(1, -1),
-  );
-}
-
-/** `key: '값'` 쌍을 블록에서 순서대로 뽑는다. */
-function labelPairs(source: string, marker: string): [string, string][] {
-  const start = source.indexOf(marker);
-  expect(start).toBeGreaterThan(-1);
-  const open = source.indexOf('{', start);
-  const close = source.indexOf('};', open);
-  const block = source.slice(open, close);
-  return (block.match(/'?[\w-]+'?:\s*'[^']*'/g) ?? []).map(entry => {
-    const [rawKey, rawValue] = entry.split(/:\s*/);
-    return [rawKey.replace(/'/g, ''), rawValue.slice(1, -1)] as [
-      string,
-      string,
-    ];
-  });
-}
 
 describe('껍데기 교체 — 검색 본문이 더 이상 웹뷰가 아니다', () => {
   it('검색 루트에서 StackWebView 가 사라졌다', () => {
@@ -187,67 +156,58 @@ describe('web 과 같아야 하는 상수', () => {
     expect(recommendedUi).not.toContain('RECOMMENDED_KEYWORDS =');
   });
 
-  it('추천 검색어는 5개만 보여준다', () => {
-    expect(webRecommend).toContain('.slice(0, 5)');
-    expect(recommendedUi).toContain('RECOMMENDED_KEYWORD_COUNT = 5');
+  /**
+   * 필터 후보·라벨·기간 계산·크기·자동완성 길이·총량 캡·문구는 @jirum/domain/search 정본 하나를
+   * web·앱이 같이 import 한다(2026-10-20). 그래서 web 파일을 읽어 숫자를 대조하지 않고
+   * «앱이 정본을 쓰고 값을 다시 적지 않는가»만 본다. web 쪽은 packages/domain canon-consumers 가 본다.
+   */
+  it('검색 값·규칙을 정본(@jirum/domain/search)에서 가져온다', () => {
+    const fromCanon = (src: string, names: string[]) => {
+      for (const name of names) {
+        expect(src).toMatch(
+          new RegExp(
+            `(?:import|export)\\s*(?:type\\s*)?\\{[^}]*\\b${name}\\b[^}]*\\}\\s*from '@jirum/domain/search'`,
+          ),
+        );
+      }
+    };
+    fromCanon(filters, [
+      'SEARCH_SORTS',
+      'SEARCH_PERIODS',
+      'SORT_LABELS',
+      'PERIOD_LABELS',
+      'periodStartDate',
+    ]);
+    fromCanon(queries, ['SEARCH_PAGE_SIZE', 'SUGGESTION_LIMIT']);
+    fromCanon(recentLib, ['RECENT_KEYWORDS_LIMIT']);
+    fromCanon(suggestionsModel, ['isPrefixValid']);
+    fromCanon(results, ['ESTIMATED_TOTAL_CAP', 'SEARCH_COPY']);
+    fromCanon(recommendedUi, ['RECOMMENDED_KEYWORD_COUNT']);
+    fromCanon(header, ['SEARCH_COPY']);
+    fromCanon(notFound, ['SEARCH_COPY']);
+    // 값을 다시 적으면 정본과 갈리기 시작한다.
+    for (const src of [
+      filters,
+      queries,
+      recentLib,
+      suggestionsModel,
+      results,
+    ]) {
+      expect(code(src)).not.toMatch(
+        /(?:SEARCH_LIMIT|SUGGESTION_LIMIT|RECENT_KEYWORDS_LIMIT|MIN_PREFIX_LENGTH_\w+|ESTIMATED_TOTAL_CAP|RECOMMENDED_KEYWORD_COUNT) = \d/,
+      );
+      expect(code(src)).not.toContain("'1d': 24");
+    }
+    expect(header).toContain('placeholder={SEARCH_COPY.placeholder}');
   });
 
-  it('정렬 라벨이 같다', () => {
-    expect(labelPairs(filters, 'export const SORT_LABELS')).toEqual(
-      labelPairs(webFilterBar, 'const SORT_LABELS'),
+  it('기간은 지금부터 N시간 전(롤링) — 자정 절단이 아니다', () => {
+    const {periodStartDate} = require('@jirum/domain/search');
+    const now = Date.UTC(2026, 9, 20, 15, 30);
+    expect(periodStartDate('all', now)).toBeUndefined();
+    expect(periodStartDate('1d', now)).toBe(
+      new Date(now - 24 * 3600 * 1000).toISOString(),
     );
-  });
-
-  it('기간 라벨이 같다', () => {
-    expect(labelPairs(filters, 'export const PERIOD_LABELS')).toEqual(
-      labelPairs(webFilterBar, 'const PERIOD_LABELS'),
-    );
-  });
-
-  it('정렬·기간 후보값이 같다', () => {
-    expect(stringsInArray(filters, 'export const SEARCH_SORTS')).toEqual(
-      stringsInArray(webFilters, 'export const SEARCH_SORTS'),
-    );
-    expect(stringsInArray(filters, 'export const SEARCH_PERIODS')).toEqual(
-      stringsInArray(webFilters, 'export const SEARCH_PERIODS'),
-    );
-  });
-
-  it('기간 구간이 web PERIOD_HOURS 와 같은 값·같은 계산이다', () => {
-    expect(webListVm).toContain(
-      "const PERIOD_HOURS = { '1d': 24, '7d': 24 * 7, '30d': 24 * 30 }",
-    );
-    expect(filters).toContain("'1d': 24");
-    expect(filters).toContain("'7d': 24 * 7");
-    expect(filters).toContain("'30d': 24 * 30");
-    // 둘 다 지금부터 N시간 전(롤링). 자정 절단이 다시 들어오면 web 과 갈린다.
-    expect(webListVm).toContain('Date.now() - PERIOD_HOURS');
-    expect(filters).toContain('now - PERIOD_HOURS[period] * 60 * 60 * 1000');
-    expect(filters).not.toContain('setHours(0, 0, 0, 0)');
-  });
-
-  it('한 페이지 20개', () => {
-    expect(webListVm).toContain('const limit = 20');
-    expect(queries).toContain('SEARCH_LIMIT = 20');
-  });
-
-  it('최근 검색어 10개', () => {
-    expect(webInputVm).toContain('RECENT_KEYWORDS_LIMIT = 10');
-    expect(recentLib).toContain('RECENT_KEYWORDS_LIMIT = 10');
-  });
-
-  it('자동완성 최소 길이·개수가 같다', () => {
-    expect(webAutocomplete).toContain('MIN_PREFIX_LENGTH_KOREAN = 1');
-    expect(webAutocomplete).toContain('MIN_PREFIX_LENGTH_OTHER = 2');
-    expect(webAutocomplete).toContain('SUGGESTION_LIMIT = 10');
-    expect(suggestionsModel).toContain('MIN_PREFIX_LENGTH_KOREAN = 1');
-    expect(suggestionsModel).toContain('MIN_PREFIX_LENGTH_OTHER = 2');
-    expect(queries).toContain('SUGGESTION_LIMIT = 10');
-  });
-
-  it('총량 표기 캡이 같다(Meili 5000)', () => {
-    expect(webResult).toContain('estimatedTotal >= 5000');
-    expect(results).toContain('ESTIMATED_TOTAL_CAP = 5000');
   });
 
   it('노출·클릭 출처 문자열이 web 과 같다 — 백엔드 집계가 이 값으로 필터한다', () => {
@@ -256,22 +216,14 @@ describe('web 과 같아야 하는 상수', () => {
     expect(results).toContain('useRankingImpressionTracker(SEARCH_SOURCE)');
   });
 
-  it('빈 상태 문구가 web 과 같다', () => {
-    expect(webNotFound).toContain('검색 결과가 없어요');
-    expect(webNotFound).toContain('키워드를 등록하고 알림을 받아보세요');
-    expect(notFound).toContain('검색 결과가 없어요');
+  it('빈 상태 — 제목은 정본 문구, 앱은 일부러 다른 다음 동작', () => {
+    expect(notFound).toContain('{SEARCH_COPY.noResult}');
     // ★앱은 일부러 다르다 — 빈 키워드 화면으로 보내는 대신 검색어로 바로 알림을 건다
     // (KeywordAlertButton). 그래서 "등록하세요" 가 아니라 "알려드릴게요".
     expect(notFound).toContain('올라오면 바로 알려드릴게요');
     expect(notFound).toContain('<KeywordAlertButton');
     // 필터 때문에 0건인 경우는 문구가 다르다(풀 수 있는 필터가 있다).
-    expect(webResult).toContain('선택한 필터에 맞는 결과가 없어요.');
-    expect(results).toContain('선택한 필터에 맞는 결과가 없어요.');
-  });
-
-  it('입력창 placeholder 가 같다', () => {
-    expect(webInput).toContain('placeholder="핫딜 상품을 검색해주세요"');
-    expect(header).toContain('placeholder="핫딜 상품을 검색해주세요"');
+    expect(results).toContain('SEARCH_COPY.noFilteredResult');
   });
 });
 
@@ -504,7 +456,9 @@ describe('검색어 알림·종료 딜 구제 — web 과 같은 규칙', () => 
     );
     for (const source of [webEndedRescue, appEndedRescue]) {
       expect(source).toContain('진행 중인 딜은 없어요');
-      expect(source).toContain('ESTIMATED_TOTAL_CAP = 5000');
+      expect(source).toMatch(
+        /import \{\s*ESTIMATED_TOTAL_CAP\s*\} from '@jirum\/domain\/search'/,
+      );
       expect(source).toContain('search_ended_rescue_click');
     }
     // 누르면 '품절 포함'을 켠다. 필터가 하나라도 켜져 있으면 이 화면(SearchNotFound)에 오지 않는다.
