@@ -47,3 +47,9 @@ paths = [
 regexTarget = "line"
 regexes = ['''NEXT_PUBLIC_FIREBASE_''']  # 빌드 인자로 넘기는 Firebase 웹 키(브라우저로 나가는 공개 값)
 condition = "OR"
+
+# 안드로이드 에뮬레이터가 «호스트 PC»를 가리키는 고정 별칭(모든 에뮬레이터 공통) — 우리 내부망 주소가 아니다.
+[[allowlists]]
+description = "Android 에뮬레이터 호스트 별칭 10.0.2.2"
+regexTarget = "match"
+regexes = ['''^10\.0\.2\.2$''']

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 평문 HTTP 는 이 기기 자신(localhost)·에뮬레이터의 호스트(10.0.2.2)만 — 앱 화면 하네스 Android 판이 Release 앱을
+     녹화한 고정 데이터 서버에 붙이려는 것. 그 밖(운영 API·제휴 링크)은 예전처럼 HTTPS 만. iOS 는 NSAllowsLocalNetworking. -->
+<network-security-config>
+  <domain-config cleartextTrafficPermitted="true">
+    <domain includeSubdomains="false">localhost</domain>
+    <domain includeSubdomains="false">10.0.2.2</domain>
+  </domain-config>
+</network-security-config>

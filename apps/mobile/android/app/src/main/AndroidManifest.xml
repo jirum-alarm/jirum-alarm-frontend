@@ -15,7 +15,8 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:allowBackup="false"
     android:theme="@style/AppTheme"
-    android:supportsRtl="true">
+    android:supportsRtl="true"
+    android:networkSecurityConfig="@xml/network_security_config">
 
     <!-- OTA(expo-updates). iOS 는 Supporting/Expo.plist 가 같은 역할을 한다.
          ⚠️ 이 레포는 bare(android/ 커밋됨) — EAS 빌드에서 prebuild 도, config plugin 도

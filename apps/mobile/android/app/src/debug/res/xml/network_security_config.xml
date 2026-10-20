@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 디버그는 main 의 같은 이름 설정을 덮는다 — networkSecurityConfig 가 있으면 usesCleartextTraffic 이 무시돼,
+     실기기에서 LAN IP 로 Metro 에 붙는 개발 흐름이 막히지 않게 전부 허용(디버그 빌드만). -->
+<network-security-config>
+  <base-config cleartextTrafficPermitted="true" />
+</network-security-config>
