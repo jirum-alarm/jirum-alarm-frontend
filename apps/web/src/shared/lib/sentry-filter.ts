@@ -12,6 +12,11 @@ import type { ErrorEvent, Event } from '@sentry/nextjs';
 // 키별 상한(Custom Rate Limits)은 Business 요금제 전용이라 코드에서 줄인다(2026-10-17).
 export const SENTRY_ERROR_SAMPLE_RATE = 0.15;
 
+// 배포 환경 — 운영(deploy-web-prod)·스테이징(deploy-web-staging) 빌드만 NEXT_PUBLIC_SENTRY_ENVIRONMENT 를 넣는다.
+// 비어 있으면(로컬·CI 화면 하네스) 보내지 않는다. 전엔 environment 를 안 정해 모든 빌드가 production 으로 들어왔고,
+// 할당량이 초기화된 날 들어온 웹 에러 대부분이 CI 러너·로컬의 하네스 fixture 에러였다(2026-10-20).
+export const SENTRY_ENVIRONMENT = process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT;
+
 export const SENTRY_IGNORE_ERRORS: (string | RegExp)[] = [
   'PRODUCT_NOT_FOUND',
   /^aborted$/,

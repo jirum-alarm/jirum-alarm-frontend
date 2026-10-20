@@ -10,6 +10,7 @@ import {
   createBurstLimiter,
   createTransactionFilter,
   SENTRY_DENY_URLS,
+  SENTRY_ENVIRONMENT,
   SENTRY_ERROR_SAMPLE_RATE,
   SENTRY_IGNORE_ERRORS,
 } from './src/shared/lib/sentry-filter';
@@ -21,7 +22,8 @@ Sentry.init({
   dsn: 'https://fa4f9f87feed1eefd14d9c786019044c@o4506348721864704.ingest.us.sentry.io/4506919541669888',
 
   // development 환경에서는 센트리 비활성화
-  enabled: !isDevelopment,
+  enabled: !isDevelopment && !!SENTRY_ENVIRONMENT,
+  environment: SENTRY_ENVIRONMENT,
 
   // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
   // 1 이면 봇 포함 모든 요청을 트레이싱해 조직 span 할당량이 바닥났고(2026-10-08 /monitoring 429

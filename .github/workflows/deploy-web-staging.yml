@@ -44,6 +44,8 @@ jobs:
       NEXT_PUBLIC_ADSENSE_CLIENT_ID: ca-pub-3855723530036909
       NEXT_PUBLIC_ADSENSE_SLOT_PRODUCT_DETAIL: "9763036455"
       NEXT_PUBLIC_ADSENSE_SLOT_SEARCH_INFEED: "1939286674"
+      # Sentry environment — 비우면 Sentry 를 끈다(로컬·CI 하네스 소음 차단, apps/web/src/shared/lib/sentry-filter.ts).
+      NEXT_PUBLIC_SENTRY_ENVIRONMENT: staging
       
     steps:
       - name: Checkout code
@@ -81,6 +83,9 @@ jobs:
       - name: Build web
         env:
           NODE_ENV: ${{ vars.NODE_ENV }}
+          # 소스맵 업로드(withSentryConfig). 없으면 업로드를 조용히 건너뛰어 7/30 이후 운영 스택이 전부 압축 코드 줄 번호였다.
+          # 값은 앱과 같은 조직 토큰(EAS production env SENTRY_AUTH_TOKEN 사본, 2026-10-20).
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: pnpm turbo run build --filter=web...
 
       - name: Set up Docker Buildx
