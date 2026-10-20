@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
 import { getQueryClient } from '@/shared/lib/react-query/query-client';
@@ -46,7 +47,13 @@ const DynamicProductSection = async ({
     );
   }
 
-  const products = await fetchPromotionProducts(section);
+  // 섹션 하나의 API 오류가 홈 전체를 500(서버에러 화면)으로 만들었다(화면 하네스 empty·error 시나리오로 발견) —
+  // 그 섹션만 숨기고 기록한다. 탭 섹션의 prefetchQuery 는 원래 오류를 삼킨다.
+  const products = await fetchPromotionProducts(section).catch((error: unknown) => {
+    Sentry.captureException(error);
+    return null;
+  });
+  if (products === null) return null;
 
   // 게스트 추천 섹션은 개인화 결과가 없으면(빈 배열) 섹션 전체를 숨긴다.
   // (선호 없음/부스트 OFF 시 백엔드가 [] 반환 → 메인 핫딜과 중복 노출 방지)
