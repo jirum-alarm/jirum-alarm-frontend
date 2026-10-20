@@ -7,6 +7,30 @@
     "data": {
       "hotDealRankingProducts": [
         {
+          "id": "36133329",
+          "title": "박재서 명인 안동소주 22도 8병, 35도 8병",
+          "mallId": 8,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741731",
+          "isHot": true,
+          "isEnd": false,
+          "price": "29,800원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741731.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "306.58",
+            "36133329"
+          ],
+          "postedAt": "2026-10-20T11:27:00.000Z"
+        },
+        {
           "id": "36089133",
           "title": "7800X3D 302,469원",
           "mallId": 143,
@@ -20,37 +44,66 @@
           "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186459565.webp",
           "hotDealType": "SUPER_DEAL",
           "isYearLowest": false,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 11
+          },
           "provider": {
             "nameKr": "아카"
           },
           "searchAfter": [
-            "305.47",
+            "248.95",
             "36089133"
           ],
           "postedAt": "2026-10-19T23:19:37.000Z"
         },
         {
-          "id": "36103851",
-          "title": "레이저 Viper V3 Pro SE 유무선 게이밍 마우스",
+          "id": "36123488",
+          "title": "보쉬 유선해머드릴 easyimpact 600",
           "mallId": 48,
-          "url": "https://www.fmkorea.com/10465533857",
+          "url": "https://www.fmkorea.com/10466495752",
           "isHot": null,
           "isEnd": false,
-          "price": "109,000원",
+          "price": "22,900원",
           "providerId": 7,
-          "categoryId": 1,
+          "categoryId": 6,
           "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465533857.webp",
-          "hotDealType": "SUPER_DEAL",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10466495752.webp",
+          "hotDealType": null,
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "에펨코리아"
           },
           "searchAfter": [
-            "295.75",
-            "36103851"
+            "243.46",
+            "36123488"
           ],
-          "postedAt": "2026-10-20T05:21:00.000Z"
+          "postedAt": "2026-10-20T10:32:00.000Z"
+        },
+        {
+          "id": "36123501",
+          "title": "프로젝트엠 순면 반팔 티셔츠 3팩",
+          "mallId": 8,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741715",
+          "isHot": true,
+          "isEnd": false,
+          "price": "6,770원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "의류/잡화",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741715.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "225.93",
+            "36123501"
+          ],
+          "postedAt": "2026-10-20T10:41:00.000Z"
         },
         {
           "id": "36089062",
@@ -66,83 +119,42 @@
           "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206921816.webp",
           "hotDealType": "HOT_DEAL",
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "어미새"
           },
           "searchAfter": [
-            "277.61",
+            "227.61",
             "36089062"
           ],
           "postedAt": "2026-10-19T22:57:29.000Z"
         },
         {
-          "id": "36102914",
-          "title": "벤션 CCC 45W 20000mAh 보조배터리",
-          "mallId": 143,
-          "url": "https://eomisae.co.kr/rt/206968905",
-          "isHot": true,
+          "id": "36103851",
+          "title": "레이저 Viper V3 Pro SE 유무선 게이밍 마우스",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10465533857",
+          "isHot": null,
           "isEnd": false,
-          "price": "19,842원",
-          "providerId": 11,
-          "categoryId": 9,
-          "category": "기타해외",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206968905.webp",
-          "hotDealType": "HOT_DEAL",
+          "price": "109,000원",
+          "providerId": 7,
+          "categoryId": 1,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465533857.webp",
+          "hotDealType": "SUPER_DEAL",
           "isYearLowest": false,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 17
+          },
           "provider": {
-            "nameKr": "어미새"
+            "nameKr": "에펨코리아"
           },
           "searchAfter": [
-            "228.02",
-            "36102914"
+            "214",
+            "36103851"
           ],
-          "postedAt": "2026-10-20T04:18:08.000Z"
-        },
-        {
-          "id": "36103495",
-          "title": "크리넥스 3겹 데코앤소프트 와이드 33MX24롤 2팩 두루마리 화장지 28,900원",
-          "mallId": 15,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741583",
-          "isHot": true,
-          "isEnd": false,
-          "price": "28,900원",
-          "providerId": 1,
-          "categoryId": 2,
-          "category": "기타",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741583.webp",
-          "hotDealType": "HOT_DEAL",
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "224.7",
-            "36103495"
-          ],
-          "postedAt": "2026-10-20T05:02:00.000Z"
-        },
-        {
-          "id": "36036015",
-          "title": "뉴발란스 992 MADE IN USA",
-          "mallId": null,
-          "url": "https://eomisae.co.kr/os/206873143",
-          "isHot": true,
-          "isEnd": false,
-          "price": null,
-          "providerId": 11,
-          "categoryId": 4,
-          "category": "패션해외",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206873143.webp",
-          "hotDealType": "HOT_DEAL",
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "어미새"
-          },
-          "searchAfter": [
-            "141",
-            "36036015"
-          ],
-          "postedAt": "2026-10-19T11:56:18.000Z"
+          "postedAt": "2026-10-20T05:21:00.000Z"
         }
       ]
     }

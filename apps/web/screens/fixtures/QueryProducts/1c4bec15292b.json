@@ -1,0 +1,184 @@
+{
+  "variables": {
+    "limit": 6,
+    "orderBy": "COMMUNITY_RANKING",
+    "startDate": "2026-10-18T15:00:00.000Z",
+    "categoryId": 2,
+    "orderOption": "DESC",
+    "isEnd": false
+  },
+  "response": {
+    "data": {
+      "products": [
+        {
+          "id": "36116697",
+          "title": "두메산골 냉장 닭다리 북채 1kg+1kg 15,900원",
+          "mallId": 8,
+          "url": "https://www.fmkorea.com/10466376371",
+          "isHot": null,
+          "isEnd": false,
+          "price": "15,900원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10466376371.webp",
+          "mallName": "롯데온",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "180.19",
+            "36116697"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-20T10:01:00.000Z"
+        },
+        {
+          "id": "36100968",
+          "title": "미트포테이블 냉동 삼겹살 2kg",
+          "mallId": 8,
+          "url": "https://www.fmkorea.com/10465141386",
+          "isHot": true,
+          "isEnd": false,
+          "price": "16,700원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465141386.webp",
+          "mallName": "롯데온",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "147.79",
+            "36100968"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-20T02:44:00.000Z"
+        },
+        {
+          "id": "36073830",
+          "title": "널담 고단백 베이글 맛혼합 10개 8,480원",
+          "mallId": 4800,
+          "url": "https://eomisae.co.kr/rt/206876746",
+          "isHot": true,
+          "isEnd": false,
+          "price": "8,480원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206876746.webp",
+          "mallName": "토스",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "142.07",
+            "36073830"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-19T15:02:55.000Z"
+        },
+        {
+          "id": "36001407",
+          "title": "변기세정제 40개 6,770원",
+          "mallId": 4800,
+          "url": "https://eomisae.co.kr/rt/206783566",
+          "isHot": true,
+          "isEnd": false,
+          "price": "6,770원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206783566.webp",
+          "mallName": "토스",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "119.66",
+            "36001407"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-19T01:27:00.000Z"
+        },
+        {
+          "id": "36074424",
+          "title": "고오급 아이스크림 엑설런트 3개 + 끌레도르 아이스크림바 12개",
+          "mallId": 8,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993853",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 28,500 (KRW)",
+          "providerId": 5,
+          "categoryId": 2,
+          "category": "생활/식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993853.webp",
+          "mallName": "롯데온",
+          "hotDealType": null,
+          "isYearLowest": true,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "116.53",
+            "36074424"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-19T16:00:19.000Z"
+        },
+        {
+          "id": "36001930",
+          "title": "두메산골 냉장 닭다리살 순살 1kg+1kg",
+          "mallId": 8,
+          "url": "https://www.fmkorea.com/10461828271",
+          "isHot": null,
+          "isEnd": false,
+          "price": "20,730원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10461828271.webp",
+          "mallName": "롯데온",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "105.85",
+            "36001930"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-19T02:16:00.000Z"
+        }
+      ]
+    }
+  }
+}

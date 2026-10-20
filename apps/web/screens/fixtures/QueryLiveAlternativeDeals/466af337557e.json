@@ -24,6 +24,10 @@
             "mallName": "알리",
             "hotDealType": "SUPER_DEAL",
             "isYearLowest": false,
+            "priceSaving": {
+              "basis": "DANAWA",
+              "percent": 25
+            },
             "provider": {
               "nameKr": "퀘이사존"
             },

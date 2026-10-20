@@ -1,0 +1,555 @@
+{
+  "variables": {
+    "limit": 20,
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "categoryId": null,
+    "searchAfter": "1792509720000"
+  },
+  "response": {
+    "data": {
+      "products": [
+        {
+          "id": "36166317",
+          "title": "스파클 생수 무라벨 2L 30개 11,810원",
+          "mallId": 4800,
+          "url": "https://arca.live/b/hotdeal/186539879",
+          "isHot": false,
+          "isEnd": false,
+          "price": "11,810원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186539879.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792509690000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:21:30.000Z"
+        },
+        {
+          "id": "36166316",
+          "title": "누텔라 비스킷 304g 1개 6,550원",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186539867",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,550원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186539867.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792509684000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:21:24.000Z"
+        },
+        {
+          "id": "36166367",
+          "title": "진주햄 천하장사 큐 소시지 결합구성 1000g + 1500g 1개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518116",
+          "isHot": false,
+          "isEnd": false,
+          "price": "25,870원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518116.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792509660000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:21:00.000Z"
+        },
+        {
+          "id": "36166368",
+          "title": "을지다락 매콤크림 게살파스타 300g 4팩",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518118",
+          "isHot": false,
+          "isEnd": false,
+          "price": "19,410원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518118.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792509660000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:21:00.000Z"
+        },
+        {
+          "id": "36166369",
+          "title": "마운틴앤필드 다크초콜릿아몬드 20g 50개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518120",
+          "isHot": false,
+          "isEnd": false,
+          "price": "22,840원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518120.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792509660000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:21:00.000Z"
+        },
+        {
+          "id": "36166370",
+          "title": "국내산 활 흰다리새우 횟감가능 500g 1박스",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518123",
+          "isHot": false,
+          "isEnd": false,
+          "price": "11,420원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518123.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792509660000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:21:00.000Z"
+        },
+        {
+          "id": "36166371",
+          "title": "일감생활 밸런스 발가락 링 1쌍",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518125",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,920원",
+          "providerId": 107,
+          "categoryId": 3,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518125.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792509660000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:21:00.000Z"
+        },
+        {
+          "id": "36166372",
+          "title": "산과들에 순수가온 20g 100봉",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518128",
+          "isHot": false,
+          "isEnd": false,
+          "price": "62,170원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518128.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792509660000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:21:00.000Z"
+        },
+        {
+          "id": "36166373",
+          "title": "다농원 호두 아몬드 율무차 18g 40포",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518130",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,230원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518130.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792509660000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:21:00.000Z"
+        },
+        {
+          "id": "36166374",
+          "title": "종가 행복이온 포기김치 10kg",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518132",
+          "isHot": false,
+          "isEnd": false,
+          "price": "49,900원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518132.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792509660000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:21:00.000Z"
+        },
+        {
+          "id": "36166375",
+          "title": "보넬라 양면 피치스킨 베이직 차렵이불 3종 풀세트 딥그린 슈퍼싱글 SS 1세트",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518134",
+          "isHot": false,
+          "isEnd": false,
+          "price": "29,490원",
+          "providerId": 107,
+          "categoryId": 6,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518134.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792509660000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:21:00.000Z"
+        },
+        {
+          "id": "36166376",
+          "title": "틈새싹 밀대 8.4cm x 54.8~95.8cm 1개 + 걸레 2개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518137",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,020원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518137.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792509660000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:21:00.000Z"
+        },
+        {
+          "id": "36166315",
+          "title": "오뚜기 진라면 순한맛 120g 5개입 8개",
+          "mallId": 4800,
+          "url": "https://arca.live/b/hotdeal/186539748",
+          "isHot": false,
+          "isEnd": false,
+          "price": "19,900원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186539748.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792509605000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:20:05.000Z"
+        },
+        {
+          "id": "36166312",
+          "title": "피코크 떡갈비 450g 4개",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741782",
+          "isHot": false,
+          "isEnd": false,
+          "price": "20,050원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741782.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792509600000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:20:00.000Z"
+        },
+        {
+          "id": "36166313",
+          "title": "목우촌 주부9단 살코기햄 1kg x 2개 15,120원",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741783",
+          "isHot": false,
+          "isEnd": false,
+          "price": "15,120원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": null,
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792509600000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:20:00.000Z"
+        },
+        {
+          "id": "36166359",
+          "title": "하림펫푸드 더리얼 강아지 그레인프리 오븐베이크드 어덜트 연어 1.6kg 2개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518107",
+          "isHot": false,
+          "isEnd": false,
+          "price": "53,700원",
+          "providerId": 107,
+          "categoryId": 12,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518107.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792509600000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:20:00.000Z"
+        },
+        {
+          "id": "36166361",
+          "title": "딸깍 1초 옷수선 미니 스티치건 ST01 바이올렛 화이트 2개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518109",
+          "isHot": false,
+          "isEnd": false,
+          "price": "12,300원",
+          "providerId": 107,
+          "categoryId": 11,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518109.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792509600000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:20:00.000Z"
+        },
+        {
+          "id": "36166362",
+          "title": "허블리 사이드 핀턱 와이드 밴딩 팬츠 블랙 L 1개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518110",
+          "isHot": false,
+          "isEnd": false,
+          "price": "13,446원",
+          "providerId": 107,
+          "categoryId": 4,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518110.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792509600000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:20:00.000Z"
+        },
+        {
+          "id": "36166363",
+          "title": "맘스케이크 우리밀 카스테라 오리지널 30g 30개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518111",
+          "isHot": false,
+          "isEnd": false,
+          "price": "18,400원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518111.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792509600000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:20:00.000Z"
+        },
+        {
+          "id": "36166364",
+          "title": "육브랜드 호주 소갈비 찜 탕갈비용 1kg 2개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518113",
+          "isHot": false,
+          "isEnd": false,
+          "price": "37,210원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518113.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792509600000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:20:00.000Z"
+        }
+      ]
+    }
+  }
+}

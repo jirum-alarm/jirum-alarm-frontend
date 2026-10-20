@@ -1,0 +1,850 @@
+{
+  "variables": {
+    "limit": 20,
+    "keyword": "만원이하",
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "searchAfter": "1792506735000"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36160260",
+          "title": "책전시대 소형 블랙 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2591942771",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,350원",
+          "providerId": 21,
+          "categoryId": 6,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2591942771.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "delivery": "배송비 3,000원",
+              "salePrice": 5350,
+              "lastSeenAt": "2026-10-20T14:32:11.292Z",
+              "sellerName": "투웨이브",
+              "deliveryFee": 3000,
+              "discountRate": 21,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 6000,
+              "detailCheckedAt": "2026-10-20T14:32:11.292Z"
+            }
+          },
+          "searchAfter": [
+            "1792506731000"
+          ],
+          "postedAt": "2026-10-20T14:32:11.000Z"
+        },
+        {
+          "id": "36149601",
+          "title": "ECHOBELLE 철제 원형 화분받침대 화이트 1개 7,560원",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/196790847",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,560원",
+          "providerId": 21,
+          "categoryId": 6,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/196790847.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "delivery": "배송비 4,000원",
+              "salePrice": 7560,
+              "lastSeenAt": "2026-10-20T14:32:09.958Z",
+              "sellerName": "블루앤샵(Blue & shop)",
+              "deliveryFee": 4000,
+              "discountRate": 76,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 18900,
+              "detailCheckedAt": "2026-10-20T14:32:09.958Z",
+              "freeShippingThreshold": "50,000원 이상 무료배송"
+            }
+          },
+          "searchAfter": [
+            "1792506730000"
+          ],
+          "postedAt": "2026-10-20T14:32:10.000Z"
+        },
+        {
+          "id": "36163728",
+          "title": "하이트그린 식물종합영양제 36ml 10개 9,650원",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2658498881",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,650원",
+          "providerId": 21,
+          "categoryId": 11,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2658498881.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/84b19a2ed82c8b060e62777d170bcb39811d8a13.webp"
+              ],
+              "delivery": "배송비 2,750원",
+              "salePrice": 9650,
+              "lastSeenAt": "2026-10-20T14:32:10.462Z",
+              "sellerName": "주식회사젤보",
+              "deliveryFee": 2750,
+              "discountRate": 0,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 9650
+            }
+          },
+          "searchAfter": [
+            "1792506730000"
+          ],
+          "postedAt": "2026-10-20T14:32:10.000Z"
+        },
+        {
+          "id": "36152646",
+          "title": "농기구 대왕자루 120cm 1개 9,900원",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/685052071",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,900원",
+          "providerId": 21,
+          "categoryId": 7,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/685052071.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/19596902ccd6444767e14c47eda8311b9b7d64a4.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/25c875628e3db03b8c5beaa490c3b67651488478.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/4db7308b0d579a84ea0a45bf9003431759b570f9.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/01ad964612ef1c7ed531d3f241a0f12d8a16aa27.webp"
+              ],
+              "delivery": "배송비 3,000원",
+              "salePrice": 9900,
+              "lastSeenAt": "2026-10-20T14:32:08.341Z",
+              "sellerName": "와이에스티(YST)",
+              "deliveryFee": 3000,
+              "discountRate": 22,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 11900
+            }
+          },
+          "searchAfter": [
+            "1792506728000"
+          ],
+          "postedAt": "2026-10-20T14:32:08.000Z"
+        },
+        {
+          "id": "36150722",
+          "title": "영채나물 씨앗 20g 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/302675499",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,500원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/302675499.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/db1c54326ffd407df35c4951a0557a83dec5d341.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/8e31eb5e49006cddfd7757b7796ddf23d4f0d797.webp"
+              ],
+              "rating": 5,
+              "delivery": "배송비 2,500원",
+              "salePrice": 6500,
+              "lastSeenAt": "2026-10-20T14:32:07.426Z",
+              "sellerName": "율이네씨앗",
+              "deliveryFee": 2500,
+              "reviewCount": 1,
+              "discountRate": 20,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 7500,
+              "freeShippingThreshold": "30,000원 이상 무료배송"
+            }
+          },
+          "searchAfter": [
+            "1792506727000"
+          ],
+          "postedAt": "2026-10-20T14:32:07.000Z"
+        },
+        {
+          "id": "36146596",
+          "title": "텃밭 베란다 정원용 모종 케일 6개 9,980원",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/122862827",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,980원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/122862827.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "delivery": "무료배송",
+              "salePrice": 9980,
+              "lastSeenAt": "2026-10-20T14:32:06.239Z",
+              "sellerName": "비그린몰",
+              "deliveryFee": 0,
+              "discountRate": 26,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 13500,
+              "detailCheckedAt": "2026-10-20T14:32:06.239Z"
+            }
+          },
+          "searchAfter": [
+            "1792506726000"
+          ],
+          "postedAt": "2026-10-20T14:32:06.000Z"
+        },
+        {
+          "id": "36155338",
+          "title": "아람종묘 청보리 씨앗 20g 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/1452905353",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,300원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1452905353.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4,
+              "delivery": "배송비 2,400원",
+              "salePrice": 5300,
+              "lastSeenAt": "2026-10-20T14:32:06.419Z",
+              "sellerName": "주식회사 산들마켓",
+              "deliveryFee": 2400,
+              "reviewCount": 1,
+              "discountRate": 42,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 7400,
+              "detailCheckedAt": "2026-10-20T14:32:06.419Z",
+              "freeShippingThreshold": "30,000원 이상 무료배송"
+            }
+          },
+          "searchAfter": [
+            "1792506726000"
+          ],
+          "postedAt": "2026-10-20T14:32:06.000Z"
+        },
+        {
+          "id": "36163690",
+          "title": "상추 모종 세트 5종세트 10개 9,000원",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2657970443",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,000원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2657970443.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/a105535db635dfc7c6ef38e96f59439969d553d8.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/12805b14102d8c7f683b9d1b56fbf5ce561b80bf.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/7f0179f6525c50fddc1547a4fa2b9b12da655ed9.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/b8718d024a7e7ee8b57351c6a0ccf080ec575d8c.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/0b3265377067393293a6523c5e851382990728bf.webp"
+              ],
+              "delivery": "무료배송",
+              "salePrice": 9000,
+              "lastSeenAt": "2026-10-20T14:32:06.070Z",
+              "sellerName": "호호육묘장",
+              "deliveryFee": 0,
+              "discountRate": 25,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 12000
+            }
+          },
+          "searchAfter": [
+            "1792506726000"
+          ],
+          "postedAt": "2026-10-20T14:32:06.000Z"
+        },
+        {
+          "id": "36159868",
+          "title": "멜라니 인도 고무나무 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2556681965",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,200원",
+          "providerId": 21,
+          "categoryId": 1,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2556681965.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "delivery": "배송비 3,500원",
+              "salePrice": 6200,
+              "lastSeenAt": "2026-10-20T14:32:02.560Z",
+              "sellerName": "한국화훼원예",
+              "deliveryFee": 3500,
+              "discountRate": 55,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 9500,
+              "detailCheckedAt": "2026-10-20T14:32:02.560Z",
+              "freeShippingThreshold": "100,000원 이상 무료배송"
+            }
+          },
+          "searchAfter": [
+            "1792506723000"
+          ],
+          "postedAt": "2026-10-20T14:32:03.000Z"
+        },
+        {
+          "id": "36161037",
+          "title": "납골당 미니 뜨개 조화 꽃다발 아이보리 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2626223529",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,900원",
+          "providerId": 21,
+          "categoryId": 11,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2626223529.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/68e1e54e4506867d2d6d5da0ea93ef352f5a13d4.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/2cf87cf48688bc84fed802d03dd87c26fb2806ca.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/ab87699e42869bbe377ff02d09d1a4eec49e0f38.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/50bb0b0129a66bc0fd1928076721d566619495b6.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/2732005975882ec5c15e2d321e4568d482a29dd3.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/3c2a23e81ccea3e76c12d16aa671e3dc6ee69a93.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/fd905a9b6737f019705ebc45a5d71dcad5ad7834.webp"
+              ],
+              "delivery": "무료배송",
+              "salePrice": 7900,
+              "lastSeenAt": "2026-10-20T14:32:00.197Z",
+              "sellerName": "(주) 더아름드리",
+              "deliveryFee": 0,
+              "discountRate": 1,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 8000
+            }
+          },
+          "searchAfter": [
+            "1792506720000"
+          ],
+          "postedAt": "2026-10-20T14:32:00.000Z"
+        },
+        {
+          "id": "36145136",
+          "title": "비누장미 미니꽃다발 한송이 핑크장미 1개 4,800원",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/85862467",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,800원",
+          "providerId": 21,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/85862467.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4.5,
+              "delivery": "배송비 3,000원",
+              "salePrice": 4800,
+              "lastSeenAt": "2026-10-20T14:31:59.058Z",
+              "sellerName": "잇쉬",
+              "deliveryFee": 3000,
+              "reviewCount": 2,
+              "discountRate": 28,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 5500,
+              "detailCheckedAt": "2026-10-20T14:31:59.058Z"
+            }
+          },
+          "searchAfter": [
+            "1792506719000"
+          ],
+          "postedAt": "2026-10-20T14:31:59.000Z"
+        },
+        {
+          "id": "36158213",
+          "title": "체인 쇼트너 길이조절 키링 고리 골드 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2339168229",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,300원",
+          "providerId": 21,
+          "categoryId": 11,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2339168229.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "delivery": "배송비 3,000원",
+              "salePrice": 3300,
+              "lastSeenAt": "2026-10-20T14:31:58.597Z",
+              "sellerName": "물결샵",
+              "deliveryFee": 3000,
+              "discountRate": 25,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 3400,
+              "detailCheckedAt": "2026-10-20T14:31:58.597Z"
+            }
+          },
+          "searchAfter": [
+            "1792506719000"
+          ],
+          "postedAt": "2026-10-20T14:31:59.000Z"
+        },
+        {
+          "id": "36160733",
+          "title": "에어스캠핑 고양이 자수 와펜 14 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2618380771",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,700원",
+          "providerId": 21,
+          "categoryId": 4,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2618380771.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "delivery": "배송비 3,000원",
+              "salePrice": 4700,
+              "lastSeenAt": "2026-10-20T14:31:58.829Z",
+              "sellerName": "칠전",
+              "deliveryFee": 3000,
+              "discountRate": 22,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 5200,
+              "detailCheckedAt": "2026-10-20T14:31:58.829Z"
+            }
+          },
+          "searchAfter": [
+            "1792506719000"
+          ],
+          "postedAt": "2026-10-20T14:31:59.000Z"
+        },
+        {
+          "id": "36150134",
+          "title": "핸드폰 키링 스트랩 메탈 연결고리 러브 실버 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/250669317",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,600원",
+          "providerId": 21,
+          "categoryId": 4,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/250669317.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "delivery": "배송비 3,000원",
+              "salePrice": 3600,
+              "lastSeenAt": "2026-10-20T14:31:58.414Z",
+              "sellerName": "잇쉬",
+              "deliveryFee": 3000,
+              "discountRate": 50,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 4200,
+              "detailCheckedAt": "2026-10-20T14:31:58.414Z"
+            }
+          },
+          "searchAfter": [
+            "1792506718000"
+          ],
+          "postedAt": "2026-10-20T14:31:58.000Z"
+        },
+        {
+          "id": "36150536",
+          "title": "반지 사이즈 조절 링밴드 원형 얇은 1P",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/282034377",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,350원",
+          "providerId": 21,
+          "categoryId": 4,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/282034377.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4.3,
+              "delivery": "배송비 3,000원",
+              "salePrice": 3350,
+              "lastSeenAt": "2026-10-20T14:31:58.247Z",
+              "sellerName": "잇쉬",
+              "deliveryFee": 3000,
+              "reviewCount": 3,
+              "discountRate": 50,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 3700,
+              "detailCheckedAt": "2026-10-20T14:31:58.247Z"
+            }
+          },
+          "searchAfter": [
+            "1792506718000"
+          ],
+          "postedAt": "2026-10-20T14:31:58.000Z"
+        },
+        {
+          "id": "36160748",
+          "title": "다니 4골 고무줄 흰색 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2619568653",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,400원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2619568653.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "delivery": "배송비 3,000원",
+              "salePrice": 5400,
+              "lastSeenAt": "2026-10-20T14:31:57.604Z",
+              "sellerName": "다니추천샵",
+              "deliveryFee": 3000,
+              "discountRate": 20,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 6000,
+              "detailCheckedAt": "2026-10-20T14:31:57.604Z",
+              "freeShippingThreshold": "99,000원 이상 무료배송"
+            }
+          },
+          "searchAfter": [
+            "1792506718000"
+          ],
+          "postedAt": "2026-10-20T14:31:58.000Z"
+        },
+        {
+          "id": "36162265",
+          "title": "바지 밑단 줄이기 클립 실버 원형 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2654068333",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,690원",
+          "providerId": 21,
+          "categoryId": 11,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2654068333.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4,
+              "delivery": "배송비 3,000원",
+              "salePrice": 3690,
+              "lastSeenAt": "2026-10-20T14:31:57.810Z",
+              "sellerName": "잇쉬",
+              "deliveryFee": 3000,
+              "reviewCount": 2,
+              "discountRate": 46,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 4300,
+              "detailCheckedAt": "2026-10-20T14:31:57.810Z"
+            }
+          },
+          "searchAfter": [
+            "1792506718000"
+          ],
+          "postedAt": "2026-10-20T14:31:58.000Z"
+        },
+        {
+          "id": "36162266",
+          "title": "바지 밑단 줄이기 클립 건메탈 하트형 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2654068339",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,690원",
+          "providerId": 21,
+          "categoryId": 4,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2654068339.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 1,
+              "delivery": "배송비 3,000원",
+              "salePrice": 3690,
+              "lastSeenAt": "2026-10-20T14:31:57.386Z",
+              "sellerName": "잇쉬",
+              "deliveryFee": 3000,
+              "reviewCount": 1,
+              "discountRate": 46,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 4300,
+              "detailCheckedAt": "2026-10-20T14:31:57.385Z"
+            }
+          },
+          "searchAfter": [
+            "1792506717000"
+          ],
+          "postedAt": "2026-10-20T14:31:57.000Z"
+        },
+        {
+          "id": "36146922",
+          "title": "오키도키 밀키코튼실 블루 1개 4,500원",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/130899277",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,500원",
+          "providerId": 21,
+          "categoryId": 11,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/130899277.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/9e0e5a8dfeb1bca70bf788fa5fe7439d72b83375.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/b5bee02251508605794242f30ffd5a89d4aa9014.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/7ec2607a83d8c31692a555f62f66bf5fc64641ed.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/46afe0b9a6fe4d8442581c53ab898109831e3d7b.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/8f927e4e740d717dafaca29cf1d7dc8e91b14e5d.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/e16b50b4c810f4bef2d7a1baa36bb588437e64dd.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/13ccfc110b1dc01b30d5500823b32aaed3974790.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/a335df5da0c8ffafb8c4203bf805bab845085c08.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/1abd4cddba9984597542229f999525a2bf7ad60b.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/64fda94d86d8a4282e19a33a835933c00c30f9bc.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/b736da014406f93fc513d07af67c4330224178cb.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/283500fc790363f72380dcf6d093c68036b33803.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/c782831c322e0ba65cff4dbb62079e3fbce44c86.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/d6360257c4c776b339596d457c6e5359bfca0ac1.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/3f1b36cf15af19fde74e216df84f4c5611a5b752.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/dde39658c9ac79d5961a6c8aa891d83bbb9d44a8.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/4b9874d0e5cb4744d137f87fa235d0fc165657ab.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/40abb510a3fd0aa3a976c8f93c713c994f4fa22d.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/c875275c085e09eb6b299669ec5270c3bcd1caf5.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/ba276924030624808518dc20871d430ac05018df.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/a2a5d95adc3b7141dbf7cb9dfceb290166138658.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/307480f2d9866b4b3b331d47fe753e351fc789ea.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/981c9e26611c7a75295d6751d657e0c450fc6eaa.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/51605b60cd07582a8665d9c71cd6391094ec672a.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/b36a153cd8d65838d4f964fd42ef484b9379746d.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/1c2619c3825b6bc16b0c308498fc1fcc0fbb3afb.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/6e5dcf7e1fea7f382519d807c72b2f64532a9940.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/ba4d71defc2335a46e48c5d4f699b9650f6938dc.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/11bef46e63c6e5c9db4026a06383573235113398.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/0c051b5213e28fed3e8ba75603e2391663c89709.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/0eb746797d5a703d8571de63cbb7635b0340d8bb.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/983d68e74d5e23aaae9d012871f6789db6710d1a.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/7f62407f5fd9a0676af409236125536c0989614a.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/af49f0ffbcd14d377293c54e70c8d23bfa92edce.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/a6c225bb70f1a5171c15baca7e373fc207b16b02.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/5030089bbad9c9033e687bc6dcb1931f3c4fb5b6.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/8dd1f3f07f30cbc44282b67d7fb4b57f3024d120.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/3c78da1500e46aefbf47252099a5ac675e7940da.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/9d86ea47eb85ba67a580e95f4d435af87f89e76b.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/0e3392f22d5c4c26b2b8b0a0fecac24fc7cdde6a.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/ac1073161b858055b71736c6d9d2ee0a1e2aa2e4.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/932c722029a090657d90e16a446fc53c7291d0c5.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/7f1d57a15611db116ac6dd3790d434268ecea346.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/83b555f358995038ce6836a0b8f14f9dbb71f646.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/2ba2f7c5eda84cc380598efff19fbcf9568874bb.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/c3cc13dd215b6339ea199beac343359f24c2e604.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/e97a3db9acf8812845e46f17560ba14dddc22ed2.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/90cdc74cc1dca70e9e4cc5f43c7a484de418afce.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/120618e7480283e1785c5c03ab243f3683852993.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/c0c55ec0241607d00bcd202c63d97de3e103b7a7.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/035b7bddd36ba07453a36a290ca39f21d44f301a.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/2a820d64c285f79dc9d54474892b3f7b655cb8b2.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/91b3069d95da17e6d14c9df074247b029982789b.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/9ec54e1f3c40053cd96bfdd3a15cab5e2496c3a1.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/ffd4b2df77a268524d5e6b3fb28a83e8aa7ae659.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/0985cc8bd38ca55c77d2e690aad3ef98357b0576.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/70432e98fc4bc4195bd1bb71819976e999c5ef77.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/c47eed8660a2c9139a7c9906dc09571463f08b89.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/033da6d4b30cd9724bc31245cba153e9d2fa5281.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/21a42679fa1b61d0bb1c020e114fe1cfaea1da0c.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/d6d213ba00406dfbe6cd92eb8ccdc2daa3cf13ff.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/82a793740ca9d9f2ca22b7def67433d7b91ae68e.webp"
+              ],
+              "delivery": "배송비 3,000원",
+              "salePrice": 4500,
+              "lastSeenAt": "2026-10-20T14:31:56.022Z",
+              "sellerName": "오키도키",
+              "deliveryFee": 3000,
+              "discountRate": 40,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 5500,
+              "freeShippingThreshold": "30,000원 이상 무료배송"
+            }
+          },
+          "searchAfter": [
+            "1792506716000"
+          ],
+          "postedAt": "2026-10-20T14:31:56.000Z"
+        },
+        {
+          "id": "36164627",
+          "title": "대한 반짇고리 풀세트 핑크 1세트",
+          "mallId": null,
+          "url": "https://shopping.toss.im/c/2678293565",
+          "isHot": false,
+          "isEnd": false,
+          "price": "1,090원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2678293565.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/3f87e57e893cdad496865b4acbac12eb5be6e1eb.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/258820199fd901ca1181ccd2a61f42c768a9ee9e.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/90cf2cd9b24c0f2b1b23166130c203b9a3d68334.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/04bbe90336796478cf0e757c3d6b8add86473f28.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/8ec745ca0efc7cb10d15eee43a730dacaf1340aa.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/48cdd4be7feb9033c32bae47315361a06f95be0b.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/6f86c01b19bbecd6686f64868be59954cb70405a.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/0ee194b4e8184116235b00bf6ecf71d262c99c6d.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/608c22384030ff1bb7a633f9ca1d7d880313434c.webp"
+              ],
+              "delivery": "무료배송",
+              "salePrice": 1090,
+              "lastSeenAt": "2026-10-20T14:31:56.404Z",
+              "sellerName": "주식회사대한몰",
+              "deliveryFee": 0,
+              "discountRate": 93,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 15900
+            }
+          },
+          "searchAfter": [
+            "1792506716000"
+          ],
+          "postedAt": "2026-10-20T14:31:56.000Z"
+        }
+      ]
+    }
+  }
+}

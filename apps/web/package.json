@@ -17,7 +17,7 @@
     "analyze": "ANALYZE=true next build --webpack",
     "knip": "knip",
     "screens": "playwright test -c screens/playwright.config.ts",
-    "screens:record": "SCREENS_MODE=record playwright test -c screens/playwright.config.ts --project=mobile-light --project=desktop-light"
+    "screens:record": "SCREENS_MODE=record playwright test -c screens/playwright.config.ts --project=mobile-light --project=desktop-light && for d in 1 2 3; do SCREENS_MODE=record SCREENS_RECORD_APPEND=1 SCREENS_PIN_DAYS=$d playwright test -c screens/playwright.config.ts --project=mobile-light --project=desktop-light -g community || exit 1; done"
   },
   "dependencies": {
     "@jirum/design-system": "workspace:*",

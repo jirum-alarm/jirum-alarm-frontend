@@ -7,6 +7,30 @@
     "data": {
       "hotDealRankingProducts": [
         {
+          "id": "36133329",
+          "title": "박재서 명인 안동소주 22도 8병, 35도 8병",
+          "mallId": 8,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741731",
+          "isHot": true,
+          "isEnd": false,
+          "price": "29,800원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741731.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "306.58",
+            "36133329"
+          ],
+          "postedAt": "2026-10-20T11:27:00.000Z"
+        },
+        {
           "id": "36089133",
           "title": "7800X3D 302,469원",
           "mallId": 143,
@@ -20,37 +44,66 @@
           "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186459565.webp",
           "hotDealType": "SUPER_DEAL",
           "isYearLowest": false,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 11
+          },
           "provider": {
             "nameKr": "아카"
           },
           "searchAfter": [
-            "305.47",
+            "248.95",
             "36089133"
           ],
           "postedAt": "2026-10-19T23:19:37.000Z"
         },
         {
-          "id": "36103851",
-          "title": "레이저 Viper V3 Pro SE 유무선 게이밍 마우스",
+          "id": "36123488",
+          "title": "보쉬 유선해머드릴 easyimpact 600",
           "mallId": 48,
-          "url": "https://www.fmkorea.com/10465533857",
+          "url": "https://www.fmkorea.com/10466495752",
           "isHot": null,
           "isEnd": false,
-          "price": "109,000원",
+          "price": "22,900원",
           "providerId": 7,
-          "categoryId": 1,
+          "categoryId": 6,
           "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465533857.webp",
-          "hotDealType": "SUPER_DEAL",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10466495752.webp",
+          "hotDealType": null,
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "에펨코리아"
           },
           "searchAfter": [
-            "295.75",
-            "36103851"
+            "243.46",
+            "36123488"
           ],
-          "postedAt": "2026-10-20T05:21:00.000Z"
+          "postedAt": "2026-10-20T10:32:00.000Z"
+        },
+        {
+          "id": "36123501",
+          "title": "프로젝트엠 순면 반팔 티셔츠 3팩",
+          "mallId": 8,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741715",
+          "isHot": true,
+          "isEnd": false,
+          "price": "6,770원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "의류/잡화",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741715.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "225.93",
+            "36123501"
+          ],
+          "postedAt": "2026-10-20T10:41:00.000Z"
         },
         {
           "id": "36089062",
@@ -66,14 +119,42 @@
           "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206921816.webp",
           "hotDealType": "HOT_DEAL",
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "어미새"
           },
           "searchAfter": [
-            "277.61",
+            "227.61",
             "36089062"
           ],
           "postedAt": "2026-10-19T22:57:29.000Z"
+        },
+        {
+          "id": "36103851",
+          "title": "레이저 Viper V3 Pro SE 유무선 게이밍 마우스",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10465533857",
+          "isHot": null,
+          "isEnd": false,
+          "price": "109,000원",
+          "providerId": 7,
+          "categoryId": 1,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465533857.webp",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 17
+          },
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "214",
+            "36103851"
+          ],
+          "postedAt": "2026-10-20T05:21:00.000Z"
         },
         {
           "id": "36102914",
@@ -89,37 +170,15 @@
           "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206968905.webp",
           "hotDealType": "HOT_DEAL",
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "어미새"
           },
           "searchAfter": [
-            "228.02",
+            "180.35",
             "36102914"
           ],
           "postedAt": "2026-10-20T04:18:08.000Z"
-        },
-        {
-          "id": "36103495",
-          "title": "크리넥스 3겹 데코앤소프트 와이드 33MX24롤 2팩 두루마리 화장지 28,900원",
-          "mallId": 15,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741583",
-          "isHot": true,
-          "isEnd": false,
-          "price": "28,900원",
-          "providerId": 1,
-          "categoryId": 2,
-          "category": "기타",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741583.webp",
-          "hotDealType": "HOT_DEAL",
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "224.7",
-            "36103495"
-          ],
-          "postedAt": "2026-10-20T05:02:00.000Z"
         },
         {
           "id": "36036015",
@@ -135,44 +194,46 @@
           "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206873143.webp",
           "hotDealType": "HOT_DEAL",
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "어미새"
           },
           "searchAfter": [
-            "141",
+            "114.32",
             "36036015"
           ],
           "postedAt": "2026-10-19T11:56:18.000Z"
         },
         {
-          "id": "36103547",
-          "title": "젠하이저 엑센텀 99,000원",
+          "id": "36114102",
+          "title": "습뜨009 청판 18.5만",
           "mallId": 48,
-          "url": "https://www.fmkorea.com/10465505309",
-          "isHot": null,
+          "url": "https://eomisae.co.kr/os/206989340",
+          "isHot": true,
           "isEnd": false,
-          "price": "99,000원",
-          "providerId": 7,
-          "categoryId": 9,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465505309.webp",
-          "hotDealType": null,
+          "price": null,
+          "providerId": 11,
+          "categoryId": 4,
+          "category": "패션국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206989340.webp",
+          "hotDealType": "HOT_DEAL",
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
-            "nameKr": "에펨코리아"
+            "nameKr": "어미새"
           },
           "searchAfter": [
-            "212.97",
-            "36103547"
+            "185.51",
+            "36114102"
           ],
-          "postedAt": "2026-10-20T05:09:00.000Z"
+          "postedAt": "2026-10-20T06:43:54.000Z"
         },
         {
           "id": "36100947",
           "title": "LG 32GS75Q QHD 울트라기어 게이밍모니터 381,040원",
           "mallId": 48,
           "url": "https://arca.live/b/hotdeal/186469796",
-          "isHot": false,
+          "isHot": true,
           "isEnd": false,
           "price": "381,040원",
           "providerId": 12,
@@ -181,106 +242,18 @@
           "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186469796.webp",
           "hotDealType": "SUPER_DEAL",
           "isYearLowest": false,
+          "priceSaving": {
+            "basis": "DANAWA",
+            "percent": 19
+          },
           "provider": {
             "nameKr": "아카"
           },
           "searchAfter": [
-            "222.44",
+            "190.35",
             "36100947"
           ],
           "postedAt": "2026-10-20T02:38:09.000Z"
-        },
-        {
-          "id": "36025873",
-          "title": "자바나스 익스트림 오버핏 스웨트셔츠 16,060원",
-          "mallId": 8,
-          "url": "https://www.fmkorea.com/10463463659",
-          "isHot": true,
-          "isEnd": false,
-          "price": "16,060원",
-          "providerId": 7,
-          "categoryId": 4,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10463463659.webp",
-          "hotDealType": "HOT_DEAL",
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "에펨코리아"
-          },
-          "searchAfter": [
-            "191.53",
-            "36025873"
-          ],
-          "postedAt": "2026-10-19T11:38:00.000Z"
-        },
-        {
-          "id": "36001938",
-          "title": "성경김 재래/올리브녹차 식탁김 48봉 11,416원",
-          "mallId": 65,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741216",
-          "isHot": true,
-          "isEnd": false,
-          "price": "11,416원",
-          "providerId": 1,
-          "categoryId": 2,
-          "category": "식품/건강",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741216.webp",
-          "hotDealType": "HOT_DEAL",
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "177.59",
-            "36001938"
-          ],
-          "postedAt": "2026-10-19T02:19:00.000Z"
-        },
-        {
-          "id": "36103200",
-          "title": "베베숲 아기물티슈 시그니처 위드블루 70매 캡 10팩",
-          "mallId": 65,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741576",
-          "isHot": true,
-          "isEnd": false,
-          "price": "10,912원",
-          "providerId": 1,
-          "categoryId": 10,
-          "category": "기타",
-          "thumbnail": null,
-          "hotDealType": "SUPER_DEAL",
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "145.17",
-            "36103200"
-          ],
-          "postedAt": "2026-10-20T04:37:00.000Z"
-        },
-        {
-          "id": "36073830",
-          "title": "널담 고단백 베이글 맛혼합 10개 8,480원",
-          "mallId": 4800,
-          "url": "https://eomisae.co.kr/rt/206876746",
-          "isHot": true,
-          "isEnd": false,
-          "price": "8,480원",
-          "providerId": 11,
-          "categoryId": 2,
-          "category": "기타국내",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206876746.webp",
-          "hotDealType": "HOT_DEAL",
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "어미새"
-          },
-          "searchAfter": [
-            "176.54",
-            "36073830"
-          ],
-          "postedAt": "2026-10-19T15:02:55.000Z"
         },
         {
           "id": "36100221",
@@ -296,83 +269,168 @@
           "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206943745.webp",
           "hotDealType": "HOT_DEAL",
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "어미새"
           },
           "searchAfter": [
-            "176.65",
+            "161.69",
             "36100221"
           ],
           "postedAt": "2026-10-20T01:48:35.000Z"
         },
         {
-          "id": "36037019",
-          "title": "세이코 SBTH001 남자시계 백판 163,450원",
-          "mallId": 48,
-          "url": "https://www.fmkorea.com/10463982675",
+          "id": "36113817",
+          "title": "스타벅스 캡슐커피 대용량 90캡슐+머그컵증정 47,880원",
+          "mallId": 8,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741624",
           "isHot": true,
           "isEnd": false,
-          "price": "163,450원",
-          "providerId": 7,
-          "categoryId": 4,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10463982675.webp",
-          "hotDealType": "HOT_DEAL",
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "에펨코리아"
-          },
-          "searchAfter": [
-            "182.79",
-            "36037019"
-          ],
-          "postedAt": "2026-10-19T14:10:00.000Z"
-        },
-        {
-          "id": "36100968",
-          "title": "미트포테이블 냉동 삼겹살 2kg",
-          "mallId": 8,
-          "url": "https://www.fmkorea.com/10465141386",
-          "isHot": null,
-          "isEnd": false,
-          "price": "16,700원",
-          "providerId": 7,
-          "categoryId": 2,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465141386.webp",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "에펨코리아"
-          },
-          "searchAfter": [
-            "174.4",
-            "36100968"
-          ],
-          "postedAt": "2026-10-20T02:44:00.000Z"
-        },
-        {
-          "id": "36024561",
-          "title": "국내산 순살 춘천닭갈비 500g 4팩 16,340원",
-          "mallId": 8,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741368",
-          "isHot": true,
-          "isEnd": false,
-          "price": "16,340원",
+          "price": "47,880원",
           "providerId": 1,
           "categoryId": 2,
-          "category": "식품/건강",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741368.webp",
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741624.webp",
           "hotDealType": "HOT_DEAL",
           "isYearLowest": false,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 7
+          },
           "provider": {
             "nameKr": "뽐뿌"
           },
           "searchAfter": [
-            "170.54",
-            "36024561"
+            "195.84",
+            "36113817"
           ],
-          "postedAt": "2026-10-19T09:54:00.000Z"
+          "postedAt": "2026-10-20T07:17:00.000Z"
+        },
+        {
+          "id": "36114862",
+          "title": "잠자리 VXE R1 Pro MAX 무선 게이밍 마우스 39,990원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741656",
+          "isHot": true,
+          "isEnd": false,
+          "price": "39,990원",
+          "providerId": 1,
+          "categoryId": 1,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741656.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "180.78",
+            "36114862"
+          ],
+          "postedAt": "2026-10-20T08:37:00.000Z"
+        },
+        {
+          "id": "36123228",
+          "title": "삼양 짜르르 140g 4개 4,270원",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10466450968",
+          "isHot": true,
+          "isEnd": false,
+          "price": "4,270원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10466450968.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "194.96",
+            "36123228"
+          ],
+          "postedAt": "2026-10-20T10:19:00.000Z"
+        },
+        {
+          "id": "36116024",
+          "title": "젠하이저 ie900 유선 이어폰 1,130,500원",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10466204640",
+          "isHot": null,
+          "isEnd": false,
+          "price": "1,130,500원",
+          "providerId": 7,
+          "categoryId": 9,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10466204640.webp",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "DANAWA",
+            "percent": 18
+          },
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "151.87",
+            "36116024"
+          ],
+          "postedAt": "2026-10-20T09:03:00.000Z"
+        },
+        {
+          "id": "36103495",
+          "title": "크리넥스 3겹 데코앤소프트 와이드 33MX24롤 2팩 두루마리 화장지 28,900원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741583",
+          "isHot": true,
+          "isEnd": false,
+          "price": "28,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741583.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 9
+          },
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "188.89",
+            "36103495"
+          ],
+          "postedAt": "2026-10-20T05:02:00.000Z"
+        },
+        {
+          "id": "36025873",
+          "title": "자바나스 익스트림 오버핏 스웨트셔츠 16,060원",
+          "mallId": 8,
+          "url": "https://www.fmkorea.com/10463463659",
+          "isHot": true,
+          "isEnd": false,
+          "price": "16,060원",
+          "providerId": 7,
+          "categoryId": 4,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10463463659.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "155.5",
+            "36025873"
+          ],
+          "postedAt": "2026-10-19T11:38:00.000Z"
         },
         {
           "id": "36004203",
@@ -388,14 +446,42 @@
           "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206818846.webp",
           "hotDealType": "ULTRA_DEAL",
           "isYearLowest": true,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 16
+          },
           "provider": {
             "nameKr": "어미새"
           },
           "searchAfter": [
-            "124.14",
+            "122.24",
             "36004203"
           ],
           "postedAt": "2026-10-19T04:28:17.000Z"
+        },
+        {
+          "id": "36103200",
+          "title": "베베숲 아기물티슈 시그니처 위드블루 70매 캡 10팩",
+          "mallId": 65,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741576",
+          "isHot": true,
+          "isEnd": false,
+          "price": "10,912원",
+          "providerId": 1,
+          "categoryId": 10,
+          "category": "기타",
+          "thumbnail": null,
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "120.03",
+            "36103200"
+          ],
+          "postedAt": "2026-10-20T04:37:00.000Z"
         },
         {
           "id": "36001200",
@@ -411,60 +497,15 @@
           "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14951548.webp",
           "hotDealType": "HOT_DEAL",
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "맘이베베"
           },
           "searchAfter": [
-            "82.21",
+            "82.24",
             "36001200"
           ],
           "postedAt": "2026-10-19T01:11:17.000Z"
-        },
-        {
-          "id": "36103852",
-          "title": "올화이트 9950X3D + 윙치킨 RTX 5090 + 64GB + 2TB",
-          "mallId": 35,
-          "url": "https://www.fmkorea.com/10465538501",
-          "isHot": true,
-          "isEnd": false,
-          "price": "14,900,160원",
-          "providerId": 7,
-          "categoryId": 1,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465538501.webp",
-          "hotDealType": "HOT_DEAL",
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "에펨코리아"
-          },
-          "searchAfter": [
-            "180.47",
-            "36103852"
-          ],
-          "postedAt": "2026-10-20T05:29:00.000Z"
-        },
-        {
-          "id": "35805516",
-          "title": "애슐리 볶음밥 올인원 10종세트 14,500원",
-          "mallId": 4800,
-          "url": "https://bbs.ruliweb.com/market/board/1020/read/108115",
-          "isHot": false,
-          "isEnd": false,
-          "price": "14,500원",
-          "providerId": 4,
-          "categoryId": 2,
-          "category": "음식",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/108115.webp",
-          "hotDealType": null,
-          "isYearLowest": true,
-          "provider": {
-            "nameKr": "루리웹"
-          },
-          "searchAfter": [
-            "155.3",
-            "35805516"
-          ],
-          "postedAt": "2026-10-17T10:55:28.000Z"
         }
       ]
     }

@@ -7,6 +7,24 @@
     "data": {
       "communityRandomRankingProducts": [
         {
+          "id": "36001200",
+          "title": "배스킨라빈스 70% 할인쿠폰 알림신청하세유",
+          "mallId": 1,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14951548?menuid=2&referrerAllArticles=false",
+          "isHot": true,
+          "isEnd": false,
+          "price": null,
+          "providerId": 18,
+          "categoryId": 8,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14951548.webp",
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-19T01:11:17.000Z"
+        },
+        {
           "id": "36025873",
           "title": "자바나스 익스트림 오버핏 스웨트셔츠 16,060원",
           "mallId": 8,
@@ -25,166 +43,148 @@
           "postedAt": "2026-10-19T11:38:00.000Z"
         },
         {
-          "id": "35935378",
-          "title": "트라이 남아 여아 홈웨어",
-          "mallId": 8,
-          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14951005?menuid=2&referrerAllArticles=false",
-          "isHot": false,
-          "isEnd": false,
-          "price": "7,350원",
-          "providerId": 18,
-          "categoryId": 4,
-          "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14951005.webp",
-          "provider": {
-            "nameKr": "맘이베베"
-          },
-          "searchAfter": null,
-          "postedAt": "2026-10-18T14:11:47.000Z"
-        },
-        {
-          "id": "35963044",
-          "title": "메가커피 20% 23% 할인",
-          "mallId": 28,
-          "url": "https://www.fmkorea.com/10460783959",
-          "isHot": null,
-          "isEnd": false,
-          "price": "1,600원",
-          "providerId": 7,
-          "categoryId": 8,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10460783959.webp",
-          "provider": {
-            "nameKr": "에펨코리아"
-          },
-          "searchAfter": null,
-          "postedAt": "2026-10-18T15:09:00.000Z"
-        },
-        {
-          "id": "35963125",
-          "title": "카페 아메리카노 500원할인",
-          "mallId": 1,
-          "url": "https://www.fmkorea.com/10460810382",
-          "isHot": null,
-          "isEnd": false,
-          "price": "무료",
-          "providerId": 7,
-          "categoryId": 2,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10460810382.webp",
-          "provider": {
-            "nameKr": "에펨코리아"
-          },
-          "searchAfter": null,
-          "postedAt": "2026-10-18T15:15:00.000Z"
-        },
-        {
-          "id": "35926885",
-          "title": "네이버 오늘끝딜 재방문쿠폰 오늘받아야 내일사용가능",
-          "mallId": 1,
-          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14950794?menuid=2&referrerAllArticles=false",
+          "id": "36103852",
+          "title": "올화이트 9950X3D + 윙치킨 RTX 5090 + 64GB + 2TB",
+          "mallId": 35,
+          "url": "https://www.fmkorea.com/10465538501",
           "isHot": true,
           "isEnd": false,
-          "price": null,
-          "providerId": 18,
-          "categoryId": 8,
-          "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14950794.webp",
-          "provider": {
-            "nameKr": "맘이베베"
-          },
-          "searchAfter": null,
-          "postedAt": "2026-10-18T12:24:54.000Z"
-        },
-        {
-          "id": "36004523",
-          "title": "더푸룸 탄산 워싱소다 5kg 기름때, 찌든때 소다 가루세제 3,870원",
-          "mallId": 1212,
-          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14952122?menuid=2&referrerAllArticles=false",
-          "isHot": false,
-          "isEnd": false,
-          "price": "3,870원",
-          "providerId": 18,
-          "categoryId": 2,
-          "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14952122.webp",
-          "provider": {
-            "nameKr": "맘이베베"
-          },
-          "searchAfter": null,
-          "postedAt": "2026-10-19T04:55:47.000Z"
-        },
-        {
-          "id": "35994423",
-          "title": "네이버 번쩍위크 랜덤쿠폰",
-          "mallId": 1,
-          "url": "https://www.fmkorea.com/10461573866",
-          "isHot": true,
-          "isEnd": false,
-          "price": "무료",
-          "providerId": 7,
-          "categoryId": 8,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10461573866.webp",
-          "provider": {
-            "nameKr": "에펨코리아"
-          },
-          "searchAfter": null,
-          "postedAt": "2026-10-19T00:13:00.000Z"
-        },
-        {
-          "id": "35934660",
-          "title": "포카칩 오리지널 10개 + 어니언 10개",
-          "mallId": 28,
-          "url": "https://www.fmkorea.com/10460312052",
-          "isHot": true,
-          "isEnd": false,
-          "price": "카페18,360원",
-          "providerId": 7,
-          "categoryId": 2,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10460312052.webp",
-          "provider": {
-            "nameKr": "에펨코리아"
-          },
-          "searchAfter": null,
-          "postedAt": "2026-10-18T12:58:00.000Z"
-        },
-        {
-          "id": "36021820",
-          "title": "라이젠7 9800X3D / AMD B850M / 32GB RAM / 라데온 RX9070 XT / 1TB / 미들타워 / 정격 850W",
-          "mallId": 530,
-          "url": "https://www.fmkorea.com/10462545070",
-          "isHot": null,
-          "isEnd": false,
-          "price": "2,839,000원",
+          "price": "14,900,160원",
           "providerId": 7,
           "categoryId": 1,
           "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10462545070.webp",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465538501.webp",
           "provider": {
             "nameKr": "에펨코리아"
           },
           "searchAfter": null,
-          "postedAt": "2026-10-19T06:47:00.000Z"
+          "postedAt": "2026-10-20T05:29:00.000Z"
         },
         {
-          "id": "35963436",
-          "title": "네이버 쿠폰 9시 등",
-          "mallId": 1,
-          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14951118?menuid=2&referrerAllArticles=false",
-          "isHot": true,
+          "id": "36099837",
+          "title": "수향미 10kg 상등급",
+          "mallId": 241,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14953831?menuid=2&referrerAllArticles=false",
+          "isHot": false,
           "isEnd": false,
-          "price": null,
+          "price": "34,900원",
           "providerId": 18,
-          "categoryId": 11,
+          "categoryId": 2,
           "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14951118.webp",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14953831.webp",
           "provider": {
             "nameKr": "맘이베베"
           },
           "searchAfter": null,
-          "postedAt": "2026-10-18T15:43:53.000Z"
+          "postedAt": "2026-10-20T01:11:31.000Z"
+        },
+        {
+          "id": "36142025",
+          "title": "투썸플레이스 생딸기 생크림 케이크",
+          "mallId": 28,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14955675?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14955675.webp",
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-20T14:31:01.000Z"
+        },
+        {
+          "id": "36099851",
+          "title": "네이버페이 배스킨라빈스 40%라도 하실분 받으세유",
+          "mallId": 1,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14953862?menuid=2&referrerAllArticles=false",
+          "isHot": true,
+          "isEnd": false,
+          "price": null,
+          "providerId": 18,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14953862.webp",
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-20T01:16:31.000Z"
+        },
+        {
+          "id": "36024247",
+          "title": "5060~5080 가격대별 완본체 추천",
+          "mallId": 15,
+          "url": "https://www.fmkorea.com/10463010763",
+          "isHot": true,
+          "isEnd": false,
+          "price": "다양",
+          "providerId": 7,
+          "categoryId": 11,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10463010763.webp",
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-19T09:10:00.000Z"
+        },
+        {
+          "id": "36116088",
+          "title": "네네치킨 네꼬닭 저당 순살 닭다리살 25팩",
+          "mallId": 28,
+          "url": "https://www.fmkorea.com/10466235041",
+          "isHot": null,
+          "isEnd": false,
+          "price": "옵션별0상이",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10466235041.webp",
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-20T09:21:00.000Z"
+        },
+        {
+          "id": "36002246",
+          "title": "오늘끝딜 20% 쿠폰",
+          "mallId": 1,
+          "url": "https://www.fmkorea.com/10461884677",
+          "isHot": null,
+          "isEnd": false,
+          "price": "무료",
+          "providerId": 7,
+          "categoryId": 11,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10461884677.webp",
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-19T02:28:00.000Z"
+        },
+        {
+          "id": "36116064",
+          "title": "완본체 모음 — 14400F 5060TI 본체 외 2종",
+          "mallId": 35,
+          "url": "https://www.fmkorea.com/10465974399",
+          "isHot": null,
+          "isEnd": false,
+          "price": "가격별상이",
+          "providerId": 7,
+          "categoryId": 11,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465974399.webp",
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": null,
+          "postedAt": "2026-10-20T09:14:00.000Z"
         }
       ]
     }

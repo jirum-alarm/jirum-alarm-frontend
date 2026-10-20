@@ -123,11 +123,7 @@ const recordedAt = (): number => {
 };
 
 // 서버가 뜰 때 한 번 정한다 — 요청마다 바뀌면 화면이 밀린 날짜로 만든 커서(searchAfter)를 되돌릴 수 없다.
-// 시계를 녹화 시각에 맞춘 재생(web 하네스, SCREENS_PIN_NOW)은 날짜를 밀 필요가 없다.
-const DELTA =
-  MODE === 'replay' && !process.env.SCREENS_PIN_NOW
-    ? Math.round((Date.now() - recordedAt()) / 1000) * 1000
-    : 0;
+const DELTA = MODE === 'replay' ? Math.round((Date.now() - recordedAt()) / 1000) * 1000 : 0;
 
 // 화면이 밀린 날짜로 만든 변수(무한 스크롤 커서의 epoch ms·ISO 날짜)를 녹화 당시 값으로 되돌린다.
 const EPOCH_MS = /^\d{13}$/;
@@ -295,7 +291,8 @@ const server = createServer(async (req, res) => {
 });
 
 // 녹화는 늘 처음부터 — 옛 파일이 남으면 날짜 기준(_meta)과 어긋나고 안 쓰는 파일이 쌓인다.
-if (MODE === 'record') {
+// SCREENS_RECORD_APPEND=1(다른 날 몫 덧붙이기)은 지우지도 기준 시각을 바꾸지도 않는다.
+if (MODE === 'record' && process.env.SCREENS_RECORD_APPEND !== '1') {
   rmSync(FIXTURES, { recursive: true, force: true });
   mkdirSync(FIXTURES, { recursive: true });
   writeFileSync(META, `${JSON.stringify({ recordedAt: new Date().toISOString() }, null, 2)}\n`);

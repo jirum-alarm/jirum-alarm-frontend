@@ -1,0 +1,303 @@
+{
+  "variables": {
+    "limit": 12,
+    "keyword": "만원이하",
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "searchAfter": "1792509360000"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36166292",
+          "title": "NFL/머렐 외 남성 후리스 하이넥 집업자켓",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741778",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,100원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "의류/잡화",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741778.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509300000"
+          ],
+          "postedAt": "2026-10-20T15:15:00.000Z"
+        },
+        {
+          "id": "36166321",
+          "title": "쉼표365 매일 상쾌한 구취케어 플러스 치약 250g 4개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518031",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,280원",
+          "providerId": 107,
+          "categoryId": 3,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518031.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509300000"
+          ],
+          "postedAt": "2026-10-20T15:15:00.000Z"
+        },
+        {
+          "id": "36166323",
+          "title": "김서림 말끔제거 지문방지 안경닦이 클리너 200개입",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9518034",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,390원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9518034.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509300000"
+          ],
+          "postedAt": "2026-10-20T15:15:00.000Z"
+        },
+        {
+          "id": "36166286",
+          "title": "몬스터크랩 15개 9,360원",
+          "mallId": null,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14955740?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,360원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14955740.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509254000"
+          ],
+          "postedAt": "2026-10-20T15:14:14.000Z"
+        },
+        {
+          "id": "36166296",
+          "title": "비타도스C 1000 순수 비타민C 알약 50정",
+          "mallId": 1,
+          "url": "https://www.city.kr/ln/43189394",
+          "isHot": null,
+          "isEnd": false,
+          "price": "2,700원",
+          "providerId": 6,
+          "categoryId": 2,
+          "category": "음식",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/city/43189394.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "시티"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509201000"
+          ],
+          "postedAt": "2026-10-20T15:13:21.000Z"
+        },
+        {
+          "id": "36166279",
+          "title": "샤워 바디브러쉬 목욕솔 일본바디브러쉬 화이트 1개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9517971",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,500원",
+          "providerId": 107,
+          "categoryId": 3,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9517971.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509060000"
+          ],
+          "postedAt": "2026-10-20T15:11:00.000Z"
+        },
+        {
+          "id": "36166281",
+          "title": "피죤 드릴펑 1L 3개 + 2L 1개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9517975",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,660원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9517975.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509060000"
+          ],
+          "postedAt": "2026-10-20T15:11:00.000Z"
+        },
+        {
+          "id": "36166289",
+          "title": "갤럭시 스토어 5천원 할인 (10/21~23)",
+          "mallId": 23005,
+          "url": "https://bbs.ruliweb.com/market/board/1020/read/108193",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,000원",
+          "providerId": 4,
+          "categoryId": 9,
+          "category": "게임S/W",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/108193.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "루리웹"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509059000"
+          ],
+          "postedAt": "2026-10-20T15:10:59.000Z"
+        },
+        {
+          "id": "36166310",
+          "title": "마그도스 마그네슘 400mg 30정 2,700원",
+          "mallId": 1,
+          "url": "https://www.dogdrip.net/730670560",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,700원",
+          "providerId": 108,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730670560.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509011000"
+          ],
+          "postedAt": "2026-10-20T15:10:11.000Z"
+        },
+        {
+          "id": "36166311",
+          "title": "스륵앤 식물성 멜라토닌 5mg 고함량 미국산 HACCP인증 30정",
+          "mallId": 1,
+          "url": "https://www.dealbada.com/bbs/board.php?bo_table=deal_domestic&wr_id=572217",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,180원",
+          "providerId": 104,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dealbada/572217.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "딜바다"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509005000"
+          ],
+          "postedAt": "2026-10-20T15:10:05.000Z"
+        },
+        {
+          "id": "36166269",
+          "title": "슈펜 스퀘어 리본 플랫 7,420원",
+          "mallId": 241,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741773",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,420원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741773.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509000000"
+          ],
+          "postedAt": "2026-10-20T15:10:00.000Z"
+        },
+        {
+          "id": "36166270",
+          "title": "비타도스C 비타민C 3000mg 30포",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741774",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,700원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741774.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509000000"
+          ],
+          "postedAt": "2026-10-20T15:10:00.000Z"
+        }
+      ]
+    }
+  }
+}

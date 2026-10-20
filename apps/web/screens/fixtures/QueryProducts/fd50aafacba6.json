@@ -11,6 +11,33 @@
     "data": {
       "products": [
         {
+          "id": "36116590",
+          "title": "ORICO USB 3.0 플래시 드라이브 C타입 64GB",
+          "mallId": 143,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994046",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 14,878 (KRW)",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994046.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "36116590"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T09:59:35.000Z"
+        },
+        {
           "id": "36116053",
           "title": "GIGABYTE G27Q26 260 HDR SS-IPS QHD OC 275Hz 게이밍 모니터 27인치",
           "mallId": 15,
@@ -25,6 +52,10 @@
           "mallName": "지마켓",
           "hotDealType": null,
           "isYearLowest": false,
+          "priceSaving": {
+            "basis": "DANAWA",
+            "percent": 12
+          },
           "provider": {
             "nameKr": "퀘이사존"
           },
@@ -49,8 +80,12 @@
           "category": "핫딜",
           "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10466193500.webp",
           "mallName": "하이마트",
-          "hotDealType": null,
+          "hotDealType": "SUPER_DEAL",
           "isYearLowest": false,
+          "priceSaving": {
+            "basis": "DANAWA",
+            "percent": 23
+          },
           "provider": {
             "nameKr": "에펨코리아"
           },
@@ -77,6 +112,7 @@
           "mallName": "하이마트",
           "hotDealType": null,
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "퀘이사존"
           },
@@ -103,6 +139,7 @@
           "mallName": "지마켓",
           "hotDealType": null,
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "퀘이사존"
           },
@@ -129,6 +166,7 @@
           "mallName": "11번가",
           "hotDealType": null,
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "에펨코리아"
           },
@@ -155,6 +193,7 @@
           "mallName": "11번가",
           "hotDealType": "HOT_DEAL",
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "에펨코리아"
           },
@@ -181,6 +220,7 @@
           "mallName": "카카오",
           "hotDealType": null,
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "어미새"
           },
@@ -207,6 +247,7 @@
           "mallName": "컴퓨존",
           "hotDealType": null,
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "퀘이사존"
           },
@@ -233,6 +274,7 @@
           "mallName": "카카오",
           "hotDealType": null,
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "쿨엔조이"
           },
@@ -259,6 +301,7 @@
           "mallName": "알리",
           "hotDealType": null,
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
             "nameKr": "뽐뿌"
           },
@@ -269,32 +312,6 @@
           "postedCommunityCount": null,
           "isRising": null,
           "postedAt": "2026-10-20T04:47:00.000Z"
-        },
-        {
-          "id": "36102930",
-          "title": "14400F + RTX 5060 Ti + RAM 32GB + Y50 블랙체리 게이밍 PC",
-          "mallId": 8,
-          "url": "https://etoland.co.kr/b/hotdeal/article/9516675",
-          "isHot": false,
-          "isEnd": false,
-          "price": "1,798,390원",
-          "providerId": 107,
-          "categoryId": 1,
-          "category": "",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9516675.webp",
-          "mallName": "롯데온",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "이토랜드"
-          },
-          "searchAfter": [
-            "36102930"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T04:20:00.000Z"
         }
       ]
     }

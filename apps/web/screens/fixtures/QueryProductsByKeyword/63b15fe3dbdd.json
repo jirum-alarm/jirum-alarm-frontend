@@ -1,0 +1,670 @@
+{
+  "variables": {
+    "limit": 20,
+    "keyword": "만원이하",
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "searchAfter": "1792509201000"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36166279",
+          "title": "샤워 바디브러쉬 목욕솔 일본바디브러쉬 화이트 1개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9517971",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,500원",
+          "providerId": 107,
+          "categoryId": 3,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9517971.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509060000"
+          ],
+          "postedAt": "2026-10-20T15:11:00.000Z"
+        },
+        {
+          "id": "36166281",
+          "title": "피죤 드릴펑 1L 3개 + 2L 1개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9517975",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,660원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9517975.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509060000"
+          ],
+          "postedAt": "2026-10-20T15:11:00.000Z"
+        },
+        {
+          "id": "36166289",
+          "title": "갤럭시 스토어 5천원 할인 (10/21~23)",
+          "mallId": 23005,
+          "url": "https://bbs.ruliweb.com/market/board/1020/read/108193",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,000원",
+          "providerId": 4,
+          "categoryId": 9,
+          "category": "게임S/W",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/108193.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "루리웹"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509059000"
+          ],
+          "postedAt": "2026-10-20T15:10:59.000Z"
+        },
+        {
+          "id": "36166310",
+          "title": "마그도스 마그네슘 400mg 30정 2,700원",
+          "mallId": 1,
+          "url": "https://www.dogdrip.net/730670560",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,700원",
+          "providerId": 108,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730670560.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509011000"
+          ],
+          "postedAt": "2026-10-20T15:10:11.000Z"
+        },
+        {
+          "id": "36166311",
+          "title": "스륵앤 식물성 멜라토닌 5mg 고함량 미국산 HACCP인증 30정",
+          "mallId": 1,
+          "url": "https://www.dealbada.com/bbs/board.php?bo_table=deal_domestic&wr_id=572217",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,180원",
+          "providerId": 104,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dealbada/572217.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "딜바다"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509005000"
+          ],
+          "postedAt": "2026-10-20T15:10:05.000Z"
+        },
+        {
+          "id": "36166269",
+          "title": "슈펜 스퀘어 리본 플랫 7,420원",
+          "mallId": 241,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741773",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,420원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741773.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509000000"
+          ],
+          "postedAt": "2026-10-20T15:10:00.000Z"
+        },
+        {
+          "id": "36166270",
+          "title": "비타도스C 비타민C 3000mg 30포",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741774",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,700원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741774.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792509000000"
+          ],
+          "postedAt": "2026-10-20T15:10:00.000Z"
+        },
+        {
+          "id": "36166299",
+          "title": "도브 헤어테라피 샴푸 380ml 2개",
+          "mallId": 592,
+          "url": "https://www.fmkorea.com/10467539828",
+          "isHot": null,
+          "isEnd": false,
+          "price": "8,928원",
+          "providerId": 7,
+          "categoryId": 3,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10467539828.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792508880000"
+          ],
+          "postedAt": "2026-10-20T15:08:00.000Z"
+        },
+        {
+          "id": "36166245",
+          "title": "KT 콘텐츠페이 갤럭시스토어 5천원 할인 (0원/무료)",
+          "mallId": 23005,
+          "url": "https://arca.live/b/hotdeal/186538049",
+          "isHot": false,
+          "isEnd": false,
+          "price": "0원",
+          "providerId": 12,
+          "categoryId": 9,
+          "category": "SW/게임",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186538049.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792508493000"
+          ],
+          "postedAt": "2026-10-20T15:01:33.000Z"
+        },
+        {
+          "id": "36165427",
+          "title": "에코벨 강아지 도넛방석 그레이 50cm 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/196779405",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,780원",
+          "providerId": 21,
+          "categoryId": 12,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/196779405.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4.8,
+              "section": "lowest",
+              "delivery": "배송비 3,000원 · 오늘출발",
+              "salePrice": 8780,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T15:00:56.697Z",
+              "sellerName": "블루앤샵(Blue & shop)",
+              "deliveryFee": 3000,
+              "reviewCount": 6,
+              "discountRate": 78,
+              "originalPrice": 29900,
+              "pageViewCount": 190,
+              "lowestIn30Days": true,
+              "detailCheckedAt": "2026-10-20T15:00:56.697Z",
+              "freeShippingThreshold": "50,000원 이상 무료배송"
+            }
+          },
+          "searchAfter": [
+            "1792508457000"
+          ],
+          "postedAt": "2026-10-20T15:00:57.000Z"
+        },
+        {
+          "id": "36166024",
+          "title": "제주 산지직송 햇감귤 5kg 1박스 8,800원",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2656444245",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,800원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2656444245.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/2053c138fdddd3ae9dfec633fa4a09d9aa9691ab.webp"
+              ],
+              "rating": 4.1,
+              "section": "conversion",
+              "delivery": "무료배송",
+              "salePrice": 8800,
+              "unitPrice": "100g당 176원",
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T15:00:54.834Z",
+              "sellerName": "위드랩",
+              "deliveryFee": 0,
+              "reviewCount": 18,
+              "discountRate": 82,
+              "campaignEndAt": "2026-10-21T23:59:59",
+              "originalPrice": 50000,
+              "pageViewCount": 1770,
+              "lowestIn30Days": true,
+              "freeShippingThreshold": "3,000원 이상 무료배송"
+            }
+          },
+          "searchAfter": [
+            "1792508455000"
+          ],
+          "postedAt": "2026-10-20T15:00:55.000Z"
+        },
+        {
+          "id": "36165992",
+          "title": "질레트 프로글라이드 최고급 호환 5중 면도날 검정주황 4개입 3팩",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2652207251",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,900원",
+          "providerId": 21,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2652207251.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/7fcf573e934369fc2f72b5b12d20c74f71575440.webp"
+              ],
+              "section": "conversion",
+              "delivery": "무료배송 · 오늘출발",
+              "salePrice": 7900,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T15:00:54.251Z",
+              "sellerName": "더나은주식회사",
+              "deliveryFee": 0,
+              "discountRate": 60,
+              "originalPrice": 19900,
+              "pageViewCount": 141
+            }
+          },
+          "searchAfter": [
+            "1792508454000"
+          ],
+          "postedAt": "2026-10-20T15:00:54.000Z"
+        },
+        {
+          "id": "36165188",
+          "title": "아스파시아 퍼퓸 샤워 코롱 돌체베르 150ml",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/73216253",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,000원",
+          "providerId": 21,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/73216253.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4.5,
+              "section": "conversion",
+              "delivery": "무료배송",
+              "salePrice": 10000,
+              "unitPrice": "10ml당 667원",
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T15:00:51.220Z",
+              "sellerName": "돈버는누나",
+              "deliveryFee": 0,
+              "reviewCount": 2394,
+              "discountRate": 0,
+              "originalPrice": 10000,
+              "pageViewCount": 2176,
+              "detailCheckedAt": "2026-10-20T15:00:51.220Z"
+            }
+          },
+          "searchAfter": [
+            "1792508451000"
+          ],
+          "postedAt": "2026-10-20T15:00:51.000Z"
+        },
+        {
+          "id": "36165652",
+          "title": "알뜰공식 니트릴 장갑 블루 대(L) 100매",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/1373967661",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,800원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1373967661.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/fa433ddbc35d8308a69acb33e04d8a43ecbd77a8.webp"
+              ],
+              "rating": 4.4,
+              "section": "creator",
+              "delivery": "무료배송 · 오늘출발",
+              "salePrice": 7800,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T15:00:50.989Z",
+              "sellerName": "주식회사 대명플러스",
+              "deliveryFee": 0,
+              "reviewCount": 69,
+              "discountRate": 39,
+              "originalPrice": 12900,
+              "pageViewCount": 3598
+            }
+          },
+          "searchAfter": [
+            "1792508451000"
+          ],
+          "postedAt": "2026-10-20T15:00:51.000Z"
+        },
+        {
+          "id": "36164923",
+          "title": "비오엠 펄 파티 아이 글리터 02 스파클링샴페인 1개 9,000원",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/34328715",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,690원",
+          "providerId": 21,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/34328715.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "section": "daily",
+              "delivery": "무료배송 · 오늘출발",
+              "dealEndAt": "2026-10-22T00:00:00",
+              "salePrice": 7690,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T15:31:28.151Z",
+              "sellerName": "주식회사 비스타릿",
+              "deliveryFee": 0,
+              "discountRate": 54,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "originalPrice": 17000,
+              "pageViewCount": 103,
+              "todayDealRank": 13,
+              "lowestIn30Days": true,
+              "todayDealEndAt": "2026-10-22T00:00:00",
+              "detailCheckedAt": "2026-10-20T15:31:28.151Z",
+              "todayDealStartAt": "2026-10-21T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "1792508450000"
+          ],
+          "postedAt": "2026-10-20T15:00:50.000Z"
+        },
+        {
+          "id": "36165060",
+          "title": "피카소 함경식 투웨이 메이크업 스파츌라 1개",
+          "mallId": null,
+          "url": "https://shopping.toss.im/c/2280013345",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,990원",
+          "providerId": 21,
+          "categoryId": 11,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2280013345.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/da28a141710a4d95f315941d3005bff6be9f4b06.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/8eb881b73e77484506583d6f1394110fa298213c.webp"
+              ],
+              "section": "daily",
+              "delivery": "무료배송 · 오늘출발",
+              "dealEndAt": "2026-10-22T00:00:00",
+              "salePrice": 7990,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T15:31:27.476Z",
+              "sellerName": "주식회사 소산퍼시픽",
+              "deliveryFee": 0,
+              "discountRate": 57,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "originalPrice": 19000,
+              "pageViewCount": 107,
+              "todayDealRank": 9,
+              "lowestIn30Days": true,
+              "todayDealEndAt": "2026-10-22T00:00:00",
+              "todayDealStartAt": "2026-10-21T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "1792508449000"
+          ],
+          "postedAt": "2026-10-20T15:00:49.000Z"
+        },
+        {
+          "id": "36164860",
+          "title": "코히모 다용도 책 정리함 4W091 소형 3240원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14955698?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,240원",
+          "providerId": 18,
+          "categoryId": 6,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14955698.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792507377000"
+          ],
+          "postedAt": "2026-10-20T14:42:57.000Z"
+        },
+        {
+          "id": "36150190",
+          "title": "접착식 데코타일 바닥시트지 528 600x600mm 셀프시공 1개 5,900원",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/259383087",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,900원",
+          "providerId": 21,
+          "categoryId": 6,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/259383087.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/b7defb30e7a89fc5a25d8042fa3a2c5a91a00110.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/f88b912340860c6dd38a2da5c35fbdebf93f2af0.webp"
+              ],
+              "delivery": "무료배송",
+              "salePrice": 5900,
+              "lastSeenAt": "2026-10-20T14:32:17.148Z",
+              "sellerName": "올데이하우스",
+              "deliveryFee": 0,
+              "discountRate": 40,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 9900
+            }
+          },
+          "searchAfter": [
+            "1792506737000"
+          ],
+          "postedAt": "2026-10-20T14:32:17.000Z"
+        },
+        {
+          "id": "36159519",
+          "title": "장난 지네 모형 10개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2529349897",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,500원",
+          "providerId": 21,
+          "categoryId": 11,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2529349897.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "delivery": "배송비 3,000원",
+              "salePrice": 3500,
+              "lastSeenAt": "2026-10-20T14:32:15.240Z",
+              "sellerName": "개발내발",
+              "deliveryFee": 3000,
+              "discountRate": 28,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 3700,
+              "detailCheckedAt": "2026-10-20T14:32:15.240Z"
+            }
+          },
+          "searchAfter": [
+            "1792506735000"
+          ],
+          "postedAt": "2026-10-20T14:32:15.000Z"
+        },
+        {
+          "id": "36161447",
+          "title": "액막이 명태 도어벨 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2637298129",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,500원",
+          "providerId": 21,
+          "categoryId": 6,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2637298129.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4,
+              "delivery": "무료배송",
+              "salePrice": 6500,
+              "lastSeenAt": "2026-10-20T14:32:15.065Z",
+              "sellerName": "탑스코리아",
+              "deliveryFee": 0,
+              "reviewCount": 1,
+              "discountRate": 5,
+              "categoryLabel": "가구/홈데코",
+              "originalPrice": 6900,
+              "detailCheckedAt": "2026-10-20T14:32:15.065Z"
+            }
+          },
+          "searchAfter": [
+            "1792506735000"
+          ],
+          "postedAt": "2026-10-20T14:32:15.000Z"
+        }
+      ]
+    }
+  }
+}

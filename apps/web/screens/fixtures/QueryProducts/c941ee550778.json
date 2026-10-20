@@ -9,160 +9,166 @@
     "data": {
       "products": [
         {
-          "id": "36115607",
-          "title": "메탈 전자 시계 1개 7,130원",
+          "id": "36166675",
+          "title": "진라면순한맛 40입",
           "mallId": 4800,
-          "url": "https://shopping.toss.im/c/2289476049",
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994123",
           "isHot": false,
           "isEnd": false,
-          "price": "7,130원",
-          "providerId": 21,
-          "categoryId": 4,
-          "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2289476049.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "토스쇼핑"
-          },
-          "searchAfter": [
-            "1792486849000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T09:00:49.000Z"
-        },
-        {
-          "id": "36115621",
-          "title": "전라도 파김치 국내산 2kg 1박스",
-          "mallId": 4800,
-          "url": "https://shopping.toss.im/c/2363964297",
-          "isHot": false,
-          "isEnd": false,
-          "price": "18,900원",
-          "providerId": 21,
+          "price": "￦ 19,900 (KRW)",
+          "providerId": 5,
           "categoryId": 2,
-          "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2363964297.webp",
+          "category": "생활/식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994123.webp",
           "mallName": "토스",
           "hotDealType": null,
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
-            "nameKr": "토스쇼핑"
+            "nameKr": "퀘이사존"
           },
           "searchAfter": [
-            "1792486840000"
+            "1792511298000"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T09:00:40.000Z"
+          "postedAt": "2026-10-20T15:48:18.000Z"
         },
         {
-          "id": "36115848",
-          "title": "경상남도 진영단감 특품 혼합과 10kg 1박스 18,500원",
+          "id": "36166674",
+          "title": "스파클생수 2L x 30개",
           "mallId": 4800,
-          "url": "https://shopping.toss.im/c/2681211375",
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994122",
           "isHot": false,
           "isEnd": false,
-          "price": "18,500원",
-          "providerId": 21,
+          "price": "￦ 11,810 (KRW)",
+          "providerId": 5,
           "categoryId": 2,
-          "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2681211375.webp",
+          "category": "생활/식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994122.webp",
           "mallName": "토스",
           "hotDealType": null,
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
-            "nameKr": "토스쇼핑"
+            "nameKr": "퀘이사존"
           },
           "searchAfter": [
-            "1792486839000"
+            "1792511239000"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T09:00:39.000Z"
+          "postedAt": "2026-10-20T15:47:19.000Z"
         },
         {
-          "id": "36115865",
-          "title": "아침엔과일 청송 시나노골드 사과 특품 2kg 1박스 8,900원",
+          "id": "36166672",
+          "title": "스파클 생수 2L 30병",
           "mallId": 4800,
-          "url": "https://shopping.toss.im/c/2688615753",
+          "url": "https://bbs.ruliweb.com/market/board/1020/read/108199",
           "isHot": false,
           "isEnd": false,
-          "price": "8,900원",
-          "providerId": 21,
+          "price": "11,810원",
+          "providerId": 4,
           "categoryId": 2,
-          "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2688615753.webp",
+          "category": "음식",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/108199.webp",
           "mallName": "토스",
           "hotDealType": null,
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
-            "nameKr": "토스쇼핑"
+            "nameKr": "루리웹"
           },
           "searchAfter": [
-            "1792486836000"
+            "1792510782000"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T09:00:36.000Z"
+          "postedAt": "2026-10-20T15:39:42.000Z"
         },
         {
-          "id": "36115556",
-          "title": "앙쥬 노니콜라겐 에멀젼 210ml 1개",
+          "id": "36166670",
+          "title": "오뚜기 진라면 순한맛 40봉 19,900원",
           "mallId": 4800,
-          "url": "https://shopping.toss.im/c/1907224989",
+          "url": "https://eomisae.co.kr/rt/207062459",
           "isHot": false,
           "isEnd": false,
-          "price": "10,390원",
-          "providerId": 21,
-          "categoryId": 3,
-          "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1907224989.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "provider": {
-            "nameKr": "토스쇼핑"
-          },
-          "searchAfter": [
-            "1792486830000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T09:00:30.000Z"
-        },
-        {
-          "id": "36115847",
-          "title": "과일꾼 햇 나주배 가정용 3kg 1박스 7,900원",
-          "mallId": 4800,
-          "url": "https://shopping.toss.im/c/2680884085",
-          "isHot": false,
-          "isEnd": false,
-          "price": "7,900원",
-          "providerId": 21,
+          "price": "19,900원",
+          "providerId": 11,
           "categoryId": 2,
-          "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2680884085.webp",
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207062459.webp",
           "mallName": "토스",
           "hotDealType": null,
           "isYearLowest": false,
+          "priceSaving": null,
           "provider": {
-            "nameKr": "토스쇼핑"
+            "nameKr": "어미새"
           },
           "searchAfter": [
-            "1792486829000"
+            "1792510753000"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T09:00:29.000Z"
+          "postedAt": "2026-10-20T15:39:13.000Z"
+        },
+        {
+          "id": "36166667",
+          "title": "대식가 일키로 부대찌개 1kg 2팩 12,915원",
+          "mallId": 4800,
+          "url": "https://www.dogdrip.net/730673345",
+          "isHot": false,
+          "isEnd": false,
+          "price": "12,915원",
+          "providerId": 108,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730673345.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "searchAfter": [
+            "1792510700000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:38:20.000Z"
+        },
+        {
+          "id": "36166662",
+          "title": "오뚜기 진라면 순한맛 120g 5개입 8개 19,900원",
+          "mallId": 4800,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741788",
+          "isHot": false,
+          "isEnd": false,
+          "price": "19,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741788.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792510680000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T15:38:00.000Z"
         }
       ]
     }

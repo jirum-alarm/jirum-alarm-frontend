@@ -1,7 +1,6 @@
 // 화면 하네스 설정. 사용법은 screens/README.md.
 //   SCREENS_SERVER=dev(기본) — next dev 를 띄운다(빠른 반복). start — 미리 만든 운영 빌드(next start, CI).
 //   SCREENS_MODE=record — 운영 API 로 넘겨 fixtures 를 새로 녹화한다.
-import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { defineConfig, devices } from '@playwright/test';
@@ -13,12 +12,17 @@ const BASE_URL = `http://localhost:${WEB_PORT}`;
 const FIXTURE_GRAPHQL = `http://localhost:${FIXTURE_PORT}/graphql`;
 const SERVER = process.env.SCREENS_SERVER === 'start' ? 'start' : 'dev';
 
-// 재생은 시계를 녹화 시각에 맞춘다(pin-clock.cjs) — «오늘»로 쿼리를 고르는 화면이 날이 바뀌어도 녹화와 같은 쿼리를 부르게.
-// 서버(web·고정 데이터)는 env 로, 브라우저는 spec 이 context.clock 으로. 워커도 이 파일을 다시 읽으니 처음 정한 값을 env 로 넘긴다.
-const META = join(HERE, 'fixtures', '_meta.json');
-if (process.env.SCREENS_MODE !== 'record' && !process.env.SCREENS_PIN_NOW && existsSync(META)) {
+// 녹화 때만 시계를 옮긴다(SCREENS_PIN_DAYS=N → web 서버·브라우저가 N일 뒤로, pin-clock.cjs). 날마다 돌려 고르는 섹션(커뮤니티 위
+// 핫딜 후보 4개)을 다른 날 몫까지 녹화하려고 — screens:record 가 1~3일 뒤를 덧붙여 녹화한다. 재생은 시계를 건드리지 않는다:
+// Date 만 옮기면 Next 캐시가 쓰는 다른 시계와 어긋나 에러 시나리오 응답이 다음 화면에 섞였다(운영 빌드, 10/21 실측).
+// 워커도 이 파일을 다시 읽으니 처음 정한 값을 env 로 넘긴다.
+if (
+  process.env.SCREENS_MODE === 'record' &&
+  process.env.SCREENS_PIN_DAYS &&
+  !process.env.SCREENS_PIN_NOW
+) {
   process.env.SCREENS_PIN_NOW = String(
-    Date.parse((JSON.parse(readFileSync(META, 'utf8')) as { recordedAt: string }).recordedAt),
+    Date.now() + Number(process.env.SCREENS_PIN_DAYS) * 86_400_000,
   );
   process.env.SCREENS_PIN_START = String(Date.now());
 }

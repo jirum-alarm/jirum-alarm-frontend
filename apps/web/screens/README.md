@@ -42,8 +42,10 @@ web 의 서버 렌더(GRAPHQL_ENDPOINT·API_URL)와 브라우저 프록시(`/api
 - 녹화는 인증 없이 — 공개 데이터만 들어간다. 토큰·이메일 모양 값은 지우고, 긴 목록은 60개로 자른다(녹화 파일은 커밋된다).
 - 시나리오: `empty`(객체 배열 전부 비움)·`error`(모든 쿼리 errors). 화면마다 하네스가 `POST /__scenario` 로 바꾼다.
 - 녹화보다 더 스크롤해 부른 다음 쪽은 «목록 끝»으로 답한다.
-- web 재생은 시계를 녹화 시각에 맞춘다(서버 `pin-clock.cjs`·브라우저 `context.clock`) — «N일 전 자정»·날마다 돌리는 섹션이 날이 바뀌어도 녹화와 같은 쿼리를 부른다.
-  앱은 기기 시계를 못 맞춰서, 날짜 값만 다른 쿼리는 날짜가 가장 가까운 녹화로 답한다(`sameExceptDates`).
+- 날짜 값만 다른 쿼리(«N일 전 자정» startDate 등)는 날짜가 가장 가까운 녹화로 답한다(`sameExceptDates`) — 날이 바뀌어도 재생이 깨지지 않게.
+- 날마다 돌려 고르는 섹션(커뮤니티 위 핫딜 후보 4개)은 `screens:record` 가 web 서버·브라우저 시계를 1~3일 뒤로 옮겨(`pin-clock.cjs`,
+  `SCREENS_PIN_DAYS`) 다른 날 몫을 덧붙여 녹화한다(`SCREENS_RECORD_APPEND=1`). 재생은 시계를 건드리지 않는다 — Date 만 옮기면
+  Next 캐시가 쓰는 다른 시계와 어긋나 에러 시나리오 응답이 다음 화면에 섞였다(운영 빌드).
 - 앱 하네스(`apps/mobile/scripts/screens-ios.sh`, `SCREENS_API=fixture`)도 같은 서버를 쓴다 — 녹화 폴더만 `SCREENS_FIXTURES_DIR=apps/mobile/screens-fixtures`
   (녹화는 폴더를 통째로 비우므로 web 과 따로). 앱은 저장소 키 `jirum:screens-api-url` 로 주소를 받고(localhost 만), 첫 실행 게스트 생성·토큰 갱신엔
   JWT 모양 `GUEST_TOKEN` 을 주며 `SCREENS_GUEST_AS_USER=1` 이라 그 토큰도 로그인 데이터(`user-fixtures.ts`, 앱 오퍼레이션 이름 포함)로 답한다.
