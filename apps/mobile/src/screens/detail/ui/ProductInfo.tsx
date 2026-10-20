@@ -11,6 +11,8 @@ import ProductGuideMetaRows, {DetailInfoRow} from './ProductGuideMetaRows';
 import HotdealCriteriaBadge from './HotdealCriteriaBadge';
 import RecommendButton from './RecommendButton';
 import TossBadges from './TossBadges';
+import ExplainedBadge from './ExplainedBadge';
+import {END_BADGE_EXPLAIN} from '@jirum/domain/badge-explain';
 import TossIcon from './TossIcon';
 import TimeDealDetailTimer from './TimeDealDetailTimer';
 import NaverIcon from './NaverIcon';
@@ -65,9 +67,12 @@ export default function ProductInfo({
       {/* 배지 줄 오른쪽에 게시 시각 — web 과 같은 자리. 가격 위에 시각 줄을 따로 두면 첫 화면에서 가격이 밀린다. */}
       <View className="min-h-[22px] flex-row items-center gap-3 pb-2">
         {product.isEnd ? (
-          <Badge size="tag" variant="outline" tone="gray">
-            판매종료
-          </Badge>
+          // 누르면 뜻(web 과 같은 정본 문구).
+          <ExplainedBadge label="판매종료" lines={END_BADGE_EXPLAIN}>
+            <Badge size="tag" variant="outline" tone="gray">
+              판매종료
+            </Badge>
+          </ExplainedBadge>
         ) : product.hotDealType ? (
           // 배지 뜻 한 줄 + 누르면 기준 시트. 이 딜의 구체적 근거는 가격 아래 근거 블록이 말한다.
           <HotdealCriteriaBadge

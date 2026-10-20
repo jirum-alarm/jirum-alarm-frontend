@@ -31,6 +31,7 @@ const SHARED_BY_BOTH: Record<string, string[]> = {
   'keyword-options': ['KEYWORD_ALERT_LABELS', 'KEYWORD_DEAL_CHOICES', 'summarizeKeywordAlert'],
   'price-chart': ['buildChartGeometry', 'shortWon', 'won', 'PRICE_PREVIEW_HINT'],
   'guide-content': ['parseGuideContent'],
+  'badge-explain': ['TOSS_BADGE_EXPLAIN', 'END_BADGE_EXPLAIN'],
   'product-card': ['visibleHotDealType'],
   ranking: [
     'rankingWindowDays',

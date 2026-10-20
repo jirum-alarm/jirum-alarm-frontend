@@ -7,6 +7,7 @@
   "exports": {
     "./alarm": "./src/alarm.ts",
     "./alert-reason": "./src/alert-reason.ts",
+    "./badge-explain": "./src/badge-explain.ts",
     "./beauty-room-experiment": "./src/beauty-room-experiment.ts",
     "./card-tracking": "./src/card-tracking.ts",
     "./categories": "./src/categories.ts",
