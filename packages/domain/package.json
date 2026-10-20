@@ -17,6 +17,7 @@
     "./derive-keyword": "./src/derive-keyword.ts",
     "./experiment-bucket": "./src/experiment-bucket.ts",
     "./go-back": "./src/go-back.ts",
+    "./guide-content": "./src/guide-content.ts",
     "./hangul-search": "./src/hangul-search.ts",
     "./home-sections": "./src/home-sections.ts",
     "./image": "./src/image.ts",

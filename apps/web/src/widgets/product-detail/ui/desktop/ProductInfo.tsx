@@ -21,6 +21,7 @@ import ShareButton from '@/shared/ui/ShareButton';
 
 import { ProductQueries } from '@/entities/product';
 import { stripPriceFromTitle } from '@/entities/product/lib/from-toss';
+import ExplainedBadge from '@/entities/product/ui/ExplainedBadge';
 import NaverIcon from '@/entities/product/ui/NaverIcon';
 import TossBadges from '@/entities/product/ui/TossBadges';
 import TossIcon from '@/entities/product/ui/TossIcon';
@@ -101,9 +102,19 @@ export default function ProductInfo({
           {/* 배지 줄 오른쪽에 게시 시각 — 모바일과 같은 자리. 가격 위에 시각 줄을 따로 두지 않는다. */}
           <div className="flex min-h-[22px] items-center gap-x-2">
             {product.isEnd && (
-              <Badge size="tag" variant="outline" tone="gray">
-                판매종료
-              </Badge>
+              <ExplainedBadge
+                explain={
+                  <>
+                    판매가 끝났거나 품절된 것으로
+                    <br />
+                    확인된 딜이에요
+                  </>
+                }
+              >
+                <Badge size="tag" variant="outline" tone="gray">
+                  판매종료
+                </Badge>
+              </ExplainedBadge>
             )}
             {/* 배지 뜻 한 줄 + 누르면 기준 시트. 이 딜의 구체적 근거는 가격 아래 근거 블록이 말한다. */}
             {!product.isEnd && product.hotDealType && (
@@ -277,36 +288,43 @@ export default function ProductInfo({
               <LikeButton productId={productId} isUserLogin={isUserLogin} />
             </Suspense>
           </div>
-          <a
-            href={product.detailUrl ?? ''}
-            // 모바일 BottomCTA 와 동일 — GTM Click URL 빈값 문제로 dataLayer 명시 전송 (2026-07-20)
-            onClick={() => {
-              startPrompts();
-              // 푸시로 들어온 상세면 그 발송 nid 도 — 알림 → 구매 귀속(notification-origin).
-              const nid = peekNotificationOrigin(productId);
-              void ProductService.collectPurchaseClick({
-                productId,
-                source: 'detail_desktop',
-                entry: getEntry(),
-                nid,
-              }).catch(() => {});
+          {product.detailUrl ? (
+            <a
+              href={product.detailUrl}
+              // 모바일 BottomCTA 와 동일 — GTM Click URL 빈값 문제로 dataLayer 명시 전송 (2026-07-20)
+              onClick={() => {
+                startPrompts();
+                // 푸시로 들어온 상세면 그 발송 nid 도 — 알림 → 구매 귀속(notification-origin).
+                const nid = peekNotificationOrigin(productId);
+                void ProductService.collectPurchaseClick({
+                  productId,
+                  source: 'detail_desktop',
+                  entry: getEntry(),
+                  nid,
+                }).catch(() => {});
 
-              pushDataLayerSoon({
-                event: 'purchase_link_click',
-                product_id: String(productId),
-                click_url: product.detailUrl ?? '',
-                monetized: product.isProfitUrl ?? false,
-                profit_provider: product.profitLinkProvider ?? null,
-                nid,
-              });
-            }}
-            className="block flex-1"
-            target="_blank"
-            // 제휴 아웃바운드 — 크롤러가 따라가 봇클릭을 만들지 않게 nofollow/sponsored
-            rel="nofollow sponsored noopener noreferrer"
-          >
-            <Button className="h-12 w-full px-6 text-base font-semibold">구매하러 가기</Button>
-          </a>
+                pushDataLayerSoon({
+                  event: 'purchase_link_click',
+                  product_id: String(productId),
+                  click_url: product.detailUrl ?? '',
+                  monetized: product.isProfitUrl ?? false,
+                  profit_provider: product.profitLinkProvider ?? null,
+                  nid,
+                });
+              }}
+              className="block flex-1"
+              target="_blank"
+              // 제휴 아웃바운드 — 크롤러가 따라가 봇클릭을 만들지 않게 nofollow/sponsored
+              rel="nofollow sponsored noopener noreferrer"
+            >
+              <Button className="h-12 w-full px-6 text-base font-semibold">구매하러 가기</Button>
+            </a>
+          ) : (
+            // 구매 링크가 아직 없다 — href='' 링크는 같은 페이지를 새 탭으로 열었다(모바일 BottomCTA 와 같은 처리).
+            <Button disabled className="h-12 flex-1 px-6 text-base font-semibold">
+              구매 링크 준비 중
+            </Button>
+          )}
         </div>
         {/* 데스크톱은 fixed 하단 바가 없어 모바일 BottomCTA 를 그대로 못 옮긴다.
             구매 버튼 바로 아래에 두어 "구매 클릭 직후"라는 같은 맥락을 유지한다. */}

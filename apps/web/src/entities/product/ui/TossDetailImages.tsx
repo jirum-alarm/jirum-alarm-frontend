@@ -2,6 +2,8 @@
 
 import { useInView } from 'react-intersection-observer';
 
+import ZoomableImage from './ProductImageViewer';
+
 /**
  * 토스 상세 상품 이미지. 여러 장을 여백 없이 세로로 이어붙인다(상세페이지 관행).
  *
@@ -22,15 +24,17 @@ export default function TossDetailImages({ images }: { images?: string[] }) {
     <div ref={ref} className="w-full">
       {inView ? (
         images.map((src, i) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            key={i}
-            src={src}
-            alt={`상품 상세 이미지 ${i + 1}`}
-            className="block w-full"
-            loading="lazy"
-            decoding="async"
-          />
+          // 누르면 크게 보기(대표 사진과 같은 뷰어) — 긴 상세 사진의 작은 글씨를 손가락으로 키워 읽는다.
+          <ZoomableImage key={i} src={src} alt={`상품 상세 이미지 ${i + 1}`} className="w-full">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={src}
+              alt={`상품 상세 이미지 ${i + 1}`}
+              className="block w-full"
+              loading="lazy"
+              decoding="async"
+            />
+          </ZoomableImage>
         ))
       ) : (
         // 첫 장 자리(정사각 근사). 이미지가 들어오면 실제 높이로 바뀐다.

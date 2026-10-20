@@ -1,6 +1,7 @@
 'use client';
 
 import { detailInfo } from '@jirum/design-system/recipes';
+import { type GuideSegment, parseGuideContent } from '@jirum/domain/guide-content';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { cn } from '@/shared/lib/cn';
@@ -26,14 +27,6 @@ type Props = {
   /** 토스 특가 코너 유입 — 가격·할인가 행을 숨긴다. */
   hidePrice?: boolean;
 };
-
-function plainGuideContent(content: string): string {
-  return content
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s]+)\)/g, '$1')
-    .replace(/https?:\/\/[^\s]+/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
 
 /**
  * productGuides 를 쇼핑몰·추천수와 같은 메타 행으로 렌더.
@@ -105,19 +98,45 @@ function GuideRows({
     .map((g) => ({
       id: g.id,
       title: g.title!,
-      content: plainGuideContent(g.content!),
+      segments: parseGuideContent(g.content!),
     }));
 
-  const visible = rows.filter((r) => r.content.length > 0);
+  const visible = rows.filter((r) => r.segments.length > 0);
   if (!visible.length) return null;
 
   return (
     <>
       {visible.map((row) => (
         <DetailInfoRow key={row.id} label={row.title} variant={variant}>
-          {row.content}
+          <GuideContent segments={row.segments} />
         </DetailInfoRow>
       ))}
+    </>
+  );
+}
+
+/**
+ * 가이드 글 — 주소는 링크로(쿠폰·이벤트 페이지). 예전엔 주소를 지워 「쿠폰 받기」가 글자로만 남았다(dead click).
+ * 외부 링크라 새 창 + nofollow(사용자 글·제휴 아님). 주소 검사는 parseGuideContent 가 한다(http(s)만).
+ */
+function GuideContent({ segments }: { segments: GuideSegment[] }) {
+  return (
+    <>
+      {segments.map((seg, i) =>
+        seg.type === 'link' ? (
+          <a
+            key={i}
+            href={seg.href}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            className="text-secondary-600 break-all underline underline-offset-2"
+          >
+            {seg.label}
+          </a>
+        ) : (
+          <span key={i}>{seg.text}</span>
+        ),
+      )}
     </>
   );
 }

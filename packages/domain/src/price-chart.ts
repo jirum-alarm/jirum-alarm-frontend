@@ -27,6 +27,12 @@ export const PERIODS = [
   { label: '24개월', days: 730 },
 ] as const;
 
+/**
+ * 가격 추이 미리보기 카드가 «지금 보는 상품»일 때(링크가 아닐 때) 카드 아래 안내. 카드를 눌러도 같은 화면이라
+ * 아무 일이 없던 자리(Clarity dead click 1위, 2026-10-20) — 다른 딜을 보는 길(점 누르기)을 알려 준다.
+ */
+export const PRICE_PREVIEW_HINT = '차트의 점을 누르면 다른 딜을 볼 수 있어요';
+
 export type ChartPoint = { date: string; price: number };
 
 export type Padding = { top: number; right: number; bottom: number; left: number };

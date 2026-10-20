@@ -63,6 +63,18 @@ export function isSeedDeal(deal: PriceHistoryDeal, productId: number): boolean {
   return deal.isSeed || sameProductId(deal.id, productId);
 }
 
+/**
+ * 가격 추이 아래 미리보기 카드를 링크로 그릴지. 「이 상품」(또는 고른 점이 지금 보는 딜)이면 링크가 지금 페이지라
+ * 눌러도 아무 일이 없다 — Clarity dead click 1위(2026-10-20). 그땐 링크가 아닌 카드로 그린다(앱 DealPreview 와 같다).
+ */
+export function isPreviewLinkable(
+  viewingCurrent: boolean,
+  deal: PriceHistoryDeal,
+  productId: number,
+): boolean {
+  return !viewingCurrent && !isSeedDeal(deal, productId);
+}
+
 export function toKstDateString(ms: number): string {
   // en-CA → YYYY-MM-DD
   return new Intl.DateTimeFormat('en-CA', {

@@ -7,7 +7,9 @@ import { ProductService } from '@/shared/api/product';
 import type { ProductDealEvidence } from '@/shared/api/product/product.service';
 import { cn } from '@/shared/lib/cn';
 
+import { useSectionPresence } from '../hooks/useSectionPresence';
 import { isPriceAnswerHoldoutPage, isPriceAnswerKind } from '../lib/price-answer-holdout';
+import { evidenceScrollTarget } from '../lib/section-presence';
 
 function pushEvent(event: string, props: Record<string, unknown>) {
   if (typeof window === 'undefined') return;
@@ -16,12 +18,6 @@ function pushEvent(event: string, props: Record<string, unknown>) {
     ...props,
   });
 }
-
-/** 「근거 보기」가 내려갈 섹션. 다나와 근거는 블록 안 숫자가 근거라 링크가 없다. */
-const SCROLL_TARGET: Record<string, string | undefined> = {
-  HISTORY: 'price-history',
-  COMMUNITY: 'community-reaction',
-};
 
 type Props = {
   productId: number;
@@ -39,6 +35,8 @@ type Props = {
 export default function DealEvidenceBlock({ productId, source, evidence }: Props) {
   const headline = evidence?.headline ?? null;
   const impressedRef = useRef<number | null>(null);
+  // 「근거 보기」는 내려갈 섹션이 실제로 그려져 있을 때만 — 로딩 중·점 2개 미만·holdout 이면 눌러도 갈 곳이 없다.
+  const isSectionPresent = useSectionPresence();
 
   useEffect(() => {
     if (!headline || impressedRef.current === productId) return;
@@ -68,7 +66,7 @@ export default function DealEvidenceBlock({ productId, source, evidence }: Props
 
   if (!evidence || !headline) return null;
 
-  const target = SCROLL_TARGET[headline.kind];
+  const target = evidenceScrollTarget(headline.kind, isSectionPresent);
   const onMore = () => {
     if (!target) return;
     pushEvent('price_verdict_click_history', {

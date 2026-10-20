@@ -11,6 +11,7 @@ import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 
 import { ProductQueries } from '@/entities/product';
 
+import { useRegisterSection } from '../hooks/useSectionPresence';
 import {
   computePeriodStates,
   filterPointsByRange,
@@ -121,6 +122,8 @@ export default function PriceHistorySection({
   const shown = !isError && !!history && allPoints.length >= 2 && points.length >= 2;
   const basis = history?.basis;
   const holdout = !!history?.holdout;
+  // 가격 아래 근거 블록의 「근거 보기 ›」는 이 섹션이 그려졌을 때만 뜬다(아래 early return 과 같은 조건).
+  useRegisterSection('price-history', mounted && !isLoading && shown && !holdout);
   const impressedRef = useRef<number | null>(null);
   const pointClickedRef = useRef<number | null>(null);
   useEffect(() => {
@@ -253,6 +256,7 @@ export default function PriceHistorySection({
 
       <PriceLineChart
         key={`${productId}-${days}`}
+        productId={productId}
         points={points}
         currentMarker={currentMarker}
         currency={currency}

@@ -2,6 +2,8 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
+import Tooltip from '@/shared/ui/common/Tooltip';
+
 import { ProductQueries } from '@/entities/product';
 
 interface ViewerCountProps {
@@ -21,15 +23,33 @@ export default function ViewerCount({ productId }: ViewerCountProps) {
 
   if (count < 10) return null;
 
+  // 알약을 누르면 숫자의 뜻을 알려 준다 — 알약 모양이라 눌러 보는 사람이 많았는데 아무 일이 없었다(Clarity dead click).
+  // viewCount 는 수집한 커뮤니티 원글의 조회수다(crawling-server collect — serviceViewCount 와 다른 값).
+  // 바깥 띠는 이미지 위 가로 전체라 눌림을 막지 않게 하고(이미지 탭 = 크게 보기) 알약만 받는다.
   return (
-    <div className="absolute inset-x-0 top-0 z-10">
+    <div className="pointer-events-none absolute inset-x-0 top-0 z-10">
       <div className="flex justify-center pt-3">
-        <span className="bg-secondary-50 border-secondary-200 flex h-9 items-center rounded-full border px-4 text-sm whitespace-nowrap text-gray-700">
-          <strong className="text-secondary-600 font-semibold" suppressHydrationWarning>
-            {count.toLocaleString('ko-kr')}명
-          </strong>
-          이 살펴본 상품
-        </span>
+        <div className="pointer-events-auto">
+          <Tooltip
+            content={
+              <p className="text-fixed-white text-13">
+                이 핫딜이 올라온 커뮤니티 글의
+                <br />
+                조회수예요
+              </p>
+            }
+          >
+            <button
+              type="button"
+              className="bg-secondary-50 border-secondary-200 flex h-9 items-center rounded-full border px-4 text-sm whitespace-nowrap text-gray-700"
+            >
+              <strong className="text-secondary-600 font-semibold" suppressHydrationWarning>
+                {count.toLocaleString('ko-kr')}명
+              </strong>
+              이 살펴본 상품
+            </button>
+          </Tooltip>
+        </div>
       </div>
     </div>
   );

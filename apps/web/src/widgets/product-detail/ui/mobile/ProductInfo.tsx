@@ -15,6 +15,7 @@ import DisplayTime from '@/shared/ui/DisplayTime';
 
 import { ProductQueries } from '@/entities/product';
 import { stripPriceFromTitle } from '@/entities/product/lib/from-toss';
+import ExplainedBadge from '@/entities/product/ui/ExplainedBadge';
 import NaverIcon from '@/entities/product/ui/NaverIcon';
 import TossBadges from '@/entities/product/ui/TossBadges';
 import TossIcon from '@/entities/product/ui/TossIcon';
@@ -79,9 +80,19 @@ export default function ProductInfo({
         {/* 게시 시각은 배지 줄 오른쪽에 — 가격 위에 줄을 하나 더 두면 375×667 첫 화면에서 가격이 밀려난다. */}
         <div className="flex items-center gap-3 pb-2">
           {product.isEnd && (
-            <Badge size="tag" variant="outline" tone="gray">
-              판매종료
-            </Badge>
+            <ExplainedBadge
+              explain={
+                <>
+                  판매가 끝났거나 품절된 것으로
+                  <br />
+                  확인된 딜이에요
+                </>
+              }
+            >
+              <Badge size="tag" variant="outline" tone="gray">
+                판매종료
+              </Badge>
+            </ExplainedBadge>
           )}
           {/* 배지 뜻 한 줄 + 누르면 기준 시트. 이 딜의 구체적 근거는 가격 아래 근거 블록이 말한다. */}
           {!product.isEnd && product.hotDealType && (

@@ -21,6 +21,7 @@ const {
   buildChartGeometry,
   computePeriodStates,
   formatRangeLabel,
+  isPreviewLinkable,
   pickDefaultDays,
   resolveCurrentProductMarker,
   resolveSubtitle,
@@ -150,4 +151,15 @@ test('buildChartGeometry — 작은 변동은 축을 15% 이상 벌리고, 하�
     NOW,
   );
   assert.ok(wide.ticks.every((t) => t.price >= 0));
+});
+
+test('미리보기 카드 — 「이 상품」·지금 보는 딜은 링크가 아니다(눌러도 같은 페이지), 다른 딜만 링크', () => {
+  assert.equal(isPreviewLinkable(true, deal(7, 1000), 7), false);
+  assert.equal(
+    isPreviewLinkable(false, deal(7, 1000), 7),
+    false,
+    '점을 골랐어도 그 딜이 지금 상품이면',
+  );
+  assert.equal(isPreviewLinkable(false, deal(8, 1000, true), 7), false, 'seed 표시가 붙은 딜');
+  assert.equal(isPreviewLinkable(false, deal(8, 1000), 7), true);
 });

@@ -88,8 +88,11 @@ export default function RecommendButton({ productId }: { productId: number }) {
         {
           'border-secondary-500 text-secondary-700 border font-semibold':
             productStats?.isMyLike !== null && productStats?.isMyLike,
+          // 처리 중 재클릭은 무시된다 — 눌러도 안 바뀌는 상태임을 보이게 흐리게(press.dim)·손가락 커서 없이.
+          'pointer-events-none opacity-50': isPending,
         },
       )}
+      aria-busy={isPending}
       onClick={handleUserLikeClick}
     >
       <span>{productStats?.isMyLike ? '추천 완료' : '상품 추천'}</span>

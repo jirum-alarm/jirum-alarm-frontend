@@ -29,7 +29,8 @@ const SHARED_BY_BOTH: Record<string, string[]> = {
     'POLICY_DOCS',
   ],
   'keyword-options': ['KEYWORD_ALERT_LABELS', 'KEYWORD_DEAL_CHOICES', 'summarizeKeywordAlert'],
-  'price-chart': ['buildChartGeometry', 'shortWon', 'won'],
+  'price-chart': ['buildChartGeometry', 'shortWon', 'won', 'PRICE_PREVIEW_HINT'],
+  'guide-content': ['parseGuideContent'],
   'product-card': ['visibleHotDealType'],
   ranking: [
     'rankingWindowDays',

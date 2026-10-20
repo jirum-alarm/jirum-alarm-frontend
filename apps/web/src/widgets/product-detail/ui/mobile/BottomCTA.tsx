@@ -28,6 +28,7 @@ export default function BottomCTA({
   isUserLogin: boolean;
 }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
+  const detailUrl = product?.detailUrl || null;
   // 화장품 상세 실험 beauty_detail_room_v1 — b 군은 구매 후 권유도 뷰티방(입장 기록도 뷰티방 것으로 본다).
   const beautyRoom = useBeautyRoomAssignment(product?.categoryId);
   const {
@@ -96,15 +97,21 @@ export default function BottomCTA({
         <div className="flex h-12 items-center">
           <LikeButton productId={productId} isUserLogin={isUserLogin} />
         </div>
-        {variant === 'button' ? (
+        {!detailUrl ? (
+          // 구매 링크가 아직 없다(수집 중·몰 링크 없음) — 예전엔 href='' 링크라 같은 페이지를 새 탭으로 열거나
+          // 버튼 군은 클릭 기록만 남기고 아무 일이 없었다(Clarity dead click). 누를 수 없는 버튼 + 상태 문구로.
+          // buyRef 를 달지 않는다 — 삼성 인터넷 숨김 판정(본문 대체 버튼)은 링크가 있을 때만 뜻이 있다.
+          <Button disabled className="h-12 flex-1 px-6 text-base font-semibold">
+            구매 링크 준비 중
+          </Button>
+        ) : variant === 'button' ? (
           // 버튼 군 — href 없는 버튼이 클릭 때 새 창을 연다(떠 있는 외부 링크로 안 보이게).
           <Button
             ref={buyRef as React.RefObject<HTMLButtonElement>}
             className="h-12 flex-1 px-6 text-base font-semibold"
             onClick={() => {
               handlePurchaseClick();
-              if (product?.detailUrl)
-                window.open(product.detailUrl, '_blank', 'noopener,noreferrer');
+              window.open(detailUrl, '_blank', 'noopener,noreferrer');
             }}
           >
             구매하러 가기
@@ -112,7 +119,7 @@ export default function BottomCTA({
         ) : (
           <a
             ref={buyRef as React.RefObject<HTMLAnchorElement>}
-            href={product?.detailUrl ?? ''}
+            href={detailUrl}
             onClick={handlePurchaseClick}
             className="block flex-1"
             target="_blank"

@@ -5,11 +5,13 @@ import { shortWon } from '@jirum/domain/price-chart';
 import { useMemo, useRef, useState } from 'react';
 
 import type { PriceHistoryPoint } from '@/shared/api/product/product.service';
+import { cn } from '@/shared/lib/cn';
 
 import { useRenderedWidth } from '../hooks/useRenderedWidth';
 import {
   buildChartGeometry,
   type CurrentProductMarker,
+  isPreviewLinkable,
   isSeedDeal,
   won,
 } from '../lib/price-history';
@@ -27,6 +29,7 @@ export const CHART = {
 } as const;
 
 export default function PriceLineChart({
+  productId,
   points,
   currentMarker,
   currency,
@@ -39,6 +42,8 @@ export default function PriceLineChart({
   contentEndMs,
   onTrackClick,
 }: {
+  /** 지금 보는 상품 — 미리보기 카드가 이 상품이면 링크로 그리지 않는다. */
+  productId: number;
   points: PriceHistoryPoint[];
   currentMarker: CurrentProductMarker | null;
   currency: string;
@@ -63,6 +68,8 @@ export default function PriceLineChart({
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [selectedSeed, setSelectedSeed] = useState(true);
+  // 마우스 아래 가장 가까운 대상이 이미 고른 것이면 눌러도 바뀌는 게 없다 — 손가락 커서를 거둔다(dead click).
+  const [hoverIsSelection, setHoverIsSelection] = useState(false);
 
   const geo = useMemo(
     () =>
@@ -123,18 +130,28 @@ export default function PriceLineChart({
     return best;
   };
 
-  const selectAtClientX = (clientX: number) => {
-    onTrackClick('point');
+  /** 이 x 를 누르면 고를 대상 — 「이 상품」 점이 가장 가까우면 seed, 아니면 그 점. */
+  const targetAtClientX = (clientX: number): { seed: true } | { seed: false; idx: number } => {
     const x = clientXToPlotX(clientX);
     const idx = nearestIdxFromClientX(clientX);
     const pointDist = orderedPoints[idx] != null ? Math.abs(orderedPoints[idx].x - x) : Infinity;
     const seedDist = seedCoord ? Math.abs(seedCoord.x - x) : Infinity;
-    if (seedCoord && seedDist <= pointDist) {
+    return seedCoord && seedDist <= pointDist ? { seed: true } : { seed: false, idx };
+  };
+
+  const isCurrentSelection = (t: ReturnType<typeof targetAtClientX>) =>
+    t.seed ? viewingCurrent : !viewingCurrent && t.idx === resolvedSelectedIdx;
+
+  const selectAtClientX = (clientX: number) => {
+    onTrackClick('point');
+    const target = targetAtClientX(clientX);
+    setHoverIsSelection(true);
+    if (target.seed) {
       setSelectedSeed(true);
       return;
     }
     setSelectedSeed(false);
-    setSelectedIdx(idx);
+    setSelectedIdx(target.idx);
   };
 
   const selectedCoord =
@@ -171,10 +188,13 @@ export default function PriceLineChart({
       <svg
         ref={svgRef}
         viewBox={`0 0 ${width} ${height}`}
-        className="h-auto w-full cursor-pointer touch-pan-y"
+        className={cn('h-auto w-full touch-pan-y', !hoverIsSelection && 'cursor-pointer')}
         role="img"
         aria-label="가격 추이 그래프"
-        onMouseMove={(e) => setHoverIdx(nearestIdxFromClientX(e.clientX))}
+        onMouseMove={(e) => {
+          setHoverIdx(nearestIdxFromClientX(e.clientX));
+          setHoverIsSelection(isCurrentSelection(targetAtClientX(e.clientX)));
+        }}
         onMouseLeave={() => setHoverIdx(null)}
         onClick={(e) => selectAtClientX(e.clientX)}
       >
@@ -350,6 +370,7 @@ export default function PriceLineChart({
           point={selectedPoint}
           currency={currency}
           isCurrent={viewingCurrent}
+          linkable={isPreviewLinkable(viewingCurrent, selectedPoint.deal, productId)}
           onClick={() => onTrackClick('deal')}
         />
       )}

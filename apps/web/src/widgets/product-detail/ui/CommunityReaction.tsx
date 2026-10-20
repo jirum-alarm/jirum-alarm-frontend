@@ -1,6 +1,6 @@
 'use client';
 
-import { emptyText } from '@jirum/design-system/recipes';
+import { emptyText, wordTag } from '@jirum/design-system/recipes';
 import { buildDealStatusSummary, splitReactionKeywords } from '@jirum/domain/deal-status-reaction';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import * as m from 'motion/react-m';
@@ -15,6 +15,7 @@ import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 import { ProductQueries } from '@/entities/product';
 
 import ProductReport from '@/features/product-actions/ui/ProductReport';
+import { useRegisterSection } from '@/features/product-detail/hooks/useSectionPresence';
 import { Reactions } from '@/features/product-reaction/ui/Reactions';
 
 type ReactionItem = {
@@ -50,19 +51,18 @@ function CommunityLink({ url, provider }: { url: string; provider: string }) {
   );
 }
 
+/**
+ * 반응 키워드 한 개 — 누를 수 없는 단어(wordTag). 예전엔 흰 바탕·테두리 알약이라 버튼처럼 보여 눌러 보는
+ * 사람이 많았는데(Clarity dead click, 2026-10-20) 아무 일도 없었다. 키워드가 «좋아했어요»·«가격이 싸요» 같은
+ * 반응 문구라 검색어로 보낼 수도 없어(엉뚱한 결과) 모양을 «누를 수 없는 단어»로 바꿨다. 긍·부정은 숫자 색이 말한다.
+ */
 function KeywordChip({ item }: { item: ReactionItem }) {
   return (
-    <li
-      className={cn('flex gap-x-1 rounded-full border bg-white px-3 py-1.5', {
-        'border-secondary-300': item.type === 'POSITIVE',
-        'border-error-200': item.type === 'NEGATIVE',
-        'border-gray-300': item.type !== 'POSITIVE' && item.type !== 'NEGATIVE',
-      })}
-    >
-      {item.tag ? <span className="text-xs font-medium text-gray-500">{item.tag}</span> : null}
-      <span className="text-xs font-medium text-gray-900">{item.name}</span>
+    <li className={cn('flex gap-x-1', wordTag.box, wordTag.tone.fill.box, wordTag.text)}>
+      {item.tag ? <span className="font-medium text-gray-600">{item.tag}</span> : null}
+      <span className="font-medium text-gray-900">{item.name}</span>
       <span
-        className={cn('text-xs font-semibold', {
+        className={cn('font-semibold', {
           'text-secondary-700': item.type === 'POSITIVE',
           'text-error-400': item.type === 'NEGATIVE',
           'text-gray-500': item.type !== 'POSITIVE' && item.type !== 'NEGATIVE',
@@ -78,6 +78,8 @@ function KeywordChip({ item }: { item: ReactionItem }) {
  * 커뮤니티 반응 — 품질 반응만 (품절·종료·가격변동 등 상태 신호 제외).
  */
 export default function CommunityReaction({ productId }: { productId: number }) {
+  // 가격 아래 근거 블록(커뮤니티 근거)의 「근거 보기 ›」는 이 섹션이 그려졌을 때만 뜬다.
+  useRegisterSection('community-reaction', true);
   const { data: product } = useSuspenseQuery(
     ProductQueries.productAdditionalInfo({ id: productId }),
   );
