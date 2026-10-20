@@ -161,7 +161,7 @@ function ProductDetailPage({
           )}
 
           {/* ⑤ 관련 딜 — 광고·댓글·토스 이미지보다 위. 맨 아래에 두었을 땐 네이버 검색 유입(모바일 최대)의
-              74% 가 거기까지 내려가지 않아 클릭이 사실상 0이었다(2026-10-08 GA4). */}
+              대부분이 거기까지 내려가지 않아 클릭이 사실상 0이었다(GA4). */}
           <DetailSection className="flex flex-col gap-4 pt-4">
             {/* 토스 상품끼리 잇는 내부 링크(실험 toss_internal_link_v1) — 네이버가 토스 상세를 더 긁게. */}
             {tossData && (
@@ -181,7 +181,7 @@ function ProductDetailPage({
             </Suspense>
           </DetailSection>
 
-          {/* 광고 자리(상세 본문 = 애드센스 수익 대부분)는 관련 딜 바로 아래 그대로. */}
+          {/* 광고 자리는 관련 딜 바로 아래 그대로. */}
           <div className="pb-8">
             <ProductDetailAd productId={productId} isMobile />
           </div>

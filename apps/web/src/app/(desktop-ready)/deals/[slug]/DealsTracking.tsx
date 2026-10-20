@@ -16,7 +16,7 @@ function pushEvent(event: string, props: Record<string, unknown>) {
  * /deals 판별 스프린트 계측 (2026-07-08 설계 — 검색유입 cohort 프록시 판정용).
  * - deals_landing: 랜딩 시 1회. referrer_host 가 cohort 구분자(naver/google=검색, ''=direct).
  *   SPA 내부 이동에 덮이지 않게 mount 시점에 캡처.
- * - deals_outbound_click: 외부(다나와 등)로 나가는 클릭 — 수익 프록시 지표의 분자.
+ * - deals_outbound_click: 외부(다나와 등)로 나가는 클릭 — 구매 프록시 지표의 분자.
  * - deals_deal_click: 내부 핫딜 상세(/products/*)로 가는 클릭.
  * 서버 컴포넌트 페이지라 링크 각각을 클라이언트화하지 않고 이벤트 위임 1개로 처리.
  * screen_width: 봇 필터용(1600 고정 = 봇 — 2026-06-19 실측).

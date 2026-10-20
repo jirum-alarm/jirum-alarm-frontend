@@ -45,7 +45,7 @@ const HOT_ONLY = {
 
 /**
  * 계정 단위 푸시 설정. 백엔드(pushSetting / updatePushSetting)는 있었는데 화면이 없어서
- * 2026-10-01 기준 1,204명 전원이 기본값 그대로였다(야간 동의 0명 → 밤 알림 전부 아침으로 밀림).
+ * 사용자 전원이 기본값 그대로였다(야간 동의 0명 → 밤 알림 전부 아침으로 밀림).
  */
 const PushSettingForm = () => {
   const id = useId();

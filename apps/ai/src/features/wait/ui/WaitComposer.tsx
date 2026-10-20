@@ -15,7 +15,7 @@ const waitHref = (q: string) => `/w?q=${encodeURIComponent(q)}`;
  * ★결과 화면(/w?q=A)에서 다른 상품(/w?q=B)으로 가면 같은 세그먼트라 loading.tsx 가 안 뜬다 — 새 답(서버 판정 1~3초)이 올
  * 때까지 옛 답이 그대로 멈춰 보여서 한 번 더 누르게 된다(2026-10-15 운영 로그: 같은 문장 판정이 1초 간격으로 두 번).
  * 그래서 이동을 transition 으로 감싸고 기다리는 동안 버튼·안내·옛 답 흐림(html[data-wait-pending], globals.css)을 켠다. 질문(채팅)이 아니라 «상품을 던지는 칸» — 사용자는 묻지 않고 상품명으로 찾는다
- * (2026-10-15 GA4: 28일 검색 1,685건 중 질문형 0, 3단어+ 7.6% 는 상품명 붙여넣기).
+ * (GA4 검색어: 질문형은 사실상 없고, 긴 검색어도 대부분 상품명 붙여넣기).
  */
 export default function WaitComposer({
   initial = '',

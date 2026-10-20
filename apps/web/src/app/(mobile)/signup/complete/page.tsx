@@ -19,13 +19,13 @@ const Completed = () => {
   // 소셜 가입은 가입 전 의도한 곳(rtnUrl)으로, 그 외엔 홈으로.
   // rtnUrl 이 다른 오리진(ai.jirum-alarm.com 등)이면 라우터가 못 가므로 브라우저 이동을 쓴다.
   const target = resolveReturnUrl(searchParams.get('rtnUrl'), WindowLocation.getCurrentOrigin());
-  // 상품 상세에서 가입했으면(가입의 81%) 그 상품으로 키워드를 추천한다.
+  // 상품 상세에서 가입했으면(가입 대부분) 그 상품으로 키워드를 추천한다.
   const productMatch = target.kind === 'internal' ? target.path.match(/^\/products\/(\d+)/) : null;
   const productId = productMatch ? Number(productMatch[1]) : null;
 
   // 가입 계측은 여기서 코드로 쏜다. 예전엔 GTM 이 "/signup/complete 로 URL 이 바뀌는 순간"
   // (historyChange)을 잡았는데, GTM 은 성능 때문에 load 뒤(lazyOnload)에 붙어서 OAuth 콜백이
-  // 곧장 넘어오면 그 순간을 놓쳤다 — GA4 웹 가입 98건 vs DB ~360(2026-10-05).
+  // 곧장 넘어오면 그 순간을 놓쳤다 — GA4 웹 가입이 DB 의 몇 분의 1 로만 잡혔다.
   // dataLayer push 는 GTM 이 늦게 붙어도 큐에 남는다.
   const method = searchParams.get('method');
   useEffect(() => {

@@ -1,5 +1,5 @@
-# 공개 레포라 커밋 = 공개. CI(.github/workflows/secret-scan.yml)가 푸시·PR 구간만 검사한다.
-# 기본 룰은 DB 접속 URI 비밀번호를 못 잡는다(2026-10-14 Mongo root 비번 유출이 그 유형) → 아래 커스텀 룰.
+# CI(.github/workflows/secret-scan.yml)가 푸시·PR 구간만, 커밋 훅(.husky/pre-commit)이 스테이징만 검사한다.
+# 기본 룰은 DB 접속 URI 비밀번호를 못 잡는다 → 아래 커스텀 룰.
 [extend]
 useDefault = true
 
@@ -14,8 +14,20 @@ keywords = ["://"]
   regexes = [
     '''(?i)^(?:password|passwd|pass|secret|changeme|example|xxx+|\*+|<[^>]+>|\$\{[^}]+\}|\$[A-Z_]+)$''',
     '''^\{[^}]+\}$''',      # f-string·템플릿 변수
-    '''REDACTED''',         # 2026-10-15 이력 재작성이 남긴 자리표시
+    '''REDACTED''',
   ]
+
+[[rules]]
+id = "internal-network-address"
+description = "사설망 IP"
+regex = '''\b(?:192\.168|10\.(?:\d{1,3})|172\.(?:1[6-9]|2\d|3[01]))\.\d{1,3}\.\d{1,3}\b'''
+keywords = ["192.168.", "10.", "172."]
+
+[[rules]]
+id = "prod-cluster-command"
+description = "운영 클러스터 kubectl 명령"
+regex = '''(?i)kubectl\b[^\n]{0,40}--context["', =]+prod\b'''
+keywords = ["kubectl"]
 
 # 공개가 전제인 클라이언트 키·테스트/목 데이터·락파일 체크섬
 [[allowlists]]

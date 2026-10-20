@@ -30,7 +30,7 @@ const LIMIT = 3;
 /**
  * 막 올라온 딜 상세의 「다른 곳 진행 중인 딜」 — 같은 상품을 다른 값에 파는 딜, 용량·구성이 다른 같은 라인 딜.
  * web features/product-detail/components/LiveAlternativeDeals 와 같은 자리(종료 딜 블록 자리, 가격 이력 위)·같은 문장
- * (@jirum/domain/live-alternatives). 상세 맨 아래 「함께 본 상품」 캐러셀은 노출 본 기기의 0.5% 만 눌러 이걸로 바꿨다.
+ * (@jirum/domain/live-alternatives). 상세 맨 아래 「함께 본 상품」 캐러셀은 노출 대비 누르는 기기가 거의 없어 이걸로 바꿨다.
  */
 export default function LiveAlternativeDeals({
   product,

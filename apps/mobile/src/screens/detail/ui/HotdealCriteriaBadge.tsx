@@ -16,7 +16,7 @@ import {cn} from '@/shared/lib/styling/className';
 /**
  * 상세 배지 + 뜻 한 줄 — 누르면 세 배지의 기준을 시트로 보여 준다. web `features/product-detail/ui/HotdealCriteriaBadge.tsx` 와 같은 내용.
  *
- * 10/10 에 옛 안내 시트(「AI 가 기존 가격과 비교해 3단계」)를 지웠다 — 배지 95%가 커뮤니티 인기글이라 사실이 아니었다.
+ * 10/10 에 옛 안내 시트(「AI 가 기존 가격과 비교해 3단계」)를 지웠다 — 배지 대부분이 커뮤니티 인기글이라 사실이 아니었다.
  * 이제 기준이 서버 한 곳(hot-deal-criteria.ts)에 숫자로 있어 그 문장을 그대로 보여 준다.
  */
 export default function HotdealCriteriaBadge({

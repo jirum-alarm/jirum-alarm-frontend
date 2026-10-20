@@ -23,7 +23,7 @@ const DISPLAY_LIMIT = 9;
 /**
  * 오래된 상품에 최신 핫딜을 권하는 블록.
  * web 모바일과 같이 3열 그리드, 최대 9개. 출처도 web 과 같다 — 동일상품 그룹 먼저, 모자라면 이 글보다 새
- * 진행 중 딜 중 같은 상품·같은 라인(서버 latestSimilarDeals). 예전 제목 키워드 최신순 검색은 채운 몫의 43%가
+ * 진행 중 딜 중 같은 상품·같은 라인(서버 latestSimilarDeals). 예전 제목 키워드 최신순 검색은 채운 몫의 절반 가까이가
  * 무관 상품이었다(2026-10-09).
  */
 export default function ExpiredProductWarning({

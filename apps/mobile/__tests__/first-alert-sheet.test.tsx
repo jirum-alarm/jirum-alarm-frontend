@@ -5,7 +5,7 @@ import FirstAlertSheet from '../src/features/keyword-prompt/ui/FirstAlertSheet';
 import {isFirstAlertDue} from '../src/shared/lib/first-alert';
 
 /**
- * 첫 실행 알림 시트(2026-10-15). 로그인 벽을 없앤 뒤 게스트의 3%만 키워드를 걸었다 — 그 칸을 메우는 시트.
+ * 첫 실행 알림 시트(2026-10-15). 로그인 벽을 없앤 뒤 키워드를 건 게스트가 거의 없었다 — 그 칸을 메우는 시트.
  * 지키는 것: 키워드 없는 게스트에게만·한 번만, 고른 것만 등록, 등록 뒤에만 OS 권한을 묻는다.
  */
 

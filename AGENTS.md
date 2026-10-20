@@ -156,7 +156,7 @@ src/components/         # 공통: Layouts·Sidebar(메뉴는 MENU 설정 배열)
 - 사이드바 메뉴 추가 = `src/components/Sidebar/index.tsx` 의 `MENU` 배열에 한 줄.
 - 실험(`/experiments`) = crawling-server `src/experiment/experiment-registry.ts` 를 읽기 전용으로 보여 준다. 실험·「배포 뒤 확인할 것」의 등록·판독 기록은 그 파일(커밋)로 — 절차는 같은 폴더 README.md. 판독일이 지났는데 결과가 없으면 `/health` 「실험 판독」 칸이 주의로 뜬다.
 - 서비스 점검(`/health`, admin 역할 전용) = 지금 문제·주의인 칸만 위에(눌러서 고치는 법), 정상은 이름만 한 줄, 직접 확인 절차는 접어 둔다. 내용은 `src/app/(admin)/health/lib/checks.ts` 한 곳 —
-  새 수익원·크롤러·세션을 붙이거나 사고를 겪으면 거기 한 칸 추가/갱신. 레포가 공개라 내부 IP·명령은 적지 말고 vault 런북 경로로.
+  새 수익원·크롤러·세션을 붙이거나 사고를 겪으면 거기 한 칸 추가/갱신. 명령이 필요한 절차는 vault 런북 경로로.
 - `public/` 은 비어 있어도 지우지 말 것(`.gitkeep`) — Dockerfile 이 COPY 한다.
 
 **Development Scripts:**
@@ -250,7 +250,7 @@ pnpm build            # Production build
     (브랜치 끝 워크트리 → cherry-pick → 설치·tsc·지문·jest(CI 조건) → 기동 확인 → 원격 끝 재확인 → `ota:publish` → push → 매니페스트 확인. `--dry-run` 은 발행 직전까지).
     JS 수정은 스토어에 나가 있는 runtime **전부**(10/17 기준 1.5.5·1.5.4(Android 만 — iOS 는 1.5.4 바이너리가 없다)·1.5.3·1.5.2·1.5.1·1.5.0·1.4.8·1.4.7 — main 은 1.5.6. `ota/runtime-1.5.5` = 0f22db4a(1.5.5 마지막 자동 OTA), `ota/runtime-1.5.4` = 4f614dac)에 따로 낸다 — `--runtime all` 이 origin 의 `ota/runtime-*` 전부를 돈다.
     **어느 runtime 까지?** 지난 7일 앱 활성 사용자(GA4 `appVersion` — 바이너리 버전이라 OTA 와 무관)의 **10% 이상**이면 낸다, 그 아래로 떨어지면 끊는다.
-    2026-10-13 실측(7일): Android 1.4.7 114·1.5.0 72·1.4.8 65, iOS 1.4.8 53·1.5.0 40·1.4.7 36 → 1.4.7·1.4.8·1.5.0 셋 다 낸다.
+    (2026-10-13 판정: 1.4.7·1.4.8·1.5.0 셋 다 기준 이상 — 버전별 수치는 vault.)
     `ota/runtime-1.5.3` 은 1.5.3 마지막 자동 OTA 커밋(57a5ca0f)에서 시작(10/16 Android 앱 링크 경로로 1.5.4 를 올리기 직전). `ota/runtime-1.5.1` 은 1.5.1 마지막 자동 OTA 커밋(620b2b75)에서 시작(10/13 1.5.2 를 main 에 합치기 직전). `ota/runtime-1.4.7` 은 1.4.8 브랜치 JS 를 runtime 1.4.7 로 낸 것(10/13) — 기동 확인 .app 은 EAS 1.4.7 sim-check 빌드
     (`eas build:list` 의 a7a48ab7 artifacts), 안드로이드는 스토어 AAB → `bundletool build-apks --mode=universal`.
   - 네이티브 변경은 몇 주에 한 번 묶어 낸다(스토어 업데이트를 사용자가 마주치는 횟수를 줄인다).

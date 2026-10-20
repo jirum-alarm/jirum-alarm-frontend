@@ -4,36 +4,31 @@
 왜: 공개 API 가 스키마를 아무에게나 내주던 것을 막았다(crawling-server introspection-guard.plugin.ts, 2026-10-15).
 release-tag 의 운영 스키마 관문(gql-check.mjs)과 codegen 의 스키마 갱신만 이 키로 연다.
 
-키는 Infisical prod /crawling-server LOCAL_JSON 의 graphql.introspectionKey(dev /crawling-server-dev 도 같은 값).
-env GRAPHQL_INTROSPECTION_KEY 가 있으면 그걸 쓰고, 없으면 Claude 의 isec.sh 로 읽는다.
+env GRAPHQL_INTROSPECTION_KEY 가 있으면 그걸 쓰고, 없으면 로컬 헬퍼(기본 ~/.config/jirum/introspection-key,
+env JIRUM_INTROSPECTION_KEY_CMD 로 바꿈)가 stdout 으로 낸 값을 쓴다. 헬퍼 내용은 jirum vault 참고.
 
   GRAPHQL_INTROSPECTION_KEY=$(python3 scripts/introspection_key.py) pnpm --filter @jirum/graphql-schema refresh
 """
-import json
 import os
 import subprocess
 import sys
 
-ISEC = os.path.expanduser('~/.claude/scripts/isec.sh')
+HELPER = os.path.expanduser(os.environ.get('JIRUM_INTROSPECTION_KEY_CMD', '~/.config/jirum/introspection-key'))
 
 
 def introspection_key():
     if os.environ.get('GRAPHQL_INTROSPECTION_KEY'):
         return os.environ['GRAPHQL_INTROSPECTION_KEY']
-    if not os.path.exists(ISEC):
+    if not os.path.exists(HELPER):
         return ''
-    p = subprocess.run([ISEC, 'secrets', 'get', 'LOCAL_JSON', '--env=prod', '--path=/crawling-server', '--plain'],
-                       capture_output=True, text=True)
+    p = subprocess.run([HELPER], capture_output=True, text=True)
     if p.returncode != 0:
         return ''
-    try:
-        return json.loads(p.stdout).get('graphql', {}).get('introspectionKey', '')
-    except ValueError:
-        return ''
+    return p.stdout.strip()
 
 
 if __name__ == '__main__':
     key = introspection_key()
     if not key:
-        sys.exit('introspection 키를 못 찾음 — env GRAPHQL_INTROSPECTION_KEY 를 넣거나 isec.sh 를 확인')
+        sys.exit(f'introspection 키를 못 찾음 — env GRAPHQL_INTROSPECTION_KEY 를 넣거나 {HELPER} 를 확인')
     print(key)

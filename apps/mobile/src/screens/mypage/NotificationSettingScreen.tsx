@@ -60,8 +60,8 @@ const HOT_ONLY = {
 /**
  * 알림 설정. web `/mypage/notification`(PushSettingForm).
  *
- * 백엔드(pushSetting / updatePushSetting)는 있었는데 화면이 없어서 2026-10-01 기준 1,204명
- * 전원이 기본값이었다(야간 동의 0명 → 밤 알림이 전부 아침으로 밀림).
+ * 백엔드(pushSetting / updatePushSetting)는 있었는데 화면이 없어서 2026-10-01 기준 사용자
+ * 전원이 기본값이었다(야간 동의 0 → 밤 알림이 전부 아침으로 밀림).
  */
 export default function NotificationSettingScreen({navigation}: Props) {
   const {data, isPending, isError, refetch} = useQuery(

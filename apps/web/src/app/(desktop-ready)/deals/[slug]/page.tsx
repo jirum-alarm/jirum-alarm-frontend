@@ -385,7 +385,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             {heroImage && (
               <div className="relative h-40 w-40 shrink-0 overflow-hidden rounded-lg bg-gray-50">
                 {/* webp 우선 + 없으면 원본 폴백. S3 webp 변환 커버리지가 91.8% 라
-                    (2026-09-02 전수 실측: 원본 87.5만 중 7.1만 누락) 폴백 없이 webp 를 쓰면
+                    (2026-09-02 전수 실측) 폴백 없이 webp 를 쓰면
                     8% 가 403 으로 깨진다 — CDN 은 폴백을 안 해준다(실측 403).
                     ImageComponent 는 fallbackSrc 가 있으면 클라 컴포넌트로 가서 priority
                     preload 가 빠지는데, 히어로 1장 preload 보다 안 깨지는 게 우선. */}

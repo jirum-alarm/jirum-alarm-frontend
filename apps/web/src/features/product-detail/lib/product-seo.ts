@@ -112,7 +112,7 @@ const DAY_MS = 24 * 60 * 60 * 1000;
  *
  * 크롤러가 매일 다시 확인하는 스토어 딜(토스)은 `data.toss.lastSeenAt`(마지막 확인 시각)을 쓴다.
  * 게시일(=최초 수집일)로 재면 오늘도 판매 중인 딜에 "N개월 전·품절됐을 수 있어요"가 붙는다 —
- * 2026-10-06 실측: 토스 딜 조회의 85%가 7일+ 페이지였고 클릭률이 1.22% → 0.7%로 떨어졌다.
+ * 토스 딜 조회 대부분이 7일+ 페이지였고 그 페이지에서 클릭률이 눈에 띄게 떨어졌다.
  * 커뮤니티 딜은 값이 없으니 게시일 그대로.
  */
 export function dealFreshnessAt<T extends string | Date | null | undefined>(product: {
@@ -225,7 +225,7 @@ export function buildRssItemTitle(title: string, price?: string | null): string 
   return `${title} (${price})`;
 }
 
-/** 제목에 이미 구매 의도어가 있나. 네이버 실측상 의도어 검색의 CTR 이 2.9배 높다. */
+/** 제목에 이미 구매 의도어가 있나. 네이버 실측상 의도어 검색의 CTR 이 몇 배 높다. */
 function hasDealIntentWord(title: string): boolean {
   return /핫딜|최저가|특가|할인|쿠폰|무료|무배|파지|공구|이벤트/.test(title);
 }
@@ -256,8 +256,8 @@ function clipTitleBase(title: string): string {
  *
  * 가격이 있고 제목이 "그냥 상품명"일 때만 `최저가 N원 핫딜` 을 덧붙인다.
  * 근거(2026-09-01 네이버 서치어드바이저 report/expose 30일 실측):
- * 의도어 포함 검색어 CTR 17.1% vs 순수 상품명 5.9% — 2.9배. 전체 CTR 은 1.0%.
- * 표본 50개 중 56%가 "가격·의도어 둘 다 없는" 제목이라 여기가 개선 여지.
+ * 의도어 포함 검색어 CTR 이 순수 상품명의 몇 배다.
+ * 표본의 절반 이상이 "가격·의도어 둘 다 없는" 제목이라 여기가 개선 여지.
  *
  * ponytail: 이미 가격/의도어가 있으면 건드리지 않는다 — 중복 표기가 되레 지저분해지고,
  * 커뮤니티 원문 제목이 이미 "(2,550원/무료)" 형태를 자주 포함한다.
@@ -340,8 +340,8 @@ export function seoTitleVariantOf(productId: number): SeoTitleVariant {
  * 상세 화면 근거 블록과 같은 말이라 설명이 내용과 어긋나지 않는다. 30일 넘은 딜·종료 딜엔 「지금 싸다」는
  * 말을 하지 않는다(제목 주석과 같은 이유 — 네이버 스팸 기준 「제목·설명이 내용과 다름」).
  *
- * AB 로 재지 않고 전체에 켰다(2026-10-12): 근거가 붙는 페이지가 네이버 랜딩의 24%뿐이라 4주 군당 ~670세션,
- * 잡을 수 있는 최소 효과가 클릭 +16.5% — 설명 한 줄로 기대할 크기보다 크다. 등록부 seo_description_evidence_v1(기각).
+ * AB 로 재지 않고 전체에 켰다(2026-10-12): 근거가 붙는 페이지가 네이버 랜딩의 일부뿐이라 4주 표본이 작고,
+ * 잡을 수 있는 최소 효과가 설명 한 줄로 기대할 크기보다 크다. 등록부 seo_description_evidence_v1(기각).
  * 모든 페이지에 똑같이 들어가 제목 실험(seoTitleVariantOf)의 홀/짝 비교는 흔들지 않는다.
  */
 export function formatEvidenceSentence(

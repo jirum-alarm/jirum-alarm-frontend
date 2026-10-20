@@ -10,7 +10,7 @@ import { ProviderHealthOutput } from '@/types/stats';
 /**
  * 서비스 점검표 — 기능마다 「지금 상태 / 깨지면 보이는 것 / 확인 / 고치기」.
  * 화면이 읽을 신호가 있는 항목은 상태를 계산하고, 없는 항목은 'manual'(직접 확인)로 둔다.
- * ⚠️ 이 레포는 공개라 내부 IP·명령은 적지 않는다 — 명령이 필요한 절차는 jirum vault 런북 경로로 보낸다.
+ * 명령이 필요한 절차는 jirum vault 런북 경로로 보낸다.
  */
 export type Level = 'danger' | 'warn' | 'ok' | 'manual';
 
@@ -123,7 +123,7 @@ const coverageCheck = (b: Signals['backend']): Pick<Check, 'level' | 'now'> => {
   return { level: 'ok', now };
 };
 
-/** 일괄 작업으로 대기가 수만 건 쌓이는 건 정상(10/9 토스 가이드 5.7만) — 생존은 「마지막 처리」로 본다 */
+/** 일괄 작업으로 대기가 수만 건 쌓이는 건 정상 — 생존은 「마지막 처리」로 본다 */
 const llmCheck = (b: Signals['backend']): Pick<Check, 'level' | 'now'> => {
   if (!b) return { level: undefined };
   const m = b.llmMinutesSinceLastDone;
@@ -250,7 +250,7 @@ const baseSections = (s: Signals): Section[] => [
         level: sessionLevel(s.toss, 'danger'),
         now: s.toss === false ? '만료 — 토스 발급·정산 멈춤' : undefined,
         symptom:
-          '토스 딜(최대 수익원) 구매 버튼이 제휴 링크 없이 나간다. 정산 수치가 멈춘다. 토스 스토어 피드도 "수집 스킵"으로 빈다.',
+          '토스 딜 구매 버튼이 제휴 링크 없이 나간다. 정산 수치가 멈춘다. 토스 스토어 피드도 "수집 스킵"으로 빈다.',
         check: [
           '이 칸이 초록이면 실제 토스 API 로 검증된 세션이다(만료면 서버가 키를 지운다).',
           '격일 06:00 자동 재발급 배치가 있다 — 이게 실패하면 만료가 이어진다.',
@@ -271,7 +271,7 @@ const baseSections = (s: Signals): Section[] => [
           '스마트스토어·브랜드스토어 딜에 제휴 링크가 안 붙는다. 네이버BC 스토어 피드와 네이버 판매 수집도 같이 멈춘다(쿠키 하나를 셋이 같이 쓴다).',
         check: [
           '자동 갱신이 없다. 만료(401/403)되면 서버가 키를 지우고 알림을 한 번 보낸다.',
-          '쿠키가 있어도 하루 발급 한도(1,000건)를 다 쓰면 그날은 nv:daily_limit 로 멈춘다 — 수익 링크 › 대시보드의 미발급 사유에서 보인다.',
+          '쿠키가 있어도 하루 발급 한도를 다 쓰면 그날은 nv:daily_limit 로 멈춘다 — 수익 링크 › 대시보드의 미발급 사유에서 보인다.',
         ],
         fix: [
           'brandconnect.naver.com 로그인 → 아무 요청 Copy as cURL → 수익 링크 › 발급·세션 › 네이버 브랜드커넥트 카드에 붙여넣기.',
@@ -315,7 +315,7 @@ const baseSections = (s: Signals): Section[] => [
         title: '몰별 링크 발급 (최근 24시간)',
         ...issuingCheck(s.profit),
         symptom:
-          '특정 몰의 발급이 0건 — 그 몰 딜이 전부 커미션 없이 나간다. 과거: 애드픽 리미터 고장 11일, 알리 요청 무한대기 5일, 쿠팡 11자리 상품번호 오인.',
+          '특정 몰의 발급이 0건 — 그 몰 딜이 전부 커미션 없이 나간다. 과거: 리미터 고장·요청 무한대기·상품번호 오인으로 한동안 0건이 이어졌다.',
         check: [
           '수익 링크 › 대시보드의 「미발급 사유」에서 그 몰의 에러 코드를 본다: *:no_token=세션, nv:daily_limit=쿼터, cp:fail_429=쿠팡 시간당 한도, lp:no_merchant=링크프라이스 미제휴 몰.',
           '세션이 멀쩡한데 0건이면 워커(상품 후처리) 쪽 — 로그에 ECONNREFUSED·timeout 이 있는지.',
@@ -336,7 +336,7 @@ const baseSections = (s: Signals): Section[] => [
           ? `지금 재시도 가능 ${s.queue.eligibleNow.toLocaleString()}건 · 포기 ${s.queue.parked.toLocaleString()}건`
           : undefined,
         symptom:
-          '30분마다 도는 재시도 배치가 멈추면 처음에 실패한 딜이 영영 링크 없이 남는다. 과거: 배치가 5일간 좀비로 걸려 1.2만 건 적체.',
+          '30분마다 도는 재시도 배치가 멈추면 처음에 실패한 딜이 영영 링크 없이 남는다. 과거: 배치가 며칠간 좀비로 걸려 대량 적체.',
         check: [
           '「지금 재시도 가능」이 계속 늘기만 하면 배치가 안 돌고 있다.',
           '「포기」가 갑자기 늘면 일시적 사유(쿼터·세션)로 시도 3회를 다 쓴 것 — 되살릴 수 있다.',
@@ -353,9 +353,9 @@ const baseSections = (s: Signals): Section[] => [
         title: '판매·정산 수신',
         ...salesCheck(s.profit),
         symptom:
-          '수익 대시보드 숫자가 멈춘다. 수집 배치는 몰별 실패를 로그로만 남기고 성공으로 끝나서 알람이 안 운다 — 14일 무소식이 유일한 신호. 과거: 알리 콜백 주소가 http 로 등록돼 8주 0건.',
+          '수익 대시보드 숫자가 멈춘다. 수집 배치는 몰별 실패를 로그로만 남기고 성공으로 끝나서 알람이 안 운다 — 14일 무소식이 유일한 신호. 과거: 콜백 주소가 http 로 등록돼 몇 주간 0건.',
         check: [
-          '수익 링크 › 대시보드의 몰별 「마지막 판매」. 쿠팡은 원래 드물고(정상 최대 공백 17일) 정산이 늦게 확정된다.',
+          '수익 링크 › 대시보드의 몰별 「마지막 판매」. 쿠팡은 원래 드물고(공백이 꽤 길어도 정상) 정산이 늦게 확정된다.',
           '오늘의집·카카오는 판매 수집 자체가 없다 — 각 제휴 콘솔에서 본다.',
         ],
         fix: [
@@ -399,7 +399,7 @@ const baseSections = (s: Signals): Section[] => [
         id: 'kakao-bot',
         title: '카톡 단톡방 발송봇',
         level: 'manual',
-        symptom: '단톡방에 딜이 안 올라온다. 구매 전환 1위 채널(utm=kakao)이라 수익 직격.',
+        symptom: '단톡방에 딜이 안 올라온다. 주요 구매 유입 채널(utm=kakao)이라 바로 타격.',
         check: ['단톡방에 최근 몇 시간 안에 올라온 딜이 있는지. 봇 루프의 생존 핑(healthchecks).'],
         fix: [
           '봇이 도는 윈도우 VM 에 원격 접속해 루프를 다시 켠다(서비스로 돌리면 카톡 창을 못 찾는다).',
@@ -430,7 +430,7 @@ const baseSections = (s: Signals): Section[] => [
         title: '커뮤니티 수집',
         ...communityCheck(s.community),
         symptom:
-          '특정 커뮤니티 딜이 피드에서 사라진다. 과거: 접속 IP 차단(430/403)으로 fmkorea·zod 두 달 0건, VPN 사이드카 고착으로 클리앙·맘이베베 6일 정지, 뽐뿌 Referer·댓글 구조 변경.',
+          '특정 커뮤니티 딜이 피드에서 사라진다. 과거: 접속 IP 차단(430/403)으로 일부 커뮤니티 장기간 0건, VPN 사이드카 고착으로 며칠 정지, Referer·댓글 구조 변경.',
         check: [
           '크롤링 화면에서 멈춘 곳의 마지막 수집 시각과 사이트 최신 글을 비교한다(사이트도 조용하면 오탐).',
           '여러 곳이 한꺼번에 멈췄으면 크롤러가 아니라 상품 파이프라인(아래) 쪽이다.',
@@ -448,7 +448,7 @@ const baseSections = (s: Signals): Section[] => [
         title: '커뮤니티 반응 신호',
         ...engagementCheck(s.backend),
         symptom:
-          '수집은 성공인데 좋아요·댓글·조회·인기글이 0 으로 저장된다 — 랭킹·인기글 배지·카톡 기준이 그 커뮤니티 반응을 못 보고, 위 「커뮤니티 수집」은 초록불 그대로다. 과거: 맘이베베 인기글 9/21~ 3주(카페가 인기글을 끔), 클리앙 댓글 수 8월~ 두 달(댓글 수 표시 클래스 변경).',
+          '수집은 성공인데 좋아요·댓글·조회·인기글이 0 으로 저장된다 — 랭킹·인기글 배지·카톡 기준이 그 커뮤니티 반응을 못 보고, 위 「커뮤니티 수집」은 초록불 그대로다. 과거: 카페가 인기글을 꺼 몇 주, 댓글 수 표시 클래스가 바뀌어 한동안 0 으로 저장.',
         check: [
           '원본 글 몇 개를 열어 화면의 추천·댓글이 정말 0 인지 본다 — 시티·딜바다 좋아요는 원래 0 이다(평소 비율이 0 인 신호는 판정하지 않는다).',
           '판정: 최근 글(좋아요·댓글·조회는 수집 6~48시간, 인기글은 1~4일)에서 값이 0 아닌 글이 평소(7~30일 전) 비율로 기대한 수의 10% 이하이고, 우연일 확률이 0.1% 미만. 매일 08:05 Mattermost `log-collect-community-error` 에 같은 판정이 온다.',
@@ -465,7 +465,7 @@ const baseSections = (s: Signals): Section[] => [
         title: '스토어 피드 (토스·네이버BC·알리 등)',
         ...feedLevel(s.mall, 12 * 60, 48 * 60),
         symptom:
-          '스토어 상품 신규 유입이 0이 된다. 서버 신선도 알람 대상이 아니라 여기서만 보인다. 과거: 토스 신규 유입 정지(업데이트 시각만 갱신), 토스 일괄 수집이 1.5만 건을 쏟아 상품 파이프라인 정지.',
+          '스토어 상품 신규 유입이 0이 된다. 서버 신선도 알람 대상이 아니라 여기서만 보인다. 과거: 토스 신규 유입 정지(업데이트 시각만 갱신), 토스 일괄 수집이 대량으로 쏟아져 상품 파이프라인 정지.',
         check: [
           '토스 3시간·네이버BC·알리 6시간 주기 — 12시간 넘게 없으면 늦은 것.',
           '토스가 멈췄으면 위 토스 세션부터, 네이버BC 면 네이버 세션부터.',
@@ -481,7 +481,7 @@ const baseSections = (s: Signals): Section[] => [
         title: '다나와 수집',
         ...feedLevel(s.danawa, 2 * 24 * 60, 4 * 24 * 60),
         symptom:
-          '가격 비교·다나와 최저가 근거가 낡는다. 과거: 브라우저 좀비 프로세스 6,570개 누적, 몰 목록 한글 깨짐(euc-kr 섞임).',
+          '가격 비교·다나와 최저가 근거가 낡는다. 과거: 브라우저 좀비 프로세스 수천 개 누적, 몰 목록 한글 깨짐(euc-kr 섞임).',
         check: ['격일 수집이라 2일 넘게 없으면 늦은 것. 다나와 HTML 이 바뀌면 조용히 0건이 된다.'],
         fix: ['다나와 크롤러 파드 메모리·프로세스 수 확인 후 재시작, 파싱 0건이면 셀렉터 수정.'],
         href: '/crawling',
@@ -500,7 +500,7 @@ const baseSections = (s: Signals): Section[] => [
             ? `최근 2일 수집률 ${(((s.thumbnail.total - s.thumbnail.missing) / s.thumbnail.total) * 100).toFixed(0)}% (${s.thumbnail.total.toLocaleString()}건 중)`
             : undefined,
         symptom:
-          '카드에 회색 빈 상자. 과거: 뽐뿌 CDN 이 요청을 403 으로 막았는데 에러를 삼켜 3주간 몰랐다, 썸네일 워커가 큐 에러로 죽음.',
+          '카드에 회색 빈 상자. 과거: 뽐뿌 CDN 이 요청을 403 으로 막았는데 에러를 삼켜 한동안 몰랐다, 썸네일 워커가 큐 에러로 죽음.',
         check: ['크롤링 › 썸네일 탭에서 출처별로 어디가 빠졌는지.'],
         fix: [
           '썸네일 워커 재시작, 원인 수정 후 빠진 기간만 백필(10건 먼저).',
@@ -547,7 +547,7 @@ const baseSections = (s: Signals): Section[] => [
               ? '「노트북」 검색 결과 0건'
               : undefined,
         symptom:
-          '검색이 에러를 내거나 결과가 빈다. 과거: 검색 서버(LXC) 재부팅 후 IP 가 바뀌어 전면 장애.',
+          '검색이 에러를 내거나 결과가 빈다. 과거: 검색 서버 재부팅 후 IP 가 바뀌어 전면 장애.',
         check: ['이 칸은 「노트북」을 실제로 검색해 본다.'],
         fix: [
           '검색 서버 주소(MEILI_HOST)가 실제 IP 와 같은지 → 다르면 env 수정 후 API 재시작.',
@@ -559,7 +559,7 @@ const baseSections = (s: Signals): Section[] => [
         title: '상품 매칭 커버리지',
         ...coverageCheck(s.backend),
         symptom:
-          '가격 비교·다나와 배지가 사라진다. 과거: 매핑률 91%→16% 급락(8,520건 고착), LLM 결제 실패(402)를 「불일치」로 삼켜 오판정.',
+          '가격 비교·다나와 배지가 사라진다. 과거: 매핑률 급락(대량 고착), LLM 결제 실패(402)를 「불일치」로 삼켜 오판정.',
         check: [
           '이 칸은 매일 09:00 감시 배치와 같은 기준(수집 2~3일 전 게이트 카테고리 딜 중 매핑 60% 이상)으로 지금 잰다.',
           s.pendingMatches !== undefined
@@ -645,7 +645,7 @@ const baseSections = (s: Signals): Section[] => [
         title: 'DB·Redis',
         level: 'manual',
         symptom:
-          '서버 CrashLoop, 크롤러 연쇄 사망, 간헐 에러. 과거: 커넥션 고갈, Redis AOF 깨짐, 정전으로 DB 3종 동시 손상.',
+          '서버 CrashLoop, 크롤러 연쇄 사망, 간헐 에러. 과거: 커넥션 고갈, Redis AOF 깨짐, 정전으로 DB 동시 손상.',
         check: ['MySQL·Valkey·Kafka Down 알람. 커넥션 수/한도.'],
         fix: [
           '상세: jirum vault runbook/redis-aof-corruption-autofix.md · runbook/nfs-db-crash-recovery.md',
@@ -666,7 +666,7 @@ const baseSections = (s: Signals): Section[] => [
         title: '배치(크론잡)',
         level: 'manual',
         symptom:
-          '정산 수집·재시도·감시·백업 같은 배치가 실패하거나 Pending 에 걸린다. 과거: 알림 키워드 추천 배치가 22일간 실패, 모델 페이지 생성 OOM 사흘.',
+          '정산 수집·재시도·감시·백업 같은 배치가 실패하거나 Pending 에 걸린다. 과거: 추천 배치가 몇 주간 실패, 페이지 생성 배치가 OOM 으로 며칠.',
         check: [
           '이 칸은 Prometheus 의 크론잡 실패·Pending 알람을 그대로 보여준다(대상 = 크론잡 이름).',
           'Job 은 성공인데 결과가 0인 배치(크롤러·정산)는 여기 안 잡힌다 — 각 칸의 실데이터 판정을 본다.',
@@ -679,7 +679,7 @@ const baseSections = (s: Signals): Section[] => [
         id: 'other-alerts',
         title: '그 밖의 알람',
         level: 'manual',
-        symptom: '위 칸에 안 묶이는 알람(노드·k8s·Proxmox·NAS·관측 스택 등).',
+        symptom: '위 칸에 안 묶이는 알람(노드·k8s·홈랩 인프라·관측 스택 등).',
         check: ['이 칸은 위 칸들에 연결되지 않은 critical·warning 알람을 모은다.'],
         fix: [
           '알람 이름으로 jirum vault runbook/homelab-monitoring-coverage-map.md 에서 절차를 찾는다.',
@@ -717,7 +717,7 @@ const baseSections = (s: Signals): Section[] => [
               ? `판독 밀림: ${s.experimentsOverdue.map((e) => e.title).join(', ')}`
               : undefined,
         symptom:
-          '판독일이 지났는데 결과가 없다. 과거: 게스트 추천 부스트를 6/1 에 켠 뒤 4개월 넘게 한 번도 판독하지 않았다.',
+          '판독일이 지났는데 결과가 없다. 과거: 켜 둔 실험을 몇 달간 한 번도 판독하지 않았다.',
         check: ['실험 화면에서 그 항목의 「판독 방법」대로 숫자를 낸다.'],
         fix: [
           '서버 레포 src/experiment/experiment-registry.ts 의 그 항목 results 에 날짜·숫자·결정을 덧붙여 커밋한다. 다음 판독일이 있으면 checkAt 을 미룬다.',

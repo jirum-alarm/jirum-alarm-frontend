@@ -48,7 +48,7 @@ const BottomNavList = [
     isActive: (pathName: string) => pathName.startsWith(PAGE.TRENDING),
   },
   {
-    // 2026-10-20 커뮤니티 자리(28일 앱 사용자 4%)를 키워드에 줬다 — 알림을 거는 단위라 북극성(알림 경유 재방문)에 가깝다.
+    // 2026-10-20 커뮤니티 자리(쓰는 사람이 소수)를 키워드에 줬다 — 알림을 거는 단위라 북극성(알림 경유 재방문)에 가깝다.
     // 커뮤니티는 홈 헤더 말풍선으로 간다. 모델 페이지(/deals)는 키워드 아래층이라 같이 켠다(PC 메뉴와 같은 규칙).
     type: NAV_TYPE.KEYWORDS,
     link: PAGE.KEYWORDS,

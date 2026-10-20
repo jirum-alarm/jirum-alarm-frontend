@@ -53,8 +53,8 @@ export type OkachatPlacement = 'soft' | 'after_purchase' | 'first_visit' | 'home
  * 값은 그 중간 페이지의 「참여하기」 버튼이 쓰는 data-intent-uri 그대로다. 카톡이 없으면
  * 브라우저가 browser_fallback_url(= 지금의 중간 페이지)로 보낸다.
  *
- * 웹은 링크를 누르면 중간 페이지가 뜨고 「참여하기」를 한 번 더 눌러야 했다 — 4주 클릭 ~550명에
- * 방 순증 ~40명(2026-10-12). 앱(apps/mobile openOkachat)은 이미 카톡으로 바로 넘긴다.
+ * 웹은 링크를 누르면 중간 페이지가 뜨고 「참여하기」를 한 번 더 눌러야 했다 — 클릭에 비해
+ * 방 순증이 아주 적었다. 앱(apps/mobile openOkachat)은 이미 카톡으로 바로 넘긴다.
  */
 export const OKACHAT_ANDROID_INTENT = `intent://join?l=gJZTWAAg&r=EW#Intent;scheme=kakaoopen;package=com.kakao.talk;S.browser_fallback_url=${encodeURIComponent(OKACHAT_LINK)};end`;
 

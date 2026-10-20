@@ -22,7 +22,7 @@ import { sourceColor, sourceName } from '@/lib/labels';
 import { partialRevenueStart } from '@/lib/revenue';
 import { kstDaysAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
 
-// 수익 90%가 고가전자 (노트북/GPU/TV/가전) — 작업 큐 기본 필터
+// 고가전자(노트북/GPU/TV/가전)부터 — 작업 큐 기본 필터
 const HIGH_VALUE_CATEGORY_IDS = [1, 6, 9];
 
 // 오늘(KST) 포함 최근 days 일 — exclusive 종료일 처리는 공용 헬퍼가 한다
@@ -74,8 +74,8 @@ const ProviderHealthSection = () => {
     issued24h > 0 ? 'ok' : issued7d > 0 ? 'warn' : 'danger';
 
   // 판매 판정은 서버(salesHealth)가 배치 알람과 같은 기준으로 내린다 — 여기서 다시
-  // 판정하지 않는다. 예전엔 `sales7d > 0` 이라는 자체 기준이라, 원래 드문 쿠팡(90일 중
-  // 판매일 5일)이 상시 노란불이었고 사람이 매번 "쿠팡은 원래 저래" 하고 넘겨야 했다.
+  // 판정하지 않는다. 예전엔 `sales7d > 0` 이라는 자체 기준이라, 원래 드문 쿠팡이
+  // 상시 노란불이었고 사람이 매번 "쿠팡은 원래 저래" 하고 넘겨야 했다.
   const saleDotLevel: Record<string, StatusLevel> = { ok: 'ok', silent: 'danger', sparse: 'muted' };
 
   return (
@@ -131,8 +131,8 @@ const ProviderHealthSection = () => {
         <p className="mt-1 leading-relaxed">
           판매는 콜백·폴링을 <b>받은</b> 시각 기준이고, 서버가 배치 알람과 같은 기준으로 판정한다.
           <b> 빨강</b>=14일 넘게 판매 소식 없음(사고, 제휴사 콘솔 확인), <b>회색</b>=원래 드물어
-          판정 안 함. 2026-09-13 실측 정상 최대 공백: 링크프라이스 2일 · 애드픽/토스/네이버 6일 ·
-          알리 7일 · 쿠팡 17일. 커미션은 수수료 총액 추정치(세전).
+          판정 안 함. 정상 공백은 출처마다 며칠에서 2주 남짓까지 다르다. 커미션은 수수료 총액
+          추정치(세전).
         </p>
       </details>
     </ChartCard>
@@ -304,9 +304,7 @@ const MissedProductsSection = () => {
           setShown(10);
         }}
       />
-      <p className="mt-1.5 text-[11px] text-bodydark2">
-        고가 전자 = 노트북·GPU·TV·가전 (수익의 90%)
-      </p>
+      <p className="mt-1.5 text-[11px] text-bodydark2">고가 전자 = 노트북·GPU·TV·가전</p>
       <ul className="mt-2 divide-y divide-stroke dark:divide-strokedark">
         {rows.slice(0, shown).map((row) => (
           <li key={row.id} className="py-2.5">
@@ -387,9 +385,9 @@ const RevenueTrendSection = () => {
         />
       </div>
       <p className="mt-2 text-xs text-bodydark2">
-        결제일 기준·취소 제외. 토스는 원천징수 3.3% 뺀 금액이고 실제 지급은 구매확정월이라 날짜가
-        밀린다. 애드센스는 GA4 추정치. * 는 집계 중 — 쿠팡·네이버·애드픽·애드센스는 다음 날 오후 3시
-        반쯤 들어와 더 오른다.
+        결제일 기준·취소 제외. 토스는 원천징수 뺀 금액이고 실제 지급은 구매확정월이라 날짜가 밀린다.
+        애드센스는 GA4 추정치. * 는 집계 중 — 쿠팡·네이버·애드픽·애드센스는 다음 날 오후 3시 반쯤
+        들어와 더 오른다.
       </p>
     </ChartCard>
   );

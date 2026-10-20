@@ -28,8 +28,8 @@ import { isLiveAlternativeTarget, LIVE_ALTERNATIVE_LIMIT } from '../lib/live-alt
 
 /**
  * 막 올라온 딜 상세의 「다른 곳 진행 중인 딜」 — 같은 상품을 다른 값에 파는 딜, 용량·구성이 다른 같은 라인 딜.
- * 상세 아래 캐러셀(함께 본·카테고리 인기)은 노출 본 기기의 0.5% 만 눌렀고 같은 자리의 종료 딜 블록은 4.6% 였다
- * (2026-10-8~14 서버 노출 기록). 그래서 이 상품과 이어진 것만, 종료 딜 블록 자리(가격 이력 위)에 둔다.
+ * 상세 아래 캐러셀(함께 본·카테고리 인기)은 거의 눌리지 않았고 같은 자리의 종료 딜 블록은 몇 배 더 눌렸다
+ * (서버 노출 기록). 그래서 이 상품과 이어진 것만, 종료 딜 블록 자리(가격 이력 위)에 둔다.
  * 실험 등록부 obs_detail_live_alternatives.
  */
 export default function LiveAlternativeDeals({

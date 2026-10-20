@@ -32,7 +32,7 @@ function pushEvent(event: string, props: Record<string, unknown>) {
 
 /**
  * 상품 상세에 "처음" 진입한 유저를 앱 설치로 유도한다 — 폰은 바텀시트, PC 는 가운데 모달(QR).
- * - 데이터 근거: 상세 본 유저 재방문율 모바일 7% / PC 4.8%, 재방문 훅(앱DL·키워드) 사망 수준.
+ * - 데이터 근거: 상세 본 유저 재방문율이 모바일·PC 모두 낮고, 재방문 훅(앱DL·키워드)이 사망 수준.
  * - 카피/이미지/스토어버튼은 알림탭 AppDownloadGuide 와 동일.
  * - 애플 → App Store, 안드 → Google Play, PC(비모바일) → 둘 다 노출.
  * - 앱내웹뷰(isJirumAlarmApp)는 유도 대상 아님 → 미노출.

@@ -30,7 +30,7 @@ export default function ProductDetailPageHeader({
   return (
     <PageHeader
       leading={<BackButton backTo={PAGE.HOME} />}
-      /* 상세로 유입된 사람의 90%가 이 한 장만 보고 이탈하고, 홈·랭킹 도달은 0.4%다.
+      /* 상세로 유입된 사람 대부분이 이 한 장만 보고 이탈하고, 홈·랭킹 도달은 거의 없다.
          로고만으로는 "여기가 뭐 하는 곳인지" 전달되지 않아 서비스 인지가 안 생긴다.
 
          태그라인은 로고 옆/아래가 아니라 로고 자체의 부제로 붙인다. h-14 안에 두 줄을

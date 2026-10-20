@@ -64,8 +64,8 @@ export const HEAVY_KEYWORD_ALERTS_PER_DAY = 5;
 
 /**
  * 최근 24시간 동안 받은 **키워드 알림** 건수(관심사·좋은 딜·커뮤니티는 빼고).
- * 「핫딜만 받기」는 설정 화면에만 두면 아무도 안 켠다 — 키워드 조건(가격·제외 단어)이 그랬다(10/12 0/1,731, 그 화면 2주 방문 수십 명).
- * 그래서 알림이 많은 사람이 실제로 보는 자리(알림함)에서 권한다. 2026-10-07~13 사람·하루 평균 4.3건, 5건 넘는 날이 26%.
+ * 「핫딜만 받기」는 설정 화면에만 두면 아무도 안 켠다 — 키워드 조건(가격·제외 단어)이 그랬다(켠 사람이 거의 없었다).
+ * 그래서 알림이 많은 사람이 실제로 보는 자리(알림함)에서 권한다. 하루 여러 건 받는 날이 적지 않았다.
  * 앱 `screens/alarm/lib/notification-source.ts` recentKeywordAlertCount 와 같은 규칙.
  */
 export function recentKeywordAlertCount(
@@ -85,7 +85,7 @@ export const GOOD_PRICE_NUDGE_MIN_ALERTS = 2;
 /**
  * 최근 24시간 동안 가장 많이 온 **내 키워드**와 건수. 동률이면 먼저 받은 순서.
  * 「핫딜만 받기」(전체 설정)보다 좁은 처방 — 시끄러운 키워드 하나만 좋은 가격일 때로 줄인다(2026-10-15:
- * 지난 7일 한 키워드로 7건+ 받은 58명 대부분이 펩시·삼다수 같은 생필품, 읽음 3.4%).
+ * 한 키워드로 많이 받는 사람 대부분이 펩시·삼다수 같은 생필품이고, 거의 읽지 않았다).
  * 앱 `screens/alarm/lib/notification-source.ts` topKeywordToday 와 같은 규칙.
  */
 export function topKeywordToday(

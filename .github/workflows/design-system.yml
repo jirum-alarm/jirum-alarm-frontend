@@ -4,7 +4,7 @@ name: design-system
 #   검증: 토큰·카탈로그 테스트(packages/design-system) → 놀이터 타입 → 모든 스토리를 라이트·다크로 렌더 +
 #         조작 시나리오(play) + 접근성(axe, 대비 AA·이름 없는 버튼 등) → 정적 빌드.
 #   배포: 검증한 정적 빌드를 그대로 nginx 이미지에 담아 Harbor → gitops apps/frontend-design 태그 → ArgoCD.
-#         https://design.jirum-alarm.com (공개 — 레포가 공개라 담긴 것도 같다. GitHub Pages 는 조직 설정이 막아 둠)
+#         https://design.jirum-alarm.com (GitHub Pages 는 조직 설정이 막아 둠)
 # 놀이터는 web 컴포넌트 스토리를 모아 보여 주므로 web 공용 UI 가 바뀌어도 돈다.
 # lint-web-family: web·ai·landing·beauty-web 의 디자인 린트(토큰·격자·층). 이 레포는 main 직접 푸시라
 #   web 계열 배포 워크플로엔 린트가 없고(web-pr-check 는 PR 에서만), 커밋 훅을 건너뛴 커밋은 그대로 나갔다.
