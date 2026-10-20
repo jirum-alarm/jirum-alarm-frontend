@@ -20,6 +20,7 @@ export type SeasonDeal = {
   isHot?: boolean | null;
   hotDealType?: HotDealType | null;
   isYearLowest?: boolean | null;
+  priceSaving?: { basis: string; percent: number } | null;
   provider?: { nameKr?: string | null } | null;
 };
 
@@ -42,6 +43,10 @@ const SeasonDealsDocument = new TypedDocumentString<
       isHot
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }

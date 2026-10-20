@@ -32,6 +32,7 @@ export type ProductCardItem = {
   provider?: {nameKr?: string | null} | null;
   postedCommunityCount?: number | null;
   isYearLowest?: boolean | null;
+  priceSaving?: {basis: string; percent: number} | null;
 };
 
 const CARD_WIDTH = 120;

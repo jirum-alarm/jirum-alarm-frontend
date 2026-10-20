@@ -288,6 +288,14 @@ function CardStatusDemo() {
           product={{earliestExpiryDate: '2026-12-31', isRising: true}}
         />
       </Thumb>
+      <Thumb>
+        <ProductCardStatus
+          product={{
+            isYearLowest: true,
+            priceSaving: {basis: 'COUPANG', percent: 21},
+          }}
+        />
+      </Thumb>
     </Row>
   );
 }

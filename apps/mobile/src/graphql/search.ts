@@ -46,6 +46,10 @@ export const QuerySearchProducts = graphql(`
       mallName
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }

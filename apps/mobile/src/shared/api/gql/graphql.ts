@@ -266,6 +266,117 @@ export type CommentOutput = {
   viewCount: Scalars['Int']['output'];
 };
 
+export type ConceptMapDealLayer = {
+  __typename?: 'ConceptMapDealLayer';
+  /** 30일 딜 중 같은 상품 노드에 묶인 것 */
+  inNode30d: Scalars['Int']['output'];
+  last24h: Scalars['Int']['output'];
+  /** 최근 30일 수집 딜 */
+  last30d: Scalars['Int']['output'];
+};
+
+export type ConceptMapDeliveryLayer = {
+  __typename?: 'ConceptMapDeliveryLayer';
+  /** 최근 7일 푸시 실패 */
+  failed7d: Scalars['Int']['output'];
+  /** 최근 7일 푸시 성공 */
+  sent7d: Scalars['Int']['output'];
+};
+
+export type ConceptMapHubItem = {
+  __typename?: 'ConceptMapHubItem';
+  name: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+  value: Scalars['Int']['output'];
+};
+
+export type ConceptMapHubLayer = {
+  __typename?: 'ConceptMapHubLayer';
+  approved: Scalars['Int']['output'];
+  /** 공개 허브 중 활성 테마 키워드에 든 것 */
+  approvedInTheme: Scalars['Int']['output'];
+  candidate: Scalars['Int']['output'];
+  /** 테마에 안 든 공개 허브(값 = 구독자, 많은 순) */
+  outsideTheme: Array<ConceptMapHubItem>;
+  rejected: Scalars['Int']['output'];
+  /** 허브 통계 배치 마지막 갱신 */
+  statsUpdatedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** 공개 허브 구독자 합(배치 값) */
+  subscriberSum: Scalars['Int']['output'];
+  /** 30일 딜이 적은 공개 허브(값 = 30일 딜) */
+  thin: Array<ConceptMapHubItem>;
+};
+
+export type ConceptMapModelPageLayer = {
+  __typename?: 'ConceptMapModelPageLayer';
+  published: Scalars['Int']['output'];
+  /** 발행됐는데 30일 넘게 새 딜이 없는 것 */
+  publishedStale: Scalars['Int']['output'];
+  /** 발행된 것 중 공개 허브에 걸리는 것(모델 페이지 「상위 키워드」 링크와 같은 매칭) */
+  publishedWithHub: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+};
+
+export type ConceptMapNodeLayer = {
+  __typename?: 'ConceptMapNodeLayer';
+  /** 살아 있는(은퇴·병합 안 된) 노드 */
+  active: Scalars['Int']['output'];
+};
+
+export type ConceptMapOutput = {
+  __typename?: 'ConceptMapOutput';
+  deal: ConceptMapDealLayer;
+  delivery: ConceptMapDeliveryLayer;
+  keywordHub: ConceptMapHubLayer;
+  modelPage: ConceptMapModelPageLayer;
+  node: ConceptMapNodeLayer;
+  theme: ConceptMapThemeLayer;
+  watch: ConceptMapWatchLayer;
+};
+
+export type ConceptMapTheme = {
+  __typename?: 'ConceptMapTheme';
+  emoji?: Maybe<Scalars['String']['output']>;
+  /** 키워드 중 공개 허브 이름·별칭과 같은 것의 허브 수 */
+  hubCount: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  isActive: Scalars['Boolean']['output'];
+  keywordCount: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  subscribers: Scalars['Int']['output'];
+};
+
+export type ConceptMapThemeLayer = {
+  __typename?: 'ConceptMapThemeLayer';
+  active: Scalars['Int']['output'];
+  /** 테마 구독 사람 수(중복 제외) */
+  subscribers: Scalars['Int']['output'];
+  themes: Array<ConceptMapTheme>;
+  total: Scalars['Int']['output'];
+};
+
+export type ConceptMapUnhubbedKeyword = {
+  __typename?: 'ConceptMapUnhubbedKeyword';
+  /** 공개 아닌 허브(후보·탈락)에 걸리면 그 상태 */
+  hubStatus?: Maybe<KeywordHubStatus>;
+  keyword: Scalars['String']['output'];
+  users: Scalars['Int']['output'];
+};
+
+export type ConceptMapWatchLayer = {
+  __typename?: 'ConceptMapWatchLayer';
+  /** 활성 알림 키워드 등록 수 */
+  registrations: Scalars['Int']['output'];
+  /** 그중 공개 허브 정의(별칭·제외어)를 따르는 것 */
+  registrationsOnHub: Scalars['Int']['output'];
+  /** 허브 없이 많이 걸린 키워드 */
+  unhubbed: Array<ConceptMapUnhubbedKeyword>;
+  /** 활성 키워드를 건 사람 */
+  users: Scalars['Int']['output'];
+  /** 그중 푸시 받을 기기가 있는 사람 */
+  usersWithDevice: Scalars['Int']['output'];
+};
+
 export type CoupangSearchCtaOutput = {
   __typename?: 'CoupangSearchCtaOutput';
   /** aged = 게시 7일+ 딜(coupang_search_cta_v1) · nolink = 게시 7일 안의 수익 링크 없는 딜(nolink_coupang_cta_v1) — 문구를 고른다 */
@@ -1050,6 +1161,8 @@ export type Mutation = {
   createAdminRole: AdminRoleOutput;
   /** 어드민) 키워드 허브 등록(후보로) */
   createKeywordHubByAdmin: KeywordHubAdminOutput;
+  /** 어드민) 새 테마 — 꺼진 채로 만든다 */
+  createNotificationThemeByAdmin: NotificationThemeAdminOutput;
   /** 유저 등록 상품 썸네일 업로드용 presigned URL 발급 */
   createProductImageUploadUrl: ProductImageUploadUrlOutput;
   /** 유저가 직접 핫딜 상품 등록 (등록된 productId 반환) */
@@ -1100,6 +1213,8 @@ export type Mutation = {
   /** 알림 키워드 제거 */
   removeNotificationKeyword: Scalars['Boolean']['output'];
   removeProductMapping: Scalars['Boolean']['output'];
+  /** 어드민) 사람의 판정을 거둔다 */
+  removeProductPairVerdictByAdmin: Scalars['Boolean']['output'];
   /** 토큰에 연결된 `userId` 연결 해제 */
   removeTokenLinkage: Scalars['Boolean']['output'];
   /** wishlist 제거 */
@@ -1120,10 +1235,14 @@ export type Mutation = {
   setModelPagePublishedByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 네이버 세션 갱신 */
   setNaverBcSession: Scalars['Boolean']['output'];
+  /** 어드민) 테마 켜기·끄기 */
+  setNotificationThemeActiveByAdmin: NotificationThemeAdminOutput;
   /** 어드민) 오늘의집 세션 갱신 */
   setOhouSession: Scalars['Boolean']['output'];
   /** 대표 매핑 지정 (id 기준) */
   setPrimaryProductMapping: Scalars['Boolean']['output'];
+  /** 어드민) 두 딜이 같은 상품인지 정한다 — 다음 묶음 배치가 떼거나 잇는다 */
+  setProductPairVerdictByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 세시간전 세션 갱신 */
   setThreeHaSession: Scalars['Boolean']['output'];
   /** 어드민) 토스 세션 갱신 */
@@ -1153,6 +1272,8 @@ export type Mutation = {
   updateNotificationKeywordPriceRange: Scalars['Boolean']['output'];
   /** 알림 키워드 상태 수정 */
   updateNotificationKeywordStatus: Scalars['Boolean']['output'];
+  /** 어드민) 테마 이름·설명·이모지·키워드(목록 통째)·제외 단어 바꾸기 */
+  updateNotificationThemeByAdmin: NotificationThemeAdminOutput;
   /** 비밀번호 업데이트 */
   updatePassword: Scalars['Boolean']['output'];
   /** 계정 별로 관리되는 푸시 설정 업데이트 */
@@ -1349,6 +1470,12 @@ export type MutationCreateKeywordHubByAdminArgs = {
   note: Scalars['String']['input'];
 };
 
+export type MutationCreateNotificationThemeByAdminArgs = {
+  description: Scalars['String']['input'];
+  emoji?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+};
+
 export type MutationCreateProductImageUploadUrlArgs = {
   contentType: Scalars['String']['input'];
 };
@@ -1441,6 +1568,11 @@ export type MutationRemoveProductMappingArgs = {
   productId: Scalars['Int']['input'];
 };
 
+export type MutationRemoveProductPairVerdictByAdminArgs = {
+  dealId: Scalars['Int']['input'];
+  seedId: Scalars['Int']['input'];
+};
+
 export type MutationRemoveTokenLinkageArgs = {
   token: Scalars['String']['input'];
 };
@@ -1492,12 +1624,24 @@ export type MutationSetNaverBcSessionArgs = {
   cookie: Scalars['String']['input'];
 };
 
+export type MutationSetNotificationThemeActiveByAdminArgs = {
+  id: Scalars['Int']['input'];
+  isActive: Scalars['Boolean']['input'];
+};
+
 export type MutationSetOhouSessionArgs = {
   curl: Scalars['String']['input'];
 };
 
 export type MutationSetPrimaryProductMappingArgs = {
   productMappingId: Scalars['Int']['input'];
+};
+
+export type MutationSetProductPairVerdictByAdminArgs = {
+  dealId: Scalars['Int']['input'];
+  note: Scalars['String']['input'];
+  same: Scalars['Boolean']['input'];
+  seedId: Scalars['Int']['input'];
 };
 
 export type MutationSetThreeHaSessionArgs = {
@@ -1591,6 +1735,15 @@ export type MutationUpdateNotificationKeywordPriceRangeArgs = {
 export type MutationUpdateNotificationKeywordStatusArgs = {
   id: Scalars['Int']['input'];
   isActive: Scalars['Boolean']['input'];
+};
+
+export type MutationUpdateNotificationThemeByAdminArgs = {
+  description: Scalars['String']['input'];
+  emoji?: InputMaybe<Scalars['String']['input']>;
+  excludeKeywords: Array<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
+  keywords: Array<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
 };
 
 export type MutationUpdatePasswordArgs = {
@@ -1718,6 +1871,53 @@ export enum NotificationTarget {
   Notice = 'NOTICE',
   Product = 'PRODUCT',
 }
+
+/** 어드민) 알림 테마 — 정의·구독·30일 받았을 알림 */
+export type NotificationThemeAdminOutput = {
+  __typename?: 'NotificationThemeAdminOutput';
+  /** 지금 규칙으로 최근 30일 받았을 알림(하루 3건 상한). 꺼진 테마도 켜면 받을 수로 센다 */
+  alerts30d: Scalars['Int']['output'];
+  description: Scalars['String']['output'];
+  emoji?: Maybe<Scalars['String']['output']>;
+  excludeKeywords: Array<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  isActive: Scalars['Boolean']['output'];
+  /** 등록 순 */
+  keywords: Array<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  slug?: Maybe<Scalars['String']['output']>;
+  subscriberCount: Scalars['Int']['output'];
+};
+
+export type NotificationThemeKeywordHit = {
+  __typename?: 'NotificationThemeKeywordHit';
+  /** 30일 동안 이 키워드로 고른 딜(하루 상한 전) */
+  deals: Scalars['Int']['output'];
+  keyword: Scalars['String']['output'];
+  /** 공개 키워드 허브 정의(별칭·제외어)를 따른다 */
+  viaHub: Scalars['Boolean']['output'];
+};
+
+export type NotificationThemePreviewDeal = {
+  __typename?: 'NotificationThemePreviewDeal';
+  id: Scalars['Int']['output'];
+  /** 걸린 키워드 */
+  keyword: Scalars['String']['output'];
+  postedAt: Scalars['DateTime']['output'];
+  title: Scalars['String']['output'];
+};
+
+/** 어드민) 테마 규칙을 바꾸면 최근 30일 받았을 알림이 어떻게 달라지나(저장 안 함) */
+export type NotificationThemePreviewOutput = {
+  __typename?: 'NotificationThemePreviewOutput';
+  currentPicked: Scalars['Int']['output'];
+  entering: Array<NotificationThemePreviewDeal>;
+  keywordHits: Array<NotificationThemeKeywordHit>;
+  leaving: Array<NotificationThemePreviewDeal>;
+  /** 하루 상한 전 걸린 딜 */
+  nextMatched: Scalars['Int']['output'];
+  nextPicked: Scalars['Int']['output'];
+};
 
 export enum NotificationTopic {
   CommunityAlert = 'COMMUNITY_ALERT',
@@ -1854,6 +2054,12 @@ export type PriceRangeCountOutput = {
   /** 가격 구간 라벨 (예: 1만~3만) */
   priceRange: Scalars['String']['output'];
 };
+
+export enum PriceSavingBasis {
+  Coupang = 'COUPANG',
+  Danawa = 'DANAWA',
+  Usual = 'USUAL',
+}
 
 export enum PriceVerdictDisplayTier {
   Hidden = 'HIDDEN',
@@ -2058,6 +2264,29 @@ export enum ProductMappingVerificationStatus {
   Verified = 'VERIFIED',
 }
 
+/** 어드민) 같은 상품 묶음(동일상품 그룹) — 멤버와 사람의 판정 */
+export type ProductNodeAdminOutput = {
+  __typename?: 'ProductNodeAdminOutput';
+  /** 묶음 id(N…). 묶음에 없으면 null */
+  clusterId?: Maybe<Scalars['String']['output']>;
+  /** 이 딜이 한쪽인 사람의 판정 */
+  decisions: Array<ProductPairDecisionOutput>;
+  memberCount: Scalars['Int']['output'];
+  /** 최근 글부터(최대 300) */
+  members: Array<ProductNodeDealOutput>;
+  product?: Maybe<ProductNodeDealOutput>;
+};
+
+export type ProductNodeDealOutput = {
+  __typename?: 'ProductNodeDealOutput';
+  id: Scalars['Int']['output'];
+  isEnd: Scalars['Boolean']['output'];
+  postedAt: Scalars['DateTime']['output'];
+  price?: Maybe<Scalars['String']['output']>;
+  providerName?: Maybe<Scalars['String']['output']>;
+  title: Scalars['String']['output'];
+};
+
 export enum ProductOrderType {
   CommentCount = 'COMMENT_COUNT',
   CommunityRanking = 'COMMUNITY_RANKING',
@@ -2136,6 +2365,8 @@ export type ProductOutput = {
   priceCurrency?: Maybe<Scalars['String']['output']>;
   /** 일별 핫딜가 추이 — 같은 상품 근거가 있는 딜만(brand_item 같은 변형·verified 매핑·동일상품 그룹·같은 글). 2점 미만이면 null */
   priceHistory?: Maybe<ProductPriceHistory>;
+  /** 카드 「기준가 대비 X%」 — 상세 근거 헤드라인이 강한 가격 근거일 때만(보통가·쿠팡·다나와). 끝난 딜은 null */
+  priceSaving?: Maybe<ProductPriceSaving>;
   /** 상세 히어로 가격 판정(지금 사도 되나). 30일 MAPPING HIGH만 READY. 프론트는 READY+STRONG만 렌더. 실패해도 객체를 내려 nullReason 계측. */
   priceVerdict?: Maybe<ProductPriceVerdict>;
   /** 상품 가격 목록 */
@@ -2160,6 +2391,20 @@ export type ProductOutput = {
 
 export type ProductOutputPriceHistoryArgs = {
   days?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ProductPairDecisionOutput = {
+  __typename?: 'ProductPairDecisionOutput';
+  /** admin:{userId} */
+  actor: Scalars['String']['output'];
+  dealId: Scalars['Int']['output'];
+  note: Scalars['String']['output'];
+  /** 상대 딜 */
+  other?: Maybe<ProductNodeDealOutput>;
+  seedId: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  /** Y 같은 상품 · N 다른 상품 */
+  verdict: Scalars['String']['output'];
 };
 
 export type ProductPrice = {
@@ -2191,6 +2436,14 @@ export type ProductPriceHistory = {
   sampleCount: Scalars['Int']['output'];
   /** 단위 라벨 (100ml당 등) — brand_item 추이 */
   unitLabel?: Maybe<Scalars['String']['output']>;
+};
+
+/** 카드 「기준가 대비 X%」 — 상세 근거 블록 헤드라인이 강함(STRONG)인 가격 근거일 때만. 근거 등급 배치가 수집 1·6·24시간에 다시 매긴다 */
+export type ProductPriceSaving = {
+  __typename?: 'ProductPriceSaving';
+  basis: PriceSavingBasis;
+  /** 기준가보다 싼 비율(%, 내림) */
+  percent: Scalars['Int']['output'];
 };
 
 export enum ProductPriceTarget {
@@ -2399,6 +2652,8 @@ export type Query = {
   communityProviders: Array<Provider>;
   /** 상품 랭킹 랜덤 조회 */
   communityRandomRankingProducts: Array<ProductOutput>;
+  /** 어드민) 개념 지도 — 딜·노드·모델 페이지·키워드 허브·테마·알림 층별 수와 층 사이 연결 */
+  conceptMapByAdmin: ConceptMapOutput;
   /** 딜 상세의 「쿠팡에서 지금 가격 보기」 — 실험군(게시 7일+ 딜: coupang_search_cta_v1 · 7일 안의 링크 없는 딜: nolink_coupang_cta_v1)이고 링크가 발급돼 있을 때만 */
   coupangSearchCta?: Maybe<CoupangSearchCtaOutput>;
   /** 어드민) 일별/주별/월별 서비스 조회수 합계 */
@@ -2488,12 +2743,18 @@ export type Query = {
   notificationKeywordsByMe: Array<NotificationKeyword>;
   /** 어드민) 개별 알림 목록 조회 */
   notificationListByAdmin: Array<Notification>;
+  /** 어드민) 알림 테마 하나 */
+  notificationThemeByAdmin: NotificationThemeAdminOutput;
   /** 묶음 상세 무한 스크롤 — 기간 제한 없이 이 묶음을 구독했다면 받았을 알림 딜(최근순, before 커서) */
   notificationThemeDeals: Array<ProductOutput>;
   /** 묶음 미리보기 — 지난 7일 이 묶음을 구독했다면 받았을 알림 딜(최근순) */
   notificationThemeLiveDeals: Array<ProductOutput>;
+  /** 어드민) 이 키워드·제외 단어로 바꾸면 최근 30일 받았을 알림이 어떻게 달라지나(저장 안 함) */
+  notificationThemePreviewByAdmin: NotificationThemePreviewOutput;
   /** 활성 알림 묶음(테마) 목록 + 대표 키워드 */
   notificationThemes: Array<ThemeWithKeywords>;
+  /** 어드민) 알림 테마 전부(켜진 것 먼저) — 30일 받았을 알림 수 포함 */
+  notificationThemesByAdmin: Array<NotificationThemeAdminOutput>;
   /** 알림 목록 조회 */
   notifications: Array<Notification>;
   /** 어드민) 알림 발송 이력 조회 */
@@ -2512,6 +2773,8 @@ export type Query = {
   productCountByProvider: Array<ProviderCountOutput>;
   productGuides?: Maybe<Array<ProductGuide>>;
   productKeywords: Array<Scalars['String']['output']>;
+  /** 어드민) 딜이 속한 같은 상품 묶음 */
+  productNodeByAdmin: ProductNodeAdminOutput;
   /** 어드민) 가격대별 상품 분포 */
   productPriceDistribution: Array<PriceRangeCountOutput>;
   /** 어드민) 일별/주별/월별 신규 상품 등록 수 */
@@ -2873,6 +3136,10 @@ export type QueryNotificationListByAdminArgs = {
   userId?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type QueryNotificationThemeByAdminArgs = {
+  id: Scalars['Int']['input'];
+};
+
 export type QueryNotificationThemeDealsArgs = {
   before?: InputMaybe<Scalars['Float']['input']>;
   limit?: Scalars['Int']['input'];
@@ -2882,6 +3149,12 @@ export type QueryNotificationThemeDealsArgs = {
 
 export type QueryNotificationThemeLiveDealsArgs = {
   themeId: Scalars['Int']['input'];
+};
+
+export type QueryNotificationThemePreviewByAdminArgs = {
+  excludeKeywords: Array<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  keywords: Array<Scalars['String']['input']>;
 };
 
 export type QueryNotificationsArgs = {
@@ -2937,6 +3210,10 @@ export type QueryProductGuidesArgs = {
 export type QueryProductKeywordsArgs = {
   endedAt?: InputMaybe<Scalars['DateTime']['input']>;
   startedAt?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type QueryProductNodeByAdminArgs = {
+  productId: Scalars['Int']['input'];
 };
 
 export type QueryProductPriceDistributionArgs = {
@@ -3934,6 +4211,11 @@ export type HotDealRankingProductsQuery = {
     isYearLowest: boolean;
     searchAfter?: Array<string> | null;
     postedAt: any;
+    priceSaving?: {
+      __typename?: 'ProductPriceSaving';
+      basis: PriceSavingBasis;
+      percent: number;
+    } | null;
     provider: {__typename?: 'Provider'; nameKr: string};
   }>;
 };
@@ -3962,6 +4244,11 @@ export type GuestRecommendedHotDealsQuery = {
     isYearLowest: boolean;
     searchAfter?: Array<string> | null;
     postedAt: any;
+    priceSaving?: {
+      __typename?: 'ProductPriceSaving';
+      basis: PriceSavingBasis;
+      percent: number;
+    } | null;
     provider: {__typename?: 'Provider'; nameKr: string};
   }>;
 };
@@ -3996,6 +4283,11 @@ export type HomeProductsByKeywordQuery = {
     data?: any | null;
     searchAfter?: Array<string> | null;
     postedAt: any;
+    priceSaving?: {
+      __typename?: 'ProductPriceSaving';
+      basis: PriceSavingBasis;
+      percent: number;
+    } | null;
     provider: {__typename?: 'Provider'; nameKr: string};
   }>;
 };
@@ -4043,6 +4335,11 @@ export type HomeProductsQuery = {
     postedCommunityCount?: number | null;
     isRising?: boolean | null;
     postedAt: any;
+    priceSaving?: {
+      __typename?: 'ProductPriceSaving';
+      basis: PriceSavingBasis;
+      percent: number;
+    } | null;
     provider: {__typename?: 'Provider'; nameKr: string};
   }>;
 };
@@ -4076,6 +4373,11 @@ export type ExpiringSoonHotDealProductsQuery = {
     searchAfter?: Array<string> | null;
     postedAt: any;
     earliestExpiryDate?: any | null;
+    priceSaving?: {
+      __typename?: 'ProductPriceSaving';
+      basis: PriceSavingBasis;
+      percent: number;
+    } | null;
     provider: {__typename?: 'Provider'; nameKr: string};
   }>;
 };
@@ -4170,6 +4472,11 @@ export type CommunityRandomRankingProductsQuery = {
     hotDealType?: HotDealType | null;
     isYearLowest: boolean;
     postedAt: any;
+    priceSaving?: {
+      __typename?: 'ProductPriceSaving';
+      basis: PriceSavingBasis;
+      percent: number;
+    } | null;
     provider: {__typename?: 'Provider'; nameKr: string};
   }>;
 };
@@ -4297,6 +4604,11 @@ export type QueryMyWishlistsQuery = {
       isMyWishlist?: boolean | null;
       categoryId: number;
       mallName?: string | null;
+      priceSaving?: {
+        __typename?: 'ProductPriceSaving';
+        basis: PriceSavingBasis;
+        percent: number;
+      } | null;
       provider: {__typename?: 'Provider'; nameKr: string};
     };
   }>;
@@ -4374,6 +4686,11 @@ export type QueryNotificationThemeLiveDealsQuery = {
     hotDealType?: HotDealType | null;
     isYearLowest: boolean;
     mallName?: string | null;
+    priceSaving?: {
+      __typename?: 'ProductPriceSaving';
+      basis: PriceSavingBasis;
+      percent: number;
+    } | null;
     provider: {__typename?: 'Provider'; nameKr: string};
   }>;
 };
@@ -4856,6 +5173,11 @@ export type SameProductDealsQuery = {
     mallName?: string | null;
     postedAt: any;
     earliestExpiryDate?: any | null;
+    priceSaving?: {
+      __typename?: 'ProductPriceSaving';
+      basis: PriceSavingBasis;
+      percent: number;
+    } | null;
     provider: {__typename?: 'Provider'; id: string; nameKr: string};
   }>;
 };
@@ -4880,6 +5202,11 @@ export type LatestSimilarDealsQuery = {
     mallName?: string | null;
     postedAt: any;
     earliestExpiryDate?: any | null;
+    priceSaving?: {
+      __typename?: 'ProductPriceSaving';
+      basis: PriceSavingBasis;
+      percent: number;
+    } | null;
     provider: {__typename?: 'Provider'; id: string; nameKr: string};
   }>;
 };
@@ -4907,6 +5234,11 @@ export type LiveAlternativeDealsQuery = {
       categoryId: number;
       mallName?: string | null;
       postedAt: any;
+      priceSaving?: {
+        __typename?: 'ProductPriceSaving';
+        basis: PriceSavingBasis;
+        percent: number;
+      } | null;
       provider: {__typename?: 'Provider'; id: string; nameKr: string};
     };
   }>;
@@ -4936,6 +5268,11 @@ export type CategoryProductsQuery = {
     mallName?: string | null;
     postedAt: any;
     earliestExpiryDate?: any | null;
+    priceSaving?: {
+      __typename?: 'ProductPriceSaving';
+      basis: PriceSavingBasis;
+      percent: number;
+    } | null;
     provider: {__typename?: 'Provider'; id: string; nameKr: string};
   }>;
 };
@@ -5039,6 +5376,11 @@ export type SearchProductsQuery = {
     searchAfter?: Array<string> | null;
     estimatedTotal?: number | null;
     postedAt: any;
+    priceSaving?: {
+      __typename?: 'ProductPriceSaving';
+      basis: PriceSavingBasis;
+      percent: number;
+    } | null;
     provider: {__typename?: 'Provider'; nameKr: string};
   }>;
 };
@@ -5444,6 +5786,10 @@ export const HotDealRankingProductsDocument = new TypedDocumentString(`
     thumbnail
     hotDealType
     isYearLowest
+    priceSaving {
+      basis
+      percent
+    }
     provider {
       nameKr
     }
@@ -5471,6 +5817,10 @@ export const GuestRecommendedHotDealsDocument = new TypedDocumentString(`
     thumbnail
     hotDealType
     isYearLowest
+    priceSaving {
+      basis
+      percent
+    }
     provider {
       nameKr
     }
@@ -5504,6 +5854,10 @@ export const HomeProductsByKeywordDocument = new TypedDocumentString(`
     thumbnail
     hotDealType
     isYearLowest
+    priceSaving {
+      basis
+      percent
+    }
     provider {
       nameKr
     }
@@ -5546,6 +5900,10 @@ export const HomeProductsDocument = new TypedDocumentString(`
     mallName
     hotDealType
     isYearLowest
+    priceSaving {
+      basis
+      percent
+    }
     provider {
       nameKr
     }
@@ -5580,6 +5938,10 @@ export const ExpiringSoonHotDealProductsDocument = new TypedDocumentString(`
     thumbnail
     hotDealType
     isYearLowest
+    priceSaving {
+      basis
+      percent
+    }
     provider {
       nameKr
     }
@@ -5673,6 +6035,10 @@ export const CommunityRandomRankingProductsDocument = new TypedDocumentString(`
     thumbnail
     hotDealType
     isYearLowest
+    priceSaving {
+      basis
+      percent
+    }
     provider {
       nameKr
     }
@@ -5794,6 +6160,10 @@ export const QueryMyWishlistsDocument = new TypedDocumentString(`
       postedAt
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       thumbnail
       isMyWishlist
       categoryId
@@ -5870,6 +6240,10 @@ export const QueryNotificationThemeLiveDealsDocument = new TypedDocumentString(`
     isHot
     hotDealType
     isYearLowest
+    priceSaving {
+      basis
+      percent
+    }
     mallName
     provider {
       nameKr
@@ -6317,6 +6691,10 @@ export const SameProductDealsDocument = new TypedDocumentString(`
     isEnd
     hotDealType
     isYearLowest
+    priceSaving {
+      basis
+      percent
+    }
     categoryId
     mallName
     postedAt
@@ -6341,6 +6719,10 @@ export const LatestSimilarDealsDocument = new TypedDocumentString(`
     isEnd
     hotDealType
     isYearLowest
+    priceSaving {
+      basis
+      percent
+    }
     categoryId
     mallName
     postedAt
@@ -6368,6 +6750,10 @@ export const LiveAlternativeDealsDocument = new TypedDocumentString(`
       isEnd
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       categoryId
       mallName
       postedAt
@@ -6397,6 +6783,10 @@ export const CategoryProductsDocument = new TypedDocumentString(`
     isEnd
     hotDealType
     isYearLowest
+    priceSaving {
+      basis
+      percent
+    }
     categoryId
     mallName
     postedAt
@@ -6492,6 +6882,10 @@ export const SearchProductsDocument = new TypedDocumentString(`
     mallName
     hotDealType
     isYearLowest
+    priceSaving {
+      basis
+      percent
+    }
     provider {
       nameKr
     }

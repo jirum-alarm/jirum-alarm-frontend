@@ -106,6 +106,10 @@ const KeywordHubDocument = new TypedDocumentString<
         isHot
         hotDealType
         isYearLowest
+        priceSaving {
+          basis
+          percent
+        }
         mallName
         postedCommunityCount
         provider {

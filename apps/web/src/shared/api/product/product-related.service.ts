@@ -96,6 +96,10 @@ const QuerySameProductDeals = new TypedDocumentString<
       mallName
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }
@@ -126,6 +130,10 @@ const QueryTossInternalLinks = new TypedDocumentString<
       mallName
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }
@@ -159,6 +167,10 @@ const QueryLiveAlternativeDeals = new TypedDocumentString<
         mallName
         hotDealType
         isYearLowest
+        priceSaving {
+          basis
+          percent
+        }
         provider {
           nameKr
         }
@@ -188,6 +200,10 @@ const QueryLatestSimilarDeals = new TypedDocumentString<
       mallName
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }

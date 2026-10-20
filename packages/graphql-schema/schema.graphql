@@ -228,6 +228,106 @@ type CommentOutput {
   viewCount: Int!
 }
 
+type ConceptMapDealLayer {
+  """30일 딜 중 같은 상품 노드에 묶인 것"""
+  inNode30d: Int!
+  last24h: Int!
+  """최근 30일 수집 딜"""
+  last30d: Int!
+}
+
+type ConceptMapDeliveryLayer {
+  """최근 7일 푸시 실패"""
+  failed7d: Int!
+  """최근 7일 푸시 성공"""
+  sent7d: Int!
+}
+
+type ConceptMapHubItem {
+  name: String!
+  slug: String!
+  value: Int!
+}
+
+type ConceptMapHubLayer {
+  approved: Int!
+  """공개 허브 중 활성 테마 키워드에 든 것"""
+  approvedInTheme: Int!
+  candidate: Int!
+  """테마에 안 든 공개 허브(값 = 구독자, 많은 순)"""
+  outsideTheme: [ConceptMapHubItem!]!
+  rejected: Int!
+  """허브 통계 배치 마지막 갱신"""
+  statsUpdatedAt: DateTime
+  """공개 허브 구독자 합(배치 값)"""
+  subscriberSum: Int!
+  """30일 딜이 적은 공개 허브(값 = 30일 딜)"""
+  thin: [ConceptMapHubItem!]!
+}
+
+type ConceptMapModelPageLayer {
+  published: Int!
+  """발행됐는데 30일 넘게 새 딜이 없는 것"""
+  publishedStale: Int!
+  """발행된 것 중 공개 허브에 걸리는 것(모델 페이지 「상위 키워드」 링크와 같은 매칭)"""
+  publishedWithHub: Int!
+  total: Int!
+}
+
+type ConceptMapNodeLayer {
+  """살아 있는(은퇴·병합 안 된) 노드"""
+  active: Int!
+}
+
+type ConceptMapOutput {
+  deal: ConceptMapDealLayer!
+  delivery: ConceptMapDeliveryLayer!
+  keywordHub: ConceptMapHubLayer!
+  modelPage: ConceptMapModelPageLayer!
+  node: ConceptMapNodeLayer!
+  theme: ConceptMapThemeLayer!
+  watch: ConceptMapWatchLayer!
+}
+
+type ConceptMapTheme {
+  emoji: String
+  """키워드 중 공개 허브 이름·별칭과 같은 것의 허브 수"""
+  hubCount: Int!
+  id: Int!
+  isActive: Boolean!
+  keywordCount: Int!
+  name: String!
+  subscribers: Int!
+}
+
+type ConceptMapThemeLayer {
+  active: Int!
+  """테마 구독 사람 수(중복 제외)"""
+  subscribers: Int!
+  themes: [ConceptMapTheme!]!
+  total: Int!
+}
+
+type ConceptMapUnhubbedKeyword {
+  """공개 아닌 허브(후보·탈락)에 걸리면 그 상태"""
+  hubStatus: KeywordHubStatus
+  keyword: String!
+  users: Int!
+}
+
+type ConceptMapWatchLayer {
+  """활성 알림 키워드 등록 수"""
+  registrations: Int!
+  """그중 공개 허브 정의(별칭·제외어)를 따르는 것"""
+  registrationsOnHub: Int!
+  """허브 없이 많이 걸린 키워드"""
+  unhubbed: [ConceptMapUnhubbedKeyword!]!
+  """활성 키워드를 건 사람"""
+  users: Int!
+  """그중 푸시 받을 기기가 있는 사람"""
+  usersWithDevice: Int!
+}
+
 type CoupangSearchCtaOutput {
   """
   aged = 게시 7일+ 딜(coupang_search_cta_v1) · nolink = 게시 7일 안의 수익 링크 없는 딜(nolink_coupang_cta_v1) — 문구를 고른다
@@ -1082,6 +1182,8 @@ type Mutation {
     """왜(이력에 남는다)"""
     note: String!
   ): KeywordHubAdminOutput!
+  """어드민) 새 테마 — 꺼진 채로 만든다"""
+  createNotificationThemeByAdmin(description: String!, emoji: String, name: String!): NotificationThemeAdminOutput!
   """유저 등록 상품 썸네일 업로드용 presigned URL 발급"""
   createProductImageUploadUrl(
     """이미지 MIME 타입 (image/jpeg|png|webp|gif|avif)"""
@@ -1154,6 +1256,13 @@ type Mutation {
   """알림 키워드 제거"""
   removeNotificationKeyword(id: Float!): Boolean!
   removeProductMapping(productId: Int!): Boolean!
+  """어드민) 사람의 판정을 거둔다"""
+  removeProductPairVerdictByAdmin(
+    """판정할 딜(다른 상품이면 묶음에서 빠지는 쪽)"""
+    dealId: Int!
+    """기준 딜(묶음에 남는 쪽)"""
+    seedId: Int!
+  ): Boolean!
   """토큰에 연결된 `userId` 연결 해제"""
   removeTokenLinkage(token: String!): Boolean!
   """wishlist 제거"""
@@ -1179,10 +1288,23 @@ type Mutation {
   setModelPagePublishedByAdmin(id: Int!, isPublished: Boolean!): Boolean!
   """어드민) 네이버 세션 갱신"""
   setNaverBcSession(cookie: String!): Boolean!
+  """어드민) 테마 켜기·끄기"""
+  setNotificationThemeActiveByAdmin(id: Int!, isActive: Boolean!): NotificationThemeAdminOutput!
   """어드민) 오늘의집 세션 갱신"""
   setOhouSession(curl: String!): Boolean!
   """대표 매핑 지정 (id 기준)"""
   setPrimaryProductMapping(productMappingId: Int!): Boolean!
+  """어드민) 두 딜이 같은 상품인지 정한다 — 다음 묶음 배치가 떼거나 잇는다"""
+  setProductPairVerdictByAdmin(
+    """판정할 딜(다른 상품이면 묶음에서 빠지는 쪽)"""
+    dealId: Int!
+    """왜"""
+    note: String!
+    """true = 같은 상품(잇는다), false = 다른 상품(뗀다)"""
+    same: Boolean!
+    """기준 딜(묶음에 남는 쪽)"""
+    seedId: Int!
+  ): Boolean!
   """어드민) 세시간전 세션 갱신"""
   setThreeHaSession(cookie: String!): Boolean!
   """어드민) 토스 세션 갱신"""
@@ -1260,6 +1382,17 @@ type Mutation {
   ): Boolean!
   """알림 키워드 상태 수정"""
   updateNotificationKeywordStatus(id: Int!, isActive: Boolean!): Boolean!
+  """어드민) 테마 이름·설명·이모지·키워드(목록 통째)·제외 단어 바꾸기"""
+  updateNotificationThemeByAdmin(
+    description: String!
+    emoji: String
+    """제목에 하나라도 있으면 뺀다"""
+    excludeKeywords: [String!]!
+    id: Int!
+    """딜 제목에서 찾는 키워드 전부(이 목록으로 바꾼다)"""
+    keywords: [String!]!
+    name: String!
+  ): NotificationThemeAdminOutput!
   """비밀번호 업데이트"""
   updatePassword(password: String!): Boolean!
   """계정 별로 관리되는 푸시 설정 업데이트"""
@@ -1380,6 +1513,49 @@ enum NotificationTarget {
   INFO
   NOTICE
   PRODUCT
+}
+
+"""어드민) 알림 테마 — 정의·구독·30일 받았을 알림"""
+type NotificationThemeAdminOutput {
+  """지금 규칙으로 최근 30일 받았을 알림(하루 3건 상한). 꺼진 테마도 켜면 받을 수로 센다"""
+  alerts30d: Int!
+  description: String!
+  emoji: String
+  excludeKeywords: [String!]!
+  id: Int!
+  isActive: Boolean!
+  """등록 순"""
+  keywords: [String!]!
+  name: String!
+  slug: String
+  subscriberCount: Int!
+}
+
+type NotificationThemeKeywordHit {
+  """30일 동안 이 키워드로 고른 딜(하루 상한 전)"""
+  deals: Int!
+  keyword: String!
+  """공개 키워드 허브 정의(별칭·제외어)를 따른다"""
+  viaHub: Boolean!
+}
+
+type NotificationThemePreviewDeal {
+  id: Int!
+  """걸린 키워드"""
+  keyword: String!
+  postedAt: DateTime!
+  title: String!
+}
+
+"""어드민) 테마 규칙을 바꾸면 최근 30일 받았을 알림이 어떻게 달라지나(저장 안 함)"""
+type NotificationThemePreviewOutput {
+  currentPicked: Int!
+  entering: [NotificationThemePreviewDeal!]!
+  keywordHits: [NotificationThemeKeywordHit!]!
+  leaving: [NotificationThemePreviewDeal!]!
+  """하루 상한 전 걸린 딜"""
+  nextMatched: Int!
+  nextPicked: Int!
 }
 
 enum NotificationTopic {
@@ -1509,6 +1685,12 @@ type PriceRangeCountOutput {
   minPrice: Float!
   """가격 구간 라벨 (예: 1만~3만)"""
   priceRange: String!
+}
+
+enum PriceSavingBasis {
+  COUPANG
+  DANAWA
+  USUAL
 }
 
 enum PriceVerdictDisplayTier {
@@ -1706,6 +1888,27 @@ enum ProductMappingVerificationStatus {
   VERIFIED
 }
 
+"""어드민) 같은 상품 묶음(동일상품 그룹) — 멤버와 사람의 판정"""
+type ProductNodeAdminOutput {
+  """묶음 id(N…). 묶음에 없으면 null"""
+  clusterId: String
+  """이 딜이 한쪽인 사람의 판정"""
+  decisions: [ProductPairDecisionOutput!]!
+  memberCount: Int!
+  """최근 글부터(최대 300)"""
+  members: [ProductNodeDealOutput!]!
+  product: ProductNodeDealOutput
+}
+
+type ProductNodeDealOutput {
+  id: Int!
+  isEnd: Boolean!
+  postedAt: DateTime!
+  price: String
+  providerName: String
+  title: String!
+}
+
 enum ProductOrderType {
   COMMENT_COUNT
   COMMUNITY_RANKING
@@ -1790,6 +1993,8 @@ type ProductOutput {
   일별 핫딜가 추이 — 같은 상품 근거가 있는 딜만(brand_item 같은 변형·verified 매핑·동일상품 그룹·같은 글). 2점 미만이면 null
   """
   priceHistory(days: Int = 90): ProductPriceHistory
+  """카드 「기준가 대비 X%」 — 상세 근거 헤드라인이 강한 가격 근거일 때만(보통가·쿠팡·다나와). 끝난 딜은 null"""
+  priceSaving: ProductPriceSaving
   """
   상세 히어로 가격 판정(지금 사도 되나). 30일 MAPPING HIGH만 READY. 프론트는 READY+STRONG만 렌더. 실패해도 객체를 내려 nullReason 계측.
   """
@@ -1812,6 +2017,19 @@ type ProductOutput {
   """조회 수"""
   viewCount: Int!
   wishlistCount: Int!
+}
+
+type ProductPairDecisionOutput {
+  """admin:{userId}"""
+  actor: String!
+  dealId: Int!
+  note: String!
+  """상대 딜"""
+  other: ProductNodeDealOutput
+  seedId: Int!
+  updatedAt: DateTime!
+  """Y 같은 상품 · N 다른 상품"""
+  verdict: String!
 }
 
 type ProductPrice {
@@ -1843,6 +2061,15 @@ type ProductPriceHistory {
   sampleCount: Int!
   """단위 라벨 (100ml당 등) — brand_item 추이"""
   unitLabel: String
+}
+
+"""
+카드 「기준가 대비 X%」 — 상세 근거 블록 헤드라인이 강함(STRONG)인 가격 근거일 때만. 근거 등급 배치가 수집 1·6·24시간에 다시 매긴다
+"""
+type ProductPriceSaving {
+  basis: PriceSavingBasis!
+  """기준가보다 싼 비율(%, 내림)"""
+  percent: Int!
 }
 
 enum ProductPriceTarget {
@@ -2090,6 +2317,8 @@ type Query {
     """최대 50"""
     limit: Int!
   ): [ProductOutput!]!
+  """어드민) 개념 지도 — 딜·노드·모델 페이지·키워드 허브·테마·알림 층별 수와 층 사이 연결"""
+  conceptMapByAdmin: ConceptMapOutput!
   """
   딜 상세의 「쿠팡에서 지금 가격 보기」 — 실험군(게시 7일+ 딜: coupang_search_cta_v1 · 7일 안의 링크 없는 딜: nolink_coupang_cta_v1)이고 링크가 발급돼 있을 때만
   """
@@ -2242,6 +2471,8 @@ type Query {
   notificationKeywordsByMe(limit: Int!, searchAfter: [String!]): [NotificationKeyword!]!
   """어드민) 개별 알림 목록 조회"""
   notificationListByAdmin(limit: Int! = 10, offset: Int! = 0, target: NotificationTarget, targetId: String, userId: Int): [Notification!]!
+  """어드민) 알림 테마 하나"""
+  notificationThemeByAdmin(id: Int!): NotificationThemeAdminOutput!
   """묶음 상세 무한 스크롤 — 기간 제한 없이 이 묶음을 구독했다면 받았을 알림 딜(최근순, before 커서)"""
   notificationThemeDeals(
     """커서: 앞 페이지 마지막 딜의 postedAt(ms). 없으면 최신부터"""
@@ -2252,8 +2483,19 @@ type Query {
   ): [ProductOutput!]!
   """묶음 미리보기 — 지난 7일 이 묶음을 구독했다면 받았을 알림 딜(최근순)"""
   notificationThemeLiveDeals(themeId: Int!): [ProductOutput!]!
+  """어드민) 이 키워드·제외 단어로 바꾸면 최근 30일 받았을 알림이 어떻게 달라지나(저장 안 함)"""
+  notificationThemePreviewByAdmin(
+    """제목에 하나라도 있으면 뺀다"""
+    excludeKeywords: [String!]!
+    """고칠 테마. 없으면 새 테마로 본다"""
+    id: Int
+    """딜 제목에서 찾는 키워드 전부(이 목록으로 바꾼다)"""
+    keywords: [String!]!
+  ): NotificationThemePreviewOutput!
   """활성 알림 묶음(테마) 목록 + 대표 키워드"""
   notificationThemes: [ThemeWithKeywords!]!
+  """어드민) 알림 테마 전부(켜진 것 먼저) — 30일 받았을 알림 수 포함"""
+  notificationThemesByAdmin: [NotificationThemeAdminOutput!]!
   """알림 목록 조회"""
   notifications(limit: Int! = 10, offset: Int! = 0): [Notification!]!
   """어드민) 알림 발송 이력 조회"""
@@ -2316,6 +2558,8 @@ type Query {
   productCountByProvider: [ProviderCountOutput!]!
   productGuides(productId: Int!): [ProductGuide!]
   productKeywords(endedAt: DateTime, startedAt: DateTime): [String!]!
+  """어드민) 딜이 속한 같은 상품 묶음"""
+  productNodeByAdmin(productId: Int!): ProductNodeAdminOutput!
   """어드민) 가격대별 상품 분포"""
   productPriceDistribution(endDate: DateTime!, interval: DateInterval! = DAILY, startDate: DateTime!): [PriceRangeCountOutput!]!
   """어드민) 일별/주별/월별 신규 상품 등록 수"""

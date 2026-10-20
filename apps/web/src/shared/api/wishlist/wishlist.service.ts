@@ -60,6 +60,10 @@ const QueryWishlists = graphql(`
         postedAt
         hotDealType
         isYearLowest
+        priceSaving {
+          basis
+          percent
+        }
         thumbnail
         isMyWishlist
         categoryId

@@ -156,6 +156,7 @@ export default async function SeasonBlackFriday2026Page() {
     isHot: d.isHot,
     hotDealType: d.hotDealType,
     isYearLowest: d.isYearLowest,
+    priceSaving: d.priceSaving,
     provider: d.provider,
   }));
 

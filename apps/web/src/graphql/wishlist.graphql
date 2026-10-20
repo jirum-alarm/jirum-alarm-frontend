@@ -31,6 +31,10 @@ query QueryWishlists(
         postedAt
         hotDealType
         isYearLowest
+        priceSaving {
+          basis
+          percent
+        }
         thumbnail
         isMyWishlist
         categoryId

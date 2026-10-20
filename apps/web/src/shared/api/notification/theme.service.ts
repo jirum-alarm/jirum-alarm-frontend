@@ -73,6 +73,10 @@ const QueryNotificationThemeDeals = new TypedDocumentString<
       isHot
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       mallName
       provider {
         nameKr

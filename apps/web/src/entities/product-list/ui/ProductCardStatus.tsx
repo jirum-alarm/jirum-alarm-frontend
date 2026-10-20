@@ -1,5 +1,5 @@
 import { cardLabel } from '@jirum/design-system/recipes';
-import { visibleHotDealType } from '@jirum/domain/product-card';
+import { priceSavingLabel, visibleHotDealType } from '@jirum/domain/product-card';
 import { getTimeDealOpening, getTossTimeDeal } from '@jirum/domain/toss-time-deal';
 
 import { cn } from '@/shared/lib/cn';
@@ -36,7 +36,7 @@ export const CardCornerLabel = ({
 );
 
 /**
- * 상품 카드 사진 위 상태 — 판매종료 / 토스 하루특가(선착순특가·선착순 마감) / 핫딜 배지 / 유통기한 띠 / 1년 최저가·급상승. 카드 4종(그리드·2단·리스트·캐러셀)이 같이 쓴다.
+ * 상품 카드 사진 위 상태 — 판매종료 / 토스 하루특가(선착순특가·선착순 마감) / 핫딜 배지 / 유통기한 띠 / 1년 최저가·기준가 대비·급상승. 카드 4종(그리드·2단·리스트·캐러셀)이 같이 쓴다.
  * ★같은 상품을 홈·검색·상세를 오가며 다시 보므로 카드마다 다르게 그리면 버그로 읽힌다 — 여기서만 그린다.
  * 유통기한 띠가 있으면 핫딜 배지는 숨긴다(같은 자리라 배지가 띠를 덮었다 — 앱 ProductCardStatus 와 같은 규칙).
  */
@@ -52,6 +52,7 @@ export const ProductCardStatus = ({
     | 'earliestExpiryDate'
     | 'isRising'
     | 'isYearLowest'
+    | 'priceSaving'
     | 'data'
     | 'title'
     | 'postedAt'
@@ -62,6 +63,7 @@ export const ProductCardStatus = ({
   squareThumb?: boolean;
 }) => {
   const { isEnd, hotDealType, earliestExpiryDate, isRising, isYearLowest } = product;
+  const savingLabel = priceSavingLabel(product.priceSaving);
   const badgeType = visibleHotDealType(hotDealType, earliestExpiryDate);
   // 토스 하루특가는 핫딜 배지 자리에 토스 앱 배지를 그대로 단다(앱 ProductCardStatus 와 같다).
   // 선착순이 끝나면 crawler 가 isEnd 도 켠다 — 「판매종료」보다 「선착순 마감」이 무슨 일인지 말해 주므로 먼저 본다.
@@ -71,12 +73,17 @@ export const ProductCardStatus = ({
   const opening = showTimeDeal ? null : getTimeDealOpening(product);
   return (
     <>
-      {/* 1년 최저가·급상승(랭킹 목록만) — 오른쪽 위에 세로로. 왼쪽 위는 순위 숫자, 아래는 핫딜 배지·유통기한 띠 자리. 앱 ProductCardStatus 와 같다. */}
-      {(isYearLowest || isRising) && !isEnd ? (
+      {/* 1년 최저가·기준가 대비(쿠팡보다 21%↓)·급상승(랭킹 목록만) — 오른쪽 위에 세로로. 왼쪽 위는 순위 숫자, 아래는 핫딜 배지·유통기한 띠 자리. 앱 ProductCardStatus 와 같다. */}
+      {(isYearLowest || savingLabel || isRising) && !isEnd ? (
         <div className="absolute top-1.5 right-1.5 z-10 flex flex-col items-end gap-1">
           {isYearLowest ? (
             <Badge variant="solid" tone="secondary" size="xs">
               1년 최저가
+            </Badge>
+          ) : null}
+          {savingLabel ? (
+            <Badge variant="solid" tone="secondary" size="xs">
+              {savingLabel}
             </Badge>
           ) : null}
           {isRising ? (

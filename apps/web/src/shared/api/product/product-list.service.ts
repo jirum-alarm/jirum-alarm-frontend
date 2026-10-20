@@ -88,6 +88,10 @@ const QueryProducts = new TypedDocumentString<ProductListResult, ProductListQuer
       mallName
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }
@@ -157,6 +161,10 @@ const QueryProductsByKeyword = graphql(`
       thumbnail
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }
@@ -199,6 +207,10 @@ const QueryHotDealRankingProducts = graphql(`
       thumbnail
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }
@@ -245,6 +257,10 @@ const QueryExpiringSoonHotDealProducts = new TypedDocumentString<
       thumbnail
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }

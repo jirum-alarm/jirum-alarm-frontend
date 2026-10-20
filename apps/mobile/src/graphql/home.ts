@@ -35,6 +35,10 @@ export const QueryHotDealRankingProducts = graphql(`
       thumbnail
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }
@@ -61,6 +65,10 @@ export const QueryGuestRecommendedHotDeals = graphql(`
       thumbnail
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }
@@ -99,6 +107,10 @@ export const QueryProductsByKeyword = graphql(`
       thumbnail
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }
@@ -163,6 +175,10 @@ export const QueryHomeProducts = graphql(`
       mallName
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }
@@ -200,6 +216,10 @@ export const QueryExpiringSoonHotDealProducts = graphql(`
       thumbnail
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }
@@ -301,6 +321,10 @@ export const QueryCommunityRandomRankingProducts = graphql(`
       thumbnail
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }

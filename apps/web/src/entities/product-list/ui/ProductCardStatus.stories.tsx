@@ -92,6 +92,15 @@ export const All: Story = {
       <Thumb label="오픈 예고" product={{ ...base, data: toss('ON_GOING', 5) }} />
       <Thumb label="급상승(랭킹)" product={{ ...base, isRising: true }} />
       <Thumb
+        label="기준가 대비 + 1년 최저가"
+        product={{
+          ...base,
+          hotDealType: HotDealType.SuperDeal,
+          isYearLowest: true,
+          priceSaving: { basis: 'COUPANG', percent: 21 },
+        }}
+      />
+      <Thumb
         label="각진 사진(랭킹)"
         squareThumb
         product={{ ...base, hotDealType: HotDealType.SuperDeal }}

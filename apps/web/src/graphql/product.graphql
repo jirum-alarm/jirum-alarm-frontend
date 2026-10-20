@@ -224,6 +224,10 @@ query QueryProducts(
       thumbnail
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }
@@ -339,6 +343,10 @@ query QueryHotDealRankingProducts($page: Int!, $limit: Int!) {
       thumbnail
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }
@@ -362,6 +370,10 @@ query QueryGuestRecommendedHotDeals($page: Int!, $limit: Int!) {
       thumbnail
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }
@@ -393,6 +405,10 @@ query QueryExpiringSoonHotDealProducts(
       thumbnail
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       provider {
         nameKr
       }

@@ -22,6 +22,8 @@ export interface ProductCardType {
   isRising?: boolean | null;
   /** 1년 최저가 — 지난 1년 같은 상품 딜 중 가장 싼 신기록(조건 없는 가격). 서버가 끝난 딜은 false 로 준다. */
   isYearLowest?: boolean | null;
+  /** 기준가 대비 — 상세 근거 헤드라인이 강한 가격 근거일 때의 기준(평소·쿠팡·다나와)·할인율. 서버가 끝난 딜은 null 로 준다. */
+  priceSaving?: { basis: string; percent: number } | null;
   /** 상품 확장정보(JSON). 키워드 목록만 싣는다 — 토스 하루특가 배지(@jirum/domain toss-time-deal)가 읽는다. */
   data?: unknown;
 }

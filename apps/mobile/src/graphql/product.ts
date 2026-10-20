@@ -281,6 +281,10 @@ export const QuerySameProductDeals = graphql(`
       isEnd
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       categoryId
       mallName
       postedAt
@@ -304,6 +308,10 @@ export const QueryLatestSimilarDeals = graphql(`
       isEnd
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       categoryId
       mallName
       postedAt
@@ -330,6 +338,10 @@ export const QueryLiveAlternativeDeals = graphql(`
         isEnd
         hotDealType
         isYearLowest
+        priceSaving {
+          basis
+          percent
+        }
         categoryId
         mallName
         postedAt
@@ -363,6 +375,10 @@ export const QueryCategoryProducts = graphql(`
       isEnd
       hotDealType
       isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
       categoryId
       mallName
       postedAt

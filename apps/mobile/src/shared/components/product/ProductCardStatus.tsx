@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {cardLabel} from '@jirum/design-system/recipes';
-import {visibleHotDealType} from '@jirum/domain/product-card';
+import {priceSavingLabel, visibleHotDealType} from '@jirum/domain/product-card';
 import {
   getTimeDealOpening,
   getTossTimeDeal,
@@ -39,7 +39,7 @@ export function CardCornerLabel({
 }
 
 /**
- * 상품 카드 사진 위 상태 — 판매종료 / 토스 하루특가(선착순특가·선착순 마감) / 핫딜 배지 / 유통기한 띠 / 1년 최저가·급상승. 홈 카드·검색 카드가 같이 쓴다.
+ * 상품 카드 사진 위 상태 — 판매종료 / 토스 하루특가(선착순특가·선착순 마감) / 핫딜 배지 / 유통기한 띠 / 1년 최저가·기준가 대비·급상승. 홈 카드·검색 카드가 같이 쓴다.
  * ★같은 상품을 홈·검색·상세를 오가며 다시 보므로 카드마다 다르게 그리면 버그로 읽힌다 — 여기서만 그린다.
  * 유통기한 띠(22px)가 있으면 핫딜 배지(24px)는 숨긴다 — 같은 자리라 띠가 배지를 덮고 윗변 2px 만 삐져나왔다.
  * 모양은 recipes 의 cardLabel — web ProductCardStatus 와 같다.
@@ -56,6 +56,8 @@ export default function ProductCardStatus({
     isRising?: boolean | null;
     /** 1년 최저가 — 지난 1년 같은 상품 딜 중 가장 싼 신기록(조건 없는 가격). 서버가 끝난 딜은 false 로 준다. */
     isYearLowest?: boolean | null;
+    /** 기준가 대비 — 상세 근거 헤드라인이 강한 가격 근거일 때의 기준(평소·쿠팡·다나와)·할인율. 끝난 딜은 null. */
+    priceSaving?: {basis: string; percent: number} | null;
     data?: unknown;
     title?: string | null;
     postedAt?: string | null;
@@ -66,6 +68,7 @@ export default function ProductCardStatus({
 }) {
   const {isEnd, hotDealType, earliestExpiryDate, isRising, isYearLowest} =
     product;
+  const savingLabel = priceSavingLabel(product.priceSaving);
   const badgeType = visibleHotDealType(hotDealType, earliestExpiryDate);
   // 토스 하루특가는 핫딜 배지 자리에 토스 앱 배지를 그대로 단다(web ProductCardStatus 와 같다).
   // 선착순이 끝나면 crawler 가 isEnd 도 켠다 — 「판매종료」보다 「선착순 마감」이 무슨 일인지 말해 주므로 먼저 본다.
@@ -76,12 +79,17 @@ export default function ProductCardStatus({
   const opening = showTimeDeal ? null : getTimeDealOpening(product);
   return (
     <>
-      {/* 1년 최저가·급상승(랭킹 목록만) — 오른쪽 위에 세로로. 왼쪽 위는 순위 숫자, 아래는 핫딜 배지·유통기한 띠 자리. web 과 같다. */}
-      {(isYearLowest || isRising) && !isEnd ? (
+      {/* 1년 최저가·기준가 대비(쿠팡보다 21%↓)·급상승(랭킹 목록만) — 오른쪽 위에 세로로. 왼쪽 위는 순위 숫자, 아래는 핫딜 배지·유통기한 띠 자리. web 과 같다. */}
+      {(isYearLowest || savingLabel || isRising) && !isEnd ? (
         <View className="absolute right-1.5 top-1.5 z-10 items-end gap-1">
           {isYearLowest ? (
             <Badge variant="solid" tone="secondary" size="xs">
               1년 최저가
+            </Badge>
+          ) : null}
+          {savingLabel ? (
+            <Badge variant="solid" tone="secondary" size="xs">
+              {savingLabel}
             </Badge>
           ) : null}
           {isRising ? (
