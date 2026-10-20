@@ -14,6 +14,8 @@ import {
   SENTRY_IGNORE_ERRORS,
 } from './src/shared/lib/sentry-filter';
 
+import { enableTraceResponseHeader } from './src/shared/lib/trace-response';
+
 import { tempoSpanProcessors, enableW3CTracePropagation } from './otel-tempo';
 
 // development 환경(NODE_ENV=test)에서는 센트리 비활성화
@@ -58,3 +60,6 @@ Sentry.init({
 });
 
 enableW3CTracePropagation();
+
+// 응답에 traceresponse 헤더 — 게이트웨이 액세스 로그 → Tempo 링크용이라 Tempo 로 보낼 때만. 자세한 건 trace-response.ts.
+if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT) enableTraceResponseHeader(Sentry.getRootSpan);
