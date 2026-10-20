@@ -325,6 +325,75 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
+  # 앱 화면 하네스(안드로이드) — boot-check-android 가 캐시한 APK 로 화면 10개를 라이트·다크로 찍는다(scripts/screens-android.sh).
+  # 발행(publish)은 이 잡을 기다리지 않는다 — 운영 API 를 읽어 흔들릴 수 있다. 깨지면 빨간 잡·아티팩트 app-screens-android 로 본다.
+  app-screens-android:
+    needs: boot-check-android
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Restore Release APK
+        uses: actions/cache/restore@v4
+        with:
+          path: apps/mobile/android/boot-check.apk
+          key: android-release-x86_64-${{ hashFiles('apps/mobile/native-fingerprint.json') }}
+          fail-on-cache-miss: true
+
+      # 판정이 스크린샷을 64px BMP 로 줄일 때 쓴다(맥은 sips).
+      - name: ImageMagick
+        run: command -v convert >/dev/null || (sudo apt-get update -q && sudo apt-get install -y -q imagemagick)
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+
+      # google_apis 이미지여야 adb root 가 된다 — 하네스가 화면마다 받은 OTA 를 지워 이 커밋 번들로 뜨게 한다.
+      - name: Screens (deep links × light/dark)
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          SCREENS_WAIT: 20
+        with:
+          api-level: 33
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          ram-size: 4096M
+          script: bash apps/mobile/scripts/screens-android.sh apps/mobile/android/boot-check.apk
+
+      - name: Report summary
+        if: always()
+        run: |
+          [ -f apps/mobile/screens-out-android/report.md ] && cat apps/mobile/screens-out-android/report.md >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: Upload screens
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-screens-android
+          path: apps/mobile/screens-out-android
+          retention-days: 7
+          if-no-files-found: ignore
+
   publish:
     needs: [boot-check, boot-check-android]
     if: >-

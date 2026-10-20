@@ -50,3 +50,4 @@ DerivedData/
 
 # 앱 화면 하네스 결과(scripts/screens-ios.sh)
 /screens-out/
+/screens-out-android/
