@@ -660,6 +660,90 @@ export type KeywordDealFrequencyOutput = {
   windowDays: Scalars['Int']['output'];
 };
 
+export type KeywordHubAdminDetailOutput = {
+  __typename?: 'KeywordHubAdminDetailOutput';
+  /** 최근 변경부터(최대 50) */
+  changes: Array<KeywordHubChangeOutput>;
+  hub: KeywordHubAdminOutput;
+};
+
+/** 어드민) 키워드 허브 — 정의·상태·배치 통계 */
+export type KeywordHubAdminOutput = {
+  __typename?: 'KeywordHubAdminOutput';
+  activeDays: Scalars['Int']['output'];
+  activeDealCount: Scalars['Int']['output'];
+  aliases: Array<Scalars['String']['output']>;
+  countCapped: Scalars['Boolean']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  excludes: Array<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  /** 마지막 판정·변경 메모 */
+  judgeNote: Scalars['String']['output'];
+  lastDealAt?: Maybe<Scalars['DateTime']['output']>;
+  name: Scalars['String']['output'];
+  recentDealCount: Scalars['Int']['output'];
+  slug: Scalars['String']['output'];
+  /** seed·subscription(배치 발굴)·manual */
+  source: Scalars['String']['output'];
+  statsUpdatedAt?: Maybe<Scalars['DateTime']['output']>;
+  status: KeywordHubStatus;
+  /** 이 키워드(이름·별칭)로 알림을 건 사람 수 */
+  subscriberCount: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export enum KeywordHubChangeAction {
+  Create = 'CREATE',
+  Judge = 'JUDGE',
+  Revert = 'REVERT',
+  Status = 'STATUS',
+  Terms = 'TERMS',
+}
+
+/** 어드민) 키워드 허브 변경 이력 한 줄 */
+export type KeywordHubChangeOutput = {
+  __typename?: 'KeywordHubChangeOutput';
+  action: KeywordHubChangeAction;
+  /** admin:{userId} 또는 판정 잡 태그 */
+  actor: Scalars['String']['output'];
+  after: KeywordHubSnapshotOutput;
+  /** CREATE 는 null */
+  before?: Maybe<KeywordHubSnapshotOutput>;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  note: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+};
+
+/** 어드민) 허브 정의를 바꾸면 최근 30일 딜이 어떻게 달라지나 */
+export type KeywordHubChangePreviewOutput = {
+  __typename?: 'KeywordHubChangePreviewOutput';
+  after: KeywordHubDefinitionCountOutput;
+  /** 지금 정의(새 허브면 null) */
+  before?: Maybe<KeywordHubDefinitionCountOutput>;
+  /** 이름·별칭이 겹치는 다른 허브 */
+  clashSlug?: Maybe<Scalars['String']['output']>;
+  countCapped: Scalars['Boolean']['output'];
+  /** 새로 들어오는 제목(새 허브면 빈 배열) */
+  gained: Array<KeywordHubDiffTitleOutput>;
+  gainedDealCount: Scalars['Int']['output'];
+  /** 바꿀 정의로 남는 제목 */
+  kept: Array<KeywordHubDiffTitleOutput>;
+  /** 빠지는 제목 */
+  lost: Array<KeywordHubDiffTitleOutput>;
+  lostDealCount: Scalars['Int']['output'];
+  /** 저장이 거부될 사유 */
+  problem?: Maybe<Scalars['String']['output']>;
+  /** 알림이 이 정의를 따르는 사람 수 — 빠지는 딜은 이들에게도 안 간다 */
+  subscriberCount: Scalars['Int']['output'];
+};
+
+export type KeywordHubDefinitionCountOutput = {
+  __typename?: 'KeywordHubDefinitionCountOutput';
+  activeDays: Scalars['Int']['output'];
+  recentDealCount: Scalars['Int']['output'];
+};
+
 export type KeywordHubDetailOutput = {
   __typename?: 'KeywordHubDetailOutput';
   /** 최근 30일 딜(진행 중 먼저, 최대 40) */
@@ -668,6 +752,15 @@ export type KeywordHubDetailOutput = {
   hub: KeywordHubOutput;
   /** 이 키워드의 모델별 모음(/deals/{slug}) */
   modelPages: Array<KeywordHubModelPageOutput>;
+};
+
+export type KeywordHubDiffTitleOutput = {
+  __typename?: 'KeywordHubDiffTitleOutput';
+  /** 같은 제목(공백·대소문자 무시) 딜 수 */
+  count: Scalars['Int']['output'];
+  /** 빠지는 쪽 정의에서 이 제목을 지운 제외어 */
+  exclude?: Maybe<Scalars['String']['output']>;
+  title: Scalars['String']['output'];
 };
 
 export type KeywordHubModelPageOutput = {
@@ -704,6 +797,16 @@ export type KeywordHubOutput = {
   topSources: Array<KeywordHubSourceOutput>;
 };
 
+export type KeywordHubSnapshotOutput = {
+  __typename?: 'KeywordHubSnapshotOutput';
+  aliases: Array<Scalars['String']['output']>;
+  /** 그 정의로 센 30일 딜 수 */
+  dealCount?: Maybe<Scalars['Int']['output']>;
+  excludes: Array<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  status: KeywordHubStatus;
+};
+
 export type KeywordHubSourceOutput = {
   __typename?: 'KeywordHubSourceOutput';
   name: Scalars['String']['output'];
@@ -711,27 +814,11 @@ export type KeywordHubSourceOutput = {
   share: Scalars['Int']['output'];
 };
 
-export type KeywordMapEntry = {
-  __typename?: 'KeywordMapEntry';
-  groupId: Scalars['Int']['output'];
-  id: Scalars['ID']['output'];
-  keyword: Scalars['String']['output'];
-};
-
-export enum KeywordMapGroupOrderType {
-  Id = 'ID',
-  Name = 'NAME',
+export enum KeywordHubStatus {
+  Approved = 'APPROVED',
+  Candidate = 'CANDIDATE',
+  Rejected = 'REJECTED',
 }
-
-export type KeywordMapGroupOutput = {
-  __typename?: 'KeywordMapGroupOutput';
-  description?: Maybe<Scalars['String']['output']>;
-  entries: Array<KeywordMapEntry>;
-  entryCount: Scalars['Int']['output'];
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  searchAfter?: Maybe<Array<Scalars['String']['output']>>;
-};
 
 export enum KeywordProductOrderType {
   PostedAt = 'POSTED_AT',
@@ -912,12 +999,6 @@ export type Mutation = {
   addHotDealKeywordByAdmin: Scalars['Int']['output'];
   /** 어드민) 핫딜 유의어 추가 */
   addHotDealKeywordSynonymByAdmin: Scalars['Boolean']['output'];
-  /** 어드민) 키워드 맵 엔트리 벌크 추가 */
-  addKeywordMapEntriesByAdmin: Scalars['Boolean']['output'];
-  /** 어드민) 키워드 맵 엔트리 추가 */
-  addKeywordMapEntryByAdmin: Scalars['Int']['output'];
-  /** 어드민) 키워드 맵 그룹 추가 */
-  addKeywordMapGroupByAdmin: Scalars['Int']['output'];
   /** 알림 키워드 추가 */
   addNotificationKeyword: Scalars['Boolean']['output'];
   /** 비회원 푸시 */
@@ -967,6 +1048,8 @@ export type Mutation = {
   createAdAssetUploadUrl: AdAssetUploadUrlOutput;
   /** 어드민) 역할 생성 */
   createAdminRole: AdminRoleOutput;
+  /** 어드민) 키워드 허브 등록(후보로) */
+  createKeywordHubByAdmin: KeywordHubAdminOutput;
   /** 유저 등록 상품 썸네일 업로드용 presigned URL 발급 */
   createProductImageUploadUrl: ProductImageUploadUrlOutput;
   /** 유저가 직접 핫딜 상품 등록 (등록된 productId 반환) */
@@ -1012,10 +1095,6 @@ export type Mutation = {
   removeHotDealKeywordByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 유의어 제거 */
   removeHotDealKeywordSynonymByAdmin: Scalars['Boolean']['output'];
-  /** 어드민) 키워드 맵 엔트리 삭제 */
-  removeKeywordMapEntryByAdmin: Scalars['Boolean']['output'];
-  /** 어드민) 키워드 맵 그룹 삭제 */
-  removeKeywordMapGroupByAdmin: Scalars['Boolean']['output'];
   /** 단일 알림 삭제 */
   removeNotification: Scalars['Boolean']['output'];
   /** 알림 키워드 제거 */
@@ -1027,12 +1106,16 @@ export type Mutation = {
   removeWishlist: Scalars['Boolean']['output'];
   /** 종료된 상품 제보 */
   reportExpiredProduct: Scalars['Boolean']['output'];
+  /** 어드민) 키워드 허브 변경 하나를 그 전 정의·상태로 되돌림 */
+  revertKeywordHubChangeByAdmin: KeywordHubAdminOutput;
   /** 어드민) 알림 발송 */
   sendNotificationByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 광고 on/off (킬스위치) */
   setAdActive: Scalars['Boolean']['output'];
   /** 어드민) 카카오쇼핑 세션 갱신 */
   setKakaoSession: Scalars['Boolean']['output'];
+  /** 어드민) 키워드 허브 공개·후보·탈락 */
+  setKeywordHubStatusByAdmin: KeywordHubAdminOutput;
   /** 어드민) 모델 페이지 발행 토글 */
   setModelPagePublishedByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 네이버 세션 갱신 */
@@ -1060,8 +1143,8 @@ export type Mutation = {
   updateComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 키워드 수정 */
   updateHotDealKeywordByAdmin: Scalars['Boolean']['output'];
-  /** 어드민) 키워드 맵 그룹 수정 */
-  updateKeywordMapGroupByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 키워드 허브 이름·별칭·제외어 수정 — 알림·테마도 다음 딜부터 따른다 */
+  updateKeywordHubByAdmin: KeywordHubAdminOutput;
   /** 이 키워드 알림에서 제외할 단어 설정 (전체 교체, 빈 배열 = 해제) */
   updateNotificationKeywordExcludeKeywords: Scalars['Boolean']['output'];
   /** 이 키워드는 등록 시점보다 가격이 내려간 딜만 알림 받기 */
@@ -1105,21 +1188,6 @@ export type MutationAddHotDealKeywordByAdminArgs = {
 export type MutationAddHotDealKeywordSynonymByAdminArgs = {
   hotDealKeywordId: Scalars['Int']['input'];
   keywords: Array<Scalars['String']['input']>;
-};
-
-export type MutationAddKeywordMapEntriesByAdminArgs = {
-  groupId: Scalars['Int']['input'];
-  keywords: Array<Scalars['String']['input']>;
-};
-
-export type MutationAddKeywordMapEntryByAdminArgs = {
-  groupId: Scalars['Int']['input'];
-  keyword: Scalars['String']['input'];
-};
-
-export type MutationAddKeywordMapGroupByAdminArgs = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
 };
 
 export type MutationAddNotificationKeywordArgs = {
@@ -1274,6 +1342,13 @@ export type MutationCreateAdminRoleArgs = {
   sections: Array<Scalars['String']['input']>;
 };
 
+export type MutationCreateKeywordHubByAdminArgs = {
+  aliases: Array<Scalars['String']['input']>;
+  excludes: Array<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  note: Scalars['String']['input'];
+};
+
 export type MutationCreateProductImageUploadUrlArgs = {
   contentType: Scalars['String']['input'];
 };
@@ -1354,14 +1429,6 @@ export type MutationRemoveHotDealKeywordSynonymByAdminArgs = {
   ids: Array<Scalars['Int']['input']>;
 };
 
-export type MutationRemoveKeywordMapEntryByAdminArgs = {
-  id: Scalars['Int']['input'];
-};
-
-export type MutationRemoveKeywordMapGroupByAdminArgs = {
-  id: Scalars['Int']['input'];
-};
-
 export type MutationRemoveNotificationArgs = {
   id: Scalars['Int']['input'];
 };
@@ -1386,6 +1453,11 @@ export type MutationReportExpiredProductArgs = {
   productId: Scalars['Int']['input'];
 };
 
+export type MutationRevertKeywordHubChangeByAdminArgs = {
+  changeId: Scalars['Int']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type MutationSendNotificationByAdminArgs = {
   message: Scalars['String']['input'];
   target?: InputMaybe<NotificationTarget>;
@@ -1403,6 +1475,12 @@ export type MutationSetAdActiveArgs = {
 
 export type MutationSetKakaoSessionArgs = {
   curl: Scalars['String']['input'];
+};
+
+export type MutationSetKeywordHubStatusByAdminArgs = {
+  note: Scalars['String']['input'];
+  slug: Scalars['String']['input'];
+  status: KeywordHubStatus;
 };
 
 export type MutationSetModelPagePublishedByAdminArgs = {
@@ -1486,10 +1564,12 @@ export type MutationUpdateHotDealKeywordByAdminArgs = {
   weight?: InputMaybe<Scalars['Float']['input']>;
 };
 
-export type MutationUpdateKeywordMapGroupByAdminArgs = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['Int']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
+export type MutationUpdateKeywordHubByAdminArgs = {
+  aliases: Array<Scalars['String']['input']>;
+  excludes: Array<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  note: Scalars['String']['input'];
+  slug: Scalars['String']['input'];
 };
 
 export type MutationUpdateNotificationKeywordExcludeKeywordsArgs = {
@@ -2376,12 +2456,14 @@ export type Query = {
   keywordDealFrequencies: Array<KeywordDealFrequencyOutput>;
   /** 키워드 허브 하나. 목록 밖 slug 는 null */
   keywordHub?: Maybe<KeywordHubDetailOutput>;
+  /** 어드민) 키워드 허브 하나 + 변경 이력 */
+  keywordHubByAdmin?: Maybe<KeywordHubAdminDetailOutput>;
+  /** 어드민) 이 정의로 바꾸면 최근 30일 딜이 어떻게 달라지나(저장 안 함). 검색을 여러 번 해서 수 초 걸린다 */
+  keywordHubPreviewByAdmin: KeywordHubChangePreviewOutput;
   /** 공개 키워드 허브 목록(30일 딜 많은 순) */
   keywordHubs: Array<KeywordHubOutput>;
-  /** 어드민) 키워드 맵 그룹 조회 */
-  keywordMapGroupByAdmin?: Maybe<KeywordMapGroupOutput>;
-  /** 어드민) 키워드 맵 그룹 목록 조회 */
-  keywordMapGroupsByAdmin: Array<KeywordMapGroupOutput>;
+  /** 어드민) 키워드 허브 목록(공개→후보→탈락) */
+  keywordHubsByAdmin: Array<KeywordHubAdminOutput>;
   /** 종료됐을 수 있는 딜 상세의 '최신 핫딜' — 이 글보다 새 진행 중 딜(같은 상품 먼저, 같은 라인 뒤, 최대 20) */
   latestSimilarDeals: Array<ProductOutput>;
   /** 진행 중 딜 상세의 '다른 곳 진행 중인 딜' — 최근 7일 진행 중 딜 중 같은 상품(싼 순) 먼저, 같은 라인 뒤(최대 10) */
@@ -2728,15 +2810,19 @@ export type QueryKeywordHubArgs = {
   slug: Scalars['String']['input'];
 };
 
-export type QueryKeywordMapGroupByAdminArgs = {
-  id: Scalars['Int']['input'];
+export type QueryKeywordHubByAdminArgs = {
+  slug: Scalars['String']['input'];
 };
 
-export type QueryKeywordMapGroupsByAdminArgs = {
-  limit: Scalars['Int']['input'];
-  orderBy: KeywordMapGroupOrderType;
-  orderOption: OrderOptionType;
-  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+export type QueryKeywordHubPreviewByAdminArgs = {
+  aliases: Array<Scalars['String']['input']>;
+  excludes: Array<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type QueryKeywordHubsByAdminArgs = {
+  status?: InputMaybe<KeywordHubStatus>;
 };
 
 export type QueryLatestSimilarDealsArgs = {
