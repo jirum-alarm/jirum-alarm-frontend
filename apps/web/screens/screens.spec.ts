@@ -91,12 +91,20 @@ for (const page of PAGES) {
       );
       mkdirSync(dirname(base), { recursive: true });
       await tab.screenshot({ path: `${base}.png`, animations: 'disabled' });
+
+      // 점검은 고정 요소를 숨기기 전에 — 숨긴 뒤 돌리면 GNB·탭바 링크가 axe 에 «이름 없음»으로 잡혔다.
+      const missing = RECORDING
+        ? []
+        : ((await (await fetch(`${FIXTURE}/__missing`)).json()) as string[]);
+      const overflow = await horizontalOverflow(tab);
+      const overlap = await textOverlap(tab);
+      const a11y = await accessibility(tab);
+      const boundary = scenario === 'default' && (await errorBoundary(tab));
+
       const viewport = tab.viewportSize()!;
       const height = await tab.evaluate(() => {
         for (const el of document.body.querySelectorAll<HTMLElement>('*')) {
-          if (getComputedStyle(el).position !== 'fixed') continue;
-          el.dataset.screensHidden = el.style.visibility;
-          el.style.visibility = 'hidden';
+          if (getComputedStyle(el).position === 'fixed') el.style.visibility = 'hidden';
         }
         return document.documentElement.scrollHeight;
       });
@@ -106,20 +114,6 @@ for (const page of PAGES) {
         animations: 'disabled',
         clip: { x: 0, y: 0, width: viewport.width, height: Math.min(height, viewport.height * 4) },
       });
-      await tab.evaluate(() => {
-        for (const el of document.body.querySelectorAll<HTMLElement>('[data-screens-hidden]')) {
-          el.style.visibility = el.dataset.screensHidden ?? '';
-          delete el.dataset.screensHidden;
-        }
-      });
-
-      const missing = RECORDING
-        ? []
-        : ((await (await fetch(`${FIXTURE}/__missing`)).json()) as string[]);
-      const overflow = await horizontalOverflow(tab);
-      const overlap = await textOverlap(tab);
-      const a11y = await accessibility(tab);
-      const boundary = scenario === 'default' && (await errorBoundary(tab));
 
       // 빈·에러 시나리오는 일부러 데이터를 깨뜨린 것 — 그 결과 생기는 콘솔 오류·추가 쿼리는 보고만 하고,
       // 막는 건 «화면이 무너졌나»(가로 넘침)뿐. 기본 시나리오는 전부 막는다.

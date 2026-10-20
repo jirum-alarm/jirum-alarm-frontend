@@ -50,7 +50,7 @@ const stable = (value: Json): string => {
 const fixturePath = (name: string, variables: Json) =>
   join(FIXTURES, name, `${createHash('sha1').update(stable(variables)).digest('hex').slice(0, 12)}.json`);
 
-// 공개 레포에 들어가는 파일이라 토큰·이메일 모양 값은 녹화 때 지운다.
+// 녹화 파일은 커밋된다 — 토큰·이메일 모양 값은 녹화 때 지운다.
 // 객체 배열은 앞 MAX_LIST 개만 — 전체 목록 쿼리(publishedModelPages 1.2MB) 하나가 녹화의 대부분을 차지했다. 화면 검증엔 충분하다.
 const MAX_LIST = 60;
 const scrub = (value: Json, key = ''): Json => {
