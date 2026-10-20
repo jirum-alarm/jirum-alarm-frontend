@@ -1,5 +1,6 @@
 'use client';
 
+import { KEYWORD_PROMPT_EVENT } from '@jirum/domain/keyword-hub';
 import { useEffect } from 'react';
 
 import { pushDataLayer, useSearchKeywordAlert } from '@/widgets/search/hooks/useSearchKeywordAlert';
@@ -29,7 +30,7 @@ export default function KeywordHubAlertButton({
   const visible = canRegister && !isOn;
   useEffect(() => {
     if (!visible) return;
-    pushDataLayer({ event: 'keyword_prompt_view', keyword: trimmed, placement });
+    pushDataLayer({ event: KEYWORD_PROMPT_EVENT.view, keyword: trimmed, placement });
   }, [visible, trimmed, placement]);
 
   if (!canRegister) return null;
@@ -50,7 +51,7 @@ export default function KeywordHubAlertButton({
       type="button"
       onClick={() => {
         pushDataLayer({
-          event: 'keyword_prompt_click',
+          event: KEYWORD_PROMPT_EVENT.click,
           keyword: trimmed,
           placement,
         });

@@ -1,6 +1,7 @@
 'use client';
 
 import { emptyText } from '@jirum/design-system/recipes';
+import { CURATION_PAGE_SIZE } from '@jirum/domain/home-sections';
 import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -22,7 +23,7 @@ interface CurationProductListProps {
   section: ContentPromotionSection;
 }
 
-const LIMIT = 20;
+const LIMIT = CURATION_PAGE_SIZE;
 
 const EmptyState = () => <div className={cn('py-10 text-center', emptyText)}>상품이 없습니다.</div>;
 

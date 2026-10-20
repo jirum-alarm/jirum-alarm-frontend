@@ -138,14 +138,6 @@ describe('★배선 — 판정이 네이티브 소유인가(브릿지 회귀 방
     expect(stripComments(bridge)).not.toMatch(/ALARM_DOT_CHANGED/);
   });
 
-  it('web 송신부도 지웠다', () => {
-    const webBottomNav = fs.readFileSync(
-      path.join(__dirname, '../../web/src/widgets/layout/ui/BottomNav.tsx'),
-      'utf8',
-    );
-    expect(stripComments(webBottomNav)).not.toMatch(/ALARM_DOT_CHANGED/);
-  });
-
   it('미읽음 수를 네이티브가 직접 쿼리한다(있는 쿼리 재사용)', () => {
     expect(sync).toMatch(/NotificationQueries\.unreadCount\(\)/);
     expect(sync).toMatch(/setUnreadCount\(/);

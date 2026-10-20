@@ -465,3 +465,15 @@ export function findPromotionSectionById(
   }
   return undefined;
 }
+
+/** 더보기(큐레이션) 화면의 한 쪽 크기. */
+export const CURATION_PAGE_SIZE = 20;
+
+/**
+ * 커서(searchAfter)로 다음 쪽을 받는 queryName 인가. 나머지 둘(hotDealRanking·guestRecommended)은 page 인자라
+ * 더보기 화면에서 한 번에 받는다(web·앱 같은 판정).
+ */
+export const isCursorPagedQuery = (queryName: PromotionQueryName): boolean =>
+  queryName === 'productsByKeyword' ||
+  queryName === 'products' ||
+  queryName === 'expiringSoonHotDealProducts';

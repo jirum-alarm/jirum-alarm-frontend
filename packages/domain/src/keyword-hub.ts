@@ -195,3 +195,9 @@ export function buildKeywordHubLead(hub: Pick<KeywordHubRhythm, 'name'> & Keywor
     ? `최근 ${KEYWORD_HUB_WINDOW_DAYS}일 동안 커뮤니티·쇼핑몰 특가에 올라온 ${hub.name} 핫딜 ${formatHubCount(hub)}을 모았어요.`
     : `커뮤니티·쇼핑몰 특가에 올라오는 ${hub.name} 핫딜을 모아 보여드려요.`;
 }
+
+/**
+ * 「이 키워드 알림 받기」 권유의 계측 이벤트 이름(GA4·GTM 이 이 문자열로 받는다). web 허브·앱 허브 버튼이 같이 쓴다 —
+ * 한쪽만 바뀌면 같은 퍼널이 두 이름으로 갈린다.
+ */
+export const KEYWORD_PROMPT_EVENT = { view: 'keyword_prompt_view', click: 'keyword_prompt_click' } as const;

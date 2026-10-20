@@ -1,91 +1,40 @@
+import {
+  INTEREST_CATEGORIES,
+  type InterestCategoryId,
+  MAX_INTEREST_CATEGORIES,
+} from '@jirum/domain/categories';
+
 import { CategoryIcons } from '@/shared/ui/common/icons';
 
-export const CATEGORIES = [
+// id·이름·순서·이모지는 정본 @jirum/domain/categories(앱 관심 카테고리와 같은 표). 여기는 web 아이콘만 붙인다.
+const ICONS: Record<
+  InterestCategoryId,
   {
-    icon: '💻',
-    text: '컴퓨터',
-    value: 1,
-    iconComponent: CategoryIcons.ComputerOn,
-    offIconComponent: CategoryIcons.ComputerOff,
-  },
-  {
-    icon: '🛒',
-    text: '생활/식품',
-    value: 2,
-    iconComponent: CategoryIcons.CartOn,
-    offIconComponent: CategoryIcons.CartOff,
-  },
-  {
-    icon: '💄',
-    text: '화장품',
-    value: 3,
-    iconComponent: CategoryIcons.CosmeticsOn,
-    offIconComponent: CategoryIcons.CosmeticsOff,
-  },
-  {
-    icon: '📗',
-    text: '도서',
-    value: 5,
-    iconComponent: CategoryIcons.BookOn,
-    offIconComponent: CategoryIcons.BookOff,
-  },
-  {
-    icon: '🛏',
-    text: '가전/가구',
-    value: 6,
-    iconComponent: CategoryIcons.ElectricOn,
-    offIconComponent: CategoryIcons.ElectricOff,
-  },
-  {
-    icon: '🧗‍♀️',
-    text: '등산/레저',
-    value: 7,
-    iconComponent: CategoryIcons.LeisureOn,
-    offIconComponent: CategoryIcons.LeisureOff,
-  },
-  {
-    icon: '🎮',
-    text: '디지털',
-    value: 9,
-    iconComponent: CategoryIcons.GameOn,
-    offIconComponent: CategoryIcons.GameOff,
-  },
-  {
-    icon: '🍼',
-    text: '육아',
-    value: 10,
-    iconComponent: CategoryIcons.BabyOn,
-    offIconComponent: CategoryIcons.BabyOff,
-  },
-  {
-    icon: '💸',
-    text: '상품권',
-    value: 8,
-    iconComponent: CategoryIcons.GiftcardOn,
-    offIconComponent: CategoryIcons.GiftcardOff,
-  },
-  {
-    icon: '👕',
-    text: '의류/잡화',
-    value: 4,
-    iconComponent: CategoryIcons.FashionOn,
-    offIconComponent: CategoryIcons.FashionOff,
-  },
-  {
-    icon: '🐶',
-    text: '반려동물',
-    value: 12,
-    iconComponent: CategoryIcons.PetOn,
-    offIconComponent: CategoryIcons.PetOff,
-  },
-  {
-    icon: '🔍',
-    text: '기타',
-    value: 11,
-    iconComponent: CategoryIcons.EtcOn,
-    offIconComponent: CategoryIcons.EtcOff,
-  },
-] as const;
+    on: (typeof CategoryIcons)[keyof typeof CategoryIcons];
+    off: (typeof CategoryIcons)[keyof typeof CategoryIcons];
+  }
+> = {
+  1: { on: CategoryIcons.ComputerOn, off: CategoryIcons.ComputerOff },
+  2: { on: CategoryIcons.CartOn, off: CategoryIcons.CartOff },
+  3: { on: CategoryIcons.CosmeticsOn, off: CategoryIcons.CosmeticsOff },
+  5: { on: CategoryIcons.BookOn, off: CategoryIcons.BookOff },
+  6: { on: CategoryIcons.ElectricOn, off: CategoryIcons.ElectricOff },
+  7: { on: CategoryIcons.LeisureOn, off: CategoryIcons.LeisureOff },
+  9: { on: CategoryIcons.GameOn, off: CategoryIcons.GameOff },
+  10: { on: CategoryIcons.BabyOn, off: CategoryIcons.BabyOff },
+  8: { on: CategoryIcons.GiftcardOn, off: CategoryIcons.GiftcardOff },
+  4: { on: CategoryIcons.FashionOn, off: CategoryIcons.FashionOff },
+  12: { on: CategoryIcons.PetOn, off: CategoryIcons.PetOff },
+  11: { on: CategoryIcons.EtcOn, off: CategoryIcons.EtcOff },
+};
+
+export const CATEGORIES = INTEREST_CATEGORIES.map((c) => ({
+  icon: c.emoji,
+  text: c.text,
+  value: c.value,
+  iconComponent: ICONS[c.value].on,
+  offIconComponent: ICONS[c.value].off,
+}));
 
 export const CATEGORY_MAP = CATEGORIES.reduce(
   (acc, category) => {
@@ -95,4 +44,4 @@ export const CATEGORY_MAP = CATEGORIES.reduce(
   {} as Record<string, (typeof CATEGORIES)[number]>,
 );
 
-export const MAX_SELECTION_COUNT = 5;
+export const MAX_SELECTION_COUNT = MAX_INTEREST_CATEGORIES;

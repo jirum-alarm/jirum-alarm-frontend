@@ -30,12 +30,15 @@ const SHARED_BY_BOTH: Record<string, string[]> = {
   'product-card': ['visibleHotDealType'],
   ranking: ['rankingWindowDays', 'orderTrendingCategories', 'nextTrendingView', 'RANKING_CARD_SOURCE'],
   share: ['SHARE_CHANNEL_COPY'],
+  'keyword-hub': ['KEYWORD_PROMPT_EVENT', 'buildKeywordHubLead', 'describeKeywordHubRhythm', 'KEYWORD_HUB_MIN_DEALS'],
+  categories: ['INTEREST_CATEGORIES', 'MAX_INTEREST_CATEGORIES'],
   'color-scheme': ['COLOR_SCHEME_COOKIE'],
   'home-sections': [
     'mapHomePageSections',
     'buildFallbackPromotionSections',
     'findPromotionSectionById',
     'LIST_SECTION_MAX',
+    'CURATION_PAGE_SIZE',
   ],
   toss: [
     'TOSS_SECTION_KEYWORD',

@@ -1,3 +1,4 @@
+import {KEYWORD_PROMPT_EVENT} from '@jirum/domain/keyword-hub';
 import React, {useEffect} from 'react';
 
 import Button from '@/shared/components/ui/Button';
@@ -19,7 +20,7 @@ export default function KeywordHubAlertButton({keyword}: {keyword: string}) {
   const visible = canRegister && !isOn;
   useEffect(() => {
     if (!visible) return;
-    Analytics.track('keyword_prompt_view', {
+    Analytics.track(KEYWORD_PROMPT_EVENT.view, {
       keyword: trimmed,
       placement: 'keyword_hub',
     });
@@ -38,7 +39,7 @@ export default function KeywordHubAlertButton({keyword}: {keyword: string}) {
   return (
     <Button
       onPress={() => {
-        Analytics.track('keyword_prompt_click', {
+        Analytics.track(KEYWORD_PROMPT_EVENT.click, {
           keyword: trimmed,
           placement: 'keyword_hub',
         });

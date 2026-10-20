@@ -11,8 +11,6 @@ declare const __dirname: string;
 
 const read = (p: string) =>
   fs.readFileSync(path.join(__dirname, '..', p), 'utf8');
-const readWeb = (p: string) =>
-  fs.readFileSync(path.join(__dirname, '../../web/src', p), 'utf8');
 
 const {
   supportsInfinite,
@@ -33,23 +31,15 @@ describe('커서 페이지네이션 지원 여부 — web 과 같다', () => {
     expect(supportsInfinite('expiringSoonHotDealProducts')).toBe(true);
   });
 
-  it('page 기반 2종은 단일 조회 — web 도 그렇다', () => {
+  it('page 기반 2종은 단일 조회 — 정본 isCursorPagedQuery(web 도 같은 판정)', () => {
     expect(supportsInfinite('hotDealRankingProducts')).toBe(false);
     expect(supportsInfinite('guestRecommendedHotDeals')).toBe(false);
-
-    const web = readWeb(
-      'app/(desktop-ready)/curation/components/CurationProductList.tsx',
-    );
-    // web 도 이 둘만 useSuspenseQuery(단일)를 쓴다
-    expect(web).toContain('ByHotDeal');
-    expect(web).toContain('ByGuestRecommended');
+    expect(supportsInfinite('productsByKeyword')).toBe(true);
   });
 
-  it('LIMIT 이 web 과 같은 20', () => {
-    const web = readWeb(
-      'app/(desktop-ready)/curation/components/CurationProductList.tsx',
-    );
-    expect(web).toContain('const LIMIT = 20');
+  it('한 쪽 크기는 정본 CURATION_PAGE_SIZE(20)', () => {
+    const {CURATION_PAGE_SIZE} = require('@jirum/domain/home-sections');
+    expect(CURATION_LIMIT).toBe(CURATION_PAGE_SIZE);
     expect(CURATION_LIMIT).toBe(20);
   });
 });

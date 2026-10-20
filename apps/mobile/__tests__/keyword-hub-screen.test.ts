@@ -24,8 +24,6 @@ declare const __dirname: string;
 
 const read = (p: string): string =>
   fs.readFileSync(path.join(__dirname, '..', p), 'utf8');
-const readWeb = (p: string): string =>
-  fs.readFileSync(path.join(__dirname, '../../web/src', p), 'utf8');
 
 const hub = (extra: Partial<KeywordHubSummary>): KeywordHubSummary => ({
   slug: '삼다수',
@@ -72,17 +70,12 @@ describe('문장 — @jirum/domain 한 곳(웹 허브와 같은 말)', () => {
     );
   });
 
-  it('web 허브도 같은 정본을 쓴다 — 문장 규칙을 다시 복사하지 않는다', () => {
-    const webLib: string = readWeb('entities/keyword-hub/lib/keyword-hub.ts');
-    expect(webLib).toContain("from '@jirum/domain/keyword-hub'");
-    expect(webLib).toContain('buildKeywordHubLead(hub)');
-    for (const phrase of [
-      '핫딜은 거의 매일 올라와요',
-      '핫딜은 매일 올라오지는 않아요',
-      '커뮤니티·쇼핑몰 특가에 올라오는',
-    ]) {
-      expect(webLib).not.toContain(phrase);
-    }
+  // web 허브도 같은 정본(buildKeywordHubLead 등)을 쓰는지·다시 정의하지 않는지는
+  // domain canon-consumers·no-app-copies 가 본다(앱 테스트가 web 파일을 읽지 않는다).
+  it('허브 화면이 정본 문장 규칙을 쓴다', () => {
+    expect(read('src/screens/keyword-hub/KeywordHubScreen.tsx')).toContain(
+      'buildKeywordHubLead(hub)',
+    );
   });
 });
 
@@ -143,13 +136,15 @@ describe('라우트 등록·들어오는 길', () => {
     );
   });
 
-  it('알림 버튼은 web 허브와 같은 계측 이름·값', () => {
+  it('알림 버튼은 정본 계측 이름(KEYWORD_PROMPT_EVENT — web 허브도 같은 상수)', () => {
+    const {KEYWORD_PROMPT_EVENT} = require('@jirum/domain/keyword-hub');
+    expect(KEYWORD_PROMPT_EVENT).toEqual({
+      view: 'keyword_prompt_view',
+      click: 'keyword_prompt_click',
+    });
     const button = read('src/screens/keyword-hub/ui/KeywordHubAlertButton.tsx');
-    const web = readWeb('widgets/keyword-hub/ui/KeywordHubAlertButton.tsx');
-    for (const s of ["'keyword_prompt_view'", "'keyword_prompt_click'"]) {
-      expect(button).toContain(s);
-      expect(web).toContain(s);
-    }
+    expect(button).toContain('KEYWORD_PROMPT_EVENT.view');
+    expect(button).toContain('KEYWORD_PROMPT_EVENT.click');
     expect(button).toContain("'keyword_hub'");
     expect(read('src/shared/lib/analytics/keyword-tracking.ts')).toContain(
       "| 'keyword_hub'",

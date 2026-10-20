@@ -13,9 +13,6 @@ const path = require('path');
 
 declare const __dirname: string;
 
-const readWeb = (p: string) =>
-  fs.readFileSync(path.join(__dirname, '../../web/src', p), 'utf8');
-
 const {
   countChars,
   isValidKeyword,
@@ -100,32 +97,36 @@ describe('비밀번호 — web useChangePasswordFormViewModel.validate 와 같�
   });
 });
 
-describe('관심 카테고리 — web shared/config/categories.ts 와 id·순서·이름이 같다', () => {
+describe('관심 카테고리 — 정본 @jirum/domain/categories(web 과 같은 표)', () => {
   /**
    * ★서버에 보내는 값이 id 라 하나만 어긋나도 **엉뚱한 카테고리가 저장된다.**
-   * web 설정 파일을 직접 읽어 대조하므로, web 이 바뀌면 이 테스트가 깨져 알려준다.
+   * web·앱이 같은 정본을 쓴다(둘 다 import 하는지는 domain canon-consumers 가 본다).
    */
-  const web = readWeb('shared/config/categories.ts');
-  const webPairs = [
-    ...web.matchAll(/text:\s*'([^']+)',\s*\n\s*value:\s*(\d+)/g),
-  ].map(m => ({text: m[1], value: Number(m[2])}));
+  const {
+    INTEREST_CATEGORIES,
+    MAX_INTEREST_CATEGORIES,
+  } = require('@jirum/domain/categories');
 
-  it('web 파싱이 실제로 됐다(정규식이 헛돌면 아래 대조가 무의미하다)', () => {
-    expect(webPairs.length).toBeGreaterThan(5);
-  });
-
-  it('순서까지 같다', () => {
+  it('정본의 id·이름·순서를 그대로 쓴다', () => {
     expect(
       CATEGORIES.map((c: {text: string; value: number}) => ({
         text: c.text,
         value: c.value,
       })),
-    ).toEqual(webPairs);
+    ).toEqual(
+      INTEREST_CATEGORIES.map((c: {text: string; value: number}) => ({
+        text: c.text,
+        value: c.value,
+      })),
+    );
+    // 서버 카테고리 id 는 겹치지 않는다.
+    const ids = CATEGORIES.map((c: {value: number}) => c.value);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('최대 선택 수는 web 과 같은 5', () => {
+  it('최대 선택 수는 정본(5)', () => {
+    expect(MAX_SELECTION_COUNT).toBe(MAX_INTEREST_CATEGORIES);
     expect(MAX_SELECTION_COUNT).toBe(5);
-    expect(web).toContain('MAX_SELECTION_COUNT = 5');
   });
 
   it('★그림은 이모지가 아니라 카테고리 라인 아이콘이다', () => {
