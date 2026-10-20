@@ -4,7 +4,7 @@ const path = require("node:path");
 // 워크스페이스 앱 목록. 새 앱을 추가하면 **여기만** 고친다.
 // (이전엔 세 함수가 각자 4개를 하드코딩해서 apps/ai 추가 시 check-types 가
 //  `--filter=` 빈 셀렉터로 죽었다 — turbo 가 "selector must have a reference" 로 거부.)
-const APPS = ["admin", "mobile", "web", "landing", "ai", "beauty-web", "design"];
+const APPS = ["mobile", "web", "landing", "ai", "beauty-web", "design"];
 
 const matchedApps = (filenames) => {
   const rel = filenames.map((f) => path.relative(process.cwd(), f));

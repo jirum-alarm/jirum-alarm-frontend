@@ -2,7 +2,7 @@
   "name": "@jirum/graphql-schema",
   "version": "0.0.0",
   "private": true,
-  "description": "운영 crawling-server GraphQL 스키마 한 벌(web·mobile·admin codegen 공용). 갱신은 refresh.",
+  "description": "운영 crawling-server GraphQL 스키마 한 벌(web·mobile codegen 공용). 갱신은 refresh.",
   "exports": {
     "./schema.graphql": "./schema.graphql",
     "./package.json": "./package.json"

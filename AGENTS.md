@@ -3,18 +3,17 @@
 ## 이 레포가 푸는 문제
 핫딜은 커뮤니티·쇼핑몰 수십 곳에 흩어져 있고 몇 시간이면 끝난다. 사용자가 그걸 돌아다니지 않고 한 곳에서 찾고(웹·검색 유입), 관심사를 걸어 두면 알림으로 다시 돌아오게(앱 푸시·알림함) 하는 것이 지름알림의 «사람 쪽» 절반이고, 이 레포가 사람이 닿는 화면 전부를 가진다.
 수집·판정·발송은 백엔드가 하고 여기는 그 결과를 crawling-server GraphQL 하나로 읽어 보여 주고 등록받는다.
-화면들이 같은 GraphQL 스키마·디자인 토큰(`packages/design-system`)·카드 규칙을 공유하고 웹 운영 태그 하나(`release-tag.py`)가 admin·ai·beauty 배포까지 같이 데려가서 한 Turborepo 에 모았다.
+화면들이 같은 GraphQL 스키마·디자인 토큰(`packages/design-system`)·카드 규칙을 공유하고 웹 운영 태그 하나(`release-tag.py`)가 ai·beauty 배포까지 같이 데려가서 한 Turborepo 에 모았다.
 
 - **성공의 모습**: 북극성 = 알림 경유 재방문/주, 보조 = 검색 유입 활성·포획률(그로스 트리 대시보드, vault `domain/growth-targets.md`). 배포는 `RELEASE-TAG DONE` + gitops `deploy-verify.py` PASS, 앱 JS 는 `mobile-ota` boot-check 통과, 런타임 오류는 Sentry.
-- **소유**: 아래 앱 7개의 화면·Next API 라우트(`/api/graphql` 프록시 등), 스토어 바이너리·OTA, 업데이트 안내 `apps/web/public/app-release.json`, 디자인 토큰.
-- **안 하는 것**: 수집·매칭·가격 판정·알림 발송·GraphQL 스키마 = crawling-server(+matching-api·metadata-api·publisher). 카톡방 봇 = kakaotalk-bot. 단축 URL = shortner-server. 옛 AI 채팅 백엔드 = jirum-alarm-chat. 운영 링크 모음 = jirum-alarm-dashboard. 배포 매니페스트 = jirum-alarm-gitops `apps/frontend-*`.
-- **위아래**: crawling-server GraphQL(검색도 그 뒤 Meili) → 이 레포 → 검색·카톡방·푸시로 들어온 사용자 / 운영자(admin).
+- **소유**: 아래 앱 6개의 화면·Next API 라우트(`/api/graphql` 프록시 등), 스토어 바이너리·OTA, 업데이트 안내 `apps/web/public/app-release.json`, 디자인 토큰.
+- **안 하는 것**: 수집·매칭·가격 판정·알림 발송·GraphQL 스키마 = crawling-server(+matching-api·metadata-api·publisher). 카톡방 봇 = kakaotalk-bot. 단축 URL = shortner-server. 운영자 어드민 = jirum-alarm-admin. 옛 AI 채팅 백엔드 = jirum-alarm-chat. 운영 링크 모음 = jirum-alarm-dashboard. 배포 매니페스트 = jirum-alarm-gitops `apps/frontend-*`.
+- **위아래**: crawling-server GraphQL(검색도 그 뒤 Meili) → 이 레포 → 검색·카톡방·푸시로 들어온 사용자.
 - **더 읽을 것**: vault `domain/service-blueprint.md` · `runbook/frontend-deploy-and-api-routing.md` · `runbook/mobile-*.md` · 각 `apps/*/AGENTS.md`.
 
 앱별로 푸는 문제:
 - `web`(jirum-alarm.com) — 검색 유입의 입구. 핫딜 목록·상세(「왜 핫딜인지」 근거)·키워드 알림 등록. 앱 안 웹뷰 화면(글쓰기·약관 등)도 여기서 나간다.
 - `mobile`(Expo, iOS·Android) — 알림을 받는 개인 우편함. 푸시를 실제로 받는 사람 대부분이 앱 사용자라 마이페이지·키워드·설정·상세는 네이티브 화면이다.
-- `admin`(admin.jirum-alarm.com) — 운영자용: 매칭 검수·키워드·광고·알림·수익링크·서비스 점검·실험 등록부. 사용자 기능 없음.
 - `landing`(about-us 소개 페이지, Cloudflare Pages) — 처음 온 사람에게 서비스를 보여 주고 스토어·카톡방으로 보낸다. gitops 밖이라 실패는 `landing-build` CI 로만 보인다.
 - `ai`(ai.jirum-alarm.com, 허용 유저만) — 「언제 사나」 프로토타입: 상품 한 줄 → 90일 핫딜로 본 좋은 가격·지금 살지. 옛 시세 채팅 `/c/*` 와 홈 잠금(`/api/quota`)은 아직 jirum-alarm-chat 에 붙어 있다.
 - `beauty-web`(jirum-alarm.com/beauty) — 화장품만 보는 별도 서비스. basePath `/beauty` 가 gitops 라우팅과의 계약이고 그 밖 경로는 web 이 받는다.
@@ -31,7 +30,7 @@ A comprehensive monorepo for the Jirum-Alarm service, which aggregates hot deals
 This is a **Turborepo monorepo** that manages multiple applications and shared packages for the Jirum-Alarm platform. The service aggregates hot deals from various Korean communities and provides them through web and mobile applications.
 
 ### Key Features
-- **Multi-app Architecture**: Separate apps for web, admin, and landing pages
+- **Multi-app Architecture**: Separate apps for web, mobile, and landing pages
 - **Design System**: 색·글자·모서리·그림자 토큰 한 곳(`packages/design-system`) — 웹·앱·소개·AI 가 같은 값을 읽고, 린트가 우회를 막는다
 - **Hot Deal Aggregation**: Real-time deal collection from various Korean communities
 - **Category-based Organization**: Deals organized by categories
@@ -45,7 +44,6 @@ jirum-alarm-frontend/
 ├── apps/                    # Next.js applications + RN app
 │   ├── mobile/             # Expo bare React Native app (iOS·Android)
 │   ├── web/                # Main web application (port 3000)
-│   ├── admin/              # Admin dashboard (port 3000, 운영 도구)
 │   ├── landing/            # Landing page (port 3100)
 │   ├── beauty-web/         # 지름알림 뷰티 — jirum-alarm.com/beauty (basePath, port 3300)
 │   └── design/             # 디자인 시스템 놀이터(Storybook, port 6006) — 부품 만지기·자동 검증
@@ -53,7 +51,7 @@ jirum-alarm-frontend/
 │   ├── eslint/            # ESLint configuration
 │   ├── prettier/          # Prettier configuration  
 │   ├── typescript/        # TypeScript configuration
-│   ├── graphql-schema/    # 운영 GraphQL 스키마 한 벌(web·mobile·admin codegen 공용)
+│   ├── graphql-schema/    # 운영 GraphQL 스키마 한 벌(web·mobile codegen 공용)
 │   └── design-system/     # 토큰·레시피·조립 규칙·부품 카탈로그·린트(README 필독)
 ├── turbo.json            # Turborepo configuration
 ├── pnpm-workspace.yaml   # PNPM workspace configuration
@@ -83,7 +81,7 @@ jirum-alarm-frontend/
 - **Framework**: Next.js 16.4 with App Router
 - **UI**: React 19.3, Tailwind CSS 4.3
 - **State Management**: Jotai, React Query (TanStack Query)
-- **Data Fetching**: React Query + GraphQL codegen 문서(`src/shared/api/**/*.service.ts` → `shared/api/gql`, `shared/lib/http-client` 의 `execute`). Apollo 는 쓰지 않는다(admin 만)
+- **Data Fetching**: React Query + GraphQL codegen 문서(`src/shared/api/**/*.service.ts` → `shared/api/gql`, `shared/lib/http-client` 의 `execute`). Apollo 는 쓰지 않는다
 - **Styling**: Tailwind CSS, Tailwind Merge, Class Variance Authority
 - **Animation**: Motion, Swiper, Tailwind CSS Animate
 - **Analytics**: GA4(웹=GTM dataLayer, 앱=Firebase), Clarity(웹), Sentry. Mixpanel 은 코드가 아니라 GTM 태그
@@ -107,66 +105,14 @@ pnpm --filter design storybook   # 컴포넌트 놀이터(apps/design 이 web �
 pnpm code-gen        # GraphQL code generation (스키마 = packages/graphql-schema)
 ```
 
-**운영 배포 = `python3 scripts/release-tag.py`** (손으로 `git tag` 하지 않는다). main 포함 확인 → 직전 태그 이후 포함분·같이 나갈 admin/ai/beauty 배포 →
-feat=minor/그 외 patch → 스테이징 빌드 성공 증거 → 웹·어드민 GraphQL 문서를 **운영 스키마**로 검증(서버 롤아웃 전 태그 차단) →
+**운영 배포 = `python3 scripts/release-tag.py`** (손으로 `git tag` 하지 않는다). main 포함 확인 → 직전 태그 이후 포함분·같이 나갈 ai/beauty 배포 →
+feat=minor/그 외 patch → 스테이징 빌드 성공 증거 → 웹 GraphQL 문서를 **운영 스키마**로 검증(서버 롤아웃 전 태그 차단) →
 원격 기준 번호로 annotated 태그(경합 시 재계산) → deploy-web-prod 결과 → gitops `scripts/deploy-verify.py frontend-web` →
 봇 UA(구글·네이버)로 운영 HTML 점검(`scripts/seo-check.py` — noindex·h1·canonical·JSON-LD·본문, 같은 점검이 `seo-check.yml` 로 매일) 까지 한 번에.
 `--dry-run` 은 관문까지만. 성공 출력 `RELEASE-TAG DONE vX.Y.Z` 가 «운영 배포됨» 보고의 근거다.
 
-### 2. **Admin App** (`apps/admin/`)
-**Administrative Dashboard** — 매칭 검수·핫딜 키워드·키워드맵·광고·알림·통계·수익링크 운영 도구
-
-**Technology Stack:**
-- **Framework**: Next.js 16 (App Router), React 19.3
-- **UI**: Tailwind CSS 4 (TailAdmin 토큰은 `src/css/style.css` 의 @theme: `primary`·`success`·`danger`·`stroke`·`boxdark`…). 라이트 전용 — `dark:` 클래스는 남아 있지만 토글이 없다
-- **Data Fetching**: Apollo Client 4 + @apollo/client-integration-nextjs (GraphQL, 운영 API `jirum-api.kyojs.com/graphql`)
-- **Charts**: ApexCharts · **Virtualization**: TanStack React Virtual · **Date**: Day.js
-
-**Structure:**
-```
-src/app/
-├── (admin)/            # 로그인 뒤 화면 전부 — layout.tsx 가 DefaultLayout(사이드바·헤더·에러 배너)을 한 번 그린다
-│   └── <route>/        # page.tsx 는 얇게, 로직은 같은 폴더 components/ (필요시 hooks/ lib/)
-├── auth/signin/        # 레이아웃 밖
-├── actions/token.ts    # httpOnly accessToken 쿠키(서버 액션)
-└── error.tsx           # 렌더 중 에러 경계
-src/graphql/*.ts        # gql 문서(오퍼레이션) 전부 여기
-src/hooks/graphql/*.ts  # 오퍼레이션별 훅 — 타입은 src/generated/gql 생성 타입(손타입 금지)
-src/components/         # 공통: Layouts·Sidebar(메뉴는 MENU 설정 배열)·QueryErrorBanner·…
-```
-
-**Conventions / 함정:**
-- 새 오퍼레이션: `src/graphql/`에 문서 → `pnpm --filter admin code-gen`(공용 운영 스키마 `packages/graphql-schema` 기준) → 훅에서 생성 타입 사용.
-  dev API 는 스키마가 뒤처져 codegen 소스로 쓰지 않는다.
-- GraphQL 실패는 Apollo 에러 링크가 상단 `QueryErrorBanner` 로 띄운다 — 화면이 `error` 를 안 읽어도 "결과 없음"으로 위장되지 않게.
-  인증 에러(FORBIDDEN/UNAUTHENTICATED)만 로그인으로 보낸다.
-- searchAfter 커서 무한 스크롤은 `useLoadMoreOnView`.
-- 공통 UI: 알림은 `useToast()`(alert 금지), 확인은 `await useConfirm()(...)`(confirm 금지), 로딩은 `<Spinner>`, 흰 카드 틀은 `<Panel>`.
-- 모바일 우선(운영자가 주로 폰으로 본다, 390px 기준). 대시보드는 새로 짜지 말고 공통 부품부터:
-  차트 `<Chart>`(ApexCharts 기본값 — 툴바·회전 없음, 축 「1.2만」), 순위·비중은 가로 막대 차트 대신 `<RankList>`,
-  기간·보기 전환 `<SegmentedControl>`, 화면 안 탭 `<Tabs>`, 숫자 요약 `<StatTiles>`, 상태 `<StatusDot>`.
-  영문 코드(provider·gender·광고 위치 등)는 `src/lib/labels.ts` 에서 한글 이름·출처 색을, 금액·날짜는 `src/lib/format.ts`.
-  표는 `table-cards` 로 폰에서 카드가 되고(이름 없는 칸=카드 머리, 이름 붙은 칸은 「이름 값」 조각이 한 줄로 이어 흐름), 부가 열은 `hidden md:table-cell` 로 숨기고 첫 칸에 요약 한 줄을 넣는다.
-  토스트·확인 provider 는 DefaultLayout 에 한 번 달려 있다(로그인 화면은 레이아웃 밖이라 별도).
-- Apollo 클라이언트는 서버 렌더에도 만들어지지만 서버엔 토큰을 싣지 않는다(httpOnly 토큰이 HTML 에 실리지 않게) —
-  서버에서 인증 쿼리가 필요한 useSuspenseQuery 화면은 브라우저가 다시 받는다.
-- 큰 화면(매칭 검수 `VerificationGroupByView/`, 광고 `GraphicLayerEditor/`)은 폴더 안 훅·컴포넌트로 나뉘어 있다. `layout.ts` 같은
-  Next 예약 파일명은 라우트 폴더 밑에 두지 말 것(빌드가 라우트 레이아웃으로 읽는다).
-- 미들웨어는 쿠키 "존재"만 본다 — 서버 액션처럼 백엔드를 안 거치는 쓰기를 만들면 액션 안에서 `adminMe` 로 어드민인지 직접 확인할 것.
-- 사이드바 메뉴 추가 = `src/components/Sidebar/index.tsx` 의 `MENU` 배열에 한 줄.
-- 실험(`/experiments`) = crawling-server `src/experiment/experiment-registry.ts` 를 읽기 전용으로 보여 준다. 실험·「배포 뒤 확인할 것」의 등록·판독 기록은 그 파일(커밋)로 — 절차는 같은 폴더 README.md. 판독일이 지났는데 결과가 없으면 `/health` 「실험 판독」 칸이 주의로 뜬다.
-- 서비스 점검(`/health`, admin 역할 전용) = 지금 문제·주의인 칸만 위에(눌러서 고치는 법), 정상은 이름만 한 줄, 직접 확인 절차는 접어 둔다. 내용은 `src/app/(admin)/health/lib/checks.ts` 한 곳 —
-  새 수익원·크롤러·세션을 붙이거나 사고를 겪으면 거기 한 칸 추가/갱신. 명령이 필요한 절차는 vault 런북 경로로.
-- `public/` 은 비어 있어도 지우지 말 것(`.gitkeep`) — Dockerfile 이 COPY 한다.
-
-**Development Scripts:**
-```bash
-pnpm --filter admin dev        # :3000 (운영 API 에 붙는다 — 쓰기 조작 주의)
-pnpm --filter admin build
-pnpm --filter admin code-gen   # 공용 운영 스키마로 타입 생성
-```
-
-**Deploy:** main push → 스테이징. 운영은 `v*.*.*` 태그(web·ai 도 함께 나감) 또는 admin 만: `gh workflow run deploy-admin-prod.yml --ref main`.
+### 2. **Admin** — 이 레포에 없다
+어드민(admin.jirum-alarm.com)은 2026-10-20 **jirum-alarm-admin** 레포로 옮겼다. 어드민 화면·배포·규칙은 그 레포 AGENTS.md.
 
 ### 3. **Landing App** (`apps/landing/`)
 **Marketing Landing Page**
@@ -338,7 +284,7 @@ Code formatting standards:
 ### Architecture Principles
 1. **Monorepo Awareness**: Changes may affect multiple applications
 2. **Shared Dependencies**: Leverage workspace packages for common functionality
-3. **GraphQL**: web·앱은 codegen 타입 문서 + React Query, admin 만 Apollo Client
+3. **GraphQL**: web·앱은 codegen 타입 문서 + React Query
 4. **State Management**: Use Jotai for client state, React Query for server state
 
 ### Development Workflow
@@ -369,7 +315,7 @@ CI: `web-screens`(main·PR, 운영 빌드로 같은 하네스, 아티팩트 `web
 ### Testing and Quality Assurance
 1. **Storybook**: Components should have Storybook stories
 2. **MSW**: `dev:mock` 의 손 핸들러는 일부 쿼리만 다룬다 — 화면 검증은 녹화 데이터를 쓰는 `apps/web/screens`(README)로
-3. **GraphQL**: 스키마는 `packages/graphql-schema/schema.graphql` 한 벌(운영). 갱신 `GRAPHQL_INTROSPECTION_KEY=$(python3 scripts/introspection_key.py) pnpm --filter @jirum/graphql-schema refresh` → web·mobile·admin 각각 `pnpm --filter <app> code-gen`
+3. **GraphQL**: 스키마는 `packages/graphql-schema/schema.graphql` 한 벌(운영). 갱신 `GRAPHQL_INTROSPECTION_KEY=$(python3 scripts/introspection_key.py) pnpm --filter @jirum/graphql-schema refresh` → web·mobile 각각 `pnpm --filter <app> code-gen`
 4. **Knip**: Use Knip to detect unused code and dependencies
 
 ### File Organization
@@ -394,7 +340,7 @@ CI: `web-screens`(main·PR, 운영 빌드로 같은 하네스, 아티팩트 `web
 - **Styling Utils**: Tailwind Merge, Class Variance Authority, CLSX
 
 ### Data & State Management
-- **GraphQL**: codegen(client preset) + React Query(web·앱), Apollo Client 4.x(admin)
+- **GraphQL**: codegen(client preset) + React Query(web·앱)
 - **State Management**: Jotai 3.x
 - **Server State**: TanStack React Query 5.x
 - **Real-time**: GraphQL WS, Firebase 13.x
@@ -443,7 +389,6 @@ pnpm dev
 
 # Individual app development
 pnpm --filter web dev
-pnpm --filter admin dev
 pnpm --filter landing dev
 
 # Type checking
@@ -482,7 +427,6 @@ Each app may require specific environment variables:
 
 ### Deployment
 - Deployment configuration managed per platform/environment
-- Docker support for admin application
 - Separate environments for development and production
 - Automated CI/CD through repository-integrated workflows
 

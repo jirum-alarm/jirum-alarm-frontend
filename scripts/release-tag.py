@@ -5,7 +5,7 @@
 
 순서와 각 단계가 막는 사고:
   ① 원격 기준 태그·main fetch, 대상 커밋이 origin/main 에 들어 있는지  — 고아 태그(v1.13.107, 07-30)
-  ② 직전 태그 이후 apps/web·packages 변경(diff --stat)과 같이 나갈 admin·ai 배포 목록  — 포함분 모르고 태그(v1.24.2)
+  ② 직전 태그 이후 apps/web·packages 변경(diff --stat)과 같이 나갈 ai·beauty 배포 목록  — 포함분 모르고 태그(v1.24.2)
   ③ feat → minor / 그 외 → patch 자동 결정  — feat 에 patch(09-26)
   ④ 빌드 관문: 그 커밋(또는 웹 입력이 같은 커밋)의 deploy-web-staging 성공  — 남의 미커밋 덕에 통과한 로컬 tsc(v1.13.116)
   ⑤ GraphQL 관문: 웹·어드민 문서를 운영 스키마로 검증, 직전 태그 대비 새 오류면 중단  — 서버보다 먼저 나간 웹(08-01 Unknown argument)
@@ -228,7 +228,7 @@ _INTROSPECTION_KEY = None
 def gql_errors(sha, work):
     root = os.path.join(work, sha[:12])
     os.makedirs(root, exist_ok=True)
-    srcs = [p for p in ('apps/web/src', 'apps/admin/src') if git('ls-tree', '-d', sha, p, check=False)]
+    srcs = [p for p in ('apps/web/src',) if git('ls-tree', '-d', sha, p, check=False)]
     archive = subprocess.run(['git', 'archive', sha, *srcs], cwd=TOP, capture_output=True, check=True).stdout
     subprocess.run(['tar', '-x', '-C', root], input=archive, check=True)
     p = subprocess.run(['node', os.path.join(HERE, 'gql-check.mjs'), '--schema', PROD_SCHEMA, '--root', root, *srcs],

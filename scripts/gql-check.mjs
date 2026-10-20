@@ -4,7 +4,7 @@
 // 왜: 서버 운영 롤아웃 전에 새 필드·인자를 쓰는 웹을 태그하면 운영에서 `Unknown argument` 장애가 난다(2026-08-01).
 // codegen 은 dev 스키마를 보고(apps/web/codegen.ts) tsc 는 문자열 쿼리를 못 본다 — 그래서 운영 스키마로 직접 잰다.
 //
-//   node scripts/gql-check.mjs --schema https://jirum-api.kyojs.com/graphql --root <소스 루트> apps/web/src apps/admin/src
+//   node scripts/gql-check.mjs --schema https://jirum-api.kyojs.com/graphql --root <소스 루트> apps/web/src
 //   → stdout JSON {checked, skipped, errors:[{file, op, message}]}
 //
 // 문서 찾기: 템플릿 리터럴 중 query/mutation/subscription/fragment 로 시작하는 것(gql``·graphql(``)·

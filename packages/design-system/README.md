@@ -2,7 +2,7 @@
 
 웹(`apps/web`)·앱(`apps/mobile`)·소개 페이지(`apps/landing`)·AI(`apps/ai`)·뷰티(`apps/beauty-web`)와 놀이터(`apps/design`)가
 **같은 색·글자·모서리·그림자**를 쓰게 하는 곳이다.
-어드민(`apps/admin`)은 운영 도구라 자체 TailAdmin 팔레트를 그대로 쓴다(범위 밖).
+어드민은 별도 레포(jirum-alarm-admin)라 범위 밖이다.
 
 **디자인의 정본은 이 패키지다.** Figma 는 2026-10 기준 더 업데이트되지 않는다 — 옛 Figma 의 글자 스타일 14종에 없는
 크기(10·11·15·22px)도 여기 토큰이면 정상이다. 색·크기를 바꾸려면 Figma 가 아니라 `tokens.js` 를 고친다.

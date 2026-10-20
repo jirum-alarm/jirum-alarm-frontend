@@ -3,14 +3,13 @@ name: web-pr-check
 # 웹 계열 앱을 PR 단계에서 검증한다(타입·테스트·린트). 배포 워크플로는 main push 에서만 돌아서,
 # 이게 없으면 PR(Dependabot 보안 PR 포함)이 타입·테스트 검사 없이 머지될 수 있다.
 # - Web check: apps/web (기존 필수 체크 이름 유지)
-# - Apps check: admin·ai·beauty-web·landing 중 base 이후 바뀐(또는 바뀐 패키지에 기대는) 앱만 turbo 로
+# - Apps check: ai·beauty-web·landing 중 base 이후 바뀐(또는 바뀐 패키지에 기대는) 앱만 turbo 로
 #   (mobile 은 mobile-validation, design 은 design-system 워크플로가 본다)
 on:
   pull_request:
     paths:
       - .github/workflows/web-pr-check.yml
       - apps/web/**
-      - apps/admin/**
       - apps/ai/**
       - apps/beauty-web/**
       - apps/landing/**
@@ -66,7 +65,7 @@ jobs:
         run: pnpm --filter web lint:check
 
   apps-check:
-    name: Apps check (admin·ai·beauty-web·landing)
+    name: Apps check (ai·beauty-web·landing)
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -93,7 +92,7 @@ jobs:
 
       - name: Generate Next types
         run: |
-          for app in admin ai beauty-web landing; do
+          for app in ai beauty-web landing; do
             (cd "apps/$app" && pnpm exec next typegen)
           done
 
