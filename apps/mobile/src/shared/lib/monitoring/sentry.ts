@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/react-native';
 import * as Updates from 'expo-updates';
 import {Analytics} from '@/shared/lib/analytics/ga4';
-import {queryErrorReportKey, queryName} from './query-errors';
+import {isOfflineError, queryErrorReportKey, queryName} from './query-errors';
 
 // 앱(RN) 크래시·에러 수집. web 은 @sentry/nextjs 로 이미 보내고 있었지만
 // 앱은 유저 폰에서 죽어도 아무 기록이 남지 않았다(유일한 신호가 스토어 리뷰).
@@ -126,6 +126,29 @@ export function captureQueryError(
     tags: {[source.kind]: queryName(source.key)},
     fingerprint: [reportKey],
   });
+}
+
+export type SilentFlow =
+  | 'push_token'
+  | 'push_bind'
+  | 'push_unbind'
+  | 'push_permission'
+  | 'ota_check';
+
+const reportedFlows = new Set<SilentFlow>();
+
+/**
+ * 앱 사용을 막지 않으려고 **삼키는** 실패(푸시 토큰 등록·계정 연결·OTA 확인)를 남긴다.
+ *
+ * 전엔 console.log 뿐이라 토큰 등록이 조용히 실패하면 그 기기는 키워드 알림이 끊긴 채로
+ * 아무도 몰랐다(2026-10-20 감사). 네트워크 끊김은 빼고, 실행당 흐름마다 한 번만 보낸다 —
+ * 같은 기기가 복귀할 때마다 같은 실패를 보내면 쿼터만 먹는다.
+ */
+export function captureSilentFailure(flow: SilentFlow, error: unknown) {
+  if (!isEnabled() || reportedFlows.has(flow)) return;
+  if (isOfflineError(error)) return;
+  reportedFlows.add(flow);
+  Sentry.captureException(error, {level: 'warning', tags: {flow}});
 }
 
 /**

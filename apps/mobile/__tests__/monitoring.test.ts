@@ -216,6 +216,25 @@ describe('Sentry 보고 (DSN 있음·릴리스)', () => {
     );
   });
 
+  it('삼키는 실패(푸시 토큰 등록 등)는 흐름 태그를 달아 실행당 흐름마다 한 번만 보낸다', () => {
+    const {captureSilentFailure} = loadEnabledSentry();
+    captureSilentFailure('push_token', new Error('addToken failed'));
+    captureSilentFailure('push_token', new Error('addToken failed again'));
+    captureSilentFailure('ota_check', new Error('ERR_UPDATES_CHECK'));
+    expect(Sentry.captureException).toHaveBeenCalledTimes(2);
+    expect(Sentry.captureException).toHaveBeenCalledWith(expect.any(Error), {
+      level: 'warning',
+      tags: {flow: 'push_token'},
+    });
+  });
+
+  it('오프라인이라 난 삼키는 실패는 보내지 않는다', () => {
+    const {captureSilentFailure} = loadEnabledSentry();
+    captureSilentFailure('push_token', new TypeError('Network request failed'));
+    captureSilentFailure('ota_check', new Error('The request timed out.'));
+    expect(Sentry.captureException).not.toHaveBeenCalled();
+  });
+
   it('정상 실행이면 아무것도 보내지 않는다', () => {
     loadEnabledSentry().reportEmergencyLaunch();
     expect(mockTrack).not.toHaveBeenCalled();

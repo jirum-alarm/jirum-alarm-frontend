@@ -2,6 +2,7 @@ import {useEffect, useRef} from 'react';
 import {AppState} from 'react-native';
 import * as Updates from 'expo-updates';
 
+import {captureSilentFailure} from '@/shared/lib/monitoring/sentry';
 import {navigationRef} from '@/shared/lib/navigation/navigation-ref';
 
 /**
@@ -91,6 +92,7 @@ export default function useOtaUpdateOnResume(): void {
         if (isAvailable) await Updates.fetchUpdateAsync();
       } catch (error) {
         console.log('ota resume check error:', error);
+        captureSilentFailure('ota_check', error);
       }
     });
     return () => subscription.remove();

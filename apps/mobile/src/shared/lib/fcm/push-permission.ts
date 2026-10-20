@@ -9,6 +9,7 @@ import {TokenType} from '@/shared/api/gql/graphql.ts';
 import {StorageKey} from '@/shared/constant/storage-key.ts';
 import {waitForDeviceId} from '@/shared/lib/device/device-id';
 import {getAsyncStorage, setAsyncStorage} from '@/shared/lib/persistence';
+import {captureSilentFailure} from '@/shared/lib/monitoring/sentry';
 
 /**
  * FCM 토큰을 받아 서버에 등록한다. 앱 진입(useFCMTokenManager)과
@@ -54,6 +55,7 @@ export async function bindFcmTokenToUser(): Promise<void> {
     await NotificationService.addToken({token, tokenType: TokenType.Fcm});
   } catch (error) {
     console.log('bind fcm token error:', error);
+    captureSilentFailure('push_bind', error);
   }
 }
 
@@ -76,6 +78,7 @@ export async function unbindFcmTokenFromUser(): Promise<void> {
     await NotificationService.removeTokenLinkage({token});
   } catch (error) {
     console.log('unbind fcm token error:', error);
+    captureSilentFailure('push_unbind', error);
   }
 }
 
@@ -116,6 +119,7 @@ export async function requestPushPermissionIfNeeded(
     if (next.granted) await registerFcmToken();
   } catch (error) {
     console.log('push permission error:', error);
+    captureSilentFailure('push_permission', error);
   }
 }
 

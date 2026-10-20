@@ -1,8 +1,11 @@
 const path = require('node:path');
-const {getDefaultConfig} = require('expo/metro-config');
+const {getSentryExpoConfig} = require('@sentry/react-native/metro');
 const {withNativeWind} = require('nativewind/metro');
 
-const config = getDefaultConfig(__dirname);
+// ★Sentry 래퍼로 만든다 — expo 기본 config 그대로면 번들에 debug ID 가 안 박혀, OTA 마다 소스맵을 올려도
+// 이벤트와 짝이 안 맞아 JS 스택이 전부 main.jsbundle 의 줄 번호로만 보였다(2026-10-20 실측). 내부는 같은
+// expo getDefaultConfig 에 debug ID·release 주입 직렬화 플러그인만 얹는다.
+const config = getSentryExpoConfig(__dirname);
 
 // ★inlineRequires — 모듈을 import 문 위치가 아니라 **처음 쓰는 순간** 평가한다. 앱 시작 때
 // 모든 모듈을 한꺼번에 평가하던 것을 첫 화면에 필요한 만큼으로 줄인다(Expo 기본값은 꺼짐).

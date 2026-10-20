@@ -5,6 +5,7 @@ import {
   registerFcmToken,
   saveAndRegisterFcmToken,
 } from '../lib/fcm/push-permission';
+import {captureSilentFailure} from '../lib/monitoring/sentry';
 
 const useFCMTokenManager = () => {
   React.useEffect(() => {
@@ -27,13 +28,15 @@ const useFCMTokenManager = () => {
         }
       } catch (error) {
         console.log('error:', error);
+        captureSilentFailure('push_token', error);
       }
     })();
 
     const unsubscribe = messaging().onTokenRefresh(token => {
-      saveAndRegisterFcmToken(token).catch(error =>
-        console.log('fcm token refresh error:', error),
-      );
+      saveAndRegisterFcmToken(token).catch(error => {
+        console.log('fcm token refresh error:', error);
+        captureSilentFailure('push_token', error);
+      });
     });
     return unsubscribe;
   }, []);

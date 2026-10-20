@@ -24,9 +24,7 @@ export function queryErrorReportKey(
   source: {kind: 'query' | 'mutation'; key: unknown},
 ): string | null {
   if (isCancelledError(error)) return null;
-  if (error instanceof TypeError && /network request/i.test(error.message)) {
-    return null;
-  }
+  if (isOfflineError(error)) return null;
   if (error instanceof FetchError && error.code != null) {
     if (EXPECTED_CODES.has(error.code)) return null;
   }
@@ -42,6 +40,21 @@ export function queryErrorReportKey(
     0,
     120,
   )}`;
+}
+
+/**
+ * 기기가 오프라인이라 난 실패 — 고칠 게 없다. fetch 는 `TypeError: Network request failed`,
+ * expo-updates·Firebase 는 메시지에 network·offline·timed out 을 담는다.
+ */
+export function isOfflineError(error: unknown): boolean {
+  if (error instanceof TypeError && /network request/i.test(error.message)) {
+    return true;
+  }
+  const message = error instanceof Error ? error.message : '';
+  return (
+    /\b(network|offline|internet|timed out)\b/i.test(message) &&
+    !(error instanceof FetchError)
+  );
 }
 
 /** 쿼리 키의 첫 칸 — 이 레포의 키는 `['product', …]` 처럼 도메인 이름으로 시작한다. */
