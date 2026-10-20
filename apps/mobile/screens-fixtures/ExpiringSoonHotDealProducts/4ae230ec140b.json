@@ -1,0 +1,254 @@
+{
+  "variables": {
+    "daysUntilExpiry": 7,
+    "limit": 10,
+    "orderBy": "EXPIRING_SOON",
+    "orderOption": "DESC"
+  },
+  "response": {
+    "data": {
+      "expiringSoonHotDealProducts": [
+        {
+          "id": "21214340",
+          "title": "딸기 포도 블루베리 애플망고 수박젤리 골라담기",
+          "mallId": 3223,
+          "mallName": "알토란마켓",
+          "url": "https://www.altoranmarket.co.kr/goods/goods_view.php?goodsNo=1000003405",
+          "isHot": false,
+          "isEnd": false,
+          "price": "200원",
+          "providerId": 19,
+          "categoryId": 2,
+          "category": "식품 > 과자/간식/라면",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/altoranmarket/1000003405.jpg",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "알토란마켓"
+          },
+          "searchAfter": [
+            "1792508400000"
+          ],
+          "postedAt": "2026-01-08T19:56:09.000Z",
+          "earliestExpiryDate": "2026-10-20T15:00:00.000Z"
+        },
+        {
+          "id": "25374852",
+          "title": "동결건조 에그모양 젤리 12g*12입(1케이스)",
+          "mallId": 3223,
+          "mallName": "알토란마켓",
+          "url": "https://www.altoranmarket.co.kr/goods/goods_view.php?goodsNo=1000004136",
+          "isHot": false,
+          "isEnd": false,
+          "price": "1,500원",
+          "providerId": 19,
+          "categoryId": 2,
+          "category": "식품 > 과자/간식/라면",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/altoranmarket/1000004136.jpg",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "알토란마켓"
+          },
+          "searchAfter": [
+            "1792508400000"
+          ],
+          "postedAt": "2026-07-04T07:03:22.000Z",
+          "earliestExpiryDate": "2026-10-20T15:00:00.000Z"
+        },
+        {
+          "id": "28700711",
+          "title": "유부닭 700g 20개입",
+          "mallId": 1936,
+          "mallName": "떠리몰",
+          "url": "https://thirtymall.com/detail?id=133470114",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 20,
+          "categoryId": 2,
+          "category": "가공식품 > HMR/간편식 > ‘닭가슴살/쉐이크/헬…’",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/thirtymall/133470114.jpg",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "떠리몰"
+          },
+          "searchAfter": [
+            "1792508400000"
+          ],
+          "postedAt": "2026-08-18T06:00:54.000Z",
+          "earliestExpiryDate": "2026-10-20T15:00:00.000Z"
+        },
+        {
+          "id": "30451541",
+          "title": "내몸엔저당 캡스파이시마요소스 300g 2개",
+          "mallId": 1936,
+          "mallName": "떠리몰",
+          "url": "https://thirtymall.com/detail?id=133698744",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,900원",
+          "providerId": 20,
+          "categoryId": 2,
+          "category": "가공식품 > 소스/조미료/오일/장류 > ‘소스/드레싱/식초’",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/thirtymall/133698744.jpg",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "떠리몰"
+          },
+          "searchAfter": [
+            "1792508400000"
+          ],
+          "postedAt": "2026-09-03T06:00:52.000Z",
+          "earliestExpiryDate": "2026-10-20T15:00:00.000Z"
+        },
+        {
+          "id": "31436953",
+          "title": "동결건조 에그모양 젤리 12g 12입",
+          "mallId": 3223,
+          "mallName": "알토란마켓",
+          "url": "https://www.altoranmarket.co.kr/goods/goods_view.php?goodsNo=1000004899",
+          "isHot": false,
+          "isEnd": false,
+          "price": "1,500원",
+          "providerId": 19,
+          "categoryId": 2,
+          "category": "식품 > 과자/간식/라면",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/altoranmarket/1000004899.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "알토란마켓"
+          },
+          "searchAfter": [
+            "1792508400000"
+          ],
+          "postedAt": "2026-09-10T04:00:25.000Z",
+          "earliestExpiryDate": "2026-10-20T15:00:00.000Z"
+        },
+        {
+          "id": "32504025",
+          "title": "현대약품 에너지드링크 에너지린 250ml x 30개",
+          "mallId": 1936,
+          "mallName": "떠리몰",
+          "url": "https://thirtymall.com/detail?id=136495084",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 20,
+          "categoryId": 2,
+          "category": "가공식품 > 음료/커피 > ‘물/음료/탄산’",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/thirtymall/136495084.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "떠리몰"
+          },
+          "searchAfter": [
+            "1792508400000"
+          ],
+          "postedAt": "2026-09-17T06:00:46.000Z",
+          "earliestExpiryDate": "2026-10-20T15:00:00.000Z"
+        },
+        {
+          "id": "32959070",
+          "title": "에버그린 메가 상어연골 콘드로이친 1,000ml x 90정 1개",
+          "mallId": 1936,
+          "mallName": "떠리몰",
+          "url": "https://thirtymall.com/detail?id=131834614",
+          "isHot": false,
+          "isEnd": false,
+          "price": "22,000원",
+          "providerId": 20,
+          "categoryId": 2,
+          "category": "건강식품 > 뼈/관절 > ‘콘드로이친’",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/thirtymall/131834614.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "떠리몰"
+          },
+          "searchAfter": [
+            "1792508400000"
+          ],
+          "postedAt": "2026-09-19T18:02:33.000Z",
+          "earliestExpiryDate": "2026-10-20T15:00:00.000Z"
+        },
+        {
+          "id": "32959074",
+          "title": "무럭무럭 키즈죽 과일퓨레 4종 100ml 골라담기",
+          "mallId": 1936,
+          "mallName": "떠리몰",
+          "url": "https://thirtymall.com/detail?id=133223538",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,490원",
+          "providerId": 20,
+          "categoryId": 10,
+          "category": "가공식품 > HMR/간편식 > ‘즉석밥/덮밥/볶음밥…’",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/thirtymall/133223538.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "떠리몰"
+          },
+          "searchAfter": [
+            "1792508400000"
+          ],
+          "postedAt": "2026-09-19T18:02:33.000Z",
+          "earliestExpiryDate": "2026-10-20T15:00:00.000Z"
+        },
+        {
+          "id": "32959079",
+          "title": "일산칼국수 1.2kg (3개이상 구매가능) (업체별도 무료배송)",
+          "mallId": 1936,
+          "mallName": "떠리몰",
+          "url": "https://thirtymall.com/detail?id=134095653",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 20,
+          "categoryId": 2,
+          "category": "가공식품 > HMR/간편식 > ‘냉장/냉동면류’",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/thirtymall/134095653.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "떠리몰"
+          },
+          "searchAfter": [
+            "1792508400000"
+          ],
+          "postedAt": "2026-09-19T18:02:33.000Z",
+          "earliestExpiryDate": "2026-10-20T15:00:00.000Z"
+        },
+        {
+          "id": "33242619",
+          "title": "곰인형 로즈 부케 간식선물세트 190g 2세트",
+          "mallId": 1936,
+          "mallName": "떠리몰",
+          "url": "https://thirtymall.com/detail?id=133826375",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,900원",
+          "providerId": 20,
+          "categoryId": 2,
+          "category": "가공식품 > 과자/간식/시리얼 > ‘스낵/칩’",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/thirtymall/133826375.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "떠리몰"
+          },
+          "searchAfter": [
+            "1792508400000"
+          ],
+          "postedAt": "2026-09-21T12:01:56.000Z",
+          "earliestExpiryDate": "2026-10-20T15:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

@@ -108,6 +108,8 @@ if os.environ["HARNESS_URL"]:
     data["jirum:screens-harness-url"] = os.environ["HARNESS_URL"]
 if os.environ["API_URL"]:
     data["jirum:screens-api-url"] = os.environ["API_URL"]
+    # 고정 데이터의 로그인 사용자는 키워드가 있어 알림 권한 안내 시트가 모든 화면 아래 절반을 덮는다 — 이미 본 것으로.
+    data["pushPrePromptShown"] = "true"
 json.dump(data, open(path, "w"))' "$STORE"
   pid=$(xcrun simctl launch "$DEV" "$BUNDLE_ID" | awk '{print $NF}')
   sleep "$WAIT"

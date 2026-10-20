@@ -1,0 +1,164 @@
+{
+  "variables": {
+    "limit": 6,
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "mallGroupId": 118
+  },
+  "response": {
+    "data": {
+      "products": [
+        {
+          "id": "36140867",
+          "title": "배스킨라빈스 베리베리 스트로베리 우유 190ml 48개 18,430원",
+          "mallId": 4800,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14955535?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "18,430원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14955535.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792502648000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T13:24:08.000Z"
+        },
+        {
+          "id": "36140520",
+          "title": "바세린 딥 모이스처 고보습 핸드크림 60ml 5개, 7,200원",
+          "mallId": 4800,
+          "url": "https://eomisae.co.kr/rt/207040399",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,200원",
+          "providerId": 11,
+          "categoryId": 3,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207040399.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792500875000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T12:54:35.000Z"
+        },
+        {
+          "id": "36133544",
+          "title": "연세우유 세브란스 A2 프로틴 초콜릿 190ml 48개 39,340원",
+          "mallId": 4800,
+          "url": "https://arca.live/b/hotdeal/186521504",
+          "isHot": false,
+          "isEnd": false,
+          "price": "39,340원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186521504.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792498859000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T12:20:59.000Z"
+        },
+        {
+          "id": "36124018",
+          "title": "동원 꽁치 300g 5개 16,060원",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/86823575",
+          "isHot": false,
+          "isEnd": false,
+          "price": "16,060원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/86823575.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "1792497621000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T12:00:21.000Z"
+        },
+        {
+          "id": "36124830",
+          "title": "오돌뼈 제거 흑돼지 냉동 삼겹살 1kg 4팩",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2684391653",
+          "isHot": false,
+          "isEnd": false,
+          "price": "41,900원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2684391653.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "1792497620000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T12:00:20.000Z"
+        },
+        {
+          "id": "36124202",
+          "title": "국내산 흠과 못난이 햇 단감 10kg 1박스",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/262318065",
+          "isHot": false,
+          "isEnd": false,
+          "price": "14,500원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/262318065.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "1792497619000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T12:00:19.000Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "variables": {},
+  "response": {
+    "data": {
+      "communityProviders": [
+        {
+          "id": "1",
+          "name": "ppomppu",
+          "nameKr": "뽐뿌"
+        },
+        {
+          "id": "2",
+          "name": "coolnjoy",
+          "nameKr": "쿨엔조이"
+        },
+        {
+          "id": "4",
+          "name": "ruliweb",
+          "nameKr": "루리웹"
+        },
+        {
+          "id": "5",
+          "name": "quasarzone",
+          "nameKr": "퀘이사존"
+        },
+        {
+          "id": "7",
+          "name": "fmkorea",
+          "nameKr": "에펨코리아"
+        },
+        {
+          "id": "11",
+          "name": "eomisae",
+          "nameKr": "어미새"
+        },
+        {
+          "id": "12",
+          "name": "arca",
+          "nameKr": "아카"
+        },
+        {
+          "id": "16",
+          "name": "zod",
+          "nameKr": "조드"
+        },
+        {
+          "id": "18",
+          "name": "mommybebe",
+          "nameKr": "맘이베베"
+        }
+      ]
+    }
+  }
+}

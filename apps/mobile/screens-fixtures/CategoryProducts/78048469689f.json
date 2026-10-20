@@ -1,0 +1,356 @@
+{
+  "variables": {
+    "categoryIds": [
+      1
+    ],
+    "limit": 20,
+    "orderBy": "COMMUNITY_RANKING",
+    "orderOption": "DESC"
+  },
+  "response": {
+    "data": {
+      "products": [
+        {
+          "id": "36114862",
+          "title": "잠자리 VXE R1 Pro MAX 무선 게이밍 마우스 39,990원",
+          "price": "39,990원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741656.webp",
+          "isEnd": false,
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "지마켓",
+          "postedAt": "2026-10-20T08:37:00.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "1",
+            "nameKr": "뽐뿌"
+          }
+        },
+        {
+          "id": "36089133",
+          "title": "7800X3D 302,469원",
+          "price": "302,469원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186459565.webp",
+          "isEnd": false,
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "알리",
+          "postedAt": "2026-10-19T23:19:37.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "12",
+            "nameKr": "아카"
+          }
+        },
+        {
+          "id": "36100947",
+          "title": "LG 32GS75Q QHD 울트라기어 게이밍모니터 381,040원",
+          "price": "381,040원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186469796.webp",
+          "isEnd": false,
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "쿠팡",
+          "postedAt": "2026-10-20T02:38:09.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "12",
+            "nameKr": "아카"
+          }
+        },
+        {
+          "id": "36103851",
+          "title": "레이저 Viper V3 Pro SE 유무선 게이밍 마우스",
+          "price": "109,000원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465533857.webp",
+          "isEnd": false,
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "쿠팡",
+          "postedAt": "2026-10-20T05:21:00.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "7",
+            "nameKr": "에펨코리아"
+          }
+        },
+        {
+          "id": "36103852",
+          "title": "올화이트 9950X3D + 윙치킨 RTX 5090 + 64GB + 2TB",
+          "price": "14,900,160원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465538501.webp",
+          "isEnd": false,
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "11번가",
+          "postedAt": "2026-10-20T05:29:00.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "7",
+            "nameKr": "에펨코리아"
+          }
+        },
+        {
+          "id": "36100955",
+          "title": "LG그램 프로 AI 16인치 256GB 램16GB",
+          "price": "1,634,530원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465125762.webp",
+          "isEnd": false,
+          "hotDealType": null,
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "쿠팡",
+          "postedAt": "2026-10-20T02:37:00.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "7",
+            "nameKr": "에펨코리아"
+          }
+        },
+        {
+          "id": "36114101",
+          "title": "9800X3D + 5070TI 완본체 3,559,730원",
+          "price": "3,559,730원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186492835.webp",
+          "isEnd": false,
+          "hotDealType": null,
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "11번가",
+          "postedAt": "2026-10-20T07:45:28.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "12",
+            "nameKr": "아카"
+          }
+        },
+        {
+          "id": "36103556",
+          "title": "ASRock RX 9070 CHALLENGER",
+          "price": "959,030원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186481814.webp",
+          "isEnd": false,
+          "hotDealType": null,
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "지마켓",
+          "postedAt": "2026-10-20T05:23:31.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "12",
+            "nameKr": "아카"
+          }
+        },
+        {
+          "id": "36075295",
+          "title": "삼성 P9 SD express 512gb $99.99/$7.85",
+          "price": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/108166.webp",
+          "isEnd": false,
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "아마존",
+          "postedAt": "2026-10-19T17:03:24.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "4",
+            "nameKr": "루리웹"
+          }
+        },
+        {
+          "id": "36116590",
+          "title": "ORICO USB 3.0 플래시 드라이브 C타입 64GB",
+          "price": "￦ 14,878 (KRW)",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994046.webp",
+          "isEnd": false,
+          "hotDealType": null,
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "알리",
+          "postedAt": "2026-10-20T09:59:35.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "5",
+            "nameKr": "퀘이사존"
+          }
+        },
+        {
+          "id": "36089428",
+          "title": "AMD Ryzen 7 7800X3D CPU 직구 302,084원",
+          "price": "￦ 302,084 (KRW)",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993895.webp",
+          "isEnd": false,
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "알리",
+          "postedAt": "2026-10-19T23:45:20.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "5",
+            "nameKr": "퀘이사존"
+          }
+        },
+        {
+          "id": "36100590",
+          "title": "LG QHD 울트라기어 32GS75Q 모니터 381,040원",
+          "price": "381,040원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/108176.webp",
+          "isEnd": false,
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "쿠팡",
+          "postedAt": "2026-10-20T02:12:32.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "4",
+            "nameKr": "루리웹"
+          }
+        },
+        {
+          "id": "36116721",
+          "title": "신한) AMD 9850X3D RTX5080 16GB+32GB+1TB_MANLI (4,199,070원/무료)",
+          "price": "4,199,070원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186507008.webp",
+          "isEnd": false,
+          "hotDealType": null,
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "11번가",
+          "postedAt": "2026-10-20T10:02:55.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "12",
+            "nameKr": "아카"
+          }
+        },
+        {
+          "id": "36022990",
+          "title": "어드레날린 AX75-FX560Ti 1,699,060원",
+          "price": "1,699,060원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186404102.webp",
+          "isEnd": false,
+          "hotDealType": null,
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "지마켓",
+          "postedAt": "2026-10-19T08:32:15.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "12",
+            "nameKr": "아카"
+          }
+        },
+        {
+          "id": "36001545",
+          "title": "9800X3D + 9070XT + 32GB + 2TB 본체 3,008,000원",
+          "price": "3,008,000원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186371775.webp",
+          "isEnd": false,
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "컴퓨존",
+          "postedAt": "2026-10-19T01:36:13.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "12",
+            "nameKr": "아카"
+          }
+        },
+        {
+          "id": "36113823",
+          "title": "9800X3D + RTX5070Ti + 32G + 1TB 완본체",
+          "price": "3,499,360원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465836585.webp",
+          "isEnd": false,
+          "hotDealType": null,
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "11번가",
+          "postedAt": "2026-10-20T07:19:00.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "7",
+            "nameKr": "에펨코리아"
+          }
+        },
+        {
+          "id": "36115909",
+          "title": "로지텍 MK275 무선 키보드 마우스 콤보",
+          "price": "24,750원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10466193500.webp",
+          "isEnd": false,
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "하이마트",
+          "postedAt": "2026-10-20T09:00:00.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "7",
+            "nameKr": "에펨코리아"
+          }
+        },
+        {
+          "id": "36096060",
+          "title": "에디파이어 220mm 드라이버 유닛 서브우퍼 70W T5S",
+          "price": "￦ 139,500 (KRW)",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993900.webp",
+          "isEnd": false,
+          "hotDealType": null,
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "쿠팡",
+          "postedAt": "2026-10-20T00:02:21.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "5",
+            "nameKr": "퀘이사존"
+          }
+        },
+        {
+          "id": "36073863",
+          "title": "삼성 P9 SD Express 512GB",
+          "price": "$99.99",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186444331.webp",
+          "isEnd": false,
+          "hotDealType": null,
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "아마존",
+          "postedAt": "2026-10-19T15:15:33.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "12",
+            "nameKr": "아카"
+          }
+        },
+        {
+          "id": "36003445",
+          "title": "컴백쇼 9800X3D / 9070XT / 2TB / 32G",
+          "price": "￦ 3,008,000 (KRW)",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993697.webp",
+          "isEnd": false,
+          "hotDealType": null,
+          "isYearLowest": false,
+          "categoryId": 1,
+          "mallName": "컴퓨존",
+          "postedAt": "2026-10-19T03:10:25.000Z",
+          "earliestExpiryDate": null,
+          "provider": {
+            "id": "5",
+            "nameKr": "퀘이사존"
+          }
+        }
+      ]
+    }
+  }
+}

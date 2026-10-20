@@ -11,6 +11,13 @@ import type {
   QueryWishlistCountQuery,
   QueryWishlistsQuery,
 } from '../src/shared/api/gql/graphql';
+// 앱(apps/mobile)은 같은 데이터를 다른 오퍼레이션 이름으로 부른다 — 앱 하네스(screens-ios.sh SCREENS_API=fixture)용.
+import type {
+  MyFavoriteCategoriesQuery,
+  QueryMyNotificationKeywordsQuery,
+  QueryMyProfileQuery,
+  QueryMyPushSettingQuery,
+} from '../../mobile/src/shared/api/gql/graphql';
 
 export const USER_TOKEN = 'fixture-user-token';
 
@@ -138,6 +145,25 @@ export const USER_FIXTURES: Record<string, (variables: Record<string, unknown>) 
   QueryWishlistCount: (): QueryWishlistCountQuery => ({ wishlistCount: PRODUCTS.length }),
   QueryPushSetting: pushSetting,
   QueryMySubscribedThemeIds: () => ({ mySubscribedThemeIds: [] }),
+  // 앱 이름들.
+  QueryMyProfile: (): QueryMyProfileQuery => me(),
+  MyFavoriteCategories: (): MyFavoriteCategoriesQuery => ({
+    me: { id: '1', favoriteCategories: [1, 2] },
+  }),
+  QueryMyNotificationKeywords: (): QueryMyNotificationKeywordsQuery => ({
+    notificationKeywordsByMe: keywords().notificationKeywordsByMe.map((k, i) => ({
+      ...k,
+      minPrice: i === 1 ? 250000 : null,
+      maxPrice: i === 1 ? 320000 : null,
+      excludeKeywords: i === 0 ? ['리필'] : null,
+    })),
+  }),
+  QueryMyPushSetting: (): QueryMyPushSettingQuery => ({
+    pushSetting: {
+      ...pushSetting().pushSetting,
+      keywordAlertLevel: 'ALL' as QueryMyPushSettingQuery['pushSetting']['keywordAlertLevel'],
+    },
+  }),
   // 알림함 「좋은 가격만 받기」 제안(수기 문서 good-price.service).
   QueryGoodPriceSuggestion: (v) => ({
     goodPriceSuggestion: {

@@ -1,0 +1,390 @@
+{
+  "variables": {
+    "keyword": "타임특가",
+    "limit": 10,
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36072622",
+          "title": "진저본 허니레몬 생강 소프트캔디 125g 5개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2556516627",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,460원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2556516627.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "section": "daily",
+              "dealEndAt": "2026-10-21T00:00:00",
+              "salePrice": 8460,
+              "bestSeller": true,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T14:00:21.687Z",
+              "discountRate": 63,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "originalPrice": 18000,
+              "pageViewCount": 616,
+              "todayDealRank": 1,
+              "lowestIn30Days": true,
+              "todayDealEndAt": "2026-10-21T00:00:00",
+              "detailCheckedAt": "2026-10-19T15:30:47.068Z",
+              "todayDealStartAt": "2026-10-20T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "0"
+          ],
+          "postedAt": "2026-10-19T15:01:17.000Z"
+        },
+        {
+          "id": "36072555",
+          "title": "압도적 소갈비탕 1.5kg 2개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/182824883",
+          "isHot": false,
+          "isEnd": false,
+          "price": "18,520원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/182824883.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/064947c4a0df0aada0fa38376c02f0125e554310.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/ad5e099263660a2ac406519de75b2970d92f925a.webp"
+              ],
+              "rating": 4.1,
+              "section": "daily",
+              "delivery": "내일도착",
+              "dealEndAt": "2026-10-21T00:00:00",
+              "salePrice": 18520,
+              "unitPrice": "100g당 618원",
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T14:00:21.322Z",
+              "reviewCount": 84,
+              "discountRate": 28,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "originalPrice": 25800,
+              "pageViewCount": 4091,
+              "todayDealRank": 1,
+              "lowestIn30Days": true,
+              "todayDealEndAt": "2026-10-21T00:00:00",
+              "todayDealStartAt": "2026-10-20T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "1"
+          ],
+          "postedAt": "2026-10-19T15:00:33.000Z"
+        },
+        {
+          "id": "36123714",
+          "title": "2026 삼성 65인치 4K UHD LH65BEHHLGFXKR 스탠드",
+          "mallId": 1,
+          "url": "https://coolenjoy.net/bbs/jirum/3571241",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 2,
+          "categoryId": 6,
+          "category": "가전",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coolnjoy/3571241.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "쿨엔조이"
+          },
+          "data": null,
+          "searchAfter": [
+            "2"
+          ],
+          "postedAt": "2026-10-20T11:25:48.000Z"
+        },
+        {
+          "id": "32018487",
+          "title": "AHC 프리미어 앰플 인 아이크림 코어리프팅 12ml 6개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2636765689",
+          "isHot": false,
+          "isEnd": false,
+          "price": "11,000원",
+          "providerId": 21,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2636765689.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4.7,
+              "section": "daily",
+              "delivery": "내일도착",
+              "dealEndAt": "2026-10-21T00:00:00",
+              "salePrice": 11000,
+              "unitPrice": "10ml당 1,528원",
+              "bestSeller": true,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T14:00:20.768Z",
+              "sellerName": "총 6개",
+              "reviewCount": 4881,
+              "discountRate": 84,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "categoryLabel": "뷰티",
+              "originalPrice": 72000,
+              "pageViewCount": 152247,
+              "todayDealRank": 1,
+              "todayDealEndAt": "2026-10-21T00:00:00",
+              "detailCheckedAt": "2026-10-19T15:30:10.729Z",
+              "todayDealStartAt": "2026-10-20T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "3"
+          ],
+          "postedAt": "2026-09-14T03:00:45.000Z"
+        },
+        {
+          "id": "31053071",
+          "title": "리퀴드 주방세제 레몬향 4L 2개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2637047977",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,890원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2637047977.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4.4,
+              "section": "daily",
+              "delivery": "내일도착",
+              "dealEndAt": "2026-10-21T00:00:00",
+              "salePrice": 6890,
+              "bestSeller": true,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T14:00:21.097Z",
+              "reviewCount": 139,
+              "discountRate": 59,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "originalPrice": 16900,
+              "pageViewCount": 4842,
+              "todayDealRank": 1,
+              "lowestIn30Days": true,
+              "todayDealEndAt": "2026-10-21T00:00:00",
+              "detailCheckedAt": "2026-10-19T15:30:17.696Z",
+              "todayDealStartAt": "2026-10-20T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "4"
+          ],
+          "postedAt": "2026-09-07T09:01:02.000Z"
+        },
+        {
+          "id": "36100932",
+          "title": "쿠팡이츠 선착순 1만원 할인쿠폰 대기 (매일 진행)",
+          "mallId": null,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14954132?menuid=2&referrerAllArticles=false",
+          "isHot": true,
+          "isEnd": false,
+          "price": "10,000원",
+          "providerId": 18,
+          "categoryId": 8,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14954132.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "5"
+          ],
+          "postedAt": "2026-10-20T02:36:50.000Z"
+        },
+        {
+          "id": "25856680",
+          "title": "빅사이즈 오드리 리본 헤어집게 블랙 2개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/173620325",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,240원",
+          "providerId": 21,
+          "categoryId": 4,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/173620325.jpeg",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4.3,
+              "section": "daily",
+              "dealEndAt": "2026-10-21T00:00:00",
+              "salePrice": 7240,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T14:00:21.606Z",
+              "reviewCount": 592,
+              "discountRate": 63,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "originalPrice": 19800,
+              "pageViewCount": 1684,
+              "todayDealRank": 1,
+              "couponDiscount": 660,
+              "lowestIn30Days": true,
+              "todayDealEndAt": "2026-10-21T00:00:00",
+              "detailCheckedAt": "2026-10-19T15:30:41.931Z",
+              "todayDealStartAt": "2026-10-20T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "6"
+          ],
+          "postedAt": "2026-07-19T03:11:03.000Z"
+        },
+        {
+          "id": "36072507",
+          "title": "비오엠 원더프루프 펜 아이라이너 01 원더 블랙 0.5g 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/34328177",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,590원",
+          "providerId": 21,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/34328177.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "section": "daily",
+              "delivery": "내일도착",
+              "dealEndAt": "2026-10-21T00:00:00",
+              "salePrice": 7590,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T14:00:21.689Z",
+              "discountRate": 49,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "originalPrice": 15000,
+              "pageViewCount": 283,
+              "todayDealRank": 2,
+              "lowestIn30Days": true,
+              "todayDealEndAt": "2026-10-21T00:00:00",
+              "detailCheckedAt": "2026-10-19T15:30:47.408Z",
+              "todayDealStartAt": "2026-10-20T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "7"
+          ],
+          "postedAt": "2026-10-19T15:01:17.000Z"
+        },
+        {
+          "id": "36099830",
+          "title": "푸드페스타 선착순 쿠폰",
+          "mallId": 1,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993927",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 0 (KRW)",
+          "providerId": 5,
+          "categoryId": 8,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993927.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "data": null,
+          "searchAfter": [
+            "8"
+          ],
+          "postedAt": "2026-10-20T01:07:21.000Z"
+        },
+        {
+          "id": "34154989",
+          "title": "퍼니트 80만 역가수치 파인애플 브로멜라인 효소 3g 100포 1박스",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/273929733",
+          "isHot": false,
+          "isEnd": false,
+          "price": "23,900원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/273929733.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "data": {
+            "toss": {
+              "rating": 4.7,
+              "section": "daily",
+              "delivery": "내일도착",
+              "dealEndAt": "2026-10-21T00:00:00",
+              "salePrice": 23900,
+              "unitPrice": "1포당 239원",
+              "bestSeller": true,
+              "dealStatus": "ON_GOING",
+              "lastSeenAt": "2026-10-20T14:00:21.609Z",
+              "reviewCount": 66,
+              "discountRate": 52,
+              "campaignEndAt": "2026-10-26T00:00:00",
+              "originalPrice": 49900,
+              "pageViewCount": 597,
+              "todayDealRank": 2,
+              "lowestIn30Days": true,
+              "todayDealEndAt": "2026-10-21T00:00:00",
+              "detailCheckedAt": "2026-10-19T15:30:42.493Z",
+              "todayDealStartAt": "2026-10-20T00:00:00"
+            }
+          },
+          "searchAfter": [
+            "9"
+          ],
+          "postedAt": "2026-09-29T14:27:23.000Z"
+        }
+      ]
+    }
+  }
+}

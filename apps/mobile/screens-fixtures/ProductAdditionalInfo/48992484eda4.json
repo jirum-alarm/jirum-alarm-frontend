@@ -1,0 +1,26 @@
+{
+  "variables": {
+    "id": 36089133
+  },
+  "response": {
+    "data": {
+      "product": {
+        "id": "36089133",
+        "url": "https://arca.live/b/hotdeal/186459565",
+        "provider": {
+          "id": "12",
+          "nameKr": "아카"
+        },
+        "commentSummary": {
+          "additionalInfo": "7900번대 CPU는 초기 불량이 발생할 수 있다는 의견이 있으며, 고장 시 부품을 새로 갈아 끼워야 했다는 사례도 있습니다.",
+          "option": null,
+          "price": "가성비가 좋다는 의견과 함께 '무료 나눔 수준'이라는 평가도 있습니다.",
+          "productId": "36089133",
+          "purchaseMethod": "현재 핫딜 기간에 대한 고민과 함께 중고 판매를 통한 차액 고려가 언급되고 있습니다.",
+          "satisfaction": "X3D로 업그레이드했을 때 만족도가 높다는 의견이 있으며, CPU 요구량이 많은 게임에서 1% LOW 개선이 많다고 합니다.",
+          "summary": "댓글에서는 X3D의 체감이 크다는 평가가 있지만, 7900번대 CPU의 초기 불량이나 고장 위험에 대한 우려도 함께 언급되고 있습니다."
+        }
+      }
+    }
+  }
+}

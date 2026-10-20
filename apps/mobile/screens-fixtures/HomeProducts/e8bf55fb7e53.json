@@ -1,0 +1,167 @@
+{
+  "variables": {
+    "limit": 6,
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "providerId": 1,
+    "providerIds": [
+      1
+    ]
+  },
+  "response": {
+    "data": {
+      "products": [
+        {
+          "id": "36141784",
+          "title": "GMKtec K12 H255 게이밍 미니 PC 베어본 외 2종",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102397",
+          "isHot": false,
+          "isEnd": false,
+          "price": "$228.00",
+          "providerId": 1,
+          "categoryId": 1,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102397.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792506240000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:24:00.000Z"
+        },
+        {
+          "id": "36141783",
+          "title": "GMKtec K12 H255 게이밍($228) AM02($199) M6 울트라($266)",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102396",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 1,
+          "categoryId": 1,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102396.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792506180000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:23:00.000Z"
+        },
+        {
+          "id": "36141779",
+          "title": "Baseus 미니 파워뱅크 45W 10000mAh 외 3종",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102395",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 1,
+          "categoryId": 9,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102395.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792506060000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:21:00.000Z"
+        },
+        {
+          "id": "36141780",
+          "title": "아이더 탈부착 바람막이 자켓",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741765",
+          "isHot": false,
+          "isEnd": false,
+          "price": "103,620원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "의류/잡화",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741765.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792506060000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:21:00.000Z"
+        },
+        {
+          "id": "36141778",
+          "title": "테일러 웰메이드 레몬 농축액 1.8kg 외 3종",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102394",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102394.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792506000000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:20:00.000Z"
+        },
+        {
+          "id": "36141774",
+          "title": "GMKtec K12 H255 게이밍 외 2종",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102393",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 1,
+          "categoryId": 1,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102393.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792505820000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:17:00.000Z"
+        }
+      ]
+    }
+  }
+}

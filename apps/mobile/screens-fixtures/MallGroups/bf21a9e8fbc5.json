@@ -1,0 +1,57 @@
+{
+  "variables": {},
+  "response": {
+    "data": {
+      "mallGroups": [
+        {
+          "id": 118,
+          "title": "토스",
+          "isActive": true,
+          "sort": 1
+        },
+        {
+          "id": 16,
+          "title": "쿠팡",
+          "isActive": true,
+          "sort": 2
+        },
+        {
+          "id": 20,
+          "title": "알리",
+          "isActive": true,
+          "sort": 3
+        },
+        {
+          "id": 1,
+          "title": "네이버",
+          "isActive": true,
+          "sort": 4
+        },
+        {
+          "id": 7,
+          "title": "지마켓",
+          "isActive": true,
+          "sort": 5
+        },
+        {
+          "id": 9,
+          "title": "11번가",
+          "isActive": true,
+          "sort": 6
+        },
+        {
+          "id": 23,
+          "title": "무신사",
+          "isActive": true,
+          "sort": 7
+        },
+        {
+          "id": 31,
+          "title": "오늘의집",
+          "isActive": true,
+          "sort": 8
+        }
+      ]
+    }
+  }
+}

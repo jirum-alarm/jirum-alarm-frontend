@@ -1,0 +1,212 @@
+{
+  "variables": {
+    "count": 20,
+    "limit": 10
+  },
+  "response": {
+    "data": {
+      "communityRandomRankingProducts": [
+        {
+          "id": "36004523",
+          "title": "더푸룸 탄산 워싱소다 5kg 기름때, 찌든때 소다 가루세제 3,870원",
+          "mallId": 1212,
+          "mallName": "SK스토아",
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14952122?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,870원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14952122.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "postedAt": "2026-10-19T04:55:47.000Z"
+        },
+        {
+          "id": "36023044",
+          "title": "라이필 더마콜라겐 바이탈리포좀C 10포",
+          "mallId": 1,
+          "mallName": "네이버",
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14952651?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "0원",
+          "providerId": 18,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14952651.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "postedAt": "2026-10-19T08:46:38.000Z"
+        },
+        {
+          "id": "36103852",
+          "title": "올화이트 9950X3D + 윙치킨 RTX 5090 + 64GB + 2TB",
+          "mallId": 35,
+          "mallName": "11번가",
+          "url": "https://www.fmkorea.com/10465538501",
+          "isHot": true,
+          "isEnd": false,
+          "price": "14,900,160원",
+          "providerId": 7,
+          "categoryId": 1,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465538501.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "postedAt": "2026-10-20T05:29:00.000Z"
+        },
+        {
+          "id": "36099837",
+          "title": "수향미 10kg 상등급",
+          "mallId": 241,
+          "mallName": "옥션",
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14953831?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "34,900원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14953831.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "postedAt": "2026-10-20T01:11:31.000Z"
+        },
+        {
+          "id": "35963125",
+          "title": "카페 아메리카노 500원할인",
+          "mallId": 1,
+          "mallName": "네이버",
+          "url": "https://www.fmkorea.com/10460810382",
+          "isHot": null,
+          "isEnd": false,
+          "price": "무료",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10460810382.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "postedAt": "2026-10-18T15:15:00.000Z"
+        },
+        {
+          "id": "36025864",
+          "title": "제주 햇 노지감귤 5kg 로얄과 9,750원",
+          "mallId": 15,
+          "mallName": "지마켓",
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14952955?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,750원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14952955.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "postedAt": "2026-10-19T11:33:57.000Z"
+        },
+        {
+          "id": "36000839",
+          "title": "네이버 푸드페스타 쿠폰",
+          "mallId": 1,
+          "mallName": "네이버",
+          "url": "https://www.fmkorea.com/10461634797",
+          "isHot": null,
+          "isEnd": false,
+          "price": "-",
+          "providerId": 7,
+          "categoryId": 8,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10461634797.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "postedAt": "2026-10-19T00:48:00.000Z"
+        },
+        {
+          "id": "36001200",
+          "title": "배스킨라빈스 70% 할인쿠폰 알림신청하세유",
+          "mallId": 1,
+          "mallName": "네이버",
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14951548?menuid=2&referrerAllArticles=false",
+          "isHot": true,
+          "isEnd": false,
+          "price": null,
+          "providerId": 18,
+          "categoryId": 8,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14951548.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "postedAt": "2026-10-19T01:11:17.000Z"
+        },
+        {
+          "id": "36002246",
+          "title": "오늘끝딜 20% 쿠폰",
+          "mallId": 1,
+          "mallName": "네이버",
+          "url": "https://www.fmkorea.com/10461884677",
+          "isHot": null,
+          "isEnd": false,
+          "price": "무료",
+          "providerId": 7,
+          "categoryId": 11,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10461884677.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "postedAt": "2026-10-19T02:28:00.000Z"
+        },
+        {
+          "id": "36001895",
+          "title": "네이버 오늘끝딜 선착순 20%쿠폰",
+          "mallId": 1,
+          "mallName": "네이버",
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14951704?menuid=2&referrerAllArticles=false",
+          "isHot": true,
+          "isEnd": false,
+          "price": null,
+          "providerId": 18,
+          "categoryId": 8,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14951704.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "postedAt": "2026-10-19T02:05:58.000Z"
+        }
+      ]
+    }
+  }
+}

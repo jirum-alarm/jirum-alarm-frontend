@@ -1,0 +1,11 @@
+{
+  "variables": {
+    "page": 0,
+    "limit": 20
+  },
+  "response": {
+    "data": {
+      "guestRecommendedHotDeals": []
+    }
+  }
+}

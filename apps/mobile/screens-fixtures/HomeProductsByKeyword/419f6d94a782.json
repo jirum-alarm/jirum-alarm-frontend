@@ -1,0 +1,106 @@
+{
+  "variables": {
+    "keyword": "백만원이상",
+    "limit": 4,
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36124313",
+          "title": "삼성 갤럭시 Z폴드8 512GB 외 갤럭시 S26 플러스 512GB",
+          "mallId": 28,
+          "url": "https://www.dogdrip.net/730636135",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,208,908원",
+          "providerId": 108,
+          "categoryId": 9,
+          "category": "전자",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730636135.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792494748000"
+          ],
+          "postedAt": "2026-10-20T11:12:28.000Z"
+        },
+        {
+          "id": "36133323",
+          "title": "삼성 공식 갤럭시 Z폴드8 512GB SM-F971N 자급제 2,208,908원",
+          "mallId": 28,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741724",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,208,908원",
+          "providerId": 1,
+          "categoryId": 6,
+          "category": "가전/가구",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741724.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792494480000"
+          ],
+          "postedAt": "2026-10-20T11:08:00.000Z"
+        },
+        {
+          "id": "36123707",
+          "title": "삼성 비스포크 1등급 키친핏 김치냉장고 3도어 RQ33DB74C1AP 313L",
+          "mallId": 15,
+          "url": "https://www.fmkorea.com/10466599654",
+          "isHot": null,
+          "isEnd": false,
+          "price": "1,394,070원",
+          "providerId": 7,
+          "categoryId": 6,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10466599654.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792494060000"
+          ],
+          "postedAt": "2026-10-20T11:01:00.000Z"
+        },
+        {
+          "id": "36116721",
+          "title": "신한) AMD 9850X3D RTX5080 16GB+32GB+1TB_MANLI (4,199,070원/무료)",
+          "mallId": 35,
+          "url": "https://arca.live/b/hotdeal/186507008",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,199,070원",
+          "providerId": 12,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186507008.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792490575000"
+          ],
+          "postedAt": "2026-10-20T10:02:55.000Z"
+        }
+      ]
+    }
+  }
+}

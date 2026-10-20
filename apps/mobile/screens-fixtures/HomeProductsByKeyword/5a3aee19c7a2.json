@@ -1,0 +1,244 @@
+{
+  "variables": {
+    "keyword": "만원이하",
+    "limit": 10,
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36141771",
+          "title": "트라이 플란넬 9부바지 9,990원",
+          "mallId": 8,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741763",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,990원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "의류/잡화",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741763.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792505400000"
+          ],
+          "postedAt": "2026-10-20T14:10:00.000Z"
+        },
+        {
+          "id": "36141613",
+          "title": "스마텍 아동용 유무선 접이식 15시간 멀티단자 블루투스헤드셋 9900원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14955604?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,900원",
+          "providerId": 18,
+          "categoryId": 9,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14955604.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792504983000"
+          ],
+          "postedAt": "2026-10-20T14:03:03.000Z"
+        },
+        {
+          "id": "36141610",
+          "title": "수비드 순살 통족발 650g + 비빔냉면 증정",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741760",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741760.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792504920000"
+          ],
+          "postedAt": "2026-10-20T14:02:00.000Z"
+        },
+        {
+          "id": "36141612",
+          "title": "소머리국밥 600g 1+1 8,900원",
+          "mallId": 1,
+          "url": "https://eomisae.co.kr/rt/207048433",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,900원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207048433.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792504855000"
+          ],
+          "postedAt": "2026-10-20T14:00:55.000Z"
+        },
+        {
+          "id": "36141326",
+          "title": "코몽트 남성 후리스 하이넥 집업자켓 외 1종",
+          "mallId": null,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994107",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 7,090원 (KRW)",
+          "providerId": 5,
+          "categoryId": 11,
+          "category": "패션/의류",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994107.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792504589000"
+          ],
+          "postedAt": "2026-10-20T13:56:29.000Z"
+        },
+        {
+          "id": "36141583",
+          "title": "동원 그릴리 직화 델리햄 450g 1개",
+          "mallId": 48,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9517752",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,510원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9517752.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792504440000"
+          ],
+          "postedAt": "2026-10-20T13:54:00.000Z"
+        },
+        {
+          "id": "36141319",
+          "title": "그린래빗 BELT 클럽 샌드위치 480g 1개",
+          "mallId": 48,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9517744",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,280원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9517744.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792504320000"
+          ],
+          "postedAt": "2026-10-20T13:52:00.000Z"
+        },
+        {
+          "id": "36141305",
+          "title": "불맛한판 직화불막창 180g",
+          "mallId": 1936,
+          "url": "https://thirtymall.com/detail?id=137405075",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,900원",
+          "providerId": 20,
+          "categoryId": 2,
+          "category": "가공식품 > HMR/간편식 > ‘가공육/양념육/해물…’",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/thirtymall/137405075.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "떠리몰"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792504301000"
+          ],
+          "postedAt": "2026-10-20T13:51:41.000Z"
+        },
+        {
+          "id": "36141315",
+          "title": "곰곰 광천 도시락김 5g 32개",
+          "mallId": 48,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9517736",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,480원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9517736.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792504200000"
+          ],
+          "postedAt": "2026-10-20T13:50:00.000Z"
+        },
+        {
+          "id": "36140865",
+          "title": "제주 귤로장생 감귤 로얄과 4.5kg 9,990원",
+          "mallId": 15,
+          "url": "https://www.dogdrip.net/730653814",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,990원",
+          "providerId": 108,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730653814.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792501763000"
+          ],
+          "postedAt": "2026-10-20T13:09:23.000Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "variables": {
+    "slotLocation": "home_carousel_banner"
+  },
+  "response": {
+    "data": {
+      "activeAds": []
+    }
+  }
+}

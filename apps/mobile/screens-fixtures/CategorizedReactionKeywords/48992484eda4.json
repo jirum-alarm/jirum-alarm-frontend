@@ -1,0 +1,49 @@
+{
+  "variables": {
+    "id": 36089133
+  },
+  "response": {
+    "data": {
+      "categorizedReactionKeywords": {
+        "items": [
+          {
+            "name": "좋아했어요",
+            "count": 5,
+            "type": "POSITIVE",
+            "role": "QUALITY",
+            "tag": "긍정"
+          },
+          {
+            "name": "구매했어요",
+            "count": 5,
+            "type": "POSITIVE",
+            "role": "QUALITY",
+            "tag": "구매"
+          },
+          {
+            "name": "가격이 싸요",
+            "count": 5,
+            "type": "POSITIVE",
+            "role": "QUALITY",
+            "tag": "가격"
+          },
+          {
+            "name": "비싸요",
+            "count": 2,
+            "type": "NEGATIVE",
+            "role": "QUALITY",
+            "tag": "가격"
+          },
+          {
+            "name": "맛있어요",
+            "count": 1,
+            "type": "POSITIVE",
+            "role": "QUALITY",
+            "tag": "상품"
+          }
+        ],
+        "lastUpdatedAt": "2026-10-20T02:00:35.590Z"
+      }
+    }
+  }
+}

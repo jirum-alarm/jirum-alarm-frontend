@@ -1,0 +1,1713 @@
+{
+  "variables": {},
+  "response": {
+    "data": {
+      "keywordHubs": [
+        {
+          "slug": "세제",
+          "name": "세제",
+          "aliases": [],
+          "excludes": [
+            "세제통",
+            "용기",
+            "디스펜서",
+            "랙",
+            "선반",
+            "정리",
+            "보관",
+            "공병",
+            "보관함",
+            "정리대"
+          ],
+          "recentDealCount": 640,
+          "countCapped": false,
+          "activeDays": 27,
+          "lastDealAt": "2026-10-20T11:42:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 60
+            }
+          ]
+        },
+        {
+          "slug": "샴푸",
+          "name": "샴푸",
+          "aliases": [],
+          "excludes": [
+            "울샴푸",
+            "브러쉬",
+            "브러시",
+            "샴푸빗",
+            "샴푸솔",
+            "카샴푸",
+            "세차",
+            "펫샴푸",
+            "강아지",
+            "고양이",
+            "반려",
+            "샴푸통",
+            "샴푸랙",
+            "공병",
+            "샴푸하듯",
+            "디스펜서",
+            "거치대",
+            "풋샴푸",
+            "염색약",
+            "염색",
+            "리필용기",
+            "샴푸의자",
+            "애견"
+          ],
+          "recentDealCount": 560,
+          "countCapped": false,
+          "activeDays": 30,
+          "lastDealAt": "2026-10-20T09:06:56.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 56
+            }
+          ]
+        },
+        {
+          "slug": "물티슈",
+          "name": "물티슈",
+          "aliases": [],
+          "excludes": [
+            "케이스",
+            "뚜껑",
+            "워머",
+            "홀더"
+          ],
+          "recentDealCount": 400,
+          "countCapped": false,
+          "activeDays": 30,
+          "lastDealAt": "2026-10-20T12:12:39.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 36
+            },
+            {
+              "name": "뽐뿌",
+              "share": 19
+            }
+          ]
+        },
+        {
+          "slug": "두유",
+          "name": "두유",
+          "aliases": [],
+          "excludes": [
+            "제조기",
+            "메이커",
+            "두유면",
+            "유선이어",
+            "도넛",
+            "두유기"
+          ],
+          "recentDealCount": 342,
+          "countCapped": false,
+          "activeDays": 24,
+          "lastDealAt": "2026-10-20T10:32:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 55
+            }
+          ]
+        },
+        {
+          "slug": "칫솔",
+          "name": "칫솔",
+          "aliases": [],
+          "excludes": [
+            "살균기",
+            "꽂이",
+            "걸이",
+            "거치대",
+            "칫솔캡",
+            "후크",
+            "홀더",
+            "건조",
+            "보관",
+            "강아지",
+            "덴탈껌",
+            "칫솔케이스"
+          ],
+          "recentDealCount": 325,
+          "countCapped": false,
+          "activeDays": 30,
+          "lastDealAt": "2026-10-20T12:12:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 63
+            }
+          ]
+        },
+        {
+          "slug": "청소기",
+          "name": "청소기",
+          "aliases": [],
+          "excludes": [
+            "귀청소기",
+            "필터",
+            "브러시",
+            "브러쉬",
+            "거치대",
+            "먼지봉투",
+            "배터리",
+            "호환",
+            "패드",
+            "걸레포",
+            "소모품",
+            "헤드",
+            "노즐",
+            "스탠드",
+            "유리",
+            "세차",
+            "에어펌프"
+          ],
+          "recentDealCount": 291,
+          "countCapped": false,
+          "activeDays": 29,
+          "lastDealAt": "2026-10-20T11:26:00.000Z",
+          "topSources": [
+            {
+              "name": "뽐뿌",
+              "share": 42
+            },
+            {
+              "name": "토스쇼핑",
+              "share": 34
+            }
+          ]
+        },
+        {
+          "slug": "닭가슴살",
+          "name": "닭가슴살",
+          "aliases": [],
+          "excludes": [
+            "고양이",
+            "강아지",
+            "트릿",
+            "습식",
+            "사료",
+            "반려",
+            "애견"
+          ],
+          "recentDealCount": 281,
+          "countCapped": false,
+          "activeDays": 30,
+          "lastDealAt": "2026-10-20T10:16:56.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 46
+            }
+          ]
+        },
+        {
+          "slug": "보조배터리",
+          "name": "보조배터리",
+          "aliases": [],
+          "excludes": [
+            "파우치",
+            "케이스",
+            "거치대",
+            "흡착"
+          ],
+          "recentDealCount": 275,
+          "countCapped": false,
+          "activeDays": 30,
+          "lastDealAt": "2026-10-20T12:11:00.000Z",
+          "topSources": [
+            {
+              "name": "뽐뿌",
+              "share": 59
+            },
+            {
+              "name": "토스쇼핑",
+              "share": 21
+            }
+          ]
+        },
+        {
+          "slug": "프로틴",
+          "name": "프로틴",
+          "aliases": [],
+          "excludes": [
+            "클리닉",
+            "샴푸",
+            "트리트먼트",
+            "헤어",
+            "치즈"
+          ],
+          "recentDealCount": 266,
+          "countCapped": false,
+          "activeDays": 28,
+          "lastDealAt": "2026-10-20T10:16:56.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 63
+            }
+          ]
+        },
+        {
+          "slug": "참치",
+          "name": "참치",
+          "aliases": [],
+          "excludes": [
+            "참치액",
+            "고양이",
+            "캣",
+            "강아지",
+            "반려",
+            "츄르",
+            "참치맛",
+            "보니또",
+            "죽",
+            "컵밥",
+            "묘설렘",
+            "애견"
+          ],
+          "recentDealCount": 235,
+          "countCapped": false,
+          "activeDays": 25,
+          "lastDealAt": "2026-10-20T02:54:18.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 83
+            }
+          ]
+        },
+        {
+          "slug": "사이다",
+          "name": "사이다",
+          "aliases": [],
+          "excludes": [
+            "비니거",
+            "애플사이다",
+            "식초"
+          ],
+          "recentDealCount": 232,
+          "countCapped": false,
+          "activeDays": 29,
+          "lastDealAt": "2026-10-20T08:29:00.000Z",
+          "topSources": [
+            {
+              "name": "에펨코리아",
+              "share": 22
+            },
+            {
+              "name": "토스쇼핑",
+              "share": 18
+            }
+          ]
+        },
+        {
+          "slug": "계란",
+          "name": "계란",
+          "aliases": [
+            "달걀",
+            "유정란"
+          ],
+          "excludes": [
+            "팬",
+            "찜기",
+            "보관",
+            "트레이",
+            "정리",
+            "과자",
+            "빵",
+            "계란틀",
+            "거품기",
+            "집게",
+            "기계",
+            "계란맛",
+            "달걀맛",
+            "계란옷",
+            "계란국",
+            "계란찜",
+            "간장",
+            "계란말이",
+            "달걀말이",
+            "계란밥",
+            "수세미",
+            "단백질",
+            "후라이",
+            "삶는",
+            "쿠커",
+            "죽",
+            "도시락",
+            "샐러드",
+            "분리기",
+            "계란판",
+            "김밥"
+          ],
+          "recentDealCount": 223,
+          "countCapped": false,
+          "activeDays": 30,
+          "lastDealAt": "2026-10-20T11:28:45.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 41
+            },
+            {
+              "name": "뽐뿌",
+              "share": 21
+            }
+          ]
+        },
+        {
+          "slug": "나이키",
+          "name": "나이키",
+          "aliases": [
+            "NIKE"
+          ],
+          "excludes": [],
+          "recentDealCount": 223,
+          "countCapped": false,
+          "activeDays": 29,
+          "lastDealAt": "2026-10-20T09:50:05.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 42
+            },
+            {
+              "name": "어미새",
+              "share": 17
+            }
+          ]
+        },
+        {
+          "slug": "삼겹살",
+          "name": "삼겹살",
+          "aliases": [],
+          "excludes": [
+            "그릴",
+            "팬",
+            "시즈닝",
+            "불판",
+            "그릴팬"
+          ],
+          "recentDealCount": 216,
+          "countCapped": false,
+          "activeDays": 30,
+          "lastDealAt": "2026-10-20T12:00:20.000Z",
+          "topSources": [
+            {
+              "name": "뽐뿌",
+              "share": 21
+            },
+            {
+              "name": "이토랜드",
+              "share": 20
+            }
+          ]
+        },
+        {
+          "slug": "이어폰",
+          "name": "이어폰",
+          "aliases": [],
+          "excludes": [
+            "케이스",
+            "이어팁",
+            "젠더",
+            "거치대",
+            "파우치",
+            "이어패드",
+            "앰프",
+            "dac"
+          ],
+          "recentDealCount": 216,
+          "countCapped": false,
+          "activeDays": 30,
+          "lastDealAt": "2026-10-20T09:03:00.000Z",
+          "topSources": [
+            {
+              "name": "뽐뿌",
+              "share": 28
+            },
+            {
+              "name": "토스쇼핑",
+              "share": 25
+            }
+          ]
+        },
+        {
+          "slug": "콜라",
+          "name": "콜라",
+          "aliases": [],
+          "excludes": [
+            "콜라겐",
+            "콜라보",
+            "쇼콜라",
+            "콜라비",
+            "리콜라",
+            "루콜라",
+            "콜라주",
+            "콜라이",
+            "앵콜라",
+            "피나콜라",
+            "차콜라",
+            "콜라트리",
+            "캔디",
+            "젤리",
+            "하이츄",
+            "버거",
+            "와퍼",
+            "프라이",
+            "콜라r",
+            "+콜라",
+            "&콜라",
+            "사탕",
+            "주물러",
+            "팝콘",
+            "앵콜"
+          ],
+          "recentDealCount": 206,
+          "countCapped": false,
+          "activeDays": 29,
+          "lastDealAt": "2026-10-20T09:07:00.000Z",
+          "topSources": [
+            {
+              "name": "에펨코리아",
+              "share": 23
+            },
+            {
+              "name": "아카",
+              "share": 19
+            }
+          ]
+        },
+        {
+          "slug": "펩시",
+          "name": "펩시",
+          "aliases": [],
+          "excludes": [
+            "선풍기",
+            "시계",
+            "충전기"
+          ],
+          "recentDealCount": 206,
+          "countCapped": false,
+          "activeDays": 29,
+          "lastDealAt": "2026-10-20T04:29:40.000Z",
+          "topSources": [
+            {
+              "name": "아카",
+              "share": 22
+            },
+            {
+              "name": "에펨코리아",
+              "share": 22
+            }
+          ]
+        },
+        {
+          "slug": "커피",
+          "name": "커피",
+          "aliases": [],
+          "excludes": [
+            "커피잔",
+            "머신",
+            "커피맛",
+            "땅콩",
+            "보관함",
+            "캔디",
+            "필터",
+            "과자",
+            "커피츄",
+            "브라운",
+            "커피색",
+            "메이커",
+            "드리퍼",
+            "커피컵",
+            "머그",
+            "홀더",
+            "스푼",
+            "트레이",
+            "받침",
+            "크래커",
+            "커피향",
+            "시럽",
+            "수세미",
+            "전기포트",
+            "분유포트",
+            "티포트",
+            "주전자",
+            "그라인더",
+            "찻잔",
+            "컵",
+            "잔세트",
+            "서버",
+            "캐리어",
+            "증정",
+            "스타킹",
+            "삭스",
+            "양말",
+            "행주",
+            "커피나무",
+            "옐로우",
+            "비스킷",
+            "샷잔",
+            "글라스",
+            ",커피,",
+            "니들",
+            "디스트리뷰터",
+            "템퍼",
+            "커피포트",
+            "유리컵",
+            "롤케",
+            "빵",
+            "지갑",
+            "동전"
+          ],
+          "recentDealCount": 206,
+          "countCapped": false,
+          "activeDays": 13,
+          "lastDealAt": "2026-10-20T12:11:25.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 44
+            },
+            {
+              "name": "뽐뿌",
+              "share": 17
+            }
+          ]
+        },
+        {
+          "slug": "면도기",
+          "name": "면도기",
+          "aliases": [],
+          "excludes": [
+            "거치대",
+            "걸이",
+            "케이스",
+            "충전기",
+            "어댑터",
+            "젠더",
+            "헤드교체",
+            "교체헤드",
+            "면도날망",
+            "살균기",
+            "보관함",
+            "굳은살",
+            "세정액",
+            "면도기커버"
+          ],
+          "recentDealCount": 202,
+          "countCapped": false,
+          "activeDays": 28,
+          "lastDealAt": "2026-10-19T14:22:37.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 58
+            },
+            {
+              "name": "뽐뿌",
+              "share": 18
+            }
+          ]
+        },
+        {
+          "slug": "모니터",
+          "name": "모니터",
+          "aliases": [],
+          "excludes": [
+            "모니터암",
+            "받침",
+            "거치",
+            "모니터링",
+            "조명",
+            "모니터스탠드",
+            "피벗스탠드",
+            "라이트바",
+            "베이비",
+            "홈캠",
+            "클리너",
+            "필름"
+          ],
+          "recentDealCount": 201,
+          "countCapped": false,
+          "activeDays": 28,
+          "lastDealAt": "2026-10-20T09:11:50.000Z",
+          "topSources": [
+            {
+              "name": "쿨엔조이",
+              "share": 33
+            },
+            {
+              "name": "토스쇼핑",
+              "share": 16
+            }
+          ]
+        },
+        {
+          "slug": "크리넥스",
+          "name": "크리넥스",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 194,
+          "countCapped": false,
+          "activeDays": 27,
+          "lastDealAt": "2026-10-20T11:05:13.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 59
+            }
+          ]
+        },
+        {
+          "slug": "휴지",
+          "name": "휴지",
+          "aliases": [
+            "화장지"
+          ],
+          "excludes": [
+            "휴지통",
+            "케이스",
+            "걸이",
+            "커버",
+            "봉투",
+            "홀더",
+            "거치대",
+            "집게",
+            "휴지걸이",
+            "휴지케이스"
+          ],
+          "recentDealCount": 188,
+          "countCapped": false,
+          "activeDays": 28,
+          "lastDealAt": "2026-10-20T10:12:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 35
+            },
+            {
+              "name": "뽐뿌",
+              "share": 22
+            }
+          ]
+        },
+        {
+          "slug": "키보드",
+          "name": "키보드",
+          "aliases": [],
+          "excludes": [
+            "스티커",
+            "키링",
+            "키보드매트",
+            "팜레스트",
+            "키보드커버",
+            "받침",
+            "키스킨"
+          ],
+          "recentDealCount": 179,
+          "countCapped": false,
+          "activeDays": 29,
+          "lastDealAt": "2026-10-20T10:16:56.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 56
+            }
+          ]
+        },
+        {
+          "slug": "건전지",
+          "name": "건전지",
+          "aliases": [],
+          "excludes": [
+            "건전지형",
+            "건전지식",
+            "건전지타입",
+            "충전기",
+            "증정",
+            "홀더",
+            "양초",
+            "캔들"
+          ],
+          "recentDealCount": 176,
+          "countCapped": false,
+          "activeDays": 28,
+          "lastDealAt": "2026-10-20T09:27:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 81
+            }
+          ]
+        },
+        {
+          "slug": "기저귀",
+          "name": "기저귀",
+          "aliases": [],
+          "excludes": [
+            "갈이대",
+            "봉투",
+            "가방",
+            "강아지",
+            "수컷",
+            "암컷",
+            "반려",
+            "배변",
+            "고양이",
+            "애견"
+          ],
+          "recentDealCount": 171,
+          "countCapped": false,
+          "activeDays": 26,
+          "lastDealAt": "2026-10-19T14:06:25.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 77
+            }
+          ]
+        },
+        {
+          "slug": "라면",
+          "name": "라면",
+          "aliases": [],
+          "excludes": [
+            "과자",
+            "스낵",
+            "용기",
+            "냄비",
+            "스푼",
+            "포트",
+            "그릇",
+            "젓가락",
+            "집게",
+            "증정",
+            "부대찌개"
+          ],
+          "recentDealCount": 166,
+          "countCapped": false,
+          "activeDays": 29,
+          "lastDealAt": "2026-10-19T17:00:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 34
+            },
+            {
+              "name": "아카",
+              "share": 15
+            }
+          ]
+        },
+        {
+          "slug": "햇반",
+          "name": "햇반",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 164,
+          "countCapped": false,
+          "activeDays": 28,
+          "lastDealAt": "2026-10-20T06:34:16.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 55
+            }
+          ]
+        },
+        {
+          "slug": "신라면",
+          "name": "신라면",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 158,
+          "countCapped": false,
+          "activeDays": 28,
+          "lastDealAt": "2026-10-20T07:08:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 18
+            },
+            {
+              "name": "에펨코리아",
+              "share": 17
+            }
+          ]
+        },
+        {
+          "slug": "마우스",
+          "name": "마우스",
+          "aliases": [],
+          "excludes": [
+            "패드",
+            "마우스피스",
+            "워시",
+            "가드",
+            "밴드",
+            "마우스링",
+            "번지",
+            "손목",
+            "스프레이"
+          ],
+          "recentDealCount": 139,
+          "countCapped": false,
+          "activeDays": 29,
+          "lastDealAt": "2026-10-20T09:00:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 19
+            },
+            {
+              "name": "뽐뿌",
+              "share": 17
+            }
+          ]
+        },
+        {
+          "slug": "생수",
+          "name": "생수",
+          "aliases": [],
+          "excludes": [
+            "학생수",
+            "위생수",
+            "인생수",
+            "평생수",
+            "수제비",
+            "수수가루",
+            "생수병",
+            "생수컵",
+            "위생수건",
+            "인생수업"
+          ],
+          "recentDealCount": 137,
+          "countCapped": false,
+          "activeDays": 29,
+          "lastDealAt": "2026-10-20T06:30:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 25
+            },
+            {
+              "name": "이토랜드",
+              "share": 23
+            }
+          ]
+        },
+        {
+          "slug": "시나노골드",
+          "name": "시나노골드",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 125,
+          "countCapped": false,
+          "activeDays": 27,
+          "lastDealAt": "2026-10-20T12:00:18.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 56
+            },
+            {
+              "name": "뽐뿌",
+              "share": 16
+            }
+          ]
+        },
+        {
+          "slug": "갤럭시",
+          "name": "갤럭시",
+          "aliases": [],
+          "excludes": [
+            "케이스",
+            "필름",
+            "강화유리",
+            "거치대",
+            "케이블",
+            "스트랩",
+            "밴드",
+            "터치펜",
+            "호환",
+            "충전기",
+            "파우치",
+            "커버",
+            "보호",
+            "아디다스",
+            "갤럭시런",
+            "galax",
+            "이어팁",
+            "지포스",
+            "rtx",
+            "부가서비스",
+            "소파"
+          ],
+          "recentDealCount": 124,
+          "countCapped": false,
+          "activeDays": 24,
+          "lastDealAt": "2026-10-20T11:40:48.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 35
+            },
+            {
+              "name": "뽐뿌",
+              "share": 20
+            }
+          ]
+        },
+        {
+          "slug": "족발",
+          "name": "족발",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 123,
+          "countCapped": false,
+          "activeDays": 27,
+          "lastDealAt": "2026-10-20T12:10:34.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 46
+            },
+            {
+              "name": "이토랜드",
+              "share": 24
+            }
+          ]
+        },
+        {
+          "slug": "비비고",
+          "name": "비비고",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 119,
+          "countCapped": false,
+          "activeDays": 24,
+          "lastDealAt": "2026-10-20T08:28:05.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 45
+            },
+            {
+              "name": "맘이베베",
+              "share": 15
+            }
+          ]
+        },
+        {
+          "slug": "켈로그",
+          "name": "켈로그",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 107,
+          "countCapped": false,
+          "activeDays": 24,
+          "lastDealAt": "2026-10-20T04:02:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 54
+            }
+          ]
+        },
+        {
+          "slug": "삼다수",
+          "name": "삼다수",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 106,
+          "countCapped": false,
+          "activeDays": 25,
+          "lastDealAt": "2026-10-19T23:16:00.000Z",
+          "topSources": [
+            {
+              "name": "뽐뿌",
+              "share": 23
+            },
+            {
+              "name": "에펨코리아",
+              "share": 16
+            }
+          ]
+        },
+        {
+          "slug": "스팸",
+          "name": "스팸",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 104,
+          "countCapped": false,
+          "activeDays": 16,
+          "lastDealAt": "2026-10-18T13:45:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 77
+            }
+          ]
+        },
+        {
+          "slug": "나랑드",
+          "name": "나랑드사이다",
+          "aliases": [
+            "나랑드"
+          ],
+          "excludes": [],
+          "recentDealCount": 99,
+          "countCapped": false,
+          "activeDays": 26,
+          "lastDealAt": "2026-10-20T08:29:00.000Z",
+          "topSources": [
+            {
+              "name": "에펨코리아",
+              "share": 21
+            },
+            {
+              "name": "토스쇼핑",
+              "share": 17
+            }
+          ]
+        },
+        {
+          "slug": "ps5",
+          "name": "PS5",
+          "aliases": [
+            "플스5",
+            "플레이스테이션5"
+          ],
+          "excludes": [
+            "sps5",
+            "wps5",
+            "콜라보",
+            "스테이션5만",
+            "ps56",
+            "ps58"
+          ],
+          "recentDealCount": 92,
+          "countCapped": false,
+          "activeDays": 25,
+          "lastDealAt": "2026-10-19T07:08:24.000Z",
+          "topSources": [
+            {
+              "name": "루리웹",
+              "share": 72
+            }
+          ]
+        },
+        {
+          "slug": "메가커피",
+          "name": "메가커피",
+          "aliases": [
+            "메가MGC",
+            "메가 MGC"
+          ],
+          "excludes": [
+            "증정",
+            "면도"
+          ],
+          "recentDealCount": 90,
+          "countCapped": false,
+          "activeDays": 22,
+          "lastDealAt": "2026-10-20T09:10:18.000Z",
+          "topSources": [
+            {
+              "name": "에펨코리아",
+              "share": 24
+            },
+            {
+              "name": "뽐뿌",
+              "share": 19
+            }
+          ]
+        },
+        {
+          "slug": "시리얼",
+          "name": "시리얼",
+          "aliases": [],
+          "excludes": [
+            "시리얼통",
+            "시리얼컵",
+            "스푼",
+            "시리얼기",
+            "보울",
+            "리얼샷",
+            "디스펜서",
+            "용기",
+            "머그",
+            "접시",
+            "시리얼볼",
+            "시리얼맛",
+            "요거트볼"
+          ],
+          "recentDealCount": 81,
+          "countCapped": false,
+          "activeDays": 26,
+          "lastDealAt": "2026-10-20T08:02:00.000Z",
+          "topSources": [
+            {
+              "name": "에펨코리아",
+              "share": 21
+            },
+            {
+              "name": "아카",
+              "share": 20
+            }
+          ]
+        },
+        {
+          "slug": "맥심",
+          "name": "맥심",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 75,
+          "countCapped": false,
+          "activeDays": 27,
+          "lastDealAt": "2026-10-20T03:59:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 40
+            },
+            {
+              "name": "뽐뿌",
+              "share": 27
+            }
+          ]
+        },
+        {
+          "slug": "선풍기",
+          "name": "선풍기",
+          "aliases": [],
+          "excludes": [
+            "커버",
+            "콘센트",
+            "조끼",
+            "브러쉬",
+            "청소"
+          ],
+          "recentDealCount": 75,
+          "countCapped": false,
+          "activeDays": 16,
+          "lastDealAt": "2026-10-19T15:20:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 79
+            }
+          ]
+        },
+        {
+          "slug": "탄산수",
+          "name": "탄산수",
+          "aliases": [],
+          "excludes": [
+            "샴푸",
+            "제조기"
+          ],
+          "recentDealCount": 69,
+          "countCapped": false,
+          "activeDays": 23,
+          "lastDealAt": "2026-10-19T21:35:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 46
+            }
+          ]
+        },
+        {
+          "slug": "냉장고",
+          "name": "냉장고",
+          "aliases": [],
+          "excludes": [
+            "정리",
+            "용기",
+            "트레이",
+            "자석",
+            "매트",
+            "탈취",
+            "물병",
+            "디스펜서",
+            "바구니",
+            "보관",
+            "수납",
+            "냄새",
+            "메모",
+            "스케줄러",
+            "바지",
+            "옮기기",
+            "냉장고컵",
+            "반찬통",
+            "김치통",
+            "냉장고용",
+            "냉장고형",
+            "선반",
+            "스티커",
+            "랙",
+            "원피스",
+            "착즙",
+            "냉장고속",
+            "청소",
+            "클리너",
+            "거치대",
+            "잠금",
+            "문열림",
+            "채반",
+            "시트",
+            "마그넷",
+            "멀티탭"
+          ],
+          "recentDealCount": 62,
+          "countCapped": false,
+          "activeDays": 23,
+          "lastDealAt": "2026-10-20T11:01:00.000Z",
+          "topSources": [
+            {
+              "name": "뽐뿌",
+              "share": 44
+            },
+            {
+              "name": "토스쇼핑",
+              "share": 23
+            }
+          ]
+        },
+        {
+          "slug": "에디파이어",
+          "name": "에디파이어",
+          "aliases": [
+            "edifier"
+          ],
+          "excludes": [],
+          "recentDealCount": 61,
+          "countCapped": false,
+          "activeDays": 18,
+          "lastDealAt": "2026-10-20T00:02:21.000Z",
+          "topSources": [
+            {
+              "name": "뽐뿌",
+              "share": 52
+            },
+            {
+              "name": "에펨코리아",
+              "share": 21
+            }
+          ]
+        },
+        {
+          "slug": "크록스",
+          "name": "크록스",
+          "aliases": [],
+          "excludes": [
+            "호환",
+            "접착제",
+            "깔창",
+            "지비츠",
+            "파라코드",
+            "크록스슬리퍼"
+          ],
+          "recentDealCount": 57,
+          "countCapped": false,
+          "activeDays": 17,
+          "lastDealAt": "2026-10-19T14:19:08.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 60
+            },
+            {
+              "name": "뽐뿌",
+              "share": 16
+            }
+          ]
+        },
+        {
+          "slug": "상품권",
+          "name": "상품권",
+          "aliases": [],
+          "excludes": [
+            "증정",
+            "가능",
+            "+상품권",
+            "주는",
+            "봉투",
+            "구매시",
+            "상품권1만",
+            "상품권5천",
+            "gs상품권"
+          ],
+          "recentDealCount": 48,
+          "countCapped": false,
+          "activeDays": 15,
+          "lastDealAt": "2026-10-19T23:40:38.000Z",
+          "topSources": [
+            {
+              "name": "아카",
+              "share": 27
+            },
+            {
+              "name": "에펨코리아",
+              "share": 19
+            }
+          ]
+        },
+        {
+          "slug": "스위치2",
+          "name": "스위치2",
+          "aliases": [
+            "스위치 2"
+          ],
+          "excludes": [
+            "멀티탭",
+            "콘센트",
+            "전등",
+            "케이스",
+            "파우치",
+            "호환",
+            "필름",
+            "강화유리",
+            "그립"
+          ],
+          "recentDealCount": 44,
+          "countCapped": false,
+          "activeDays": 21,
+          "lastDealAt": "2026-10-20T07:59:11.000Z",
+          "topSources": [
+            {
+              "name": "루리웹",
+              "share": 68
+            }
+          ]
+        },
+        {
+          "slug": "일리윤",
+          "name": "일리윤",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 43,
+          "countCapped": false,
+          "activeDays": 19,
+          "lastDealAt": "2026-10-18T01:04:30.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 67
+            }
+          ]
+        },
+        {
+          "slug": "닌텐도",
+          "name": "닌텐도",
+          "aliases": [],
+          "excludes": [
+            "케이스",
+            "파우치",
+            "호환",
+            "그립",
+            "필름",
+            "강화유리"
+          ],
+          "recentDealCount": 42,
+          "countCapped": false,
+          "activeDays": 19,
+          "lastDealAt": "2026-10-20T01:34:00.000Z",
+          "topSources": [
+            {
+              "name": "루리웹",
+              "share": 36
+            },
+            {
+              "name": "토스쇼핑",
+              "share": 33
+            }
+          ]
+        },
+        {
+          "slug": "초록매실",
+          "name": "초록매실",
+          "aliases": [],
+          "excludes": [
+            "빅토리아"
+          ],
+          "recentDealCount": 42,
+          "countCapped": false,
+          "activeDays": 13,
+          "lastDealAt": "2026-10-19T00:54:15.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 33
+            },
+            {
+              "name": "에펨코리아",
+              "share": 19
+            }
+          ]
+        },
+        {
+          "slug": "포카리",
+          "name": "포카리스웨트",
+          "aliases": [
+            "포카리"
+          ],
+          "excludes": [],
+          "recentDealCount": 41,
+          "countCapped": false,
+          "activeDays": 13,
+          "lastDealAt": "2026-10-20T00:39:06.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 54
+            }
+          ]
+        },
+        {
+          "slug": "수향미",
+          "name": "수향미",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 40,
+          "countCapped": false,
+          "activeDays": 22,
+          "lastDealAt": "2026-10-20T01:11:31.000Z",
+          "topSources": [
+            {
+              "name": "맘이베베",
+              "share": 45
+            },
+            {
+              "name": "뽐뿌",
+              "share": 18
+            }
+          ]
+        },
+        {
+          "slug": "요금제",
+          "name": "요금제",
+          "aliases": [],
+          "excludes": [
+            "제미나이",
+            "폰슐랭"
+          ],
+          "recentDealCount": 38,
+          "countCapped": false,
+          "activeDays": 21,
+          "lastDealAt": "2026-10-19T07:38:00.000Z",
+          "topSources": [
+            {
+              "name": "뽐뿌",
+              "share": 29
+            },
+            {
+              "name": "퀘이사존",
+              "share": 16
+            }
+          ]
+        },
+        {
+          "slug": "rtx5080",
+          "name": "RTX 5080",
+          "aliases": [
+            "5080"
+          ],
+          "excludes": [
+            "완본체",
+            "조립pc",
+            "본체",
+            "게이밍pc",
+            "노트북",
+            "데스크탑",
+            "컴퓨터",
+            "반본체",
+            "감성pc",
+            "32g",
+            "+32",
+            "/32",
+            "1tb",
+            "오멘",
+            "코덱스",
+            "구성",
+            "5080원"
+          ],
+          "recentDealCount": 35,
+          "countCapped": false,
+          "activeDays": 12,
+          "lastDealAt": "2026-10-14T07:27:13.000Z",
+          "topSources": [
+            {
+              "name": "퀘이사존",
+              "share": 46
+            },
+            {
+              "name": "아카",
+              "share": 29
+            }
+          ]
+        },
+        {
+          "slug": "노트북",
+          "name": "노트북",
+          "aliases": [],
+          "excludes": [
+            "거치대",
+            "백팩",
+            "가방",
+            "파우치",
+            "스티커",
+            "스탠드",
+            "받침",
+            "테이블",
+            "선반",
+            "책상",
+            "티니핑",
+            "쿨러",
+            "클립",
+            "노트북용",
+            "케이스",
+            "슬리브",
+            "거치",
+            "부스트캠프",
+            "충전기",
+            "어댑터",
+            "필름",
+            "모니터",
+            "보조배터리",
+            "스피커",
+            "이어폰",
+            "매트",
+            "랜카드",
+            "동글",
+            "라이트"
+          ],
+          "recentDealCount": 33,
+          "countCapped": false,
+          "activeDays": 19,
+          "lastDealAt": "2026-10-19T02:32:00.000Z",
+          "topSources": [
+            {
+              "name": "이토랜드",
+              "share": 33
+            },
+            {
+              "name": "뽐뿌",
+              "share": 21
+            }
+          ]
+        },
+        {
+          "slug": "ssd",
+          "name": "SSD",
+          "aliases": [],
+          "excludes": [
+            "케이스",
+            "인클로저",
+            "미니pc",
+            "조립pc",
+            "게이밍pc",
+            "rtx",
+            "rx9",
+            "라이젠",
+            "7500f",
+            "x3d",
+            "5500gt",
+            "도킹",
+            "ssdarter",
+            "조립PC",
+            "미니PC",
+            "미니 PC",
+            "노트북",
+            "그램"
+          ],
+          "recentDealCount": 33,
+          "countCapped": false,
+          "activeDays": 18,
+          "lastDealAt": "2026-10-20T02:06:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 27
+            },
+            {
+              "name": "퀘이사존",
+              "share": 24
+            }
+          ]
+        },
+        {
+          "slug": "기프트카드",
+          "name": "기프트카드",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 31,
+          "countCapped": false,
+          "activeDays": 14,
+          "lastDealAt": "2026-10-20T08:20:23.000Z",
+          "topSources": [
+            {
+              "name": "에펨코리아",
+              "share": 23
+            },
+            {
+              "name": "아카",
+              "share": 19
+            }
+          ]
+        },
+        {
+          "slug": "아이폰",
+          "name": "아이폰",
+          "aliases": [
+            "iphone"
+          ],
+          "excludes": [
+            "케이스",
+            "필름",
+            "강화유리",
+            "거치대",
+            "케이블",
+            "호환",
+            "충전기",
+            "젠더",
+            "이어폰",
+            "보험",
+            "맥세이프",
+            "에어클로",
+            "배터리",
+            "충전",
+            "파우치",
+            "부가서비스",
+            "보조배터리",
+            "아이폰용",
+            "즉시개통"
+          ],
+          "recentDealCount": 29,
+          "countCapped": false,
+          "activeDays": 10,
+          "lastDealAt": "2026-10-19T07:38:00.000Z",
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 55
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

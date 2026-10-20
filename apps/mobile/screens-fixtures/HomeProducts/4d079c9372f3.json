@@ -1,0 +1,515 @@
+{
+  "variables": {
+    "limit": 20,
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "categoryIds": null,
+    "searchAfter": null
+  },
+  "response": {
+    "data": {
+      "products": [
+        {
+          "id": "36141782",
+          "title": "코다노 트리플 슈레드 피자치즈 1kg 10,790원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14955663?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,790원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14955663.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792506271000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:24:31.000Z"
+        },
+        {
+          "id": "36141784",
+          "title": "GMKtec K12 H255 게이밍 미니 PC 베어본 외 2종",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102397",
+          "isHot": false,
+          "isEnd": false,
+          "price": "$228.00",
+          "providerId": 1,
+          "categoryId": 1,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102397.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792506240000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:24:00.000Z"
+        },
+        {
+          "id": "36141785",
+          "title": "세이코 크로노그래프 SBTQ041 남자시계 96,540원",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10467354576",
+          "isHot": null,
+          "isEnd": false,
+          "price": "96,540원",
+          "providerId": 7,
+          "categoryId": 4,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10467354576.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792506240000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:24:00.000Z"
+        },
+        {
+          "id": "36141783",
+          "title": "GMKtec K12 H255 게이밍($228) AM02($199) M6 울트라($266)",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102396",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 1,
+          "categoryId": 1,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102396.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792506180000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:23:00.000Z"
+        },
+        {
+          "id": "36141786",
+          "title": "배스킨라빈스 1997 인크레더블 와츄원",
+          "mallId": 28,
+          "url": "https://www.fmkorea.com/10467357936",
+          "isHot": null,
+          "isEnd": false,
+          "price": "22,240원",
+          "providerId": 7,
+          "categoryId": 8,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10467357936.webp",
+          "mallName": "카카오",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792506180000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:23:00.000Z"
+        },
+        {
+          "id": "36141779",
+          "title": "Baseus 미니 파워뱅크 45W 10000mAh 외 3종",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102395",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 1,
+          "categoryId": 9,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102395.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792506060000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:21:00.000Z"
+        },
+        {
+          "id": "36141780",
+          "title": "아이더 탈부착 바람막이 자켓",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741765",
+          "isHot": false,
+          "isEnd": false,
+          "price": "103,620원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "의류/잡화",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741765.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792506060000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:21:00.000Z"
+        },
+        {
+          "id": "36141778",
+          "title": "테일러 웰메이드 레몬 농축액 1.8kg 외 3종",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102394",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102394.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792506000000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:20:00.000Z"
+        },
+        {
+          "id": "36141775",
+          "title": "일월엔틱 플라워 블루밍 온열매트 18,900원",
+          "mallId": 28,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14955648?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "18,900원",
+          "providerId": 18,
+          "categoryId": 6,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14955648.webp",
+          "mallName": "카카오",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792505887000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:18:07.000Z"
+        },
+        {
+          "id": "36141774",
+          "title": "GMKtec K12 H255 게이밍 외 2종",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102393",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 1,
+          "categoryId": 1,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102393.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792505820000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:17:00.000Z"
+        },
+        {
+          "id": "36141777",
+          "title": "당일 착유 기름 700ml",
+          "mallId": 35,
+          "url": "https://www.fmkorea.com/10467329212",
+          "isHot": null,
+          "isEnd": false,
+          "price": "11,690원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10467329212.webp",
+          "mallName": "11번가",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792505820000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:17:00.000Z"
+        },
+        {
+          "id": "36141773",
+          "title": "초코에몽 190ml 24개+단팥에몽 190ml 24개",
+          "mallId": 28,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741764",
+          "isHot": false,
+          "isEnd": false,
+          "price": "29,871원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741764.webp",
+          "mallName": "카카오",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792505640000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:14:00.000Z"
+        },
+        {
+          "id": "36141772",
+          "title": "Baseus 100W 20000mAh 외 3종",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102392",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 1,
+          "categoryId": 9,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102392.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792505520000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:12:00.000Z"
+        },
+        {
+          "id": "36141771",
+          "title": "트라이 플란넬 9부바지 9,990원",
+          "mallId": 8,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741763",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,990원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "의류/잡화",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741763.webp",
+          "mallName": "롯데온",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792505400000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:10:00.000Z"
+        },
+        {
+          "id": "36141770",
+          "title": "해남 고당도 흙호풍미 5kg 14,850원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741762",
+          "isHot": false,
+          "isEnd": false,
+          "price": "14,850원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741762.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792505340000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:09:00.000Z"
+        },
+        {
+          "id": "36141744",
+          "title": "투키 40W GaN 충전기 KR플러그 외 2종",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102391",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 1,
+          "categoryId": 9,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102391.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792505100000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:05:00.000Z"
+        },
+        {
+          "id": "36141614",
+          "title": "행운드림 프리미엄 화장지 3겹 30m 2팩 외 1종",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102390",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102390.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792505040000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:04:00.000Z"
+        },
+        {
+          "id": "36141615",
+          "title": "ANF 고양이캔 25개 26,300원",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741761",
+          "isHot": false,
+          "isEnd": false,
+          "price": "26,300원",
+          "providerId": 1,
+          "categoryId": 12,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741761.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792505040000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:04:00.000Z"
+        },
+        {
+          "id": "36141613",
+          "title": "스마텍 아동용 유무선 접이식 15시간 멀티단자 블루투스헤드셋 9900원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14955604?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,900원",
+          "providerId": 18,
+          "categoryId": 9,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14955604.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792504983000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:03:03.000Z"
+        },
+        {
+          "id": "36141607",
+          "title": "베이스어스 인스파이어 XC1 보스사운드 오픈형 무선 이어버드 외 1종",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102387",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 1,
+          "categoryId": 9,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102387.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792504920000"
+          ],
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-20T14:02:00.000Z"
+        }
+      ]
+    }
+  }
+}

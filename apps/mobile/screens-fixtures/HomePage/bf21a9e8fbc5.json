@@ -1,0 +1,326 @@
+{
+  "variables": {},
+  "response": {
+    "data": {
+      "homePage": {
+        "experimentId": "home_hero_v1",
+        "variant": "control",
+        "sections": [
+          {
+            "id": "toss",
+            "title": "토스 특가",
+            "type": "TOSS",
+            "displayOrder": 0,
+            "viewMoreLink": "/toss"
+          },
+          {
+            "id": "time-deal",
+            "title": "선착순·타임특가",
+            "type": "HORIZONTAL_SCROLL",
+            "displayOrder": 0.5,
+            "viewMoreLink": "/curation/time-deal",
+            "dataSource": {
+              "type": "GRAPHQL_QUERY",
+              "queryName": "productsByKeyword",
+              "variables": {
+                "keyword": "타임특가",
+                "limit": 10,
+                "orderBy": "POSTED_AT",
+                "orderOption": "DESC"
+              }
+            }
+          },
+          {
+            "id": "hotdeal",
+            "title": "놓치면 아까운 핫딜",
+            "type": "PAGINATED_GRID",
+            "displayOrder": 1,
+            "viewMoreLink": "/curation/hotdeal",
+            "dataSource": {
+              "type": "GRAPHQL_QUERY",
+              "queryName": "hotDealRankingProducts",
+              "variables": {
+                "page": 0,
+                "limit": 20
+              }
+            }
+          },
+          {
+            "id": "guest-recommended",
+            "title": "내 취향 저격 핫딜",
+            "type": "PAGINATED_GRID",
+            "displayOrder": 1.5,
+            "viewMoreLink": "/curation/guest-recommended",
+            "dataSource": {
+              "type": "GRAPHQL_QUERY",
+              "queryName": "guestRecommendedHotDeals",
+              "variables": {
+                "page": 0,
+                "limit": 20
+              }
+            }
+          },
+          {
+            "id": "under-10000",
+            "title": "부담없이 만원이하템",
+            "type": "HORIZONTAL_SCROLL",
+            "displayOrder": 2,
+            "viewMoreLink": "/curation/under-10000",
+            "dataSource": {
+              "type": "GRAPHQL_QUERY",
+              "queryName": "productsByKeyword",
+              "variables": {
+                "keyword": "만원이하",
+                "limit": 10,
+                "orderBy": "POSTED_AT",
+                "orderOption": "DESC"
+              }
+            }
+          },
+          {
+            "id": "group-1",
+            "title": "그룹 섹션",
+            "type": "GROUP",
+            "displayOrder": 2,
+            "viewMoreLink": null,
+            "sections": [
+              {
+                "id": "impending",
+                "title": "유통기한 임박 특가",
+                "type": "DOUBLE_ROW",
+                "displayOrder": 1,
+                "viewMoreLink": "/curation/impending",
+                "dataSource": {
+                  "type": "GRAPHQL_QUERY",
+                  "queryName": "expiringSoonHotDealProducts",
+                  "variables": {
+                    "daysUntilExpiry": 7,
+                    "limit": 10,
+                    "orderBy": "EXPIRING_SOON",
+                    "orderOption": "DESC"
+                  }
+                }
+              },
+              {
+                "id": "premium",
+                "title": "프리미엄 핫딜",
+                "type": "LIST",
+                "displayOrder": 2,
+                "viewMoreLink": "/curation/premium",
+                "dataSource": {
+                  "type": "GRAPHQL_QUERY",
+                  "queryName": "productsByKeyword",
+                  "variables": {
+                    "keyword": "백만원이상",
+                    "limit": 4,
+                    "orderBy": "POSTED_AT",
+                    "orderOption": "DESC"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "mall",
+            "title": "쇼핑몰별 모아보기",
+            "type": "GRID_TABBED",
+            "displayOrder": 3,
+            "viewMoreLink": "/curation/mall",
+            "dataSource": {
+              "type": "GRAPHQL_QUERY",
+              "queryName": "products",
+              "variables": {
+                "limit": 6,
+                "orderBy": "POSTED_AT",
+                "orderOption": "DESC"
+              }
+            },
+            "tabs": [
+              {
+                "id": "mall-group-118",
+                "label": "토스",
+                "variables": {
+                  "mallGroupId": 118
+                },
+                "viewMoreLink": "/curation/mall-group-118"
+              },
+              {
+                "id": "mall-group-16",
+                "label": "쿠팡",
+                "variables": {
+                  "mallGroupId": 16
+                },
+                "viewMoreLink": "/curation/mall-group-16"
+              },
+              {
+                "id": "mall-group-20",
+                "label": "알리",
+                "variables": {
+                  "mallGroupId": 20
+                },
+                "viewMoreLink": "/curation/mall-group-20"
+              },
+              {
+                "id": "mall-group-1",
+                "label": "네이버",
+                "variables": {
+                  "mallGroupId": 1
+                },
+                "viewMoreLink": "/curation/mall-group-1"
+              },
+              {
+                "id": "mall-group-7",
+                "label": "지마켓",
+                "variables": {
+                  "mallGroupId": 7
+                },
+                "viewMoreLink": "/curation/mall-group-7"
+              },
+              {
+                "id": "mall-group-9",
+                "label": "11번가",
+                "variables": {
+                  "mallGroupId": 9
+                },
+                "viewMoreLink": "/curation/mall-group-9"
+              },
+              {
+                "id": "mall-group-23",
+                "label": "무신사",
+                "variables": {
+                  "mallGroupId": 23
+                },
+                "viewMoreLink": "/curation/mall-group-23"
+              },
+              {
+                "id": "mall-group-31",
+                "label": "오늘의집",
+                "variables": {
+                  "mallGroupId": 31
+                },
+                "viewMoreLink": "/curation/mall-group-31"
+              }
+            ]
+          },
+          {
+            "id": "community",
+            "title": "커뮤니티 모아보기",
+            "type": "GRID_TABBED",
+            "displayOrder": 4,
+            "viewMoreLink": "/curation/community",
+            "dataSource": {
+              "type": "GRAPHQL_QUERY",
+              "queryName": "products",
+              "variables": {
+                "limit": 6,
+                "orderBy": "POSTED_AT",
+                "orderOption": "DESC"
+              }
+            },
+            "tabs": [
+              {
+                "id": "provider-1",
+                "label": "뽐뿌",
+                "variables": {
+                  "providerId": 1,
+                  "providerIds": [
+                    1
+                  ]
+                },
+                "viewMoreLink": "/curation/provider-1"
+              },
+              {
+                "id": "provider-2",
+                "label": "쿨엔조이",
+                "variables": {
+                  "providerId": 2,
+                  "providerIds": [
+                    2
+                  ]
+                },
+                "viewMoreLink": "/curation/provider-2"
+              },
+              {
+                "id": "provider-4",
+                "label": "루리웹",
+                "variables": {
+                  "providerId": 4,
+                  "providerIds": [
+                    4
+                  ]
+                },
+                "viewMoreLink": "/curation/provider-4"
+              },
+              {
+                "id": "provider-5",
+                "label": "퀘이사존",
+                "variables": {
+                  "providerId": 5,
+                  "providerIds": [
+                    5
+                  ]
+                },
+                "viewMoreLink": "/curation/provider-5"
+              },
+              {
+                "id": "provider-7",
+                "label": "에펨코리아",
+                "variables": {
+                  "providerId": 7,
+                  "providerIds": [
+                    7
+                  ]
+                },
+                "viewMoreLink": "/curation/provider-7"
+              },
+              {
+                "id": "provider-11",
+                "label": "어미새",
+                "variables": {
+                  "providerId": 11,
+                  "providerIds": [
+                    11
+                  ]
+                },
+                "viewMoreLink": "/curation/provider-11"
+              },
+              {
+                "id": "provider-12",
+                "label": "아카",
+                "variables": {
+                  "providerId": 12,
+                  "providerIds": [
+                    12
+                  ]
+                },
+                "viewMoreLink": "/curation/provider-12"
+              },
+              {
+                "id": "provider-16",
+                "label": "조드",
+                "variables": {
+                  "providerId": 16,
+                  "providerIds": [
+                    16
+                  ]
+                },
+                "viewMoreLink": "/curation/provider-16"
+              },
+              {
+                "id": "provider-18",
+                "label": "맘이베베",
+                "variables": {
+                  "providerId": 18,
+                  "providerIds": [
+                    18
+                  ]
+                },
+                "viewMoreLink": "/curation/provider-18"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
