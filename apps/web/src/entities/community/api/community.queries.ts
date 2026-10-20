@@ -1,3 +1,9 @@
+import {
+  COMMUNITY_POSTS_ORDER,
+  COMMUNITY_POSTS_PAGE_SIZE,
+  type CommunityTab,
+  communityTabFilter,
+} from '@jirum/domain/community';
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
 import { CommunityService } from '@/shared/api/community/community.service';
@@ -5,23 +11,14 @@ import { CommentOrder, OrderOptionType } from '@/shared/api/gql/graphql';
 
 const COMMENTS_LIMIT = 20;
 
-const POSTS_LIMIT = 20;
-const POSTS_ORDER_BY = CommentOrder.Id;
-const POSTS_ORDER_OPTION = OrderOptionType.Desc;
-
+// 쪽 크기·정렬·탭 필터는 정본 @jirum/domain/community(앱 목록과 같은 값).
 export const defaultPostsVariables = {
-  limit: POSTS_LIMIT,
-  orderBy: POSTS_ORDER_BY,
-  orderOption: POSTS_ORDER_OPTION,
+  limit: COMMUNITY_POSTS_PAGE_SIZE,
+  orderBy: COMMUNITY_POSTS_ORDER.orderBy as CommentOrder,
+  orderOption: COMMUNITY_POSTS_ORDER.orderOption as OrderOptionType,
 };
 
-export type CommunityTab = 'all' | 'trending' | 'notice';
-
-function getTabFilter(tab: CommunityTab): { isNotice?: boolean; isTrending?: boolean } {
-  if (tab === 'notice') return { isNotice: true };
-  if (tab === 'trending') return { isTrending: true };
-  return {};
-}
+export type { CommunityTab };
 
 export const CommunityQueries = {
   all: () => ['community'] as const,
@@ -32,7 +29,7 @@ export const CommunityQueries = {
       queryFn: ({ pageParam }) =>
         CommunityService.getCommunityPosts({
           ...defaultPostsVariables,
-          ...getTabFilter(tab),
+          ...communityTabFilter(tab),
           searchAfter: pageParam,
         }),
       initialPageParam: null as null | string[],

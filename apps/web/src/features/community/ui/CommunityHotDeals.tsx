@@ -1,5 +1,6 @@
 'use client';
 
+import { COMMUNITY_HOT_DEAL_OPTIONS, dailyHotDealOptionIndex } from '@jirum/domain/community';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Suspense, useMemo } from 'react';
@@ -11,32 +12,9 @@ import { Skeleton } from '@/shared/ui/common/Skeleton';
 import { ProductQueries } from '@/entities/product';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
-type RankingOption =
-  | { label: string; type: 'hotdeal'; link: string }
-  | { label: string; type: 'ranking'; categoryId: number | null; link: string };
-
-const RANKING_OPTIONS: RankingOption[] = [
-  { label: '지금 인기 핫딜', type: 'hotdeal', link: '/curation/hotdeal' },
-  { label: '전체 랭킹', type: 'ranking', categoryId: null, link: '/trending/ranking' },
-  {
-    label: "'생활·식품' 인기 상품",
-    type: 'ranking',
-    categoryId: 2,
-    link: '/trending/ranking?tab=2',
-  },
-  {
-    label: "'컴퓨터' 인기 상품",
-    type: 'ranking',
-    categoryId: 1,
-    link: '/trending/ranking?tab=1',
-  },
-];
-
-// 날짜 기반 인덱스 — KST 날짜로 고정한다. getDate() 는 실행 환경 시간대라 서버(UTC)·브라우저(KST)가
-// 00~09시 KST 에 하루씩 갈려 다른 제목을 그렸다(하이드레이션 오류 #418, 10/15 실측).
-const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
-const getDailyOptionIndex = () =>
-  new Date(Date.now() + KST_OFFSET_MS).getUTCDate() % RANKING_OPTIONS.length;
+// 섹션 후보·오늘(KST) 고르기는 정본 @jirum/domain/community(앱과 같은 날 같은 섹션).
+const RANKING_OPTIONS = COMMUNITY_HOT_DEAL_OPTIONS;
+const getDailyOptionIndex = () => dailyHotDealOptionIndex();
 
 type ProductItem = {
   id: string | number;

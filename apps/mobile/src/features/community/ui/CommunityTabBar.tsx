@@ -1,3 +1,4 @@
+import {COMMUNITY_TABS} from '@jirum/domain/community';
 import React from 'react';
 import {View} from 'react-native';
 
@@ -6,11 +7,8 @@ import type {CommunityTab} from '@/entities/community';
 import {gaps} from './community-styles';
 
 /** web `features/community/ui/TabBar` 와 같은 라벨·순서. */
-export const COMMUNITY_TABS: {label: string; value: CommunityTab}[] = [
-  {label: '전체', value: 'all'},
-  {label: '인기', value: 'trending'},
-  {label: '공지', value: 'notice'},
-];
+/** 탭 순서·라벨 — 정본 @jirum/domain/community(web 탭 줄과 같은 표). */
+export {COMMUNITY_TABS};
 
 /** 전체·인기·공지 탭 — 공용 TabPill(neutral, web TabBar 와 같은 레시피). */
 export default function CommunityTabBar({

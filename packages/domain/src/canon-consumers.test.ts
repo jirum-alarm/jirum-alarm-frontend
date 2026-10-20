@@ -19,23 +19,42 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const repo = path.resolve(here, '../../..');
 
 const SHARED_BY_BOTH: Record<string, string[]> = {
-  mypage: [
-    'MYPAGE_GROUPS',
-    'CUSTOMER_SERVICE_TITLE',
-    'MAX_KEYWORD_COUNT',
-    'WISHLIST_PAGE_SIZE',
-  ],
+  mypage: ['MYPAGE_GROUPS', 'CUSTOMER_SERVICE_TITLE', 'MAX_KEYWORD_COUNT', 'WISHLIST_PAGE_SIZE'],
   'keyword-options': ['KEYWORD_ALERT_LABELS', 'KEYWORD_DEAL_CHOICES', 'summarizeKeywordAlert'],
   'price-chart': ['buildChartGeometry', 'shortWon', 'won'],
   'product-card': ['visibleHotDealType'],
-  ranking: ['rankingWindowDays', 'orderTrendingCategories', 'nextTrendingView', 'RANKING_CARD_SOURCE'],
+  ranking: [
+    'rankingWindowDays',
+    'orderTrendingCategories',
+    'nextTrendingView',
+    'RANKING_CARD_SOURCE',
+  ],
   share: ['SHARE_CHANNEL_COPY'],
-  'community-post': ['parsePostContent', 'isAllowedPostImageUrl', 'MAX_POST_IMAGES', 'getPostDisplayContent'],
+  'community-post': [
+    'parsePostContent',
+    'isAllowedPostImageUrl',
+    'MAX_POST_IMAGES',
+    'getPostDisplayContent',
+  ],
   image: ['convertToWebp'],
   'go-back': ['NATIVE_STACK_DATASET_KEY'],
-  community: ['REPORT_REASON_OPTIONS', 'COMMUNITY_COPY'],
+  community: [
+    'REPORT_REASON_OPTIONS',
+    'COMMUNITY_COPY',
+    'COMMUNITY_TABS',
+    'communityTabFilter',
+    'COMMUNITY_POSTS_PAGE_SIZE',
+    'COMMUNITY_POSTS_ORDER',
+    'COMMUNITY_HOT_DEAL_OPTIONS',
+    'dailyHotDealOptionIndex',
+  ],
   price: ['parsePrice', 'splitPriceNote'],
-  'keyword-hub': ['KEYWORD_PROMPT_EVENT', 'buildKeywordHubLead', 'describeKeywordHubRhythm', 'KEYWORD_HUB_MIN_DEALS'],
+  'keyword-hub': [
+    'KEYWORD_PROMPT_EVENT',
+    'buildKeywordHubLead',
+    'describeKeywordHubRhythm',
+    'KEYWORD_HUB_MIN_DEALS',
+  ],
   categories: ['INTEREST_CATEGORIES', 'MAX_INTEREST_CATEGORIES'],
   'color-scheme': ['COLOR_SCHEME_COOKIE'],
   'home-sections': [
@@ -75,7 +94,8 @@ const walk = (dir: string, out: string[] = []): string[] => {
     if (e.name === 'node_modules') continue;
     const p = path.join(dir, e.name);
     if (e.isDirectory()) walk(p, out);
-    else if (/\.(ts|tsx)$/.test(e.name) && !/\.(test|spec|stories)\.tsx?$/.test(e.name)) out.push(p);
+    else if (/\.(ts|tsx)$/.test(e.name) && !/\.(test|spec|stories)\.tsx?$/.test(e.name))
+      out.push(p);
   }
   return out;
 };
@@ -85,10 +105,15 @@ const importedNames = (appRoot: string) => {
   const byModule = new Map<string, Set<string>>();
   for (const file of walk(path.join(repo, appRoot))) {
     const src = fs.readFileSync(file, 'utf8');
-    for (const m of src.matchAll(/(?:import|export)\s*(?:type\s*)?\{([^}]*)\}\s*from\s*'@jirum\/domain\/([\w-]+)'/g)) {
+    for (const m of src.matchAll(
+      /(?:import|export)\s*(?:type\s*)?\{([^}]*)\}\s*from\s*'@jirum\/domain\/([\w-]+)'/g,
+    )) {
       const names = byModule.get(m[2]) ?? new Set<string>();
       for (const part of m[1].split(',')) {
-        const name = part.trim().replace(/^type\s+/, '').split(/\s+as\s+/)[0];
+        const name = part
+          .trim()
+          .replace(/^type\s+/, '')
+          .split(/\s+as\s+/)[0];
         if (name) names.add(name);
       }
       byModule.set(m[2], names);
@@ -103,6 +128,10 @@ for (const app of ['apps/web/src', 'apps/mobile/src']) {
     const missing = Object.entries(SHARED_BY_BOTH).flatMap(([mod, names]) =>
       names.filter((n) => !imported.get(mod)?.has(n)).map((n) => `@jirum/domain/${mod} ${n}`),
     );
-    assert.deepEqual(missing, [], `${app} 가 정본을 쓰지 않는다(다시 만들었나?):\n${missing.join('\n')}`);
+    assert.deepEqual(
+      missing,
+      [],
+      `${app} 가 정본을 쓰지 않는다(다시 만들었나?):\n${missing.join('\n')}`,
+    );
   });
 }

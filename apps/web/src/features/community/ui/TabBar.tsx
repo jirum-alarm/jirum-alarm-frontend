@@ -1,16 +1,14 @@
 'use client';
 
 import { tab } from '@jirum/design-system/recipes';
+import { COMMUNITY_TABS } from '@jirum/domain/community';
 
 import { cn } from '@/shared/lib/cn';
 
 import { CommunityTab } from '@/entities/community';
 
-const TABS: { label: string; value: CommunityTab }[] = [
-  { label: '전체', value: 'all' },
-  { label: '인기', value: 'trending' },
-  { label: '공지', value: 'notice' },
-];
+// 탭 순서·라벨은 정본 @jirum/domain/community(앱 탭 줄과 같은 표).
+const TABS = COMMUNITY_TABS;
 
 export default function TabBar({
   activeTab,

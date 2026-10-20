@@ -25,10 +25,10 @@ const path = require('path');
 declare const __dirname: string;
 
 const MOBILE = path.join(__dirname, '..');
+// web 은 파일 «목록»만 읽는다(이식 대조표 — 내용 대조가 아니다). 같아야 하는 값은 @jirum/domain/community.
 const WEB = path.join(__dirname, '../../web/src');
 
 const read = (p: string) => fs.readFileSync(path.join(MOBILE, p), 'utf8');
-const readWeb = (p: string) => fs.readFileSync(path.join(WEB, p), 'utf8');
 const exists = (p: string) => fs.existsSync(path.join(MOBILE, p));
 
 const {getPostCardView} = require('../src/features/community/lib/post-card');
@@ -200,17 +200,23 @@ describe('목록 카드 표시 규칙 — web CommunityPostCard 와 같은 판�
   });
 });
 
-describe('탭·섹션 상수가 web 과 같다', () => {
-  it('탭 라벨·순서가 web TabBar 와 같다', () => {
-    const web = readWeb('features/community/ui/TabBar.tsx');
-    const webLabels = [...web.matchAll(/label: '([^']+)'/g)].map(m => m[1]);
-    const app = read('src/features/community/ui/CommunityTabBar.tsx');
-    const appLabels = [...app.matchAll(/label: '([^']+)'/g)].map(m => m[1]);
-    expect(appLabels).toEqual(webLabels);
-    expect(appLabels).toEqual(['전체', '인기', '공지']);
+// 탭·섹션·목록 변수는 정본 @jirum/domain/community 를 web·앱이 같이 쓴다(두 앱의 import 는 domain canon-consumers 가 본다).
+describe('탭·섹션·목록 변수 — 정본 @jirum/domain/community', () => {
+  const canon = require('@jirum/domain/community');
+
+  it('탭 줄이 정본 탭을 그대로 쓴다', () => {
+    const {
+      COMMUNITY_TABS,
+    } = require('../src/features/community/ui/CommunityTabBar');
+    expect(COMMUNITY_TABS).toBe(canon.COMMUNITY_TABS);
+    expect(COMMUNITY_TABS.map((t: {label: string}) => t.label)).toEqual([
+      '전체',
+      '인기',
+      '공지',
+    ]);
   });
 
-  it('탭 필터가 web getTabFilter 와 같다', () => {
+  it('탭 필터 — 「전체」는 필터를 안 보낸다', () => {
     const {
       getTabFilter,
     } = require('../src/entities/community/community.queries');
@@ -219,39 +225,27 @@ describe('탭·섹션 상수가 web 과 같다', () => {
     expect(getTabFilter('notice')).toEqual({isNotice: true});
   });
 
-  it('핫딜 섹션 라벨·링크·순서가 web CommunityHotDeals 와 같다', () => {
-    const web = readWeb('features/community/ui/CommunityHotDeals.tsx');
-    const webLabels = [...web.matchAll(/label: (?:'([^']+)'|"([^"]+)")/g)].map(
-      m => m[1] ?? m[2],
-    );
-    const webLinks = [...web.matchAll(/link: '([^']+)'/g)].map(m => m[1]);
-    const app = read('src/features/community/ui/CommunityHotDeals.tsx');
-    const appLabels = [...app.matchAll(/label: (?:'([^']+)'|"([^"]+)")/g)].map(
-      m => m[1] ?? m[2],
-    );
-    const appLinks = [...app.matchAll(/link: '([^']+)'/g)].map(m => m[1]);
-    expect(appLabels).toEqual(webLabels);
-    expect(appLinks).toEqual(webLinks);
+  it('핫딜 섹션 후보는 정본 그대로, 오늘 고르기는 KST 날짜(기기 시간대 무관)', () => {
+    const {
+      RANKING_OPTIONS,
+      getDailyOptionIndex,
+    } = require('../src/features/community/ui/CommunityHotDeals');
+    expect(RANKING_OPTIONS).toBe(canon.COMMUNITY_HOT_DEAL_OPTIONS);
+    // KST 10/21 00:30 = UTC 10/20 15:30 — UTC 날짜(20)가 아니라 KST 날짜(21)로 고른다.
+    expect(getDailyOptionIndex(new Date('2026-10-20T15:30:00Z'))).toBe(21 % 4);
+    expect(getDailyOptionIndex(new Date('2026-10-21T14:00:00Z'))).toBe(21 % 4);
   });
 
-  it('날짜 기반 선택식이 web 과 같다(같은 날 같은 섹션)', () => {
-    const web = readWeb('features/community/ui/CommunityHotDeals.tsx');
-    expect(web).toMatch(
-      /\+ KST_OFFSET_MS\)\.getUTCDate\(\) %\s*RANKING_OPTIONS\.length/,
-    );
-    const app = read('src/features/community/ui/CommunityHotDeals.tsx');
-    expect(app).toMatch(
-      /\+ KST_OFFSET_MS\)\.getUTCDate\(\) %\s*RANKING_OPTIONS\.length/,
-    );
-  });
-
-  it('목록 정렬이 web defaultPostsVariables 와 같다', () => {
-    const web = readWeb('entities/community/api/community.queries.ts');
-    expect(web).toMatch(/POSTS_LIMIT = 20/);
-    expect(web).toMatch(/CommentOrder\.Id/);
-    const app = read('src/entities/community/community.queries.ts');
-    expect(app).toMatch(/POSTS_LIMIT = 20/);
-    expect(app).toMatch(/CommentOrder\.Id/);
+  it('목록 쿼리 변수 — 정본 쪽 크기·정렬 + 탭 필터', () => {
+    const {
+      defaultPostsVariables,
+    } = require('../src/entities/community/community.queries');
+    expect(defaultPostsVariables).toEqual({
+      limit: canon.COMMUNITY_POSTS_PAGE_SIZE,
+      orderBy: 'ID',
+      orderOption: 'DESC',
+    });
+    expect(canon.COMMUNITY_POSTS_PAGE_SIZE).toBe(20);
   });
 
   it('목록은 루트 글만 받는다(isRoot: true) — 안 넣으면 댓글이 섞인다', () => {

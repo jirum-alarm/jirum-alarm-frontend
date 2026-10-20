@@ -1,3 +1,7 @@
+import {
+  COMMUNITY_HOT_DEAL_OPTIONS,
+  dailyHotDealOptionIndex,
+} from '@jirum/domain/community';
 import React, {useCallback, useMemo} from 'react';
 import {ActivityIndicator, Pressable, StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -14,58 +18,9 @@ import {tabStackNavigations} from '@/shared/constant/navigations';
 
 type Nav = NativeStackNavigationProp<TabStackParamList>;
 
-type RankingOption = {
-  id: string;
-  label: string;
-  type: 'hotdeal' | 'ranking';
-  categoryId: number | null;
-  link: string;
-};
-
-/**
- * web `CommunityHotDeals` 의 RANKING_OPTIONS 와 **같은 순서·라벨·링크**.
- * 날짜로 고르므로 순서가 어긋나면 웹과 앱이 같은 날 다른 섹션을 보여준다.
- */
-export const RANKING_OPTIONS: RankingOption[] = [
-  {
-    id: 'hotdeal',
-    label: '지금 인기 핫딜',
-    type: 'hotdeal',
-    categoryId: null,
-    link: '/curation/hotdeal',
-  },
-  {
-    id: 'ranking-all',
-    label: '전체 랭킹',
-    type: 'ranking',
-    categoryId: null,
-    link: '/trending/ranking',
-  },
-  {
-    id: 'ranking-2',
-    label: "'생활·식품' 인기 상품",
-    type: 'ranking',
-    categoryId: 2,
-    link: '/trending/ranking?tab=2',
-  },
-  {
-    id: 'ranking-1',
-    label: "'컴퓨터' 인기 상품",
-    type: 'ranking',
-    categoryId: 1,
-    link: '/trending/ranking?tab=1',
-  },
-];
-
-const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
-
-/** web `getDailyOptionIndex` — 날짜 기반이라 하루 동안 값이 안 바뀐다. 기기 시간대와 무관하게 KST 날짜(web 과 같게). */
-export function getDailyOptionIndex(date: Date = new Date()): number {
-  return (
-    new Date(date.getTime() + KST_OFFSET_MS).getUTCDate() %
-    RANKING_OPTIONS.length
-  );
-}
+/** 섹션 후보·오늘(KST) 고르기 — 정본 @jirum/domain/community(web 과 같은 날 같은 섹션). */
+export const RANKING_OPTIONS = COMMUNITY_HOT_DEAL_OPTIONS;
+export const getDailyOptionIndex = dailyHotDealOptionIndex;
 
 /**
  * 커뮤니티 목록 아래 붙는 핫딜/랭킹 6개. web `features/community/ui/CommunityHotDeals`.

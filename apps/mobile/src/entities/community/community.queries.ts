@@ -1,3 +1,9 @@
+import {
+  COMMUNITY_POSTS_ORDER,
+  COMMUNITY_POSTS_PAGE_SIZE,
+  type CommunityTab,
+  communityTabFilter,
+} from '@jirum/domain/community';
 import {infiniteQueryOptions, queryOptions} from '@tanstack/react-query';
 
 import {CommentOrder, OrderOptionType} from '@/shared/api/gql/graphql';
@@ -5,31 +11,18 @@ import {CommunityService} from '@/shared/api/community';
 import {HomeService} from '@/shared/api/home/home.service';
 import type {ProductCardType} from '@/shared/types/product-card';
 
-/** 커뮤니티 탭 3종. web `entities/community` 의 CommunityTab 과 같은 값. */
-export type CommunityTab = 'all' | 'trending' | 'notice';
+/** 커뮤니티 탭 3종·탭 필터 — 정본 @jirum/domain/community(web 과 같은 값). */
+export type {CommunityTab};
+export const getTabFilter = communityTabFilter;
 
-const POSTS_LIMIT = 20;
 const COMMENTS_LIMIT = 20;
 
-/**
- * web `defaultPostsVariables` 와 같은 정렬. 어긋나면 같은 커뮤니티가
- * 웹/앱에서 다른 순서로 보인다.
- */
+/** 쪽 크기·정렬 — 정본(web defaultPostsVariables 와 같은 값). 어긋나면 같은 커뮤니티가 웹/앱에서 다른 순서. */
 export const defaultPostsVariables = {
-  limit: POSTS_LIMIT,
-  orderBy: CommentOrder.Id,
-  orderOption: OrderOptionType.Desc,
+  limit: COMMUNITY_POSTS_PAGE_SIZE,
+  orderBy: COMMUNITY_POSTS_ORDER.orderBy as CommentOrder,
+  orderOption: COMMUNITY_POSTS_ORDER.orderOption as OrderOptionType,
 } as const;
-
-/** web `getTabFilter` 와 같은 매핑. '전체' 는 필터를 아예 안 보낸다. */
-export function getTabFilter(tab: CommunityTab): {
-  isNotice?: boolean;
-  isTrending?: boolean;
-} {
-  if (tab === 'notice') return {isNotice: true};
-  if (tab === 'trending') return {isTrending: true};
-  return {};
-}
 
 /**
  * ReactQueryProvider 가 retry: false 를 전역으로 걸어둔 탓에 네트워크가 한 번
@@ -78,7 +71,7 @@ export class CommunityQueries {
       initialPageParam: null as null | string[],
       getNextPageParam: lastPage => {
         const last = lastPage.at(-1);
-        if (!last || lastPage.length < POSTS_LIMIT) return null;
+        if (!last || lastPage.length < COMMUNITY_POSTS_PAGE_SIZE) return null;
         return last.searchAfter ?? null;
       },
       retry: RETRY,
