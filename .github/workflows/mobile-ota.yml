@@ -179,8 +179,8 @@ jobs:
           if-no-files-found: ignore
 
   # 화면 하네스 — boot-check 가 만든(캐시한) Release 앱으로 주요 화면을 딥링크로 열어 라이트·다크로 찍는다(scripts/screens-ios.sh).
-  # 발행(publish)은 이 잡을 기다리지 않는다 — 운영 API 를 읽어서 그쪽이 느리면 흔들릴 수 있다. 실패(빈 화면·치명 예외·화면 못 감)는
-  # 빨간 잡으로 보이고, 찍은 화면은 아티팩트 app-screens-ios(`gh run download <run> -n app-screens-ios` → report.md 부터).
+  # 데이터는 녹화한 고정 데이터(SCREENS_API=fixture, apps/mobile/screens-fixtures) — 실행마다 같고 운영 점검·장애와 무관하다.
+  # 발행(publish)은 아직 이 잡을 기다리지 않는다. 실패(빈 화면·치명 예외·화면 못 감·녹화 안 된 쿼리)는 빨간 잡으로 보이고, 찍은 화면은 아티팩트 app-screens-ios(`gh run download <run> -n app-screens-ios` → report.md 부터).
   app-screens:
     needs: boot-check
     runs-on: macos-latest
@@ -216,7 +216,9 @@ jobs:
           key: ios-release-sim-${{ steps.xcode.outputs.version }}-${{ hashFiles('apps/mobile/native-fingerprint.json') }}
           fail-on-cache-miss: true
 
-      - name: Screens (deep links × light/dark)
+      - name: Screens (deep links × light/dark, fixed data)
+        env:
+          SCREENS_API: fixture
         run: bash apps/mobile/scripts/screens-ios.sh apps/mobile/ios/build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app
 
       - name: Report summary
