@@ -1,6 +1,7 @@
 'use client';
 
 import { detailInfo } from '@jirum/design-system/recipes';
+import { END_BADGE_EXPLAIN } from '@jirum/domain/badge-explain';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense, useEffect } from 'react';
 
@@ -102,15 +103,7 @@ export default function ProductInfo({
           {/* 배지 줄 오른쪽에 게시 시각 — 모바일과 같은 자리. 가격 위에 시각 줄을 따로 두지 않는다. */}
           <div className="flex min-h-[22px] items-center gap-x-2">
             {product.isEnd && (
-              <ExplainedBadge
-                explain={
-                  <>
-                    판매가 끝났거나 품절된 것으로
-                    <br />
-                    확인된 딜이에요
-                  </>
-                }
-              >
+              <ExplainedBadge lines={END_BADGE_EXPLAIN}>
                 <Badge size="tag" variant="outline" tone="gray">
                   판매종료
                 </Badge>
