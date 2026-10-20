@@ -18,6 +18,7 @@ import {
   resolveContentRangeMs,
   withAxisBuffer,
   won,
+  PRICE_PREVIEW_HINT,
 } from '@jirum/domain/price-chart';
 import {
   isSeedDeal,
@@ -387,45 +388,55 @@ function DealPreview({
   onPress?: () => void;
 }) {
   return (
-    <View className="mx-5 mt-3 rounded-xl border border-gray-200 bg-white p-2.5">
-      <View className="mb-1.5 h-4 flex-row items-center gap-x-2">
-        <View
-          className={cn(
-            'size-1.5 rounded-full',
-            isCurrent ? 'bg-secondary-500' : 'opacity-0',
-          )}
-        />
-        <Text className="text-11 text-gray-500" numberOfLines={1}>
-          {formatPreviewDate(date)}
-          {isCurrent ? ' · 이 상품' : ''}
-        </Text>
-      </View>
-      <Pressable
-        onPress={onPress}
-        disabled={!onPress}
-        accessibilityRole={onPress ? 'link' : undefined}
-        // ★함수형 style 엔 opacity 만 — 행 레이아웃은 안쪽 View 가 받는다.
-        // disabled 면 pressed 가 오지 않아 눌림 표시도 없다.
-        style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-        <View className="flex-row items-center gap-x-2.5">
-          <View className="size-11 overflow-hidden rounded-md bg-gray-50">
-            <Thumbnail uri={deal.thumbnail} resizeMode="contain" />
-          </View>
-          <View className="min-w-0 flex-1">
-            <Text className="text-xs text-gray-900" numberOfLines={1}>
-              {deal.title}
-            </Text>
-            {deal.providerName ? (
-              <Text className="mt-0.5 text-11 text-gray-500" numberOfLines={1}>
-                {deal.providerName}
-              </Text>
-            ) : null}
-          </View>
-          <Text className="text-xs font-semibold text-error-600">
-            {won(deal.price, deal.currency)}
+    <View className="mx-5 mt-3">
+      <View className="rounded-xl border border-gray-200 bg-white p-2.5">
+        <View className="mb-1.5 h-4 flex-row items-center gap-x-2">
+          <View
+            className={cn(
+              'size-1.5 rounded-full',
+              isCurrent ? 'bg-secondary-500' : 'opacity-0',
+            )}
+          />
+          <Text className="text-11 text-gray-500" numberOfLines={1}>
+            {formatPreviewDate(date)}
+            {isCurrent ? ' · 이 상품' : ''}
           </Text>
         </View>
-      </Pressable>
+        <Pressable
+          onPress={onPress}
+          disabled={!onPress}
+          accessibilityRole={onPress ? 'link' : undefined}
+          // ★함수형 style 엔 opacity 만 — 행 레이아웃은 안쪽 View 가 받는다.
+          // disabled 면 pressed 가 오지 않아 눌림 표시도 없다.
+          style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+          <View className="flex-row items-center gap-x-2.5">
+            <View className="size-11 overflow-hidden rounded-md bg-gray-50">
+              <Thumbnail uri={deal.thumbnail} resizeMode="contain" />
+            </View>
+            <View className="min-w-0 flex-1">
+              <Text className="text-xs text-gray-900" numberOfLines={1}>
+                {deal.title}
+              </Text>
+              {deal.providerName ? (
+                <Text
+                  className="mt-0.5 text-11 text-gray-500"
+                  numberOfLines={1}>
+                  {deal.providerName}
+                </Text>
+              ) : null}
+            </View>
+            <Text className="text-xs font-semibold text-error-600">
+              {won(deal.price, deal.currency)}
+            </Text>
+          </View>
+        </Pressable>
+      </View>
+      {/* 지금 보는 상품이라 카드를 눌러도 같은 화면 — 다른 딜을 보는 길을 알려 준다(web 과 같은 정본 문구). */}
+      {!onPress ? (
+        <Text className="mt-1.5 text-11 text-gray-500">
+          {PRICE_PREVIEW_HINT}
+        </Text>
+      ) : null}
     </View>
   );
 }

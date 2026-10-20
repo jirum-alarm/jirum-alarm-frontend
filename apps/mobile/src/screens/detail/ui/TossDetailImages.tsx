@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {Image} from 'expo-image';
 
 /**
@@ -35,7 +35,14 @@ function AutoHeightImage({uri, width}: {uri: string; width: number}) {
   );
 }
 
-export default function TossDetailImages({images}: {images?: string[] | null}) {
+export default function TossDetailImages({
+  images,
+  onPressImage,
+}: {
+  images?: string[] | null;
+  /** 누르면 그 사진을 크게 본다(상세의 사진 뷰어). */
+  onPressImage?: (uri: string) => void;
+}) {
   const [width, setWidth] = useState(0);
 
   if (!images?.length) return null;
@@ -46,7 +53,14 @@ export default function TossDetailImages({images}: {images?: string[] | null}) {
       onLayout={e => setWidth(e.nativeEvent.layout.width)}>
       {width > 0
         ? images.map((src, i) => (
-            <AutoHeightImage key={`${src}-${i}`} uri={src} width={width} />
+            <Pressable
+              key={`${src}-${i}`}
+              disabled={!onPressImage}
+              accessibilityRole="imagebutton"
+              accessibilityLabel={`상품 상세 이미지 ${i + 1} 크게 보기`}
+              onPress={() => onPressImage?.(src)}>
+              <AutoHeightImage uri={src} width={width} />
+            </Pressable>
           ))
         : null}
     </View>

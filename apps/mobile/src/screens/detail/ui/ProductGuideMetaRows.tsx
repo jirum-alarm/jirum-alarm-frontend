@@ -6,16 +6,9 @@ import {useQuery} from '@tanstack/react-query';
 import {ProductQueries} from '@/entities/product/product.queries';
 import {isPriceGuideTitle} from '@/entities/home/lib/toss';
 import {detailInfo} from '@jirum/design-system/recipes';
+import {parseGuideContent} from '@jirum/domain/guide-content';
 import {cn} from '@/shared/lib/styling';
-
-/** 마크다운 링크·URL 을 걷어낸 평문. web ProductGuideMetaRows 와 동일 규칙. */
-function plainGuideContent(content: string): string {
-  return content
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s]+)\)/g, '$1')
-    .replace(/https?:\/\/[^\s]+/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
+import {openInAppBrowser} from '@/shared/lib/navigation';
 
 /** productGuides 를 쇼핑몰·배송비와 같은 메타 행으로 렌더. */
 export default function ProductGuideMetaRows({
@@ -37,9 +30,10 @@ export default function ProductGuideMetaRows({
     .map(g => ({
       id: String(g.id),
       title: g.title as string,
-      content: plainGuideContent(g.content as string),
+      // 주소는 링크로(쿠폰·이벤트 페이지) — 예전엔 지워서 「쿠폰 받기」가 글자로만 남았다. 규칙은 web 과 같은 정본.
+      segments: parseGuideContent(g.content as string),
     }))
-    .filter(r => r.content.length > 0);
+    .filter(r => r.segments.length > 0);
 
   if (!rows.length) return null;
 
@@ -48,7 +42,19 @@ export default function ProductGuideMetaRows({
       {rows.map(row => (
         <DetailInfoRow key={row.id} label={row.title}>
           <Text className={detailInfo.value} numberOfLines={4}>
-            {row.content}
+            {row.segments.map((seg, i) =>
+              seg.type === 'link' ? (
+                <Text
+                  key={i}
+                  accessibilityRole="link"
+                  className="text-secondary-600 underline"
+                  onPress={() => void openInAppBrowser(seg.href)}>
+                  {seg.label}
+                </Text>
+              ) : (
+                <React.Fragment key={i}>{seg.text}</React.Fragment>
+              ),
+            )}
           </Text>
         </DetailInfoRow>
       ))}

@@ -98,6 +98,8 @@ describe('★원격 이미지를 그리는 곳은 변환을 거친다', () => {
     const allowed = new Set([
       'src/shared/components/product/Thumbnail.tsx',
       'src/features/community/ui/PostImages.tsx',
+      // 사진 크게 보기 — 부르는 쪽이 webp 로 바꿔 넘기고 실패하면 원본(fallbackUri)으로 바꾼다.
+      'src/screens/detail/ui/ImageViewerModal.tsx',
       // 토스·배너·상세 본문은 cdn.jirum-alarm.com 이 아니라 외부 원본이다.
       'src/screens/detail/ui/TossDetailImages.tsx',
       'src/screens/detail/ProductDetailScreen.tsx',

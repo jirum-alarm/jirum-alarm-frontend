@@ -25,6 +25,7 @@ import {
   type SourceData,
 } from '../model/types';
 import {dealFreshnessAt, isSeenBasedFreshness} from '../lib/price-signals';
+import type {EvidenceTargetsReady} from '../lib/evidence-target';
 import {stripPriceFromTitle} from '@/entities/home/lib/toss';
 import Badge from '@/shared/components/ui/Badge';
 import {detailInfo} from '@jirum/design-system/recipes';
@@ -37,6 +38,7 @@ export default function ProductInfo({
   isUserLogin,
   hidePrice,
   evidence,
+  evidenceTargetsReady,
   onPressEvidenceMore,
 }: {
   product: ProductDetail;
@@ -46,6 +48,8 @@ export default function ProductInfo({
   hidePrice?: boolean;
   /** 왜 핫딜인지 — 근거 블록·가격 조건 줄·정보 표에서 뺄 행(서버 dealEvidence) */
   evidence?: DealEvidence | null;
+  /** 「근거 보기」가 내려갈 섹션(가격 추이·커뮤니티 반응)이 그려졌는지 — 안 그려졌으면 링크를 숨긴다. */
+  evidenceTargetsReady: EvidenceTargetsReady;
   onPressEvidenceMore?: (target: EvidenceTarget) => void;
 }) {
   const now = useNowMinute();
@@ -148,6 +152,7 @@ export default function ProductInfo({
           <DealEvidenceBlock
             productId={productId}
             evidence={evidence}
+            targetsReady={evidenceTargetsReady}
             onPressMore={target => onPressEvidenceMore?.(target)}
           />
         </>

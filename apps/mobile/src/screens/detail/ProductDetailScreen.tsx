@@ -6,7 +6,7 @@ import React, {
   useState,
   useSyncExternalStore,
 } from 'react';
-import {RefreshControl, ScrollView, View} from 'react-native';
+import {Pressable, RefreshControl, ScrollView, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {HELP_PATH} from '@/constants/env';
 import {Analytics} from '@/shared/lib/analytics/ga4';
@@ -72,7 +72,10 @@ import {
 import ShareSheet from './ui/ShareSheet';
 import KakaoOpenChatPrompt from './ui/KakaoOpenChatPrompt';
 import TossDetailImages from './ui/TossDetailImages';
+import ImageViewerModal from './ui/ImageViewerModal';
+import {convertToWebp} from '@/shared/lib/format/image';
 import DetailBand from './ui/DetailBand';
+import type {EvidenceTarget, EvidenceTargetsReady} from './lib/evidence-target';
 import ViewerCount, {MIN_VIEWER_COUNT} from './ui/ViewerCount';
 import CommunityReaction from '@/features/community-reaction/ui/CommunityReaction';
 import PressableOpacity from '@/shared/components/PressableOpacity';
@@ -140,6 +143,14 @@ function NativeDetail({
   // 근거 블록 「근거 보기」가 내려갈 섹션 위치 — 가격 근거는 가격 추이, 사람 근거는 커뮤니티 반응.
   const priceHistoryY = useRef<number | null>(null);
   const communityY = useRef<number | null>(null);
+  // 그 섹션이 그려져 위치를 아는지 — 모를 땐 「근거 보기」를 숨긴다(눌러도 갈 곳이 없던 dead click).
+  // 위치(y)는 ref 로 두고 «처음 알게 된 순간»만 state 를 바꾼다(레이아웃마다 상세 전체를 다시 그리지 않게).
+  const [evidenceTargetsReady, setEvidenceTargetsReady] =
+    useState<EvidenceTargetsReady>({priceHistory: false, community: false});
+  const markTargetReady = (target: EvidenceTarget) =>
+    setEvidenceTargetsReady(prev =>
+      prev[target] ? prev : {...prev, [target]: true},
+    );
   // 종료 딜 '최신 핫딜' 블록 — 첫 줄이 화면에 들어오면 노출로 센다(블록이 기록). 한 번만 state 를 바꾼다.
   const expiredBlockY = useRef<number | null>(null);
   const viewportHeight = useRef(0);
@@ -154,6 +165,11 @@ function NativeDetail({
       setExpiredSeen(true);
   };
   const [shareOpen, setShareOpen] = useState(false);
+  // 사진 크게 보기 — 대표 사진·토스 상세 사진을 누르면 연다(web 상세와 같은 동작).
+  const [viewer, setViewer] = useState<{
+    uri: string;
+    fallbackUri?: string | null;
+  } | null>(null);
   const navigation = useNavigation<DetailNavigationProp>();
   const {getWebViewRef} = useWebviewContext();
   const {
@@ -355,12 +371,26 @@ function NativeDetail({
         {/* web ProductDetailImage 와 같이 webp → 원본 → 카테고리 대체 그림 순서.
             CDN 은 webp 만 갖고 있어 원본 확장자 URL 은 403 이다. */}
         <View className="relative aspect-square w-full bg-gray-50">
-          <Thumbnail
-            uri={product.thumbnail}
-            categoryId={product.categoryId}
-            resizeMode="cover"
-            full
-          />
+          {/* 누르면 크게 보기 — 사진을 눌러 보는 사람이 많은데 아무 일이 없었다(web Clarity dead click, 2026-10-20). */}
+          <Pressable
+            className="size-full"
+            disabled={!product.thumbnail}
+            accessibilityRole="imagebutton"
+            accessibilityLabel="사진 크게 보기"
+            onPress={() =>
+              product.thumbnail &&
+              setViewer({
+                uri: convertToWebp(product.thumbnail) ?? product.thumbnail,
+                fallbackUri: product.thumbnail,
+              })
+            }>
+            <Thumbnail
+              uri={product.thumbnail}
+              categoryId={product.categoryId}
+              resizeMode="cover"
+              full
+            />
+          </Pressable>
           {showViewerCount ? (
             <ViewerCount count={product.viewCount ?? 0} />
           ) : null}
@@ -375,6 +405,7 @@ function NativeDetail({
             isUserLogin={isLogin}
             hidePrice={hidePrice}
             evidence={evidence}
+            evidenceTargetsReady={evidenceTargetsReady}
             onPressEvidenceMore={target => {
               const y =
                 target === 'priceHistory'
@@ -489,6 +520,7 @@ function NativeDetail({
             topDivider
             onLayout={e => {
               priceHistoryY.current = e.nativeEvent.layout.y;
+              markTargetReady('priceHistory');
             }}
             currentPrice={
               product.price
@@ -504,13 +536,17 @@ function NativeDetail({
             <View
               onLayout={e => {
                 communityY.current = e.nativeEvent.layout.y;
+                markTargetReady('community');
               }}>
               <CommunityReaction productId={productId} isUserLogin={isLogin} />
             </View>
           </>
         ) : null}
         <DetailBand />
-        <TossDetailImages images={source.toss?.images} />
+        <TossDetailImages
+          images={source.toss?.images}
+          onPressImage={uri => setViewer({uri})}
+        />
         <CommentSection
           productId={productId}
           myUserId={myUserId}
@@ -540,6 +576,11 @@ function NativeDetail({
         onPressTop={() => scrollRef.current?.scrollTo({y: 0, animated: true})}
       />
       {shareSheet}
+      <ImageViewerModal
+        uri={viewer?.uri ?? null}
+        fallbackUri={viewer?.fallbackUri}
+        onClose={() => setViewer(null)}
+      />
     </View>
   );
 }

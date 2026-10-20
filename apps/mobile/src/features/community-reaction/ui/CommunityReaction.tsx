@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {ActivityIndicator, Pressable, View} from 'react-native';
-import {emptyText, sectionTitle} from '@jirum/design-system/recipes';
+import {emptyText, sectionTitle, wordTag} from '@jirum/design-system/recipes';
 import {fixed} from '@jirum/design-system';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
@@ -28,28 +28,30 @@ import {
 
 const MIN_REACTIONS_FOR_PERCENT = 5;
 
-/** web KeywordChip 과 같은 테두리/글자색 규칙. */
+/**
+ * 반응 키워드 한 개 — 누를 수 없는 단어(wordTag, web KeywordChip 과 같은 모양). 흰 바탕·테두리 알약은 버튼처럼 보여
+ * 눌러 보는 사람이 많았는데 아무 일이 없었다(web Clarity dead click, 2026-10-20). 키워드가 «좋아했어요» 같은
+ * 반응 문구라 검색어로 보낼 수도 없어 모양을 바꿨다. 긍·부정은 숫자 색이 말한다.
+ */
 function KeywordChip({item}: {item: ReactionKeywordItem}) {
   const positive = item.type === 'POSITIVE';
   const negative = item.type === 'NEGATIVE';
 
   return (
     <View
-      className={cn(
-        'flex-row gap-x-1 rounded-full border bg-white px-3 py-1.5',
-        positive
-          ? 'border-secondary-300'
-          : negative
-          ? 'border-error-200'
-          : 'border-gray-300',
-      )}>
+      className={cn('flex-row gap-x-1', wordTag.box, wordTag.tone.fill.box)}>
       {item.tag ? (
-        <Text className="text-xs font-medium text-gray-500">{item.tag}</Text>
+        <Text className={cn(wordTag.text, 'font-medium text-gray-600')}>
+          {item.tag}
+        </Text>
       ) : null}
-      <Text className="text-xs font-medium text-gray-900">{item.name}</Text>
+      <Text className={cn(wordTag.text, 'font-medium text-gray-900')}>
+        {item.name}
+      </Text>
       <Text
         className={cn(
-          'text-xs font-semibold',
+          wordTag.text,
+          'font-semibold',
           positive
             ? 'text-secondary-700'
             : negative

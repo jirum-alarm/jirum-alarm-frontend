@@ -18,12 +18,17 @@ import {Analytics} from '@/shared/lib/analytics/ga4';
 import {cn} from '@/shared/lib/styling';
 import {useColors} from '@/shared/theme/useColors';
 
+import {
+  type EvidenceTarget,
+  type EvidenceTargetsReady,
+  evidenceMoreTarget,
+} from '../lib/evidence-target';
+
 export type DealEvidence = NonNullable<
   NonNullable<ProductDealEvidenceQuery['product']>['dealEvidence']
 >;
 
-/** 「근거 보기」가 내려갈 섹션 — 다나와 근거는 블록 안 숫자가 근거라 없다. */
-export type EvidenceTarget = 'priceHistory' | 'community';
+export type {EvidenceTarget};
 
 /**
  * 왜 핫딜인지 — 가격 바로 아래 블록 하나. web `features/product-detail/ui/DealEvidenceBlock.tsx` 이식.
@@ -33,10 +38,13 @@ export type EvidenceTarget = 'priceHistory' | 'community';
 export default function DealEvidenceBlock({
   productId,
   evidence,
+  targetsReady,
   onPressMore,
 }: {
   productId: number;
   evidence?: DealEvidence | null;
+  /** 「근거 보기」가 내려갈 섹션이 그려졌는지 — 안 그려졌으면 링크를 숨긴다. */
+  targetsReady: EvidenceTargetsReady;
   onPressMore: (target: EvidenceTarget) => void;
 }) {
   const c = useColors();
@@ -75,12 +83,7 @@ export default function DealEvidenceBlock({
   // 「답」 숨김 실험(price_answer_holdout_v1) — 군을 알기 전·숨김 군이면 가격 답 블록을 그리지 않는다.
   if (priceAnswer && holdout !== false) return null;
 
-  const target: EvidenceTarget | null =
-    headline.kind === DealEvidenceKind.History
-      ? 'priceHistory'
-      : headline.kind === DealEvidenceKind.Community
-      ? 'community'
-      : null;
+  const target = evidenceMoreTarget(headline.kind, targetsReady);
   const strong = headline.strength === DealEvidenceStrength.Strong;
   const isPeople = headline.kind === DealEvidenceKind.Community;
   const part = strong ? headline.highlight : null;
