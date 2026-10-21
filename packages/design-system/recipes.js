@@ -210,6 +210,8 @@ const wordTag = {
   text: 'text-xs',
   tone: {
     fill: {box: 'bg-gray-100', text: 'text-gray-700'},
+    /** 색 면 카드(커뮤니티 반응의 secondary-50) 위 — gray-100 은 파랑 위에서 탁해진다. 테두리 없이 면만이라 버튼처럼 안 보인다. */
+    onTint: {box: 'bg-white', text: 'text-gray-700'},
     more: {box: 'border border-gray-200', text: 'font-medium text-gray-700'},
     struck: {box: 'border border-gray-200', text: 'text-gray-500 line-through'},
   },

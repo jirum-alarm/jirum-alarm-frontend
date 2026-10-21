@@ -77,6 +77,18 @@ const Gallery = () => (
           +3개 더 보기
         </span>
       </div>
+      <div className="bg-secondary-50 flex flex-wrap gap-2 rounded-xl p-4">
+        <span
+          className={`${wordTag.box} ${wordTag.tone.onTint.box} ${wordTag.text} ${wordTag.tone.onTint.text}`}
+        >
+          가격 가격이 싸요
+        </span>
+        <span
+          className={`${wordTag.box} ${wordTag.tone.onTint.box} ${wordTag.text} ${wordTag.tone.onTint.text}`}
+        >
+          상품 맛있어요
+        </span>
+      </div>
     </section>
   </div>
 );

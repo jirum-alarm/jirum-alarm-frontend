@@ -156,7 +156,7 @@ const catalog = [
   {
     id: 'wordTag',
     name: '단어 태그',
-    use: '누를 수 없는 단어 나열(관심사 키워드·제외어)과 「+N개 더 보기」',
+    use: '누를 수 없는 단어 나열(관심사 키워드·제외어·커뮤니티 반응 키워드)과 「+N개 더 보기」. 색 면 카드 위면 onTint',
     recipe: 'wordTag',
     web: null,
     app: null,
@@ -164,6 +164,8 @@ const catalog = [
     sites: [
       `${W}features/mypage/ui/theme/ThemeDetail.tsx`,
       `${A}screens/mypage/ThemeDetailScreen.tsx`,
+      `${W}widgets/product-detail/ui/CommunityReaction.tsx`,
+      `${A}features/community-reaction/ui/CommunityReaction.tsx`,
     ],
   },
   {
