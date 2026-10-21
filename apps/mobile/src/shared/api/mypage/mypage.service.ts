@@ -41,7 +41,8 @@ export type PushSettingKey =
   | 'keywordAlert'
   | 'marketing'
   | 'nightAlerts'
-  | 'communityAlert';
+  | 'communityAlert'
+  | 'emailDigest';
 /** 방해금지 시간(KST 시 0~23). 둘 다 null = 꺼짐 — 서버는 둘을 함께 받는다(하나만 보내면 거부). */
 export type MyPushSetting = Record<PushSettingKey, boolean> & {
   quietHoursStart: number | null;
