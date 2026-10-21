@@ -95,11 +95,10 @@ export const defaultMetadata: Metadata = {
     icon: [{ url: faviconUrl, sizes: '48x48', type: 'image/x-icon' }],
     apple: [{ url: appleTouchIconUrl }],
   },
-  alternates: {
-    canonical: METADATA_SERVICE_URL,
-    // RSS 링크는 여기 두지 않는다 — 라우트가 alternates 를 덮으면 같이 날아감(shallow merge).
-    // app/layout.tsx 의 <link rel="alternate"> 가 정본.
-  },
+  // alternates(canonical) 는 여기 두지 않는다 — 두면 자기 canonical 이 없는 noindex 페이지(/search·/app·글쓰기·404 등)가
+  // 홈을 정본으로 물려받아 «noindex + 홈 canonical» 모순 신호가 된다(2026-10-22). 색인 페이지는 전부 자기 canonical 을 쓴다(홈 포함).
+  // RSS 링크도 여기 두지 않는다 — 라우트가 alternates 를 덮으면 같이 날아감(shallow merge).
+  // app/layout.tsx 의 <link rel="alternate"> 가 정본.
   robots: robotsDirective,
   other: {
     'platform:name': siteName,

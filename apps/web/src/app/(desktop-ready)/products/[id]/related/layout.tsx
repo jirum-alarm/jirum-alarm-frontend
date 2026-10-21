@@ -53,11 +53,9 @@ export async function generateMetadata({
       description,
       images: image,
     },
-    // 상세의 부분 뷰(비슷한 상품). 독립 색인 가치가 없어 noindex + canonical은 부모 상세로.
+    // 상세의 부분 뷰(비슷한 상품). 독립 색인 가치가 없어 noindex(링크는 따라감).
+    // canonical 은 걸지 않는다 — noindex 와 남의 canonical 을 같이 내면 구글이 noindex 를 정본(상세)에 옮겨 읽을 여지가 있다(2026-10-22).
     robots: { index: false, follow: true },
-    alternates: {
-      canonical: `${METADATA_SERVICE_URL}/products/${id}`,
-    },
   };
 }
 

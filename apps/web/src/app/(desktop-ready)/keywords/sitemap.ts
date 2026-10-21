@@ -1,7 +1,7 @@
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
 import { fetchKeywordHubs } from '@/entities/keyword-hub/api/fetchKeywordHub';
-import { keywordHubPath } from '@/entities/keyword-hub/lib/keyword-hub';
+import { KEYWORD_HUB_MIN_DEALS, keywordHubPath } from '@/entities/keyword-hub/lib/keyword-hub';
 
 import type { MetadataRoute } from 'next';
 
@@ -25,11 +25,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.5,
     },
-    ...hubs.map((h) => ({
-      url: `${METADATA_SERVICE_URL}${keywordHubPath(h)}`,
-      ...(h.lastDealAt ? { lastModified: new Date(h.lastDealAt) } : {}),
-      changeFrequency: 'daily' as const,
-      priority: 0.7,
-    })),
+    // 얇은 허브(최근 딜 KEYWORD_HUB_MIN_DEALS 미만)는 페이지가 noindex 라 싣지 않는다 — 사이트맵의 noindex URL 은
+    // 크롤 예산만 쓰고 «제출됐지만 noindex» 로 남는다(2026-10-22: 80개 중 3개). 기준은 buildKeywordHubSeo.indexable 과 같다.
+    ...hubs
+      .filter((h) => h.recentDealCount >= KEYWORD_HUB_MIN_DEALS)
+      .map((h) => ({
+        url: `${METADATA_SERVICE_URL}${keywordHubPath(h)}`,
+        ...(h.lastDealAt ? { lastModified: new Date(h.lastDealAt) } : {}),
+        changeFrequency: 'daily' as const,
+        priority: 0.7,
+      })),
   ];
 }

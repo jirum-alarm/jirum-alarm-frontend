@@ -3,15 +3,36 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 
 import { checkDevice } from '@/shared/actions/agent';
+import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
 import ThemeList from '@/features/mypage/ui/theme/ThemeList';
 
+const themesTitle = '관심사별 핫딜 알림 | 지름알림';
+const themesUrl = `${METADATA_SERVICE_URL}/themes`;
+const themesOgImage = `${METADATA_SERVICE_URL}/opengraph-image.webp`;
+
+// openGraph·twitter 를 안 주면 루트(홈)의 제목·설명·주소가 그대로 나간다(얕은 병합) — 공유 카드가 홈으로 보였다(2026-10-22).
 export const metadata: Metadata = {
-  title: '관심사별 핫딜 알림 | 지름알림',
+  title: themesTitle,
   description: THEME_COPY.intro,
   alternates: { canonical: '/themes' },
+  openGraph: {
+    title: themesTitle,
+    description: THEME_COPY.intro,
+    url: themesUrl,
+    images: [{ url: themesOgImage, width: 1200, height: 630, alt: themesTitle }],
+    type: 'website',
+    siteName: '지름알림',
+    locale: 'ko_KR',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: themesTitle,
+    description: THEME_COPY.intro,
+    images: themesOgImage,
+  },
 };
 
 const ThemesPage = async () => {
