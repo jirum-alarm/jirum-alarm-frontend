@@ -32,6 +32,7 @@ const MIN_REACTIONS_FOR_PERCENT = 5;
  * 반응 키워드 한 개 — 누를 수 없는 단어(wordTag, web KeywordChip 과 같은 모양). 흰 바탕·테두리 알약은 버튼처럼 보여
  * 눌러 보는 사람이 많았는데 아무 일이 없었다(web Clarity dead click, 2026-10-20). 키워드가 «좋아했어요» 같은
  * 반응 문구라 검색어로 보낼 수도 없어 모양을 바꿨다. 긍·부정은 숫자 색이 말한다.
+ * 면은 onTint(흰 면) — 기본 회색 면은 파란 카드 위에서 탁했다(2026-10-22).
  */
 function KeywordChip({item}: {item: ReactionKeywordItem}) {
   const positive = item.type === 'POSITIVE';
@@ -39,7 +40,7 @@ function KeywordChip({item}: {item: ReactionKeywordItem}) {
 
   return (
     <View
-      className={cn('flex-row gap-x-1', wordTag.box, wordTag.tone.fill.box)}>
+      className={cn('flex-row gap-x-1', wordTag.box, wordTag.tone.onTint.box)}>
       {item.tag ? (
         <Text className={cn(wordTag.text, 'font-medium text-gray-600')}>
           {item.tag}
