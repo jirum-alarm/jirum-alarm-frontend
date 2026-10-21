@@ -300,7 +300,9 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
           setSupportMultipleWindows={false}
           javaScriptCanOpenWindowsAutomatically
           allowsInlineMediaPlayback
-          decelerationRate="normal"
+          // 숫자로 — 'normal' 을 숫자로 바꾸는 건 iOS 래퍼뿐이라 Android 네이티브가 문자열을 Double 로
+          // 캐스팅하다 죽는다(Sentry JIRUM-ALARM-APP-6 ClassCastException). 0.998 = iOS 'normal'.
+          decelerationRate={0.998}
         />
         {cover ? (
           <View
