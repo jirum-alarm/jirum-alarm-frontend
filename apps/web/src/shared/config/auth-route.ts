@@ -17,7 +17,7 @@ export type AuthAction = 'pass' | 'refresh' | 'guest-refresh' | 'redirect';
 /**
  * 쿠키 상태만 보고 무엇을 할지 결정한다.
  *
- * ACCESS_TOKEN 쿠키의 expires 는 JWT exp 와 동일(백엔드 1h/7d)하므로, 만료되면 브라우저가
+ * ACCESS_TOKEN 쿠키의 expires 는 JWT exp 와 동일(백엔드 1h)하므로, 만료되면 브라우저가
  * 아예 전송하지 않는다. 즉 "쿠키 부재 = 만료"이고, exp 디코드나 me 왕복 검증이 필요 없다.
  *
  * 갱신을 특정 경로로 좁히면(구 mypage/like/trending 화이트리스트) 그 밖으로 진입한 유저는

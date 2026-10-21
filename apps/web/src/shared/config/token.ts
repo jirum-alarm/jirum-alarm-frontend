@@ -1,5 +1,6 @@
 export const accessTokenExpiresAt = 1 * 60 * 60 * 1000; // 1hour
-export const refreshTokenExpiresAt = 7 * 24 * 60 * 60 * 1000; // 7day
+// 백엔드 refresh 수명(회원·게스트 1년 슬라이딩)과 맞춘다 — 쿠키가 먼저 지워지면 토큰이 살아 있어도 로그인이 풀린다.
+export const refreshTokenExpiresAt = 365 * 24 * 60 * 60 * 1000; // 1year
 
 /**
  * 게스트(로그인 없이 키워드 알림만 받는 기기 계정) 쿠키.
