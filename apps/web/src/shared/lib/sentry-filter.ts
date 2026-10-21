@@ -114,6 +114,15 @@ function trimServerSpans(event: Event): void {
   event.spans = kept;
 }
 
+// 브라우저 트랜잭션의 리소스 로딩 span(resource.script·img·link 등)은 보내지 않는다.
+// ★왜(2026-10-21): 서버 span 을 추린 뒤 남은 할당량의 큰 몫이 페이지마다 수십 개씩 붙는 리소스 span 이었다.
+// 웹 바이탈(LCP·FCP·CLS 등)은 루트의 measurements·속성(lcp.element 등)에 따로 실려 리소스 span 없이도 그대로 남고,
+// 에러는 trace_id 로 트랜잭션에 이어진다. 리소스별 크기·지연은 개발자 도구·Lighthouse 로 본다.
+function dropResourceSpans(event: Event): void {
+  if (!event.spans || event.contexts?.trace?.op === 'http.server') return;
+  event.spans = event.spans.filter((span) => !span.op?.startsWith('resource.'));
+}
+
 // 크롤러 판정은 shared/config/user-agent 의 isCrawlerUA 를 넘긴다(이 파일은 node --test 가 바로 읽게 의존 없이 둔다).
 export function createTransactionFilter(isCrawler: (ua: string) => boolean) {
   return <T extends Event>(event: T): T | null => {
@@ -121,6 +130,7 @@ export function createTransactionFilter(isCrawler: (ua: string) => boolean) {
     if (event.contexts?.trace?.op === 'http.server.middleware') return null;
     if (isCrawler(requestUserAgent(event))) return null;
     trimServerSpans(event);
+    dropResourceSpans(event);
     return event;
   };
 }

@@ -147,8 +147,24 @@ test('실패한 span 은 종류와 상관없이 남긴다', () => {
   );
 });
 
-test('브라우저 트랜잭션의 span 은 건드리지 않는다', () => {
-  const spans = [span('res', 'root', 'resource.script', 'https://jirum-alarm.com/x.js')];
-  const event = serverTransaction(spans, 'pageload');
-  assert.equal(dropUnneededTransaction(event)?.spans?.length, 1);
+test('브라우저 트랜잭션은 리소스 span 만 빼고 웹 바이탈 측정값·나머지 span 은 그대로 둔다', () => {
+  const event: Event = {
+    ...serverTransaction(
+      [
+        span('script', 'root', 'resource.script', 'https://jirum-alarm.com/x.js'),
+        span('img', 'root', 'resource.img', 'https://cdn.jirum-alarm.com/a.webp'),
+        span('fcp', 'root', 'paint', 'first-contentful-paint'),
+        span('req', 'root', 'browser.request', 'https://jirum-alarm.com/'),
+        span('gql', 'root', 'http.client', 'POST https://jirum-alarm.com/api/graphql'),
+      ],
+      'pageload',
+    ),
+    measurements: { lcp: { value: 1200, unit: 'millisecond' } },
+  };
+  const result = dropUnneededTransaction(event);
+  assert.deepEqual(
+    result?.spans?.map((s) => s.span_id),
+    ['fcp', 'req', 'gql'],
+  );
+  assert.deepEqual(result?.measurements, { lcp: { value: 1200, unit: 'millisecond' } });
 });
