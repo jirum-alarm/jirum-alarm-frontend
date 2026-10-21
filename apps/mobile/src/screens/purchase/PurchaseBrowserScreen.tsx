@@ -295,7 +295,9 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
             setCover(null);
           }}
           allowsBackForwardNavigationGestures
-          sharedCookiesEnabled
+          // sharedCookiesEnabled 를 켜지 않는다 — iOS 에선 쇼핑몰이 쿠키를 구울 때마다 저장소 쿠키 전부를
+          // 메인 스레드에서 다시 써 화면이 몇 초씩 멈췄다(App Hanging). 외부 쇼핑몰이라 앱 쿠키가 필요 없고,
+          // 쇼핑몰 로그인은 웹뷰 기본 저장소에 그대로 남는다.
           // 결제창(PG)이 새 창으로 뜨는 쇼핑몰이 있다 — 같은 웹뷰에서 연다.
           setSupportMultipleWindows={false}
           javaScriptCanOpenWindowsAutomatically
