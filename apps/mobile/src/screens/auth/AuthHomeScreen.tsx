@@ -59,7 +59,10 @@ const AuthHomeScreen = () => {
             </Text>
           ) : null}
         </View>
+        {/* 로그인 중에만 opacity 가 붙으면 Android Fabric 이 이 View 를 그때 새로 만들며 버튼들을 옮겨
+            붙인다 — 네이버 로그인 창에서 막 돌아온 순간 이 이동이 addViewAt 크래시를 냈다. 늘 실제 View 로 둔다. */}
         <View
+          collapsable={false}
           style={[
             styles.buttonContainer,
             isSocialLoginPending && styles.pending,
