@@ -13,6 +13,7 @@ import { categoryRankingPath } from '@/shared/config/category-ranking';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { robotsDirective } from '@/shared/config/metadata';
 import { isLightSsrCrawlerUA, isLinkPreviewUA } from '@/shared/config/user-agent';
+import { jsonLdHtml } from '@/shared/lib/json-ld';
 
 import { isFromToss, stripPriceFromTitle } from '@/entities/product/lib/from-toss';
 import { parseProductId } from '@/entities/product/lib/product-id';
@@ -565,21 +566,12 @@ export default async function ProductDetail({
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(jsonLd)} />
       {itemPageLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemPageLd) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(itemPageLd)} />
       )}
       {breadcrumbLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(breadcrumbLd)} />
       )}
       <CollectProductOnView productId={productId} />
       <ProductPrefetch

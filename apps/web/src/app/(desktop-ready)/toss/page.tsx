@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
+import { jsonLdHtml } from '@/shared/lib/json-ld';
 
 import { fetchTossDeals } from '@/widgets/toss/api/toss.api';
 import { TOSS_SECTIONS } from '@/widgets/toss/model/mock';
@@ -52,10 +53,7 @@ export default async function TossDailyPage() {
   return (
     <>
       {itemListLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(itemListLd)} />
       )}
       {/* 페이지 주제를 h1 으로 한 번 선언한다. 본문은 탭부터 시작해 h1 이 없었음(2026-09-02 실측).
           themes/page.tsx 와 같은 sr-only 관행 — 화면 레이아웃은 그대로 두고 문서 구조만 채운다. */}

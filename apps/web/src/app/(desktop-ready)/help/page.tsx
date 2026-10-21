@@ -15,6 +15,7 @@ import { checkDevice } from '@/shared/actions/agent';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
+import { jsonLdHtml } from '@/shared/lib/json-ld';
 import { OKACHAT_LINK } from '@/shared/lib/okachat';
 import { ArrowDown, ArrowRight } from '@/shared/ui/common/icons';
 import { IconLogo } from '@/shared/ui/common/icons/Illust';
@@ -485,11 +486,7 @@ export default async function HelpPage() {
   return (
     <main className="max-w-mobile-max pc:max-w-5xl pc:px-10 pc:pt-20 mx-auto w-full px-5 pt-14 pb-24">
       {[faqLd, breadcrumbLd].map((ld, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
-        />
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(ld)} />
       ))}
       <DealsMobileHeader title="지름알림 사용법" />
       <OpenFaqFromHash />

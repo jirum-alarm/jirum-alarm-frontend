@@ -14,6 +14,7 @@ import { isTabRootPath } from '@/shared/config/tab-root';
 import { CHUNK_RELOAD_SCRIPT } from '@/shared/lib/chunk-reload';
 import { cn } from '@/shared/lib/cn';
 import { pretendard } from '@/shared/lib/fonts';
+import { jsonLdHtml } from '@/shared/lib/json-ld';
 
 import { PRICE_ANSWER_HOLDOUT_SCRIPT } from '@/features/product-detail/lib/price-answer-holdout';
 
@@ -94,14 +95,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           title="지름알림 - 실시간 핫딜"
           href="/rss.xml"
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(jsonLd)} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(organizationLd)} />
         <meta name="application-name" content="지름알림" />
         <meta name="author" content="지름알림" />
       </head>

@@ -1,6 +1,7 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
+import { jsonLdHtml } from '@/shared/lib/json-ld';
 
 import { CategoryQueries, getCategoriesForUser } from '@/entities/category';
 import { ProductQueries } from '@/entities/product';
@@ -58,10 +59,7 @@ const TrendingContainerServer = async ({ tab }: Props) => {
   return (
     <>
       {itemListLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(itemListLd)} />
       )}
       <HydrationBoundary state={dehydrate(queryClient)}>
         <TrendingContainer initialTab={tab} />

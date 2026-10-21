@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
+import { jsonLdHtml } from '@/shared/lib/json-ld';
 
 import { fetchKeywordHubs } from '@/entities/keyword-hub/api/fetchKeywordHub';
 import { keywordHubPath } from '@/entities/keyword-hub/lib/keyword-hub';
@@ -79,10 +80,7 @@ export default async function HotdealAlarmGuidePage() {
 
   return (
     <main className="max-w-mobile-max pc:pt-24 mx-auto w-full px-5 pt-14 pb-24">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(howToLd)} />
       <DealsMobileHeader title="핫딜 알림 받는 법" />
 
       <article className="text-15 space-y-10 leading-relaxed text-gray-800">

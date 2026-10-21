@@ -8,6 +8,7 @@ import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { robotsDirective } from '@/shared/config/metadata';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
+import { jsonLdHtml } from '@/shared/lib/json-ld';
 
 import { fetchKeywordHub, fetchKeywordHubs } from '@/entities/keyword-hub/api/fetchKeywordHub';
 import {
@@ -160,11 +161,7 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
   return (
     <main className="max-w-mobile-max pc:max-w-layout-max pc:pt-24 mx-auto w-full px-5 pt-14 pb-24">
       {[itemListLd, breadcrumbLd, faqLd].filter(Boolean).map((ld, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
-        />
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(ld)} />
       ))}
       <DealsMobileHeader title={`${hub.name} 핫딜`} />
 
