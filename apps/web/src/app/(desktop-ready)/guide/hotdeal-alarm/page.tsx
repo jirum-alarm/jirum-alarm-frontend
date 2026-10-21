@@ -5,6 +5,7 @@ import { NIGHT_HOURS, NIGHT_HOURS_TEXT } from '@jirum/domain/quiet-hours';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
+import { checkDevice } from '@/shared/actions/agent';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
@@ -19,6 +20,8 @@ import DealsMobileHeader from '../../deals/[slug]/DealsMobileHeader';
  * "핫딜 알림 받는 법" 안내. 네이버 자동완성에 "쿠팡 핫딜 알림·네이버 핫딜 알림 받는 법"이 뜨고
  * 그 질의엔 AI 브리핑이 붙는다(2026-10-01 실측) — 정보형 질의를 받을 문서가 우리에겐 없었다.
  * 숫자(하루 3건)는 실제 서버·화면 값이다. 바뀌면 같이 고칠 것. 키워드·제외 단어 상한과 야간 시간은 정본 @jirum/domain 에서 온다.
+ * 앱은 /help 질문의 링크로 이 글을 웹뷰로 연다 — /help 와 같이 앱에선 위치를 「내정보」로 쓰고, 웹 마이페이지·앱 받기 링크를 뺀다
+ * (웹뷰 안의 웹 마이페이지는 로그인 상태가 다를 수 있다). 검색엔진이 읽는 HowTo JSON-LD 는 웹 글 그대로 둔다.
  */
 const PATH = '/guide/hotdeal-alarm';
 const title = '핫딜 알림 받는 법 — 원하는 상품 핫딜이 올라오면 바로 받기 | 지름알림';
@@ -79,6 +82,8 @@ const howToLd = {
 export const dynamic = 'force-dynamic';
 
 export default async function HotdealAlarmGuidePage() {
+  const { isJirumAlarmApp } = await checkDevice();
+  const myPage = isJirumAlarmApp ? '내정보' : '마이페이지';
   // 알림을 건 사람이 많은 순 — 이 섹션 제목이 "요즘 많이 받는 키워드"다.
   const popular = [...(await fetchKeywordHubs())]
     .sort((a, b) => b.subscriberCount - a.subscriberCount)
@@ -104,17 +109,20 @@ export default async function HotdealAlarmGuidePage() {
           <ol className="list-decimal space-y-2 pl-5">
             {STEPS.map((s) => (
               <li key={s.name}>
-                <strong>{s.name}</strong> — {s.text}
+                <strong>{s.name}</strong> —{' '}
+                {isJirumAlarmApp ? s.text.replaceAll('마이페이지 →', '내정보 →') : s.text}
               </li>
             ))}
           </ol>
-          <Link
-            href={PAGE.MYPAGE_KEYWORD}
-            rel="nofollow"
-            className="mt-4 inline-flex rounded-full bg-gray-900 px-4 py-2 text-sm font-semibold text-white"
-          >
-            키워드 알림 등록하기
-          </Link>
+          {isJirumAlarmApp ? null : (
+            <Link
+              href={PAGE.MYPAGE_KEYWORD}
+              rel="nofollow"
+              className="mt-4 inline-flex rounded-full bg-gray-900 px-4 py-2 text-sm font-semibold text-white"
+            >
+              키워드 알림 등록하기
+            </Link>
+          )}
         </section>
 
         <section>
@@ -153,16 +161,18 @@ export default async function HotdealAlarmGuidePage() {
             </li>
             <li>
               {NIGHT_HOURS_TEXT} 사이 알림은 야간 알림 수신에 동의하지 않으면 아침 {NIGHT_HOURS.end}
-              시에 모아서 보내드려요. 마이페이지 알림 설정에서 바꿀 수 있어요.
+              시에 모아서 보내드려요. {myPage} → 알림 설정에서 바꿀 수 있어요.
             </li>
             <li>알림 조건(제외 단어·가격 범위)이 너무 좁지 않은지 확인해요.</li>
-            <li>
-              푸시를 가장 확실하게 받으려면{' '}
-              <Link href="/app" className="underline underline-offset-2">
-                지름알림 앱
-              </Link>
-              을 쓰는 걸 권해요.
-            </li>
+            {isJirumAlarmApp ? null : (
+              <li>
+                푸시를 가장 확실하게 받으려면{' '}
+                <Link href="/app" className="underline underline-offset-2">
+                  지름알림 앱
+                </Link>
+                을 쓰는 걸 권해요.
+              </li>
+            )}
           </ul>
         </section>
 
