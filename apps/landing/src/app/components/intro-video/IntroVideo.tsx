@@ -8,6 +8,8 @@ import SectionHeader from '../SectionHeader';
 
 // 소개 영상(33초). 원본·렌더 스크립트는 레포 밖(작업 세션 스크래치) — 다시 만들면 같은 경로·파일명으로 덮어쓴다.
 // 폰은 세로, 넓은 화면은 가로. 안 보이는 쪽은 preload="none" 이라 내려받지 않는다.
+// 포스터는 14초 장면(「원하는 딜이 뜨면 바로 알려드려요」). 영상 속 「9개 커뮤니티」(6·24초)는 옛 숫자라 첫 화면에 걸지 않는다 —
+// 다시 렌더할 때 숫자는 @jirum/domain/service-facts 를 따른다.
 const VIDEOS = [
   {
     key: 'portrait',
@@ -98,7 +100,7 @@ const IntroVideo = () => {
   return (
     <section
       ref={sectionRef}
-      className="flex w-full flex-col items-center bg-white pt-4 pb-20 lg:pt-8 lg:pb-32"
+      className="flex w-full flex-col items-center bg-gray-50 py-20 lg:py-32"
     >
       <SectionHeader
         keyword="30초 영상"

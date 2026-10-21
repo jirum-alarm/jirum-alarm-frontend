@@ -1,9 +1,9 @@
+import Concepts from './components/concepts/Concepts';
+import Faq from './components/faq/Faq';
 import Footer from './components/footer/Footer';
 import Header from './components/header/Header';
 import IntroVideo from './components/intro-video/IntroVideo';
 import KeyVisual from './components/key-visual/KeyVisual';
-import PainPoint from './components/pain-point/PainPoint';
-import ServiceIntroduction from './components/service-introduction/ServiceIntroduction';
 import Talk from './components/talkroom/TalkRoom';
 
 export default function Home() {
@@ -11,10 +11,10 @@ export default function Home() {
     <>
       <Header />
       <KeyVisual />
-      <PainPoint />
+      <Concepts />
       <IntroVideo />
-      <ServiceIntroduction />
       <Talk />
+      <Faq />
       <Footer />
     </>
   );

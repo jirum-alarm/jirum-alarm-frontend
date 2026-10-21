@@ -1,7 +1,8 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // 서비스 숫자 정본(@jirum/domain/service-facts)은 TS 원본 그대로 export 한다 — web 처럼 여기서 컴파일한다.
+  transpilePackages: ['@jirum/domain'],
   images: {
     unoptimized: true,
     localPatterns: [

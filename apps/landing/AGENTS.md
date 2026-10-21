@@ -44,20 +44,22 @@ src/
 │   │   │   ├── NavLink.tsx      # Navigation link component
 │   │   │   └── Title.tsx        # Site title component
 │   │   ├── key-visual/          # Hero section components
-│   │   │   ├── KeyVisual.tsx    # Main hero section
-│   │   │   └── AppDownload.tsx  # App download CTAs
-│   │   ├── pain-point/          # Problem-solution section
-│   │   │   ├── PainPoint.tsx    # Pain point presentation
-│   │   │   └── Bubble.tsx       # Animated bubble elements
-│   │   ├── service-introduction/ # Service features section
-│   │   │   ├── ServiceIntroduction.tsx # Feature showcase
-│   │   │   └── ContentPage.tsx  # Content page component
+│   │   │   ├── KeyVisual.tsx    # 히어로 — 칩·약속(진짜 싼지)·설명·설치·숫자 3개
+│   │   │   ├── HeroPhone.tsx    # 잠금화면 알림 두 개(키워드 알림 → ✅ 근거 확인)를 그린 폰
+│   │   │   └── AppDownload.tsx  # App download CTAs (QR·스토어, 자리별 utm_content)
+│   │   ├── concepts/
+│   │   │   └── Concepts.tsx     # 하는 일 세 가지(모으고·따지고·알려요) 카드
+│   │   ├── intro-video/
+│   │   │   └── IntroVideo.tsx   # 33초 소개 영상(세로·가로)
 │   │   ├── talkroom/           # Talk room section
 │   │   │   └── TalkRoom.tsx     # Community discussion section
+│   │   ├── faq/
+│   │   │   └── Faq.tsx          # 자주 묻는 질문(<details>) — 전체는 web /help
 │   │   ├── footer/             # Footer components
 │   │   │   ├── Footer.tsx       # Main footer
-│   │   │   └── Banner.tsx       # Promotional banner
-│   │   └── SectionHeader.tsx   # Reusable section header
+│   │   │   └── Banner.tsx       # 마지막 설치 권유(라임 띠)
+│   │   ├── icons.tsx           # 선 아이콘(currentColor)
+│   │   └── SectionHeader.tsx   # 구역 제목(알약·제목·설명)
 │   ├── layout.tsx              # Root layout component
 │   ├── page.tsx                # Landing page home
 │   ├── icon.png                # App icon

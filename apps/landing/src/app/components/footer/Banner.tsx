@@ -1,42 +1,31 @@
-'use client';
-
-import { motion, useScroll, useTransform } from 'motion/react';
 import Image from 'next/image';
-import { useRef } from 'react';
 
 import AppDownload from '../key-visual/AppDownload';
 
-const MotionImage = motion.create(Image);
-
-const Banner = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'start start'] });
-
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '-13%']);
-
-  return (
-    <section
-      ref={ref}
-      className="mx-auto flex h-screen w-[80vw] max-w-7xl flex-col-reverse items-center justify-center pt-16 lg:flex-row lg:justify-between lg:pt-18"
-    >
-      <div className="flex shrink-0 flex-col items-center justify-center gap-y-2 pb-18 lg:items-start lg:pb-0">
-        <p className="font-semibold text-white lg:text-2xl">핫딜을 누구보다 빠르게 구매해보세요!</p>
-        <h3 className="text-22 lg:text-28 font-bold text-white">바로 다운로드하기</h3>
+// 마지막 설치 권유 — 다 읽고 내려온 사람이 위로 다시 올라가지 않게 같은 설치 버튼을 한 번 더. 라임 띠라 앞 구역과 확실히 갈린다.
+const Banner = () => (
+  <section className="w-full bg-white px-5 pt-4 pb-20 lg:px-8 lg:pb-32">
+    <div className="bg-primary-500 relative mx-auto flex max-w-6xl flex-col items-center overflow-hidden rounded-3xl px-6 py-14 text-center break-keep lg:py-20">
+      <Image
+        src="/assets/icons/jirum.svg"
+        alt=""
+        width={180}
+        height={180}
+        className="pointer-events-none absolute -bottom-10 -left-8 size-36 rotate-12 opacity-30 lg:size-56"
+      />
+      <h2 className="text-fixed-900 relative text-[32px] leading-tight font-bold lg:text-[48px]">
+        지금 받아 두고,
+        <br />
+        진짜 싼 순간을 먼저
+      </h2>
+      <p className="text-fixed-800 relative mt-3 text-base font-medium lg:text-lg">
+        설치 무료 · 키워드 알림 무료
+      </p>
+      <div className="relative">
         <AppDownload type="footer" />
       </div>
-      <div className="flex h-full max-h-[50vh] w-full max-w-[50vh] justify-end lg:max-h-[75vh] lg:max-w-160">
-        <MotionImage
-          unoptimized
-          style={{ y }}
-          className="aspect-[240/340] object-contain lg:object-right"
-          src="/assets/images/banner.webp"
-          alt="지름알림 화면"
-          width={956}
-          height={1360}
-        />
-      </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default Banner;

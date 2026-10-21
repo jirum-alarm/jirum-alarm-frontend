@@ -1,51 +1,41 @@
+import { COMMUNITY_COUNT, SERVICE_STATS } from '@jirum/domain/service-facts';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { PAGE } from '@/shared/constants/page';
-import { cn } from '@/shared/libs/cn';
 
 import AppDownload from './AppDownload';
+import HeroPhone from './HeroPhone';
 
-// 장식용 아이콘이라 alt 를 비운다(스크린리더가 "컴퓨터, 장바구니…" 를 읽지 않게).
-const Category = ({ src, className }: { src: string; className?: string }) => (
-  <Image
-    src={src}
-    alt=""
-    className={cn('absolute aspect-square flex-1/3 md:static', className)}
-    unoptimized
-    width={200}
-    height={200}
-  />
-);
-
+/**
+ * 첫 화면 — 무엇을 해 주는지 한 줄(칩) → 약속(제목) → 어떻게(설명) → 설치 → 숫자 → 실제로 오는 알림(폰).
+ * 브랜드 이름만 크게 걸던 히어로(「지름알림 / 득템의 시작」)는 무엇이 좋은지를 말하지 않았다(2026-10-21 개편).
+ * 약속은 「진짜 싼지」 — 사람은 편해서가 아니라 싸게 사려고 온다(/help 와 같은 원칙). 숫자는 /help 와 같은 정본을 쓴다.
+ */
 const KeyVisual = () => (
-  <section className="mx-auto flex min-h-svh w-full flex-col bg-white px-5 pt-14 pb-5 lg:px-8 lg:pb-9">
+  <section className="mx-auto flex w-full flex-col bg-white px-5 pt-14 pb-5 lg:px-8 lg:pb-9">
     {/* eslint-disable-next-line no-restricted-syntax -- 히어로 전용 모서리(28px) */}
-    <div className="relative flex w-full grow items-center justify-center overflow-hidden rounded-[28px] rounded-bl-none py-5">
-      <div className="to-landing-background absolute inset-0 -z-0 bg-linear-to-b from-gray-900 via-37% lg:via-0%" />
-      <div className="relative">
-        <div className="flex flex-col items-center justify-center">
-          <Image
-            src="/assets/icons/jirum.svg"
-            alt=""
-            className="mb-2 aspect-square w-[100px] md:mb-0 md:w-[150px] lg:w-[200px]"
-            width={200}
-            height={200}
-            priority
-          />
-          <h1 className="text-primary-500 text-[44px] leading-[1.3] font-bold md:text-[66px] lg:text-[88px]">
-            지름알림
-          </h1>
-          <p className="text-[32px] leading-[1.3] font-bold text-white md:text-[48px] lg:text-[64px]">
-            득템의 시작
+    <div className="relative w-full overflow-hidden rounded-[28px] rounded-bl-none">
+      <div className="from-fixed-900 to-landing-background absolute inset-0 bg-linear-to-b" />
+      {/* 제목 뒤 은은한 라임 빛 — 짙은 판이 납작해 보이지 않게 */}
+      <div className="bg-primary-500/15 pointer-events-none absolute -top-32 left-1/2 size-96 -translate-x-1/2 rounded-full blur-3xl lg:left-1/3" />
+
+      <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 pt-12 pb-28 lg:grid-cols-[1fr_auto] lg:gap-10 lg:px-12 lg:pt-20 lg:pb-32 xl:gap-40">
+        <div className="flex flex-col items-center text-center break-keep lg:items-start lg:text-left">
+          <p className="border-fixed-white/15 bg-fixed-white/5 text-fixed-300 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium">
+            <span className="bg-primary-500 size-2 rounded-full" />
+            커뮤니티 핫딜 · 가격 근거 · 키워드 알림
           </p>
-          {/* ponytail: "9개" 는 운영 communityProviders API 실측(2026-09-26). 커뮤니티를 추가·제거하면 같이 고친다. */}
-          <p className="text-fixed-300 mt-3 px-4 text-center text-base font-medium md:text-lg lg:mt-5 lg:text-xl">
-            뽐뿌·루리웹·퀘이사존 등 9개 커뮤니티 <br className="md:hidden" />
-            핫딜을 한곳에
+          <h1 className="text-fixed-white mt-5 text-[36px] leading-tight font-bold md:text-[52px] lg:text-[60px]">
+            핫딜이 뜨면 바로,
             <br />
-            원하는 상품이 뜨면 바로 알려드려요
+            <span className="text-primary-500">진짜 싼지까지</span>
+          </h1>
+          <p className="text-fixed-300 mt-5 max-w-xl text-base leading-relaxed md:text-lg">
+            커뮤니티 {COMMUNITY_COUNT}의 핫딜을 한곳에 모으고, 같은 상품의 지난 핫딜가·다나와·쿠팡
+            가격과 비교한 근거를 붙여요. 키워드만 걸어 두면 올라오는 순간 알려드려요.
           </p>
+
           <AppDownload type="key-visual" />
           <a
             href={PAGE.BASE}
@@ -53,29 +43,22 @@ const KeyVisual = () => (
           >
             설치 없이 웹에서 먼저 보기
           </a>
+
+          <ul className="mt-10 grid w-full max-w-md grid-cols-3 gap-2 lg:mt-12">
+            {SERVICE_STATS.map((s) => (
+              <li key={s.label} className="flex flex-col items-center lg:items-start">
+                <strong className="text-fixed-white md:text-28 text-2xl font-bold">
+                  {s.value}
+                </strong>
+                <span className="text-fixed-400 mt-1 text-xs md:text-sm">{s.label}</span>
+              </li>
+            ))}
+          </ul>
         </div>
+
+        <HeroPhone />
       </div>
-      <div className="pointer-events-none absolute inset-0 -mx-5 flex items-center justify-between md:-mx-8">
-        <div className="relative flex h-40 w-1/2 items-center justify-between pr-18 md:pr-30 lg:pr-50">
-          <Category src="/assets/icons/computer.svg" className="top-0 -left-1 w-19 md:max-w-46" />
-          <Category src="/assets/icons/cart.svg" className="bottom-0 left-4 w-17.5 md:max-w-41" />
-          <Category src="/assets/icons/game.svg" className="top-13 left-14 w-14 md:max-w-32" />
-        </div>
-        <div className="relative flex h-40 w-1/2 flex-row-reverse items-center justify-between pl-18 md:pl-30 lg:pl-50">
-          <Category
-            src="/assets/icons/leisure.svg"
-            className="right-0 bottom-2 w-20 md:max-w-47.5"
-          />
-          <Category
-            src="/assets/icons/electric.svg"
-            className="top-0.75 right-3 w-15 md:max-w-35"
-          />
-          <Category
-            src="/assets/icons/cosmetics.svg"
-            className="top-11.25 right-14.5 w-14 md:max-w-32"
-          />
-        </div>
-      </div>
+
       <div className="absolute bottom-0 left-0">
         {/* eslint-disable-next-line no-restricted-syntax -- 오목한 모서리 트릭(흰 그림자로 바깥을 칠한다) */}
         <div className="h-16 w-16 rounded-bl-3xl shadow-[0_36px_0_rgb(255,255,255)]" />
