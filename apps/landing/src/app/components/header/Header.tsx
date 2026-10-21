@@ -4,7 +4,7 @@ import { InstallLink } from '../key-visual/AppDownload';
 
 import Title from './Title';
 
-// 소개 페이지는 바깥(카톡방 공지·검색·SNS)에서 처음 온 사람을 설치로 데려오는 입구다 — 상단도 웹 메뉴를 늘어놓지 않고
+// 소개 페이지는 바깥(검색·SNS·QR)에서 지름알림을 처음 보는 사람을 설치로 데려오는 입구다 — 상단도 웹 메뉴를 늘어놓지 않고
 // 「앱 받기」 하나와 설치 없이 둘러볼 길(웹으로 보기)만 둔다. 예전엔 web 상단 메뉴의 손 복제본이라 메뉴마다 웹으로 새어 나갔다.
 const Header = () => {
   return (

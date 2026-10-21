@@ -14,10 +14,10 @@ The Landing app serves as the primary marketing and promotional interface for th
 
 This app is designed as a static marketing website to attract new users and provide information about the Jirum-Alarm hot deal aggregation service.
 
-**역할(2026-10-21)**: 바깥(카톡방 공지·검색·SNS·QR)에서 처음 온 사람을 **앱 설치로 데려오는 입구**. 서비스 안(web·앱)에서는 여기로 링크하지 않는다 —
+**역할(2026-10-21)**: 바깥(검색·SNS·QR·스토어)에서 지름알림을 처음 보는 사람을 **앱 설치로 데려오는 입구**. 서비스 안(web·앱)과 카톡방(이미 딜을 받아 보는 사람 — 앱 다리는 web 카톡 인앱 «앱으로 받기»)에서는 여기로 링크하지 않는다 —
 안의 «앱 받기»는 web `/app`(기기별 스토어 착지), 사용법·전체 FAQ 는 web `/help`.
 - 상단은 웹 메뉴 없이 「웹으로 보기」·「앱 받기」만, 폰에선 히어로 설치 버튼이 지나가면 하단 고정 「앱 받기」(`StickyInstall`).
-- 바깥 링크는 입구마다 `?utm_source=<입구>`(예: `kakao_notice`)를 붙인다 — 스토어 링크의 Play `utm_campaign`·App Store `ct`(pt 포함)에 실려 입구별 설치가 갈린다(`hooks/useEntrance.ts`).
+- 바깥 링크는 입구마다 `?utm_source=<입구>`(예: `threads`)를 붙인다 — 스토어 링크의 Play `utm_campaign`·App Store `ct`(pt 포함)에 실려 입구별 설치가 갈린다(`hooks/useEntrance.ts`).
 
 ## 📁 Key Files and Configuration
 

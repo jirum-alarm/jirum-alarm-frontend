@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
 const { parseEntrance } = require('./entrance.ts') as typeof import('./entrance');
 
 test('utm_source 를 입구로 읽는다', () => {
-  assert.equal(parseEntrance('?utm_source=kakao_notice&utm_medium=chat'), 'kakao_notice');
+  assert.equal(parseEntrance('?utm_source=threads&utm_medium=post'), 'threads');
 });
 
 test('없거나 비면 null', () => {

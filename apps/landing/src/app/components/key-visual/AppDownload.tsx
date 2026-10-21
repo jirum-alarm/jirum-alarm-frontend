@@ -16,7 +16,7 @@ const AppStoreLink =
   'https://apps.apple.com/sg/app/%EC%A7%80%EB%A6%84%EC%95%8C%EB%A6%BC/id6474611420';
 
 // 소개 페이지발 설치를 스토어 콘솔에서 가르기 위한 캠페인 값. Play 는 referrer 가 그대로 획득 보고서에 잡힌다.
-// 들어온 입구(이 페이지 주소의 utm_source, 예: 카톡방 공지)는 Play utm_campaign·App Store ct 뒤에 붙여 입구별 설치를 가른다.
+// 들어온 입구(이 페이지 주소의 utm_source, 예: SNS 글)는 Play utm_campaign·App Store ct 뒤에 붙여 입구별 설치를 가른다.
 // App Store 는 pt(provider token, web appHandoff 와 같은 값)가 있어야 ct 가 App Analytics 캠페인으로 잡힌다. ct 는 30자까지.
 const IOS_PROVIDER_TOKEN = '126805495';
 const googlePlayLink = (position: Position, entrance: string | null) =>
