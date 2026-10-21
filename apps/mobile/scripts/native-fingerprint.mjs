@@ -91,6 +91,15 @@ const mode = process.argv[2];
 const current = collect();
 
 if (mode === '--write') {
+  // 입력은 git 추적 파일뿐이라 add 전에 찍으면 새 파일이 기준에서 빠지고, 커밋 뒤 CI --check 가 막는다(10/21 11cf1d66).
+  const untracked = execFileSync('git', ['ls-files', '--others', '--exclude-standard', 'ios', 'android', 'patches'], {
+    cwd: root,
+    encoding: 'utf8',
+  }).trim();
+  if (untracked) {
+    console.error(`native-fingerprint: git 이 아직 모르는 네이티브 파일이 있어요 — git add 한 뒤 다시 찍으세요.\n${untracked}`);
+    process.exit(1);
+  }
   writeFileSync(baselinePath, JSON.stringify(current, null, 2) + '\n');
   console.log(
     `native-fingerprint: runtime ${current.runtimeVersion} 기준을 찍었어요 (${relative(process.cwd(), baselinePath)}).`,
