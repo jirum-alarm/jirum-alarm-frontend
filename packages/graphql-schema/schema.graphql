@@ -145,6 +145,28 @@ interface BaseSection {
   viewMoreLink: String
 }
 
+type BlockedTitleKeywordMatchOutput {
+  id: Int!
+  postedAt: DateTime
+  providerId: Int!
+  title: String!
+}
+
+type BlockedTitleKeywordOutput {
+  createdAt: DateTime!
+  """추가할 때 숨긴 기존 딜 수"""
+  hiddenCount: Int!
+  id: Int!
+  keyword: String!
+}
+
+type BlockedTitleKeywordPreviewOutput {
+  """지금 공개 중이라 추가하면 숨겨질 딜 수"""
+  count: Int!
+  """최근 딜부터 최대 20건"""
+  samples: [BlockedTitleKeywordMatchOutput!]!
+}
+
 type BrandItemMatchCountOutput {
   brandName: String!
   id: ID!
@@ -1024,6 +1046,11 @@ type ModelPageRecentDealOutput {
 }
 
 type Mutation {
+  """어드민) 상품명 차단 — 걸리는 기존 딜을 비공개로 돌리고, 앞으로 수집하지 않는다"""
+  addBlockedTitleKeywordByAdmin(
+    """차단할 상품명(제목에 들어 있으면 — 공백·대소문자 무시)"""
+    keyword: String!
+  ): BlockedTitleKeywordOutput!
   addComment(content: String!, isNotice: Boolean, parentId: Int, productId: Int, title: String): Boolean!
   """어드민) 핫딜 제외 키워드 추가"""
   addHotDealExcludeKeywordByAdmin(excludeKeywords: [String!]!, hotDealKeywordId: Int!): Boolean!
@@ -1244,6 +1271,8 @@ type Mutation {
   rematchGatedMapping(productMappingId: Int!): GatedMappingRematchOutput!
   """모든 알림 삭제"""
   removeAllNotifications: Boolean!
+  """어드민) 차단 해제 — 앞으로 다시 수집한다. 이미 숨긴 딜은 그대로 둔다"""
+  removeBlockedTitleKeywordByAdmin(id: Int!): Boolean!
   removeComment(id: Int!): Boolean!
   """어드민) 핫딜 제외 키워드 추가"""
   removeHotDealExcludeKeywordByAdmin(ids: [Int!]!): Boolean!
@@ -1399,6 +1428,8 @@ type Mutation {
   updatePushSetting(
     """커뮤니티(댓글/대댓글/좋아요) 알림 수신"""
     communityAlert: Boolean
+    """키워드 알림 이메일 요약 수신 동의"""
+    emailDigest: Boolean
     """유용한(베스트/인기) 핫딜 알림"""
     hotDealAlert: Boolean
     """정보성 알림"""
@@ -2249,6 +2280,13 @@ type Query {
   ): [AdvertiseCreative!]!
   """어드민) provider별 일간 추이"""
   affiliateSalesTrend(endDate: DateTime!, startDate: DateTime!): [AffiliateSalesDailyOutput!]!
+  """어드민) 이 상품명을 차단하면 숨겨질 공개 딜(저장 안 함)"""
+  blockedTitleKeywordPreviewByAdmin(
+    """차단할 상품명(제목에 들어 있으면 — 공백·대소문자 무시)"""
+    keyword: String!
+  ): BlockedTitleKeywordPreviewOutput!
+  """어드민) 차단 상품명 전부(최근 것 먼저)"""
+  blockedTitleKeywordsByAdmin: [BlockedTitleKeywordOutput!]!
   """BrandItem 단위 매칭된 전체 개수 조회"""
   brandItemsByMatchCountTotalCount(
     """브랜드명 + 상품명 LIKE 검색"""
@@ -2938,6 +2976,9 @@ type UserOverviewOutput {
 type UserPushSetting {
   communityAlert: Boolean!
   createdAt: DateTime!
+  """키워드 알림 이메일 요약 수신 동의"""
+  emailDigest: Boolean!
+  emailDigestAgreedAt: DateTime
   hotDealAlert: Boolean!
   id: ID!
   info: Boolean!

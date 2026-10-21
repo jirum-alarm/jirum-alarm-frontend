@@ -5,6 +5,7 @@ import {KeywordAlertLevel} from '@/shared/api/gql/graphql';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useQuery} from '@tanstack/react-query';
 
+import {useAuth} from '@/entities/auth/useAuth';
 import {MyPageQueries} from '@/entities/mypage';
 import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import type {PushSettingKey} from '@/shared/api/mypage';
@@ -27,6 +28,14 @@ const ROWS: {key: PushSettingKey; title: string; description: string}[] = [
     key: 'keywordAlert',
     title: '키워드 알림',
     description: '등록한 키워드나 구독한 관심사의 딜이 올라오면 알려드려요',
+  },
+  {
+    // 푸시 통로가 없어 알림함에만 쌓이는 키워드 알림을 하루 한 통으로(crawling send_email_digest). 토큰이 있으면 안 보낸다.
+    // 게스트는 이메일이 없어 숨긴다. web PushSettingForm 과 같은 문구.
+    key: 'emailDigest',
+    title: '키워드 알림 이메일로 받기',
+    description:
+      '앱·웹 알림을 받지 않는 동안, 새 딜을 하루 한 번 가입 이메일로 모아 보내드려요',
   },
   {
     // 광고성 정보(정보통신망법 §50) — 서버는 이 동의(marketing)한 유저에게만 "(광고)" 를 붙여 낮에만 보낸다.
@@ -68,6 +77,8 @@ export default function NotificationSettingScreen({navigation}: Props) {
     MyPageQueries.pushSetting(),
   );
   const {mutate} = useUpdatePushSetting();
+  const {isGuest} = useAuth();
+  const rows = isGuest ? ROWS.filter(row => row.key !== 'emailDigest') : ROWS;
   // 휴대폰 알림 권한이 꺼져 있으면 아래 스위치가 다 켜져 있어도 아무것도 안 온다 — 그걸 먼저 알린다.
   const push = usePushPermissionStatus();
 
@@ -99,7 +110,7 @@ export default function NotificationSettingScreen({navigation}: Props) {
             </View>
           ) : (
             <>
-              {ROWS.map(({key, title, description}) => (
+              {rows.map(({key, title, description}) => (
                 <React.Fragment key={key}>
                   <View
                     accessible={false}

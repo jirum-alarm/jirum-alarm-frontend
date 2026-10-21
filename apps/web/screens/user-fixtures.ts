@@ -127,6 +127,7 @@ const pushSetting = () => ({
     marketing: false,
     nightAlerts: false,
     communityAlert: true,
+    emailDigest: false,
     quietHoursStart: 23,
     quietHoursEnd: 7,
   },

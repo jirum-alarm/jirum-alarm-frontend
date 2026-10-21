@@ -169,6 +169,31 @@ export type BaseSection = {
   viewMoreLink?: Maybe<Scalars['String']['output']>;
 };
 
+export type BlockedTitleKeywordMatchOutput = {
+  __typename?: 'BlockedTitleKeywordMatchOutput';
+  id: Scalars['Int']['output'];
+  postedAt?: Maybe<Scalars['DateTime']['output']>;
+  providerId: Scalars['Int']['output'];
+  title: Scalars['String']['output'];
+};
+
+export type BlockedTitleKeywordOutput = {
+  __typename?: 'BlockedTitleKeywordOutput';
+  createdAt: Scalars['DateTime']['output'];
+  /** 추가할 때 숨긴 기존 딜 수 */
+  hiddenCount: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  keyword: Scalars['String']['output'];
+};
+
+export type BlockedTitleKeywordPreviewOutput = {
+  __typename?: 'BlockedTitleKeywordPreviewOutput';
+  /** 지금 공개 중이라 추가하면 숨겨질 딜 수 */
+  count: Scalars['Int']['output'];
+  /** 최근 딜부터 최대 20건 */
+  samples: Array<BlockedTitleKeywordMatchOutput>;
+};
+
 export type BrandItemMatchCountOutput = {
   __typename?: 'BrandItemMatchCountOutput';
   brandName: Scalars['String']['output'];
@@ -1097,6 +1122,8 @@ export type ModelPageRecentDealOutput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** 어드민) 상품명 차단 — 걸리는 기존 딜을 비공개로 돌리고, 앞으로 수집하지 않는다 */
+  addBlockedTitleKeywordByAdmin: BlockedTitleKeywordOutput;
   addComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 제외 키워드 추가 */
   addHotDealExcludeKeywordByAdmin: Scalars['Boolean']['output'];
@@ -1195,6 +1222,8 @@ export type Mutation = {
   rematchGatedMapping: GatedMappingRematchOutput;
   /** 모든 알림 삭제 */
   removeAllNotifications: Scalars['Boolean']['output'];
+  /** 어드민) 차단 해제 — 앞으로 다시 수집한다. 이미 숨긴 딜은 그대로 둔다 */
+  removeBlockedTitleKeywordByAdmin: Scalars['Boolean']['output'];
   removeComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 제외 키워드 추가 */
   removeHotDealExcludeKeywordByAdmin: Scalars['Boolean']['output'];
@@ -1278,6 +1307,10 @@ export type Mutation = {
   verifyProductMapping: Scalars['Boolean']['output'];
   /** 회원 탈퇴 */
   withdraw: Scalars['Boolean']['output'];
+};
+
+export type MutationAddBlockedTitleKeywordByAdminArgs = {
+  keyword: Scalars['String']['input'];
 };
 
 export type MutationAddCommentArgs = {
@@ -1534,6 +1567,10 @@ export type MutationRematchGatedMappingArgs = {
   productMappingId: Scalars['Int']['input'];
 };
 
+export type MutationRemoveBlockedTitleKeywordByAdminArgs = {
+  id: Scalars['Int']['input'];
+};
+
 export type MutationRemoveCommentArgs = {
   id: Scalars['Int']['input'];
 };
@@ -1746,6 +1783,7 @@ export type MutationUpdatePasswordArgs = {
 
 export type MutationUpdatePushSettingArgs = {
   communityAlert?: InputMaybe<Scalars['Boolean']['input']>;
+  emailDigest?: InputMaybe<Scalars['Boolean']['input']>;
   hotDealAlert?: InputMaybe<Scalars['Boolean']['input']>;
   info?: InputMaybe<Scalars['Boolean']['input']>;
   keywordAlert?: InputMaybe<Scalars['Boolean']['input']>;
@@ -2622,6 +2660,10 @@ export type Query = {
   adsByAdmin: Array<AdvertiseCreative>;
   /** 어드민) provider별 일간 추이 */
   affiliateSalesTrend: Array<AffiliateSalesDailyOutput>;
+  /** 어드민) 이 상품명을 차단하면 숨겨질 공개 딜(저장 안 함) */
+  blockedTitleKeywordPreviewByAdmin: BlockedTitleKeywordPreviewOutput;
+  /** 어드민) 차단 상품명 전부(최근 것 먼저) */
+  blockedTitleKeywordsByAdmin: Array<BlockedTitleKeywordOutput>;
   /** BrandItem 단위 매칭된 전체 개수 조회 */
   brandItemsByMatchCountTotalCount: Scalars['Int']['output'];
   /** BrandItem 단위 매칭 합산 목록 조회 (커서 기반 페이지네이션) */
@@ -2880,6 +2922,10 @@ export type QueryAdsByAdminArgs = {
 export type QueryAffiliateSalesTrendArgs = {
   endDate: Scalars['DateTime']['input'];
   startDate: Scalars['DateTime']['input'];
+};
+
+export type QueryBlockedTitleKeywordPreviewByAdminArgs = {
+  keyword: Scalars['String']['input'];
 };
 
 export type QueryBrandItemsByMatchCountTotalCountArgs = {
@@ -3663,6 +3709,9 @@ export type UserPushSetting = {
   __typename?: 'UserPushSetting';
   communityAlert: Scalars['Boolean']['output'];
   createdAt: Scalars['DateTime']['output'];
+  /** 키워드 알림 이메일 요약 수신 동의 */
+  emailDigest: Scalars['Boolean']['output'];
+  emailDigestAgreedAt?: Maybe<Scalars['DateTime']['output']>;
   hotDealAlert: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
   info: Scalars['Boolean']['output'];

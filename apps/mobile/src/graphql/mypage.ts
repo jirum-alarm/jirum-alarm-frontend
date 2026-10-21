@@ -264,6 +264,7 @@ export const QueryMyPushSetting = graphql(`
       marketing
       nightAlerts
       communityAlert
+      emailDigest
       quietHoursStart
       quietHoursEnd
     }
@@ -277,6 +278,7 @@ export const MutationUpdateMyPushSetting = graphql(`
     $marketing: Boolean
     $nightAlerts: Boolean
     $communityAlert: Boolean
+    $emailDigest: Boolean
     $quietHoursStart: Int
     $quietHoursEnd: Int
   ) {
@@ -286,6 +288,7 @@ export const MutationUpdateMyPushSetting = graphql(`
       marketing: $marketing
       nightAlerts: $nightAlerts
       communityAlert: $communityAlert
+      emailDigest: $emailDigest
       quietHoursStart: $quietHoursStart
       quietHoursEnd: $quietHoursEnd
     )

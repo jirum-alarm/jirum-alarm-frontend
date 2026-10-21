@@ -15,6 +15,12 @@ const ROWS: { key: PushSettingKey; title: string; description: string }[] = [
     description: '등록한 키워드나 구독한 관심사의 딜이 올라오면 알려드려요',
   },
   {
+    // 푸시 통로가 없어 알림함에만 쌓이는 키워드 알림을 하루 한 통으로(crawling send_email_digest). 토큰이 있으면 안 보낸다.
+    key: 'emailDigest',
+    title: '키워드 알림 이메일로 받기',
+    description: '앱·웹 알림을 받지 않는 동안, 새 딜을 하루 한 번 가입 이메일로 모아 보내드려요',
+  },
+  {
     // 광고성 정보(정보통신망법 §50) — 서버는 이 동의(marketing)한 유저에게만 "(광고)" 를 붙여 낮에만 보낸다.
     key: 'marketing',
     title: '지금 뜨는 좋은 딜 (광고성 정보 수신 동의)',

@@ -5,7 +5,8 @@ import { execute } from '@/shared/lib/http-client';
 import { useToast } from '@/shared/ui/common/Toast';
 
 // 수기 TypedDocumentString — codegen 이 깨져 있어서(keyword-setting.service.ts 주석 참고).
-export type PushSettingKey = 'keywordAlert' | 'marketing' | 'nightAlerts' | 'communityAlert';
+export type PushSettingKey =
+  'keywordAlert' | 'marketing' | 'nightAlerts' | 'communityAlert' | 'emailDigest';
 /** 방해금지 시간(KST 시 0~23). 둘 다 null = 꺼짐 — 서버는 둘을 함께 받는다(하나만 보내면 거부). */
 type QuietHoursSetting = { quietHoursStart: number | null; quietHoursEnd: number | null };
 /** 키워드 알림 받는 기준 — ALL 올라오는 즉시 / HOT 핫딜·대박딜이 됐을 때만(서버 KeywordAlertLevel). */
@@ -24,6 +25,7 @@ const QueryPushSetting = new TypedDocumentString<
       marketing
       nightAlerts
       communityAlert
+      emailDigest
       quietHoursStart
       quietHoursEnd
     }
@@ -40,6 +42,7 @@ const MutationUpdatePushSetting = new TypedDocumentString<
     $marketing: Boolean
     $nightAlerts: Boolean
     $communityAlert: Boolean
+    $emailDigest: Boolean
     $quietHoursStart: Int
     $quietHoursEnd: Int
   ) {
@@ -49,6 +52,7 @@ const MutationUpdatePushSetting = new TypedDocumentString<
       marketing: $marketing
       nightAlerts: $nightAlerts
       communityAlert: $communityAlert
+      emailDigest: $emailDigest
       quietHoursStart: $quietHoursStart
       quietHoursEnd: $quietHoursEnd
     )
