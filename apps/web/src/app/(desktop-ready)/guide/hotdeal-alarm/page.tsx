@@ -36,6 +36,12 @@ export const metadata: Metadata = {
     type: 'article',
     images: [{ url: `${METADATA_SERVICE_URL}/opengraph-image.webp`, width: 1200, height: 630 }],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title,
+    description,
+    images: [{ url: `${METADATA_SERVICE_URL}/opengraph-image.webp`, width: 1200, height: 630 }],
+  },
 };
 
 const STEPS = [

@@ -49,6 +49,12 @@ export async function generateMetadata(): Promise<Metadata> {
       url: `${METADATA_SERVICE_URL}/keywords`,
       images: [{ url: `${METADATA_SERVICE_URL}/opengraph-image.webp`, width: 1200, height: 630 }],
     },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [{ url: `${METADATA_SERVICE_URL}/opengraph-image.webp`, width: 1200, height: 630 }],
+    },
   };
 }
 

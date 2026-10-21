@@ -69,6 +69,12 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
       siteName: '지름알림',
       images: [dealImage ? { url: dealImage } : { url: OG_IMAGE, width: 1200, height: 630 }],
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: seo.title,
+      description: seo.description,
+      images: [dealImage ? { url: dealImage } : { url: OG_IMAGE, width: 1200, height: 630 }],
+    },
   };
 }
 

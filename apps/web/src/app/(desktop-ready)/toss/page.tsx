@@ -20,6 +20,12 @@ export const metadata: Metadata = {
     // 라우트가 openGraph 를 지정하면 루트 images 가 같이 날아간다 → 공유 썸네일이 빈다.
     images: [{ url: `${METADATA_SERVICE_URL}/opengraph-image.webp`, width: 1200, height: 630 }],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: '토스 하루특가 | 지름알림',
+    description: '오늘만 이 가격, 토스 하루특가를 지름알림에서 한눈에.',
+    images: [{ url: `${METADATA_SERVICE_URL}/opengraph-image.webp`, width: 1200, height: 630 }],
+  },
 };
 
 export const revalidate = 600; // 10분 ISR — /deals 와 동일(목록은 자주 안 바뀜)

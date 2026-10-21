@@ -73,6 +73,12 @@ export const metadata: Metadata = {
     siteName: '지름알림',
     images: [{ url: `${METADATA_SERVICE_URL}/opengraph-image.webp`, width: 1200, height: 630 }],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title,
+    description,
+    images: [{ url: `${METADATA_SERVICE_URL}/opengraph-image.webp`, width: 1200, height: 630 }],
+  },
 };
 
 /** 시즌 섹션이 열려 있으면 그 딜(서버가 기간 밖엔 빈 배열), 아니면 최근 알리 딜. 실패해도 허브의 글은 나와야 한다. */

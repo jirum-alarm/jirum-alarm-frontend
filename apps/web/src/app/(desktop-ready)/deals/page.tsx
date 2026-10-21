@@ -51,6 +51,12 @@ export const metadata: Metadata = {
     // 없으면 네이버·카톡 공유 썸네일이 빈다 — 2026-09-02 운영 HTML 에서 og:image 0개 실측.
     images: [{ url: `${METADATA_SERVICE_URL}/opengraph-image.webp`, width: 1200, height: 630 }],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: '핫딜 최저가 모음 | 지름알림',
+    description: '인기 상품별 핫딜 최저가를 한곳에 모아 비교하세요.',
+    images: [{ url: `${METADATA_SERVICE_URL}/opengraph-image.webp`, width: 1200, height: 630 }],
+  },
 };
 
 export const revalidate = 600; // 10분 ISR — 판정의 '3일 이내'도 이 주기로 갱신된다(배치는 매시)
