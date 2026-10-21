@@ -2,7 +2,7 @@ import { infoBox, wordTag } from '@jirum/design-system/recipes';
 import { MAX_EXCLUDE_KEYWORDS } from '@jirum/domain/keyword-options';
 import { MAX_KEYWORD_COUNT } from '@jirum/domain/mypage';
 import { NIGHT_HOURS } from '@jirum/domain/quiet-hours';
-import { DAILY_COMMUNITY_DEALS } from '@jirum/domain/service-facts';
+import { COMMUNITY_COUNT, DAILY_COMMUNITY_DEALS } from '@jirum/domain/service-facts';
 
 import { cn } from '@/shared/lib/cn';
 
@@ -65,9 +65,10 @@ function ConceptHeader({
 const RULER_MIN = 11_000;
 const RULER_MAX = 19_000;
 const pos = (won: number) => `${((won - RULER_MIN) / (RULER_MAX - RULER_MIN)) * 100}%`;
+// 아래 문구(「14건 중 85%보다 싸요」·보통가 16,000원)와 맞춘 점들 — 지금가보다 싼 건 2건, 가운데 두 값의 평균이 보통가.
 const PAST_DEALS = [
-  13_400, 13_900, 14_200, 14_500, 14_900, 15_000, 15_300, 15_500, 15_900, 16_200, 16_500, 16_900,
-  17_400, 12_600,
+  13_900, 14_500, 15_200, 15_600, 15_800, 16_200, 16_500, 16_900, 17_300, 17_600, 18_100, 18_500,
+  12_300, 12_600,
 ];
 const NOW = 12_900;
 const USUAL = 16_000;
@@ -342,7 +343,7 @@ function AlarmConcept({ isApp }: { isApp: boolean }) {
         icon="bell"
         tone="bg-primary-100 text-primary-800"
         title="원하는 것만 걸러서 알려드려요"
-        lead="계속 들여다볼 필요 없어요. 키워드를 걸어 두면 모든 커뮤니티를 대신 지켜보다가, 조건에 맞는 딜이 올라오는 순간 알려드려요."
+        lead={`계속 들여다볼 필요 없어요. 키워드를 걸어 두면 커뮤니티 ${COMMUNITY_COUNT}을 대신 지켜보다가, 조건에 맞는 딜이 올라오는 순간 알려드려요.`}
       />
       <figure data-nosnippet className="pc:p-6 mt-5 rounded-2xl bg-gray-50 p-4">
         <div className="flex justify-end">
