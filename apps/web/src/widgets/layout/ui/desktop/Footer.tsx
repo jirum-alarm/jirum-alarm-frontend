@@ -4,6 +4,12 @@ import ColorSchemeButton from '@/shared/ui/ColorSchemeButton';
 import { IllustIcons } from '@/shared/ui/common/icons';
 import TalkLight from '@/shared/ui/common/icons/TalkLight';
 
+// 해외직구 시즌 허브 — 사이트맵·IndexNow·llms.txt 에만 있고 HTML 링크가 0개라 10/22 GSC 에서 «알려지지 않은 URL» 이었다.
+// 광군제(11/11) 전에 검색엔진이 찾도록 모든 PC 페이지·홈에서 거는 상시 크롤 경로. 시즌 끝(12/12, KST) 뒤엔 내린다.
+const SEASON_HUB_UNTIL_KST = '2026-12-12';
+const isSeasonHubLinkOn = () =>
+  new Date(Date.now() + 9 * 3_600_000).toISOString().slice(0, 10) <= SEASON_HUB_UNTIL_KST;
+
 const Footer = () => {
   return (
     <div className="relative flex w-full flex-col bg-gray-50">
@@ -35,7 +41,8 @@ const Footer = () => {
             </Link>
           </p>
           <div className="flex h-full flex-col justify-between lg:flex-row">
-            <div className="flex gap-x-2 text-sm text-gray-600">
+            {/* 링크가 6개라 폰 폭에선 칸마다 글자 단위로 꺾였다 — 링크 단위로 다음 줄로 넘긴다. */}
+            <div className="flex flex-wrap gap-x-2 gap-y-1 text-sm whitespace-nowrap text-gray-600">
               <Link href="https://jirum-alarm.com/policies/terms" className="underline">
                 서비스 이용약관
               </Link>
@@ -57,6 +64,14 @@ const Footer = () => {
               <Link href="/help" className="underline">
                 지름알림이란 · 자주 묻는 질문
               </Link>
+              {isSeasonHubLinkOn() && (
+                <>
+                  <span className="text-gray-400">ㅣ</span>
+                  <Link href="/season/2026-black-friday" className="underline">
+                    블프·광군제 직구 달력
+                  </Link>
+                </>
+              )}
             </div>
             <p className="text-sm text-gray-600">
               Copyright {new Date().getFullYear()}. 지름알림. All rights reserved.
