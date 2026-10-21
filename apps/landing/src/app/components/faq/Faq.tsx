@@ -1,3 +1,6 @@
+import { MAX_EXCLUDE_KEYWORDS } from '@jirum/domain/keyword-options';
+import { MAX_KEYWORD_COUNT } from '@jirum/domain/mypage';
+import { NIGHT_HOURS_TEXT } from '@jirum/domain/quiet-hours';
 import {
   COMMUNITY_COUNT,
   DAILY_COMMUNITY_DEALS,
@@ -12,7 +15,7 @@ import SectionHeader from '../SectionHeader';
 
 /**
  * 설치 전에 망설이게 하는 질문 — 무엇인지·어디서 모으는지·진짜 싼지·알림 공해·돈·앱 필요 여부.
- * 답의 사실(키워드 20개·제외 단어 10개·밤 9시~아침 8시·제휴 링크)은 web /help 자주 묻는 질문과 같다 — 거기가 전체 목록이고,
+ * 답의 사실(키워드·제외 단어 상한·야간 시간 — 정본 @jirum/domain, 제휴 링크)은 web /help 자주 묻는 질문과 같다 — 거기가 전체 목록이고,
  * 맨 아래 링크로 보낸다. 접고 펴기는 <details> 라 스크립트가 없어도 된다.
  */
 const FAQ = [
@@ -30,7 +33,7 @@ const FAQ = [
   },
   {
     q: '알림이 너무 많이 오지 않나요?',
-    a: '키워드는 20개까지, 키워드마다 빼고 싶은 단어 10개와 가격 범위를 정할 수 있어요. 「콜라」에서 「콜라겐」을 빼는 식이에요. 밤 9시부터 아침 8시 사이 알림은 따로 동의하지 않으면 아침에 모아서 보내드려요.',
+    a: `키워드는 ${MAX_KEYWORD_COUNT}개까지, 키워드마다 빼고 싶은 단어 ${MAX_EXCLUDE_KEYWORDS}개와 가격 범위를 정할 수 있어요. 「콜라」에서 「콜라겐」을 빼는 식이에요. ${NIGHT_HOURS_TEXT} 사이 알림은 따로 동의하지 않으면 아침에 모아서 보내드려요.`,
   },
   {
     q: '이용료가 있나요?',

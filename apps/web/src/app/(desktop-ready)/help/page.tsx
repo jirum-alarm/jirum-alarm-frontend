@@ -1,4 +1,7 @@
 import { infoBox, linkChip } from '@jirum/design-system/recipes';
+import { MAX_EXCLUDE_KEYWORDS } from '@jirum/domain/keyword-options';
+import { MAX_KEYWORD_COUNT } from '@jirum/domain/mypage';
+import { NIGHT_HOURS, NIGHT_HOURS_TEXT } from '@jirum/domain/quiet-hours';
 import {
   COMMUNITY_COUNT,
   DAILY_COMMUNITY_DEALS,
@@ -50,8 +53,8 @@ import OpenFaqFromHash from './OpenFaqFromHash';
  * 딱딱함은 회색 테두리 상자 나열이 원인이라 테두리를 빼고 면(gray-50)·구역별 색 아이콘·마스코트·작은 색 eyebrow 로 바꿨다.
  * 질문 묶음 상자는 overflow-clip — overflow-hidden 은 스크롤 컨테이너가 돼 /help#evidence 의 scroll-margin 이 무시되고
  * 질문 제목이 헤더 밑으로 숨었다.
- * 숫자(키워드 20개·제외 단어 10개·하루 3건·21~08시)는 서버 값이다. 커뮤니티 목록·곳 수·하루 건수는 소개 페이지와 같이 쓰는
- * 정본 @jirum/domain/service-facts 에서 온다 — 바뀌면 거기를 고친다.
+ * 숫자(하루 3건)는 서버 값이다. 커뮤니티 목록·곳 수·하루 건수(service-facts)와 키워드·제외 단어 상한(mypage·keyword-options),
+ * 야간 시간(quiet-hours)은 소개 페이지와 같이 쓰는 정본 @jirum/domain 에서 온다 — 바뀌면 거기를 고친다.
  */
 const PATH = '/help';
 // 검색 결과에서 잘리지 않는 길이 — 제목 ~30자, 설명 ~100자(모바일 검색 결과 기준). 예전 제목 43자·설명 170자는 뒤가 잘렸다.
@@ -281,7 +284,7 @@ const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
       {
         id: 'keyword',
         q: '원하는 상품 핫딜만 알림 받을 수 있나요?',
-        a: '마이페이지 → 키워드 알림에서 상품 이름을 등록하면 그 단어가 들어간 핫딜이 올라올 때 푸시를 보내드려요. 키워드는 20개까지, 키워드마다 제외할 단어 10개와 가격 범위를 정할 수 있어요.',
+        a: `마이페이지 → 키워드 알림에서 상품 이름을 등록하면 그 단어가 들어간 핫딜이 올라올 때 푸시를 보내드려요. 키워드는 ${MAX_KEYWORD_COUNT}개까지, 키워드마다 제외할 단어 ${MAX_EXCLUDE_KEYWORDS}개와 가격 범위를 정할 수 있어요.`,
         link: { href: '/guide/hotdeal-alarm', label: '핫딜 알림 받는 법 자세히 보기' },
       },
       {
@@ -292,7 +295,7 @@ const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
       {
         id: 'night',
         q: '밤에도 알림이 오나요?',
-        a: '밤 9시부터 아침 8시 사이 알림은 야간 알림 수신에 동의하지 않으면 아침 8시에 모아서 보내드려요. 마이페이지 → 알림 설정에서 바꿀 수 있어요.',
+        a: `${NIGHT_HOURS_TEXT} 사이 알림은 야간 알림 수신에 동의하지 않으면 아침 ${NIGHT_HOURS.end}시에 모아서 보내드려요. 마이페이지 → 알림 설정에서 바꿀 수 있어요.`,
       },
       {
         id: 'not-coming',

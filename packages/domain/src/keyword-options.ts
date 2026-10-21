@@ -1,4 +1,5 @@
-const MAX_EXCLUDE_KEYWORDS = 10;
+/** 키워드 하나에 넣을 수 있는 제외 단어 수 — 사용법(/help)·소개 페이지 문구도 이 값을 쓴다. */
+export const MAX_EXCLUDE_KEYWORDS = 10;
 /** 서버 검증(Length 1~20)과 같은 값 */
 const MAX_EXCLUDE_KEYWORD_LENGTH = 20;
 

@@ -1,8 +1,11 @@
 import { linkChip } from '@jirum/design-system/recipes';
+import { MAX_EXCLUDE_KEYWORDS } from '@jirum/domain/keyword-options';
+import { MAX_KEYWORD_COUNT } from '@jirum/domain/mypage';
+import { NIGHT_HOURS, NIGHT_HOURS_TEXT } from '@jirum/domain/quiet-hours';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
-import { LANDING_URL, METADATA_SERVICE_URL } from '@/shared/config/env';
+import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
 
@@ -14,7 +17,7 @@ import DealsMobileHeader from '../../deals/[slug]/DealsMobileHeader';
 /**
  * "핫딜 알림 받는 법" 안내. 네이버 자동완성에 "쿠팡 핫딜 알림·네이버 핫딜 알림 받는 법"이 뜨고
  * 그 질의엔 AI 브리핑이 붙는다(2026-10-01 실측) — 정보형 질의를 받을 문서가 우리에겐 없었다.
- * 숫자(키워드 20개·제외 단어 10개·하루 3건·21~08시)는 실제 서버·화면 값이다. 바뀌면 같이 고칠 것.
+ * 숫자(하루 3건)는 실제 서버·화면 값이다. 바뀌면 같이 고칠 것. 키워드·제외 단어 상한과 야간 시간은 정본 @jirum/domain 에서 온다.
  */
 const PATH = '/guide/hotdeal-alarm';
 const title = '핫딜 알림 받는 법 — 원하는 상품 핫딜이 올라오면 바로 받기 | 지름알림';
@@ -38,7 +41,7 @@ const STEPS = [
   { name: '로그인', text: '지름알림 웹이나 앱에서 로그인해요. 등록한 키워드는 계정에 저장돼요.' },
   {
     name: '키워드 등록',
-    text: '마이페이지 → 키워드 알림에서 받고 싶은 상품 이름을 등록해요(예: 삼다수, 기저귀, 에어팟). 키워드는 최대 20개까지예요.',
+    text: `마이페이지 → 키워드 알림에서 받고 싶은 상품 이름을 등록해요(예: 삼다수, 기저귀, 에어팟). 키워드는 최대 ${MAX_KEYWORD_COUNT}개까지예요.`,
   },
   {
     name: '알림 조건 설정(선택)',
@@ -118,8 +121,8 @@ export default async function HotdealAlarmGuidePage() {
             키워드는 제목에 그 글자가 들어가면 알림이 가요. 그래서 &quot;콜라&quot;를 등록하면
             &quot;콜라겐&quot;도 걸릴 수 있어요. 이럴 땐 키워드의 알림 조건에서{' '}
             <strong>제외할 단어</strong>
-            (최대 10개)를 넣거나, <strong>가격 범위</strong>를 정해 그 밖의 딜은 빼세요. 가격을 읽지
-            못한 글은 놓치지 않도록 조건과 상관없이 알려드려요.
+            (최대 {MAX_EXCLUDE_KEYWORDS}개)를 넣거나, <strong>가격 범위</strong>를 정해 그 밖의 딜은
+            빼세요. 가격을 읽지 못한 글은 놓치지 않도록 조건과 상관없이 알려드려요.
           </p>
         </section>
 
@@ -145,15 +148,15 @@ export default async function HotdealAlarmGuidePage() {
               않았는지 확인해요.
             </li>
             <li>
-              밤 9시부터 아침 8시 사이 알림은 야간 알림 수신에 동의하지 않으면 아침 8시에 모아서
-              보내드려요. 마이페이지 알림 설정에서 바꿀 수 있어요.
+              {NIGHT_HOURS_TEXT} 사이 알림은 야간 알림 수신에 동의하지 않으면 아침 {NIGHT_HOURS.end}
+              시에 모아서 보내드려요. 마이페이지 알림 설정에서 바꿀 수 있어요.
             </li>
             <li>알림 조건(제외 단어·가격 범위)이 너무 좁지 않은지 확인해요.</li>
             <li>
               푸시를 가장 확실하게 받으려면{' '}
-              <a href={LANDING_URL} className="underline underline-offset-2">
+              <Link href="/app" className="underline underline-offset-2">
                 지름알림 앱
-              </a>
+              </Link>
               을 쓰는 걸 권해요.
             </li>
           </ul>

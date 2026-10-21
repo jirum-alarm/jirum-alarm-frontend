@@ -16,4 +16,3 @@ export const METADATA_SERVICE_URL = NEXT_PUBLIC_SERVICE_URL ?? NEXT_PUBLIC_DEFAU
  */
 export const IS_INDEXABLE_DEPLOYMENT = METADATA_SERVICE_URL === NEXT_PUBLIC_DEFAULT_SERVICE_URL;
 export const API_URL = process.env.API_URL;
-export const LANDING_URL = process.env.LANDING_URL ?? 'https://about-us.jirum-alarm.com';

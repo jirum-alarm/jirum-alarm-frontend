@@ -31,7 +31,16 @@ const hoursIn = ({ start, end }: QuietHours) => {
   return hours;
 };
 
-const isNightHour = (hour: number) => hour >= 21 || hour < 8;
+/**
+ * 야간 — 야간 수신 동의가 없으면 [start, end) 동안 알림을 모아 end 시각에 보낸다(서버 규칙).
+ * 사용법(/help·/guide)·소개 페이지 문구도 이 값으로 쓴다.
+ */
+export const NIGHT_HOURS: QuietHours = { start: 21, end: 8 };
+
+/** 「밤 9시부터 아침 8시」 */
+export const NIGHT_HOURS_TEXT = `밤 ${NIGHT_HOURS.start - 12}시부터 아침 ${NIGHT_HOURS.end}시`;
+
+const isNightHour = (hour: number) => hour >= NIGHT_HOURS.start || hour < NIGHT_HOURS.end;
 
 /** 설정 행 아래 한 줄 안내. 야간 미동의인데 밤 시간만 골랐으면 "원래 안 오는 시간" 이라고 알려 준다. */
 export const describeQuietHours = (quiet: QuietHours, nightAlerts: boolean) => {

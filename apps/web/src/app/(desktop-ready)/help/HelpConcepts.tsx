@@ -1,4 +1,7 @@
 import { infoBox, wordTag } from '@jirum/design-system/recipes';
+import { MAX_EXCLUDE_KEYWORDS } from '@jirum/domain/keyword-options';
+import { MAX_KEYWORD_COUNT } from '@jirum/domain/mypage';
+import { NIGHT_HOURS } from '@jirum/domain/quiet-hours';
 import { DAILY_COMMUNITY_DEALS } from '@jirum/domain/service-facts';
 
 import { cn } from '@/shared/lib/cn';
@@ -378,9 +381,12 @@ function AlarmConcept({ isApp }: { isApp: boolean }) {
 
       <div className="pc:grid-cols-3 mt-4 grid gap-2">
         {[
-          { k: '20개', v: '키워드는 20개까지' },
-          { k: '10개', v: '키워드마다 제외 단어' },
-          { k: '21~08시', v: '밤 알림은 동의 안 하면 아침 8시에 모아서' },
+          { k: `${MAX_KEYWORD_COUNT}개`, v: `키워드는 ${MAX_KEYWORD_COUNT}개까지` },
+          { k: `${MAX_EXCLUDE_KEYWORDS}개`, v: '키워드마다 제외 단어' },
+          {
+            k: `${NIGHT_HOURS.start}~${String(NIGHT_HOURS.end).padStart(2, '0')}시`,
+            v: `밤 알림은 동의 안 하면 아침 ${NIGHT_HOURS.end}시에 모아서`,
+          },
         ].map((s) => (
           <div
             key={s.v}

@@ -12,7 +12,6 @@
         "GRAPHQL_ENDPOINT",
         "SUBSCRIPTIONS_GRAPHQL_ENDPOINT",
         "CHAT_API_URL",
-        "LANDING_URL",
         "ANALYZE",
         "SENTRY_*"
       ],
