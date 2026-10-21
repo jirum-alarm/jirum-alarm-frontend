@@ -43,6 +43,12 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      // App Store Connect 의 개인정보 처리방침 URL 이 옛 경로다 — 404 면 심사·스토어 링크가 깨진다.
+      { source: '/privacyPolicy', destination: '/policies/privacy', permanent: true },
+    ];
+  },
   productionBrowserSourceMaps: false,
   images: {
     minimumCacheTTL: 31536000,
