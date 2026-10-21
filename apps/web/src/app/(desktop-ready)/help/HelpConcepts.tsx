@@ -1,4 +1,5 @@
 import { infoBox, wordTag } from '@jirum/design-system/recipes';
+import { DAILY_COMMUNITY_DEALS } from '@jirum/domain/service-facts';
 
 import { cn } from '@/shared/lib/cn';
 
@@ -248,7 +249,7 @@ function GatherConcept({ communityCount }: { communityCount: number }) {
         icon="layers"
         tone="bg-secondary-50 text-secondary-600"
         title={`커뮤니티 ${communityCount}곳을 대신 돌아봐요`}
-        lead="핫딜은 커뮤니티마다 따로 올라와요. 하루 900건 안팎이라 한두 곳만 보면 나머지를 놓쳐요. 지름알림이 모두 읽어 와서 같은 딜은 한 칸으로 접어요."
+        lead={`핫딜은 커뮤니티마다 따로 올라와요. 하루 ${DAILY_COMMUNITY_DEALS} 안팎이라 한두 곳만 보면 나머지를 놓쳐요. 지름알림이 모두 읽어 와서 같은 딜은 한 칸으로 접어요.`}
       />
       <figure
         data-nosnippet
@@ -313,7 +314,7 @@ function Arrow() {
 /* ───────── 3. 원하는 것만 알림 — 거름망 ───────── */
 
 const FUNNEL: { label: string; detail: string; width: string; tone: string }[] = [
-  { label: '하루 핫딜', detail: '약 900건', width: '100%', tone: 'bg-gray-200' },
+  { label: '하루 핫딜', detail: `약 ${DAILY_COMMUNITY_DEALS}`, width: '100%', tone: 'bg-gray-200' },
   {
     label: '키워드 「콜라」',
     detail: '「콜라」가 들어간 딜만',

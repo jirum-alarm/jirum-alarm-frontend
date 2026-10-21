@@ -35,6 +35,7 @@
     "./ranking": "./src/ranking.ts",
     "./relative-time": "./src/relative-time.ts",
     "./search": "./src/search.ts",
+    "./service-facts": "./src/service-facts.ts",
     "./share": "./src/share.ts",
     "./toss": "./src/toss.ts",
     "./toss-time-deal": "./src/toss-time-deal.ts",

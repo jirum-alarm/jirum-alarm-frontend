@@ -1,4 +1,10 @@
 import { infoBox, linkChip } from '@jirum/design-system/recipes';
+import {
+  COMMUNITY_COUNT,
+  DAILY_COMMUNITY_DEALS,
+  SERVICE_STATS,
+  SOURCE_COMMUNITIES,
+} from '@jirum/domain/service-facts';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -44,14 +50,13 @@ import OpenFaqFromHash from './OpenFaqFromHash';
  * 딱딱함은 회색 테두리 상자 나열이 원인이라 테두리를 빼고 면(gray-50)·구역별 색 아이콘·마스코트·작은 색 eyebrow 로 바꿨다.
  * 질문 묶음 상자는 overflow-clip — overflow-hidden 은 스크롤 컨테이너가 돼 /help#evidence 의 scroll-margin 이 무시되고
  * 질문 제목이 헤더 밑으로 숨었다.
- * 숫자(커뮤니티 목록·하루 건수·키워드 20개·제외 단어 10개·하루 3건·21~08시)는 실제 데이터·서버 값이다
- * (2026-10-14 운영 DB 최근 7일: 커뮤니티 13곳 하루 ~940건). 바뀌면 같이 고칠 것.
+ * 숫자(키워드 20개·제외 단어 10개·하루 3건·21~08시)는 서버 값이다. 커뮤니티 목록·곳 수·하루 건수는 소개 페이지와 같이 쓰는
+ * 정본 @jirum/domain/service-facts 에서 온다 — 바뀌면 거기를 고친다.
  */
 const PATH = '/help';
 // 검색 결과에서 잘리지 않는 길이 — 제목 ~30자, 설명 ~100자(모바일 검색 결과 기준). 예전 제목 43자·설명 170자는 뒤가 잘렸다.
 const title = '지름알림이란? 핫딜 알림 사용법·자주 묻는 질문';
-const description =
-  '뽐뿌·에펨코리아 등 커뮤니티 13곳의 핫딜을 한곳에 모아 진짜 싼지 근거를 붙이고, 원하는 상품이 올라오면 알려주는 무료 서비스예요. 다른 점·사용법·자주 묻는 질문을 모았어요.';
+const description = `뽐뿌·에펨코리아 등 커뮤니티 ${COMMUNITY_COUNT}의 핫딜을 한곳에 모아 진짜 싼지 근거를 붙이고, 원하는 상품이 올라오면 알려주는 무료 서비스예요. 다른 점·사용법·자주 묻는 질문을 모았어요.`;
 
 export const metadata: Metadata = {
   title,
@@ -67,8 +72,7 @@ export const metadata: Metadata = {
   },
 };
 
-const COMMUNITIES =
-  '뽐뿌·에펨코리아·아카라이브·이토랜드·맘이베베·퀘이사존·루리웹·쿨엔조이·어미새·딜바다·다모앙·클리앙';
+const COMMUNITIES = SOURCE_COMMUNITIES.join('·');
 
 /** 다른 핫딜 커뮤니티·사이트와 다른 점. 순서 = 사람들이 오는 이유(싸게 사기) 순. tone = 아이콘 칸 색(싸다=빨강 관례). */
 type Tone = 'error' | 'secondary' | 'primary' | 'success';
@@ -95,8 +99,8 @@ const DIFFERENCES: {
   {
     icon: 'layers',
     tone: 'secondary',
-    title: '커뮤니티 13곳을 한눈에',
-    text: '핫딜은 커뮤니티마다 따로 올라와요. 커뮤니티 핫딜만 하루 900건 안팎이라(2026년 10월 기준) 한두 곳만 보면 나머지를 놓쳐요. 토스쇼핑·네이버쇼핑·오늘의집 특가도 함께 모아요.',
+    title: `커뮤니티 ${COMMUNITY_COUNT}을 한눈에`,
+    text: `핫딜은 커뮤니티마다 따로 올라와요. 커뮤니티 핫딜만 하루 ${DAILY_COMMUNITY_DEALS} 안팎이라(2026년 10월 기준) 한두 곳만 보면 나머지를 놓쳐요. 토스쇼핑·네이버쇼핑·오늘의집 특가도 함께 모아요.`,
     tags: COMMUNITIES.split('·'),
   },
   {
@@ -223,7 +227,7 @@ const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
       {
         id: 'sources',
         q: '어디에 올라온 핫딜을 모으나요?',
-        a: `${COMMUNITIES} 등 커뮤니티 핫딜 게시판을 읽어요. 커뮤니티 핫딜만 하루 900건 안팎이에요(2026년 10월 기준). 토스쇼핑·네이버쇼핑·오늘의집 특가도 따로 모아요.`,
+        a: `${COMMUNITIES} 등 커뮤니티 핫딜 게시판을 읽어요. 커뮤니티 핫딜만 하루 ${DAILY_COMMUNITY_DEALS} 안팎이에요(2026년 10월 기준). 토스쇼핑·네이버쇼핑·오늘의집 특가도 따로 모아요.`,
       },
       {
         id: 'one-place',
@@ -386,12 +390,6 @@ const TOC: TocItem[] = [
   },
 ];
 
-const STATS = [
-  { value: '13곳', label: '모아 보는 커뮤니티' },
-  { value: '900건', label: '하루 커뮤니티 핫딜' },
-  { value: '0원', label: '보기·알림 모두 무료' },
-];
-
 /** 구역 제목. eyebrow(작은 색 글씨)는 목차 이름과 같아 「지금 어디인지」를 알려 주고, 문서가 딱딱한 제목 나열로 안 보이게 한다. */
 function SectionHeading({
   id,
@@ -508,7 +506,7 @@ export default async function HelpPage() {
               </span>
             </h1>
             <p className="pc:text-lg mt-4 text-base leading-relaxed text-gray-700">
-              지름알림은 커뮤니티 13곳과 쇼핑몰 특가의 핫딜을 한곳에 모아,{' '}
+              지름알림은 커뮤니티 {COMMUNITY_COUNT}과 쇼핑몰 특가의 핫딜을 한곳에 모아,{' '}
               <strong className="font-semibold text-gray-900">
                 지난 핫딜가·다나와·쿠팡 가격과 비교해 진짜 싼지 근거
               </strong>
@@ -516,7 +514,7 @@ export default async function HelpPage() {
             </p>
 
             <ul className="pc:max-w-md mt-6 grid grid-cols-3 gap-2">
-              {STATS.map((s) => (
+              {SERVICE_STATS.map((s) => (
                 <li key={s.label} className="rounded-2xl bg-white px-2 py-3 text-center">
                   <strong className="pc:text-xl block text-lg font-bold text-gray-900">
                     {s.value}
@@ -563,7 +561,7 @@ export default async function HelpPage() {
                 title="지름알림은 이렇게 일해요"
                 sub="싸게 사는 데 꼭 필요한 세 가지를 그림으로 보여드릴게요."
               />
-              <HelpConcepts communityCount={13} isApp={isJirumAlarmApp} />
+              <HelpConcepts communityCount={SOURCE_COMMUNITIES.length} isApp={isJirumAlarmApp} />
             </section>
 
             <section id="how-to" aria-labelledby="how-to-title" className="scroll-mt-20">
@@ -768,7 +766,7 @@ export default async function HelpPage() {
                 <br className="pc:hidden" /> 올라오면 바로 알려드릴게요
               </p>
               <p className="text-fixed-300 mt-2 text-sm">
-                키워드 하나만 걸어 두면 커뮤니티 13곳을 대신 지켜봐요.
+                키워드 하나만 걸어 두면 커뮤니티 {COMMUNITY_COUNT}을 대신 지켜봐요.
               </p>
             </div>
           </div>

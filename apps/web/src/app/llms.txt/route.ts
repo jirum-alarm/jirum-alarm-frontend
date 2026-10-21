@@ -1,3 +1,4 @@
+import { COMMUNITY_COUNT, DAILY_COMMUNITY_DEALS } from '@jirum/domain/service-facts';
 import { NextResponse } from 'next/server';
 
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
@@ -11,7 +12,7 @@ export function GET() {
   const base = METADATA_SERVICE_URL;
   const llmsTxt = `# 지름알림 (Jirum Alarm)
 
-> 한국 커뮤니티 핫딜을 실시간으로 모아 왜 싼지 근거와 함께 보여주는 무료 서비스. 뽐뿌·에펨코리아·아카라이브·이토랜드·맘이베베·퀘이사존·루리웹·클리앙 등 커뮤니티 13곳(하루 약 900건)과 토스쇼핑·네이버쇼핑·오늘의집 특가를 모아, 같은 상품의 지난 1년 핫딜가·다나와 최저가·쿠팡 같은 상품 가격·커뮤니티 반응으로 이 가격이 좋은지 알려주고, 키워드(제외 단어·가격 범위 조건)·관심사 알림을 제공합니다.
+> 한국 커뮤니티 핫딜을 실시간으로 모아 왜 싼지 근거와 함께 보여주는 무료 서비스. 뽐뿌·에펨코리아·아카라이브·이토랜드·맘이베베·퀘이사존·루리웹·클리앙 등 커뮤니티 ${COMMUNITY_COUNT}(하루 약 ${DAILY_COMMUNITY_DEALS})과 토스쇼핑·네이버쇼핑·오늘의집 특가를 모아, 같은 상품의 지난 1년 핫딜가·다나와 최저가·쿠팡 같은 상품 가격·커뮤니티 반응으로 이 가격이 좋은지 알려주고, 키워드(제외 단어·가격 범위 조건)·관심사 알림을 제공합니다.
 
 ## 주요 페이지
 - [지름알림이란 · 자주 묻는 질문](${base}/help): 다른 핫딜 커뮤니티와 다른 점, 쓸 수 있는 기능, 자주 묻는 질문
