@@ -4,7 +4,7 @@ import AppDownload from '../key-visual/AppDownload';
 
 // 마지막 설치 권유 — 다 읽고 내려온 사람이 위로 다시 올라가지 않게 같은 설치 버튼을 한 번 더. 라임 띠라 앞 구역과 확실히 갈린다.
 const Banner = () => (
-  <section className="w-full bg-white px-5 pt-4 pb-20 lg:px-8 lg:pb-32">
+  <section id="install-band" className="w-full bg-white px-5 pt-4 pb-20 lg:px-8 lg:pb-32">
     <div className="bg-primary-500 relative mx-auto flex max-w-6xl flex-col items-center overflow-hidden rounded-3xl px-6 py-14 text-center break-keep lg:py-20">
       <Image
         src="/assets/icons/jirum.svg"

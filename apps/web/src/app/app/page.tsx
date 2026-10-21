@@ -23,8 +23,14 @@ export const metadata: Metadata = {
  * isApple(agent.ts)을 쓰지 않는 이유: 그쪽은 Macintosh도 Apple로 잡아서
  * 맥 데스크톱이 App Store 앱 페이지로 떨어진다. 여기선 iOS 기기만 정확히 본다.
  */
-export default async function AppInstallPage() {
+export default async function AppInstallPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ utm_source?: string | string[] }>;
+}) {
   const ua = (await headers()).get('user-agent') ?? '';
+  // 소개 페이지 QR(…/app?utm_source=about-us) 로 온 설치를 서비스 안 「앱 받기」(app_page)와 갈라 센다.
+  const source = (await searchParams).utm_source === 'about-us' ? 'about_us_qr' : 'app_page';
   const isIOS = /iPhone|iPad|iPod/i.test(ua);
   // PC 도 여기로 온다(키워드 화면 PushStatusBanner 「앱 설치하기」). 스토어 버튼은 데스크톱 웹 스토어를
   // 열 뿐 설치로 안 이어지니 QR 을 보여준다. 판정은 agent.ts checkDevice 의 isMobile 과 같은 정규식.
@@ -65,7 +71,7 @@ export default async function AppInstallPage() {
           <OpenInAppLink
             platform={isIOS ? 'apple' : 'android'}
             path="/"
-            source="app_page"
+            source={source}
             className="bg-primary-500 text-fixed-900 mt-10 flex h-14 w-full items-center justify-center rounded-xl font-semibold"
           >
             {isIOS ? 'App Store에서 받기' : 'Google Play에서 받기'}

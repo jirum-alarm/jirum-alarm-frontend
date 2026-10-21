@@ -34,6 +34,8 @@ export const metadata: Metadata = {
   alternates: {
     canonical: URL_BASE,
   },
+  // iOS 사파리 상단 「받기/열기」 배너 — 설치 입구라 OS 가 주는 설치 길도 연다.
+  itunes: { appId: '6474611420' },
   robots: {
     index: true,
     follow: true,

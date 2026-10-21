@@ -1,33 +1,30 @@
 import { PAGE } from '@/shared/constants/page';
 
-import GnbActions from './Navigation';
-import NavLink from './NavLink';
+import { InstallLink } from '../key-visual/AppDownload';
+
 import Title from './Title';
 
-// web DesktopGNB(apps/web/src/widgets/layout/ui/desktop/DesktopGNB.tsx) 의 NAV_LINKS 와 같은 순서·이름.
-// 앱이 달라 코드를 공유하지 못하니 메뉴를 바꾸면 양쪽을 같이 고친다.
-const NAV_LINKS = [
-  { path: PAGE.HOME, label: '홈' },
-  { path: PAGE.TRENDING_LIVE, label: '실시간' },
-  { path: PAGE.TRENDING_RANKING, label: '랭킹' },
-  { path: PAGE.KEYWORDS, label: '키워드' },
-  { path: PAGE.COMMUNITY, label: '커뮤니티' },
-];
-
+// 소개 페이지는 바깥(카톡방 공지·검색·SNS)에서 처음 온 사람을 설치로 데려오는 입구다 — 상단도 웹 메뉴를 늘어놓지 않고
+// 「앱 받기」 하나와 설치 없이 둘러볼 길(웹으로 보기)만 둔다. 예전엔 web 상단 메뉴의 손 복제본이라 메뉴마다 웹으로 새어 나갔다.
 const Header = () => {
   return (
     <div className="fixed inset-0 bottom-auto z-10 bg-white shadow-xs lg:border-b lg:border-gray-200">
       <header className="mx-auto flex h-14 max-w-7xl items-center justify-between px-5">
-        <nav className="flex h-full items-center gap-x-11">
-          <Title />
-          <div className="hidden h-full items-center gap-x-10 lg:flex">
-            {NAV_LINKS.map((nav) => (
-              <NavLink key={nav.path} href={PAGE.BASE + nav.path} label={nav.label} />
-            ))}
-            <NavLink href={PAGE.LANDING} label="소개" isActive />
-          </div>
-        </nav>
-        <GnbActions />
+        <Title />
+        <div className="flex items-center gap-x-4">
+          <a
+            href={PAGE.BASE}
+            className="text-sm font-semibold text-gray-600 transition-colors hover:text-gray-900"
+          >
+            웹으로 보기
+          </a>
+          <InstallLink
+            position="header"
+            className="bg-primary-500 text-fixed-900 hover:bg-primary-400 rounded-full px-4 py-1.5 text-sm font-bold transition-colors"
+          >
+            앱 받기
+          </InstallLink>
+        </div>
       </header>
     </div>
   );

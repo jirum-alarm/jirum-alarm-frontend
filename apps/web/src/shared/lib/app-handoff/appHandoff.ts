@@ -60,6 +60,7 @@ export type HandoffSource =
   | 'alarm_tab'
   | 'push_channel'
   | 'app_page'
+  | 'about_us_qr' // 소개 페이지(about-us) PC QR 로 /app 에 온 사람(?utm_source=about-us)
   | 'kakao_bridge' // 카톡 인앱에서 키워드를 건 뒤 「앱에서 받기」(shared/lib/kakao-bridge.ts)
   | 'kakao_invite'; // 카톡 인앱 「카톡 링크를 앱으로 바로 열기」 안내 띠(shared/lib/kakao-app-open.ts)
 

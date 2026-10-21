@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { describe, it } from 'node:test';
 
 const require = createRequire(import.meta.url);
-const { describeQuietHours, formatHour, toQuietHours } =
+const { describeQuietHours, formatHour, NIGHT_HOURS_TEXT, toQuietHours } =
   require('./quiet-hours.ts') as typeof import('./quiet-hours');
 
 describe('formatHour', () => {
@@ -42,5 +42,11 @@ describe('describeQuietHours', () => {
 
   it('밤에 걸쳐도 낮 시간이 끼면 일반 안내', () => {
     assert.match(describeQuietHours({ start: 6, end: 10 }, false), /오전 10시에 모아서/);
+  });
+});
+
+describe('NIGHT_HOURS_TEXT', () => {
+  it('소개·사용법 문구에 들어가는 야간 시간', () => {
+    assert.equal(NIGHT_HOURS_TEXT, '밤 9시부터 아침 8시');
   });
 });

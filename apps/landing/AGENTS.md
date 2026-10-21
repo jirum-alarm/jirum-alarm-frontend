@@ -14,6 +14,11 @@ The Landing app serves as the primary marketing and promotional interface for th
 
 This app is designed as a static marketing website to attract new users and provide information about the Jirum-Alarm hot deal aggregation service.
 
+**역할(2026-10-21)**: 바깥(카톡방 공지·검색·SNS·QR)에서 처음 온 사람을 **앱 설치로 데려오는 입구**. 서비스 안(web·앱)에서는 여기로 링크하지 않는다 —
+안의 «앱 받기»는 web `/app`(기기별 스토어 착지), 사용법·전체 FAQ 는 web `/help`.
+- 상단은 웹 메뉴 없이 「웹으로 보기」·「앱 받기」만, 폰에선 히어로 설치 버튼이 지나가면 하단 고정 「앱 받기」(`StickyInstall`).
+- 바깥 링크는 입구마다 `?utm_source=<입구>`(예: `kakao_notice`)를 붙인다 — 스토어 링크의 Play `utm_campaign`·App Store `ct`(pt 포함)에 실려 입구별 설치가 갈린다(`hooks/useEntrance.ts`).
+
 ## 📁 Key Files and Configuration
 
 ### Core Configuration
@@ -38,15 +43,13 @@ This app is designed as a static marketing website to attract new users and prov
 src/
 ├── app/                          # Next.js App Router pages
 │   ├── components/              # Page-specific components
-│   │   ├── header/              # Navigation header components
-│   │   │   ├── Header.tsx       # Main navigation header
-│   │   │   ├── Navigation.tsx  # Navigation menu
-│   │   │   ├── NavLink.tsx      # Navigation link component
+│   │   ├── header/
+│   │   │   ├── Header.tsx       # 로고 · 웹으로 보기 · 앱 받기(웹 메뉴 복제 아님)
 │   │   │   └── Title.tsx        # Site title component
 │   │   ├── key-visual/          # Hero section components
 │   │   │   ├── KeyVisual.tsx    # 히어로 — 칩·약속(진짜 싼지)·설명·설치·숫자 3개
 │   │   │   ├── HeroPhone.tsx    # 잠금화면 알림 두 개(키워드 알림 → ✅ 근거 확인)를 그린 폰
-│   │   │   └── AppDownload.tsx  # App download CTAs (QR·스토어, 자리별 utm_content)
+│   │   │   └── AppDownload.tsx  # App download CTAs (QR·스토어, 자리별 utm_content·입구별 캠페인, InstallLink)
 │   │   ├── concepts/
 │   │   │   └── Concepts.tsx     # 하는 일 세 가지(모으고·따지고·알려요) 카드
 │   │   ├── intro-video/
@@ -55,6 +58,8 @@ src/
 │   │   │   └── TalkRoom.tsx     # Community discussion section
 │   │   ├── faq/
 │   │   │   └── Faq.tsx          # 자주 묻는 질문(<details>) — 전체는 web /help
+│   │   ├── sticky-install/
+│   │   │   └── StickyInstall.tsx # 모바일 하단 고정 「앱 받기」(히어로 지난 뒤~마지막 설치 띠 전)
 │   │   ├── footer/             # Footer components
 │   │   │   ├── Footer.tsx       # Main footer
 │   │   │   └── Banner.tsx       # 마지막 설치 권유(라임 띠)
@@ -71,7 +76,8 @@ src/
 │   └── libs/
 │       └── cn.ts               # Utility function for class names
 ├── hooks/                       # Custom React hooks
-│   └── useDevice.ts           # Device detection utilities
+│   ├── useDevice.ts           # Device detection utilities
+│   └── useEntrance.ts         # 들어온 입구(utm_source) — 스토어 캠페인용
 ├── styles/                      # Global styles
 │   └── globals.css            # Global CSS styles
 └── fonts/                       # Font assets
