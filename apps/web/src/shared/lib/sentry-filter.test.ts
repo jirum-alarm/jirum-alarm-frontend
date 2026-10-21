@@ -87,3 +87,68 @@ test('이미지 최적화·미들웨어 트랜잭션은 버린다', () => {
   );
   assert.equal(dropUnneededTransaction(middleware), null);
 });
+
+type SpanJSON = NonNullable<Event['spans']>[number];
+
+const span = (
+  span_id: string,
+  parent_span_id: string,
+  op: string,
+  description: string,
+  status = 'ok',
+): SpanJSON => ({
+  span_id,
+  parent_span_id,
+  op,
+  description,
+  status,
+  trace_id: 't',
+  start_timestamp: 0,
+  data: {},
+});
+
+const serverTransaction = (spans: SpanJSON[], op = 'http.server'): Event =>
+  transactionEvent({}, { contexts: { trace: { op, trace_id: 't', span_id: 'root' } }, spans });
+
+test('서버 트랜잭션은 GraphQL 호출·Next 내부 단계 span 을 빼고 페이지 단위 단계만 남긴다', () => {
+  const event = serverTransaction([
+    span('render', 'root', 'default', 'render route (app) /products/[id]'),
+    span('tree', 'render', 'default', 'build component tree'),
+    span('page', 'tree', 'function.nextjs', 'resolve page server component "/products/[id]"'),
+    span('layout', 'tree', 'function.nextjs', 'resolve layout server component "(detail)"'),
+    span(
+      'meta',
+      'root',
+      'default',
+      'generateMetadata /(desktop-ready)/products/[id]/(detail)/page',
+    ),
+    span('load', 'root', 'default', 'load route module'),
+    span('gql', 'page', 'http.client', 'POST http://backend/graphql'),
+  ]);
+  const result = dropUnneededTransaction(event);
+  assert.deepEqual(
+    result?.spans?.map((s) => [s.span_id, s.parent_span_id]),
+    [
+      ['render', 'root'],
+      ['page', 'render'], // 잘린 build component tree 대신 남은 조상에 잇는다
+      ['meta', 'root'],
+    ],
+  );
+});
+
+test('실패한 span 은 종류와 상관없이 남긴다', () => {
+  const event = serverTransaction([
+    span('gql', 'load', 'http.client', 'POST http://backend/graphql', 'internal_error'),
+    span('load', 'root', 'default', 'load route module'),
+  ]);
+  assert.deepEqual(
+    dropUnneededTransaction(event)?.spans?.map((s) => [s.span_id, s.parent_span_id]),
+    [['gql', 'root']],
+  );
+});
+
+test('브라우저 트랜잭션의 span 은 건드리지 않는다', () => {
+  const spans = [span('res', 'root', 'resource.script', 'https://jirum-alarm.com/x.js')];
+  const event = serverTransaction(spans, 'pageload');
+  assert.equal(dropUnneededTransaction(event)?.spans?.length, 1);
+});

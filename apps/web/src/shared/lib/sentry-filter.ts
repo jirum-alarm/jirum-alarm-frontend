@@ -82,11 +82,45 @@ const requestUserAgent = (event: Event): string => {
   );
 };
 
+// 서버 트랜잭션의 자식 span 은 Sentry 로는 추려서 보낸다.
+// ★왜(2026-10-21): 서버 페이지 요청 하나가 백엔드 GraphQL 호출(http.client)과 Next.js 내부 단계(load route module 등)
+// span 을 수십 개씩 달고 와 span 할당량 대부분을 차지했다. 그 세부는 Tempo 가 같은 트레이스로 다 갖고 있다.
+// Sentry 엔 «어느 페이지가 느린가·에러가 어느 요청에서 났나»에 필요한 것만 남긴다 — 루트, 실패한 span,
+// 페이지·라우트 단위 단계(KEPT_SERVER_SPAN).
+// 샘플러가 아니라 전송 직전에 자르는 건 샘플러가 Tempo 와 공유라서다 — Tempo 로 가는 span 은 그대로다.
+const KEPT_SERVER_SPAN =
+  /^(render route|generateMetadata|executing api route|resolve page server component)/;
+
+type SpanJSON = NonNullable<Event['spans']>[number];
+
+const keepServerSpan = (span: SpanJSON): boolean =>
+  (!!span.status && span.status !== 'ok') || KEPT_SERVER_SPAN.test(span.description ?? '');
+
+// 남긴 span 의 부모가 잘렸으면 남은 가장 가까운 조상(없으면 루트)으로 잇는다 — 폭포 그림이 끊기지 않게.
+function trimServerSpans(event: Event): void {
+  const spans = event.spans;
+  const rootId = event.contexts?.trace?.span_id;
+  if (!spans || event.contexts?.trace?.op !== 'http.server') return;
+  const byId = new Map(spans.map((span) => [span.span_id, span]));
+  const kept = spans.filter(keepServerSpan);
+  const keptIds = new Set(kept.map((span) => span.span_id));
+  for (const span of kept) {
+    let parent = span.parent_span_id;
+    while (parent && parent !== rootId && !keptIds.has(parent)) {
+      parent = byId.get(parent)?.parent_span_id;
+    }
+    span.parent_span_id = parent ?? rootId;
+  }
+  event.spans = kept;
+}
+
 // 크롤러 판정은 shared/config/user-agent 의 isCrawlerUA 를 넘긴다(이 파일은 node --test 가 바로 읽게 의존 없이 둔다).
 export function createTransactionFilter(isCrawler: (ua: string) => boolean) {
   return <T extends Event>(event: T): T | null => {
     if (event.transaction === 'GET /_next/image') return null;
     if (event.contexts?.trace?.op === 'http.server.middleware') return null;
-    return isCrawler(requestUserAgent(event)) ? null : event;
+    if (isCrawler(requestUserAgent(event))) return null;
+    trimServerSpans(event);
+    return event;
   };
 }
