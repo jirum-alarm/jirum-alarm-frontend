@@ -16,7 +16,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useQuery} from '@tanstack/react-query';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -75,6 +75,7 @@ export default function KeywordsTabScreen() {
   const c = useColors();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<Nav>();
+  const isFocused = useIsFocused();
   const {data: hubs, isPending, isError, refetch} = useKeywordHubs();
   const {refreshing, onRefresh} = usePullRefresh(refetch);
 
@@ -116,7 +117,8 @@ export default function KeywordsTabScreen() {
 
   return (
     <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>
-      <SystemBars style="auto" hidden={false} />
+      {/* 보일 때만 — 시작 2초 뒤 미리 그려질 때 홈의 상태바(흰 글자)를 덮지 않게(HomeStatusBar 참고). */}
+      {isFocused ? <SystemBars style="auto" hidden={false} /> : null}
 
       {/* 헤더 — web KeywordsTabHeader(제목 + 검색) */}
       <View
