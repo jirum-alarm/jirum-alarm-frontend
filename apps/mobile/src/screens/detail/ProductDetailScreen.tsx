@@ -84,6 +84,7 @@ import {useKeywordHubs} from '@/entities/keyword-hub/model/useKeywordHubs';
 import {text} from '@jirum/design-system/recipes';
 import {cn} from '@/shared/lib/styling/className';
 import {readingColumn} from '@/shared/hooks/useWideLayout';
+import DetailSplit from './ui/DetailSplit';
 
 type Props = NativeStackScreenProps<
   ProductFlowParamList,
@@ -344,235 +345,251 @@ function NativeDetail({
     ? findKeywordHubsForTitle(product.title, hubList)
     : [];
 
+  // web ProductDetailImage 와 같이 webp → 원본 → 카테고리 대체 그림 순서.
+  // CDN 은 webp 만 갖고 있어 원본 확장자 URL 은 403 이다.
+  const media = (
+    <View className="relative aspect-square w-full bg-gray-50">
+      {/* 누르면 크게 보기 — 사진을 눌러 보는 사람이 많은데 아무 일이 없었다(web Clarity dead click, 2026-10-20). */}
+      <Pressable
+        className="size-full"
+        disabled={!product.thumbnail}
+        accessibilityRole="imagebutton"
+        accessibilityLabel="사진 크게 보기"
+        onPress={() =>
+          product.thumbnail &&
+          setViewer({
+            uri: convertToWebp(product.thumbnail) ?? product.thumbnail,
+            fallbackUri: product.thumbnail,
+          })
+        }>
+        <Thumbnail
+          uri={product.thumbnail}
+          categoryId={product.categoryId}
+          resizeMode="cover"
+          full
+        />
+      </Pressable>
+      {showViewerCount ? <ViewerCount count={product.viewCount ?? 0} /> : null}
+    </View>
+  );
+
   return (
     <View className="flex-1 bg-white">
       <SystemBars style="auto" hidden={false} />
-      <ScrollView
-        ref={scrollRef}
-        className="flex-1"
-        // 넓은 화면(듀오 펼침·가로)에선 가운데 600 틀 — 정사각 사진이 화면 폭만큼 커지지 않게(web 모바일 틀과 같다).
-        contentContainerStyle={readingColumn}
-        contentInsetAdjustmentBehavior="never"
-        showsVerticalScrollIndicator={false}
-        scrollEventThrottle={16}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        onLayout={e => {
-          viewportHeight.current = e.nativeEvent.layout.height;
-          checkExpiredSeen(lastScrollY.current);
-        }}
-        onScroll={e => {
-          const y = e.nativeEvent.contentOffset.y;
-          checkExpiredSeen(y);
-          // ★상세 state 가 아니라 작은 store 에 쓴다 — 방향이 바뀔 때마다 상세 전체
-          // (차트·댓글·캐러셀)가 다시 그려져 스크롤 직후 탭이 한 박자 늦었다.
-          scrollFlags.set({
-            showTopButton: y > 200 && y < lastScrollY.current,
-          });
-          lastScrollY.current = y;
-        }}>
-        {/* web ProductDetailImage 와 같이 webp → 원본 → 카테고리 대체 그림 순서.
-            CDN 은 webp 만 갖고 있어 원본 확장자 URL 은 403 이다. */}
-        <View className="relative aspect-square w-full bg-gray-50">
-          {/* 누르면 크게 보기 — 사진을 눌러 보는 사람이 많은데 아무 일이 없었다(web Clarity dead click, 2026-10-20). */}
-          <Pressable
-            className="size-full"
-            disabled={!product.thumbnail}
-            accessibilityRole="imagebutton"
-            accessibilityLabel="사진 크게 보기"
-            onPress={() =>
-              product.thumbnail &&
-              setViewer({
-                uri: convertToWebp(product.thumbnail) ?? product.thumbnail,
-                fallbackUri: product.thumbnail,
-              })
-            }>
-            <Thumbnail
-              uri={product.thumbnail}
-              categoryId={product.categoryId}
-              resizeMode="cover"
-              full
-            />
-          </Pressable>
-          {showViewerCount ? (
-            <ViewerCount count={product.viewCount ?? 0} />
-          ) : null}
-        </View>
-        {/* web 처럼 카드가 이미지 아래쪽 24px 을 덮어 둥근 모서리 뒤로 이미지가 보인다. */}
-        <View className="-mt-6 rounded-t-3xl border-t border-gray-100 bg-white pt-6">
-          <AlertReasonLine path={path} />
-          <ProductInfo
-            product={product}
-            source={source}
-            productId={productId}
-            isUserLogin={isLogin}
-            hidePrice={hidePrice}
-            evidence={evidence}
-            evidenceTargetsReady={evidenceTargetsReady}
-            onPressEvidenceMore={target => {
-              const y =
-                target === 'priceHistory'
-                  ? priceHistoryY.current
-                  : communityY.current;
-              if (y == null) return;
-              scrollRef.current?.scrollTo({y, animated: true});
+      {/* 넓은 가로 화면이면 사진은 왼쪽에 고정, 정보만 오른쪽에서 스크롤(DetailSplit). */}
+      <DetailSplit media={media}>
+        {(inlineMedia, split) => (
+          <ScrollView
+            ref={scrollRef}
+            className="flex-1"
+            // 넓은 화면(듀오 펼침·가로)에선 가운데 600 틀 — 정사각 사진이 화면 폭만큼 커지지 않게(web 모바일 틀과 같다).
+            contentContainerStyle={readingColumn}
+            contentInsetAdjustmentBehavior="never"
+            showsVerticalScrollIndicator={false}
+            scrollEventThrottle={16}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            onLayout={e => {
+              viewportHeight.current = e.nativeEvent.layout.height;
+              checkExpiredSeen(lastScrollY.current);
             }}
-          />
-          {/* web ProductPriceContext — 오래된 딜 안내. 모델 페이지 링크는 앱에서
+            onScroll={e => {
+              const y = e.nativeEvent.contentOffset.y;
+              checkExpiredSeen(y);
+              // ★상세 state 가 아니라 작은 store 에 쓴다 — 방향이 바뀔 때마다 상세 전체
+              // (차트·댓글·캐러셀)가 다시 그려져 스크롤 직후 탭이 한 박자 늦었다.
+              scrollFlags.set({
+                showTopButton: y > 200 && y < lastScrollY.current,
+              });
+              lastScrollY.current = y;
+            }}>
+            {inlineMedia}
+            {/* web 처럼 카드가 이미지 아래쪽 24px 을 덮어 둥근 모서리 뒤로 이미지가 보인다(나눈 화면은 사진이 옆이라 겹치지 않는다). */}
+            <View
+              className={
+                split
+                  ? 'bg-white pt-4'
+                  : '-mt-6 rounded-t-3xl border-t border-gray-100 bg-white pt-6'
+              }>
+              <AlertReasonLine path={path} />
+              <ProductInfo
+                product={product}
+                source={source}
+                productId={productId}
+                isUserLogin={isLogin}
+                hidePrice={hidePrice}
+                evidence={evidence}
+                evidenceTargetsReady={evidenceTargetsReady}
+                onPressEvidenceMore={target => {
+                  const y =
+                    target === 'priceHistory'
+                      ? priceHistoryY.current
+                      : communityY.current;
+                  if (y == null) return;
+                  scrollRef.current?.scrollTo({y, animated: true});
+                }}
+              />
+              {/* web ProductPriceContext — 오래된 딜 안내. 모델 페이지 링크는 앱에서
               /deals 를 열지 않으므로(2026-09-09 결정) 뺐다. */}
-          {ageNotice ? (
-            <Text className={cn(text.muted, 'mx-5 mb-6')}>{ageNotice}</Text>
-          ) : null}
-          {/* web ProductPriceContext 키워드 허브 링크 — 딜에서 한 층 위(「삼다수 핫딜」 모음)로. 제목 매칭은
+              {ageNotice ? (
+                <Text className={cn(text.muted, 'mx-5 mb-6')}>{ageNotice}</Text>
+              ) : null}
+              {/* web ProductPriceContext 키워드 허브 링크 — 딜에서 한 층 위(「삼다수 핫딜」 모음)로. 제목 매칭은
               @jirum/domain 한 곳(서버 keyword-hub-match 와 같은 규칙). 목록이 없으면 안 보일 뿐이다. */}
-          {keywordHubs.length > 0 ? (
-            <View className="mx-5 mb-6 flex-row flex-wrap gap-x-3 gap-y-1">
-              {keywordHubs.map(hub => (
+              {keywordHubs.length > 0 ? (
+                <View className="mx-5 mb-6 flex-row flex-wrap gap-x-3 gap-y-1">
+                  {keywordHubs.map(hub => (
+                    <PressableOpacity
+                      key={hub.slug}
+                      accessibilityRole="link"
+                      hitSlop={6}
+                      onPress={() => {
+                        Analytics.track('keyword_hub_card_click', {
+                          keyword: hub.slug,
+                          placement: 'detail_price_context',
+                        });
+                        // 상세 스택 타입엔 허브가 없다 — 액션으로 보내 루트(탭) 스택이 받게 한다(아래 도움말 링크와 같은 길).
+                        navigation.dispatch(
+                          StackActions.push(tabStackNavigations.KEYWORD_HUB, {
+                            slug: hub.slug,
+                            name: hub.name,
+                          }),
+                        );
+                      }}>
+                      <Text className="text-sm text-gray-600">
+                        {hub.name} 핫딜 더보기 →
+                      </Text>
+                    </PressableOpacity>
+                  ))}
+                </View>
+              ) : null}
+              {/* web ProductPriceContext 「지름알림이 가격을 판단하는 법」 — 근거 칸 밖에 둔다. 그 칸은 「답」 숨김
+              실험(price_answer_holdout_v1)이 숨기므로 안에 넣으면 실험 군만 링크가 생긴다. 검색 스택에서 열려도
+              WEBVIEW 는 루트 스택이 받는다(push 가 부모로 올라간다). */}
+              {!hidePrice ? (
                 <PressableOpacity
-                  key={hub.slug}
                   accessibilityRole="link"
-                  hitSlop={6}
+                  className="mx-5 mb-6 self-start"
+                  hitSlop={8}
                   onPress={() => {
-                    Analytics.track('keyword_hub_card_click', {
-                      keyword: hub.slug,
+                    Analytics.track('help_link_click', {
                       placement: 'detail_price_context',
                     });
-                    // 상세 스택 타입엔 허브가 없다 — 액션으로 보내 루트(탭) 스택이 받게 한다(아래 도움말 링크와 같은 길).
+                    // 상세 스택 타입엔 WEBVIEW 가 없다(상세·댓글만) — 액션으로 보내 루트 스택이 받게 한다.
                     navigation.dispatch(
-                      StackActions.push(tabStackNavigations.KEYWORD_HUB, {
-                        slug: hub.slug,
-                        name: hub.name,
+                      StackActions.push(tabStackNavigations.WEBVIEW, {
+                        uri: `${HELP_PATH}#evidence`,
+                        title: '사용법 · 자주 묻는 질문',
                       }),
                     );
                   }}>
-                  <Text className="text-sm text-gray-600">
-                    {hub.name} 핫딜 더보기 →
+                  <Text className={text.muted}>
+                    지름알림이 가격을 판단하는 법 ›
                   </Text>
                 </PressableOpacity>
-              ))}
+              ) : null}
             </View>
-          ) : null}
-          {/* web ProductPriceContext 「지름알림이 가격을 판단하는 법」 — 근거 칸 밖에 둔다. 그 칸은 「답」 숨김
-              실험(price_answer_holdout_v1)이 숨기므로 안에 넣으면 실험 군만 링크가 생긴다. 검색 스택에서 열려도
-              WEBVIEW 는 루트 스택이 받는다(push 가 부모로 올라간다). */}
-          {!hidePrice ? (
-            <PressableOpacity
-              accessibilityRole="link"
-              className="mx-5 mb-6 self-start"
-              hitSlop={8}
-              onPress={() => {
-                Analytics.track('help_link_click', {
-                  placement: 'detail_price_context',
-                });
-                // 상세 스택 타입엔 WEBVIEW 가 없다(상세·댓글만) — 액션으로 보내 루트 스택이 받게 한다.
-                navigation.dispatch(
-                  StackActions.push(tabStackNavigations.WEBVIEW, {
-                    uri: `${HELP_PATH}#evidence`,
-                    title: '사용법 · 자주 묻는 질문',
-                  }),
-                );
-              }}>
-              <Text className={text.muted}>
-                지름알림이 가격을 판단하는 법 ›
-              </Text>
-            </PressableOpacity>
-          ) : null}
-        </View>
-        {/* web 순서: 카톡방 → 쿠팡 고지 → (띠) 비교 → (띠) 가격추이 → (띠) 커뮤니티 반응. 광고는 앱에서 제거.
+            {/* web 순서: 카톡방 → 쿠팡 고지 → (띠) 비교 → (띠) 가격추이 → (띠) 커뮤니티 반응. 광고는 앱에서 제거.
             띠는 조건부 섹션이 자기 안에 둔다(DetailBand) — 섹션이 없으면 띠도 없다. */}
-        {/* 요약 아래 안내 묶음(web 의 gap-3 묶음) — 카드 사이는 gap 이 주고 카드엔 바깥 margin 을 두지 않는다.
+            {/* 요약 아래 안내 묶음(web 의 gap-3 묶음) — 카드 사이는 gap 이 주고 카드엔 바깥 margin 을 두지 않는다.
             예전엔 카톡 카드 mb-4 + 띠 mt-7 로 띠 위가 44pt, 아래가 28pt 로 어긋났다(2026-10-15). */}
-        <View className="gap-3">
-          <KakaoOpenChatPrompt
-            categoryId={product.categoryId}
-            productId={Number(product.id)}
-          />
-          <AffiliateNotice mallName={product.mallName} variant="coupang" />
-        </View>
-        <View
-          onLayout={e => {
-            expiredBlockY.current = e.nativeEvent.layout.y;
-            checkExpiredSeen(lastScrollY.current);
-          }}>
-          <ExpiredProductWarning
-            product={product}
-            seen={expiredSeen}
-            onPressProduct={pushProduct}
-            // 하위 경로도 같은 라우트(DETAIL) — 탭 스택·검색 스택 어디서 열려도 같다
-            // (검색 스택엔 WEBVIEW 가 없다). /related 는 ProductDetailScreen 이 네이티브로 그린다.
-            onPressMore={() =>
-              navigation.push(tabStackNavigations.DETAIL, {
-                path: `/products/${productId}/related`,
-              })
-            }
-          />
-          {/* 막 올라온 딜(7일 미만)엔 위 종료 딜 블록 대신 같은 상품·같은 라인의 다른 진행 중 딜(둘은 겹치지 않는다). */}
-          <LiveAlternativeDeals
-            product={product}
-            seen={expiredSeen}
-            onPressProduct={pushProduct}
-          />
-        </View>
-        {!hidePrice ? (
-          <PriceHistorySection
-            productId={productId}
-            postedAt={product.postedAt}
-            productTitle={product.title}
-            productThumbnail={product.thumbnail}
-            onPressProduct={pushProduct}
-            topDivider
-            onLayout={e => {
-              priceHistoryY.current = e.nativeEvent.layout.y;
-              markTargetReady('priceHistory');
-            }}
-            currentPrice={
-              product.price
-                ? Number(String(product.price).replace(/[^0-9.]/g, '')) || null
-                : null
-            }
-          />
-        ) : null}
-        {/* 유저 직접 등록 상품은 크롤링 출처가 없어 커뮤니티 반응도 없다(web 과 동일). */}
-        {product.uploaderType !== UploaderType.User ? (
-          <>
-            <DetailBand />
+            <View className="gap-3">
+              <KakaoOpenChatPrompt
+                categoryId={product.categoryId}
+                productId={Number(product.id)}
+              />
+              <AffiliateNotice mallName={product.mallName} variant="coupang" />
+            </View>
             <View
               onLayout={e => {
-                communityY.current = e.nativeEvent.layout.y;
-                markTargetReady('community');
+                expiredBlockY.current = e.nativeEvent.layout.y;
+                checkExpiredSeen(lastScrollY.current);
               }}>
-              <CommunityReaction productId={productId} isUserLogin={isLogin} />
+              <ExpiredProductWarning
+                product={product}
+                seen={expiredSeen}
+                onPressProduct={pushProduct}
+                // 하위 경로도 같은 라우트(DETAIL) — 탭 스택·검색 스택 어디서 열려도 같다
+                // (검색 스택엔 WEBVIEW 가 없다). /related 는 ProductDetailScreen 이 네이티브로 그린다.
+                onPressMore={() =>
+                  navigation.push(tabStackNavigations.DETAIL, {
+                    path: `/products/${productId}/related`,
+                  })
+                }
+              />
+              {/* 막 올라온 딜(7일 미만)엔 위 종료 딜 블록 대신 같은 상품·같은 라인의 다른 진행 중 딜(둘은 겹치지 않는다). */}
+              <LiveAlternativeDeals
+                product={product}
+                seen={expiredSeen}
+                onPressProduct={pushProduct}
+              />
             </View>
-          </>
-        ) : null}
-        <DetailBand />
-        <TossDetailImages
-          images={source.toss?.images}
-          onPressImage={uri => setViewer({uri})}
-        />
-        <CommentSection
-          productId={productId}
-          myUserId={myUserId}
-          onPressMore={() =>
-            navigation.navigate(tabStackNavigations.COMMENTS, {productId})
-          }
-        />
-        <DetailBand />
-        <ProductCarouselSection
-          title={`${product.categoryName ?? '기타'} 인기 상품`}
-          products={categoryPopular?.filter(
-            p => String(p.id) !== String(product.id),
-          )}
-          isPending={isCategoryPending}
-          isError={isCategoryError}
-          onRetry={refetchCategory}
-          onPressProduct={pushProduct}
-          trackingSource="category_popular"
-        />
-        <AffiliateNotice mallName={product.mallName} variant="general" />
-        <View className="h-6 bg-gray-100" />
-      </ScrollView>
+            {!hidePrice ? (
+              <PriceHistorySection
+                productId={productId}
+                postedAt={product.postedAt}
+                productTitle={product.title}
+                productThumbnail={product.thumbnail}
+                onPressProduct={pushProduct}
+                topDivider
+                onLayout={e => {
+                  priceHistoryY.current = e.nativeEvent.layout.y;
+                  markTargetReady('priceHistory');
+                }}
+                currentPrice={
+                  product.price
+                    ? Number(String(product.price).replace(/[^0-9.]/g, '')) ||
+                      null
+                    : null
+                }
+              />
+            ) : null}
+            {/* 유저 직접 등록 상품은 크롤링 출처가 없어 커뮤니티 반응도 없다(web 과 동일). */}
+            {product.uploaderType !== UploaderType.User ? (
+              <>
+                <DetailBand />
+                <View
+                  onLayout={e => {
+                    communityY.current = e.nativeEvent.layout.y;
+                    markTargetReady('community');
+                  }}>
+                  <CommunityReaction
+                    productId={productId}
+                    isUserLogin={isLogin}
+                  />
+                </View>
+              </>
+            ) : null}
+            <DetailBand />
+            <TossDetailImages
+              images={source.toss?.images}
+              onPressImage={uri => setViewer({uri})}
+            />
+            <CommentSection
+              productId={productId}
+              myUserId={myUserId}
+              onPressMore={() =>
+                navigation.navigate(tabStackNavigations.COMMENTS, {productId})
+              }
+            />
+            <DetailBand />
+            <ProductCarouselSection
+              title={`${product.categoryName ?? '기타'} 인기 상품`}
+              products={categoryPopular?.filter(
+                p => String(p.id) !== String(product.id),
+              )}
+              isPending={isCategoryPending}
+              isError={isCategoryError}
+              onRetry={refetchCategory}
+              onPressProduct={pushProduct}
+              trackingSource="category_popular"
+            />
+            <AffiliateNotice mallName={product.mallName} variant="general" />
+            <View className="h-6 bg-gray-100" />
+          </ScrollView>
+        )}
+      </DetailSplit>
       <ScrollAwareBottomCTA
         flags={scrollFlags}
         product={product}

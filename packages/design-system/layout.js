@@ -70,8 +70,11 @@ const layout = {
    * 넓은 화면(폴더블 펼침·가로 모드 — 앱). 폰 폭(375~440)에선 아무것도 바뀌지 않는다.
    *   readingMaxWidth 600 = 한 줄로 읽는 화면(상세·글)·시트의 최대 폭, 가운데 정렬. web 모바일 틀(--container-mobile-max)과 같은 값.
    *   gridColumnWidth     = 상품 그리드 열 수를 정하는 칸 폭 — gridColumns() 참고.
+   *   twoPaneMinWidth 700 = 가로 화면이 이만큼 넓으면 상세를 사진 | 정보 둘로 나눈다(듀오 펼침·폴드·태블릿 가로, 가로 아이폰).
+   *                         세로 화면은 넓어도 한 줄(가운데 600) — 듀오 펼침 세로 669·폴드 세로 ~670 은 여기 안 걸린다.
+   *   twoPaneMediaMax 440 = 나눈 화면의 왼쪽 사진 최대 폭(가장 큰 폰 폭). 세로 높이가 모자라면 그 높이까지만.
    */
-  wide: {readingMaxWidth: 600, gridColumnWidth: 375},
+  wide: {readingMaxWidth: 600, gridColumnWidth: 375, twoPaneMinWidth: 700, twoPaneMediaMax: 440},
 };
 
 /**

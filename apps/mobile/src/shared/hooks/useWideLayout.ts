@@ -1,4 +1,5 @@
 import {gridColumns, layout} from '@jirum/design-system/layout';
+import {useWindowDimensions} from 'react-native';
 import {useContentWidth} from '@/shared/components/SideSafeArea';
 
 /**
@@ -10,6 +11,25 @@ import {useContentWidth} from '@/shared/components/SideSafeArea';
 export function useGridColumns(base: 2 | 3): number {
   return gridColumns(useContentWidth(), base);
 }
+
+/** 가로이고 충분히 넓으면 상세를 사진 | 정보 둘로 나눈다(layout.wide.twoPaneMinWidth). */
+export function useTwoPane(): boolean {
+  const width = useContentWidth();
+  const {height} = useWindowDimensions();
+  return isTwoPane(width, height);
+}
+
+export const isTwoPane = (contentWidth: number, height: number): boolean =>
+  contentWidth > height && contentWidth >= layout.wide.twoPaneMinWidth;
+
+/** 나눈 화면의 왼쪽 사진 한 변 — 폭의 45%·가장 큰 폰 폭·쓸 수 있는 높이 중 작은 값. */
+export const twoPaneMediaSize = (
+  contentWidth: number,
+  paneHeight: number,
+): number =>
+  Math.floor(
+    Math.min(contentWidth * 0.45, layout.wide.twoPaneMediaMax, paneHeight),
+  );
 
 /**
  * «더보기»가 있는 미리보기 그리드는 꽉 찬 줄까지만 — 열이 늘면 마지막 줄에 한두 장만 남아 빈칸이 눈에 띈다.

@@ -213,6 +213,8 @@ pnpm build            # Production build
 - **넓은 화면(듀오 펼침·가로 모드) = 카드는 폰 크기 그대로, 열·여백이 는다**(2026-10-22). 규칙 정본은 design-system `layout.wide`·`gridColumns()`, 앱은 `shared/hooks/useWideLayout`:
   상품 그리드는 폰 열 수(2·3)를 `useGridColumns(base)` 로 넘긴다(CurationGrid·GridSkeleton 은 `columns` 가 폰 기준이라 알아서 는다 — 669 → 3·5열, 가로 ~870 → 4·6열, 폰 그대로). «더보기» 미리보기 그리드는 `fullRows` 로 꽉 찬 줄까지만.
   한 줄로 읽는 화면(상세·커뮤니티 글)·시트(BottomSheet·공유)는 `readingColumn` — 가운데 600(web 모바일 틀과 같은 폭). 목록 행(설정·키워드·알림)은 늘어나도 그대로 둔다.
+  상품 상세는 가로이고 폭 700 이상이면(듀오 펼침·폴드·태블릿 가로, 가로 아이폰) 사진 | 정보로 나눈다(`DetailSplit`, `layout.wide.twoPaneMinWidth`) — 사진은 왼쪽 고정, 정보만 스크롤. 세로는 넓어도 한 줄.
+  아이패드는 안 바뀐다 — 앱이 아이폰 전용(TARGETED_DEVICE_FAMILY=1)이라 아이패드에선 아이폰 크기 창으로 돈다(유니버설 전환은 스토어 빌드 일).
 - **다크모드 = OS 설정을 따른다(2026-10-01). 내정보 > 화면 모드에서 라이트/다크 고정 가능(`color-scheme-preference.ts` → `Appearance.setColorScheme`).** 색 정본은 `packages/design-system/tokens.js` 한 곳(web 과 같은 값) — tailwind 토큰이 `:root` 변수라
   `bg-white`·`text-gray-900` 은 **다크에서 값만 뒤집힌다**(`dark:` 를 붙일 일이 거의 없다. `white`=바탕, gray 50↔900).
   - 테마와 무관해야 하는 자리(홈 상단 어두운 띠·사진 위 배지·색 배지 위 흰 글자·라임 버튼 위 짙은 글자)는 `fixed-*`(`text-fixed-white`, `bg-fixed-900`).
