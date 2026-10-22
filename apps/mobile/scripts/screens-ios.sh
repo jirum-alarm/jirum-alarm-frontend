@@ -57,16 +57,23 @@ fi
 /usr/libexec/PlistBuddy -c 'Add :FIREBASE_ANALYTICS_COLLECTION_ENABLED bool false' "$APP/Info.plist"
 codesign --force --deep --sign - "$APP" 2>/dev/null
 
-read -r TYPE RUNTIME < <(xcrun simctl list devices available -j | BOOT_RUNTIME="${BOOT_RUNTIME:-}" python3 -c '
+# SCREENS_DEVICE_TYPE=com.apple.CoreSimulator.SimDeviceType.iPhone-Duo BOOT_RUNTIME=com.apple.CoreSimulator.SimRuntime.iOS-27-1
+#   → 다른 기기 모양으로 찍는다. 듀오는 iOS 27.1 런타임부터 만들어지고 시뮬레이터가 접힌 자세로 켜져
+#   바깥 화면(466×678pt)만 켜진다 — SCREENS_DISPLAY=1 로 그 화면을 찍는다(안 주면 꺼진 안쪽 화면이 까맣게 찍힌다).
+#   펼침(안쪽 669×951pt)은 Device Hub 버튼으로만 바뀐다(simctl 명령 없음, Xcode 27.1).
+#   iOS 27 기기는 부팅 뒤 1~2분 동안 앱이 스플래시에서 멈춘다(Firebase Messaging 의 푸시 등록 확인 XPC 가 답을 못 받음 —
+#   시뮬레이터 전용, AGENTS.md) — SCREENS_BOOT_SETTLE=150 으로 부팅 뒤 기다렸다 찍는다.
+read -r TYPE RUNTIME < <(xcrun simctl list devices available -j | BOOT_RUNTIME="${BOOT_RUNTIME:-}" DEVICE_TYPE="${SCREENS_DEVICE_TYPE:-}" python3 -c '
 import json, os, sys
 devs = json.load(sys.stdin)["devices"]
 ver = lambda r: [int(x) for x in r.rsplit("iOS-", 1)[1].split("-")]
 rt = os.environ["BOOT_RUNTIME"] or max((r for r, ds in devs.items() if "iOS" in r and ver(r)[0] < 27
          and any(d["name"].startswith("iPhone") for d in ds)), key=ver)
-print(next(d["deviceTypeIdentifier"] for d in devs[rt] if d["name"].startswith("iPhone")), rt)')
+print(os.environ["DEVICE_TYPE"] or next(d["deviceTypeIdentifier"] for d in devs[rt] if d["name"].startswith("iPhone")), rt)')
 DEV=$(xcrun simctl create app-screens "$TYPE" "$RUNTIME")
 xcrun simctl boot "$DEV"
 xcrun simctl bootstatus "$DEV" -b >/dev/null
+sleep "${SCREENS_BOOT_SETTLE:-0}"
 xcrun simctl install "$DEV" "$APP"
 
 rm -rf "$OUT"
@@ -113,7 +120,7 @@ if os.environ["API_URL"]:
 json.dump(data, open(path, "w"))' "$STORE"
   pid=$(xcrun simctl launch "$DEV" "$BUNDLE_ID" | awk '{print $NF}')
   sleep "$WAIT"
-  xcrun simctl io "$DEV" screenshot "$OUT/$1/$2.png" >/dev/null 2>&1 || true
+  xcrun simctl io "$DEV" screenshot ${SCREENS_DISPLAY:+--display="$SCREENS_DISPLAY"} "$OUT/$1/$2.png" >/dev/null 2>&1 || true
   if ps -p "$pid" >/dev/null 2>&1; then
     echo "  찍음 $1/$2"
   else

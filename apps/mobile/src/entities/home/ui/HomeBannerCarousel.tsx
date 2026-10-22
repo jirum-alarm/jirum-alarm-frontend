@@ -8,13 +8,13 @@ import React, {
 } from 'react';
 import {NavigationContext, StackActions} from '@react-navigation/native';
 import {
-  Dimensions,
   Image,
   View,
   type ImageSourcePropType,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
 } from 'react-native';
+import {useContentWidth} from '@/shared/components/SideSafeArea';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {adLabel} from '@jirum/design-system/recipes';
 import {cn} from '@/shared/lib/styling/className';
@@ -98,7 +98,7 @@ export default function HomeBannerCarousel() {
 }
 
 function BannerPager({slides}: {slides: BannerSlide[]}) {
-  const screenWidth = Dimensions.get('window').width;
+  const screenWidth = useContentWidth();
   // web: style width 'calc(100% - 50px)' + centeredSlides + spaceBetween 12
   const slideWidth = screenWidth - 50;
   const GAP = 12;

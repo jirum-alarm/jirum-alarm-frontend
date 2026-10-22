@@ -205,6 +205,10 @@ pnpm build            # Production build
   - `minSupportedVersion`(강제): **옛 버전이 실제로 깨질 때만**(API 변경·보안). 평소엔 올리지 않는다 — 막는 화면은 나쁜 경험.
 - 완료 보고는 길을 나눠 적는다: JS 는 「OTA 발행됨(mobile-ota run 링크 — boot-check 통과)/대기」, 네이티브는 「다음 스토어 빌드(1.x.y)에 포함」.
 - "배포됐나"는 스토어 실물 버전으로 판정한다(`app-store-lag` 워크플로) — EAS submit 성공 ≠ 출시.
+- **아이폰 듀오(폴더블, 2026-10-23 출시)·좌우 safe area**: iOS 27.1 SDK 로 빌드하면 듀오는 상태 표시줄이 오른쪽 위 세로 기둥이고 그 폭을 오른쪽 inset 으로 준다(접힌 바깥 화면 466×678pt·right 84 — 시뮬 실측).
+  앱 루트 `SideSafeArea` 가 앱 전체를 좌우 inset 만큼 들이고 안쪽엔 좌우 0 을 알린다 — 화면에서 `insets.left/right` 를 더하지 말 것, 폭으로 크기를 재는 곳은 `useWindowDimensions` 대신 `useContentWidth()`(RN Modal 안만 예외 — 별도 창이라 안에 `SafeAreaProvider`).
+  들인 기둥 색은 상태 표시줄 글자색의 반대로 따라간다. 스토어 바이너리가 Xcode 26 SDK 면 듀오에선 애플 호환 모드로 돈다 — EAS production 이미지는 `macos-tahoe-26.6-xcode-27.1` 로 고정.
+  검증: `SCREENS_DEVICE_TYPE=com.apple.CoreSimulator.SimDeviceType.iPhone-Duo BOOT_RUNTIME=com.apple.CoreSimulator.SimRuntime.iOS-27-1 SCREENS_DISPLAY=1 SCREENS_BOOT_SETTLE=150 SCREENS_API=fixture bash apps/mobile/scripts/screens-ios.sh <Release .app>`(바깥 화면). 펼친 안쪽 화면(669×951pt)은 Device Hub 버튼으로만 바뀐다 — 맥 앞에서 손으로.
 - **다크모드 = OS 설정을 따른다(2026-10-01). 내정보 > 화면 모드에서 라이트/다크 고정 가능(`color-scheme-preference.ts` → `Appearance.setColorScheme`).** 색 정본은 `packages/design-system/tokens.js` 한 곳(web 과 같은 값) — tailwind 토큰이 `:root` 변수라
   `bg-white`·`text-gray-900` 은 **다크에서 값만 뒤집힌다**(`dark:` 를 붙일 일이 거의 없다. `white`=바탕, gray 50↔900).
   - 테마와 무관해야 하는 자리(홈 상단 어두운 띠·사진 위 배지·색 배지 위 흰 글자·라임 버튼 위 짙은 글자)는 `fixed-*`(`text-fixed-white`, `bg-fixed-900`).

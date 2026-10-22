@@ -68,7 +68,8 @@
       },
       "ios": {
         "scheme": "jirumAlarmMobile",
-        "credentialsSource": "remote"
+        "credentialsSource": "remote",
+        "image": "macos-tahoe-26.6-xcode-27.1"
       }
     }
   },

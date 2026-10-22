@@ -23,6 +23,7 @@ import OfflineBanner from '@/shared/components/OfflineBanner.tsx';
 import WebViewPrewarm from '@/shared/components/WebViewPrewarm';
 import AppErrorFallback from '@/shared/components/AppErrorFallback.tsx';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import SideSafeArea from '@/shared/components/SideSafeArea';
 import WindowControlsSafeArea from '@/shared/components/WindowControlsSafeArea';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {
@@ -97,32 +98,34 @@ function App(): React.JSX.Element {
     <GestureHandlerRootView style={{flex: 1}}>
       <SafeAreaProvider>
         <WindowControlsSafeArea>
-          <Sentry.ErrorBoundary
-            fallback={({resetError}) => (
-              <AppErrorFallback onRetry={resetError} />
-            )}>
-            <KeyboardProvider>
-              <NavigationContainer
-                ref={navigationRef}
-                theme={navigationTheme}
-                onReady={() => {
-                  registerSentryNavigation(navigationRef);
-                  trackScreen();
-                }}
-                onStateChange={trackScreen}>
-                <ReactQueryProvider>
-                  <WebviewRefContext.Provider value={webViewRefManager}>
-                    <FcmHandler>
-                      <RootNavigator />
-                    </FcmHandler>
-                    <OfflineBanner />
-                    <WebViewPrewarm />
-                  </WebviewRefContext.Provider>
-                  <Toast config={toastConfig} />
-                </ReactQueryProvider>
-              </NavigationContainer>
-            </KeyboardProvider>
-          </Sentry.ErrorBoundary>
+          <SideSafeArea>
+            <Sentry.ErrorBoundary
+              fallback={({resetError}) => (
+                <AppErrorFallback onRetry={resetError} />
+              )}>
+              <KeyboardProvider>
+                <NavigationContainer
+                  ref={navigationRef}
+                  theme={navigationTheme}
+                  onReady={() => {
+                    registerSentryNavigation(navigationRef);
+                    trackScreen();
+                  }}
+                  onStateChange={trackScreen}>
+                  <ReactQueryProvider>
+                    <WebviewRefContext.Provider value={webViewRefManager}>
+                      <FcmHandler>
+                        <RootNavigator />
+                      </FcmHandler>
+                      <OfflineBanner />
+                      <WebViewPrewarm />
+                    </WebviewRefContext.Provider>
+                    <Toast config={toastConfig} />
+                  </ReactQueryProvider>
+                </NavigationContainer>
+              </KeyboardProvider>
+            </Sentry.ErrorBoundary>
+          </SideSafeArea>
         </WindowControlsSafeArea>
       </SafeAreaProvider>
     </GestureHandlerRootView>

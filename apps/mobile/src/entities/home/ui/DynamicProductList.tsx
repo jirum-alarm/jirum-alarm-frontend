@@ -1,5 +1,6 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {Dimensions, FlatList, Pressable, View} from 'react-native';
+import {FlatList, Pressable, View} from 'react-native';
+import {useContentWidth} from '@/shared/components/SideSafeArea';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import {LIST_SECTION_MAX} from '@jirum/domain/home-sections';
@@ -297,9 +298,8 @@ function DoubleRowCarousel({
   // '85%' 는 FlatList 안에서 콘텐츠 컨테이너 기준으로 풀려 실제 폭이 어긋나고,
   // 그러면 카드 히트영역이 화면 위치와 밀려서 **엉뚱한 카드가 눌린다**
   // (사용자 지적: "유통기한 임박 특가 클릭하면 이상하게 된다").
-  const slideWidth = Math.round(
-    (Dimensions.get('window').width - HORIZONTAL_PADDING * 2) * 0.85,
-  );
+  const contentWidth = useContentWidth();
+  const slideWidth = Math.round((contentWidth - HORIZONTAL_PADDING * 2) * 0.85);
 
   const pairs = useMemo(() => {
     const chunks: ProductCardType[][] = [];

@@ -1,6 +1,7 @@
 import {layout} from '@jirum/design-system/layout';
 import React from 'react';
-import {Animated, Dimensions, View} from 'react-native';
+import {Animated, View} from 'react-native';
+import {useContentWidth} from '@/shared/components/SideSafeArea';
 
 import {useShimmer} from '@/shared/components/Skeletons';
 
@@ -18,7 +19,7 @@ import {useShimmer} from '@/shared/components/Skeletons';
 /** HomeBannerCarousel 과 같은 크기(높이 92, 폭 화면-50). */
 export function BannerSkeleton() {
   const opacity = useShimmer();
-  const screenWidth = Dimensions.get('window').width;
+  const screenWidth = useContentWidth();
 
   return (
     <View className="items-center">
@@ -37,7 +38,7 @@ export function BannerSkeleton() {
 /** JirumRankingSlider 와 같은 크기(카드 240×352 + 도트 줄 20). */
 export function RankingSkeleton() {
   const opacity = useShimmer();
-  const screenWidth = Dimensions.get('window').width;
+  const screenWidth = useContentWidth();
   const sidePadding = Math.max(0, (screenWidth - 240) / 2);
 
   return (

@@ -2,12 +2,12 @@ import {prefetchProductDetail} from '@/entities/product/prefetch-detail';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   ActivityIndicator,
-  Dimensions,
   View,
   useColorScheme,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
 } from 'react-native';
+import {useContentWidth} from '@/shared/components/SideSafeArea';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import Animated, {
   type SharedValue,
@@ -104,7 +104,7 @@ export default function JirumRankingSlider({
     scrollX.value = e.contentOffset.x;
   });
 
-  const screenWidth = Dimensions.get('window').width;
+  const screenWidth = useContentWidth();
   // centeredSlides: 카드가 항상 화면 가운데 오도록 좌우 여백을 준다.
   const sidePadding = Math.max(0, (screenWidth - CARD_WIDTH) / 2);
 

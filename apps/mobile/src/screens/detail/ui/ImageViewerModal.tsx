@@ -17,7 +17,10 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import Svg, {Path} from 'react-native-svg';
 import {fixed} from '@jirum/design-system';
 
@@ -51,12 +54,15 @@ export default function ImageViewerModal({
       navigationBarTranslucent
       onRequestClose={onClose}>
       {uri ? (
-        <ZoomStage
-          key={uri}
-          uri={uri}
-          fallbackUri={fallbackUri}
-          onClose={onClose}
-        />
+        // Modal 은 별도 창이라 앱 루트의 좌우 여백(SideSafeArea)이 닿지 않는다 — 이 창의 inset 을 따로 잰다.
+        <SafeAreaProvider>
+          <ZoomStage
+            key={uri}
+            uri={uri}
+            fallbackUri={fallbackUri}
+            onClose={onClose}
+          />
+        </SafeAreaProvider>
       ) : null}
     </Modal>
   );
@@ -178,8 +184,8 @@ function ZoomStage({
           hitSlop={8}
           accessibilityRole="button"
           accessibilityLabel="닫기"
-          className="absolute right-3 size-11 items-center justify-center rounded-full bg-fixed-900/60"
-          style={{top: insets.top + 8}}>
+          className="absolute size-11 items-center justify-center rounded-full bg-fixed-900/60"
+          style={{top: insets.top + 8, right: insets.right + 12}}>
           <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
             <Path
               d="M6 6l12 12M18 6L6 18"

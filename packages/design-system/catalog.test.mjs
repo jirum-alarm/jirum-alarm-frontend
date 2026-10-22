@@ -74,6 +74,7 @@ const NOT_PARTS = {
   'apps/mobile/src/shared/components/WebViewLoadingIndicator.tsx': '웹뷰 로딩 — 웹뷰 전용',
   'apps/mobile/src/shared/components/WebViewPrewarm.tsx': '웹뷰 예열(화면 없음)',
   'apps/mobile/src/shared/components/WindowControlsSafeArea.tsx': '창 컨트롤 여백(화면 없음)',
+  'apps/mobile/src/shared/components/SideSafeArea.tsx': '좌우 시스템 여백(화면 없음)',
 };
 
 const units = (dir, {files = true, dirs = true} = {}) =>

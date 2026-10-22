@@ -2,11 +2,11 @@ import React, {useCallback, useEffect, useRef} from 'react';
 import {
   FlatList,
   View,
-  useWindowDimensions,
   type ListRenderItemInfo,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
 } from 'react-native';
+import {useContentWidth} from '@/shared/components/SideSafeArea';
 
 import type {CategoryItem} from '@/shared/types/category';
 
@@ -40,7 +40,7 @@ export default function CategoryPager({
   renderPage: (category: CategoryItem) => React.ReactNode;
   renderPlaceholder: () => React.ReactNode;
 }) {
-  const {width} = useWindowDimensions();
+  const width = useContentWidth();
   const listRef = useRef<FlatList<CategoryItem>>(null);
   const activeIndex = Math.max(
     0,
