@@ -36,6 +36,7 @@ export const PAGES: ScreenPage[] = [
   { name: 'community', path: '/community', states: true, desktop: true },
   { name: 'themes', path: '/themes', desktop: true },
   { name: 'help', path: '/help', desktop: true },
+  { name: 'mcp', path: '/mcp', desktop: true },
   { name: 'recommend', path: '/recommend', desktop: true },
   { name: 'mypage', path: '/mypage' },
   { name: 'alarm', path: '/alarm' },
