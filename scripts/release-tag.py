@@ -183,8 +183,11 @@ def build_gate(target, timeout=1800):
     deadline = time.time() + timeout
     waited = False
     while True:
-        runs = json.loads(gh('run', 'list', '-R', REPO, '--workflow', 'deploy-web-staging.yml', '--branch', 'main',
-                             '--limit', '30', '--json', 'headSha,status,conclusion,databaseId'))
+        # `--branch main` 은 쓰지 않는다 — GitHub runs API 의 branch 필터가 가끔 0건을 돌려줘(2026-10-22·23 세 번 실측)
+        # 성공한 빌드가 있는데도 «증거 없음»으로 죽었다. 받아 와서 headBranch 로 거른다.
+        runs = [r for r in json.loads(gh('run', 'list', '-R', REPO, '--workflow', 'deploy-web-staging.yml',
+                                         '--limit', '40', '--json', 'headSha,headBranch,status,conclusion,databaseId'))
+                if r.get('headBranch') == 'main']
         exact = [r for r in runs if r['headSha'] == target]
         ok = [r for r in exact if r['conclusion'] == 'success']
         if ok:
