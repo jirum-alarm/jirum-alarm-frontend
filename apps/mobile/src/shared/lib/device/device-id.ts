@@ -1,5 +1,6 @@
 import {getAsyncStorage, setAsyncStorage} from '@/shared/lib/persistence';
 import {StorageKey} from '@/shared/constant/storage-key';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 
 /** web 이 localStorage 에 쓰는 키와 같아야 한다(웹뷰에서 읽어올 때 대조용). */
 export const WEB_DEVICE_ID_KEY = 'jirum-alarm-device-id';
@@ -21,13 +22,19 @@ export async function getDeviceId(): Promise<string | null> {
   if (cached) return cached;
   const stored = await getAsyncStorage(StorageKey.DEVICE_ID);
   if (stored) {
-    cached = stored;
+    remember(stored);
     return stored;
   }
   const created = generateDeviceId();
-  cached = created;
+  remember(created);
   await setAsyncStorage(StorageKey.DEVICE_ID, created).catch(() => {});
   return created;
+}
+
+/** 이 실행의 기기 id 를 정하고 GA4 에도 싣는다 — 웹 게스트를 이어받아 id 가 바뀌면 GA4 도 따라간다. */
+function remember(deviceId: string) {
+  cached = deviceId;
+  Analytics.setDeviceId(deviceId);
 }
 
 /**
@@ -44,7 +51,7 @@ function generateDeviceId(): string {
 /** 웹뷰에서 읽어온 deviceId 를 네이티브 쪽에 저장한다. */
 export async function syncDeviceIdFromWeb(deviceId: string | null | undefined) {
   if (!deviceId || cached === deviceId) return;
-  cached = deviceId;
+  remember(deviceId);
   await setAsyncStorage(StorageKey.DEVICE_ID, deviceId);
   // 먼저 떠서 기다리고 있는 푸시 토큰 등록을 깨운다(아래 waitForDeviceId 참고).
   for (const notify of waiters) notify(deviceId);

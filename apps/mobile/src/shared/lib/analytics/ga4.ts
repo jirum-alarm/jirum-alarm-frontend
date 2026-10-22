@@ -93,6 +93,15 @@ export const Analytics = {
     );
   },
 
+  // 우리 기기 id 를 user property 로 — 서버 로그(X-Device-Id)·실험 버킷과 BigQuery 를 잇는 열쇠.
+  // 사람이 아니라 기기라 로그아웃(reset)해도 떼지 않는다. GA4 맞춤 측정기준으로는 등록하지 않는다(BQ 전용).
+  setDeviceId(deviceId: string) {
+    if (!deviceId) return;
+    safely('setDeviceId', () =>
+      analytics().setUserProperty('device_id', deviceId),
+    );
+  },
+
   // 로그아웃 시 user_id 해제(다음 유저와 섞이지 않도록).
   reset() {
     safely('reset', () => analytics().setUserId(null));
