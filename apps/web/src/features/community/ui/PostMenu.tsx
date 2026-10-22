@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -104,10 +105,8 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
         >
           <Content>
             <Header>
-              <Title className="text-base font-semibold text-gray-900">글을 삭제할까요?</Title>
-              <Description className="text-sm text-gray-500">
-                글을 삭제하면 다시 복구할 수 없어요.
-              </Description>
+              <Title className={text.subtitle}>글을 삭제할까요?</Title>
+              <Description className={text.muted}>글을 삭제하면 다시 복구할 수 없어요.</Description>
             </Header>
             <Footer>
               <Cancel className="flex h-11 flex-1 items-center justify-center rounded-lg bg-gray-100 text-sm font-medium text-gray-700">

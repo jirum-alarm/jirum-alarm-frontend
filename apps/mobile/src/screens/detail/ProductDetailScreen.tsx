@@ -81,6 +81,8 @@ import CommunityReaction from '@/features/community-reaction/ui/CommunityReactio
 import PressableOpacity from '@/shared/components/PressableOpacity';
 import {findKeywordHubsForTitle} from '@/entities/keyword-hub/lib/keyword-hub';
 import {useKeywordHubs} from '@/entities/keyword-hub/model/useKeywordHubs';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 type Props = NativeStackScreenProps<
   ProductFlowParamList,
@@ -418,7 +420,7 @@ function NativeDetail({
           {/* web ProductPriceContext — 오래된 딜 안내. 모델 페이지 링크는 앱에서
               /deals 를 열지 않으므로(2026-09-09 결정) 뺐다. */}
           {ageNotice ? (
-            <Text className="mx-5 mb-6 text-sm text-gray-500">{ageNotice}</Text>
+            <Text className={cn(text.muted, 'mx-5 mb-6')}>{ageNotice}</Text>
           ) : null}
           {/* web ProductPriceContext 키워드 허브 링크 — 딜에서 한 층 위(「삼다수 핫딜」 모음)로. 제목 매칭은
               @jirum/domain 한 곳(서버 keyword-hub-match 와 같은 규칙). 목록이 없으면 안 보일 뿐이다. */}
@@ -469,7 +471,7 @@ function NativeDetail({
                   }),
                 );
               }}>
-              <Text className="text-sm text-gray-500">
+              <Text className={text.muted}>
                 지름알림이 가격을 판단하는 법 ›
               </Text>
             </PressableOpacity>

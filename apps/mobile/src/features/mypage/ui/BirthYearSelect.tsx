@@ -7,6 +7,8 @@ import BottomSheet from '@/shared/components/BottomSheet';
 import ArrowRight from '@/shared/components/icons/ArrowRight';
 
 import {buildBirthYearOptions} from '../lib/birth-year';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 /**
  * 출생 연도 선택. web `entities/user/ui/BirthYearSelect`(자작 `Select`).
@@ -28,7 +30,7 @@ export default function BirthYearSelect({
 
   return (
     <View>
-      <Text className="pb-2 text-sm text-gray-500">출생 연도</Text>
+      <Text className={cn(text.muted, 'pb-2')}>출생 연도</Text>
       <PressableOpacity
         onPress={() => setOpen(true)}
         accessibilityRole="button"

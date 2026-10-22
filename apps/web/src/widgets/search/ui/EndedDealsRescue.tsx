@@ -1,8 +1,11 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { endedRescueVariables, ESTIMATED_TOTAL_CAP, SEARCH_EVENT } from '@jirum/domain/search';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
+
+import { cn } from '@/shared/lib/cn';
 
 import { ProductQueries } from '@/entities/product';
 
@@ -55,11 +58,14 @@ export default function EndedDealsRescue({
 
   return (
     <div className="pc:mx-0 mx-5 flex items-center gap-x-3 rounded-xl bg-gray-50 py-2 pr-2 pl-4">
-      <p className="min-w-0 flex-1 text-sm text-gray-700">진행 중인 딜은 없어요</p>
+      <p className={cn(text.body, 'min-w-0 flex-1')}>진행 중인 딜은 없어요</p>
       <button
         type="button"
         onClick={handleClick}
-        className="flex h-9 shrink-0 items-center rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-900"
+        className={cn(
+          text.label,
+          'flex h-9 shrink-0 items-center rounded-lg border border-gray-300 bg-white px-3',
+        )}
       >
         종료된 딜{countLabel} 보기
       </button>

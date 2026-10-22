@@ -1,6 +1,6 @@
 'use client';
 
-import { cardThumb } from '@jirum/design-system/recipes';
+import { cardThumb, text } from '@jirum/design-system/recipes';
 import * as m from 'motion/react-m';
 
 import { PAGE } from '@/shared/config/page';
@@ -50,7 +50,7 @@ export default function ListProductCard({
             <ProductCardStatus product={product} showHotdealBadge={false} />
           </div>
           <div className="flex h-full flex-col justify-between gap-1">
-            <span className="line-clamp-2 text-sm break-all text-gray-700">{product.title}</span>
+            <span className={cn(text.body, 'line-clamp-2 break-all')}>{product.title}</span>
             <div className="flex items-center gap-2">
               <DisplayListPrice price={product.price} widthType="wide" />
               {product.hotDealType && !product.isEnd && (

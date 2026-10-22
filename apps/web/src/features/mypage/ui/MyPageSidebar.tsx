@@ -1,6 +1,6 @@
 'use client';
 
-import { listRow } from '@jirum/design-system/recipes';
+import { listRow, text } from '@jirum/design-system/recipes';
 import { CUSTOMER_SERVICE_TITLE } from '@jirum/domain/mypage';
 import { useQuery } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
@@ -38,7 +38,7 @@ export default function MyPageSidebar() {
         )}
       >
         <p className="truncate font-bold text-gray-900">{me?.nickname ?? '\u00a0'}</p>
-        <p className="truncate text-xs text-gray-500">{me?.email ?? '\u00a0'}</p>
+        <p className={cn(text.caption, 'truncate')}>{me?.email ?? '\u00a0'}</p>
         <p className="pt-2 text-xs font-medium text-gray-700">가입 정보 ›</p>
       </Link>
       <nav className="flex flex-col gap-5 pt-6">

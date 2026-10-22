@@ -1,3 +1,6 @@
+import { text } from '@jirum/design-system/recipes';
+
+import { cn } from '@/shared/lib/cn';
 import { ArrowRight } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
 
@@ -21,7 +24,7 @@ export default function MyPageOverview() {
                   {menu.icon}
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold text-gray-900">{menu.title}</p>
-                    <p className="truncate pt-0.5 text-sm text-gray-500">{menu.description}</p>
+                    <p className={cn(text.muted, 'truncate pt-0.5')}>{menu.description}</p>
                   </div>
                   <ArrowRight />
                 </Link>

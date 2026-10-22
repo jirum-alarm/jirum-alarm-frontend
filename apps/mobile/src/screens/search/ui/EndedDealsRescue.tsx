@@ -7,6 +7,8 @@ import {SearchQueries} from '@/entities/search/api/search.queries';
 import PressableScale from '@/shared/components/PressableScale';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {Analytics} from '@/shared/lib/analytics/ga4';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 /**
  * 진짜 0건(필터 없음·종료 제외)일 때 "종료된 딜 N건 보기". web: widgets/search/ui/EndedDealsRescue.tsx
@@ -40,7 +42,7 @@ export default function EndedDealsRescue({
 
   return (
     <View className="mx-5 mb-6 flex-row items-center gap-x-3 rounded-xl bg-gray-50 py-2 pl-4 pr-2">
-      <Text className="min-w-0 flex-1 text-sm text-gray-700">
+      <Text className={cn(text.body, 'min-w-0 flex-1')}>
         진행 중인 딜은 없어요
       </Text>
       <PressableScale
@@ -51,7 +53,7 @@ export default function EndedDealsRescue({
         accessibilityRole="button"
         accessibilityLabel={label}
         className="h-9 flex-row items-center rounded-lg border border-gray-300 bg-white px-3">
-        <Text className="text-sm font-semibold text-gray-900">{label}</Text>
+        <Text className={text.label}>{label}</Text>
       </PressableScale>
     </View>
   );

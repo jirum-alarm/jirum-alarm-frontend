@@ -1,6 +1,6 @@
 import React from 'react';
 import {useColorScheme, View} from 'react-native';
-import {cardThumb} from '@jirum/design-system/recipes';
+import {cardThumb, text} from '@jirum/design-system/recipes';
 import {Image} from 'expo-image';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
@@ -65,7 +65,7 @@ export default React.memo(function TossDealCard({
 
       <View>
         <Text
-          className="pt-2 text-sm text-gray-700"
+          className={cn(text.body, 'pt-2')}
           style={{height: 48}}
           numberOfLines={2}>
           {deal.title}
@@ -82,7 +82,7 @@ export default React.memo(function TossDealCard({
 
         <View className="flex-row flex-wrap items-center gap-x-1.5 pt-1">
           {typeof deal.rating === 'number' ? (
-            <Text className="text-xs text-gray-500" numberOfLines={1}>
+            <Text className={text.caption} numberOfLines={1}>
               <Text className="text-warning-400">★</Text> {deal.rating}
               {deal.reviewCount
                 ? ` (${deal.reviewCount.toLocaleString()})`
@@ -90,7 +90,7 @@ export default React.memo(function TossDealCard({
             </Text>
           ) : null}
           {deal.delivery ? (
-            <Text className="text-xs text-gray-500" numberOfLines={1}>
+            <Text className={text.caption} numberOfLines={1}>
               · {deal.delivery}
             </Text>
           ) : null}

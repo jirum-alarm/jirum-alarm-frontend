@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { Fragment, useId } from 'react';
 
 import Switch from '@/shared/ui/common/Switch';
@@ -67,7 +68,7 @@ const PushSettingForm = () => {
               className="flex min-w-0 flex-1 cursor-pointer flex-col gap-0.5"
             >
               <span className="font-medium text-gray-900">{title}</span>
-              <span className="text-sm text-gray-500">{description}</span>
+              <span className={text.muted}>{description}</span>
             </label>
             <Switch
               id={`${id}-${key}`}
@@ -84,7 +85,7 @@ const PushSettingForm = () => {
                 className="flex min-w-0 flex-1 cursor-pointer flex-col gap-0.5"
               >
                 <span className="font-medium text-gray-900">{HOT_ONLY.title}</span>
-                <span className="text-sm text-gray-500">{HOT_ONLY.description}</span>
+                <span className={text.muted}>{HOT_ONLY.description}</span>
               </label>
               <Switch
                 id={`${id}-hot-only`}

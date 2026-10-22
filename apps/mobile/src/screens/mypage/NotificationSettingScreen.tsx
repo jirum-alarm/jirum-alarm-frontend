@@ -17,6 +17,8 @@ import Switch from '@/shared/components/ui/Switch';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import {useUpdatePushSetting} from '@/features/mypage/model/mutations';
 import QuietHoursRow from '@/features/mypage/ui/QuietHoursRow';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -117,7 +119,7 @@ export default function NotificationSettingScreen({navigation}: Props) {
                     className="flex-row items-center gap-4 border-b border-gray-200 py-4">
                     <View className="min-w-0 flex-1">
                       <Text className="font-medium text-gray-900">{title}</Text>
-                      <Text className="mt-0.5 text-sm text-gray-500">
+                      <Text className={cn(text.muted, 'mt-0.5')}>
                         {description}
                       </Text>
                     </View>
@@ -135,7 +137,7 @@ export default function NotificationSettingScreen({navigation}: Props) {
                         <Text className="font-medium text-gray-900">
                           {HOT_ONLY.title}
                         </Text>
-                        <Text className="mt-0.5 text-sm text-gray-500">
+                        <Text className={cn(text.muted, 'mt-0.5')}>
                           {HOT_ONLY.description}
                         </Text>
                       </View>

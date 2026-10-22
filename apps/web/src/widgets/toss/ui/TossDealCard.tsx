@@ -1,6 +1,6 @@
 'use client';
 
-import { cardThumb, productCard } from '@jirum/design-system/recipes';
+import { cardThumb, productCard, text } from '@jirum/design-system/recipes';
 import * as m from 'motion/react-m';
 
 import { cn } from '@/shared/lib/cn';
@@ -72,7 +72,7 @@ export default function TossDealCard({
         )}
 
         {/* 좁은 카드에서 '무료배송'이 글자 단위로 쪼개지던 것 방지 — 각 조각 nowrap, 넘치면 배송만 줄내림 */}
-        <div className="flex flex-wrap items-center gap-x-1.5 pt-1 text-xs text-gray-500">
+        <div className={cn(text.caption, 'flex flex-wrap items-center gap-x-1.5 pt-1')}>
           {typeof deal.rating === 'number' && (
             <span className="whitespace-nowrap">
               <span className="text-warning-400">★</span> {deal.rating}

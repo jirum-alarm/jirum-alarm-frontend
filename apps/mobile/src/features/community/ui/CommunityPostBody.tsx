@@ -1,6 +1,6 @@
 import React from 'react';
 import {Pressable, View} from 'react-native';
-import {chip} from '@jirum/design-system/recipes';
+import {chip, text} from '@jirum/design-system/recipes';
 import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
@@ -51,9 +51,7 @@ export default function CommunityPostBody({
             {post.author?.nickname ?? '알 수 없음'}
           </Text>
         )}
-        <Text className="text-xs text-gray-500">
-          {displayTime(post.createdAt, now)}
-        </Text>
+        <Text className={text.caption}>{displayTime(post.createdAt, now)}</Text>
       </View>
 
       {post.title ? (

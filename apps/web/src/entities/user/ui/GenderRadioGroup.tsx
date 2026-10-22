@@ -1,3 +1,4 @@
+import { text } from '@jirum/design-system/recipes';
 import { useId } from 'react';
 
 import { Gender } from '@/shared/api/gql/graphql';
@@ -15,7 +16,7 @@ interface GenderRadioGroupProps {
 const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) => {
   return (
     <fieldset>
-      <legend className="text-sm text-gray-500">성별</legend>
+      <legend className={text.muted}>성별</legend>
       <div className="h-4" />
       <ul className="grid grid-cols-2 gap-2">
         <li>
@@ -27,7 +28,7 @@ const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) 
           >
             <div className="flex flex-col items-center gap-2">
               <span className="text-2xl">👩</span>
-              <span className="text-sm text-gray-700">여자</span>
+              <span className={text.body}>여자</span>
             </div>
           </Radio>
         </li>
@@ -40,7 +41,7 @@ const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) 
           >
             <div className="flex flex-col items-center gap-2">
               <span className="text-2xl">👨</span>
-              <span className="text-sm text-gray-700">남자</span>
+              <span className={text.body}>남자</span>
             </div>
           </Radio>
         </li>

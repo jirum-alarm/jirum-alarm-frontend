@@ -1,6 +1,6 @@
 'use client';
 
-import { cardThumb } from '@jirum/design-system/recipes';
+import { cardThumb, text } from '@jirum/design-system/recipes';
 import {
   formatPriceDiff,
   liveAlternativeKindLabel,
@@ -126,7 +126,7 @@ function LiveAlternativeRow({
           />
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="line-clamp-1 text-sm break-all text-gray-700">{product.title}</span>
+          <span className={cn(text.body, 'line-clamp-1 break-all')}>{product.title}</span>
           <div className="flex items-baseline gap-2">
             <DisplayListPrice price={product.price} className="text-base" />
             {diff ? (
@@ -140,7 +140,7 @@ function LiveAlternativeRow({
               </span>
             ) : null}
           </div>
-          <span className="flex items-center gap-1 text-xs text-gray-500">
+          <span className={cn(text.caption, 'flex items-center gap-1')}>
             <span>{liveAlternativeKindLabel(deal.kind)}</span>
             {where ? (
               <>

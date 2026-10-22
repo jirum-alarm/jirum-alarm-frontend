@@ -7,6 +7,7 @@ import type {ThemeWithKeywords} from '@/shared/api/theme/theme.service';
 import PressableScale from '@/shared/components/PressableScale';
 import SectionHeader from '@/shared/components/ui/SectionHeader';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {text} from '@jirum/design-system/recipes';
 
 /**
  * 홈 알림 묶음(관심사) 캐러셀. web: widgets/home/ui/ThemeSection.tsx
@@ -61,13 +62,13 @@ function ThemeHomeCard({
       <Text className="text-2xl" accessibilityElementsHidden>
         {theme.emoji || '🔔'}
       </Text>
-      <Text className="text-sm font-semibold text-gray-900" numberOfLines={1}>
+      <Text className={text.label} numberOfLines={1}>
         {theme.name}
       </Text>
-      <Text className="text-xs text-gray-500" numberOfLines={1}>
+      <Text className={text.caption} numberOfLines={1}>
         {theme.representativeKeywords.slice(0, 3).join('·')}
       </Text>
-      <Text className="text-xs text-gray-500">
+      <Text className={text.caption}>
         최근 7일 알림{' '}
         <Text className="text-xs font-semibold text-gray-900">
           {theme.weeklyAlertCount}건

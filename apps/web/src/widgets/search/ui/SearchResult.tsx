@@ -1,4 +1,4 @@
-import { emptyText } from '@jirum/design-system/recipes';
+import { emptyText, text } from '@jirum/design-system/recipes';
 import { ESTIMATED_TOTAL_CAP, SEARCH_COPY } from '@jirum/domain/search';
 import { Suspense, useEffect, useRef } from 'react';
 
@@ -110,7 +110,7 @@ export default function SearchResult({ show }: { show: boolean }) {
           )}
         >
           {estimatedTotal != null && (
-            <p className="pb-3 text-sm text-gray-500">
+            <p className={cn(text.muted, 'pb-3')}>
               약{' '}
               <span className="font-semibold text-gray-900">{estimatedTotal.toLocaleString()}</span>
               건{estimatedTotal >= ESTIMATED_TOTAL_CAP && '+'}

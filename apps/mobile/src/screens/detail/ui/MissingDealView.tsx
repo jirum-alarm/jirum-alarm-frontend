@@ -2,6 +2,8 @@ import React from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import PressableOpacity from '@/shared/components/PressableOpacity';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 /**
  * 서버가 「없는 상품」(404)이라고 답한 상세 — 삭제·비공개된 딜.
@@ -23,7 +25,7 @@ export default function MissingDealView({
       <Text className="mb-2 text-lg font-bold text-gray-900">
         판매가 끝났거나 내려간 딜이에요
       </Text>
-      <Text className="mb-6 text-center text-sm text-gray-500">
+      <Text className={cn(text.muted, 'mb-6 text-center')}>
         지금 진행 중인 핫딜을 둘러보거나{'\n'}찾던 상품을 검색해 보세요
       </Text>
       <View className="w-full max-w-xs gap-2">
@@ -39,7 +41,7 @@ export default function MissingDealView({
           accessibilityRole="button"
           onPress={onPressSearch}
           className="items-center rounded-lg bg-gray-100 py-3">
-          <Text className="text-sm font-semibold text-gray-900">검색하기</Text>
+          <Text className={text.label}>검색하기</Text>
         </PressableOpacity>
       </View>
     </View>

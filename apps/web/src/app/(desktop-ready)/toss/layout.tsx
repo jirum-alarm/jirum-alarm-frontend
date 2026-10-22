@@ -1,7 +1,9 @@
+import { text } from '@jirum/design-system/recipes';
 import { ReactNode } from 'react';
 
 import { checkDevice } from '@/shared/actions/agent';
 import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
 import { Search } from '@/shared/ui/common/icons';
 import BackButton from '@/shared/ui/layout/BackButton';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
@@ -24,7 +26,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
           <PageHeader
             leading={<BackButton backTo={PAGE.HOME} />}
             // 문자열을 넘기면 PageHeader 가 h1 을 만든다 — page.tsx 의 「토스 하루특가」 h1 과 겹쳐 모바일만 h1 이 둘이었다.
-            title={<span className="truncate text-lg font-semibold text-gray-900">{TITLE}</span>}
+            title={<span className={cn(text.title, 'truncate')}>{TITLE}</span>}
             actions={
               <>
                 <Link href={PAGE.SEARCH} aria-label="검색" title="검색" className="-m-2 p-2">

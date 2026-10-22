@@ -4,6 +4,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 
 import IconLogo from '@/shared/components/icons/IconLogo';
 import {gaps} from './community-styles';
+import {text} from '@jirum/design-system/recipes';
 
 /**
  * 공지글 작성자. web `NoticeAuthor` 와 같이 개인 닉네임 대신
@@ -21,7 +22,7 @@ export default function NoticeAuthor({size = 20}: {size?: number}) {
         style={{width: size, height: size}}>
         <IconLogo size={size} />
       </View>
-      <Text className="text-sm font-semibold text-gray-900">지름알림</Text>
+      <Text className={text.label}>지름알림</Text>
     </View>
   );
 }

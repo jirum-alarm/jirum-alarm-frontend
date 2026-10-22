@@ -3,6 +3,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 
 import {parsePrice, splitPriceNote} from '@/shared/lib/format/price';
 import {cn} from '@/shared/lib/styling';
+import {text} from '@jirum/design-system/recipes';
 
 /**
  * 상세 상단의 큰 가격 표기. web DisplayPrice 와 같은 규칙 —
@@ -20,7 +21,7 @@ export default function DisplayPrice({
 
   return (
     <Text className={cn('text-lg font-bold text-gray-500', className)}>
-      <Text className="text-2xl font-semibold text-gray-900">{main}</Text>
+      <Text className={text.display}>{main}</Text>
       {hasWon ? '원' : ''}
       {note ? <Text className="text-sm font-medium"> {note}</Text> : null}
     </Text>

@@ -1,6 +1,9 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { useState } from 'react';
+
+import { cn } from '@/shared/lib/cn';
 
 import { DealGrid, DealRows, type ListItem } from './DealsListParts';
 
@@ -55,12 +58,10 @@ export default function DealsFoldedMore({
       ) : (
         <>
           {state === 'loading' && (
-            <p className="py-6 text-center text-sm text-gray-500">불러오는 중…</p>
+            <p className={cn(text.muted, 'py-6 text-center')}>불러오는 중…</p>
           )}
           <ul
-            className={
-              state === 'loading' ? 'hidden' : 'mt-2 flex flex-col gap-2 text-sm text-gray-700'
-            }
+            className={state === 'loading' ? 'hidden' : cn(text.body, 'mt-2 flex flex-col gap-2')}
           >
             {links.map((l) => (
               <li key={l.slug}>

@@ -10,6 +10,7 @@ import {Analytics} from '@/shared/lib/analytics/ga4';
 import {cn} from '@/shared/lib/styling';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
+import {text} from '@jirum/design-system/recipes';
 
 /** 지름알림 뷰티 경로 — web 과 같은 주소(곧 별도 앱이 받지만 경로는 같다). */
 export const BEAUTY_VERTICAL_PATH = '/beauty';
@@ -53,7 +54,7 @@ export default function BeautyVerticalLink({
         <Text className="text-sm font-semibold text-gray-800">
           지름알림 뷰티에서 더 보기
         </Text>
-        <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
+        <Text className={cn(text.caption, 'mt-0.5')} numberOfLines={1}>
           지금 뜨는 화장품·스킨케어 핫딜 모음
         </Text>
       </View>

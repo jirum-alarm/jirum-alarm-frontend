@@ -1,7 +1,9 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
+import { cn } from '@/shared/lib/cn';
 import Tooltip from '@/shared/ui/common/Tooltip';
 
 import { ProductQueries } from '@/entities/product';
@@ -41,7 +43,10 @@ export default function ViewerCount({ productId }: ViewerCountProps) {
           >
             <button
               type="button"
-              className="bg-secondary-50 border-secondary-200 flex h-9 items-center rounded-full border px-4 text-sm whitespace-nowrap text-gray-700"
+              className={cn(
+                text.body,
+                'bg-secondary-50 border-secondary-200 flex h-9 items-center rounded-full border px-4 whitespace-nowrap',
+              )}
             >
               <strong className="text-secondary-600 font-semibold" suppressHydrationWarning>
                 {count.toLocaleString('ko-kr')}명

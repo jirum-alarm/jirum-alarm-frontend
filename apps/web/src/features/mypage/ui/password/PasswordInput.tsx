@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { useState } from 'react';
 
 import { Eye, EyeOff } from '@/shared/ui/common/icons';
@@ -35,7 +36,7 @@ const PasswordInput = ({
 
   return (
     <label>
-      <span className="text-sm text-gray-500">{labelText}</span>
+      <span className={text.muted}>{labelText}</span>
       <Input
         type={masking ? 'password' : 'text'}
         id={id}

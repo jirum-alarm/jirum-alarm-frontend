@@ -20,6 +20,8 @@ import {
   invalidateMyKeywords,
   openKeywordSettings,
 } from '@/entities/mypage/model/myKeywords';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 // 홈이 먼저 그려지고 숨 돌린 뒤 — PushPermissionPrePrompt 와 같은 박자.
 const SHOW_DELAY_MS = 1500;
@@ -150,7 +152,7 @@ export default function FirstAlertSheet() {
             dismiss('custom');
             openKeywordSettings();
           }}>
-          <Text className="text-sm text-gray-500 underline">
+          <Text className={cn(text.muted, 'underline')}>
             찾는 게 없어요 · 직접 입력하기
           </Text>
         </Pressable>

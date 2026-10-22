@@ -1,6 +1,6 @@
 'use client';
 
-import { dealRow, emptyText } from '@jirum/design-system/recipes';
+import { dealRow, emptyText, text } from '@jirum/design-system/recipes';
 import { useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
@@ -135,7 +135,7 @@ export default function DealsListSection({
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="line-clamp-2 text-sm">{title}</div>
-                  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                  <div className={cn(text.caption, 'mt-1 flex flex-wrap items-center gap-2')}>
                     {deal.mallName && <span className="text-gray-500">{deal.mallName}</span>}
                     {deal.postedAt && (
                       <span>{new Date(deal.postedAt).toLocaleDateString('ko-KR')}</span>

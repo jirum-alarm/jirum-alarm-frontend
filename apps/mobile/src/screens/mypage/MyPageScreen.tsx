@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
-import {pageHeader} from '@jirum/design-system/recipes';
+import {pageHeader, text} from '@jirum/design-system/recipes';
 import {
   CUSTOMER_SERVICE_TITLE,
   MYPAGE_GROUPS,
@@ -189,7 +189,7 @@ export default function MyPageScreen() {
                     <Text className="text-lg font-bold text-gray-900">
                       로그인하고 계정에 저장
                     </Text>
-                    <Text className="text-xs text-gray-500">
+                    <Text className={text.caption}>
                       키워드 알림은 지금도 받고 있어요. 로그인하면 계정으로
                       옮겨져요
                     </Text>
@@ -221,7 +221,7 @@ export default function MyPageScreen() {
                       web 은 text-gray-400 인데 명암비 2.58:1 로 WCAG AA 미달이다.
                       보조 라벨은 gray-500 을 쓴다(gray-400-text-fails-wcag-aa).
                     */}
-                    <Text className="text-xs text-gray-500" numberOfLines={1}>
+                    <Text className={text.caption} numberOfLines={1}>
                       {me?.email}
                     </Text>
                   </View>
@@ -280,7 +280,7 @@ export default function MyPageScreen() {
               )}
             </MenuGroup>
           ))}
-          <Text className="text-xs text-gray-500">
+          <Text className={text.caption}>
             앱 버전 {Constants.expoConfig?.version}
           </Text>
         </View>

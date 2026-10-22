@@ -17,6 +17,7 @@ import {tick} from '@/shared/lib/feedback';
 import BaseChip from '@/shared/components/ui/Chip';
 import {CheckIcon} from '@/shared/components/icons';
 import PressableOpacity from '@/shared/components/PressableOpacity';
+import {text} from '@jirum/design-system/recipes';
 
 /**
  * 검색 필터 바. web: widgets/search/ui/SearchFilterBar.tsx
@@ -91,7 +92,7 @@ export default function SearchFilterBar({
               accessibilityRole="button"
               accessibilityLabel="필터 초기화"
               className="py-2">
-              <Text className="text-sm text-gray-500 underline">초기화</Text>
+              <Text className={cn(text.muted, 'underline')}>초기화</Text>
             </PressableOpacity>
           ) : null}
           <PressableOpacity
@@ -105,7 +106,7 @@ export default function SearchFilterBar({
             accessibilityLabel="품절 포함"
             className="flex-row items-center gap-1.5 py-2">
             <Checkbox checked={filters.ended} />
-            <Text className="text-sm text-gray-500">품절 포함</Text>
+            <Text className={text.muted}>품절 포함</Text>
           </PressableOpacity>
         </View>
       </View>
@@ -179,7 +180,7 @@ function FilterRow({
 }) {
   return (
     <View className="flex-row items-center gap-2 pl-5">
-      <Text className="text-xs text-gray-500" style={styles.rowLabel}>
+      <Text className={text.caption} style={styles.rowLabel}>
         {label}
       </Text>
       <ScrollView

@@ -1,3 +1,5 @@
+import { text } from '@jirum/design-system/recipes';
+
 import { PAGE } from '@/shared/config/page';
 import Button from '@/shared/ui/common/Button';
 import { IllustWarning } from '@/shared/ui/common/icons';
@@ -21,9 +23,7 @@ const ProductNotFound = () => {
           <IllustWarning />
         </div>
         <div className="pb-7 text-center">
-          <div className="text-2xl font-semibold text-gray-900">
-            판매가 끝났거나 내려간 딜이에요
-          </div>
+          <div className={text.display}>판매가 끝났거나 내려간 딜이에요</div>
           <div className="text-gray-500">
             지금 진행 중인 핫딜을 둘러보거나 찾던 상품을 검색해 보세요
           </div>

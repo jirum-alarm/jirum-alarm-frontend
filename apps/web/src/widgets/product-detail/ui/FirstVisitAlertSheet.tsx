@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { deriveKeyword } from '@jirum/domain/derive-keyword';
 import { useEffect, useState } from 'react';
 import { Drawer } from 'vaul';
@@ -413,7 +414,7 @@ function KeywordAlertSheet({
       >
         앱에서 알림 받기
       </OpenInAppLink>
-      <button type="button" onClick={onClose} className="h-10 text-sm text-gray-500">
+      <button type="button" onClick={onClose} className={cn(text.muted, 'h-10')}>
         다음에 할게요
       </button>
     </div>
@@ -422,7 +423,7 @@ function KeywordAlertSheet({
       <Button onClick={handleAlert} disabled={pending}>
         {handoff ? '브라우저에서 알림 받기' : '알림 받기'}
       </Button>
-      <button type="button" onClick={onClose} className="h-10 text-sm text-gray-500">
+      <button type="button" onClick={onClose} className={cn(text.muted, 'h-10')}>
         다음에 할게요
       </button>
     </div>
@@ -436,7 +437,7 @@ function KeywordAlertSheet({
             <AlertDialog.Title className="text-xl font-semibold text-gray-900">
               {heading}
             </AlertDialog.Title>
-            <AlertDialog.Description className="pt-2 text-sm text-gray-500">
+            <AlertDialog.Description className={cn(text.muted, 'pt-2')}>
               {bodyText}
             </AlertDialog.Description>
           </AlertDialog.Header>
@@ -449,8 +450,8 @@ function KeywordAlertSheet({
   return (
     <Drawer.Root open onOpenChange={(open) => !open && onClose()}>
       <BottomSheetContent handle className="pb-safe-bottom-16 px-5">
-        <Drawer.Title className="text-2xl font-semibold text-gray-900">{heading}</Drawer.Title>
-        <Drawer.Description className="pt-2 text-sm text-gray-500">{bodyText}</Drawer.Description>
+        <Drawer.Title className={text.display}>{heading}</Drawer.Title>
+        <Drawer.Description className={cn(text.muted, 'pt-2')}>{bodyText}</Drawer.Description>
         {actions}
       </BottomSheetContent>
     </Drawer.Root>
@@ -513,7 +514,7 @@ function OkachatSheet({
       >
         카톡방 입장하기
       </a>
-      <button type="button" onClick={onClose} className="h-10 text-sm text-gray-500">
+      <button type="button" onClick={onClose} className={cn(text.muted, 'h-10')}>
         다음에 할게요
       </button>
     </div>
@@ -527,7 +528,7 @@ function OkachatSheet({
             <AlertDialog.Title className="text-xl font-semibold text-gray-900">
               {heading}
             </AlertDialog.Title>
-            <AlertDialog.Description className="pt-2 text-sm text-gray-500">
+            <AlertDialog.Description className={cn(text.muted, 'pt-2')}>
               {bodyText}
             </AlertDialog.Description>
           </AlertDialog.Header>
@@ -540,8 +541,8 @@ function OkachatSheet({
   return (
     <Drawer.Root open onOpenChange={(open) => !open && onClose()}>
       <BottomSheetContent handle className="pb-safe-bottom-16 px-5">
-        <Drawer.Title className="text-2xl font-semibold text-gray-900">{heading}</Drawer.Title>
-        <Drawer.Description className="pt-2 text-sm text-gray-500">{bodyText}</Drawer.Description>
+        <Drawer.Title className={text.display}>{heading}</Drawer.Title>
+        <Drawer.Description className={cn(text.muted, 'pt-2')}>{bodyText}</Drawer.Description>
         {actions}
       </BottomSheetContent>
     </Drawer.Root>

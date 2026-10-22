@@ -1,10 +1,12 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { createHangulFilter } from '@jirum/domain/hangul-search';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
 import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
 
 export interface DealsSearchItem {
   slug: string;
@@ -38,7 +40,7 @@ export default function DealsSearch({ items }: { items: DealsSearchItem[] }) {
         <div className="mt-3">
           {results.length > 0 ? (
             <>
-              <p className="mb-2 text-xs text-gray-500">{results.length}개 찾았어요</p>
+              <p className={cn(text.caption, 'mb-2')}>{results.length}개 찾았어요</p>
               <ul className="pc:grid-cols-3 grid grid-cols-1 gap-2">
                 {results.slice(0, 30).map((it) => (
                   <li key={it.slug}>
@@ -49,14 +51,14 @@ export default function DealsSearch({ items }: { items: DealsSearchItem[] }) {
                       <span className="line-clamp-1 text-sm font-medium text-gray-900">
                         {it.name}
                       </span>
-                      {it.hint && <span className="text-xs text-gray-500">{it.hint}</span>}
+                      {it.hint && <span className={text.caption}>{it.hint}</span>}
                     </Link>
                   </li>
                 ))}
               </ul>
             </>
           ) : (
-            <p className="text-sm text-gray-500">
+            <p className={text.muted}>
               아직 가격을 모으는 상품이 아니에요.{' '}
               <Link
                 href={PAGE.MYPAGE_KEYWORD}

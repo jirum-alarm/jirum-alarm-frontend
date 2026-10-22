@@ -5,6 +5,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 import {Gender} from '@/shared/api/gql/graphql';
 import {tick} from '@/shared/lib/feedback/haptic';
 import PressableOpacity from '@/shared/components/PressableOpacity';
+import {text} from '@jirum/design-system/recipes';
 
 /**
  * 성별 선택. web `entities/user/ui/GenderRadioGroup`.
@@ -26,7 +27,7 @@ export default function GenderRadioGroup({
 
   return (
     <View>
-      <Text className="text-sm text-gray-500">성별</Text>
+      <Text className={text.muted}>성별</Text>
       <View className="h-4" />
       <View className="flex-row gap-2">
         {options.map(option => {
@@ -49,7 +50,7 @@ export default function GenderRadioGroup({
               }>
               <View className="items-center gap-2">
                 <Text className="text-2xl">{option.emoji}</Text>
-                <Text className="text-sm text-gray-700">{option.label}</Text>
+                <Text className={text.body}>{option.label}</Text>
               </View>
             </PressableOpacity>
           );

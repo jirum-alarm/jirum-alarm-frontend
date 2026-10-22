@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { deriveKeyword } from '@jirum/domain/derive-keyword';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
@@ -94,7 +95,7 @@ export default function SignupKeyword({ productId }: { productId: number | null 
   if (done) {
     return (
       <div role="status" className="bg-secondary-50 rounded-lg px-4 py-4 text-left">
-        <p className="text-sm font-semibold text-gray-900">알림을 등록했어요</p>
+        <p className={text.label}>알림을 등록했어요</p>
         <p className="mt-1 text-sm text-gray-600">‘{done}’ 핫딜이 올라오면 바로 알려드릴게요</p>
       </div>
     );

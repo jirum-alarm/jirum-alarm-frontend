@@ -1,4 +1,4 @@
-import { dealRow } from '@jirum/design-system/recipes';
+import { dealRow, text } from '@jirum/design-system/recipes';
 
 import { cn } from '@/shared/lib/cn';
 import { convertToWebp } from '@/shared/lib/utils/image';
@@ -18,7 +18,7 @@ export default function RecentDealsSection({ rows }: { rows: RecentDealRow[] }) 
     <section className="mb-6">
       <div className="mb-3 flex items-baseline justify-between gap-2">
         <h2 className="text-base font-semibold">최근 올라온 핫딜</h2>
-        <span className="text-xs text-gray-500">새로 올라온 순</span>
+        <span className={text.caption}>새로 올라온 순</span>
       </div>
       <ul className="pc:grid-cols-2 grid grid-cols-1 gap-2">
         {rows.map((r) => (
@@ -38,7 +38,7 @@ export default function RecentDealsSection({ rows }: { rows: RecentDealRow[] }) 
               </div>
               <div className="min-w-0 flex-1">
                 <div className="line-clamp-1 text-sm">{r.title}</div>
-                <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-gray-500">
+                <div className={cn(text.caption, 'mt-1 flex flex-wrap items-center gap-1.5')}>
                   {r.isEnd ? (
                     <Badge size="xs">지난 딜</Badge>
                   ) : (
@@ -70,7 +70,7 @@ export default function RecentDealsSection({ rows }: { rows: RecentDealRow[] }) 
         ))}
       </ul>
       {hasPending && (
-        <p className="mt-2 text-xs text-gray-500">
+        <p className={cn(text.caption, 'mt-2')}>
           ‘확인 전’은 같은 상품으로 자동 연결됐지만 아직 사람이 확인하지 않은 딜이라, 가격 추이에는
           넣지 않아요.
         </p>

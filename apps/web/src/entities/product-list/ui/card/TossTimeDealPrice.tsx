@@ -1,4 +1,7 @@
+import { text } from '@jirum/design-system/recipes';
 import { getTimeDealOpening, getTossTimeDeal } from '@jirum/domain/toss-time-deal';
+
+import { cn } from '@/shared/lib/cn';
 
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
@@ -34,7 +37,7 @@ export default function TossTimeDealPrice({
         <TimeDealCountdown openAt={opening.openAt} />
       ) : (
         timeDeal?.viewCountText && (
-          <span className="truncate pt-0.5 text-xs text-gray-500">{timeDeal.viewCountText}</span>
+          <span className={cn(text.caption, 'truncate pt-0.5')}>{timeDeal.viewCountText}</span>
         )
       )}
     </>

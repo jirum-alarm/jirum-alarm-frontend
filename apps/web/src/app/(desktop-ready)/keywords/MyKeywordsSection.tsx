@@ -1,6 +1,6 @@
 'use client';
 
-import { linkChip } from '@jirum/design-system/recipes';
+import { linkChip, sectionTitle, text } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import { useAtomValue } from 'jotai';
 
@@ -36,10 +36,8 @@ export default function MyKeywordsSection() {
   if (keywords.length === 0) {
     return (
       <section className="mb-8 rounded-xl bg-gray-50 px-4 py-4">
-        <p className="text-sm font-semibold text-gray-900">
-          키워드를 걸어 두면 핫딜이 올라올 때 알려 드려요
-        </p>
-        <p className="mt-1 text-xs text-gray-500">
+        <p className={text.label}>키워드를 걸어 두면 핫딜이 올라올 때 알려 드려요</p>
+        <p className={cn(text.caption, 'mt-1')}>
           아래 키워드를 눌러 30일 핫딜을 보고, 마음에 들면 그 자리에서 알림을 걸 수 있어요.
         </p>
         <Link
@@ -56,11 +54,11 @@ export default function MyKeywordsSection() {
   return (
     <section className="mb-10">
       <div className="mb-3 flex items-baseline justify-between">
-        <h2 className="text-lg font-bold text-gray-900">내 키워드</h2>
+        <h2 className={sectionTitle.page}>내 키워드</h2>
         <Link
           href={PAGE.MYPAGE_KEYWORD}
           data-track="keyword-tab-manage"
-          className="text-xs text-gray-500 hover:text-gray-700"
+          className={cn(text.caption, 'hover:text-gray-700')}
         >
           알림 관리 ›
         </Link>

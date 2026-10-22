@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { COMMUNITY_COPY } from '@jirum/domain/community';
 import {
   useMutation,
@@ -12,6 +13,7 @@ import { useInView } from 'react-intersection-observer';
 import { Drawer } from 'vaul';
 
 import { CommunityService } from '@/shared/api/community/community.service';
+import { cn } from '@/shared/lib/cn';
 import { displayTime } from '@/shared/lib/utils/displayTime';
 import {
   Action,
@@ -62,7 +64,7 @@ function CommentItem({
           <span className="text-sm font-medium text-gray-700">
             {comment.author?.nickname ?? '알 수 없음'}
           </span>
-          <span className="text-xs text-gray-500">{displayTime(comment.createdAt)}</span>
+          <span className={text.caption}>{displayTime(comment.createdAt)}</span>
         </div>
         {isMyComment && (
           <button
@@ -135,8 +137,8 @@ function CommentItem({
         >
           <AlertContent>
             <Header>
-              <Title className="text-base font-semibold text-gray-900">댓글을 삭제할까요?</Title>
-              <Description className="text-sm text-gray-500">
+              <Title className={text.subtitle}>댓글을 삭제할까요?</Title>
+              <Description className={text.muted}>
                 댓글을 삭제하면 다시 복구할 수 없어요.
               </Description>
             </Header>
@@ -242,7 +244,7 @@ function CommunityCommentList({
   const comments = pages.flatMap((page) => page?.comments ?? []);
 
   if (comments.length === 0) {
-    return <div className="py-8 text-center text-sm text-gray-500">첫 번째 댓글을 남겨보세요</div>;
+    return <div className={cn(text.muted, 'py-8 text-center')}>첫 번째 댓글을 남겨보세요</div>;
   }
 
   return (
@@ -298,7 +300,7 @@ function CommunityCommentList({
       })}
       <div ref={ref} className="h-1" />
       {isFetchingNextPage && (
-        <div className="flex items-center justify-center py-4 text-sm text-gray-500">
+        <div className={cn(text.muted, 'flex items-center justify-center py-4')}>
           불러오는 중...
         </div>
       )}
@@ -377,7 +379,7 @@ export default function CommunityCommentSection({
     // PC 는 입력창이 일반 흐름(pc:static)이므로 여백 불필요.
     <section className="pc:pb-0 mt-4 pb-[calc(4rem+var(--bottom-chrome-padding,0.75rem)-0.75rem)]">
       <div className="px-5 pb-2">
-        <h2 className="text-base font-semibold text-gray-900">댓글</h2>
+        <h2 className={text.subtitle}>댓글</h2>
       </div>
       <Suspense
         fallback={

@@ -1,6 +1,6 @@
 'use client';
 
-import { detailInfo } from '@jirum/design-system/recipes';
+import { detailInfo, text } from '@jirum/design-system/recipes';
 import { END_BADGE_EXPLAIN } from '@jirum/domain/badge-explain';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense, useEffect } from 'react';
@@ -101,11 +101,11 @@ export default function ProductInfo({
           <div className="flex items-center justify-between">
             <div>
               {hidePrice ? (
-                <p className="text-lg font-semibold text-gray-900">토스에서 가격 확인</p>
+                <p className={text.title}>토스에서 가격 확인</p>
               ) : (
                 <>
                   {displayData?.originalPrice && (
-                    <span className="text-sm text-gray-500 line-through">
+                    <span className={cn(text.muted, 'line-through')}>
                       {displayData.originalPrice.toLocaleString()}원
                     </span>
                   )}
@@ -122,7 +122,7 @@ export default function ProductInfo({
               {displayData &&
                 (typeof displayData.rating === 'number' ||
                   (!hidePrice && displayData.couponDiscount)) && (
-                  <div className="flex flex-wrap items-center gap-x-2 pt-1 text-sm text-gray-500">
+                  <div className={cn(text.muted, 'flex flex-wrap items-center gap-x-2 pt-1')}>
                     {typeof displayData.rating === 'number' && (
                       <span>
                         <span className="text-warning-400">★</span> {displayData.rating}
@@ -227,9 +227,7 @@ export default function ProductInfo({
       {product.uploaderType === UploaderType.User && product.content && (
         <div className="mt-6">
           <h2 className="mb-2 text-sm font-medium text-gray-500">상품 설명</h2>
-          <p className="text-sm leading-relaxed whitespace-pre-wrap text-gray-700">
-            {product.content}
-          </p>
+          <p className={cn(text.body, 'leading-relaxed whitespace-pre-wrap')}>{product.content}</p>
         </div>
       )}
     </section>

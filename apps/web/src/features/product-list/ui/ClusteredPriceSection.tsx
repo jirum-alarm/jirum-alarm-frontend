@@ -1,6 +1,6 @@
 'use client';
 
-import { dealRow } from '@jirum/design-system/recipes';
+import { dealRow, text } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
@@ -104,7 +104,7 @@ export default function ClusteredPriceSection({ productId, title = '판매처별
               >
                 <div className="min-w-0 flex-1">
                   <div className="line-clamp-1 text-sm">{p.title}</div>
-                  <div className="mt-1 flex items-center gap-2 text-xs text-gray-500">
+                  <div className={cn(text.caption, 'mt-1 flex items-center gap-2')}>
                     {(p.mallName || p.provider?.nameKr) && (
                       <span className="text-gray-500">{p.mallName ?? p.provider?.nameKr}</span>
                     )}
@@ -128,9 +128,7 @@ export default function ClusteredPriceSection({ productId, title = '판매처별
           );
         })}
       </ul>
-      {restCount > 0 && (
-        <p className="mt-2 text-center text-xs text-gray-500">외 {restCount}개 더</p>
-      )}
+      {restCount > 0 && <p className={cn(text.caption, 'mt-2 text-center')}>외 {restCount}개 더</p>}
     </section>
   );
 }

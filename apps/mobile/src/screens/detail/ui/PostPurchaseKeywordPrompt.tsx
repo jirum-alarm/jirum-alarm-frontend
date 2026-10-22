@@ -22,6 +22,8 @@ import {useAuth} from '@/entities/auth/useAuth';
 
 import {deriveKeyword} from '@jirum/domain/derive-keyword';
 import {invalidateMyKeywords} from '@/entities/mypage/model/myKeywords';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 /** 키워드 등록 최소 길이. web MIN_KEYWORD_LENGTH 와 맞춘다. */
 const MIN_KEYWORD_LENGTH = 2;
@@ -146,7 +148,7 @@ export default function PostPurchaseKeywordPrompt({
           <Text className="text-sm font-semibold text-gray-800">
             알림을 등록했어요
           </Text>
-          <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
+          <Text className={cn(text.caption, 'mt-0.5')} numberOfLines={1}>
             ‘{keyword}’ 새 딜이 나오면 알려드려요
           </Text>
         </View>
@@ -155,7 +157,7 @@ export default function PostPurchaseKeywordPrompt({
           accessibilityRole="button"
           accessibilityLabel="알림 안내 닫기">
           <View className="h-11 justify-center px-2">
-            <Text className="text-xs text-gray-500">닫기</Text>
+            <Text className={text.caption}>닫기</Text>
           </View>
         </PressableScale>
       </View>
@@ -171,7 +173,7 @@ export default function PostPurchaseKeywordPrompt({
         <Text className="text-sm font-semibold text-gray-800">
           또 뜨면 알려드릴까요?
         </Text>
-        <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
+        <Text className={cn(text.caption, 'mt-0.5')} numberOfLines={1}>
           ‘{keyword}’ 핫딜이 올라오면 알려드려요
         </Text>
       </View>
@@ -203,7 +205,7 @@ export default function PostPurchaseKeywordPrompt({
           accessibilityRole="button"
           accessibilityLabel="알림 안내 닫기">
           <View className="h-11 justify-center px-2">
-            <Text className="text-xs text-gray-500">닫기</Text>
+            <Text className={text.caption}>닫기</Text>
           </View>
         </PressableScale>
       </View>

@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import { DropdownMenu } from 'radix-ui';
 
@@ -17,8 +18,10 @@ import { MYPAGE_GROUPS, MYPAGE_MENU } from '@/features/mypage/model/menu';
 
 const itemClass =
   'flex w-full cursor-pointer items-center rounded-lg px-2.5 py-1.5 text-sm text-gray-900 outline-none data-[highlighted]:bg-gray-50';
-const segClass =
-  'cursor-pointer rounded-md px-2 py-0.5 text-xs text-gray-500 outline-none transition-colors data-[highlighted]:text-gray-900';
+const segClass = cn(
+  text.caption,
+  'cursor-pointer rounded-md px-2 py-0.5 outline-none transition-colors data-[highlighted]:text-gray-900',
+);
 
 /**
  * GNB 👤 메뉴 — 마이페이지 사이드바와 같은 묶음(지원 묶음은 사이드바에만) + 화면 모드 + 로그아웃.
@@ -50,7 +53,7 @@ export default function UserMenu({ color }: { color: string }) {
               className="block rounded-lg px-2.5 pt-2 pb-2.5 outline-none data-[highlighted]:bg-gray-50"
             >
               <p className="truncate font-bold text-gray-900">{me?.nickname ?? ' '}</p>
-              <p className="truncate text-xs text-gray-500">{me?.email ?? ' '}</p>
+              <p className={cn(text.caption, 'truncate')}>{me?.email ?? ' '}</p>
             </Link>
           </DropdownMenu.Item>
           {MYPAGE_GROUPS.filter((group) => group.key !== 'support').map((group) => (

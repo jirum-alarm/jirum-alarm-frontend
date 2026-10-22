@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import {
   broadenSuggestion,
   describeKeywordFrequency,
@@ -35,7 +36,7 @@ type Keyword = {
 const inputClass =
   'focus:border-primary-500 w-full min-w-0 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none';
 
-const sectionTitle = 'text-sm font-semibold text-gray-900';
+const sectionTitle = text.label;
 
 /**
  * 키워드 카드 한 장. 접힌 상태엔 "어떤 알림이 오는지" 한 줄 요약만, 누르면 설정이 펼쳐진다.
@@ -97,10 +98,8 @@ const KeywordItem = ({
       <details ref={detailsRef} open={defaultOpen} className="group">
         <summary className="flex cursor-pointer list-none items-center gap-2 py-3.5 pr-2 pl-4 [&::-webkit-details-marker]:hidden">
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-gray-900">{keyword.keyword}</p>
-            <p className="mt-0.5 truncate text-xs text-gray-500">
-              {summarizeKeywordAlert(keyword)}
-            </p>
+            <p className={cn(text.label, 'truncate')}>{keyword.keyword}</p>
+            <p className={cn(text.caption, 'mt-0.5 truncate')}>{summarizeKeywordAlert(keyword)}</p>
             {described && (
               <p
                 className={cn(
@@ -138,7 +137,7 @@ const KeywordItem = ({
             // 드문 키워드(90일 3번 미만) — 첫 낱말(대개 브랜드)로 넓혀 받기. 원래 키워드는 지우지 않는다(같은 딜은 한 번만 온다).
             <div className="rounded-lg bg-gray-50 px-3 py-3">
               <p className="text-sm text-gray-900">자주 안 올라오는 키워드라 알림이 드물게 와요.</p>
-              <p className="mt-0.5 text-xs text-gray-500">{suggestion.text}</p>
+              <p className={cn(text.caption, 'mt-0.5')}>{suggestion.text}</p>
               <button
                 type="button"
                 disabled={broadening}
@@ -187,10 +186,8 @@ const KeywordItem = ({
                       {selected && <span className="size-2 rounded-full bg-gray-900" />}
                     </span>
                     <span className="min-w-0">
-                      <span className="block text-sm font-semibold text-gray-900">
-                        {choice.label}
-                      </span>
-                      <span className="mt-0.5 block text-xs text-gray-500">
+                      <span className={cn(text.label, 'block')}>{choice.label}</span>
+                      <span className={cn(text.caption, 'mt-0.5 block')}>
                         {choice.hint(keyword.keyword)}
                       </span>
                     </span>
@@ -224,7 +221,7 @@ const KeywordItem = ({
                 className={inputClass}
               />
             </div>
-            <p className="text-xs text-gray-500">
+            <p className={text.caption}>
               비워 두면 가격과 상관없이 알려드려요. 가격이 안 적힌 글도 알려드려요.
             </p>
           </div>
@@ -241,7 +238,7 @@ const KeywordItem = ({
               maxLength={220}
               className={inputClass}
             />
-            <span className="text-xs text-gray-500">
+            <span className={text.caption}>
               제목에 이 단어가 있으면 알리지 않아요. 여러 개는 쉼표로 구분해요.
             </span>
           </label>
@@ -250,7 +247,7 @@ const KeywordItem = ({
             <button
               type="button"
               onClick={onDelete}
-              className="rounded-lg px-3 py-2.5 text-sm text-gray-500 hover:text-gray-700"
+              className={cn(text.muted, 'rounded-lg px-3 py-2.5 hover:text-gray-700')}
               aria-label={`${keyword.keyword} 키워드 삭제`}
             >
               키워드 삭제

@@ -1,6 +1,6 @@
 'use client';
 
-import { addChip } from '@jirum/design-system/recipes';
+import { addChip, text } from '@jirum/design-system/recipes';
 import { broadenSuggestion, describeKeywordFrequency } from '@jirum/domain/keyword-frequency';
 import { useEffect, useState } from 'react';
 
@@ -81,7 +81,7 @@ const KeywordInput = ({ autoFocus = true }: { autoFocus?: boolean }) => {
             </p>
             {suggestion && (
               <>
-                <p className="text-xs text-gray-500">{suggestion.text}</p>
+                <p className={text.caption}>{suggestion.text}</p>
                 <button
                   type="button"
                   disabled={registeringSuggestion}

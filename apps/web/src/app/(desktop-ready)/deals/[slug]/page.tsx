@@ -1,4 +1,4 @@
-import { infoBox, linkChip } from '@jirum/design-system/recipes';
+import { infoBox, linkChip, text } from '@jirum/design-system/recipes';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -352,7 +352,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
       <DealsTracking slug={page.slug} />
       <DealsMobileHeader title={displayName} />
 
-      <nav aria-label="위치" className="mb-3 text-sm text-gray-500">
+      <nav aria-label="위치" className={cn(text.muted, 'mb-3')}>
         {parentHub ? (
           <>
             <Link href={PAGE.KEYWORDS} className="hover:underline">
@@ -404,7 +404,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
               <p className="mt-1 text-sm text-gray-600">
                 {leadSentence ?? '커뮤니티 핫딜을 단위가로 모아, 사도 되는 가격을 알려드립니다.'}
               </p>
-              <p className="mt-1 text-xs text-gray-500">
+              <p className={cn(text.caption, 'mt-1')}>
                 {page.brand ? `${page.brand} · ` : ''}지금까지 핫딜 {page.dealCount}건
                 {page.lastDealAt
                   ? ` · 마지막 ${new Date(page.lastDealAt).toLocaleDateString('ko-KR')}`
@@ -434,7 +434,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                           ? ` (${timing.unitLabel})`
                           : ''}
                       </p>
-                      <p className="text-lg font-semibold text-gray-900">
+                      <p className={text.title}>
                         {timing.current > 0
                           ? won(timing.current)
                           : histBasis === 'unit' && heroPrice?.unitPrice != null
@@ -442,13 +442,13 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                             : won(heroPrice?.minPrice)}
                       </p>
                       {timing.isActivePrice && timing.bestPackLabel ? (
-                        <p className="text-xs text-gray-500">
+                        <p className={text.caption}>
                           {timing.bestPackLabel}
                           {timing.totalPrice != null ? ` · 총액 ${won(timing.totalPrice)}` : ''}
                         </p>
                       ) : (
                         heroPrice?.label && (
-                          <p className="text-xs text-gray-500">
+                          <p className={text.caption}>
                             {heroPrice.label}
                             {heroPrice.minPrice != null ? ` · 총액 ${won(heroPrice.minPrice)}` : ''}
                           </p>
@@ -458,7 +458,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                     {timing.avg != null && (
                       <div>
                         <p className="text-11 text-gray-500">추이 평균 대비</p>
-                        <p className="text-lg font-semibold text-gray-900">
+                        <p className={text.title}>
                           {timing.savePct != null
                             ? timing.savePct > 0
                               ? `약 ${timing.savePct}% 저렴`
@@ -467,16 +467,14 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                                 : '평균 수준'
                             : '-'}
                         </p>
-                        <p className="text-xs text-gray-500">평균 {fmtHist(timing.avg)}</p>
+                        <p className={text.caption}>평균 {fmtHist(timing.avg)}</p>
                       </div>
                     )}
                     {timing.buyLine != null && (
                       <div>
                         <p className="text-11 text-gray-500">이하면 사도 됨</p>
-                        <p className="text-lg font-semibold text-gray-900">
-                          {fmtHist(timing.buyLine)}
-                        </p>
-                        <p className="text-xs text-gray-500">추이 최저~최고의 하위 30%</p>
+                        <p className={text.title}>{fmtHist(timing.buyLine)}</p>
+                        <p className={text.caption}>추이 최저~최고의 하위 30%</p>
                       </div>
                     )}
                   </div>
@@ -520,7 +518,10 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                       href={danawa.danawaUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-3 mr-4 inline-flex text-sm font-semibold text-gray-900 underline-offset-2 hover:underline"
+                      className={cn(
+                        text.label,
+                        'mt-3 mr-4 inline-flex underline-offset-2 hover:underline',
+                      )}
                     >
                       다나와 최저가 보기 →
                     </a>
@@ -528,7 +529,10 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                   {activeDeals.length > 0 && (
                     <a
                       href="#deals-list"
-                      className="mt-3 inline-flex text-sm font-semibold text-gray-900 underline-offset-2 hover:underline"
+                      className={cn(
+                        text.label,
+                        'mt-3 inline-flex underline-offset-2 hover:underline',
+                      )}
                     >
                       지금 살 수 있는 딜 보기 →
                     </a>
@@ -549,7 +553,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
               <div className="mb-3 flex items-baseline justify-between gap-2">
                 <h2 className="text-base font-semibold">용량·수량별 대표 상품</h2>
                 {bestRep && (
-                  <span className="text-xs text-gray-500">
+                  <span className={text.caption}>
                     가성비 1위 {bestRep.label}
                     {bestRep.unitPrice != null && bestRep.unitLabel
                       ? ` · ${bestRep.unitLabel} ${won(bestRep.unitPrice)}`
@@ -593,16 +597,14 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                         </div>
                       </div>
                       {rep.dealMinPrice != null && (
-                        <span className="text-sm font-semibold text-gray-900">
-                          핫딜 {won(rep.dealMinPrice)}
-                        </span>
+                        <span className={text.label}>핫딜 {won(rep.dealMinPrice)}</span>
                       )}
                       {rep.unitPrice != null && (
-                        <span className="text-xs text-gray-500">
+                        <span className={text.caption}>
                           {rep.unitLabel} {won(rep.unitPrice)}
                         </span>
                       )}
-                      <span className="text-xs text-gray-500">
+                      <span className={text.caption}>
                         {danawaDisplay != null ? `다나와 ${won(danawaDisplay)}` : ''}
                         {rep.mallCount ? ` · ${rep.mallCount}곳` : ''}
                         {rep.danawaSaving != null ? ` · ${won(rep.danawaSaving)} 절약` : ''}
@@ -620,7 +622,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             <section className="mb-6">
               <div className="mb-1 flex items-baseline justify-between">
                 <h2 className="text-base font-semibold">{histTitle}</h2>
-                <span className="text-xs text-gray-500">
+                <span className={text.caption}>
                   {histBasis === 'unit' && histUnitLabel
                     ? histUnitLabel
                     : histCurrency === 'USD'
@@ -628,7 +630,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                       : '원화'}
                 </span>
               </div>
-              <p className="mb-3 text-xs text-gray-500">
+              <p className={cn(text.caption, 'mb-3')}>
                 {nowPrice != null && (
                   <>
                     지금 <span className="font-semibold text-gray-800">{fmtHist(nowPrice)}</span>
@@ -729,13 +731,13 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             >
               <div>
                 <div className="text-sm font-medium">다나와 최저가 비교</div>
-                <div className="mt-0.5 text-xs text-gray-500">
+                <div className={cn(text.caption, 'mt-0.5')}>
                   상시몰 가격 검증
                   {danawa.mallCount ? ` · ${danawa.mallCount}곳` : ''}
                   {danawa.danawaPrice ? ` · ${won(danawa.danawaPrice)}` : ''}
                 </div>
               </div>
-              <span className="text-sm text-gray-500">바로가기 →</span>
+              <span className={text.muted}>바로가기 →</span>
             </a>
           )}
 

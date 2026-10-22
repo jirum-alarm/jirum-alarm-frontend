@@ -1,3 +1,4 @@
+import { text } from '@jirum/design-system/recipes';
 import Link from 'next/link';
 
 import type { ProductModelPageLink } from '@/shared/api/product/product.service';
@@ -51,7 +52,7 @@ export default async function ProductPriceContext({
 
   return (
     <section className={cn('flex flex-col gap-2', className)}>
-      {ageNotice ? <p className="text-sm text-gray-500">{ageNotice}</p> : null}
+      {ageNotice ? <p className={text.muted}>{ageNotice}</p> : null}
 
       {modelPage ? (
         <Link
@@ -62,10 +63,8 @@ export default async function ProductPriceContext({
           className="flex items-center justify-between gap-3 rounded-xl border border-gray-200 px-4 py-3.5 transition-colors hover:border-gray-300 hover:bg-gray-50"
         >
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-gray-900">
-              {modelPage.modelName} 핫딜 최저가 모음
-            </p>
-            <p className="mt-0.5 truncate text-xs text-gray-500">
+            <p className={cn(text.label, 'truncate')}>{modelPage.modelName} 핫딜 최저가 모음</p>
+            <p className={cn(text.caption, 'mt-0.5 truncate')}>
               {[
                 modelPage.brand?.trim() || null,
                 modelPage.dealCount > 0 ? `최근 핫딜 ${modelPage.dealCount}건` : null,
@@ -75,7 +74,7 @@ export default async function ProductPriceContext({
                 .join(' · ')}
             </p>
           </div>
-          <span className="shrink-0 text-sm text-gray-500" aria-hidden>
+          <span className={cn(text.muted, 'shrink-0')} aria-hidden>
             →
           </span>
         </Link>
@@ -104,7 +103,7 @@ export default async function ProductPriceContext({
           href="/help#evidence"
           data-track="help-link"
           data-source="detail_price_context"
-          className="self-start text-sm text-gray-500 underline-offset-2 hover:underline"
+          className={cn(text.muted, 'self-start underline-offset-2 hover:underline')}
         >
           지름알림이 가격을 판단하는 법 ›
         </Link>

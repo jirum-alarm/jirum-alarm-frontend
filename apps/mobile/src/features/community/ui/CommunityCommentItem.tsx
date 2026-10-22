@@ -15,6 +15,7 @@ import SheetMenuRow from '@/shared/components/SheetMenuRow';
 
 import {gaps} from './community-styles';
 import {tick} from '@/shared/lib/feedback';
+import {text} from '@jirum/design-system/recipes';
 
 const MAX_COMMENT_LENGTH = 300; // web textarea maxLength
 
@@ -99,7 +100,7 @@ export default function CommunityCommentItem({
           <Text className="text-sm font-medium text-gray-700">
             {comment.author?.nickname ?? '알 수 없음'}
           </Text>
-          <Text className="text-xs text-gray-500">
+          <Text className={text.caption}>
             {displayTime(comment.createdAt, now)}
           </Text>
         </View>

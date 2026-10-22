@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { deriveKeyword } from '@jirum/domain/derive-keyword';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
@@ -226,7 +227,7 @@ export default function PostPurchaseKeywordPrompt({
         {/* 권유 상태와 같은 2줄 구조·같은 크기 — 안내 문장은 온전히, 키워드만 줄인다. */}
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-gray-800">알림을 등록했어요</p>
-          <p className="mt-0.5 truncate text-xs text-gray-500">
+          <p className={cn(text.caption, 'mt-0.5 truncate')}>
             {kakaoBridge ? (
               <>앱을 열면 &lsquo;{keyword}&rsquo; 알림이 와요</>
             ) : (
@@ -250,7 +251,7 @@ export default function PostPurchaseKeywordPrompt({
           type="button"
           onClick={onClose}
           aria-label="알림 안내 닫기"
-          className="flex h-11 shrink-0 items-center px-2 text-xs text-gray-500"
+          className={cn(text.caption, 'flex h-11 shrink-0 items-center px-2')}
         >
           닫기
         </button>
@@ -279,7 +280,7 @@ export default function PostPurchaseKeywordPrompt({
         <p className="text-sm font-semibold text-gray-800">
           {kakaoBridge ? '이런 딜, 폰 알림으로 먼저 받을까요?' : '또 뜨면 알려드릴까요?'}
         </p>
-        <p className="mt-0.5 truncate text-xs text-gray-500">
+        <p className={cn(text.caption, 'mt-0.5 truncate')}>
           {kakaoBridge ? (
             <>카톡방 말고 &lsquo;{keyword}&rsquo; 딜만 앱으로</>
           ) : (
@@ -307,7 +308,7 @@ export default function PostPurchaseKeywordPrompt({
           type="button"
           onClick={onClose}
           aria-label="알림 안내 닫기"
-          className="flex h-11 items-center px-1 text-xs text-gray-500"
+          className={cn(text.caption, 'flex h-11 items-center px-1')}
         >
           닫기
         </button>

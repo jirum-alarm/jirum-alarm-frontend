@@ -1,6 +1,11 @@
 import React, {useState} from 'react';
 import {ActivityIndicator, Pressable, View} from 'react-native';
-import {emptyText, sectionTitle, wordTag} from '@jirum/design-system/recipes';
+import {
+  emptyText,
+  sectionTitle,
+  wordTag,
+  text,
+} from '@jirum/design-system/recipes';
 import {fixed} from '@jirum/design-system';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
@@ -204,7 +209,7 @@ export default function CommunityReaction({
             <Text className="text-base font-semibold text-gray-800">
               {isPositive ? '추천해요' : '아쉬워요'}
             </Text>
-            <Text className="text-sm text-gray-500">· {share}</Text>
+            <Text className={text.muted}>· {share}</Text>
           </View>
         ) : (
           <Text className={emptyText}>아직 모은 반응이 없어요</Text>
@@ -220,7 +225,7 @@ export default function CommunityReaction({
         ) : null}
 
         {statusSummary ? (
-          <Text className="text-xs text-gray-500">{statusSummary.message}</Text>
+          <Text className={text.caption}>{statusSummary.message}</Text>
         ) : null}
 
         {additional?.commentSummary ? (
@@ -228,7 +233,7 @@ export default function CommunityReaction({
         ) : null}
 
         <View className="flex-row items-center justify-between gap-2 border-t border-secondary-100 pt-3">
-          <Text className="text-xs text-gray-500">{lastUpdatedAt ?? ' '}</Text>
+          <Text className={text.caption}>{lastUpdatedAt ?? ' '}</Text>
           {additional?.url && additional.provider?.nameKr ? (
             <CommunityLink
               url={additional.url}

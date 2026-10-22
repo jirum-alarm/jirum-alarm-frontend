@@ -1,11 +1,13 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { Drawer } from 'vaul';
 
 import useAlertSession from '@/shared/hooks/useAlertSession';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
+import { cn } from '@/shared/lib/cn';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { readHandoff } from '@/shared/lib/push-channel/browserHandoff';
 import { readPushStatus } from '@/shared/lib/push-channel/pushChannel';
@@ -77,12 +79,12 @@ export default function BrowserHandoffArrival() {
   return (
     <Drawer.Root open onOpenChange={(open) => !open && setAskPush(false)}>
       <BottomSheetContent handle className="pb-safe-bottom-16 px-5">
-        <Drawer.Title className="text-2xl font-semibold text-gray-900">
+        <Drawer.Title className={text.display}>
           마지막 단계예요
           <br />
           알림을 켜 주세요
         </Drawer.Title>
-        <Drawer.Description className="pt-2 text-sm text-gray-500">
+        <Drawer.Description className={cn(text.muted, 'pt-2')}>
           이 브라우저로 핫딜 알림을 보내드려요.
         </Drawer.Description>
         <div className="mt-5 flex flex-col gap-y-2">
@@ -90,7 +92,7 @@ export default function BrowserHandoffArrival() {
           <button
             type="button"
             onClick={() => setAskPush(false)}
-            className="h-10 text-sm text-gray-500"
+            className={cn(text.muted, 'h-10')}
           >
             다음에 할게요
           </button>

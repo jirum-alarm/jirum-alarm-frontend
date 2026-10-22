@@ -1,11 +1,12 @@
 'use client';
 
-import { emptyText } from '@jirum/design-system/recipes';
+import { emptyText, text } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Fragment, useEffect } from 'react';
 
 import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
 
 import { AuthQueries } from '@/entities/auth';
 import { CommunityTab } from '@/entities/community';
@@ -97,7 +98,7 @@ export default function CommunityList({ tab, insertAfterIndex, insertContent }: 
       {/* 무한 스크롤 트리거 */}
       <div ref={ref} className="h-1" />
       {isFetchingNextPage && (
-        <div className="flex items-center justify-center py-4 text-sm text-gray-500">
+        <div className={cn(text.muted, 'flex items-center justify-center py-4')}>
           불러오는 중...
         </div>
       )}

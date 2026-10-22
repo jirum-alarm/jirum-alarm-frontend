@@ -1,4 +1,4 @@
-import { emptyText, linkChip } from '@jirum/design-system/recipes';
+import { emptyText, linkChip, text } from '@jirum/design-system/recipes';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -178,7 +178,7 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
           <KeywordHubAlertButton keyword={hub.name} />
           <Link
             href="/guide/hotdeal-alarm"
-            className="mt-3 inline-block text-sm text-gray-500 underline underline-offset-2"
+            className={cn(text.muted, 'mt-3 inline-block underline underline-offset-2')}
           >
             알림 받는 법
           </Link>
@@ -190,9 +190,9 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
           aria-label={`${hub.name} 핫딜이 올라오는 리듬`}
           className="mb-6 rounded-xl bg-gray-50 px-4 py-3"
         >
-          <p className="text-sm font-semibold text-gray-900">{rhythm.headline}</p>
+          <p className={text.label}>{rhythm.headline}</p>
           {rhythm.sources ? (
-            <p className="mt-0.5 text-xs text-gray-500">주로 올라오는 곳 · {rhythm.sources}</p>
+            <p className={cn(text.caption, 'mt-0.5')}>주로 올라오는 곳 · {rhythm.sources}</p>
           ) : null}
           <p className="mt-1.5 text-sm text-gray-600">{rhythm.advice}</p>
         </section>
@@ -203,7 +203,7 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
         // 허브에서 가격을 섞어 비교하지 않는 대신 그쪽으로 보낸다. 구글은 모델 페이지로 사람을 데려오는 쪽이라
         // 모델 페이지 → 허브 링크와 짝이다.
         <nav aria-label={`${hub.name} 상품별 최저가`} className="mb-6">
-          <h2 className="mb-2 text-base font-semibold text-gray-900">상품별 최저가 모음</h2>
+          <h2 className={cn(text.subtitle, 'mb-2')}>상품별 최저가 모음</h2>
           <ul className="flex flex-wrap gap-2">
             {modelPages.map((page) => (
               <li key={page.slug}>
@@ -223,8 +223,8 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
 
       {parentThemes.length > 0 ? (
         <nav aria-label={`${hub.name} 관심사 묶음`} className="mb-6">
-          <h2 className="mb-1 text-base font-semibold text-gray-900">비슷한 것까지 묶어서 받기</h2>
-          <p className="mb-3 text-sm text-gray-500">
+          <h2 className={cn(text.subtitle, 'mb-1')}>비슷한 것까지 묶어서 받기</h2>
+          <p className={cn(text.muted, 'mb-3')}>
             {hub.name}처럼 비슷한 키워드를 한꺼번에 — 반응 좋은 딜만 하루 최대 3건 알려드려요.
           </p>
           <ul className="flex flex-wrap gap-2">
@@ -256,7 +256,7 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
         <Link
           href={searchHref(hub.name)}
           rel="nofollow"
-          className="text-sm text-gray-500 underline underline-offset-2"
+          className={cn(text.muted, 'underline underline-offset-2')}
         >
           ‘{hub.name}’ 전체 검색 결과 보기
         </Link>
@@ -264,9 +264,7 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
 
       {faqs.length > 0 ? (
         <section className="mt-14">
-          <h2 className="mb-2 text-base font-semibold text-gray-900">
-            {hub.name} 핫딜, 자주 묻는 질문
-          </h2>
+          <h2 className={cn(text.subtitle, 'mb-2')}>{hub.name} 핫딜, 자주 묻는 질문</h2>
           <dl className="divide-y divide-gray-100 border-y border-gray-100 text-sm">
             {faqs.map((f) => (
               <div key={f.q} className="py-3">
@@ -277,7 +275,7 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
           </dl>
           <Link
             href={PAGE.HELP}
-            className="mt-3 inline-block text-sm text-gray-500 underline underline-offset-2"
+            className={cn(text.muted, 'mt-3 inline-block underline underline-offset-2')}
           >
             지름알림 사용법 · 자주 묻는 질문
           </Link>
@@ -285,7 +283,7 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
       ) : null}
 
       <nav aria-label="다른 키워드 핫딜" className="mt-14">
-        <h2 className="mb-3 text-base font-semibold text-gray-900">다른 키워드 핫딜</h2>
+        <h2 className={cn(text.subtitle, 'mb-3')}>다른 키워드 핫딜</h2>
         <ul className="flex flex-wrap gap-2">
           {otherHubs.map((h) => (
             <li key={h.slug}>

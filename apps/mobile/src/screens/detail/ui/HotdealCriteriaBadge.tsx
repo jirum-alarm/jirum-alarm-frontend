@@ -12,6 +12,7 @@ import HotdealBadge, {
 } from '@/shared/components/product/HotdealBadge';
 import {HotDealType} from '@/shared/api/gql/graphql';
 import {cn} from '@/shared/lib/styling/className';
+import {text} from '@jirum/design-system/recipes';
 
 /**
  * 상세 배지 + 뜻 한 줄 — 누르면 세 배지의 기준을 시트로 보여 준다. web `features/product-detail/ui/HotdealCriteriaBadge.tsx` 와 같은 내용.
@@ -37,7 +38,7 @@ export default function HotdealCriteriaBadge({
         hitSlop={10}
         className="shrink flex-row items-center gap-x-1.5">
         <HotdealBadge hotdealType={hotdealType} badgeVariant="page" />
-        <Text className="shrink text-xs text-gray-500" numberOfLines={1}>
+        <Text className={cn(text.caption, 'shrink')} numberOfLines={1}>
           {criteria.short} ›
         </Text>
       </PressableScale>
@@ -50,7 +51,7 @@ export default function HotdealCriteriaBadge({
           <Text className="text-xl font-bold text-gray-900">
             배지는 이렇게 붙어요
           </Text>
-          <Text className="pt-1 pb-4 text-sm text-gray-500">
+          <Text className={cn(text.muted, 'pt-1 pb-4')}>
             둘 이상 해당하면 높은 배지 하나만 보여요.
           </Text>
           <View className="gap-y-1">
@@ -65,7 +66,7 @@ export default function HotdealCriteriaBadge({
                   <HotdealBadge hotdealType={type} badgeVariant="page" />
                 </View>
                 <View className="min-w-0 flex-1">
-                  <Text className="text-sm font-semibold text-gray-900">
+                  <Text className={text.label}>
                     {hotdealCriteria[type].title}
                     {type === hotdealType ? (
                       <Text className="text-xs font-medium text-error-600">
@@ -73,7 +74,7 @@ export default function HotdealCriteriaBadge({
                       </Text>
                     ) : null}
                   </Text>
-                  <Text className="mt-0.5 text-xs text-gray-500">
+                  <Text className={cn(text.caption, 'mt-0.5')}>
                     {hotdealCriteria[type].detail}
                   </Text>
                 </View>

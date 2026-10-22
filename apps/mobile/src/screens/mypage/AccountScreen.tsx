@@ -18,6 +18,7 @@ import {FORM_CTA_BOTTOM, MovePageRow} from '@/features/mypage/ui/Rows';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import {useLogout} from '@/features/mypage/model/useLogout';
 import {useWithdraw} from '@/features/mypage/model/mutations';
+import {text} from '@jirum/design-system/recipes';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -86,9 +87,7 @@ export default function AccountScreen({navigation}: Props) {
 
             <View className="pt-8" style={styles.grow}>
               <View className="pb-[22px]">
-                <Text className="text-sm text-gray-500">
-                  {ACCOUNT_COPY.email}
-                </Text>
+                <Text className={text.muted}>{ACCOUNT_COPY.email}</Text>
               </View>
               <Text className="text-gray-900">{me?.email}</Text>
 

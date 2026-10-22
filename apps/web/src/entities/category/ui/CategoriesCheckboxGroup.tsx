@@ -1,3 +1,4 @@
+import { text } from '@jirum/design-system/recipes';
 import { useId } from 'react';
 
 import { CATEGORIES } from '@/shared/config/categories';
@@ -37,7 +38,7 @@ const CategoriesCheckboxGroup = ({
                   섞였다(특히 상품권=💵, 기타=🔍 는 뜻이 어긋난다).
                   선택 상태는 기존대로 테두리·배경으로만 가른다. */}
               <CategoryIcon value={category.value} />
-              <span className="text-sm text-gray-700">{category.text}</span>
+              <span className={text.body}>{category.text}</span>
             </div>
           </Checkbox>
         </li>

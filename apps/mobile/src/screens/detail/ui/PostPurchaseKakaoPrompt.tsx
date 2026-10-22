@@ -13,6 +13,8 @@ import {
   openOkachat,
   trackOkachatEvent,
 } from '../lib/okachat';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 /**
  * 구매 직후 오카방 입장 권유. web PostPurchaseKakaoPrompt 와 같은 자리·어투.
@@ -61,7 +63,7 @@ export default function PostPurchaseKakaoPrompt({
             ? '카톡으로 뷰티 핫딜 먼저 받아보세요'
             : '카톡으로 핫딜 먼저 받아보세요'}
         </Text>
-        <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
+        <Text className={cn(text.caption, 'mt-0.5')} numberOfLines={1}>
           {beauty
             ? '화장품·스킨케어 핫딜만 모아 보내드려요'
             : '지름알림이 엄선한 핫딜만 골라 보내드려요'}
@@ -88,7 +90,7 @@ export default function PostPurchaseKakaoPrompt({
         accessibilityRole="button"
         accessibilityLabel="카톡방 안내 닫기"
         className="px-1 py-3">
-        <Text className="text-xs text-gray-500">닫기</Text>
+        <Text className={text.caption}>닫기</Text>
       </PressableScale>
     </View>
   );

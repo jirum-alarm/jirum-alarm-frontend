@@ -17,6 +17,7 @@ import GenderRadioGroup from '@/features/mypage/ui/GenderRadioGroup';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import {FORM_CTA_BOTTOM} from '@/features/mypage/ui/Rows';
 import {useUpdatePersonal} from '@/features/mypage/model/mutations';
+import {text} from '@jirum/design-system/recipes';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -61,7 +62,7 @@ export default function PersonalScreen({navigation}: Props) {
       <StackHeader title="개인정보 수정" onBack={navigation.goBack} />
       <ScrollView contentContainerStyle={contentStyle}>
         <View className="px-5 pt-9" style={styles.grow}>
-          <Text className="text-2xl font-semibold text-gray-900">
+          <Text className={text.display}>
             {'출생 연도와 성별을\n수정해주세요.'}
           </Text>
           <View className="pt-[88px]">

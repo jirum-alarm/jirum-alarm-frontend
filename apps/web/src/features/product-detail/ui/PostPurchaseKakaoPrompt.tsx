@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { useEffect } from 'react';
 
 import { cn } from '@/shared/lib/cn';
@@ -69,7 +70,7 @@ export default function PostPurchaseKakaoPrompt({
         <p className="text-sm font-semibold text-gray-800">
           {beauty ? '카톡으로 뷰티 핫딜 먼저 받아보세요' : '카톡으로 핫딜 먼저 받아보세요'}
         </p>
-        <p className="mt-0.5 truncate text-xs text-gray-500">
+        <p className={cn(text.caption, 'mt-0.5 truncate')}>
           {beauty
             ? '화장품·스킨케어 핫딜만 모아 보내드려요'
             : '지름알림이 엄선한 핫딜만 골라 보내드려요'}
@@ -87,7 +88,7 @@ export default function PostPurchaseKakaoPrompt({
           type="button"
           onClick={onClose}
           aria-label="카톡방 안내 닫기"
-          className="flex h-11 items-center px-1 text-xs text-gray-500"
+          className={cn(text.caption, 'flex h-11 items-center px-1')}
         >
           닫기
         </button>

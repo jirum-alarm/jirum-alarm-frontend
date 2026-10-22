@@ -1,7 +1,10 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import Link from 'next/link';
 import { useEffect } from 'react';
+
+import { cn } from '@/shared/lib/cn';
 
 import {
   buildKeywordHubFacts,
@@ -45,12 +48,12 @@ export default function SearchKeywordHubCard({ keyword }: { keyword: string }) {
       className="mb-3 flex items-center justify-between gap-3 rounded-xl border border-gray-200 px-4 py-3 transition-colors hover:border-gray-300 hover:bg-gray-50"
     >
       <div className="min-w-0">
-        <p className="truncate text-sm font-semibold text-gray-900">{hub.name} 핫딜 모음</p>
-        <p className="mt-0.5 truncate text-xs text-gray-500">
+        <p className={cn(text.label, 'truncate')}>{hub.name} 핫딜 모음</p>
+        <p className={cn(text.caption, 'mt-0.5 truncate')}>
           {[`최근 30일 ${formatHubCount(hub)}`, ...facts].join(' · ')}
         </p>
       </div>
-      <span className="shrink-0 text-sm text-gray-500" aria-hidden>
+      <span className={cn(text.muted, 'shrink-0')} aria-hidden>
         →
       </span>
     </Link>

@@ -30,6 +30,8 @@ import {
 } from '@jirum/domain/keyword-options';
 import {useUpdateKeywordOptions} from '../model/mutations';
 import PressableOpacity from '@/shared/components/PressableOpacity';
+import {text as textRole} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 /** iOS 숫자 키패드엔 리턴 키가 없어 닫을 길이 없다 — 키보드 위 「완료」 줄. 모든 카드가 같이 쓴다. */
 const PRICE_ACCESSORY_ID = 'keyword-price-done';
@@ -123,12 +125,10 @@ export default function KeywordItem({
             accessibilityState={{expanded: open}}
             accessibilityLabel={`${keyword.keyword} 알림 설정`}
             className="min-w-0 flex-1 py-3.5 pl-4">
-            <Text
-              className="text-sm font-semibold text-gray-900"
-              numberOfLines={1}>
+            <Text className={textRole.label} numberOfLines={1}>
               {keyword.keyword}
             </Text>
-            <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
+            <Text className={cn(textRole.caption, 'mt-0.5')} numberOfLines={1}>
               {summarizeKeywordAlert(saved)}
             </Text>
             {described ? (
@@ -136,7 +136,7 @@ export default function KeywordItem({
                 className={
                   described.sparse
                     ? 'mt-0.5 text-xs text-warning-700'
-                    : 'mt-0.5 text-xs text-gray-500'
+                    : cn(textRole.caption, 'mt-0.5')
                 }
                 numberOfLines={1}>
                 {described.text}
@@ -179,7 +179,7 @@ export default function KeywordItem({
                 <Text className="text-sm text-gray-900">
                   자주 안 올라오는 키워드라 알림이 드물게 와요.
                 </Text>
-                <Text className="mt-0.5 text-xs text-gray-500">
+                <Text className={cn(textRole.caption, 'mt-0.5')}>
                   {suggestion.text}
                 </Text>
                 <View className="mt-3 flex-row">
@@ -207,10 +207,10 @@ export default function KeywordItem({
               <Text className="text-sm text-gray-900" numberOfLines={1}>
                 {`‘${keyword.keyword}’ 지금 올라온 딜 보기`}
               </Text>
-              <Text className="text-sm text-gray-500">›</Text>
+              <Text className={textRole.muted}>›</Text>
             </PressableOpacity>
             <View className="gap-2">
-              <Text className="mb-1 text-sm font-semibold text-gray-900">
+              <Text className={cn(textRole.label, 'mb-1')}>
                 {KEYWORD_ALERT_LABELS.deals}
               </Text>
               <View className="gap-2" accessibilityRole="radiogroup">
@@ -241,10 +241,8 @@ export default function KeywordItem({
                         ) : null}
                       </View>
                       <View className="min-w-0 flex-1">
-                        <Text className="text-sm font-semibold text-gray-900">
-                          {choice.label}
-                        </Text>
-                        <Text className="mt-0.5 text-xs text-gray-500">
+                        <Text className={textRole.label}>{choice.label}</Text>
+                        <Text className={cn(textRole.caption, 'mt-0.5')}>
                           {choice.hint(keyword.keyword)}
                         </Text>
                       </View>
@@ -255,7 +253,7 @@ export default function KeywordItem({
             </View>
 
             <View className="gap-2">
-              <Text className="text-sm font-semibold text-gray-900">
+              <Text className={textRole.label}>
                 {KEYWORD_ALERT_LABELS.priceRange}{' '}
                 <Text className="text-xs font-normal text-gray-500">
                   (선택)
@@ -284,14 +282,14 @@ export default function KeywordItem({
                   />
                 </View>
               </View>
-              <Text className="text-xs text-gray-500">
+              <Text className={textRole.caption}>
                 비워 두면 가격과 상관없이 알려드려요. 가격이 안 적힌 글도
                 알려드려요.
               </Text>
             </View>
 
             <View className="gap-2">
-              <Text className="text-sm font-semibold text-gray-900">
+              <Text className={textRole.label}>
                 {KEYWORD_ALERT_LABELS.exclude}{' '}
                 <Text className="text-xs font-normal text-gray-500">
                   (선택)
@@ -313,7 +311,7 @@ export default function KeywordItem({
                 accessibilityRole="button"
                 accessibilityLabel={`${keyword.keyword} 키워드 삭제`}
                 className="h-11 justify-center px-3">
-                <Text className="text-sm text-gray-500">키워드 삭제</Text>
+                <Text className={textRole.muted}>키워드 삭제</Text>
               </PressableOpacity>
               <View className="flex-1">
                 <Button
@@ -344,7 +342,7 @@ export function PriceKeyboardAccessory() {
           accessibilityLabel="키보드 닫기"
           hitSlop={8}
           className="py-2.5">
-          <Text className="text-base font-semibold text-gray-900">완료</Text>
+          <Text className={textRole.subtitle}>완료</Text>
         </PressableOpacity>
       </View>
     </InputAccessoryView>

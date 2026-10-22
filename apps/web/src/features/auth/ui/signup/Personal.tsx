@@ -1,3 +1,7 @@
+import { text } from '@jirum/design-system/recipes';
+
+import { cn } from '@/shared/lib/cn';
+
 import { Registration } from '../../model/signup/registration';
 
 import PersonalForm from './PersonalForm';
@@ -33,7 +37,7 @@ const Description = () => {
         <br />
         알려주세요.<span className="pl-2 text-base text-gray-500">(선택)</span>
       </p>
-      <p className="pt-4 text-sm text-gray-700">
+      <p className={cn(text.body, 'pt-4')}>
         나와 비슷한 사람들이 좋아하는
         <br />
         물건들을 추천해줘요

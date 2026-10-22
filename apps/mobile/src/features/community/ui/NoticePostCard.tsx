@@ -13,6 +13,8 @@ import PostStats from './PostStats';
 import {gaps} from './community-styles';
 import {useColors} from '@/shared/theme/useColors';
 import Badge from '@/shared/components/ui/Badge';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 /**
  * 공지 탭 전용 한 줄. web `features/community/ui/NoticePostCard` 대응 —
@@ -43,9 +45,7 @@ export default function NoticePostCard({
       className="w-full border-b border-gray-100 bg-white px-5 py-4">
       <View className="flex-row items-center" style={gaps.g8}>
         <NoticeAuthor />
-        <Text className="text-xs text-gray-500">
-          {displayTime(post.createdAt, now)}
-        </Text>
+        <Text className={text.caption}>{displayTime(post.createdAt, now)}</Text>
         {isNew ? (
           <Badge size="md" variant="solid" tone="secondary">
             NEW
@@ -53,9 +53,7 @@ export default function NoticePostCard({
         ) : null}
       </View>
 
-      <Text
-        className="mt-2 text-sm font-semibold text-gray-900"
-        numberOfLines={1}>
+      <Text className={cn(text.label, 'mt-2')} numberOfLines={1}>
         {post.title ?? displayContent}
       </Text>
       {post.title && displayContent ? (

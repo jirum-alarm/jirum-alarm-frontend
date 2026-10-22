@@ -1,5 +1,5 @@
 import {catalog} from '@jirum/design-system/catalog';
-import {cardThumb} from '@jirum/design-system/recipes';
+import {cardThumb, text} from '@jirum/design-system/recipes';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
@@ -59,7 +59,7 @@ export default function DesignSystemScreen({navigation}: Props) {
       <StackHeader title="디자인 시스템" onBack={navigation.goBack} />
       <ScrollView contentContainerStyle={styles.content}>
         <View className="gap-y-2">
-          <Text className="text-sm text-gray-500">
+          <Text className={text.muted}>
             앱 부품 {appParts.length}개 · 값은 packages/design-system 한 곳
           </Text>
           <View className="flex-row gap-x-2">
@@ -83,13 +83,9 @@ export default function DesignSystemScreen({navigation}: Props) {
                 <Text className="text-lg font-bold text-gray-900">
                   {entry.name}
                 </Text>
-                <Text className="text-sm text-gray-500">{entry.use}</Text>
+                <Text className={text.muted}>{entry.use}</Text>
               </View>
-              {Demo ? (
-                <Demo />
-              ) : (
-                <Text className="text-sm text-gray-500">데모 없음</Text>
-              )}
+              {Demo ? <Demo /> : <Text className={text.muted}>데모 없음</Text>}
             </View>
           );
         })}
@@ -188,7 +184,7 @@ function SwitchDemo() {
         onChange={() => {}}
         accessibilityLabel="비활성 스위치"
       />
-      <Text className="text-sm text-gray-700">{on ? '켜짐' : '꺼짐'}</Text>
+      <Text className={text.body}>{on ? '켜짐' : '꺼짐'}</Text>
     </Row>
   );
 }
@@ -210,7 +206,7 @@ function PressDemo() {
         className="h-11 w-11 items-center justify-center">
         <Text className="text-lg text-gray-700">★</Text>
       </PressableOpacity>
-      <Text className="text-sm text-gray-500">누르면 tick()</Text>
+      <Text className={text.muted}>누르면 tick()</Text>
     </Row>
   );
 }
@@ -406,7 +402,7 @@ function SheetDemo() {
         accessibilityLabel="놀이터 바텀시트">
         <View className="gap-y-3 px-5 pb-6 pt-4">
           <Text className="text-lg font-bold text-gray-900">바텀시트</Text>
-          <Text className="text-sm text-gray-500">
+          <Text className={text.muted}>
             겉(가림막·모서리·손잡이)만 공통, 안은 자리마다 채운다. 끌어내려 닫아
             보세요.
           </Text>
@@ -478,13 +474,13 @@ const DEMO_PRODUCTS = [
 function ProductCardDemo() {
   return (
     <View className="gap-y-4">
-      <Text className="text-xs text-gray-500">캐러셀(120px · 가격 18)</Text>
+      <Text className={text.caption}>캐러셀(120px · 가격 18)</Text>
       <Row>
         {DEMO_PRODUCTS.map(p => (
           <ProductCard key={p.id} product={p} onPress={() => {}} />
         ))}
       </Row>
-      <Text className="text-xs text-gray-500">
+      <Text className={text.caption}>
         그리드(3열 · 가격 16 — web 그리드와 같다)
       </Text>
       <View className="flex-row gap-x-2">

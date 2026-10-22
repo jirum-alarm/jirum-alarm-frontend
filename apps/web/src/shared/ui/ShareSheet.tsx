@@ -226,7 +226,7 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
       {/* 링크 칸 — 무엇이 복사되는지 보이고, 결과도 시트 안에서 바로 보인다(토스트에 기대지 않음). */}
       <div className="mt-6 flex h-12 items-center gap-2 rounded-xl bg-gray-50 pr-1.5 pl-3.5">
         <ShareLink width={16} height={16} className="flex-none text-gray-500" />
-        <span className="min-w-0 flex-1 truncate text-sm text-gray-700">{displayUrl}</span>
+        <span className={cn(text.body, 'min-w-0 flex-1 truncate')}>{displayUrl}</span>
         <button
           type="button"
           onClick={() => share('copy')}

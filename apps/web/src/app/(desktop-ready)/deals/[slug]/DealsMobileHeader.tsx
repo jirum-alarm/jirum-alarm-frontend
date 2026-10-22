@@ -1,5 +1,8 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
+
+import { cn } from '@/shared/lib/cn';
 import BackButton from '@/shared/ui/layout/BackButton';
 import PageHeader from '@/shared/ui/layout/PageHeader';
 import ShareButton from '@/shared/ui/ShareButton';
@@ -17,7 +20,7 @@ export default function DealsMobileHeader({ title }: { title: string }) {
     <PageHeader
       className="pc:hidden"
       leading={<BackButton />}
-      title={<span className="truncate text-lg font-semibold text-gray-900">{title}</span>}
+      title={<span className={cn(text.title, 'truncate')}>{title}</span>}
       actions={<ShareButton title={title} />}
     />
   );

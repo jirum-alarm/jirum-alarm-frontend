@@ -15,6 +15,8 @@ import PostStats from './PostStats';
 import {gaps} from './community-styles';
 import {useColors} from '@/shared/theme/useColors';
 import Badge from '@/shared/components/ui/Badge';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 const THUMBNAIL_SIZE = 80; // web h-20 w-20
 
@@ -60,7 +62,7 @@ export default function CommunityPostCard({
               </Text>
             </>
           )}
-          <Text className="text-xs text-gray-500">
+          <Text className={text.caption}>
             {displayTime(post.createdAt, now)}
           </Text>
           {post.isNotice ? (
@@ -71,9 +73,7 @@ export default function CommunityPostCard({
         </View>
 
         {post.title ? (
-          <Text
-            className="mt-2 text-sm font-semibold text-gray-900"
-            numberOfLines={1}>
+          <Text className={cn(text.label, 'mt-2')} numberOfLines={1}>
             {post.title}
           </Text>
         ) : null}
@@ -115,7 +115,7 @@ export default function CommunityPostCard({
             ) : null}
           </View>
           {view.showProductTitle ? (
-            <Text className="mt-1 text-xs text-gray-500" numberOfLines={2}>
+            <Text className={cn(text.caption, 'mt-1')} numberOfLines={2}>
               {post.taggedProduct?.title}
             </Text>
           ) : null}

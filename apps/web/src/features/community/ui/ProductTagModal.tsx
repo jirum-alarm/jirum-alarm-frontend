@@ -1,6 +1,6 @@
 'use client';
 
-import { emptyText } from '@jirum/design-system/recipes';
+import { emptyText, text } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Drawer } from 'vaul';
@@ -118,7 +118,10 @@ export default function ProductTagModal({
         <button
           type="button"
           onClick={() => handleOpenChange(true)}
-          className="flex items-center gap-x-2 text-sm text-gray-500 transition-transform active:scale-95"
+          className={cn(
+            text.muted,
+            'flex items-center gap-x-2 transition-transform active:scale-95',
+          )}
         >
           <span className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 text-gray-500">
             <svg
@@ -140,7 +143,7 @@ export default function ProductTagModal({
         <BottomSheetContent srTitle="상품 태그" className="flex h-[88dvh] flex-col">
           {/* 모달 헤더 */}
           <div className="flex items-center justify-between px-5 py-4">
-            <h2 className="text-base font-semibold text-gray-900">상품 태그</h2>
+            <h2 className={text.subtitle}>상품 태그</h2>
             <button
               onClick={() => setIsOpen(false)}
               className="p-1 text-gray-500 transition-transform active:scale-95"

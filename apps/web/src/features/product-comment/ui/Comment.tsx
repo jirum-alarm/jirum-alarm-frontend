@@ -1,3 +1,4 @@
+import { text } from '@jirum/design-system/recipes';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { User } from '@/shared/api/gql/graphql';
@@ -41,7 +42,7 @@ export default function Comment({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-2">
           <span className="text-sm font-medium text-gray-600">{comment.author?.nickname}</span>
-          <span className="text-sm text-gray-500">
+          <span className={text.muted}>
             {editStatus === 'update' ? '수정중' : displayTime(comment.createdAt)}
           </span>
         </div>

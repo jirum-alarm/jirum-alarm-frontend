@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { Drawer } from 'vaul';
 
 import { type HotDealType } from '@/shared/api/gql/graphql';
@@ -26,7 +27,7 @@ export default function HotdealCriteriaBadge({ hotdealType }: { hotdealType: Hot
           aria-label={`${hotdealTextMap[hotdealType]} — ${hotdealCriteria[hotdealType].title}. 배지 기준 보기`}
         >
           <HotdealBadge badgeVariant="page" hotdealType={hotdealType} />
-          <span className="truncate text-xs text-gray-500">
+          <span className={cn(text.caption, 'truncate')}>
             {hotdealCriteria[hotdealType].short} ›
           </span>
         </button>
@@ -35,7 +36,7 @@ export default function HotdealCriteriaBadge({ hotdealType }: { hotdealType: Hot
         <Drawer.Title asChild>
           <h2 className="text-xl font-bold text-gray-900">배지는 이렇게 붙어요</h2>
         </Drawer.Title>
-        <Drawer.Description className="pt-1 pb-4 text-sm text-gray-500">
+        <Drawer.Description className={cn(text.muted, 'pt-1 pb-4')}>
           둘 이상 해당하면 높은 배지 하나만 보여요.
         </Drawer.Description>
         <ul className="space-y-1">
@@ -51,13 +52,13 @@ export default function HotdealCriteriaBadge({ hotdealType }: { hotdealType: Hot
                 <HotdealBadge badgeVariant="page" hotdealType={type} />
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-semibold text-gray-900">
+                <p className={text.label}>
                   {hotdealCriteria[type].title}
                   {type === hotdealType ? (
                     <span className="text-error-600 ml-1.5 text-xs font-medium">이 딜</span>
                   ) : null}
                 </p>
-                <p className="mt-0.5 text-xs text-gray-500">{hotdealCriteria[type].detail}</p>
+                <p className={cn(text.caption, 'mt-0.5')}>{hotdealCriteria[type].detail}</p>
               </div>
             </li>
           ))}

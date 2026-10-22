@@ -1,5 +1,7 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
+
 import { cn } from '@/shared/lib/cn';
 import { ArrowRight } from '@/shared/ui/common/icons';
 
@@ -37,7 +39,7 @@ export default function BeautyVerticalLink({
     >
       <span className="min-w-0">
         <span className="block text-sm font-semibold text-gray-800">지름알림 뷰티에서 더 보기</span>
-        <span className="mt-0.5 block truncate text-xs text-gray-500">
+        <span className={cn(text.caption, 'mt-0.5 block truncate')}>
           지금 뜨는 화장품·스킨케어 핫딜 모음
         </span>
       </span>

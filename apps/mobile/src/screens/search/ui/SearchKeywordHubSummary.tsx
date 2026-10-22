@@ -11,6 +11,7 @@ import {
 import {useKeywordHubs} from '@/entities/keyword-hub/model/useKeywordHubs';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {Analytics} from '@/shared/lib/analytics/ga4';
+import {text} from '@jirum/design-system/recipes';
 
 /**
  * 검색어가 키워드 허브 자체일 때("삼다수", "플스5") 결과 위에 30일 요약 한 줄 — "삼다수 핫딜 최근 30일 92건 ·
@@ -59,7 +60,7 @@ export default function SearchKeywordHubSummary({keyword}: {keyword: string}) {
         accessibilityLabel={`${hub.name} 핫딜 모아보기`}
         hitSlop={8}
         style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-        <Text className="text-sm text-gray-500" numberOfLines={2}>
+        <Text className={text.muted} numberOfLines={2}>
           <Text className="font-semibold text-gray-900">{`${hub.name} 핫딜 `}</Text>
           {`${parts.join(' · ')} ›`}
         </Text>

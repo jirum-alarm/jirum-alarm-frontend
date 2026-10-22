@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { ACCOUNT_COPY } from '@jirum/domain/mypage';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
@@ -45,7 +46,7 @@ const AccountContainer = () => {
       </div>
       <div className="flex flex-1 flex-col pt-8">
         <div className="pb-[22px]">
-          <span className="text-sm text-gray-500">{ACCOUNT_COPY.email}</span>
+          <span className={text.muted}>{ACCOUNT_COPY.email}</span>
         </div>
         <div>
           <span className="text-gray-900">{me?.email}</span>

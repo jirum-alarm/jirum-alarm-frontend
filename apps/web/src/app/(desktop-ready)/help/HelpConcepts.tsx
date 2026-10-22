@@ -1,4 +1,4 @@
-import { infoBox, wordTag } from '@jirum/design-system/recipes';
+import { infoBox, text, wordTag } from '@jirum/design-system/recipes';
 import { MAX_EXCLUDE_KEYWORDS } from '@jirum/domain/keyword-options';
 import { MAX_KEYWORD_COUNT } from '@jirum/domain/mypage';
 import { NIGHT_HOURS } from '@jirum/domain/quiet-hours';
@@ -102,7 +102,7 @@ function PriceRuler() {
   return (
     <figure data-nosnippet className="shadow-card pc:p-6 rounded-2xl bg-white p-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm font-semibold text-gray-900">제주 삼다수 2L 24병</p>
+        <p className={text.label}>제주 삼다수 2L 24병</p>
         <ExampleTag />
       </div>
 
@@ -142,7 +142,8 @@ function PriceRuler() {
           <span
             key={m.name}
             className={cn(
-              'absolute text-xs leading-tight whitespace-nowrap text-gray-500',
+              text.caption,
+              'absolute leading-tight whitespace-nowrap',
               // 다나와·쿠팡은 값이 붙어 있어 겹친다 — 줄을 나누고 눈금 왼쪽으로 붙인다.
               [
                 '-top-10 -translate-x-1/2 text-center',
@@ -158,7 +159,7 @@ function PriceRuler() {
         ))}
       </div>
 
-      <div className="flex items-center justify-between text-xs text-gray-500">
+      <div className={cn(text.caption, 'flex items-center justify-between')}>
         <span>← 쌀수록</span>
         <span className="flex items-center gap-1.5">
           <span aria-hidden className="bg-secondary-400 size-2.5 rounded-full opacity-70" />
@@ -172,15 +173,13 @@ function PriceRuler() {
           <HelpIcon name="tag" className="size-4" />
         </span>
         <div className="min-w-0 pt-0.5">
-          <p className="text-sm font-semibold text-gray-900">
+          <p className={text.label}>
             보통가보다 <b className="text-error-600 font-bold">3,100원</b> 싸요 (19%)
           </p>
-          <p className="mt-0.5 text-xs text-gray-500">
-            좋은 딜 · 지난 1년 핫딜 14건 중 85%보다 싸요
-          </p>
+          <p className={cn(text.caption, 'mt-0.5')}>좋은 딜 · 지난 1년 핫딜 14건 중 85%보다 싸요</p>
         </div>
       </div>
-      <figcaption className="mt-2.5 text-center text-xs text-gray-500">
+      <figcaption className={cn(text.caption, 'mt-2.5 text-center')}>
         이 그림을 한 줄로 줄인 게 상품 가격 바로 아래 「왜 핫딜인지」 칸이에요
       </figcaption>
     </figure>
@@ -214,7 +213,7 @@ function EvidenceConcept() {
                   <HelpIcon name={k.icon} className="size-4" />
                 </span>
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-gray-900">{k.name}</p>
+                  <p className={text.label}>{k.name}</p>
                   <p className="mt-0.5 text-xs leading-relaxed text-gray-600">{k.text}</p>
                 </div>
               </li>
@@ -282,7 +281,7 @@ function GatherConcept({ communityCount }: { communityCount: number }) {
         <Arrow />
         <div className="rounded-xl bg-white p-3">
           <p className="text-xs font-semibold text-gray-500">② 같은 상품끼리 묶고</p>
-          <p className="mt-2 text-sm text-gray-700">
+          <p className={cn(text.body, 'mt-2')}>
             같은 딜이 세 곳에 올라왔어요.
             <br />
             <b className="font-semibold text-gray-900">여러 곳이 동시에 올렸다</b>는 것도 좋은 딜의
@@ -292,9 +291,9 @@ function GatherConcept({ communityCount }: { communityCount: number }) {
         <Arrow />
         <div className="rounded-xl bg-white p-3">
           <p className="text-xs font-semibold text-gray-500">③ 한 칸으로 보여드려요</p>
-          <p className="mt-2 text-sm font-semibold text-gray-900">삼다수 2L 24병</p>
+          <p className={cn(text.label, 'mt-2')}>삼다수 2L 24병</p>
           <p className="text-error-600 text-base font-bold">12,900원</p>
-          <p className="mt-1 text-xs text-gray-500">뽐뿌 외 2곳 · 추천·댓글 반응 · 댓글 요약</p>
+          <p className={cn(text.caption, 'mt-1')}>뽐뿌 외 2곳 · 추천·댓글 반응 · 댓글 요약</p>
         </div>
       </figure>
       <p className="mt-3 text-sm text-gray-600">
@@ -356,11 +355,9 @@ function AlarmConcept({ isApp }: { isApp: boolean }) {
                 className={cn('flex min-h-11 items-center justify-center rounded-xl px-3', f.tone)}
                 style={{ width: f.width, minWidth: '11rem' }}
               >
-                <span className="text-center text-sm leading-tight font-semibold text-gray-900">
-                  {f.label}
-                </span>
+                <span className={cn(text.label, 'text-center leading-tight')}>{f.label}</span>
               </div>
-              <span className="mt-0.5 text-xs text-gray-500">{f.detail}</span>
+              <span className={cn(text.caption, 'mt-0.5')}>{f.detail}</span>
             </li>
           ))}
           <li className="flex flex-col items-center pt-1">
@@ -369,13 +366,13 @@ function AlarmConcept({ isApp }: { isApp: boolean }) {
                 <HelpIcon name="bell" className="size-4" />
               </span>
               <div className="min-w-0 text-left">
-                <p className="text-xs text-gray-500">지름알림 · 방금</p>
-                <p className="truncate text-sm font-semibold text-gray-900">
+                <p className={text.caption}>지름알림 · 방금</p>
+                <p className={cn(text.label, 'truncate')}>
                   「콜라」 코카콜라 제로 355ml 24캔 15,900원
                 </p>
               </div>
             </div>
-            <span className="mt-1.5 text-xs text-gray-500">내 폰에는 이것만 와요</span>
+            <span className={cn(text.caption, 'mt-1.5')}>내 폰에는 이것만 와요</span>
           </li>
         </ol>
       </figure>

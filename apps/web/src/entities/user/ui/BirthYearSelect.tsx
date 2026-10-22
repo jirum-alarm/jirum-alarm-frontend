@@ -1,3 +1,6 @@
+import { text } from '@jirum/design-system/recipes';
+
+import { cn } from '@/shared/lib/cn';
 import Select from '@/shared/ui/common/Select';
 
 interface BirthYearSelectProps {
@@ -13,7 +16,7 @@ const BirthYearSelect = ({
 }: BirthYearSelectProps) => {
   return (
     <fieldset>
-      <legend className="pb-2 text-sm text-gray-500">출생년도</legend>
+      <legend className={cn(text.muted, 'pb-2')}>출생년도</legend>
       <Select placeholder="출생년도" onChange={handleSelectChange} defaultValue={birthYear}>
         {birthYearOptions.map((option) => (
           <Select.Option key={option.value} value={option.value}>

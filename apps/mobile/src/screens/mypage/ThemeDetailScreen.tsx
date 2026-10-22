@@ -1,5 +1,10 @@
 import {THEME_COPY} from '@jirum/domain/mypage';
-import {emptyText, wordTag} from '@jirum/design-system/recipes';
+import {
+  emptyText,
+  wordTag,
+  text,
+  sectionTitle,
+} from '@jirum/design-system/recipes';
 import React, {useCallback, useState} from 'react';
 import {
   ActivityIndicator,
@@ -130,10 +135,8 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
               <Text className="text-2xl">{theme.emoji}</Text>
             ) : null}
             <View style={styles.grow}>
-              <Text className="text-lg font-bold text-gray-900">
-                {theme.name}
-              </Text>
-              <Text className="mt-1 text-sm text-gray-500">
+              <Text className={sectionTitle.page}>{theme.name}</Text>
+              <Text className={cn(text.muted, 'mt-1')}>
                 {theme.description}
               </Text>
             </View>
@@ -152,7 +155,7 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
             accessibilityLabel={isSubscribed ? '알림 끄기' : '알림 받기'}>
             {isSubscribed ? THEME_COPY.subscribedToggle : '알림 받기'}
           </Button>
-          <Text className="mt-2 text-xs text-gray-500">
+          <Text className={cn(text.caption, 'mt-2')}>
             키워드를 하나하나 등록하지 않아도, 반응 좋은 딜만 하루 최대 3건
             보내드려요.
           </Text>
@@ -162,7 +165,7 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
             <Text className="mb-0.5 text-sm font-medium text-gray-900">
               {THEME_COPY.criteriaTitle}
             </Text>
-            <Text className="mb-2 text-xs text-gray-500">
+            <Text className={cn(text.caption, 'mb-2')}>
               딜이 뜰 때마다 울리는 게 아니라, 아래 조건을 다 통과한 딜만 와요.
             </Text>
             <ThemeConditions theme={theme} onOpenHub={openHub} />
@@ -333,7 +336,7 @@ function ConditionRow({
       }>
       <Text className="text-lg">{icon}</Text>
       <View style={styles.grow}>
-        <Text className="text-sm font-semibold text-gray-900">{title}</Text>
+        <Text className={text.label}>{title}</Text>
         {children}
       </View>
     </View>
@@ -341,7 +344,7 @@ function ConditionRow({
 }
 
 function ConditionText({children}: {children: React.ReactNode}) {
-  return <Text className="mt-0.5 text-sm text-gray-500">{children}</Text>;
+  return <Text className={cn(text.muted, 'mt-0.5')}>{children}</Text>;
 }
 
 const styles = StyleSheet.create({

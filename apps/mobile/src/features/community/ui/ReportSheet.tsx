@@ -16,6 +16,7 @@ import {buildReportVariables, REPORT_REASONS} from '../lib/report';
 
 import {gaps} from './community-styles';
 import {useColors} from '@/shared/theme/useColors';
+import {text} from '@jirum/design-system/recipes';
 
 /** web `features/community/ui/ReportModal` 대응. 문구·사유 목록을 그대로 옮겼다. */
 export default function ReportSheet({
@@ -57,9 +58,7 @@ export default function ReportSheet({
       onClose={close}
       accessibilityLabel="글 신고하기">
       <View className="px-5 pt-2">
-        <Text className="text-base font-semibold text-gray-900">
-          글 신고하기
-        </Text>
+        <Text className={text.subtitle}>글 신고하기</Text>
         <Text className="pt-3 text-sm text-gray-600">
           신고 사유를 선택하면 운영팀이 검토 후 처리해드릴게요.
         </Text>

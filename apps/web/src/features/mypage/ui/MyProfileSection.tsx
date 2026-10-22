@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { PAGE } from '@/shared/config/page';
@@ -23,7 +24,7 @@ const MyProfileSection = () => {
             <div>
               <h2 className="text-lg font-bold">{me?.nickname}</h2>
               {/* gray-400 은 대비 2.58:1 로 AA 미달 — 보조 라벨은 gray-500. */}
-              <span className="text-xs text-gray-500">{me?.email}</span>
+              <span className={text.caption}>{me?.email}</span>
             </div>
             <div>
               <ArrowRight />

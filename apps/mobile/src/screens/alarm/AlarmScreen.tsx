@@ -50,7 +50,7 @@ import {
 } from './lib/notification-source';
 import {MyPageService} from '@/shared/api/mypage';
 import {cn} from '@/shared/lib/styling/className';
-import {button, pageHeader} from '@jirum/design-system/recipes';
+import {button, pageHeader, text} from '@jirum/design-system/recipes';
 import {MyPageQueries} from '@/entities/mypage';
 import {useUpdatePushSetting} from '@/features/mypage/model/mutations';
 
@@ -404,7 +404,7 @@ export default function AlarmScreen() {
                     className="text-sm font-medium text-gray-700">
                     「{goodPrice.keyword}」 알림 오늘 {topKeyword?.count}건
                   </Text>
-                  <Text numberOfLines={1} className="text-xs text-gray-500">
+                  <Text numberOfLines={1} className={text.caption}>
                     {goodPriceText(
                       goodPrice.unit as GoodPriceUnit,
                       goodPrice.goodPrice,

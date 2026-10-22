@@ -1,6 +1,6 @@
 'use client';
 
-import { addChip } from '@jirum/design-system/recipes';
+import { addChip, text } from '@jirum/design-system/recipes';
 import { MAX_KEYWORD_COUNT } from '@jirum/domain/mypage';
 import { useQuery } from '@tanstack/react-query';
 
@@ -51,16 +51,16 @@ const KeywordList = ({ focus }: { focus?: string }) => {
   return (
     <section>
       <div className="flex items-baseline justify-between">
-        <h2 className="text-base font-semibold text-gray-900">내 키워드</h2>
+        <h2 className={text.subtitle}>내 키워드</h2>
         <div className="flex items-baseline gap-x-3">
-          <span className="text-xs text-gray-500">
+          <span className={text.caption}>
             {keywords.length}/{MAX_KEYWORD_COUNT}
           </span>
           {/* 키워드 화면이 막다른 길이던 자리 — 등록한 키워드로 받은 알림을 바로 본다. */}
           <Link
             href={PAGE.ALARM}
             onClick={() => trackAlarmLink('keyword_inbox')}
-            className="text-xs text-gray-500 hover:text-gray-700"
+            className={cn(text.caption, 'hover:text-gray-700')}
           >
             받은 알림 보기 ›
           </Link>
@@ -70,7 +70,7 @@ const KeywordList = ({ focus }: { focus?: string }) => {
         <EmptyKeywords />
       ) : (
         <>
-          <p className="mt-1 text-xs text-gray-500">
+          <p className={cn(text.caption, 'mt-1')}>
             키워드를 누르면 알림 받을 조건을 바꿀 수 있어요.
           </p>
           <ul className="mt-4 flex flex-col gap-2">
@@ -130,14 +130,14 @@ function EmptyKeywords() {
 
   return (
     <div className="flex flex-col items-center py-8 text-center">
-      <p className="text-base font-semibold text-gray-900">아직 등록한 키워드가 없어요</p>
-      <p className="mt-1 text-sm text-gray-500">
+      <p className={text.subtitle}>아직 등록한 키워드가 없어요</p>
+      <p className={cn(text.muted, 'mt-1')}>
         갖고 싶은 상품 이름을 등록하면
         <br />새 핫딜이 올라올 때 바로 알려드려요
       </p>
       {chips.length > 0 && (
         <>
-          <p className="mt-6 text-xs text-gray-500">요즘 많이 받는 키워드</p>
+          <p className={cn(text.caption, 'mt-6')}>요즘 많이 받는 키워드</p>
           <ul className="mt-2 flex flex-wrap justify-center gap-2">
             {chips.map((keyword) => (
               <li key={keyword}>

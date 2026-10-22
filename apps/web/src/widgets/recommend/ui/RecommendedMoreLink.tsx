@@ -1,10 +1,12 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import * as m from 'motion/react-m';
 import { useQueryState } from 'nuqs';
 import { PropsWithChildren } from 'react';
 
 import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
 import Link from '@/shared/ui/Link';
 
 const RecommendedMoreLink = ({
@@ -19,7 +21,7 @@ const RecommendedMoreLink = ({
   };
 
   return (
-    <Link className="h-full text-sm text-gray-500" href={hrefObject} aria-label={ariaLabel}>
+    <Link className={cn(text.muted, 'h-full')} href={hrefObject} aria-label={ariaLabel}>
       <m.div
         className="rounded-lg px-2 py-1"
         whileTap={{ scale: 0.95 }}

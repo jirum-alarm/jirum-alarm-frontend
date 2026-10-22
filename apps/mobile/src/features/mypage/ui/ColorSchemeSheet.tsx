@@ -11,6 +11,8 @@ import {
 } from '@/shared/theme/color-scheme-preference';
 import {tick} from '@/shared/lib/feedback/haptic';
 import {useColors} from '@/shared/theme/useColors';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 const OPTIONS: ColorSchemePreference[] = ['system', 'light', 'dark'];
 
@@ -51,9 +53,7 @@ export default function ColorSchemeSheet({
               className="h-14 flex-row items-center justify-between">
               <Text
                 className={
-                  selected
-                    ? 'text-base font-semibold text-gray-900'
-                    : 'text-base text-gray-700'
+                  selected ? text.subtitle : 'text-base text-gray-700'
                 }>
                 {COLOR_SCHEME_LABEL[option]}
               </Text>
@@ -71,7 +71,7 @@ export default function ColorSchemeSheet({
             </PressableOpacity>
           );
         })}
-        <Text className="pt-1 text-xs text-gray-500">
+        <Text className={cn(text.caption, 'pt-1')}>
           시스템 설정은 휴대폰의 라이트·다크 설정을 따라가요.
         </Text>
       </View>

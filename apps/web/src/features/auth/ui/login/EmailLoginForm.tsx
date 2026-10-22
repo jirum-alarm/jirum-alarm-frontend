@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
@@ -39,7 +40,7 @@ const EmailInput = ({
 }) => {
   return (
     <>
-      <label htmlFor="email" className="pb-2 text-sm text-gray-500">
+      <label htmlFor="email" className={cn(text.muted, 'pb-2')}>
         이메일
       </label>
       <Input
@@ -86,7 +87,7 @@ const PasswordInput = ({
 
   return (
     <>
-      <label htmlFor="password" className="pt-11 pb-2 text-sm text-gray-500">
+      <label htmlFor="password" className={cn(text.muted, 'pt-11 pb-2')}>
         비밀번호
       </label>
       <Input

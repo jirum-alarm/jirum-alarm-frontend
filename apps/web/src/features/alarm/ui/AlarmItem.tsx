@@ -1,4 +1,4 @@
-import { notificationRow } from '@jirum/design-system/recipes';
+import { notificationRow, text } from '@jirum/design-system/recipes';
 import { ALARM_COPY } from '@jirum/domain/alarm';
 import { useAtomValue } from 'jotai';
 import { memo, type ReactNode } from 'react';
@@ -78,7 +78,7 @@ const AlarmItem = ({
           상세 링크(ItemBody) 안에 a 를 겹칠 수 없어 그 위 줄로 뺀다. 왼쪽은 본문 글자 칸(썸네일 56 + 12 + 20)에 맞춘다. */}
       {source &&
         (isEditMode ? (
-          <span className="block truncate pt-4 pr-14 pl-[88px] text-xs text-gray-500">
+          <span className={cn(text.caption, 'block truncate pt-4 pr-14 pl-[88px]')}>
             {source.label}
           </span>
         ) : (
@@ -86,7 +86,7 @@ const AlarmItem = ({
             href={source.href}
             onClick={() => trackAlarmLink(`source_${source.kind}`)}
             aria-label={`${source.label} 설정`}
-            className="block truncate pt-4 pr-14 pl-[88px] text-xs text-gray-500 hover:text-gray-700"
+            className={cn(text.caption, 'block truncate pt-4 pr-14 pl-[88px] hover:text-gray-700')}
           >
             {source.label} ›
           </Link>
@@ -135,7 +135,7 @@ const AlarmItem = ({
                 <span className="inline-block h-2.5 border-l border-gray-400"></span>
               </>
             )}
-            <span className="text-xs text-gray-500">
+            <span className={text.caption}>
               <DisplayTime time={createdAt} />
             </span>
           </div>

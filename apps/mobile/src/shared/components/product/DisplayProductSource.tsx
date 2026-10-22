@@ -1,6 +1,8 @@
 import React from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 /**
  * 카드의 "판매처 · 제보 커뮤니티 · 시간" 메타 한 줄.
@@ -49,7 +51,7 @@ export default function DisplayProductSource({
           ? 'flex-row items-center pt-1'
           : 'flex-row items-center'
       }>
-      <Text className="shrink text-xs text-gray-500" numberOfLines={1}>
+      <Text className={cn(text.caption, 'shrink')} numberOfLines={1}>
         {mall ? (
           <Text className="font-medium text-gray-600">{mall}</Text>
         ) : null}

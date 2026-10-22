@@ -6,6 +6,8 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 
 import type {ThemeWithKeywords} from '@/shared/api/theme';
 import {tick} from '@/shared/lib/feedback';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 /**
  * 알림 묶음 카드 2종. web `ThemeList`(목록) · `MySubscribedThemes`(키워드 화면).
@@ -39,15 +41,11 @@ export function ThemeCard({
         <View className="min-w-0" style={styles.grow}>
           <View className="flex-row items-center gap-1.5">
             {theme.emoji ? <Text>{theme.emoji}</Text> : null}
-            <Text className="text-base font-semibold text-gray-900">
-              {theme.name}
-            </Text>
+            <Text className={text.subtitle}>{theme.name}</Text>
           </View>
-          <Text className="mt-1 text-sm text-gray-500">
-            {theme.description}
-          </Text>
+          <Text className={cn(text.muted, 'mt-1')}>{theme.description}</Text>
           {/* web ThemeList 와 같은 줄 — 몇 개 단어로 찾고 얼마나 오는지. */}
-          <Text className="mt-1 text-xs text-gray-500">
+          <Text className={cn(text.caption, 'mt-1')}>
             {theme.keywords.length > 0
               ? `키워드 ${theme.keywords.length}개 · `
               : ''}
@@ -129,9 +127,7 @@ export function SubscribedThemeRow({
         {/* 섹션 제목이 이미 "관심사" — 줄마다 붙던 라임 배지는 뺐다(web 과 같이). */}
         <View className="min-w-0 flex-row items-center gap-2">
           {theme.emoji ? <Text>{theme.emoji}</Text> : null}
-          <Text
-            className="text-sm font-semibold text-gray-900"
-            numberOfLines={1}>
+          <Text className={text.label} numberOfLines={1}>
             {theme.name}
           </Text>
         </View>

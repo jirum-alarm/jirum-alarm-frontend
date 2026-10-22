@@ -1,6 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {text} from '@jirum/design-system/recipes';
 
 /** web 과 같은 노출 하한 — 이보다 적으면 "N명이 살펴본"이 되레 빈약해 보인다. */
 export const MIN_VIEWER_COUNT = 10;
@@ -18,7 +19,7 @@ export default function ViewerCount({count}: {count: number}) {
       pointerEvents="none"
       className="absolute inset-x-0 top-3 z-10 items-center">
       <View className="h-9 items-center justify-center rounded-full border border-secondary-200 bg-secondary-50 px-4">
-        <Text className="text-sm text-gray-700">
+        <Text className={text.body}>
           <Text className="font-semibold text-secondary-600">
             {count.toLocaleString('ko-KR')}명
           </Text>

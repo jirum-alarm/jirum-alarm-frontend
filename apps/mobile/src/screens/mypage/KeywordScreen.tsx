@@ -1,5 +1,5 @@
 import {THEME_COPY} from '@jirum/domain/mypage';
-import {addChip} from '@jirum/design-system/recipes';
+import {addChip, text} from '@jirum/design-system/recipes';
 import React from 'react';
 import {ActivityIndicator, Pressable, RefreshControl, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -170,17 +170,13 @@ export default function KeywordScreen({navigation, route}: Props) {
             <View className="mt-2 items-start gap-2">
               <Text
                 className={
-                  previewText.sparse
-                    ? 'text-xs text-warning-700'
-                    : 'text-xs text-gray-500'
+                  previewText.sparse ? 'text-xs text-warning-700' : text.caption
                 }>
                 {previewText.text}
               </Text>
               {previewSuggestion ? (
                 <>
-                  <Text className="text-xs text-gray-500">
-                    {previewSuggestion.text}
-                  </Text>
+                  <Text className={text.caption}>{previewSuggestion.text}</Text>
                   <PressableScale
                     disabled={isAdding}
                     onPress={() => addBroadened(previewSuggestion.keyword)}
@@ -204,11 +200,9 @@ export default function KeywordScreen({navigation, route}: Props) {
 
           {/* 내 키워드 — web KeywordList */}
           <View className="flex-row items-baseline justify-between">
-            <Text className="text-base font-semibold text-gray-900">
-              내 키워드
-            </Text>
+            <Text className={text.subtitle}>내 키워드</Text>
             <View className="flex-row items-baseline gap-x-3">
-              <Text className="text-xs text-gray-500">
+              <Text className={text.caption}>
                 {`${keywords.length}/${MAX_KEYWORD_COUNT}`}
               </Text>
               {/* 키워드 화면이 막다른 길이던 자리 — 등록한 키워드로 받은 알림을 바로 본다. */}
@@ -223,7 +217,7 @@ export default function KeywordScreen({navigation, route}: Props) {
                 hitSlop={12}
                 accessibilityRole="link"
                 style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-                <Text className="text-xs text-gray-500">받은 알림 보기 ›</Text>
+                <Text className={text.caption}>받은 알림 보기 ›</Text>
               </Pressable>
             </View>
           </View>
@@ -238,7 +232,7 @@ export default function KeywordScreen({navigation, route}: Props) {
             <EmptyKeywords onPick={addDirect} disabled={isAdding} />
           ) : (
             <>
-              <Text className="mt-1 text-xs text-gray-500">
+              <Text className={cn(text.caption, 'mt-1')}>
                 키워드를 누르면 알림 받을 조건을 바꿀 수 있어요.
               </Text>
               <View className="mt-4 gap-2">
@@ -340,10 +334,8 @@ function SubscribedThemes({
           accessibilityLabel="관심사 알림 둘러보기"
           className="flex-row items-center gap-x-3 rounded-xl bg-gray-50 px-4 py-3.5">
           <View className="min-w-0 flex-1">
-            <Text className="text-sm font-semibold text-gray-900">
-              관심사 알림 둘러보기
-            </Text>
-            <Text className="mt-0.5 text-xs text-gray-500">
+            <Text className={text.label}>관심사 알림 둘러보기</Text>
+            <Text className={cn(text.caption, 'mt-0.5')}>
               키워드를 몰라도, 관심사 하나로 관련 핫딜을 한 번에 받아요
             </Text>
           </View>
@@ -356,18 +348,14 @@ function SubscribedThemes({
   return (
     <View className="pb-6">
       <View className="mb-4 flex-row items-center justify-between">
-        <Text className="text-base font-semibold text-gray-900">
-          {THEME_COPY.mySubscribedTitle}
-        </Text>
+        <Text className={text.subtitle}>{THEME_COPY.mySubscribedTitle}</Text>
         <Pressable
           onPress={onOpenThemes}
           hitSlop={12}
           accessibilityRole="button"
           accessibilityLabel="관심사 더 둘러보기"
           style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-          <Text className="text-xs text-gray-500">
-            {THEME_COPY.browseMore} ›
-          </Text>
+          <Text className={text.caption}>{THEME_COPY.browseMore} ›</Text>
         </Pressable>
       </View>
       <View className="gap-2">
@@ -401,15 +389,13 @@ function EmptyKeywords({
 
   return (
     <View className="items-center py-8">
-      <Text className="text-base font-semibold text-gray-900">
-        아직 등록한 키워드가 없어요
-      </Text>
-      <Text className="mt-1 text-center text-sm text-gray-500">
+      <Text className={text.subtitle}>아직 등록한 키워드가 없어요</Text>
+      <Text className={cn(text.muted, 'mt-1 text-center')}>
         {'갖고 싶은 상품 이름을 등록하면\n새 핫딜이 올라올 때 바로 알려드려요'}
       </Text>
       {chips.length > 0 ? (
         <>
-          <Text className="mt-6 text-xs text-gray-500">
+          <Text className={cn(text.caption, 'mt-6')}>
             요즘 많이 받는 키워드
           </Text>
           <View className="mt-2 flex-row flex-wrap justify-center gap-2">

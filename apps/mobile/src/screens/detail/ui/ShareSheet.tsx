@@ -14,7 +14,7 @@ import {
   useColorScheme,
 } from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
-import {sheet as sheetRecipe} from '@jirum/design-system/recipes';
+import {sheet as sheetRecipe, text} from '@jirum/design-system/recipes';
 import {brand, fixed} from '@jirum/design-system';
 import {
   SHEET_RADIUS,
@@ -313,7 +313,7 @@ export default function ShareSheet({
               )}
               <View className="min-w-0 flex-1 pr-2">
                 <Text
-                  className="text-base font-semibold leading-[22px] text-gray-900"
+                  className={cn(text.subtitle, 'leading-[22px]')}
                   numberOfLines={2}>
                   {title.trim() || '지름알림'}
                 </Text>
@@ -355,9 +355,7 @@ export default function ShareSheet({
           {/* 링크 칸 — 무엇이 복사되는지 보이고 결과(복사됨)도 칸 안에서 보인다. web ShareSheet 와 같은 모양. */}
           <View className="mx-5 mt-6 h-14 flex-row items-center rounded-2xl bg-gray-50 pl-4 pr-2">
             <ShareLink width={16} height={16} color={c.gray[500]} />
-            <Text
-              className="ml-2.5 flex-1 text-sm text-gray-700"
-              numberOfLines={1}>
+            <Text className={cn(text.body, 'ml-2.5 flex-1')} numberOfLines={1}>
               {displayUrl}
             </Text>
             <PressableOpacity

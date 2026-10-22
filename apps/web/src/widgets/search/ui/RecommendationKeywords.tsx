@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { RECOMMENDED_KEYWORD_COUNT } from '@jirum/domain/search';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -43,7 +44,7 @@ export default function RecommendationKeywords() {
             href={PAGE.KEYWORDS}
             data-track="keyword-index-link"
             data-source="search_recommend"
-            className="text-sm text-gray-500"
+            className={text.muted}
           >
             키워드 전체 보기
           </Link>

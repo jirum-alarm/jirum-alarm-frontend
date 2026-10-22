@@ -1,3 +1,4 @@
+import { text } from '@jirum/design-system/recipes';
 import { isKeywordHubToday, splitKeywordHubsByRecency } from '@jirum/domain/keyword-hub';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -7,6 +8,7 @@ import type { KeywordHub } from '@/shared/api/keyword-hub/keyword-hub.service';
 import { ModelPageService } from '@/shared/api/model-page';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
 import Badge from '@/shared/ui/common/Badge';
 
 import { fetchKeywordHubs } from '@/entities/keyword-hub/api/fetchKeywordHub';
@@ -117,7 +119,7 @@ export default async function KeywordHubIndexPage() {
       <p className="text-center">
         <Link
           href={PAGE.DEALS}
-          className="text-sm text-gray-500 underline underline-offset-2"
+          className={cn(text.muted, 'underline underline-offset-2')}
           data-track="model-page-index-link"
           data-source="keyword_index"
         >
@@ -144,7 +146,7 @@ function KeywordHubCards({ hubs, now }: { hubs: KeywordHub[]; now: number }) {
             className="flex h-full flex-col gap-1 rounded-lg border border-gray-100 px-4 py-3 hover:bg-gray-50"
           >
             <span className="flex items-center justify-between gap-2">
-              <span className="truncate text-base font-semibold text-gray-900">{h.name} 핫딜</span>
+              <span className={cn(text.subtitle, 'truncate')}>{h.name} 핫딜</span>
               {h.lastDealAt && (
                 <Badge
                   pill
@@ -155,7 +157,7 @@ function KeywordHubCards({ hubs, now }: { hubs: KeywordHub[]; now: number }) {
                 </Badge>
               )}
             </span>
-            <span className="text-xs text-gray-500">
+            <span className={text.caption}>
               {[
                 h.recentDealCount > 0
                   ? `최근 ${KEYWORD_HUB_WINDOW_DAYS}일 ${formatHubCount(h)}`

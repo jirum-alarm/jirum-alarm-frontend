@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import * as m from 'motion/react-m';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -92,9 +93,7 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
       <AlertDialog defaultOpen>
         <AlertDialog.Content className="max-w-[320px] gap-0">
           <AlertDialog.Header>
-            <AlertDialog.Title className="text-2xl font-semibold text-gray-900">
-              {title}
-            </AlertDialog.Title>
+            <AlertDialog.Title className={text.display}>{title}</AlertDialog.Title>
             <AlertDialog.Description>{image}</AlertDialog.Description>
           </AlertDialog.Header>
           <div className="mt-4 flex flex-col items-center">
@@ -103,7 +102,7 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
               <AppDownloadQr compact url={qrUrl} />
             </div>
             <AlertDialog.Cancel asChild>
-              <button type="button" className="mt-3 h-10 text-sm text-gray-500">
+              <button type="button" className={cn(text.muted, 'mt-3 h-10')}>
                 다음에 할게요
               </button>
             </AlertDialog.Cancel>
@@ -117,17 +116,17 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
   return (
     <Drawer.Root open={show} onOpenChange={setShow}>
       <BottomSheetContent handle className="pb-safe-bottom-16 px-5">
-        <Drawer.Title className="text-2xl font-semibold text-gray-900">{title}</Drawer.Title>
+        <Drawer.Title className={text.display}>{title}</Drawer.Title>
         <Drawer.Description asChild>{image}</Drawer.Description>
         <div className="mt-4 flex flex-col items-center">
-          <p className="pb-3 text-center text-sm text-gray-500">
+          <p className={cn(text.muted, 'pb-3 text-center')}>
             키워드를 등록하고
             <br />
             누구보다 빠르게 받아보세요
           </p>
           <StoreButton kind={platform} />
           <Drawer.Close asChild>
-            <button type="button" className="mt-3 h-10 text-sm text-gray-500">
+            <button type="button" className={cn(text.muted, 'mt-3 h-10')}>
               다음에 할게요
             </button>
           </Drawer.Close>

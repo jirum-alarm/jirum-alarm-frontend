@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 
@@ -56,7 +57,8 @@ export default function ThumbnailUploader({
         handleFiles(e.dataTransfer.files);
       }}
       className={cn(
-        'flex h-40 w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-gray-300 text-sm text-gray-500',
+        text.muted,
+        'flex h-40 w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-gray-300',
         {
           'border-primary-500 bg-primary-50': isDragging,
           'cursor-wait': isUploading,

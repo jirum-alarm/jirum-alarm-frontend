@@ -1,4 +1,4 @@
-import { button, emptyText, infoBox, linkChip } from '@jirum/design-system/recipes';
+import { button, emptyText, infoBox, linkChip, text } from '@jirum/design-system/recipes';
 import * as Sentry from '@sentry/nextjs';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -134,10 +134,10 @@ function EventRows({ events }: { events: SeasonEvent[] }) {
     <dl className="divide-y divide-gray-100">
       {events.map((e) => (
         <div key={e.name} className="pc:flex pc:gap-6 py-3">
-          <dt className="pc:w-56 shrink-0 text-sm font-semibold text-gray-900">{e.name}</dt>
-          <dd className="mt-0.5 text-sm text-gray-700">
+          <dt className={cn(text.label, 'pc:w-56 shrink-0')}>{e.name}</dt>
+          <dd className={cn(text.body, 'mt-0.5')}>
             {e.when}
-            {e.note ? <span className="mt-0.5 block text-xs text-gray-500">{e.note}</span> : null}
+            {e.note ? <span className={cn(text.caption, 'mt-0.5 block')}>{e.note}</span> : null}
           </dd>
         </div>
       ))}
@@ -228,18 +228,18 @@ export default async function SeasonBlackFriday2026Page() {
           >
             알리익스프레스 행사장 가기
           </a>
-          <Link href="#calendar" className="text-sm text-gray-500 underline underline-offset-2">
+          <Link href="#calendar" className={cn(text.muted, 'underline underline-offset-2')}>
             일정 먼저 보기
           </Link>
         </div>
-        <p className="mt-2 text-xs text-gray-500">
+        <p className={cn(text.caption, 'mt-2')}>
           이 페이지의 알리익스프레스 등 쇼핑몰 링크는 제휴 링크예요. 링크로 사면 지름알림이 수수료를
           받을 수 있고, 사는 가격은 같아요.
         </p>
       </header>
 
       <section aria-labelledby="season-deals" className="mb-12">
-        <h2 id="season-deals" className="mb-3 text-base font-semibold text-gray-900">
+        <h2 id="season-deals" className={cn(text.subtitle, 'mb-3')}>
           {saleOpen ? '지금 올라온 해외직구 특가' : '최근 올라온 알리 핫딜'}
         </h2>
         {cards.length > 0 ? (
@@ -251,7 +251,7 @@ export default async function SeasonBlackFriday2026Page() {
           <Link
             href={saleOpen ? '/curation/overseas-sale' : searchHref(SEASON_FALLBACK_KEYWORD)}
             rel={saleOpen ? undefined : 'nofollow'}
-            className="text-sm text-gray-500 underline underline-offset-2"
+            className={cn(text.muted, 'underline underline-offset-2')}
           >
             {saleOpen ? '직구 특가 더 보기' : '알리 핫딜 더 보기'}
           </Link>
@@ -259,10 +259,10 @@ export default async function SeasonBlackFriday2026Page() {
       </section>
 
       <section id="calendar" aria-labelledby="season-calendar" className="mb-12 scroll-mt-20">
-        <h2 id="season-calendar" className="text-base font-semibold text-gray-900">
+        <h2 id="season-calendar" className={text.subtitle}>
           2026 시즌 달력
         </h2>
-        <p className="mt-1 text-xs text-gray-500">
+        <p className={cn(text.caption, 'mt-1')}>
           알리익스프레스의 2026 공식 일정은 아직 발표 전이에요(10월 기준). 아래는 2025년 실제
           일정이고, 발표되면 고쳐요.
         </p>
@@ -271,7 +271,7 @@ export default async function SeasonBlackFriday2026Page() {
         <h3 className="mt-5 text-sm font-semibold text-gray-700">미국 쇼핑몰</h3>
         <EventRows events={US_EVENTS} />
         <div className={cn('mt-5 px-4 py-3', infoBox)}>
-          <p className="text-sm font-semibold text-gray-900">언제 사면 좋을까요?</p>
+          <p className={text.label}>언제 사면 좋을까요?</p>
           <p className="mt-1 text-sm leading-relaxed break-keep text-gray-600">
             작년 지름알림에서 알리 딜은 광군제 주에 가장 많이 올라왔지만(평소의 약 3배), 주문 한
             건의 크기는 블랙프라이데이와 12.12에 가장 컸어요. 생활용품·소모품은 광군제에,
@@ -281,10 +281,10 @@ export default async function SeasonBlackFriday2026Page() {
       </section>
 
       <section aria-labelledby="season-coupon" className="mb-12">
-        <h2 id="season-coupon" className="text-base font-semibold text-gray-900">
+        <h2 id="season-coupon" className={text.subtitle}>
           쿠폰은 어디서 확인하나요?
         </h2>
-        <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed break-keep text-gray-700">
+        <ul className={cn(text.body, 'mt-2 list-disc space-y-1.5 pl-5 leading-relaxed break-keep')}>
           <li>
             알리익스프레스 앱·홈페이지의 행사 페이지가 정본이에요. 쿠폰 코드는 기간·최소 금액이 자주
             바뀌어서 여기 적지 않아요.
@@ -298,14 +298,14 @@ export default async function SeasonBlackFriday2026Page() {
           rel="sponsored nofollow noopener"
           data-track="season-ali-event"
           data-source="season_hub_coupon"
-          className="mt-3 inline-block text-sm font-semibold text-gray-900 underline underline-offset-2"
+          className={cn(text.label, 'mt-3 inline-block underline underline-offset-2')}
         >
           알리익스프레스 행사·쿠폰 페이지 열기
         </a>
       </section>
 
       <section aria-labelledby="season-caution" className="mb-12">
-        <h2 id="season-caution" className="text-base font-semibold text-gray-900">
+        <h2 id="season-caution" className={text.subtitle}>
           해외직구 전에 확인할 3가지
         </h2>
         <dl className="mt-2 space-y-3 text-sm leading-relaxed break-keep">
@@ -352,7 +352,7 @@ export default async function SeasonBlackFriday2026Page() {
       </section>
 
       <section aria-labelledby="season-domestic" className="mb-12">
-        <h2 id="season-domestic" className="text-base font-semibold text-gray-900">
+        <h2 id="season-domestic" className={text.subtitle}>
           국내 쇼핑 행사 — 지금 올라온 딜
         </h2>
         <EventRows events={DOMESTIC_EVENTS} />
@@ -372,7 +372,7 @@ export default async function SeasonBlackFriday2026Page() {
       </section>
 
       <section aria-labelledby="season-faq" className="mb-12">
-        <h2 id="season-faq" className="mb-2 text-base font-semibold text-gray-900">
+        <h2 id="season-faq" className={cn(text.subtitle, 'mb-2')}>
           자주 묻는 질문
         </h2>
         <dl className="divide-y divide-gray-100 border-y border-gray-100 text-sm">
@@ -386,7 +386,7 @@ export default async function SeasonBlackFriday2026Page() {
       </section>
 
       <section className={cn('px-4 py-4', infoBox)}>
-        <p className="text-sm font-semibold text-gray-900">블프 직구 특가, 놓치지 않게</p>
+        <p className={text.label}>블프 직구 특가, 놓치지 않게</p>
         <p className="mt-1 text-sm leading-relaxed break-keep text-gray-600">
           지름알림 카톡방에서 커뮤니티 인기 핫딜과 시즌 직구 특가를 실시간으로 받아 보세요.
         </p>
@@ -397,11 +397,11 @@ export default async function SeasonBlackFriday2026Page() {
             rel="noopener"
             data-track="season-okachat"
             data-source="season_hub"
-            className="text-sm font-semibold text-gray-900 underline underline-offset-2"
+            className={cn(text.label, 'underline underline-offset-2')}
           >
             카톡방 들어가기
           </a>
-          <Link href={PAGE.HELP} className="text-sm text-gray-500 underline underline-offset-2">
+          <Link href={PAGE.HELP} className={cn(text.muted, 'underline underline-offset-2')}>
             지름알림 사용법
           </Link>
         </div>

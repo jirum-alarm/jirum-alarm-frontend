@@ -5,6 +5,8 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 import TextField from '@/shared/components/ui/Text/TextField';
 import EyeIcon from '@/shared/components/icons/eye';
 import EyeOffIcon from '@/shared/components/icons/eye_off';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 /**
  * 비밀번호 입력. web `features/mypage/ui/password/PasswordInput`.
@@ -34,7 +36,7 @@ export default function PasswordField({
 
   return (
     <View>
-      <Text className="pb-2 text-sm text-gray-500">{label}</Text>
+      <Text className={cn(text.muted, 'pb-2')}>{label}</Text>
       <TextField
         value={value}
         onChangeText={onChangeText}

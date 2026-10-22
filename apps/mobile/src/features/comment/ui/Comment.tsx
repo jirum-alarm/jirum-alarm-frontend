@@ -35,6 +35,7 @@ import CommentMenu from './CommentMenu';
 import {useColors} from '@/shared/theme/useColors';
 import {useOpenLogin} from '@/shared/hooks/useRequireLogin';
 import PressableOpacity from '@/shared/components/PressableOpacity';
+import {text} from '@jirum/design-system/recipes';
 
 export default function Comment({
   comment,
@@ -152,7 +153,7 @@ export default function Comment({
           <Text className="text-sm font-medium text-gray-600">
             {comment.author?.nickname}
           </Text>
-          <Text className="text-sm text-gray-500">
+          <Text className={text.muted}>
             {editStatus === 'update'
               ? '수정 중'
               : displayTime(comment.createdAt, now)}

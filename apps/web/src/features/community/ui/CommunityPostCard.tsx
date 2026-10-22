@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -46,7 +47,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
               </span>
             </>
           )}
-          <span className="text-xs text-gray-500">{displayTime(post.createdAt)}</span>
+          <span className={text.caption}>{displayTime(post.createdAt)}</span>
           {post.isNotice && (
             <Badge size="md" variant="solid" tone="secondary">
               NEW
@@ -55,9 +56,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
         </div>
 
         {/* 본문 */}
-        {post.title && (
-          <p className="mt-2 truncate text-sm font-semibold text-gray-900">{post.title}</p>
-        )}
+        {post.title && <p className={cn(text.label, 'mt-2 truncate')}>{post.title}</p>}
         {displayContent && (
           <p className={cn('mt-1 text-sm text-gray-600', post.title ? 'truncate' : 'line-clamp-2')}>
             {displayContent}
@@ -65,7 +64,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
         )}
 
         {/* 통계: 하단 고정 */}
-        <div className="mt-auto flex items-center gap-x-3 pt-2 text-xs text-gray-500">
+        <div className={cn(text.caption, 'mt-auto flex items-center gap-x-3 pt-2')}>
           <span className="flex items-center gap-x-1">
             <ThumbsupFill className="h-3.5 w-3.5" aria-hidden />
             {post.likeCount}
@@ -110,7 +109,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
             )}
           </div>
           {showProductTitle && (
-            <p className="line-clamp-2 text-xs leading-tight text-gray-500">
+            <p className={cn(text.caption, 'line-clamp-2 leading-tight')}>
               {post.taggedProduct!.title}
             </p>
           )}

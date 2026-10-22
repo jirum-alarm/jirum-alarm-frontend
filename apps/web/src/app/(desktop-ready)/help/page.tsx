@@ -1,4 +1,4 @@
-import { infoBox, linkChip } from '@jirum/design-system/recipes';
+import { infoBox, linkChip, text as textRole } from '@jirum/design-system/recipes';
 import { MAX_EXCLUDE_KEYWORDS } from '@jirum/domain/keyword-options';
 import { MAX_KEYWORD_COUNT } from '@jirum/domain/mypage';
 import { NIGHT_HOURS, NIGHT_HOURS_TEXT } from '@jirum/domain/quiet-hours';
@@ -418,7 +418,7 @@ function SectionHeading({
       <h2 id={`${id}-title`} className="pc:text-2xl mt-1 text-xl font-bold text-gray-900">
         {title}
       </h2>
-      {sub ? <p className="mt-1.5 text-sm text-gray-500">{sub}</p> : null}
+      {sub ? <p className={cn(textRole.muted, 'mt-1.5')}>{sub}</p> : null}
     </div>
   );
 }
@@ -431,7 +431,7 @@ function EvidenceExample() {
   return (
     <figure data-nosnippet>
       <div className="shadow-card rounded-2xl bg-white p-4">
-        <p className="text-sm text-gray-500">제주 삼다수 2L 24병</p>
+        <p className={textRole.muted}>제주 삼다수 2L 24병</p>
         <p className="mt-0.5 text-xl font-bold text-gray-900">
           <span className="text-error-600 mr-1.5">19%</span>12,900원
         </p>
@@ -440,16 +440,18 @@ function EvidenceExample() {
             <HelpIcon name="tag" className="size-4" />
           </span>
           <div className="min-w-0 pt-0.5">
-            <p className="text-sm font-semibold text-gray-900">
+            <p className={textRole.label}>
               보통가보다 <b className="text-error-600 font-bold">3,100원</b> 싸요 (19%)
             </p>
-            <p className="mt-0.5 text-xs text-gray-500">
+            <p className={cn(textRole.caption, 'mt-0.5')}>
               좋은 딜 · 지난 1년 핫딜 14건 중 85%보다 싸요
             </p>
           </div>
         </div>
       </div>
-      <figcaption className="mt-2.5 flex items-center justify-center gap-1.5 text-xs text-gray-500">
+      <figcaption
+        className={cn(textRole.caption, 'mt-2.5 flex items-center justify-center gap-1.5')}
+      >
         <span className="rounded bg-white px-1.5 py-0.5 font-semibold text-gray-600">예시</span>
         상품을 누르면 가격 바로 아래에 이렇게 보여요
       </figcaption>
@@ -525,7 +527,9 @@ export default async function HelpPage() {
                   <strong className="pc:text-xl block text-lg font-bold text-gray-900">
                     {s.value}
                   </strong>
-                  <span className="mt-0.5 block text-xs leading-snug text-gray-500">{s.label}</span>
+                  <span className={cn(textRole.caption, 'mt-0.5 block leading-snug')}>
+                    {s.label}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -642,10 +646,8 @@ export default async function HelpPage() {
                                   />
                                 ) : null}
                               </span>
-                              <span className="mt-3 block text-sm font-semibold text-gray-900">
-                                {f.name}
-                              </span>
-                              <span className="mt-0.5 block text-xs leading-snug text-gray-500">
+                              <span className={cn(textRole.label, 'mt-3 block')}>{f.name}</span>
+                              <span className={cn(textRole.caption, 'mt-0.5 block leading-snug')}>
                                 {placeName(f.text, isJirumAlarmApp)}
                               </span>
                             </>
@@ -717,7 +719,7 @@ export default async function HelpPage() {
                               className="shrink-0 transition-transform group-open:rotate-180"
                             />
                           </summary>
-                          <div className="pr-4 pb-4 pl-[42px] text-sm leading-relaxed text-gray-700">
+                          <div className={cn(textRole.body, 'pr-4 pb-4 pl-[42px] leading-relaxed')}>
                             <p>{placeName(f.a, isJirumAlarmApp)}</p>
                             {/* 앱 안에서 「앱 받기」는 엉뚱하다. */}
                             {f.link && !(isJirumAlarmApp && f.link.href === '/app') ? (

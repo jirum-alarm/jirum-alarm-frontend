@@ -1,9 +1,11 @@
+import { text } from '@jirum/design-system/recipes';
 import { SEARCH_COPY, SEARCH_EVENT } from '@jirum/domain/search';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 import { PAGE } from '@/shared/config/page';
 import useMyRouter from '@/shared/hooks/useMyRouter';
+import { cn } from '@/shared/lib/cn';
 import { ErrorIllust } from '@/shared/ui/common/icons/Illust';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
@@ -48,7 +50,7 @@ const ProductNotFound = () => {
         <div className="flex justify-center pb-4">
           <ErrorIllust className="size-25" />
         </div>
-        <p className="pb-2 text-2xl font-semibold text-gray-900">{SEARCH_COPY.noResult}</p>
+        <p className={cn(text.display, 'pb-2')}>{SEARCH_COPY.noResult}</p>
         <p className="text-gray-500">키워드를 등록하고 알림을 받아보세요</p>
       </div>
       <div className="w-full pb-16 text-center">

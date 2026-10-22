@@ -1,3 +1,7 @@
+import { text } from '@jirum/design-system/recipes';
+
+import { cn } from '@/shared/lib/cn';
+
 import { Registration } from '../../model/signup/registration';
 
 import CategoriesForm from './CategoriesForm';
@@ -34,7 +38,7 @@ const Description = () => {
         관심사를 알려주세요.
         <span className="pl-2 text-base text-gray-500">(선택)</span>
       </p>
-      <p className="pt-4 text-sm text-gray-700">
+      <p className={cn(text.body, 'pt-4')}>
         관심분야 핫딜이 올라오면
         <br /> 알림으로 알려드려요.
       </p>

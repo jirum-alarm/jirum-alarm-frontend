@@ -1,9 +1,11 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { OrderOptionType, ProductOrderType, ThumbnailType } from '@/shared/api/gql/graphql';
 import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
 import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 import Link from '@/shared/ui/Link';
 
@@ -52,7 +54,7 @@ export default function CategoryLatestLinksSection({
           <li key={p.id}>
             <Link
               href={PAGE.DETAIL + '/' + p.id}
-              className="line-clamp-1 py-2 text-sm text-gray-700 hover:text-gray-900"
+              className={cn(text.body, 'line-clamp-1 py-2 hover:text-gray-900')}
             >
               {p.title}
             </Link>

@@ -1,6 +1,6 @@
 'use client';
 
-import { button, chip, infoBox } from '@jirum/design-system/recipes';
+import { button, chip, infoBox, text as textRole } from '@jirum/design-system/recipes';
 
 import { cn } from '@/shared/lib/cn';
 
@@ -40,8 +40,8 @@ const SentenceAlertBuilder = () => {
   return (
     <section className={cn(infoBox, 'flex flex-col gap-3 p-4')}>
       <div>
-        <h2 className="text-sm font-semibold text-gray-900">문장으로 만들기</h2>
-        <p className="mt-0.5 text-xs text-gray-500">
+        <h2 className={textRole.label}>문장으로 만들기</h2>
+        <p className={cn(textRole.caption, 'mt-0.5')}>
           원하는 걸 그대로 적으면 키워드·가격·뺄 단어로 바꿔 드려요.
         </p>
       </div>
@@ -76,7 +76,7 @@ const SentenceAlertBuilder = () => {
       </form>
 
       {intent === null && (
-        <p className="text-sm text-gray-700">
+        <p className={textRole.body}>
           문장에서 상품을 못 찾았어요. 위 칸에 상품 이름을 직접 적어 주세요.
         </p>
       )}
@@ -84,7 +84,7 @@ const SentenceAlertBuilder = () => {
       {intent && (
         <div className="flex flex-col gap-3 border-t border-gray-200 pt-3">
           <div className="flex flex-col gap-2">
-            <span className="text-xs text-gray-500">키워드</span>
+            <span className={textRole.caption}>키워드</span>
             <div className="flex flex-wrap gap-2">
               {intent.candidates.map((c) => {
                 const on = c.keyword === keyword;
@@ -118,7 +118,7 @@ const SentenceAlertBuilder = () => {
             </ul>
           )}
 
-          <div className="text-sm text-gray-700">
+          <div className={textRole.body}>
             {selected && selected.recentMatchCount > 0 ? (
               <p>
                 지난 30일이면{' '}
@@ -134,7 +134,7 @@ const SentenceAlertBuilder = () => {
             {keyword === intent.keyword && intent.recentSamples.length > 0 && (
               <ul className="mt-2 flex flex-col gap-1">
                 {intent.recentSamples.map((s) => (
-                  <li key={s.id} className="truncate text-xs text-gray-500">
+                  <li key={s.id} className={cn(textRole.caption, 'truncate')}>
                     · {s.title}
                   </li>
                 ))}

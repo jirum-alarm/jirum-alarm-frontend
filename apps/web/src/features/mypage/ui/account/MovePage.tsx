@@ -1,3 +1,5 @@
+import { text } from '@jirum/design-system/recipes';
+
 import { ArrowRight } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
 
@@ -15,7 +17,7 @@ const MovePage = ({ to, title, subtitle }: MovePageProps) => {
           <span className="text-gray-900">{title}</span>
         </div>
         <div className="flex items-center gap-2">
-          {subtitle && <span className="text-sm text-gray-500">{subtitle}</span>}
+          {subtitle && <span className={text.muted}>{subtitle}</span>}
           <ArrowRight />
         </div>
       </div>

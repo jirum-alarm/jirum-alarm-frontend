@@ -1,5 +1,5 @@
 import {THEME_COPY} from '@jirum/domain/mypage';
-import {emptyText} from '@jirum/design-system/recipes';
+import {emptyText, text} from '@jirum/design-system/recipes';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -21,6 +21,7 @@ import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import {ThemeCard} from '@/features/mypage/ui/ThemeCards';
 import {useThemeSubscription} from '@/features/mypage/model/useThemeSubscription';
+import {cn} from '@/shared/lib/styling/className';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -106,7 +107,7 @@ export default function ThemesScreen({navigation}: Props) {
 }
 
 function ThemesListHeader() {
-  return <Text className="mb-5 text-sm text-gray-500">{THEME_COPY.intro}</Text>;
+  return <Text className={cn(text.muted, 'mb-5')}>{THEME_COPY.intro}</Text>;
 }
 
 function ThemeSeparator() {

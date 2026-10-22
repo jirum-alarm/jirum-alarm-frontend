@@ -41,6 +41,7 @@ import {
   httpsUpgradeOf,
   openExternalApp,
 } from './lib/purchase-navigation';
+import {text} from '@jirum/design-system/recipes';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -235,9 +236,7 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
             accessibilityLabel="지름알림으로 돌아가기">
             <Close />
             {/* X 만으론 «쇼핑몰을 닫고 지름알림으로 간다»가 안 읽혀서 이름을 붙인다. */}
-            <Text className="text-sm font-semibold text-gray-900">
-              지름알림
-            </Text>
+            <Text className={text.label}>지름알림</Text>
           </PressableOpacity>
           {canGoBack ? (
             <PressableOpacity
@@ -250,13 +249,11 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
             </PressableOpacity>
           ) : null}
           <View className="flex-1 px-1">
-            <Text
-              className="text-base font-semibold text-gray-900"
-              numberOfLines={1}>
+            <Text className={text.subtitle} numberOfLines={1}>
               {title || host || '구매하기'}
             </Text>
             {title && host ? (
-              <Text className="text-xs text-gray-500" numberOfLines={1}>
+              <Text className={text.caption} numberOfLines={1}>
                 {host}
               </Text>
             ) : null}
@@ -319,7 +316,7 @@ export default function PurchaseBrowserScreen({route, navigation}: Props) {
               </>
             ) : (
               <>
-                <Text className="text-base font-semibold text-gray-900">
+                <Text className={text.subtitle}>
                   {title
                     ? `${title} 앱에서 열었어요`
                     : '쇼핑몰 앱에서 열었어요'}

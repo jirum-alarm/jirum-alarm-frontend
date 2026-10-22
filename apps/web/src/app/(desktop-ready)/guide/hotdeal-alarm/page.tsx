@@ -1,4 +1,4 @@
-import { linkChip } from '@jirum/design-system/recipes';
+import { linkChip, text } from '@jirum/design-system/recipes';
 import { MAX_EXCLUDE_KEYWORDS } from '@jirum/domain/keyword-options';
 import { MAX_KEYWORD_COUNT } from '@jirum/domain/mypage';
 import { NIGHT_HOURS, NIGHT_HOURS_TEXT } from '@jirum/domain/quiet-hours';
@@ -105,7 +105,7 @@ export default async function HotdealAlarmGuidePage() {
         </header>
 
         <section>
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">키워드 알림 설정하는 법</h2>
+          <h2 className={cn(text.title, 'mb-3')}>키워드 알림 설정하는 법</h2>
           <ol className="list-decimal space-y-2 pl-5">
             {STEPS.map((s) => (
               <li key={s.name}>
@@ -126,9 +126,7 @@ export default async function HotdealAlarmGuidePage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">
-            원하지 않는 딜은 어떻게 거르나요?
-          </h2>
+          <h2 className={cn(text.title, 'mb-3')}>원하지 않는 딜은 어떻게 거르나요?</h2>
           <p>
             키워드는 제목에 그 글자가 들어가면 알림이 가요. 그래서 &quot;콜라&quot;를 등록하면
             &quot;콜라겐&quot;도 걸릴 수 있어요. 이럴 땐 키워드의 알림 조건에서{' '}
@@ -139,9 +137,7 @@ export default async function HotdealAlarmGuidePage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">
-            키워드 없이 받을 수는 없나요?
-          </h2>
+          <h2 className={cn(text.title, 'mb-3')}>키워드 없이 받을 수는 없나요?</h2>
           <p>
             <Link href="/themes" className="underline underline-offset-2">
               관심사별 핫딜 알림
@@ -153,7 +149,7 @@ export default async function HotdealAlarmGuidePage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">알림이 안 올 때 확인할 것</h2>
+          <h2 className={cn(text.title, 'mb-3')}>알림이 안 올 때 확인할 것</h2>
           <ul className="list-disc space-y-2 pl-5">
             <li>
               휴대폰 설정에서 지름알림 앱 알림이 꺼져 있지 않은지, 웹이라면 브라우저 알림이 차단되지
@@ -177,7 +173,7 @@ export default async function HotdealAlarmGuidePage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">요즘 많이 받는 키워드</h2>
+          <h2 className={cn(text.title, 'mb-3')}>요즘 많이 받는 키워드</h2>
           <ul className="flex flex-wrap gap-2">
             {popular.map((h) => (
               <li key={h.slug}>
@@ -189,7 +185,10 @@ export default async function HotdealAlarmGuidePage() {
             <li>
               <Link
                 href={PAGE.KEYWORDS}
-                className="inline-block rounded-full px-3 py-1.5 text-sm text-gray-500 underline underline-offset-2"
+                className={cn(
+                  text.muted,
+                  'inline-block rounded-full px-3 py-1.5 underline underline-offset-2',
+                )}
               >
                 전체 키워드
               </Link>

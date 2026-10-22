@@ -1,6 +1,6 @@
 'use client';
 
-import { tab } from '@jirum/design-system/recipes';
+import { tab, text } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
@@ -227,19 +227,19 @@ export default function PriceHistorySection({
         </div>
       )}
 
-      <p className="mt-2 text-xs text-gray-500">
+      <p className={cn(text.caption, 'mt-2')}>
         이 기간 핫딜 {points.length}건{` · ${formatRangeLabel(rangeFromLabel, rangeToLabel)}`}
       </p>
 
       <div className="mt-3 grid grid-cols-3 gap-2 rounded-xl bg-gray-50 px-4 py-3.5">
         <div className="flex flex-col gap-0.5">
-          <span className="text-xs text-gray-500">최저</span>
+          <span className={text.caption}>최저</span>
           <span className="text-error-600 text-sm font-bold sm:text-base">
             {won(minPrice, currency)}
           </span>
         </div>
         <div className="flex flex-col items-center gap-0.5">
-          <span className="text-xs text-gray-500">현재가</span>
+          <span className={text.caption}>현재가</span>
           <span className="text-sm font-bold text-gray-900 sm:text-base">
             {won(currentPrice, currency)}
           </span>
@@ -247,7 +247,7 @@ export default function PriceHistorySection({
               근거 블록과 같은 상품에 다른 판정을 냈다. 판정은 가격 아래 근거 블록이 맡는다. */}
         </div>
         <div className="flex flex-col items-end gap-0.5">
-          <span className="text-xs text-gray-500">최고</span>
+          <span className={text.caption}>최고</span>
           <span className="text-secondary-600 text-sm font-bold sm:text-base">
             {won(maxPrice, currency)}
           </span>

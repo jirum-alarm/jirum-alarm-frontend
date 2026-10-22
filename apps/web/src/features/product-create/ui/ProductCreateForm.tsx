@@ -1,5 +1,7 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
+
 import { CATEGORIES } from '@/shared/config/categories';
 import { cn } from '@/shared/lib/cn';
 import Button from '@/shared/ui/common/Button';
@@ -94,7 +96,7 @@ export default function ProductCreateForm() {
                   )}
                 >
                   <Icon width={36} height={36} />
-                  <span className={cn('text-sm text-gray-700', { 'text-primary-800': selected })}>
+                  <span className={cn(text.body, { 'text-primary-800': selected })}>
                     {category.text}
                   </span>
                 </button>

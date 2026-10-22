@@ -1,6 +1,6 @@
 import {ALARM_COPY} from '@jirum/domain/alarm';
 import {prefetchProductDetail} from '@/entities/product/prefetch-detail';
-import {notificationRow} from '@jirum/design-system/recipes';
+import {notificationRow, text} from '@jirum/design-system/recipes';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -158,7 +158,7 @@ const AlarmItem = React.memo(function AlarmItem({
                 accessibilityRole="button"
                 accessibilityLabel={label}
                 className="-mt-1 self-start py-1">
-                <Text className="text-xs text-gray-500" numberOfLines={1}>
+                <Text className={text.caption} numberOfLines={1}>
                   {`${label} ›`}
                 </Text>
               </PressableOpacity>
@@ -196,7 +196,7 @@ const AlarmItem = React.memo(function AlarmItem({
                   <View className="h-2.5 border-l border-gray-400" />
                 </>
               ) : null}
-              <Text className="text-xs text-gray-500">
+              <Text className={text.caption}>
                 {displayTime(createdAt, now)}
               </Text>
             </View>

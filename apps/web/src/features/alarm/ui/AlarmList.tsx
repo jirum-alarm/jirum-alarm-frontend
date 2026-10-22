@@ -1,6 +1,6 @@
 'use client';
 
-import { button } from '@jirum/design-system/recipes';
+import { button, text } from '@jirum/design-system/recipes';
 import { ALARM_COPY } from '@jirum/domain/alarm';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAtomValue, useSetAtom } from 'jotai';
@@ -170,7 +170,7 @@ export default function AlarmList() {
                 <span className="block truncate text-sm font-medium text-gray-700">
                   「{goodPrice.keyword}」 알림 오늘 {topKeyword?.count}건
                 </span>
-                <span className="block truncate text-xs text-gray-500">
+                <span className={cn(text.caption, 'block truncate')}>
                   {goodPriceText(goodPrice.unit, goodPrice.goodPrice)} 이하만 받으면{' '}
                   {goodPrice.windowDays}일에 {goodPrice.goodDealCount}번
                 </span>

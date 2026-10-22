@@ -1,3 +1,5 @@
+import { text } from '@jirum/design-system/recipes';
+
 import { cn } from '@/shared/lib/cn';
 
 import { type ProductCardType } from '@/entities/product-list/model/types';
@@ -48,7 +50,8 @@ export default function DisplayProductSource({
   return (
     <div
       className={cn(
-        'flex min-w-0 items-center gap-1 text-xs text-gray-500',
+        text.caption,
+        'flex min-w-0 items-center gap-1',
         narrow && '@container',
         className,
       )}

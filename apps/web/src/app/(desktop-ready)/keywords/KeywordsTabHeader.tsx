@@ -1,5 +1,8 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
+
+import { cn } from '@/shared/lib/cn';
 import PageHeader from '@/shared/ui/layout/PageHeader';
 
 import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
@@ -11,7 +14,7 @@ export default function KeywordsTabHeader() {
     <PageHeader
       // 본문 main 의 px-5 안에 놓여 fixed 가 20px 밀린다 — 좌우를 0 에 붙이고 가운데로.
       className="pc:hidden inset-x-0 mx-auto"
-      title={<span className="truncate text-lg font-semibold text-gray-900">키워드</span>}
+      title={<span className={cn(text.title, 'truncate')}>키워드</span>}
       actions={<SearchLinkButton color="var(--color-gray-900)" />}
     />
   );

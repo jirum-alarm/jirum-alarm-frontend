@@ -24,6 +24,7 @@ import {
   NICKNAME_HELPER_TEXT,
 } from '@/entities/mypage/lib/validation';
 import PressableOpacity from '@/shared/components/PressableOpacity';
+import {text} from '@jirum/design-system/recipes';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -60,7 +61,7 @@ export default function NicknameScreen({navigation}: Props) {
         bottomOffset={88}
         keyboardShouldPersistTaps="handled">
         <View className="px-5 pt-9">
-          <Text className="text-2xl font-semibold text-gray-900">
+          <Text className={text.display}>
             {'변경할 닉네임을\n입력해주세요.'}
           </Text>
         </View>

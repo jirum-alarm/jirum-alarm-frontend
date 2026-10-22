@@ -1,8 +1,10 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
 
+import { cn } from '@/shared/lib/cn';
 import { WindowLocation } from '@/shared/lib/window-location';
 import { loginModalMessageAtom } from '@/shared/model/loginModal';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
@@ -82,14 +84,14 @@ export default function LoginModal() {
           </button>
         </AlertDialog.Cancel>
         <AlertDialog.Header className="min-w-0 gap-2">
-          <AlertDialog.Title className="text-lg font-semibold break-keep text-gray-900">
+          <AlertDialog.Title className={cn(text.title, 'break-keep')}>
             {message.title}
           </AlertDialog.Title>
-          <AlertDialog.Description className="text-sm break-keep text-gray-500">
+          <AlertDialog.Description className={cn(text.muted, 'break-keep')}>
             {message.description}
           </AlertDialog.Description>
           {recentMethod && (
-            <p className="shrink-0 text-xs whitespace-nowrap text-gray-500">
+            <p className={cn(text.caption, 'shrink-0 whitespace-nowrap')}>
               최근에 {RECENT_METHOD_PHRASE[recentMethod]} 로그인했어요
             </p>
           )}
@@ -121,7 +123,7 @@ export default function LoginModal() {
           />
         </div>
         <AlertDialog.Cancel asChild>
-          <button type="button" className="h-10 text-sm text-gray-500 hover:text-gray-700">
+          <button type="button" className={cn(text.muted, 'h-10 hover:text-gray-700')}>
             다음에 할게요
           </button>
         </AlertDialog.Cancel>

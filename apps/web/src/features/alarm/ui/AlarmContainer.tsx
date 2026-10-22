@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { useAtomValue } from 'jotai';
 import * as m from 'motion/react-m';
 import Image from 'next/image';
@@ -90,7 +91,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
       </p>
       {platform === 'non-mobile' && (
         // 하단 문구를 걷어냈으니 "왜 받아야 하는지"는 제목 바로 아래 한 줄로 남긴다.
-        <p className="pt-2 pb-6 text-sm text-gray-500">
+        <p className={cn(text.muted, 'pt-2 pb-6')}>
           키워드를 등록하고 누구보다 빠르게 핫딜을 받아보세요
         </p>
       )}
@@ -117,7 +118,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
       ) : (
         <div className="fixed right-0 bottom-[var(--bottom-nav-padding,0px)] left-0 m-auto w-full max-w-[600px] bg-white px-5 pt-4 pb-8">
           <div className="flex flex-col items-center pb-6">
-            <p className="pb-3 text-center text-sm text-gray-500">
+            <p className={cn(text.muted, 'pb-3 text-center')}>
               키워드를 등록하고
               <br />
               누구보다 빠르게 받아보세요
@@ -179,7 +180,7 @@ function LoginGuide() {
           <Illust />
         </div>
         <div>
-          <p className="pb-8 text-2xl font-semibold text-gray-900">
+          <p className={cn(text.display, 'pb-8')}>
             키워드 알림은
             <br /> 로그인이 필요해요
           </p>

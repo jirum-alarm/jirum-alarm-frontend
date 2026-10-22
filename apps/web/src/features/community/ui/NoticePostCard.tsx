@@ -1,9 +1,11 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import Link from 'next/link';
 
 import { CommunityPostsQuery } from '@/shared/api/community/community.service';
 import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
 import { displayTime } from '@/shared/lib/utils/displayTime';
 import Badge from '@/shared/ui/common/Badge';
 import { BubbleChat, Eye, ThumbsupFill } from '@/shared/ui/common/icons';
@@ -34,7 +36,7 @@ export default function NoticePostCard({
     >
       <div className="flex items-center gap-x-2">
         <NoticeAuthor />
-        <span className="text-xs text-gray-500">{displayTime(post.createdAt)}</span>
+        <span className={text.caption}>{displayTime(post.createdAt)}</span>
         {isNew && (
           <Badge size="md" variant="solid" tone="secondary">
             NEW
@@ -42,14 +44,12 @@ export default function NoticePostCard({
         )}
       </div>
 
-      <p className="mt-2 truncate text-sm font-semibold text-gray-900">
-        {post.title ?? displayContent}
-      </p>
+      <p className={cn(text.label, 'mt-2 truncate')}>{post.title ?? displayContent}</p>
       {post.title && displayContent && (
         <p className="mt-0.5 truncate text-sm text-gray-600">{displayContent}</p>
       )}
 
-      <div className="mt-2 flex items-center gap-x-3 text-xs text-gray-500">
+      <div className={cn(text.caption, 'mt-2 flex items-center gap-x-3')}>
         <span className="flex items-center gap-x-1">
           <ThumbsupFill className="h-3.5 w-3.5" aria-hidden />
           {post.likeCount}

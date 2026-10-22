@@ -1,3 +1,4 @@
+import { text } from '@jirum/design-system/recipes';
 import Image from 'next/image';
 
 import PageQrCode from '@/shared/ui/app-handoff/PageQrCode';
@@ -50,7 +51,7 @@ export default function AppDownloadQr({
       )}
       <div className={compact ? '' : 'text-left'}>
         <p className="pb-1 font-semibold text-gray-900">카메라로 스캔해보세요</p>
-        <p className="text-sm text-gray-500">
+        <p className={text.muted}>
           {url ? '폰에서 이 상품을 이어서 볼 수 있어요' : '앱을 통해 알림을 받을 수 있어요'}
         </p>
       </div>

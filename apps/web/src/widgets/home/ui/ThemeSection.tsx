@@ -2,11 +2,13 @@
 
 import 'swiper/css';
 
+import { text } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { themePath } from '@/shared/api/notification/theme.service';
+import { cn } from '@/shared/lib/cn';
 import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
@@ -50,11 +52,11 @@ const ThemeSection = ({ isMobile }: { isMobile: boolean }) => {
               <span className="text-2xl" aria-hidden>
                 {theme.emoji || '🔔'}
               </span>
-              <span className="line-clamp-1 text-sm font-semibold text-gray-900">{theme.name}</span>
-              <span className="line-clamp-1 text-xs text-gray-500">
+              <span className={cn(text.label, 'line-clamp-1')}>{theme.name}</span>
+              <span className={cn(text.caption, 'line-clamp-1')}>
                 {theme.representativeKeywords.slice(0, isMobile ? 3 : 4).join('·')}
               </span>
-              <span className="text-xs text-gray-500">
+              <span className={text.caption}>
                 최근 7일 알림{' '}
                 <b className="font-semibold text-gray-900">{theme.weeklyAlertCount}건</b>
               </span>

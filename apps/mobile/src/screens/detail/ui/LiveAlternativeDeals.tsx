@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
-import {cardThumb, sectionTitle} from '@jirum/design-system/recipes';
+import {cardThumb, sectionTitle, text} from '@jirum/design-system/recipes';
 import {
   formatPriceDiff,
   liveAlternativeKindLabel,
@@ -106,13 +106,11 @@ export default function LiveAlternativeDeals({
                     />
                   </View>
                   <View className="flex-1 gap-0.5">
-                    <Text className="text-sm text-gray-700" numberOfLines={1}>
+                    <Text className={text.body} numberOfLines={1}>
                       {item.title}
                     </Text>
                     <View className="flex-row items-baseline gap-2">
-                      <Text
-                        className="text-base font-semibold text-gray-900"
-                        numberOfLines={1}>
+                      <Text className={text.subtitle} numberOfLines={1}>
                         {hasWon ? `${priceWithoutWon}원` : priceWithoutWon}
                       </Text>
                       {diff ? (
@@ -126,7 +124,7 @@ export default function LiveAlternativeDeals({
                         </Text>
                       ) : null}
                     </View>
-                    <Text className="text-xs text-gray-500" numberOfLines={1}>
+                    <Text className={text.caption} numberOfLines={1}>
                       {[
                         liveAlternativeKindLabel(deal.kind),
                         where,

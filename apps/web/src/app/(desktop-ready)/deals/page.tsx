@@ -1,4 +1,4 @@
-import { linkChip } from '@jirum/design-system/recipes';
+import { linkChip, text } from '@jirum/design-system/recipes';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -126,7 +126,7 @@ export default async function DealsIndexPage() {
         </p>
         <Link
           href={PAGE.KEYWORDS}
-          className="mt-2 inline-block text-sm text-gray-500 underline underline-offset-2"
+          className={cn(text.muted, 'mt-2 inline-block underline underline-offset-2')}
         >
           키워드별 핫딜로 보기
         </Link>

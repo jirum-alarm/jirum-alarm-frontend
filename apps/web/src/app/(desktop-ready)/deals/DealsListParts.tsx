@@ -1,5 +1,7 @@
+import { text } from '@jirum/design-system/recipes';
 import Link from 'next/link';
 
+import { cn } from '@/shared/lib/cn';
 import { convertToWebp } from '@/shared/lib/utils/image';
 import Badge from '@/shared/ui/common/Badge';
 import ImageComponent from '@/shared/ui/ImageComponent';
@@ -34,7 +36,7 @@ export function WaitingRow({ item: p }: { item: ListItem }) {
         <p className="line-clamp-1 text-sm font-medium text-gray-900">
           {buildModelDisplayName(p.brand, p.modelName)}
         </p>
-        <p className="line-clamp-1 text-xs text-gray-500">
+        <p className={cn(text.caption, 'line-clamp-1')}>
           {[
             waitingPriceText(p),
             p.lastDealAt ? `마지막 핫딜 ${relativeTimeLabel(p.lastDealAt)}` : null,
@@ -118,7 +120,7 @@ export function DealCard({ item: p }: { item: ListItem }) {
         />
       </div>
       <div className="flex grow flex-col gap-1 p-3">
-        <h3 className="line-clamp-2 text-sm font-semibold text-gray-900">
+        <h3 className={cn(text.label, 'line-clamp-2')}>
           {buildModelDisplayName(p.brand, p.modelName)}
         </h3>
         {isActive ? (
@@ -128,10 +130,8 @@ export function DealCard({ item: p }: { item: ListItem }) {
                 {verdict.text}
               </Badge>
             )}
-            <p className="text-lg font-semibold text-gray-900">
-              {p.activePrice!.toLocaleString()}원
-            </p>
-            <p className="text-xs text-gray-500">
+            <p className={text.title}>{p.activePrice!.toLocaleString()}원</p>
+            <p className={text.caption}>
               {[
                 relativeTimeLabel(p.activePostedAt),
                 p.activeDealCount > 1 ? `진행 ${p.activeDealCount}건` : null,
@@ -145,22 +145,20 @@ export function DealCard({ item: p }: { item: ListItem }) {
           <div className="mt-auto">
             {p.buyLine != null && p.buyLine > 0 ? (
               <>
-                <p className="text-xs text-gray-500">적정가</p>
-                <p className="text-base font-semibold text-gray-900">
+                <p className={text.caption}>적정가</p>
+                <p className={text.subtitle}>
                   {p.buyLineUnitLabel ? `${p.buyLineUnitLabel} ` : ''}
                   {p.buyLine.toLocaleString()}원 이하
                 </p>
               </>
             ) : p.heroMinPrice != null ? (
               <>
-                <p className="text-xs text-gray-500">지난 핫딜 최저</p>
-                <p className="text-base font-semibold text-gray-900">
-                  {p.heroMinPrice.toLocaleString()}원
-                </p>
+                <p className={text.caption}>지난 핫딜 최저</p>
+                <p className={text.subtitle}>{p.heroMinPrice.toLocaleString()}원</p>
               </>
             ) : null}
             {p.lastDealAt && (
-              <p className="text-xs text-gray-500">마지막 핫딜 {relativeTimeLabel(p.lastDealAt)}</p>
+              <p className={text.caption}>마지막 핫딜 {relativeTimeLabel(p.lastDealAt)}</p>
             )}
           </div>
         )}

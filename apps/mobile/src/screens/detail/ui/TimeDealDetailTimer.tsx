@@ -5,6 +5,7 @@ import {formatCountdown, getTimeDealTimer} from '@jirum/domain/toss-time-deal';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useNow} from '@/shared/hooks/useNow';
 import {cn} from '@/shared/lib/styling';
+import {text} from '@jirum/design-system/recipes';
 
 type Props = {
   product: Parameters<typeof getTimeDealTimer>[0];
@@ -23,7 +24,7 @@ export default function TimeDealDetailTimer({product, className}: Props) {
   if (!timer) return null;
   if (timer.kind === 'soldOut') {
     return (
-      <Text className={cn('pt-2 text-sm text-gray-500', className)}>
+      <Text className={cn(text.muted, 'pt-2', className)}>
         {timer.label}
         {timer.label === '선착순 마감' && ' · 밤 12시 새 특가 오픈'}
       </Text>
@@ -61,13 +62,13 @@ function Countdown({
           ? `${timer.endLabel}, ${count} 남음`
           : `${timer.label}, 오픈까지 ${count}`
       }>
-      <Text className="text-sm text-gray-700">
+      <Text className={text.body}>
         {closing ? timer.endLabel : timer.label}
       </Text>
       {/* eslint-disable-next-line no-restricted-syntax -- 구분점(글자 아님) */}
       <Text className="text-sm text-gray-400">·</Text>
       {left <= 0 ? (
-        <Text className="text-sm text-gray-500">
+        <Text className={text.muted}>
           {closing ? '특가가 끝났어요' : '지금 오픈'}
         </Text>
       ) : closing ? (

@@ -1,11 +1,13 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { THEME_COPY } from '@jirum/domain/mypage';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 
 import { themePath } from '@/shared/api/notification/theme.service';
 import useAlertSession from '@/shared/hooks/useAlertSession';
+import { cn } from '@/shared/lib/cn';
 import Button from '@/shared/ui/common/Button';
 
 import { ThemeQueries } from '@/entities/notification';
@@ -38,13 +40,13 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
                 {theme.emoji || '🔔'}
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-base font-semibold text-gray-900">{theme.name}</p>
-                <p className="mt-1 line-clamp-2 text-sm text-gray-500">{theme.description}</p>
+                <p className={text.subtitle}>{theme.name}</p>
+                <p className={cn(text.muted, 'mt-1 line-clamp-2')}>{theme.description}</p>
                 {/* 깜깜이 구독 방지: 묶음에 어떤 키워드가 들었는지 미리보기 */}
-                <p className="mt-2 line-clamp-1 text-xs text-gray-500">
+                <p className={cn(text.caption, 'mt-2 line-clamp-1')}>
                   {theme.representativeKeywords.join('·')}
                 </p>
-                <p className="mt-1 text-xs text-gray-500">
+                <p className={cn(text.caption, 'mt-1')}>
                   {theme.keywords.length > 0 && <>키워드 {theme.keywords.length}개 · </>}
                   최근 7일 알림{' '}
                   <b className="font-semibold text-gray-900">{theme.weeklyAlertCount}건</b>

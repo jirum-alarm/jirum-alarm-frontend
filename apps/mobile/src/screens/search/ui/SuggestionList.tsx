@@ -7,6 +7,7 @@ import SearchIcon from '@/shared/components/icons/search';
 
 import {splitByPrefix} from '../lib/highlight';
 import {useColors} from '@/shared/theme/useColors';
+import {text} from '@jirum/design-system/recipes';
 
 /**
  * 자동완성 목록. web: widgets/search/ui/SearchAutocompleteDropdown.tsx
@@ -46,7 +47,7 @@ export default function SuggestionList({
           accessibilityLabel={suggestion}
           className="flex-row items-center gap-2 px-5 py-3">
           <SearchIcon width={18} height={18} color={c.gray[400]} />
-          <Text className="text-sm text-gray-700" numberOfLines={1}>
+          <Text className={text.body} numberOfLines={1}>
             {splitByPrefix(suggestion, highlight).map((part, i) => (
               <Text
                 key={i}

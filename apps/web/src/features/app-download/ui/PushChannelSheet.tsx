@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 
@@ -86,7 +87,7 @@ export default function PushChannelSheet() {
             <br />
             어디로 받을까요?
           </AlertDialog.Title>
-          <AlertDialog.Description className="pt-2 text-sm text-gray-500">
+          <AlertDialog.Description className={cn(text.muted, 'pt-2')}>
             지금은 이 브라우저로 알림이 오지 않아요.
           </AlertDialog.Description>
         </AlertDialog.Header>
@@ -111,7 +112,7 @@ export default function PushChannelSheet() {
               </OpenInAppLink>
             </AlertDialog.Action>
           )}
-          <p className="text-center text-xs text-gray-500">
+          <p className={cn(text.caption, 'text-center')}>
             {isGuest ? (
               <>
                 여기서 로그인한 뒤 앱에서 같은 계정으로 들어가면
@@ -141,7 +142,7 @@ export default function PushChannelSheet() {
             <button
               type="button"
               onClick={() => track('dismiss')}
-              className="h-10 text-sm text-gray-500"
+              className={cn(text.muted, 'h-10')}
             >
               다음에 할게요
             </button>

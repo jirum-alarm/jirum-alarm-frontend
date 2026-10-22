@@ -15,6 +15,8 @@ import {
   type QuietHours,
   toQuietHours,
 } from '@jirum/domain/quiet-hours';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 type Edge = 'start' | 'end';
 
@@ -52,7 +54,7 @@ export default function QuietHoursRow({
       <View accessible={false} className="flex-row items-center gap-4">
         <View className="min-w-0 flex-1">
           <Text className="font-medium text-gray-900">방해금지 시간</Text>
-          <Text className="mt-0.5 text-sm text-gray-500">
+          <Text className={cn(text.muted, 'mt-0.5')}>
             정한 시간엔 알림을 울리지 않고, 끝나는 시각에 모아서 보내드려요.
             알림함에는 바로 쌓여요
           </Text>

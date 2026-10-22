@@ -1,4 +1,4 @@
-import {emptyText} from '@jirum/design-system/recipes';
+import {emptyText, text} from '@jirum/design-system/recipes';
 import {ESTIMATED_TOTAL_CAP, SEARCH_COPY} from '@jirum/domain/search';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
@@ -145,7 +145,7 @@ export default function SearchResults({
               <SearchFilterBar controller={controller} />
               {estimatedTotal != null ? (
                 <View className="px-5 pb-3">
-                  <Text className="text-sm text-gray-500">
+                  <Text className={text.muted}>
                     {'약 '}
                     <Text className="font-semibold text-gray-900">
                       {estimatedTotal.toLocaleString()}

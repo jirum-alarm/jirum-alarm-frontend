@@ -1,6 +1,6 @@
 'use client';
 
-import { chip } from '@jirum/design-system/recipes';
+import { chip, text } from '@jirum/design-system/recipes';
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 
 import { CommunityService } from '@/shared/api/community/community.service';
@@ -78,7 +78,7 @@ export default function CommunityPostDetailClient({
               {post.author?.nickname ?? '알 수 없음'}
             </span>
           )}
-          <span className="text-xs text-gray-500">{displayTime(post.createdAt)}</span>
+          <span className={text.caption}>{displayTime(post.createdAt)}</span>
         </div>
         {isUserLogin && (
           <div className="pc:block hidden">
@@ -136,7 +136,7 @@ export default function CommunityPostDetailClient({
 
       {/* 통계 + 추천 */}
       <div className="flex items-center justify-between border-y border-gray-100 px-5 py-3">
-        <div className="flex items-center gap-x-3 text-sm text-gray-500">
+        <div className={cn(text.muted, 'flex items-center gap-x-3')}>
           <span className="flex items-center gap-x-1">
             <ThumbsupFill className="h-4 w-4" aria-hidden />
             {post.likeCount}

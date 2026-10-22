@@ -15,6 +15,7 @@ import {navigateToNativeRoute} from '@/shared/lib/navigation/navigation-ref';
 import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
+import {text} from '@jirum/design-system/recipes';
 
 type Nav = NativeStackNavigationProp<TabStackParamList>;
 
@@ -75,16 +76,14 @@ export default function CommunityHotDeals() {
   return (
     <View className="mt-2 border-t border-gray-100 pt-4">
       <View className="flex-row items-center justify-between px-5 pb-3">
-        <Text className="text-sm font-semibold text-gray-900">
-          {option.label}
-        </Text>
+        <Text className={text.label}>{option.label}</Text>
         <Pressable
           onPress={handlePressMore}
           accessibilityRole="button"
           accessibilityLabel={`${option.label} 더보기`}
           hitSlop={12}
           style={({pressed}) => (pressed ? {opacity: 0.6} : null)}>
-          <Text className="text-xs text-gray-500">더보기</Text>
+          <Text className={text.caption}>더보기</Text>
         </Pressable>
       </View>
 

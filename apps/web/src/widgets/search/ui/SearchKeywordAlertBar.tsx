@@ -1,7 +1,10 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { SEARCH_ALERT_BAR_COPY, SEARCH_BAR_SOURCE } from '@jirum/domain/search';
 import { useEffect } from 'react';
+
+import { cn } from '@/shared/lib/cn';
 
 import { pushDataLayer, useSearchKeywordAlert } from '../hooks/useSearchKeywordAlert';
 
@@ -34,7 +37,7 @@ export default function SearchKeywordAlertBar({ keyword }: { keyword: string }) 
 
   return (
     <div className="mb-3 flex items-center gap-x-3 rounded-xl bg-gray-50 py-2 pr-2 pl-4">
-      <p className="min-w-0 flex-1 truncate text-sm text-gray-700">
+      <p className={cn(text.body, 'min-w-0 flex-1 truncate')}>
         <span className="font-semibold text-gray-900">&lsquo;{trimmed}&rsquo;</span>
         {isOn ? SEARCH_ALERT_BAR_COPY.on : SEARCH_ALERT_BAR_COPY.off}
       </p>

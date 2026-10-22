@@ -14,6 +14,8 @@ import KeywordAlertButton from '@/features/keyword-prompt/ui/KeywordAlertButton'
 import EndedDealsRescue from './EndedDealsRescue';
 
 import SectionHeader from '@/shared/components/ui/SectionHeader';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 /**
  * 검색 결과가 없을 때. web: widgets/search/ui/ProductNotFound.tsx
@@ -66,7 +68,7 @@ export default function SearchNotFound({
           빈 상태 일러스트를 쓴다. 정확한 그림이 필요하면 별도로 포팅할 것.
         */}
         <AlarmIllustError />
-        <Text className="pt-4 pb-2 text-2xl font-semibold text-gray-900">
+        <Text className={cn(text.display, 'pt-4 pb-2')}>
           {SEARCH_COPY.noResult}
         </Text>
         <Text className="text-center text-gray-500">

@@ -1,3 +1,4 @@
+import { text } from '@jirum/design-system/recipes';
 import { Metadata } from 'next';
 import { headers } from 'next/headers';
 import Image from 'next/image';
@@ -50,7 +51,7 @@ export default async function AppInstallPage({
           className="rounded-2xl shadow-sm"
           priority
         />
-        <h1 className="pt-6 text-2xl font-semibold text-gray-900">
+        <h1 className={cn(text.display, 'pt-6')}>
           <span className="shadow-primary-500 shadow-highlight inline-block font-extrabold">
             지름알림
           </span>{' '}
@@ -82,7 +83,7 @@ export default async function AppInstallPage({
           {/* UA 판정이 틀렸거나 다른 기기로 옮겨 설치하는 경우를 위한 탈출구. */}
           <a
             href={isIOS ? ANDROID_STORE_LINK : IOS_STORE_LINK}
-            className="mt-3 flex h-11 w-full items-center justify-center text-sm text-gray-500"
+            className={cn(text.muted, 'mt-3 flex h-11 w-full items-center justify-center')}
           >
             {isIOS ? 'Android 기기인가요?' : 'iPhone인가요?'}
           </a>

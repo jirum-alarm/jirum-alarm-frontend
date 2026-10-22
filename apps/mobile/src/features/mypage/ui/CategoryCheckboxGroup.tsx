@@ -8,6 +8,7 @@ import EtcOnIcon from '@/shared/components/icons/categories/EtcOnIcon';
 import {CATEGORIES} from '../lib/categories';
 import {tick} from '@/shared/lib/feedback';
 import PressableOpacity from '@/shared/components/PressableOpacity';
+import {text} from '@jirum/design-system/recipes';
 
 /**
  * 관심 카테고리 3열 체크박스. web `entities/category/ui/CategoriesCheckboxGroup`.
@@ -51,7 +52,7 @@ export default function CategoryCheckboxGroup({
                 번호가 어긋날 수 있다.
               */}
               <CategoryIcon value={category.value} />
-              <Text className="text-sm text-gray-700">{category.text}</Text>
+              <Text className={text.body}>{category.text}</Text>
             </View>
           </PressableOpacity>
         );

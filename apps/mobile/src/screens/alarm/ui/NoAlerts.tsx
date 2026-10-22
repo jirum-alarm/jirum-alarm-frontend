@@ -6,6 +6,8 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 import AlarmIllustError from '@/shared/components/icons/AlarmIllustError';
 import Button from '@/shared/components/ui/Button';
 import {useMyKeywordSet} from '@/entities/mypage/model/myKeywords';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 /**
  * 알림이 하나도 없을 때. web `features/alarm/ui/NoAlerts` 와 같은 문구·버튼.
@@ -21,7 +23,7 @@ export default function NoAlerts({
     <View className="flex-1 items-center justify-center p-11">
       <AlarmIllustError />
       <View className="pb-8 pt-4">
-        <Text className="pb-2 text-2xl font-semibold text-gray-900">
+        <Text className={cn(text.display, 'pb-2')}>
           {ALARM_COPY.emptyTitle}
         </Text>
         <Text className="text-center text-gray-500">

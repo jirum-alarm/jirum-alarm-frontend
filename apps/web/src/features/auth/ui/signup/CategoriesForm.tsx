@@ -1,4 +1,7 @@
+import { text } from '@jirum/design-system/recipes';
+
 import { MAX_SELECTION_COUNT } from '@/shared/config/categories';
+import { cn } from '@/shared/lib/cn';
 import Button from '@/shared/ui/common/Button';
 
 import CategoriesCheckboxGroup from '@/entities/category/ui/CategoriesCheckboxGroup';
@@ -37,7 +40,7 @@ export default CategoriesForm;
 
 const Description = () => {
   return (
-    <p className="pt-12 pb-4 text-center text-sm text-gray-500">
+    <p className={cn(text.muted, 'pt-12 pb-4 text-center')}>
       관심 분야는 나중에 다시 변경할 수 있어요!
     </p>
   );

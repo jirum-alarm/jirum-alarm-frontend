@@ -1,9 +1,11 @@
+import { text } from '@jirum/design-system/recipes';
 import { THEME_COPY } from '@jirum/domain/mypage';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
 import { checkDevice } from '@/shared/actions/agent';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
+import { cn } from '@/shared/lib/cn';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
@@ -44,7 +46,7 @@ const ThemesPage = async () => {
       <div className="mt-14 pt-8">
         <h1 className="sr-only">관심사별 핫딜 알림</h1>
         <SectionHeader title="관심사별 핫딜 알림" />
-        <p className="mb-8 text-center text-sm text-gray-500">{THEME_COPY.intro}</p>
+        <p className={cn(text.muted, 'mb-8 text-center')}>{THEME_COPY.intro}</p>
         <div className="max-w-layout-max mx-auto px-5 pb-16">
           <Suspense>
             <ThemeList isMobile={false} />
@@ -58,7 +60,7 @@ const ThemesPage = async () => {
     <BasicLayout hasBackButton title="관심사별 핫딜 알림">
       <div className="relative h-full px-5 py-6">
         <h1 className="sr-only">관심사별 핫딜 알림</h1>
-        <p className="mb-5 text-sm text-gray-500">{THEME_COPY.intro}</p>
+        <p className={cn(text.muted, 'mb-5')}>{THEME_COPY.intro}</p>
         <Suspense>
           <ThemeList isMobile />
         </Suspense>

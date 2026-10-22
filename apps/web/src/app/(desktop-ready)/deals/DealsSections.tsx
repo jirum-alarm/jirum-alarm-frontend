@@ -1,3 +1,7 @@
+import { sectionTitle, text } from '@jirum/design-system/recipes';
+
+import { cn } from '@/shared/lib/cn';
+
 import { buildModelDisplayName } from '@/features/deals/lib/model-page-insights';
 
 import DealsFoldedMore, { type FoldedLink } from './DealsFoldedMore';
@@ -44,8 +48,8 @@ export function SectionTitle({
   return (
     <div className="mb-4 flex items-end justify-between gap-3">
       <div>
-        <h2 className="text-lg font-bold text-gray-900">{title}</h2>
-        <p className="mt-0.5 text-sm text-gray-500">{description}</p>
+        <h2 className={sectionTitle.page}>{title}</h2>
+        <p className={cn(text.muted, 'mt-0.5')}>{description}</p>
       </div>
       {action}
     </div>

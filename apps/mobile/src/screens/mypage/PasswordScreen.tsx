@@ -21,6 +21,7 @@ import {useUpdatePassword} from '@/features/mypage/model/mutations';
 import {usePasswordCheck} from '@/features/mypage/model/usePasswordCheck';
 import {validatePassword} from '@/entities/mypage/lib/validation';
 import {showToast} from '@/shared/lib/feedback';
+import {text as textRole} from '@jirum/design-system/recipes';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -104,7 +105,7 @@ function CurrentPasswordStep({
         bottomOffset={88}
         keyboardShouldPersistTaps="handled">
         <View className="px-5 pt-[88px]">
-          <Text className="text-2xl font-semibold text-gray-900">
+          <Text className={textRole.display}>
             {'확인을 위해 현재 비밀번호를\n입력해주세요.'}
           </Text>
         </View>

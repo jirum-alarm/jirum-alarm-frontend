@@ -1,6 +1,6 @@
 import {prefetchProductDetail} from '@/entities/product/prefetch-detail';
 import React from 'react';
-import {productCard} from '@jirum/design-system/recipes';
+import {productCard, text} from '@jirum/design-system/recipes';
 import {getTossTimeDeal} from '@jirum/domain/toss-time-deal';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -202,7 +202,7 @@ export const ListCard = React.memo(function ListCard({
         {/* web `h-full justify-between` — 썸네일(76px) 높이에 맞춰 벌리되, 제목이 두 줄이면
             (40+4+28+4+16=92) 칸이 늘어나야 출처 줄이 다음 카드로 삐져나가지 않는다. */}
         <View className="min-h-[76px] flex-1 justify-between gap-1">
-          <Text className="text-sm text-gray-700" numberOfLines={2}>
+          <Text className={text.body} numberOfLines={2}>
             {product.title}
           </Text>
           <View className="flex-row items-center gap-2">

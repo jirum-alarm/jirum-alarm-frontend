@@ -1,10 +1,12 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { THEME_COPY } from '@jirum/domain/mypage';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 
 import { themePath } from '@/shared/api/notification/theme.service';
+import { cn } from '@/shared/lib/cn';
 
 import { ThemeQueries } from '@/entities/notification';
 
@@ -25,8 +27,8 @@ const MySubscribedThemes = () => {
   return (
     <div className="pb-6">
       <div className="mb-4 flex items-baseline justify-between">
-        <h2 className="text-base font-semibold text-gray-900">{THEME_COPY.mySubscribedTitle}</h2>
-        <Link href="/themes" className="text-xs text-gray-500 hover:text-gray-700">
+        <h2 className={text.subtitle}>{THEME_COPY.mySubscribedTitle}</h2>
+        <Link href="/themes" className={cn(text.caption, 'hover:text-gray-700')}>
           {THEME_COPY.browseMore} ›
         </Link>
       </div>
@@ -39,7 +41,7 @@ const MySubscribedThemes = () => {
             {/* 섹션 제목이 이미 "관심사" — 줄마다 붙던 라임 배지는 흰 바탕 대비 1.2:1 이라 뺐다. */}
             <Link href={themePath(theme)} className="flex min-w-0 items-center gap-2">
               {theme.emoji && <span aria-hidden>{theme.emoji}</span>}
-              <span className="truncate text-sm font-semibold text-gray-900">{theme.name}</span>
+              <span className={cn(text.label, 'truncate')}>{theme.name}</span>
             </Link>
             <button
               type="button"

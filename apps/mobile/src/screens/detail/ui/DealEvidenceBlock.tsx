@@ -1,4 +1,4 @@
-import {infoBox} from '@jirum/design-system/recipes';
+import {infoBox, text} from '@jirum/design-system/recipes';
 import React, {useEffect, useRef} from 'react';
 import {Dimensions, Pressable, View} from 'react-native';
 import Svg, {Circle, Path} from 'react-native-svg';
@@ -109,7 +109,7 @@ export default function DealEvidenceBlock({
       accessibilityLabel="근거 보기"
       // ★함수형 style 엔 opacity 만(레이아웃을 섞으면 NativeWind 가 떨군다).
       style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-      <Text className="text-xs text-gray-500">근거 보기 ›</Text>
+      <Text className={text.caption}>근거 보기 ›</Text>
     </Pressable>
   ) : null;
 
@@ -132,7 +132,7 @@ export default function DealEvidenceBlock({
           )}
         </View>
         <View className="min-w-0 flex-1 pt-0.5">
-          <Text className="text-sm font-semibold text-gray-900">
+          <Text className={text.label}>
             {part && at >= 0 ? (
               <>
                 {headline.title.slice(0, at)}
@@ -144,7 +144,7 @@ export default function DealEvidenceBlock({
             )}
           </Text>
           {headline.detail ? (
-            <Text className="mt-0.5 text-xs text-gray-500">
+            <Text className={cn(text.caption, 'mt-0.5')}>
               {headline.detail}
             </Text>
           ) : null}

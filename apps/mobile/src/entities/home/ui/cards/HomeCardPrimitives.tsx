@@ -1,6 +1,10 @@
 import React from 'react';
 import {View} from 'react-native';
-import {cardThumb, productCard} from '@jirum/design-system/recipes';
+import {
+  cardThumb,
+  productCard,
+  text as textRole,
+} from '@jirum/design-system/recipes';
 import {
   formatCountdown,
   getTimeDealOpening,
@@ -155,7 +159,7 @@ export function TossTimeDealPrice({
       {opening ? (
         <TimeDealCountdown openAt={opening.openAt} />
       ) : timeDeal?.viewCountText ? (
-        <Text className="pt-0.5 text-xs text-gray-500" numberOfLines={1}>
+        <Text className={cn(textRole.caption, 'pt-0.5')} numberOfLines={1}>
           {timeDeal.viewCountText}
         </Text>
       ) : null}

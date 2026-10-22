@@ -9,6 +9,8 @@ import {Analytics} from '@/shared/lib/analytics/ga4';
 
 import {useKeywordAlert} from '../model/useKeywordAlert';
 import {useColors} from '@/shared/theme/useColors';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 /**
  * 검색한 바로 그 단어로 **한 번에** 알림을 건다. 예전엔 "키워드 등록" 이 빈 키워드 화면으로
@@ -71,7 +73,7 @@ export default function KeywordAlertButton({
 
   return (
     <View className="mx-5 mb-3 flex-row items-center gap-x-3 rounded-xl bg-gray-50 py-2 pl-4 pr-2">
-      <Text className="min-w-0 flex-1 text-sm text-gray-700" numberOfLines={1}>
+      <Text className={cn(text.body, 'min-w-0 flex-1')} numberOfLines={1}>
         <Text className="font-semibold text-gray-900">‘{trimmed}’</Text>
         {isOn ? SEARCH_ALERT_BAR_COPY.on : SEARCH_ALERT_BAR_COPY.off}
       </Text>

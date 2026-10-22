@@ -3,7 +3,7 @@ import {ActivityIndicator, Pressable, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import type {LayoutChangeEvent} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
-import {sectionTitle, tab} from '@jirum/design-system/recipes';
+import {sectionTitle, tab, text} from '@jirum/design-system/recipes';
 
 import {ProductQueries} from '@/entities/product/product.queries';
 import {ProductService} from '@/shared/api/product/product.service';
@@ -303,7 +303,7 @@ export default function PriceHistorySection({
           </View>
         ) : null}
 
-        <Text className="px-5 pt-2 text-xs text-gray-500">
+        <Text className={cn(text.caption, 'px-5 pt-2')}>
           이 기간 핫딜 {points.length}건 · {rangeLabel}
         </Text>
 
@@ -311,13 +311,13 @@ export default function PriceHistorySection({
         <View className="mx-5 mt-3 rounded-xl bg-gray-50 px-4 py-3.5">
           <View className="flex-row">
             <View className="flex-1 gap-y-0.5">
-              <Text className="text-xs text-gray-500">최저</Text>
+              <Text className={text.caption}>최저</Text>
               <Text className="text-sm font-bold text-error-600">
                 {won(minPrice, currency)}
               </Text>
             </View>
             <View className="flex-1 items-center gap-y-0.5">
-              <Text className="text-xs text-gray-500">현재가</Text>
+              <Text className={text.caption}>현재가</Text>
               <Text className="text-sm font-bold text-gray-900">
                 {shownCurrentPrice != null
                   ? won(shownCurrentPrice, currency)
@@ -325,7 +325,7 @@ export default function PriceHistorySection({
               </Text>
             </View>
             <View className="flex-1 items-end gap-y-0.5">
-              <Text className="text-xs text-gray-500">최고</Text>
+              <Text className={text.caption}>최고</Text>
               <Text className="text-sm font-bold text-secondary-600">
                 {won(maxPrice, currency)}
               </Text>

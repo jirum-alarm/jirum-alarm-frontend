@@ -35,6 +35,8 @@ import {
 import ShareSheet from '@/screens/detail/ui/ShareSheet';
 import {openSearch} from '@/shared/lib/navigation/search-flow';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 /**
  * 더보기(큐레이션) 화면. web: app/(desktop-ready)/curation/[id]
@@ -165,10 +167,8 @@ export default function CurationScreen({
     // 없는 id(낡은 딥링크 등). web 은 notFound() — 스피너에 멈춰 두지 않는다.
     return (
       <View className="flex-1 items-center justify-center bg-white px-5">
-        <Text className="text-base font-semibold text-gray-900">
-          페이지를 찾을 수 없어요
-        </Text>
-        <Text className="mt-2 text-center text-sm text-gray-500">
+        <Text className={text.subtitle}>페이지를 찾을 수 없어요</Text>
+        <Text className={cn(text.muted, 'mt-2 text-center')}>
           종료되었거나 주소가 바뀐 모아보기예요.
         </Text>
       </View>

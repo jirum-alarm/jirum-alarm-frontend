@@ -17,6 +17,8 @@ import StackHeader from '@/features/mypage/ui/StackHeader';
 import {FORM_CTA_BOTTOM} from '@/features/mypage/ui/Rows';
 import {useUpdateCategories} from '@/features/mypage/model/mutations';
 import {MAX_SELECTION_COUNT} from '@/features/mypage/lib/categories';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -74,7 +76,7 @@ export default function CategoriesScreen({navigation}: Props) {
       ) : (
         <ScrollView contentContainerStyle={contentStyle}>
           <View className="px-5 pt-6" style={styles.grow}>
-            <Text className="pb-7 text-sm text-gray-700">
+            <Text className={cn(text.body, 'pb-7')}>
               {'내 관심사는 최대 5개까지\n선택할 수 있어요.'}
             </Text>
             <CategoryCheckboxGroup selected={selected} onToggle={toggle} />

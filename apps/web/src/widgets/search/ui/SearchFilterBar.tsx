@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { PERIOD_LABELS, SORT_LABELS } from '@jirum/domain/search';
 import { useQuery } from '@tanstack/react-query';
 
@@ -15,7 +16,7 @@ import { SEARCH_PERIODS, SEARCH_SORTS, SearchFiltersController } from '../hooks/
 function FilterRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-2">
-      <span className="w-11 shrink-0 text-xs text-gray-500">{label}</span>
+      <span className={cn(text.caption, 'w-11 shrink-0')}>{label}</span>
       <div className="scrollbar-hide pc:mr-0 pc:pr-0 -mr-5 flex min-w-0 flex-1 gap-1.5 overflow-x-auto py-0.5 pr-5">
         {children}
       </div>
@@ -87,12 +88,12 @@ export default function SearchFilterBar({ controller }: { controller: SearchFilt
             <button
               type="button"
               onClick={resetFilters}
-              className="py-2 text-sm text-gray-500 underline underline-offset-2"
+              className={cn(text.muted, 'py-2 underline underline-offset-2')}
             >
               초기화
             </button>
           )}
-          <label className="flex cursor-pointer items-center gap-1.5 py-2 text-sm text-gray-500">
+          <label className={cn(text.muted, 'flex cursor-pointer items-center gap-1.5 py-2')}>
             <input
               type="checkbox"
               checked={filters.ended}

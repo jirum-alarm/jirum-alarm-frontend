@@ -1,6 +1,6 @@
 'use client';
 
-import { wordTag } from '@jirum/design-system/recipes';
+import { sectionTitle, text, wordTag } from '@jirum/design-system/recipes';
 import { THEME_COPY } from '@jirum/domain/mypage';
 import { useQuery, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -56,9 +56,7 @@ const ThemeDealList = ({ themeId }: { themeId: number }) => {
 
   if (deals.length === 0) {
     return (
-      <p className="py-10 text-center text-sm text-gray-500">
-        아직 이 관심사에 맞는 딜이 없었어요.
-      </p>
+      <p className={cn(text.muted, 'py-10 text-center')}>아직 이 관심사에 맞는 딜이 없었어요.</p>
     );
   }
 
@@ -188,8 +186,8 @@ const ConditionRow = ({
       {icon}
     </span>
     <div className="min-w-0 flex-1">
-      <p className="text-sm font-semibold text-gray-900">{title}</p>
-      <div className="mt-0.5 text-sm text-gray-500">{children}</div>
+      <p className={text.label}>{title}</p>
+      <div className={cn(text.muted, 'mt-0.5')}>{children}</div>
     </div>
   </li>
 );
@@ -209,16 +207,12 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
 
   return (
     <div className={isMobile ? 'pb-10' : 'pb-16'}>
-      {isMobile ? (
-        <h2 className="text-lg font-bold text-gray-900">{title}</h2>
-      ) : (
-        <SectionHeader title={title} />
-      )}
+      {isMobile ? <h2 className={sectionTitle.page}>{title}</h2> : <SectionHeader title={title} />}
 
       <div className={cn('mt-1', !isMobile && 'mx-auto max-w-xl text-center')}>
-        <p className="text-sm text-gray-500">{theme.description}</p>
+        <p className={text.muted}>{theme.description}</p>
         {theme.subscriberCount >= SUBSCRIBER_COUNT_MIN_VISIBLE && (
-          <p className="mt-1 text-xs text-gray-500">
+          <p className={cn(text.caption, 'mt-1')}>
             {theme.subscriberCount.toLocaleString()}명이 알림 받는 중
           </p>
         )}
@@ -235,7 +229,7 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
         >
           {isSubscribed ? THEME_COPY.subscribedToggle : '알림 받기'}
         </Button>
-        <p className="mt-2 text-xs text-gray-500">
+        <p className={cn(text.caption, 'mt-2')}>
           키워드를 하나하나 등록하지 않아도, 반응 좋은 딜만 하루 최대 3건 보내드려요.
         </p>
       </div>

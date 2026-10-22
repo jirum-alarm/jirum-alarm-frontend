@@ -1,6 +1,6 @@
 'use client';
 
-import { infoBox } from '@jirum/design-system/recipes';
+import { infoBox, text as textRole } from '@jirum/design-system/recipes';
 import { useEffect, useRef } from 'react';
 
 import { ProductService } from '@/shared/api/product';
@@ -89,7 +89,7 @@ export default function DealEvidenceBlock({ productId, source, evidence }: Props
     <button
       type="button"
       onClick={onMore}
-      className="shrink-0 text-xs text-gray-500"
+      className={cn(textRole.caption, 'shrink-0')}
       aria-label="근거 보기"
     >
       근거 보기 ›
@@ -116,11 +116,11 @@ export default function DealEvidenceBlock({ productId, source, evidence }: Props
           {isPeople ? <PeopleIcon /> : <TagIcon />}
         </span>
         <div className="min-w-0 pt-0.5">
-          <p className="text-sm font-semibold text-gray-900">
+          <p className={textRole.label}>
             <Highlighted text={headline.title} part={strong ? headline.highlight : null} />
           </p>
           {headline.detail ? (
-            <p className="mt-0.5 text-xs text-gray-500">{headline.detail}</p>
+            <p className={cn(textRole.caption, 'mt-0.5')}>{headline.detail}</p>
           ) : null}
           {/* 덧붙일 줄이 없으면 구분선 없이 본문 아래에 — 링크 하나만 떨어져 있으면 빈 칸처럼 보였다. */}
           {!hasFooter && moreButton ? <div className="mt-1.5">{moreButton}</div> : null}

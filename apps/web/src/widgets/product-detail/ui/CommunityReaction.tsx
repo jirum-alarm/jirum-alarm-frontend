@@ -1,6 +1,6 @@
 'use client';
 
-import { emptyText, wordTag } from '@jirum/design-system/recipes';
+import { emptyText, text, wordTag } from '@jirum/design-system/recipes';
 import { buildDealStatusSummary, splitReactionKeywords } from '@jirum/domain/deal-status-reaction';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import * as m from 'motion/react-m';
@@ -149,7 +149,7 @@ export default function CommunityReaction({ productId }: { productId: number }) 
               <span className="text-base font-semibold text-gray-800">
                 {isPositive ? '추천해요' : '아쉬워요'}
               </span>
-              <span className="text-sm text-gray-500 tabular-nums">· {share}</span>
+              <span className={cn(text.muted, 'tabular-nums')}>· {share}</span>
             </div>
           ) : (
             <p className={emptyText}>아직 모은 반응이 없어요</p>
@@ -164,12 +164,12 @@ export default function CommunityReaction({ productId }: { productId: number }) 
             </ul>
           )}
 
-          {statusSummary && <p className="text-xs text-gray-500">{statusSummary.message}</p>}
+          {statusSummary && <p className={text.caption}>{statusSummary.message}</p>}
 
           {commentSummary && <Reactions commentSummary={commentSummary} />}
 
           <div className="border-secondary-100 flex items-center justify-between gap-2 border-t pt-3">
-            <span className="text-xs text-gray-500">{lastUpdatedAt ?? '\u00a0'}</span>
+            <span className={text.caption}>{lastUpdatedAt ?? '\u00a0'}</span>
             {product.url && !MALL_SOURCED_PROVIDER_IDS.has(product.provider.id) ? (
               <CommunityLink url={product.url} provider={product.provider.nameKr} />
             ) : null}

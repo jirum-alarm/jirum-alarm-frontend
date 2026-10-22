@@ -1,8 +1,10 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { useEffect, useState } from 'react';
 
 import { APP_QR_PATH } from '@/shared/config/appStore';
+import { cn } from '@/shared/lib/cn';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { PushStatus, readPushStatus as readStatus } from '@/shared/lib/push-channel/pushChannel';
 
@@ -28,12 +30,12 @@ const PushStatusBanner = () => {
   };
 
   return (
-    <div className="mb-6 rounded-lg bg-gray-50 p-4 text-sm text-gray-700">
+    <div className={cn(text.body, 'mb-6 rounded-lg bg-gray-50 p-4')}>
       {/* 알림 설정 화면에서도 쓴다 — 스위치가 다 켜져 있어도 이 상태면 아무것도 안 온다. PC 도 있어 "휴대폰" 이라 하지 않는다. */}
       <p className="font-medium text-gray-900">지금은 이 기기로 알림이 오지 않아요</p>
       {status === 'default' && (
         <>
-          <p className="mt-1 text-xs text-gray-500">브라우저 알림을 켜면 바로 받아볼 수 있어요.</p>
+          <p className={cn(text.caption, 'mt-1')}>브라우저 알림을 켜면 바로 받아볼 수 있어요.</p>
           <button
             type="button"
             onClick={handleEnable}
@@ -44,13 +46,13 @@ const PushStatusBanner = () => {
         </>
       )}
       {status === 'denied' && (
-        <p className="mt-1 text-xs text-gray-500">
+        <p className={cn(text.caption, 'mt-1')}>
           이 브라우저에서 알림이 차단돼 있어요. 주소창의 사이트 설정에서 알림을 허용하거나, 앱을
           설치해 주세요.
         </p>
       )}
       {status === 'unsupported' && (
-        <p className="mt-1 text-xs text-gray-500">
+        <p className={cn(text.caption, 'mt-1')}>
           이 브라우저는 푸시 알림을 지원하지 않아요(아이폰 사파리는 홈 화면에 추가해야 해요). 앱을
           설치하면 바로 받아볼 수 있어요.
         </p>

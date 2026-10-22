@@ -178,6 +178,38 @@ test('web 에서 주 버튼 모양을 손으로 다시 적지 않는다(Button·
   assert.deepEqual(offenders, []);
 });
 
+// 글자는 역할(text.caption·muted…)로 — 같은 조합을 손으로 적은 곳이 web ~300·앱 ~150곳이라 역할을 고쳐도 화면이 안 따라왔다(2026-10-22 일괄 치환).
+// 역할의 클래스가 다 있고 같은 묶음(크기·굵기·색)의 다른 값이 없는 문자열 = 그 역할을 손으로 다시 적은 것.
+const ROLE_SIZE = /^text-(?:10|11|xs|13|sm|15|base|lg|xl|22|2xl|28|[3-9]xl|\[.+\])$/;
+const ROLE_WEIGHT = /^font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)$/;
+const ROLE_COLOR = /^text-(?:white|black|transparent|current|inherit|(?:gray|primary|secondary|error|success|warning|fixed|kakao|naver)(?:-\w+)?(?:\/\d+)?)$/;
+const handWrittenRole = (literal) => {
+  const toks = literal.trim().split(/\s+/);
+  for (const [name, recipe] of Object.entries(recipes.text)) {
+    const need = recipe.split(' ');
+    if (!need.every((t) => toks.includes(t))) continue;
+    const rest = toks.filter((t) => !need.includes(t));
+    if (!rest.some((t) => ROLE_SIZE.test(t) || ROLE_WEIGHT.test(t) || ROLE_COLOR.test(t))) return name;
+  }
+  return null;
+};
+
+test('web·앱에서 글자 역할(text.*) 조합을 손으로 다시 적지 않는다', () => {
+  assert.equal(handWrittenRole('mt-1 text-xs text-gray-500'), 'caption');
+  assert.equal(handWrittenRole('text-xs font-medium text-gray-500'), null);
+  const offenders = [];
+  for (const dir of ['apps/web/src', 'apps/mobile/src']) {
+    for (const f of sourcesUnder(dir)) {
+      const src = readFileSync(join(root, f), 'utf8');
+      for (const [, , body] of src.matchAll(/(^|[^\w])['"]([^'"\n]*\btext-(?:2xl|lg|base|sm|xs)\b[^'"\n]*)['"]/g)) {
+        const role = handWrittenRole(body);
+        if (role) offenders.push(`${f}: '${body}' → text.${role}`);
+      }
+    }
+  }
+  assert.deepEqual(offenders, []);
+});
+
 test('홈 랭킹 카드 크기 — web 클래스·앱 숫자가 layout.rankingCard 와 같다', () => {
   // 앱은 layout 숫자를 import 하고(Animated·스켈레톤), web 은 같은 값의 클래스를 쓴다(PC 에선 pc:h-auto 로 풀어야 해 style 로 못 옮긴다).
   const {layout} = require('./layout.js');

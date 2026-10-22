@@ -35,6 +35,8 @@ import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import ShareSheet from '@/screens/detail/ui/ShareSheet';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import type {CommunityComment} from '@/shared/api/community';
+import {text} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling/className';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -197,9 +199,7 @@ export default function CommunityPostScreen({route, navigation}: Props) {
                 }
               />
               <View className="px-5 pb-2 pt-4">
-                <Text className="text-base font-semibold text-gray-900">
-                  댓글
-                </Text>
+                <Text className={text.subtitle}>댓글</Text>
               </View>
             </>
           }
@@ -210,7 +210,7 @@ export default function CommunityPostScreen({route, navigation}: Props) {
               </View>
             ) : (
               <View className="py-8">
-                <Text className="text-center text-sm text-gray-500">
+                <Text className={cn(text.muted, 'text-center')}>
                   첫 번째 댓글을 남겨보세요
                 </Text>
               </View>

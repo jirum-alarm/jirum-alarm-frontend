@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import {
   DEFAULT_QUIET_HOURS,
   describeQuietHours,
@@ -36,7 +37,7 @@ const QuietHoursRow = ({ start, end, nightAlerts, disabled, onChange }: Props) =
       <div className="flex items-center gap-4">
         <label htmlFor={id} className="flex min-w-0 flex-1 cursor-pointer flex-col gap-0.5">
           <span className="font-medium text-gray-900">방해금지 시간</span>
-          <span className="text-sm text-gray-500">
+          <span className={text.muted}>
             정한 시간엔 알림을 울리지 않고, 끝나는 시각에 모아서 보내드려요. 알림함에는 바로 쌓여요
           </span>
         </label>

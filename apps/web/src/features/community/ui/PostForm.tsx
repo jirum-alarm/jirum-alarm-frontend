@@ -1,7 +1,9 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 
+import { cn } from '@/shared/lib/cn';
 import Button from '@/shared/ui/common/Button';
 
 import { AuthQueries } from '@/entities/auth';
@@ -65,7 +67,10 @@ export default function PostForm({
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력해 주세요"
           aria-label="제목"
-          className="mb-3 w-full border-b border-gray-100 pb-3 text-base font-semibold text-gray-900 placeholder-gray-500 outline-none"
+          className={cn(
+            text.subtitle,
+            'mb-3 w-full border-b border-gray-100 pb-3 placeholder-gray-500 outline-none',
+          )}
         />
 
         <textarea
@@ -127,7 +132,7 @@ export default function PostForm({
               </div>
             </div>
           ) : (
-            <span className="flex items-center gap-x-2 text-sm text-gray-500">
+            <span className={cn(text.muted, 'flex items-center gap-x-2')}>
               <span className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 text-gray-500">
                 <svg
                   width="12"

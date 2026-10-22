@@ -30,7 +30,7 @@ import {dealFreshnessAt, isSeenBasedFreshness} from '../lib/price-signals';
 import type {EvidenceTargetsReady} from '../lib/evidence-target';
 import {stripPriceFromTitle} from '@/entities/home/lib/toss';
 import Badge from '@/shared/components/ui/Badge';
-import {detailInfo} from '@jirum/design-system/recipes';
+import {detailInfo, text} from '@jirum/design-system/recipes';
 import {cn} from '@/shared/lib/styling';
 
 export default function ProductInfo({
@@ -91,14 +91,12 @@ export default function ProductInfo({
         <View className="flex-row items-center justify-between gap-x-3">
           <View className="min-w-0 flex-1">
             {hidePrice ? (
-              <Text className="text-lg font-semibold text-gray-900">
-                토스에서 가격 확인
-              </Text>
+              <Text className={text.title}>토스에서 가격 확인</Text>
             ) : (
               <>
                 {display?.originalPrice ? (
                   // gray-400 은 흰 배경 대비 AA 미달이라 gray-500.
-                  <Text className="text-sm text-gray-500 line-through">
+                  <Text className={cn(text.muted, 'line-through')}>
                     {display.originalPrice.toLocaleString()}원
                   </Text>
                 ) : null}
@@ -123,7 +121,7 @@ export default function ProductInfo({
           (!hidePrice && display.couponDiscount)) ? (
           <View className="flex-row flex-wrap items-center gap-x-2 pt-1">
             {typeof display.rating === 'number' ? (
-              <Text className="text-sm text-gray-500">
+              <Text className={text.muted}>
                 <Text className="text-warning-400">★</Text> {display.rating}
                 {display.reviewCount
                   ? ` (${display.reviewCount.toLocaleString()})`
@@ -217,7 +215,7 @@ export default function ProductInfo({
           <Text className="mb-2 text-sm font-medium text-gray-500">
             상품 설명
           </Text>
-          <Text className="text-sm leading-relaxed text-gray-700">
+          <Text className={cn(text.body, 'leading-relaxed')}>
             {product.content}
           </Text>
         </View>

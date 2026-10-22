@@ -1,11 +1,13 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { COMMUNITY_HOT_DEAL_OPTIONS, dailyHotDealOptionIndex } from '@jirum/domain/community';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Suspense, useMemo } from 'react';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
+import { cn } from '@/shared/lib/cn';
 import { getDayBefore } from '@/shared/lib/utils/date';
 import { Skeleton } from '@/shared/ui/common/Skeleton';
 
@@ -102,10 +104,10 @@ export default function CommunityHotDeals() {
   return (
     <section className="mt-2 border-t border-gray-100 pt-4">
       <div className="mb-3 flex items-center justify-between px-5">
-        <h2 className="text-sm font-semibold text-gray-900">{option.label}</h2>
+        <h2 className={text.label}>{option.label}</h2>
         <Link
           href={option.link}
-          className="text-xs text-gray-500 transition-transform active:scale-95"
+          className={cn(text.caption, 'transition-transform active:scale-95')}
         >
           더보기
         </Link>

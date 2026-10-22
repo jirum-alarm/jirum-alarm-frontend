@@ -1,4 +1,4 @@
-import {keywordChip} from '@jirum/design-system/recipes';
+import {keywordChip, text} from '@jirum/design-system/recipes';
 import React from 'react';
 import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import PressableOpacity from '@/shared/components/PressableOpacity';
@@ -54,7 +54,7 @@ export default function RecentKeywords({
             accessibilityRole="button"
             accessibilityLabel="최근 검색어 전체 삭제"
             style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-            <Text className="text-sm text-gray-500">전체 삭제</Text>
+            <Text className={text.muted}>전체 삭제</Text>
           </Pressable>
         }
       />

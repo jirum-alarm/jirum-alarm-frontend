@@ -5,6 +5,7 @@ import {formatCountdown, nextKstMidnight} from '@jirum/domain/toss-time-deal';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useNow} from '@/shared/hooks/useNow';
 import {cn} from '@/shared/lib/styling';
+import {text} from '@jirum/design-system/recipes';
 
 /** 「선착순·타임특가」 섹션 id — 홈 섹션·더보기가 이 섹션에만 타이머를 단다. */
 export const TIME_DEAL_SECTION_ID = 'time-deal';
@@ -25,7 +26,7 @@ export default function TimeDealTimerBar({className}: {className?: string}) {
         style={{fontVariant: ['tabular-nums']}}>
         {formatCountdown(nextKstMidnight(now) - now)}
       </Text>
-      <Text className="text-sm text-gray-500">· 밤 12시 새 특가 오픈</Text>
+      <Text className={text.muted}>· 밤 12시 새 특가 오픈</Text>
     </View>
   );
 }

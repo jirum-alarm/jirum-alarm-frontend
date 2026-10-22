@@ -1,5 +1,6 @@
 'use client';
 
+import { text } from '@jirum/design-system/recipes';
 import { REPORT_REASON_OPTIONS } from '@jirum/domain/community';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -57,8 +58,8 @@ export default function ReportModal({
     <Drawer.Root open={isOpen} onOpenChange={(open) => !open && handleClose()}>
       <BottomSheetContent srTitle="글 신고하기">
         <div className="flex flex-col px-5 pt-6 pb-8">
-          <h2 className="mb-4 text-base font-semibold text-gray-900">글 신고하기</h2>
-          <p className="mb-4 text-sm text-gray-500">
+          <h2 className={cn(text.subtitle, 'mb-4')}>글 신고하기</h2>
+          <p className={cn(text.muted, 'mb-4')}>
             신고 사유를 선택하면 운영팀이 검토 후 처리해드릴게요.
           </p>
 
