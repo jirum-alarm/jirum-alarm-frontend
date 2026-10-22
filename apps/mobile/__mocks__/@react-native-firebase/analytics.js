@@ -16,12 +16,18 @@
 const logEvent = jest.fn(() => Promise.resolve());
 const setUserId = jest.fn(() => Promise.resolve());
 const logScreenView = jest.fn(() => Promise.resolve());
+const setUserProperty = jest.fn(() => Promise.resolve());
 
-const analytics = jest.fn(() => ({logEvent, setUserId, logScreenView}));
+const analytics = jest.fn(() => ({
+  logEvent,
+  setUserId,
+  logScreenView,
+  setUserProperty,
+}));
 
 module.exports = {
   __esModule: true,
   default: analytics,
   // 테스트에서 호출 여부를 보고 싶을 때 쓸 수 있게 노출한다.
-  __mockFns: {logEvent, setUserId, logScreenView},
+  __mockFns: {logEvent, setUserId, logScreenView, setUserProperty},
 };
