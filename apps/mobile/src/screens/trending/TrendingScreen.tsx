@@ -1,7 +1,7 @@
 import React, {useCallback, useMemo} from 'react';
 import {View} from 'react-native';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SystemBars} from 'react-native-edge-to-edge';
@@ -52,6 +52,7 @@ type Nav = NativeStackNavigationProp<TabStackParamList>;
 
 export default function TrendingScreen() {
   const navigation = useNavigation<Nav>();
+  const isFocused = useIsFocused();
   const insets = useSafeAreaInsets();
   // 카테고리도 store 가 정본 — 밖(`/trending/ranking?tab=N`)에서 지정할 수 있어야 한다.
   const categoryId = useTrendingCategory();
@@ -169,7 +170,8 @@ export default function TrendingScreen() {
   return (
     <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>
       {/* 흰 배경이라 상태바 글씨는 어둡게. 홈(다크 헤더)과 다르다. */}
-      <SystemBars style="auto" hidden={false} />
+      {/* 보일 때만 — 시작 2초 뒤 미리 그려질 때 홈의 상태바(흰 글자)를 덮지 않게(HomeStatusBar 참고). */}
+      {isFocused ? <SystemBars style="auto" hidden={false} /> : null}
 
       {/* web TrendingPageHeader — h1 은 sr-only 라 화면엔 탭만 보인다. */}
       <TrendingTopTabs active={view} onSelect={requestTrendingView} />

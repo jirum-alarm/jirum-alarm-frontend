@@ -17,7 +17,11 @@ import {
 } from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SystemBars} from 'react-native-edge-to-edge';
@@ -473,6 +477,10 @@ function HomeStickyHeader({onPressLogo}: {onPressLogo: () => void}) {
  * 안 되므로, 즉시 바꾸면 아직 다크 헤더인데 글씨가 검어 안 보이고,
  * 끝나고 바꾸면 흰 헤더에 흰 글씨가 된다.
  * 상단 다크 헤더 위에선 상태바를 밝게(웹뷰 시절 TabWebView 가 하던 일).
+ *
+ * ★보일 때만 건다 — SystemBars 는 마운트된 것 중 나중 것이 이긴다. 시작 2초 뒤 미리 그리는 발견·키워드 탭(PRELOAD_TABS)이
+ * 'auto' 로 덮어 홈 맨 위가 어두운 띠에 검은 시계가 됐고(듀오는 상태 표시줄 기둥까지 흰색), 홈 것이 남아 있으면
+ * 상태바를 안 거는 내정보 탭이 홈의 흰 글자를 물려받는다.
  */
 function HomeStatusBar() {
   const isScrolled = useHomeScrolled();
@@ -487,5 +495,5 @@ function HomeStatusBar() {
     );
     return () => clearTimeout(timer);
   }, [isScrolled]);
-  return <SystemBars style={style} hidden={false} />;
+  return useIsFocused() ? <SystemBars style={style} hidden={false} /> : null;
 }
