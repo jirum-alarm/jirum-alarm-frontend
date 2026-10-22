@@ -194,7 +194,7 @@ pnpm build            # Production build
     발행 전 커밋본으로 되돌린다(안 하면 `native:check` 가 막는다). 마지막 OTA 커밋이 이미 다음 runtime 으로 올린 커밋이면 재현 불가 — 건너뛴다.
     **`ota/runtime-<버전>` 브랜치가 이미 있으면 한 줄로**: `bash apps/mobile/scripts/ota-backport.sh --runtime <버전> --app <그 버전 Release .app> <커밋…>`
     (브랜치 끝 워크트리 → cherry-pick → 설치·tsc·지문·jest(CI 조건) → 기동 확인 → 원격 끝 재확인 → `ota:publish` → push → 매니페스트 확인. `--dry-run` 은 발행 직전까지).
-    JS 수정은 스토어에 나가 있는 runtime **전부**(10/21 기준 1.5.6·1.5.5·1.5.4(Android 만 — iOS 는 1.5.4 바이너리가 없다)·1.5.3·1.5.2·1.5.1·1.5.0·1.4.8·1.4.7 — main 은 1.5.7(스토어 출시 전). `ota/runtime-1.5.6` = e7763942(1.5.6 마지막 자동 OTA), `ota/runtime-1.5.5` = 0f22db4a(1.5.5 마지막 자동 OTA), `ota/runtime-1.5.4` = 4f614dac)에 따로 낸다 — `--runtime all` 이 origin 의 `ota/runtime-*` 전부를 돈다.
+    JS 수정은 스토어에 나가 있는 runtime **전부**(10/22 기준 1.5.7·1.5.6·1.5.5·1.5.4(Android 만 — iOS 는 1.5.4 바이너리가 없다)·1.5.3·1.5.2·1.5.1·1.5.0·1.4.8·1.4.7 — main 은 1.5.8(스토어 출시 전 — 네이티브 변경 없이 듀오용 Xcode 27.1 SDK 빌드). `ota/runtime-1.5.7` = 78315f08(1.5.7 마지막 자동 OTA), `ota/runtime-1.5.6` = e7763942(1.5.6 마지막 자동 OTA), `ota/runtime-1.5.5` = 0f22db4a(1.5.5 마지막 자동 OTA), `ota/runtime-1.5.4` = 4f614dac)에 따로 낸다 — `--runtime all` 이 origin 의 `ota/runtime-*` 전부를 돈다.
     **어느 runtime 까지?** 지난 7일 앱 활성 사용자(GA4 `appVersion` — 바이너리 버전이라 OTA 와 무관)의 **10% 이상**이면 낸다, 그 아래로 떨어지면 끊는다.
     (2026-10-13 판정: 1.4.7·1.4.8·1.5.0 셋 다 기준 이상 — 버전별 수치는 vault.)
     `ota/runtime-1.5.3` 은 1.5.3 마지막 자동 OTA 커밋(57a5ca0f)에서 시작(10/16 Android 앱 링크 경로로 1.5.4 를 올리기 직전). `ota/runtime-1.5.1` 은 1.5.1 마지막 자동 OTA 커밋(620b2b75)에서 시작(10/13 1.5.2 를 main 에 합치기 직전). `ota/runtime-1.4.7` 은 1.4.8 브랜치 JS 를 runtime 1.4.7 로 낸 것(10/13) — 기동 확인 .app 은 EAS 1.4.7 sim-check 빌드
@@ -207,7 +207,7 @@ pnpm build            # Production build
 - "배포됐나"는 스토어 실물 버전으로 판정한다(`app-store-lag` 워크플로) — EAS submit 성공 ≠ 출시.
 - **아이폰 듀오(폴더블, 2026-10-23 출시)·좌우 safe area**: iOS 27.1 SDK 로 빌드하면 듀오는 상태 표시줄이 오른쪽 위 세로 기둥이고 그 폭을 오른쪽 inset 으로 준다(접힌 바깥 화면 466×678pt·right 84 — 시뮬 실측).
   앱 루트 `SideSafeArea` 가 앱 전체를 좌우 inset 만큼 들이고 안쪽엔 좌우 0 을 알린다 — 화면에서 `insets.left/right` 를 더하지 말 것, 폭으로 크기를 재는 곳은 `useWindowDimensions` 대신 `useContentWidth()`(RN Modal 안만 예외 — 별도 창이라 안에 `SafeAreaProvider`).
-  들인 기둥 색은 상태 표시줄 글자색의 반대로 따라간다. 스토어 바이너리가 Xcode 26 SDK 면 듀오에선 애플 호환 모드로 돈다 — EAS production 이미지는 `macos-tahoe-26.6-xcode-27.1` 로 고정.
+  들인 기둥 색은 상태 표시줄 글자색의 반대로 따라간다. 스토어 바이너리가 Xcode 26 SDK 면 듀오에선 애플 호환 모드로 돈다(1.5.7 까지) — EAS production 이미지는 `macos-tahoe-26.6-xcode-27.1` 로 고정, 1.5.8 부터 듀오 전체 화면.
   검증: `SCREENS_DEVICE_TYPE=com.apple.CoreSimulator.SimDeviceType.iPhone-Duo BOOT_RUNTIME=com.apple.CoreSimulator.SimRuntime.iOS-27-1 SCREENS_DISPLAY=1 SCREENS_BOOT_SETTLE=150 SCREENS_API=fixture bash apps/mobile/scripts/screens-ios.sh <Release .app>`(바깥 화면). 펼친 안쪽 화면(669×951pt)은 Device Hub 버튼으로만 바뀐다 — 맥 앞에서 손으로.
 - **다크모드 = OS 설정을 따른다(2026-10-01). 내정보 > 화면 모드에서 라이트/다크 고정 가능(`color-scheme-preference.ts` → `Appearance.setColorScheme`).** 색 정본은 `packages/design-system/tokens.js` 한 곳(web 과 같은 값) — tailwind 토큰이 `:root` 변수라
   `bg-white`·`text-gray-900` 은 **다크에서 값만 뒤집힌다**(`dark:` 를 붙일 일이 거의 없다. `white`=바탕, gray 50↔900).
