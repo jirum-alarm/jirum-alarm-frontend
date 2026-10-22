@@ -14,6 +14,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useKeyboardState} from 'react-native-keyboard-controller';
 import {radius} from '@jirum/design-system';
 import {sheet} from '@jirum/design-system/recipes';
+import {readingColumn} from '@/shared/hooks/useWideLayout';
 import {useColors} from '@/shared/theme/useColors';
 
 /**
@@ -156,6 +157,8 @@ export default function BottomSheet({
           aria-label={accessibilityLabel}
           style={[
             styles.sheet,
+            // 넓은 화면(듀오 펼침·가로)에선 가운데 600 — 버튼·칩이 화면 끝까지 늘어나지 않게.
+            readingColumn,
             panelStyle,
             {
               // 키보드가 떠 있으면 홈 인디케이터 여백은 키보드 아래로 들어간다 — 그대로 두면

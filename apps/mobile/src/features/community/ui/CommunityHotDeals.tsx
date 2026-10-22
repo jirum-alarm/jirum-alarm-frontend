@@ -16,6 +16,8 @@ import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {text} from '@jirum/design-system/recipes';
+import {useContentWidth} from '@/shared/components/SideSafeArea';
+import {fullRows, useGridColumns} from '@/shared/hooks/useWideLayout';
 
 type Nav = NativeStackNavigationProp<TabStackParamList>;
 
@@ -38,7 +40,12 @@ export default function CommunityHotDeals() {
     CommunityQueries.hotDeals(option),
   );
 
-  const products = data ?? [];
+  // 폰 3열 — 넓은 화면(듀오 펼침·가로)에선 열을 늘리고 꽉 찬 줄까지만.
+  const columns = useGridColumns(3);
+  const products = fullRows(data ?? [], columns);
+  const cellWidth =
+    (useContentWidth() - GRID_PADDING_X * 2 - GRID_GAP * (columns - 1)) /
+    columns;
 
   const handlePressProduct = useCallback(
     (id: number) => {
@@ -99,7 +106,7 @@ export default function CommunityHotDeals() {
           // web: grid-cols-3 gap-x-2 gap-y-3
           style={styles.grid}>
           {products.map(product => (
-            <View key={String(product.id)} style={styles.gridCell}>
+            <View key={String(product.id)} style={{width: cellWidth}}>
               <GridCard
                 product={product}
                 onPress={handlePressProduct}
@@ -113,8 +120,9 @@ export default function CommunityHotDeals() {
   );
 }
 
+const GRID_PADDING_X = 20; // px-5
+const GRID_GAP = 8;
+
 const styles = StyleSheet.create({
-  grid: {gap: 8},
-  /** 3열. gap 8 두 칸을 빼고 나눈 값. */
-  gridCell: {width: '31%'},
+  grid: {gap: GRID_GAP},
 });

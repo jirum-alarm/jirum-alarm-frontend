@@ -6,6 +6,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {GridSkeleton} from '@/shared/components/Skeletons';
+import {useGridColumns} from '@/shared/hooks/useWideLayout';
 import {tick} from '@/shared/lib/feedback/haptic';
 
 /**
@@ -77,6 +78,7 @@ export default function CurationGrid<T>({
   keyOf: (item: T) => string;
   /** index 는 발견 탭이 노출 position 으로 쓴다. 기존 호출부는 무시하면 된다. */
   renderCard: (item: T, index: number) => React.ReactElement;
+  /** 폰에서의 열 수. 넓은 화면(듀오 펼침·가로)에선 카드 크기를 지키며 늘어난다(useGridColumns). */
   columns?: 2 | 3;
   isPending: boolean;
   isError: boolean;
@@ -105,6 +107,8 @@ export default function CurationGrid<T>({
   bottomInset?: number;
   topSpacing?: 'normal' | 'tight';
 }) {
+  // FlashList v2 는 numColumns 가 바뀌면(돌리기·접고 펴기) 칸을 다시 배치한다 — FlatList 처럼 다시 마운트할 필요가 없다.
+  const numColumns = useGridColumns(columns);
   // onViewableItemsChanged 는 FlatList 가 첫 렌더의 함수만 쓴다(교체하면 예외).
   // 최신 콜백을 ref 로 읽어 안정된 핸들러 하나를 유지한다.
   const onViewableIndexesRef = useRef(onViewableIndexes);
@@ -196,7 +200,7 @@ export default function CurationGrid<T>({
       <FlashList
         data={items}
         keyExtractor={keyOf}
-        numColumns={columns}
+        numColumns={numColumns}
         contentContainerStyle={{
           paddingHorizontal: CONTENT_PADDING_X,
           paddingTop: topSpacing === 'tight' ? 0 : 16,

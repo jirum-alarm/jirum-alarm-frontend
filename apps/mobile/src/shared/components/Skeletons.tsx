@@ -2,6 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import {Animated, View} from 'react-native';
 
 import {useReduceMotion} from '@/shared/hooks/useReduceMotion';
+import {useGridColumns} from '@/shared/hooks/useWideLayout';
 import {useColors} from '@/shared/theme/useColors';
 
 /**
@@ -130,14 +131,16 @@ export function ListRowsSkeleton({
  * ★깜빡임 하나를 통째로 공유한다 — 칸마다 SkeletonBox 를 쓰면 애니메이션이 수십 개 돈다.
  */
 export function GridSkeleton({
-  columns = 2,
+  columns: baseColumns = 2,
   rows = 3,
   topSpacing = 16,
 }: {
+  /** 폰에서의 열 수 — 실제 그리드처럼 넓은 화면에선 늘어난다. */
   columns?: 2 | 3;
   rows?: number;
   topSpacing?: number;
 }) {
+  const columns = useGridColumns(baseColumns);
   const opacity = useShimmer();
   const c = useColors();
   const bar = {backgroundColor: c.gray[200], borderRadius: 4};

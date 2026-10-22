@@ -21,6 +21,7 @@ import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {RANKING_SPLIT, TrendingQueries} from '../api/trending.queries';
 import {useRankingImpressionTracker} from '../model/useRankingImpressionTracker';
 import {GridSkeleton} from '@/shared/components/Skeletons';
+import {useGridColumns} from '@/shared/hooks/useWideLayout';
 import {GRID_WINDOW_SIZE} from '@/entities/home/ui/CurationGrid';
 
 /**
@@ -37,7 +38,8 @@ import {GRID_WINDOW_SIZE} from '@/entities/home/ui/CurationGrid';
 
 /** 랭킹 탭 노출/클릭 출처. 백엔드 CTR 집계가 이 값으로 필터한다. */
 const RANKING_SOURCE = RANKING_CARD_SOURCE;
-const COLUMNS = 2;
+/** 폰에서의 열 수 — 넓은 화면(듀오 펼침·가로)에선 useGridColumns 가 늘린다. */
+const BASE_COLUMNS = 2;
 const GRID_GAP_X = 12; // web gap-x-3
 const GRID_GAP_Y = 20; // web gap-y-5
 const SECTION_GAP = 32;
@@ -50,6 +52,8 @@ type GridRow = {
   type: 'grid';
   key: string;
   products: ProductCardType[];
+  /** 한 줄 칸 수(마지막 줄이 덜 차도 칸 폭은 같다). */
+  columns: number;
   /** 이 줄 첫 카드의 0-based position(CTR 계측·뱃지 = position + 1). */
   positionFrom: number;
   gapAfter: number;
@@ -65,7 +69,7 @@ type CarouselRow = {
 export type RankingRow = GridRow | CarouselRow;
 
 /**
- * 화면에 그릴 줄 목록. 랭킹을 2장씩 끊고, 11위 앞·맨 끝에 캐러셀을 끼운다.
+ * 화면에 그릴 줄 목록. 랭킹을 columns 장씩(폰 2) 끊고, 11위 앞·맨 끝에 캐러셀을 끼운다.
  * 줄 사이 간격은 그리드끼리 20, 섹션 경계 32(예전 ScrollView gap 과 같다).
  */
 export function buildRankingRows({
@@ -73,22 +77,25 @@ export function buildRankingRows({
   categoryName,
   live,
   recommended,
+  columns = BASE_COLUMNS,
 }: {
   products: ProductCardType[];
   categoryName: string;
+  columns?: number;
   live?: ProductCardType[];
   recommended?: ProductCardType[];
 }): RankingRow[] {
   const rows: RankingRow[] = [];
   const pushGrid = (from: number, to: number) => {
-    for (let i = from; i < Math.min(to, products.length); i += COLUMNS) {
+    for (let i = from; i < Math.min(to, products.length); i += columns) {
       rows.push({
         type: 'grid',
         key: `grid-${i}`,
-        products: products.slice(i, Math.min(i + COLUMNS, to)),
+        products: products.slice(i, Math.min(i + columns, to)),
+        columns,
         positionFrom: i,
         gapAfter:
-          i + COLUMNS < Math.min(to, products.length)
+          i + columns < Math.min(to, products.length)
             ? GRID_GAP_Y
             : SECTION_GAP,
       });
@@ -154,6 +161,7 @@ export default function RankingList({
     }
   }, [ranking, live, recommended]);
 
+  const columns = useGridColumns(BASE_COLUMNS);
   const rows = useMemo(
     () =>
       buildRankingRows({
@@ -161,8 +169,9 @@ export default function RankingList({
         categoryName,
         live: live.data,
         recommended: recommended.data,
+        columns,
       }),
-    [ranking.data, categoryName, live.data, recommended.data],
+    [ranking.data, categoryName, live.data, recommended.data, columns],
   );
 
   const handlePress = useCallback(
@@ -249,7 +258,7 @@ export default function RankingList({
 
 const rowKey = (row: RankingRow) => row.key;
 
-/** 랭킹 뱃지가 붙은 그리드 한 줄(2장). 마지막 줄이 1장이면 왼쪽 반만 채운다. */
+/** 랭킹 뱃지가 붙은 그리드 한 줄(columns 장). 마지막 줄이 덜 차면 왼쪽부터 채운다. */
 const RankedRow = React.memo(function RankedRow({
   row,
   onPress,
@@ -269,6 +278,7 @@ const RankedRow = React.memo(function RankedRow({
           key={product.id}
           product={product}
           position={row.positionFrom + i}
+          columns={row.columns}
           onPress={onPress}
         />
       ))}
@@ -279,10 +289,12 @@ const RankedRow = React.memo(function RankedRow({
 const RankedCell = React.memo(function RankedCell({
   product,
   position,
+  columns,
   onPress,
 }: {
   product: ProductCardType;
   position: number;
+  columns: number;
   onPress: (id: number, position: number) => void;
 }) {
   // GridCard 는 memo 다 — 인라인 화살표를 넘기면 부모가 그릴 때마다 memo 가 깨진다.
@@ -292,7 +304,7 @@ const RankedCell = React.memo(function RankedCell({
   );
   return (
     <View
-      style={{width: `${100 / COLUMNS}%`, paddingHorizontal: GRID_GAP_X / 2}}>
+      style={{width: `${100 / columns}%`, paddingHorizontal: GRID_GAP_X / 2}}>
       <GridCard
         product={product}
         rank={position + 1}

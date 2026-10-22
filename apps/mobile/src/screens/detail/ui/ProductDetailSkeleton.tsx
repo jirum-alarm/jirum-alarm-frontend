@@ -6,6 +6,7 @@ import type {DetailPreview} from '@/entities/product/prefetch-detail';
 import Thumbnail from '@/shared/components/product/Thumbnail';
 import {SkeletonBox} from '@/shared/components/Skeletons';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {readingColumn} from '@/shared/hooks/useWideLayout';
 
 /**
  * 상품 상세 첫 로딩 골격. 예전엔 흰 화면 가운데 작은 스피너 하나라 "멈춘 화면" 처럼
@@ -28,7 +29,7 @@ export default function ProductDetailSkeleton({
     <View
       className="flex-1 bg-white"
       accessibilityLabel="상품 정보를 불러오는 중">
-      <View className="flex-1 overflow-hidden">
+      <View className="flex-1 overflow-hidden" style={readingColumn}>
         {preview?.thumbnail ? (
           <View className="aspect-square w-full bg-gray-50">
             <Thumbnail uri={preview.thumbnail} resizeMode="cover" full />
@@ -85,11 +86,13 @@ export default function ProductDetailSkeleton({
         </View>
       </View>
       {/* BottomCTA 와 같은 자리·높이 — 찜·구매 버튼이 로딩 끝에 튀어나오지 않게. */}
-      <View
-        className="flex-row items-center gap-x-3 border-t border-t-gray-300 px-5 pt-2"
-        style={{paddingBottom: Math.max(insets.bottom, 12)}}>
-        <SkeletonBox style={{width: 44, height: 44, borderRadius: 8}} />
-        <SkeletonBox style={{flex: 1, height: 48, borderRadius: 8}} />
+      <View className="border-t border-t-gray-300">
+        <View
+          className="flex-row items-center gap-x-3 px-5 pt-2"
+          style={[readingColumn, {paddingBottom: Math.max(insets.bottom, 12)}]}>
+          <SkeletonBox style={{width: 44, height: 44, borderRadius: 8}} />
+          <SkeletonBox style={{flex: 1, height: 48, borderRadius: 8}} />
+        </View>
       </View>
     </View>
   );

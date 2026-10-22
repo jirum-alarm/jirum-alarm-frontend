@@ -36,6 +36,7 @@ import ShareSheet from '@/screens/detail/ui/ShareSheet';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import type {CommunityComment} from '@/shared/api/community';
 import {text} from '@jirum/design-system/recipes';
+import {readingColumn} from '@/shared/hooks/useWideLayout';
 import {cn} from '@/shared/lib/styling/className';
 
 type Props = NativeStackScreenProps<
@@ -182,6 +183,8 @@ export default function CommunityPostScreen({route, navigation}: Props) {
           renderItem={renderItem}
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.4}
+          // 넓은 화면(듀오 펼침·가로)에선 글·댓글을 가운데 600 틀로(상세와 같다).
+          contentContainerStyle={readingColumn}
           keyboardShouldPersistTaps="handled"
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

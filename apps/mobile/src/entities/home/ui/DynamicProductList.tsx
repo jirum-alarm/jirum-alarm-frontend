@@ -1,6 +1,7 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {FlatList, Pressable, View} from 'react-native';
 import {useContentWidth} from '@/shared/components/SideSafeArea';
+import {fullRows, useGridColumns} from '@/shared/hooks/useWideLayout';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import {LIST_SECTION_MAX} from '@jirum/domain/home-sections';
@@ -37,6 +38,8 @@ import {
 const HORIZONTAL_PADDING = 20; // web px-5
 const GRID_GAP_X = 12; // web gap-x-3
 const GRID_GAP_Y = 20; // web gap-y-5
+/** 두 줄 캐러셀 슬라이드 최대 폭 = 가장 큰 폰(440pt)에서의 85% 폭. */
+const DOUBLE_ROW_MAX_SLIDE = 340;
 // GA4 product_card_click 진입 경로. web DynamicProductList 도 모든 레이아웃에
 // source="home_promotion" 을 박는다 — 이 디스패처는 홈 SDUI 전용이다.
 const SOURCE: ProductCardSource = 'home_promotion';
@@ -129,18 +132,26 @@ export default function DynamicProductList({
 /**
  * n열 그리드. FlatList numColumns 대신 flexWrap 을 쓴다 —
  * 홈은 이미 바깥이 스크롤이라 중첩 VirtualizedList 경고를 피해야 한다.
+ * columns 는 폰 기준(2·3) — 넓은 화면(듀오 펼침·가로)에선 열을 늘리고 꽉 찬 줄까지만 그린다.
  */
 function ProductGrid({
-  products,
-  columns,
+  products: allProducts,
+  columns: baseColumns,
   showTime = true,
+  keepPartialRow = false,
   onPressProduct,
 }: {
   products: ProductCardType[];
   columns: 2 | 3;
   showTime?: boolean;
+  /** 쪽 넘김 그리드의 마지막 쪽처럼 덜 찬 줄도 보여야 할 때. */
+  keepPartialRow?: boolean;
   onPressProduct: (id: number) => void;
 }) {
+  const columns = useGridColumns(baseColumns);
+  const products = keepPartialRow
+    ? allProducts
+    : fullRows(allProducts, columns);
   const widthPercent = `${100 / columns}%` as const;
   // web `gap-y-5` 는 행 **사이**에만 붙는다. 모든 셀에 marginBottom 을 주면
   // 마지막 행 아래에 20px 이 남아 섹션 간격이 web 보다 넓어진다.
@@ -177,7 +188,7 @@ function ProductGrid({
  * PAGINATED_GRID — 모바일은 4개씩 끊어 보여주고 "추천 상품 더보기"로 순환한다.
  * web PaginatedProductGridList 와 동작 동일(마지막 페이지 다음은 첫 페이지).
  */
-const ITEMS_PER_PAGE = 4; // web: !isMobile ? 5 : 4
+const ROWS_PER_PAGE = 2; // web 모바일 = 2열 × 2줄(4개). 넓은 화면에선 열만 늘어난다.
 
 function PaginatedProductGrid({
   products,
@@ -187,15 +198,14 @@ function PaginatedProductGrid({
   onPressProduct: (id: number) => void;
 }) {
   const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = Math.max(1, Math.ceil(products.length / ITEMS_PER_PAGE));
+  const itemsPerPage = useGridColumns(2) * ROWS_PER_PAGE;
+  const totalPages = Math.max(1, Math.ceil(products.length / itemsPerPage));
+  // 돌리거나 펼쳐 쪽 수가 줄면 마지막 쪽을 넘지 않게.
+  const page = currentPage % totalPages;
 
   const currentProducts = useMemo(
-    () =>
-      products.slice(
-        currentPage * ITEMS_PER_PAGE,
-        (currentPage + 1) * ITEMS_PER_PAGE,
-      ),
-    [products, currentPage],
+    () => products.slice(page * itemsPerPage, (page + 1) * itemsPerPage),
+    [products, page, itemsPerPage],
   );
 
   return (
@@ -204,18 +214,19 @@ function PaginatedProductGrid({
         <ProductGrid
           products={currentProducts}
           columns={2}
+          keepPartialRow
           onPressProduct={onPressProduct}
         />
       </View>
 
       <View className="items-center">
         <Pressable
-          onPress={() => setCurrentPage(prev => (prev + 1) % totalPages)}
+          onPress={() => setCurrentPage((page + 1) % totalPages)}
           // h-9(36px) → 44pt 권장 터치 영역.
           hitSlop={4}
           accessibilityRole="button"
           accessibilityLabel={`추천 상품 더보기, ${
-            currentPage + 1
+            page + 1
           }/${totalPages} 페이지`}
           // ★함수형 style 엔 opacity 만 — 레이아웃 className 은 안쪽 View 가 받는다
           // (섞으면 NativeWind 가 레이아웃을 떨군다).
@@ -225,7 +236,7 @@ function PaginatedProductGrid({
               추천 상품 더보기
             </Text>
             <Text className="text-sm">
-              <Text className="text-gray-900">{currentPage + 1}</Text>
+              <Text className="text-gray-900">{page + 1}</Text>
               <Text className="text-gray-500">/{totalPages}</Text>
             </Text>
           </View>
@@ -298,8 +309,13 @@ function DoubleRowCarousel({
   // '85%' 는 FlatList 안에서 콘텐츠 컨테이너 기준으로 풀려 실제 폭이 어긋나고,
   // 그러면 카드 히트영역이 화면 위치와 밀려서 **엉뚱한 카드가 눌린다**
   // (사용자 지적: "유통기한 임박 특가 클릭하면 이상하게 된다").
+  // 넓은 화면(듀오 펼침·가로)에선 가장 큰 폰에서의 폭에 멈춘다 — 85% 를 그대로 따라가면 목록 카드가
+  // 화면을 가로지르는 띠가 된다. 남는 폭엔 다음 슬라이드가 보인다.
   const contentWidth = useContentWidth();
-  const slideWidth = Math.round((contentWidth - HORIZONTAL_PADDING * 2) * 0.85);
+  const slideWidth = Math.min(
+    Math.round((contentWidth - HORIZONTAL_PADDING * 2) * 0.85),
+    DOUBLE_ROW_MAX_SLIDE,
+  );
 
   const pairs = useMemo(() => {
     const chunks: ProductCardType[][] = [];

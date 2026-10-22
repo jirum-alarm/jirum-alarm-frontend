@@ -208,7 +208,11 @@ pnpm build            # Production build
 - **아이폰 듀오(폴더블, 2026-10-23 출시)·좌우 safe area**: iOS 27.1 SDK 로 빌드하면 듀오는 상태 표시줄이 오른쪽 위 세로 기둥이고 그 폭을 오른쪽 inset 으로 준다(접힌 바깥 화면 466×678pt·right 84 — 시뮬 실측).
   앱 루트 `SideSafeArea` 가 앱 전체를 좌우 inset 만큼 들이고 안쪽엔 좌우 0 을 알린다 — 화면에서 `insets.left/right` 를 더하지 말 것, 폭으로 크기를 재는 곳은 `useWindowDimensions` 대신 `useContentWidth()`(RN Modal 안만 예외 — 별도 창이라 안에 `SafeAreaProvider`).
   들인 기둥 색은 상태 표시줄 글자색의 반대로 따라간다. 스토어 바이너리가 Xcode 26 SDK 면 듀오에선 애플 호환 모드로 돈다(1.5.7 까지) — EAS production 이미지는 `macos-tahoe-26.6-xcode-27.1` 로 고정, 1.5.8 부터 듀오 전체 화면.
-  검증: `SCREENS_DEVICE_TYPE=com.apple.CoreSimulator.SimDeviceType.iPhone-Duo BOOT_RUNTIME=com.apple.CoreSimulator.SimRuntime.iOS-27-1 SCREENS_DISPLAY=1 SCREENS_BOOT_SETTLE=150 SCREENS_API=fixture bash apps/mobile/scripts/screens-ios.sh <Release .app>`(바깥 화면). 펼친 안쪽 화면(669×951pt)은 Device Hub 버튼으로만 바뀐다 — 맥 앞에서 손으로.
+  검증: `SCREENS_DEVICE_TYPE=com.apple.CoreSimulator.SimDeviceType.iPhone-Duo BOOT_RUNTIME=com.apple.CoreSimulator.SimRuntime.iOS-27-1 SCREENS_DISPLAY=1 SCREENS_BOOT_SETTLE=150 SCREENS_API=fixture bash apps/mobile/scripts/screens-ios.sh <Release .app>`(바깥 화면).
+  펼친 안쪽 화면은 손 없이도 된다 — `orca emulator attach <기기>` → `orca emulator exec --command "fold 180"`(0 = 접힘). 펼치면 가로 951×669(오른쪽 기둥 84)로 켜지고 `orca emulator rotate landscape_left` 가 세로 669×951. 찍기는 `simctl io screenshot`(display 생략). 탭·스와이프는 안쪽 화면에서 잘 안 먹어 화면은 하네스처럼 저장소 딥링크로 연다.
+- **넓은 화면(듀오 펼침·가로 모드) = 카드는 폰 크기 그대로, 열·여백이 는다**(2026-10-22). 규칙 정본은 design-system `layout.wide`·`gridColumns()`, 앱은 `shared/hooks/useWideLayout`:
+  상품 그리드는 폰 열 수(2·3)를 `useGridColumns(base)` 로 넘긴다(CurationGrid·GridSkeleton 은 `columns` 가 폰 기준이라 알아서 는다 — 669 → 3·5열, 가로 ~870 → 4·6열, 폰 그대로). «더보기» 미리보기 그리드는 `fullRows` 로 꽉 찬 줄까지만.
+  한 줄로 읽는 화면(상세·커뮤니티 글)·시트(BottomSheet·공유)는 `readingColumn` — 가운데 600(web 모바일 틀과 같은 폭). 목록 행(설정·키워드·알림)은 늘어나도 그대로 둔다.
 - **다크모드 = OS 설정을 따른다(2026-10-01). 내정보 > 화면 모드에서 라이트/다크 고정 가능(`color-scheme-preference.ts` → `Appearance.setColorScheme`).** 색 정본은 `packages/design-system/tokens.js` 한 곳(web 과 같은 값) — tailwind 토큰이 `:root` 변수라
   `bg-white`·`text-gray-900` 은 **다크에서 값만 뒤집힌다**(`dark:` 를 붙일 일이 거의 없다. `white`=바탕, gray 50↔900).
   - 테마와 무관해야 하는 자리(홈 상단 어두운 띠·사진 위 배지·색 배지 위 흰 글자·라임 버튼 위 짙은 글자)는 `fixed-*`(`text-fixed-white`, `bg-fixed-900`).

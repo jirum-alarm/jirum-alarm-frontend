@@ -66,6 +66,20 @@ const layout = {
    * web useToast·앱 feedback/toast 가 이 값을 읽는다(전엔 두 앱이 숫자를 따로 적고 앱 테스트가 대조했다, 2026-10-20).
    */
   duration: {toast: 2500, toastWithAction: 4000},
+  /**
+   * 넓은 화면(폴더블 펼침·가로 모드 — 앱). 폰 폭(375~440)에선 아무것도 바뀌지 않는다.
+   *   readingMaxWidth 600 = 한 줄로 읽는 화면(상세·글)·시트의 최대 폭, 가운데 정렬. web 모바일 틀(--container-mobile-max)과 같은 값.
+   *   gridColumnWidth     = 상품 그리드 열 수를 정하는 칸 폭 — gridColumns() 참고.
+   */
+  wide: {readingMaxWidth: 600, gridColumnWidth: 375},
 };
 
-module.exports = {layout};
+/**
+ * 상품 그리드 열 수. base 는 폰에서의 열 수(2 = 보통 카드, 3 = 작은 카드).
+ * 카드가 375pt 폰에서의 크기보다 작아지지 않는 한 열을 늘린다 — 넓어진 만큼 카드가 커지지 않고 더 많이 보인다.
+ * 아이폰 듀오 펼침 세로(669) 2→3·3→5, 가로(~870) 2→4·3→6, 가로 아이폰(~750) 2→4, 폰·듀오 바깥 화면 그대로.
+ */
+const gridColumns = (width, base) =>
+  Math.max(base, Math.floor((width * base) / layout.wide.gridColumnWidth));
+
+module.exports = {layout, gridColumns};

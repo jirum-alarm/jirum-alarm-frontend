@@ -48,6 +48,7 @@ import {
 } from '@/shared/lib/share';
 import {useColors} from '@/shared/theme/useColors';
 import PressableOpacity from '@/shared/components/PressableOpacity';
+import {readingColumn} from '@/shared/hooks/useWideLayout';
 
 /**
  * 무엇을 공유하나 — 상품(`productId`) 또는 임의 서비스 경로(`sharePath`, 예: `/community/12`).
@@ -277,6 +278,7 @@ export default function ShareSheet({
           onStartShouldSetResponder={() => true}
           style={[
             styles.sheet,
+            readingColumn, // 넓은 화면에선 가운데 600(BottomSheet 와 같다)
             panelStyle,
             {
               paddingBottom: Math.max(insets.bottom, 16),

@@ -11,6 +11,11 @@ import * as React from 'react';
 import * as ReactTestRenderer from 'react-test-renderer';
 
 jest.mock('../global.css', () => ({}));
+// 화면 폭 — 기본은 폰(390). RN jest 창(750)은 넓은 화면이라 열이 늘어난다.
+let mockContentWidth = 390;
+jest.mock('../src/shared/components/SideSafeArea', () => ({
+  useContentWidth: () => mockContentWidth,
+}));
 
 import DynamicProductList from '../src/entities/home/ui/DynamicProductList';
 import type {ProductCardType} from '../src/entities/home/model/types';
@@ -97,6 +102,17 @@ describe('표기가 web 규칙과 같다', () => {
     expect(texts).toContain('추천 상품 더보기');
     // 20건 / 4 = 5페이지
     expect(texts.join('')).toContain('/5');
+  });
+
+  it('넓은 화면(듀오 펼침 669)에선 PAGINATED_GRID 가 3열 × 2줄씩 끊는다', () => {
+    mockContentWidth = 669;
+    try {
+      const texts = textsOf(render('PAGINATED_GRID', live.hotdeal));
+      // 20건 / 6 = 4페이지
+      expect(texts.join('')).toContain('/4');
+    } finally {
+      mockContentWidth = 390;
+    }
   });
 
   it('LIST 는 4개까지만(web slice(0,4))', () => {

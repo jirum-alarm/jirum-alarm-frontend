@@ -9,6 +9,7 @@ import TossDealCard from './cards/TossDealCard';
 import Chip from '@/shared/components/ui/Chip';
 import SectionHeader from '@/shared/components/ui/SectionHeader';
 import TabPill from '@/shared/components/ui/TabPill';
+import {fullRows, useGridColumns} from '@/shared/hooks/useWideLayout';
 
 /**
  * 홈의 토스 특가 섹션. web: widgets/home/ui/TossHomeSection.tsx
@@ -70,6 +71,8 @@ export default function TossHomeSection({
   });
 
   const deals = useMemo(() => rawDeals.map(toTossDeal), [rawDeals]);
+  // 폰 3열 — 넓은 화면(듀오 펼침·가로)에선 열을 늘리고 꽉 찬 줄까지만.
+  const columns = useGridColumns(3);
 
   // web 과 동일 — 불러왔는데 0건이면 섹션을 통째로 숨긴다.
   if (isFetched && deals.length === 0) return null;
@@ -117,11 +120,11 @@ export default function TossHomeSection({
             flexWrap: 'wrap',
             marginHorizontal: -6,
           }}>
-          {deals.map(deal => (
+          {fullRows(deals, columns).map(deal => (
             <View
               key={deal.id}
               style={{
-                width: '33.333%',
+                width: `${100 / columns}%`,
                 paddingHorizontal: 6,
                 marginBottom: 20,
               }}>

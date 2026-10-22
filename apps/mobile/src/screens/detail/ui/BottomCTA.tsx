@@ -4,6 +4,7 @@ import {Animated, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
+import {readingColumn} from '@/shared/hooks/useWideLayout';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
 import * as Haptics from 'expo-haptics';
@@ -184,7 +185,8 @@ export default function BottomCTA({
       />
       <View
         className="flex-row items-center gap-x-3 px-5 pt-2"
-        style={{paddingBottom}}>
+        // 넓은 화면에선 상세 본문과 같은 가운데 600 틀.
+        style={[readingColumn, {paddingBottom}]}>
         <PressableScale
           onPress={() => {
             if (requireLogin(PendingActionType.WISHLIST_ADD)) return;

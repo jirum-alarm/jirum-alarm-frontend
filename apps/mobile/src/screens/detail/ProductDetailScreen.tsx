@@ -83,6 +83,7 @@ import {findKeywordHubsForTitle} from '@/entities/keyword-hub/lib/keyword-hub';
 import {useKeywordHubs} from '@/entities/keyword-hub/model/useKeywordHubs';
 import {text} from '@jirum/design-system/recipes';
 import {cn} from '@/shared/lib/styling/className';
+import {readingColumn} from '@/shared/hooks/useWideLayout';
 
 type Props = NativeStackScreenProps<
   ProductFlowParamList,
@@ -349,7 +350,8 @@ function NativeDetail({
       <ScrollView
         ref={scrollRef}
         className="flex-1"
-        contentContainerStyle={{paddingBottom: 0}}
+        // 넓은 화면(듀오 펼침·가로)에선 가운데 600 틀 — 정사각 사진이 화면 폭만큼 커지지 않게(web 모바일 틀과 같다).
+        contentContainerStyle={readingColumn}
         contentInsetAdjustmentBehavior="never"
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}

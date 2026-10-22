@@ -29,6 +29,10 @@ jest.mock('../src/entities/home/ui/cards/HomeProductCards', () => ({
 jest.mock('../src/entities/home/ui/DynamicProductList', () => ({
   CarouselList: () => null,
 }));
+// 폰 폭으로 고정 — RN jest 창은 750 이라 넓은 화면(4열)으로 잡힌다. 넓은 화면은 buildRankingRows 테스트가 본다.
+jest.mock('../src/shared/components/SideSafeArea', () => ({
+  useContentWidth: () => 390,
+}));
 
 import RankingList, {
   buildRankingRows,
@@ -105,6 +109,25 @@ describe('buildRankingRows — 줄 목록', () => {
     });
     expect(odd.every(r => r.type === 'grid')).toBe(true);
     expect(odd.at(-1)?.type === 'grid' && odd.at(-1)?.products).toHaveLength(1);
+  });
+});
+
+describe('buildRankingRows — 넓은 화면(열이 늘어남)', () => {
+  const rows = buildRankingRows({
+    products: fifty,
+    categoryName: '전체',
+    live: [product(900)],
+    columns: 4,
+  });
+  const grids = rows.filter(
+    (r): r is Extract<RankingRow, {type: 'grid'}> => r.type === 'grid',
+  );
+
+  it('4장씩 끊고, 10위에서 끊긴 줄은 덜 찬 채 캐러셀로 넘어간다', () => {
+    expect(grids.slice(0, 3).map(g => g.products.length)).toEqual([4, 4, 2]);
+    expect(rows[3].type).toBe('carousel');
+    expect(grids[3].positionFrom).toBe(10);
+    expect(grids.every(g => g.columns === 4)).toBe(true);
   });
 });
 
