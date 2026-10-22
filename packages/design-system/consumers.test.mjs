@@ -158,6 +158,26 @@ test('web 어디에도 칩·태그 모양을 손으로 다시 적지 않는다(�
   assert.deepEqual(offenders, []);
 });
 
+// 주 버튼(라임 판 + 짙은 글자)은 Button 이나 buttonClass() 로 — 손으로 적은 14곳이 높이(h-12·h-14·py-3·py-3.5)·모서리·비활성 모양이
+// 갈렸고 대부분 눌림 반응이 없었다(2026-10-22).
+const WEB_PRIMARY_BUTTON_EXCEPTIONS = {
+  // 도움말 본문 안 아이콘 달린 작은 권유 링크 — 화면 아래 주 버튼(lg)이 아니고 레시피 md 는 짙은 판이라 맞는 모양이 없다.
+  'apps/web/src/app/(desktop-ready)/help/page.tsx': 1,
+  // 떠 있는 글쓰기 버튼(FAB) — 알약·그림자, 버튼 레시피의 모양이 아니다.
+  'apps/web/src/features/community/ui/CommunityList.tsx': 1,
+};
+
+test('web 에서 주 버튼 모양을 손으로 다시 적지 않는다(Button·buttonClass)', () => {
+  const offenders = [];
+  for (const f of sourcesUnder('apps/web/src').filter((f) => f.endsWith('.tsx'))) {
+    if (f.includes('shared/ui/common/Button/')) continue;
+    const strings = readFileSync(join(root, f), 'utf8').match(/(["'`])[^"'`\n]*\bbg-primary-500\b[^"'`\n]*\1/g) ?? [];
+    const n = strings.filter((c) => /\btext-fixed-900\b/.test(c) && /\b(?:h-1[0-4]|py-3(?:\.5)?)\b/.test(c)).length;
+    if (n > (WEB_PRIMARY_BUTTON_EXCEPTIONS[f] ?? 0)) offenders.push(`${f}: ${n}`);
+  }
+  assert.deepEqual(offenders, []);
+});
+
 test('홈 랭킹 카드 크기 — web 클래스·앱 숫자가 layout.rankingCard 와 같다', () => {
   // 앱은 layout 숫자를 import 하고(Animated·스켈레톤), web 은 같은 값의 클래스를 쓴다(PC 에선 pc:h-auto 로 풀어야 해 style 로 못 옮긴다).
   const {layout} = require('./layout.js');

@@ -1,9 +1,12 @@
 import React from 'react';
 import Svg, {Path, type SvgProps} from 'react-native-svg';
 
+import {useColors} from '@/shared/theme/useColors';
+
 /** 링크 복사용 체인 아이콘. */
 export default function ShareLink({width, height, color, ...props}: SvgProps) {
-  const stroke = (color as string) ?? '#4B5563';
+  const c = useColors();
+  const stroke = (color as string) ?? c.gray[600];
   return (
     <Svg
       width={width ?? 20}

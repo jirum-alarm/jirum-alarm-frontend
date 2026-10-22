@@ -11,6 +11,7 @@ import { isAndroidUA, isCrawlerBrowser, isInAppBrowserUA } from '@/shared/config
 import useAlertSession from '@/shared/hooks/useAlertSession';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
+import { cn } from '@/shared/lib/cn';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { getGraphqlErrorMessage } from '@/shared/lib/graphql-error';
 import { shouldUseKakaoBridge } from '@/shared/lib/kakao-bridge-ua';
@@ -27,6 +28,7 @@ import { readPushStatus, usePushChannelPrompt } from '@/shared/lib/push-channel/
 import OpenInAppLink from '@/shared/ui/app-handoff/OpenInAppLink';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
 import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
+import Button, { buttonClass } from '@/shared/ui/common/Button';
 import { useToast } from '@/shared/ui/common/Toast';
 
 import { useUpdateKeyword } from '@/entities/auth/model/update-keyword';
@@ -407,7 +409,7 @@ function KeywordAlertSheet({
         iosUniversalLink
         // 바로 닫으면 <a> 가 DOM 에서 빠져 이동이 취소된다(연결 안 된 앵커는 이동하지 않는다) — 한 박자 뒤에.
         onClick={() => window.setTimeout(onClose, 500)}
-        className="bg-primary-500 text-fixed-900 flex h-12 w-full items-center justify-center rounded-lg font-semibold"
+        className={cn(buttonClass(), 'flex items-center justify-center')}
       >
         앱에서 알림 받기
       </OpenInAppLink>
@@ -417,14 +419,9 @@ function KeywordAlertSheet({
     </div>
   ) : (
     <div className="mt-5 flex flex-col gap-y-2">
-      <button
-        type="button"
-        onClick={handleAlert}
-        disabled={pending}
-        className="bg-primary-500 text-fixed-900 h-12 w-full rounded-lg font-semibold disabled:opacity-50"
-      >
+      <Button onClick={handleAlert} disabled={pending}>
         {handoff ? '브라우저에서 알림 받기' : '알림 받기'}
-      </button>
+      </Button>
       <button type="button" onClick={onClose} className="h-10 text-sm text-gray-500">
         다음에 할게요
       </button>
@@ -512,7 +509,7 @@ function OkachatSheet({
           if (openOkachatDirect('first_visit', { room, link, exp })) e.preventDefault();
           onClose();
         }}
-        className="bg-primary-500 text-fixed-900 flex h-12 w-full items-center justify-center rounded-lg font-semibold"
+        className={cn(buttonClass(), 'flex items-center justify-center')}
       >
         카톡방 입장하기
       </a>

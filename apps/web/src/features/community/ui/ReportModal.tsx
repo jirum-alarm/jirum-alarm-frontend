@@ -9,6 +9,7 @@ import { CommunityService } from '@/shared/api/community/community.service';
 import { UserReportReason, UserReportTarget } from '@/shared/api/gql/graphql';
 import { cn } from '@/shared/lib/cn';
 import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
+import Button from '@/shared/ui/common/Button';
 import { useToast } from '@/shared/ui/common/Toast';
 
 // 사유 순서·문구·값은 정본 @jirum/domain/community(앱 신고 시트와 같은 표).
@@ -95,19 +96,16 @@ export default function ReportModal({
           )}
 
           <div className="mt-6 flex gap-x-3">
-            <button
-              onClick={handleClose}
-              className="flex h-12 flex-1 items-center justify-center rounded-lg bg-gray-100 text-sm font-medium text-gray-700 transition-transform active:scale-95"
-            >
+            <Button color="secondary" onClick={handleClose} className="flex-1">
               취소
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => report()}
               disabled={!selectedReason || isPending}
-              className="bg-primary-500 text-fixed-900 flex h-12 flex-1 items-center justify-center rounded-lg text-sm font-medium transition-transform active:scale-95 disabled:opacity-40"
+              className="flex-1"
             >
               신고
-            </button>
+            </Button>
           </div>
         </div>
       </BottomSheetContent>

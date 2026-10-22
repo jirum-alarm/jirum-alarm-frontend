@@ -2,6 +2,8 @@
 
 import { useQuery } from '@tanstack/react-query';
 
+import Button from '@/shared/ui/common/Button';
+
 import { AuthQueries } from '@/entities/auth';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
@@ -152,13 +154,9 @@ export default function PostForm({
 
       {/* 데스크탑 전용 제출 버튼 */}
       <div className="hidden px-5 pb-6 md:block">
-        <button
-          type="submit"
-          disabled={!canSubmit}
-          className="bg-primary-500 text-fixed-900 w-full rounded-xl py-3.5 text-sm font-semibold transition-opacity disabled:opacity-40"
-        >
+        <Button type="submit" disabled={!canSubmit}>
           {isSubmitting ? '처리 중...' : isEdit ? '수정 완료' : '글 등록하기'}
-        </button>
+        </Button>
       </div>
     </form>
   );

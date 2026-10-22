@@ -197,12 +197,12 @@ Tailwind 기본 간격이라 web·앱이 같은 클래스로 같은 값이 된�
 
 | 자리 | 이유 |
 | --- | --- |
-| web `widgets/promotion/2607siwol` (파일 전체) | 캠페인 페이지 고유 색 |
 | web 광고 소재 문구(`HomeContainerV2`, `AdBanner`) | 소재 이미지에 맞춘 색 |
 | 소개 배너 짙은 초록(web `AboutLink`, 앱 `HomeBannerCarousel`) | 배너 고유색 |
 | 핫딜 배지 그라데이션(web `HotdealBadge`) | 배지 고유 그림(앱과 같은 정지점) |
 | 핫딜 배지 그라데이션(beauty-web `widgets/ProductCard`) | web·앱 HotdealBadge 와 같은 정지점 |
 | 소개 페이지 히어로(landing `KeyVisual`) | 히어로 모서리·오목한 모서리 트릭 |
+| 소개 페이지 폰 그림(landing `HeroPhone`) | 기기 몸체·화면 모서리(44·36px) — 기기 모양이라 눈금 밖 |
 | 앱 `TextField` 입력 글자 `text-[16px]` | TextInput 줄높이 문제(위 「글자」) |
 | web 아이콘 `Jirume`(마스코트 눈)·`RoundedLogo`(로고 마크)·`Illust/AppIcon`(앱 아이콘 남색) | 브랜드 그림 — 테마와 무관하게 검정·남색 |
 
@@ -249,6 +249,7 @@ UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·
 - **버튼**(`button`, `buttonTone`) — lg 48px 가득(주 버튼 라임), md·sm 작은 버튼(주 버튼이면 짙은 판 + 라임 글자), 보조·위험·테두리.
   줄 끝 작은 동작은 `button.size.xs`(32px) + `tone.neutralOutline`(회색 테두리) — Link·PressableScale 에도 걸려 레시피를 바로 읽는다.
   누르면 면이 한 단계 진해진다. (variant, color, size) → 모양 고르기는 `buttonTone` 하나.
+  web 에서 Link·`<a>`·OpenInAppLink 를 버튼 모양으로 쓸 땐 `buttonClass()`(Button 과 같은 고르기) — 주 버튼을 손으로 적으면 `consumers.test.mjs` 가 막는다.
 - **바텀시트 겉**(`sheet`) — 가림막 40% 검정·윗모서리 20px·손잡이 40x4. 다크에선 판 위 테두리 한 줄(판이 바탕색이라 경계가 안 보였다).
 - **토스트**(`toast`) — 짙은 판(fixed-800, 테마 무관)·왼쪽 흰 글자·오른쪽 라임 동작. 성공(체크)·실패(느낌표)·안내(아이콘 없음),
   동작 버튼이 있으면 4초, 없으면 2.5초. web 은 `const {toast} = useToast()` 후 `toast.success(msg, {action: {label, onClick}})`·`toast.error(msg)`·`toast(msg)`,

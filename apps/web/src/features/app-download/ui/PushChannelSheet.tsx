@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useDevice } from '@/shared/hooks/useDevice';
 import { isGuestAtom } from '@/shared/hooks/useIsLoggedIn';
 import { resolveAppDownloadPlatform } from '@/shared/lib/app-handoff/resolvePlatform';
+import { cn } from '@/shared/lib/cn';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import {
   pushChannelSheetAtom,
@@ -15,6 +16,7 @@ import {
 import AppDownloadQr from '@/shared/ui/app-handoff/AppDownloadQr';
 import OpenInAppLink from '@/shared/ui/app-handoff/OpenInAppLink';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
+import Button, { buttonClass } from '@/shared/ui/common/Button';
 
 function pushEvent(event: string, props: Record<string, unknown>) {
   (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
@@ -91,13 +93,9 @@ export default function PushChannelSheet() {
 
         <div className="mt-5 flex flex-col gap-y-2">
           {browserFirst && (
-            <button
-              type="button"
-              onClick={handleBrowser}
-              className="bg-primary-500 text-fixed-900 mb-3 h-12 w-full rounded-lg font-semibold"
-            >
+            <Button onClick={handleBrowser} className="mb-3">
               {platform === 'non-mobile' ? '이 PC로 바로 받기' : '이 브라우저로 바로 받기'}
-            </button>
+            </Button>
           )}
           {platform === 'non-mobile' ? (
             <AppDownloadQr compact />
@@ -107,7 +105,7 @@ export default function PushChannelSheet() {
                 platform={platform}
                 path="/"
                 source="push_channel"
-                className="bg-primary-500 text-fixed-900 flex h-12 w-full items-center justify-center rounded-lg font-semibold"
+                className={cn(buttonClass(), 'flex items-center justify-center')}
               >
                 앱으로 받기
               </OpenInAppLink>

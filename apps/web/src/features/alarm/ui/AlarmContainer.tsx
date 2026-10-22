@@ -10,9 +10,10 @@ import { useDevice } from '@/shared/hooks/useDevice';
 import useIsLoggedIn, { isGuestAtom } from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import { resolveAppDownloadPlatform } from '@/shared/lib/app-handoff/resolvePlatform';
+import { cn } from '@/shared/lib/cn';
 import AppDownloadQr from '@/shared/ui/app-handoff/AppDownloadQr';
 import OpenInAppLink from '@/shared/ui/app-handoff/OpenInAppLink';
-import Button from '@/shared/ui/common/Button';
+import Button, { buttonClass } from '@/shared/ui/common/Button';
 import { Apple, ArrowDown, Google, LoadingSpinner } from '@/shared/ui/common/icons';
 import { Illust } from '@/shared/ui/common/icons/Illust';
 import Link from '@/shared/ui/Link';
@@ -139,7 +140,7 @@ function AndroidDownloadButton() {
     // 앱이 있으면 앱의 알림 탭이 바로 열린다(intent), 없으면 Play.
     <OpenInAppLink platform="android" path="/alarm" source="alarm_tab" className="w-full">
       <m.span
-        className="bg-primary-500 text-fixed-900 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold"
+        className={cn(buttonClass(), 'flex items-center justify-center gap-x-2')}
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >
@@ -154,7 +155,7 @@ function IosDownloadButton() {
   return (
     <OpenInAppLink platform="apple" path="/alarm" source="alarm_tab" className="w-full">
       <m.span
-        className="bg-primary-500 text-fixed-900 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold"
+        className={cn(buttonClass(), 'flex items-center justify-center gap-x-2')}
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >

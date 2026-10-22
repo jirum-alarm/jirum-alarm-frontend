@@ -3,8 +3,10 @@ import { headers } from 'next/headers';
 import Image from 'next/image';
 
 import { ANDROID_STORE_LINK, IOS_STORE_LINK } from '@/shared/config/appStore';
+import { cn } from '@/shared/lib/cn';
 import AppDownloadQr from '@/shared/ui/app-handoff/AppDownloadQr';
 import OpenInAppLink from '@/shared/ui/app-handoff/OpenInAppLink';
+import { buttonClass } from '@/shared/ui/common/Button';
 
 export const metadata: Metadata = {
   title: '지름알림 앱 설치',
@@ -72,7 +74,7 @@ export default async function AppInstallPage({
             platform={isIOS ? 'apple' : 'android'}
             path="/"
             source={source}
-            className="bg-primary-500 text-fixed-900 mt-10 flex h-14 w-full items-center justify-center rounded-xl font-semibold"
+            className={cn(buttonClass(), 'mt-10 flex items-center justify-center')}
           >
             {isIOS ? 'App Store에서 받기' : 'Google Play에서 받기'}
           </OpenInAppLink>

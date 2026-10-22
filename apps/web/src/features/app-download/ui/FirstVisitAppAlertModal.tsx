@@ -8,10 +8,12 @@ import { Drawer } from 'vaul';
 
 import { CheckDeviceResult } from '@/shared/actions/agent.types';
 import { resolveAppDownloadPlatform } from '@/shared/lib/app-handoff/resolvePlatform';
+import { cn } from '@/shared/lib/cn';
 import AppDownloadQr from '@/shared/ui/app-handoff/AppDownloadQr';
 import OpenInAppLink from '@/shared/ui/app-handoff/OpenInAppLink';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
 import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
+import { buttonClass } from '@/shared/ui/common/Button';
 import { Apple, Google } from '@/shared/ui/common/icons';
 
 // ponytail: 전역 1회 노출. 상품별로 반복 노출하면 이탈만 키움. 재노출 원하면 이 키 삭제 or 만료 추가.
@@ -142,7 +144,7 @@ function StoreButton({ kind }: { kind: 'android' | 'apple' }) {
     <Drawer.Close asChild>
       <OpenInAppLink platform={kind} path={pathname} source="first_visit_detail" className="w-full">
         <m.span
-          className="bg-primary-500 text-fixed-900 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold"
+          className={cn(buttonClass(), 'flex items-center justify-center gap-x-2')}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.1 }}
         >

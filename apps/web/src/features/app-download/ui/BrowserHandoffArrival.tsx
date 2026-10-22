@@ -10,6 +10,7 @@ import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { readHandoff } from '@/shared/lib/push-channel/browserHandoff';
 import { readPushStatus } from '@/shared/lib/push-channel/pushChannel';
 import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
+import Button from '@/shared/ui/common/Button';
 import { useToast } from '@/shared/ui/common/Toast';
 
 const DEVICE_ID_KEY = 'jirum-alarm-device-id';
@@ -85,13 +86,7 @@ export default function BrowserHandoffArrival() {
           이 브라우저로 핫딜 알림을 보내드려요.
         </Drawer.Description>
         <div className="mt-5 flex flex-col gap-y-2">
-          <button
-            type="button"
-            onClick={handleEnable}
-            className="bg-primary-500 text-fixed-900 h-12 w-full rounded-lg font-semibold"
-          >
-            알림 켜기
-          </button>
+          <Button onClick={handleEnable}>알림 켜기</Button>
           <button
             type="button"
             onClick={() => setAskPush(false)}
