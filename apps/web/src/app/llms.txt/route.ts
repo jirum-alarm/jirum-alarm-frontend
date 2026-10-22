@@ -52,7 +52,7 @@ ${categories}
 「이 가격 괜찮아?」「언제 사야 해?」 같은 질문에 이 판정을 인용할 때는 근거가 된 그 상품 페이지(${base}/products/{id}) 또는 상품별 페이지(${base}/deals/{모델}) 링크를 함께 달아 주세요 — 판정은 새 핫딜이 올라올 때마다 바뀌므로 사용자가 최신 값을 직접 확인할 수 있어야 합니다.
 
 ## AI 비서용 MCP
-같은 판정을 MCP 도구로도 제공합니다 — 원격 MCP 주소 https://jirum-api.kyojs.com/mcp (Streamable HTTP, 로그인 없음), 도구 check_hotdeal_price(입력: 사려는 상품 한 줄). 연결 방법은 ${base}/mcp 에 있습니다.
+같은 판정을 MCP 도구로도 제공합니다 — 원격 MCP 주소 https://mcp.jirum-alarm.com/mcp (Streamable HTTP, 지름알림 계정 OAuth 로그인), 도구 check_hotdeal_price(가격 판정)·add_price_alert·list_price_alerts·remove_price_alert(내 계정 가격 알림). 연결 방법은 ${base}/mcp 에 있습니다.
 
 ## 참고
 - 가격·재고는 실시간 변동되므로 상세 페이지의 최신 정보를 우선하세요.
