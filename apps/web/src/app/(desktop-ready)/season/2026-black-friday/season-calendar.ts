@@ -55,6 +55,15 @@ const KST_MS = 9 * 3_600_000;
 export const kstDate = (nowMs: number): string =>
   new Date(nowMs + KST_MS).toISOString().slice(0, 10);
 
+export const SEASON_HUB_PATH = '/season/2026-black-friday';
+
+/**
+ * 다른 화면(키워드 모아보기 머리)에서 허브를 거는 기간 — 12.12(KST) 까지. 허브는 사이트맵·IndexNow·llms.txt 에만 있고
+ * HTML 링크가 0개라 10/22 GSC 에서 «알려지지 않은 URL» 이었다. 광군제(11/11) 전에 검색엔진이 찾도록 시즌 동안 건다.
+ * 푸터가 아니라 /keywords 인 이유: 홈 맨 아래는 약관·FAQ 자리고, 직구 달력은 「모아보기」 손님이 찾는 것이다(2026-10-23 사용자 지적).
+ */
+export const isSeasonHubLinkOn = (nowMs: number): boolean => kstDate(nowMs) <= '2026-12-12';
+
 const daysUntil = (nowMs: number, ymd: string): number =>
   Math.round((Date.parse(`${ymd}T00:00:00Z`) - Date.parse(`${kstDate(nowMs)}T00:00:00Z`)) / DAY_MS);
 

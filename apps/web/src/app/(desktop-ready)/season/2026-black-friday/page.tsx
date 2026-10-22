@@ -26,6 +26,7 @@ import DealsMobileHeader from '../../deals/[slug]/DealsMobileHeader';
 import {
   DOMESTIC_EVENTS,
   OVERSEAS_EVENTS,
+  SEASON_HUB_PATH,
   type SeasonEvent,
   seasonStatus,
   US_EVENTS,
@@ -49,7 +50,7 @@ import SeasonContentGroup from './SeasonContentGroup';
  * - 제휴 고지는 페이지 안에 그대로 둔다(공정위 추천·보증 심사지침).
  * - 앱은 홈 「직구 특가」 섹션이 같은 딜을 보여 줘서 이 허브를 따로 만들지 않았다(검색 유입용 웹 문서).
  */
-const PATH = '/season/2026-black-friday';
+const PATH = SEASON_HUB_PATH;
 const title = '2026 알리 블프·광군제 일정과 쿠폰 확인법';
 const description =
   '알리익스프레스 광군제(11.11)·블랙프라이데이·12.12 일정을 작년 기준으로 정리하고, 공식 쿠폰 확인처·면세 한도·KC 인증 주의점과 지금 올라온 해외직구 핫딜을 모았어요.';

@@ -1,4 +1,4 @@
-import { text } from '@jirum/design-system/recipes';
+import { infoBox, text } from '@jirum/design-system/recipes';
 import { isKeywordHubToday, splitKeywordHubsByRecency } from '@jirum/domain/keyword-hub';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -22,6 +22,11 @@ import {
 import { relativeTimeLabel } from '@/features/deals/lib/model-page-insights';
 
 import { FoldedGrid, SectionTitle, splitByVerdict } from '../deals/DealsSections';
+import {
+  isSeasonHubLinkOn,
+  SEASON_HUB_PATH,
+  seasonStatus,
+} from '../season/2026-black-friday/season-calendar';
 
 import KeywordsTabHeader from './KeywordsTabHeader';
 import MyKeywordsSection from './MyKeywordsSection';
@@ -82,6 +87,24 @@ export default async function KeywordHubIndexPage() {
       </header>
       {/* 하단 탭 「키워드」(2026-10-20) — 내 키워드부터. 계정·키워드는 브라우저가 알아서 클라에서 그린다(이 페이지는 캐시되는 공개 화면). */}
       <MyKeywordsSection />
+
+      {/* 해외직구 시즌 허브 — 시즌(~12/12) 동안만. 「모아보기」 손님이 직구 일정을 찾는 자리이자 허브의 HTML 크롤 경로(season-calendar 주석). */}
+      {isSeasonHubLinkOn(now) && (
+        <Link
+          href={SEASON_HUB_PATH}
+          className={cn('mb-8 flex items-center justify-between gap-3 px-4 py-3', infoBox)}
+          data-track="season-hub-link"
+          data-source="keyword_index"
+        >
+          <span className="min-w-0">
+            <span className={cn(text.label, 'block')}>2026 블프·광군제 직구 달력</span>
+            <span className={cn(text.caption, 'mt-0.5 block')}>
+              {seasonStatus(now).label} · 알리 일정과 쿠폰 확인법
+            </span>
+          </span>
+          <span className={cn(text.muted, 'shrink-0')}>보기</span>
+        </Link>
+      )}
 
       {buyNow.length > 0 && (
         <section className="mb-12">
