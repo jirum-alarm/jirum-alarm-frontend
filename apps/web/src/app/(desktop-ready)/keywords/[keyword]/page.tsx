@@ -12,7 +12,7 @@ import { cn } from '@/shared/lib/cn';
 import { jsonLdHtml } from '@/shared/lib/json-ld';
 
 import { fetchKeywordHub, fetchKeywordHubs } from '@/entities/keyword-hub/api/fetchKeywordHub';
-import { buildHubModelChips, type HubModelChip } from '@/entities/keyword-hub/lib/hub-model-pages';
+import { buildHubModelGroups, type HubModelChip } from '@/entities/keyword-hub/lib/hub-model-pages';
 import {
   buildKeywordHubSeo,
   findThemesForHub,
@@ -87,7 +87,7 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
   // 칩의 «지금 싼가»는 /deals·/keywords 가 쓰는 판정 목록에서(데이터 캐시 10분). 실패하면 판정 없이 이름만.
   const modelChips =
     modelPages.length > 0
-      ? buildHubModelChips(
+      ? buildHubModelGroups(
           hub.name,
           modelPages,
           await ModelPageService.getPublishedModelPages().catch(() => []),
@@ -212,8 +212,8 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
       {modelChips && (
         // 같은 키워드 안에서도 상품이 갈린다(삼다수 2L·500ml). 상품별 가격 비교는 모델 페이지가 한다 —
         // 허브에서 가격을 섞어 비교하지 않는 대신 그쪽으로 보낸다. 구글은 모델 페이지로 사람을 데려오는 쪽이라
-        // 모델 페이지 → 허브 링크와 짝이다. 지금 싼 상품을 앞에, 나머지는 접는다(hub-model-pages.ts).
-        // 접힌 칩도 <details> 안 HTML 링크라 크롤러는 그대로 따라간다.
+        // 모델 페이지 → 허브 링크와 짝이다. 같은 상품 줄(진라면 매운맛·순한맛)은 한 줄로 묶고, 지금 싼 상품을 앞에,
+        // 묶이지 않은 것은 접는다(hub-model-pages.ts). 접힌 칩도 <details> 안 HTML 링크라 크롤러는 그대로 따라간다.
         <nav aria-label={`${hub.name} 상품별 최저가`} className="mb-6">
           <div className="mb-2 flex items-baseline justify-between gap-3">
             <h2 className={text.subtitle}>상품별 최저가 모음</h2>
@@ -222,6 +222,21 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
               {modelPages.length}개
             </span>
           </div>
+          {modelChips.groups.length > 0 && (
+            <ul className="mb-3 divide-y divide-gray-100">
+              {modelChips.groups.map((group) => (
+                <li key={group.name} className="flex gap-3 py-2">
+                  <p className={cn(text.label, 'pc:w-32 w-20 shrink-0 pt-1.5 break-keep')}>
+                    {group.name}
+                  </p>
+                  <ModelChipList chips={group.chips} />
+                </li>
+              ))}
+            </ul>
+          )}
+          {modelChips.groups.length > 0 && modelChips.visible.length > 0 && (
+            <p className={cn(text.caption, 'mb-2')}>그 밖의 상품</p>
+          )}
           <ModelChipList chips={modelChips.visible} />
           {modelChips.folded.length > 0 && (
             <details className="group mt-2">
@@ -327,6 +342,8 @@ function ModelChipList({ chips }: { chips: HubModelChip[] }) {
             data-source="keyword_hub"
             className={cn('inline-block', linkChip)}
           >
+            {/* 묶음 안 칩은 줄 이름을 뺀 말만 보이지만, 링크 글은 「진라면 매운맛」으로 읽혀야 한다(검색·스크린리더). */}
+            {chip.prefix ? <span className="sr-only">{chip.prefix} </span> : null}
             {chip.label}
             {chip.good ? (
               <span className="text-success-600 font-semibold"> · {chip.good}</span>
