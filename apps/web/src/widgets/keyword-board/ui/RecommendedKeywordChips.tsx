@@ -20,7 +20,14 @@ const MAX_CHIPS = 8;
  * 키워드 탭에서 등록하면 상황판에 그 키워드 카드가 바로 생긴다 — «걸자마자 최근 딜이 보인다»가 이 탭의 첫 경험.
  * 이미 건 키워드는 뺀다. 계측 keyword_register source=keyword_tab(앱과 같은 값).
  */
-export default function RecommendedKeywordChips({ registered }: { registered: Set<string> }) {
+export default function RecommendedKeywordChips({
+  registered,
+  wrap = false,
+}: {
+  registered: Set<string>;
+  /** 키워드가 없을 때(칩이 화면의 본체) — 한 줄로 넘기지 않고 다 보이게 감는다. */
+  wrap?: boolean;
+}) {
   const { toast } = useToast();
   const promptPushChannel = usePushChannelPrompt();
   const { data } = useQuery(AuthQueries.recommendedKeywords());
@@ -35,43 +42,51 @@ export default function RecommendedKeywordChips({ registered }: { registered: Se
     },
   });
 
+  const addMore = (
+    <Link
+      href={PAGE.MYPAGE_KEYWORD}
+      data-track="keyword-tab-register"
+      className={cn(text.caption, 'shrink-0 underline underline-offset-2 hover:text-gray-700')}
+    >
+      {KEYWORD_BOARD_COPY.addMore}
+    </Link>
+  );
+
+  // 폰은 칩을 한 줄로 넘기고(여러 줄로 감기면 카드보다 칩이 커 보였다), PC 는 감는다. 「직접 입력해서 걸기」는 제목 줄 오른쪽.
+  if (chips.length === 0) return addMore;
   return (
     <div>
-      {chips.length > 0 && (
-        <>
-          <p className={text.caption}>{KEYWORD_BOARD_COPY.recommendedTitle}</p>
-          <ul className="mt-2 flex flex-wrap gap-2">
-            {chips.map((keyword) => (
-              <li key={keyword}>
-                <button
-                  type="button"
-                  disabled={isPending}
-                  onClick={() => mutate({ keyword, fromRecommendation: true })}
-                  aria-label={`${keyword} 키워드 알림 등록`}
-                  className={cn(
-                    'flex items-center gap-1.5 disabled:opacity-50',
-                    addChip.box,
-                    addChip.text,
-                  )}
-                >
-                  {keyword}
-                  <span className={addChip.plus}>+</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-      <Link
-        href={PAGE.MYPAGE_KEYWORD}
-        data-track="keyword-tab-register"
+      <div className="flex items-baseline justify-between gap-3">
+        <p className={text.caption}>{KEYWORD_BOARD_COPY.recommendedTitle}</p>
+        {addMore}
+      </div>
+      <ul
         className={cn(
-          text.caption,
-          'mt-3 inline-block underline underline-offset-2 hover:text-gray-700',
+          'mt-2 flex gap-2',
+          wrap
+            ? 'flex-wrap'
+            : 'pc:mx-0 pc:flex-wrap pc:px-0 scrollbar-hide -mx-5 overflow-x-auto px-5',
         )}
       >
-        {KEYWORD_BOARD_COPY.addMore}
-      </Link>
+        {chips.map((keyword) => (
+          <li key={keyword} className="shrink-0">
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={() => mutate({ keyword, fromRecommendation: true })}
+              aria-label={`${keyword} 키워드 알림 등록`}
+              className={cn(
+                'flex items-center gap-1.5 disabled:opacity-50',
+                addChip.box,
+                addChip.text,
+              )}
+            >
+              {keyword}
+              <span className={addChip.plus}>+</span>
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

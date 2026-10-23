@@ -26,6 +26,7 @@ export default function KeywordBoardCard({
   onBroaden,
   broadening = false,
   now,
+  className,
 }: {
   keyword: string;
   item: KeywordBoardItem | null;
@@ -35,6 +36,8 @@ export default function KeywordBoardCard({
   onBroaden?: (keyword: string) => void;
   broadening?: boolean;
   now: number;
+  /** 놓일 자리(상황판의 가로 넘기기·PC 격자)가 폭을 정한다. */
+  className?: string;
 }) {
   const activity = item
     ? describeKeywordActivity(item, relativeTimeLabel(item.lastDealAt as string | null, now), now)
@@ -42,7 +45,7 @@ export default function KeywordBoardCard({
   const suggestion = item && onBroaden ? broadenSuggestion(item) : null;
 
   return (
-    <li className="rounded-xl border border-gray-200 px-4 py-3">
+    <li className={cn('rounded-xl border border-gray-200 px-4 py-3', className)}>
       <div className="flex items-center justify-between gap-2">
         <div className="min-w-0">
           <h3 className={cn(text.subtitle, 'truncate')}>{keyword}</h3>

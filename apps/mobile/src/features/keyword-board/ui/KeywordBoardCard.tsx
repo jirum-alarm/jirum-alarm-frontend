@@ -67,7 +67,8 @@ export default function KeywordBoardCard({
       : null;
 
   return (
-    <View className="rounded-xl border border-gray-200 px-4 py-3">
+    // flex-1 — 가로 넘기기에서 가장 긴 카드 높이에 맞춘다(줄 맞춤).
+    <View className="flex-1 rounded-xl border border-gray-200 px-4 py-3">
       <View className="flex-row items-center justify-between gap-2">
         <View className="min-w-0 shrink">
           <Text className={text.subtitle} numberOfLines={1}>

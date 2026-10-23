@@ -76,6 +76,7 @@ const keywords = (): QueryMypageKeywordQuery => ({
     { id: '1', keyword: '세제', priceDropOnly: false },
     { id: '2', keyword: '7800X3D', priceDropOnly: true },
     { id: '3', keyword: '아주 긴 키워드로 줄바꿈이 어떻게 되는지 보는 칸', priceDropOnly: false },
+    { id: '4', keyword: '탄산소다', priceDropOnly: false },
   ],
 });
 
@@ -168,7 +169,8 @@ export const USER_FIXTURES: Record<string, (variables: Record<string, unknown>) 
     },
   }),
   // 키워드 탭 «내 키워드 상황판»(web 수기 문서 keyword-board.service · 앱 QueryKeywordBoard — 같은 이름·같은 모양).
-  // 세제 = 이번 주 2건(하나는 1년 최저가), 7800X3D = 끝난 딜 하나·조용함, 긴 키워드 = 90일 0건(넓혀 받기 제안).
+  // 세제 = 이번 주 2건(하나는 1년 최저가), 7800X3D = 끝난 딜 하나·조용함, 긴 키워드 = 90일 0건(넓혀 받기 제안),
+  // 탄산소다 = 최근 딜 3건 — 키워드 4개라 PC 3열 첫 줄 밖 「키워드 1개 더 보기」가 보인다.
   QueryKeywordBoard: (): QueryKeywordBoardQuery => {
     const deal = (
       p: (typeof PRODUCTS)[number],
@@ -228,6 +230,20 @@ export const USER_FIXTURES: Record<string, (variables: Record<string, unknown>) 
           suggestedDealCount: 7,
           weekDealCount: 0,
           recentDeals: [],
+        },
+        {
+          keyword: '탄산소다',
+          dealCount: 12,
+          windowDays: 90,
+          lastDealAt: minutesAgo(180),
+          suggestedKeyword: null,
+          suggestedDealCount: null,
+          weekDealCount: 3,
+          recentDeals: [
+            deal(PRODUCTS[0], { id: '36102106', postedAt: minutesAgo(180) }),
+            deal(PRODUCTS[2], { id: '36102107', postedAt: minutesAgo(60 * 50) }),
+            deal(PRODUCTS[0], { id: '36102108', postedAt: minutesAgo(60 * 100) }),
+          ],
         },
       ],
     };

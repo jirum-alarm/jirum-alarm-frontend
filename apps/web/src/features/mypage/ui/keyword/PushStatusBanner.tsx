@@ -1,6 +1,6 @@
 'use client';
 
-import { text } from '@jirum/design-system/recipes';
+import { button, text } from '@jirum/design-system/recipes';
 import { useEffect, useState } from 'react';
 
 import { APP_QR_PATH } from '@/shared/config/appStore';
@@ -14,8 +14,11 @@ import { PushStatus, readPushStatus as readStatus } from '@/shared/lib/push-chan
  * 키워드 유저 중 푸시 토큰이 있는 건 소수였다. 나머지는 알림센터에만 쌓였고
  * 거의 읽히지 않았다 — 유저는 알림을 받는 줄 알고 있었다. iOS 사파리는 홈 화면에
  * 추가하지 않으면 웹 푸시 API 자체가 없고, 거부한 브라우저는 다시 묻지 않는다.
+ *
+ * compact = 한 줄 띠(키워드 탭 상황판 — 앱 키워드 탭의 「알림이 꺼져 있어요 · 켜기」 띠와 같은 모양). 이유 설명은
+ * 내 키워드·알림 설정 화면의 넓은 띠에만 둔다 — 탭 첫 화면에선 띠가 카드를 밀어냈다(2026-10-23).
  */
-const PushStatusBanner = () => {
+const PushStatusBanner = ({ compact = false }: { compact?: boolean }) => {
   const [status, setStatus] = useState<PushStatus | 'unknown'>('unknown');
   const { requestPermission } = useFcmPermission();
 
@@ -28,6 +31,31 @@ const PushStatusBanner = () => {
     await requestPermission({ force: true });
     setStatus(readStatus());
   };
+
+  if (compact) {
+    const action = cn(
+      'shrink-0',
+      button.size.xs.box,
+      button.size.xs.text,
+      button.tone.dark.box,
+      button.tone.dark.text,
+    );
+    return (
+      <div className="mb-3 flex items-center justify-between gap-3 rounded-lg bg-gray-50 px-4 py-2.5">
+        <p className="text-sm font-medium text-gray-700">이 기기로는 알림이 오지 않아요</p>
+        {status === 'default' ? (
+          <button type="button" onClick={handleEnable} className={action}>
+            알림 켜기
+          </button>
+        ) : (
+          // 스토어 분기 리다이렉트(UA) 라우트라 일반 이동(아래 넓은 띠와 같다).
+          <a href={APP_QR_PATH} className={cn('inline-flex items-center', action)}>
+            앱 설치
+          </a>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className={cn(text.body, 'mb-6 rounded-lg bg-gray-50 p-4')}>
