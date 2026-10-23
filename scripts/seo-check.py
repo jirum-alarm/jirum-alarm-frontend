@@ -56,6 +56,7 @@ REQUIRED = {
     'toss': SITE_LD | {'ItemList'},
     'help': SITE_LD | {'FAQPage'},
     'guide': SITE_LD | {'HowTo'},
+    'guide-sites': SITE_LD | {'FAQPage'},
 }
 # 본문 글자 수 하한(머리·바닥 글자 ~250자 포함). 10/19 실측 최저의 절반 안팎 — 본문이 빠지면 머리·바닥만 남아 여기 아래로 떨어진다.
 MIN_TEXT = {
