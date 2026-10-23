@@ -494,6 +494,36 @@ export type DoubleRowSection = BaseSection & {
   viewMoreLink?: Maybe<Scalars['String']['output']>;
 };
 
+export type EmailDigestBodyOutput = {
+  __typename?: 'EmailDigestBodyOutput';
+  html?: Maybe<Scalars['String']['output']>;
+  text?: Maybe<Scalars['String']['output']>;
+};
+
+export type EmailDigestOutput = {
+  __typename?: 'EmailDigestOutput';
+  createdAt: Scalars['DateTime']['output'];
+  digestDate: Scalars['String']['output'];
+  email?: Maybe<Scalars['String']['output']>;
+  error?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  itemCount: Scalars['Int']['output'];
+  reviewedAt?: Maybe<Scalars['DateTime']['output']>;
+  sentAt?: Maybe<Scalars['DateTime']['output']>;
+  status: EmailDigestStatus;
+  subject?: Maybe<Scalars['String']['output']>;
+  userId: Scalars['Int']['output'];
+};
+
+export enum EmailDigestStatus {
+  Approved = 'APPROVED',
+  Draft = 'DRAFT',
+  Expired = 'EXPIRED',
+  Failed = 'FAILED',
+  Rejected = 'REJECTED',
+  Sent = 'SENT',
+}
+
 /** 커뮤니티 반응 신호 하나(사이트 × 좋아요·댓글·조회·인기글) — 매일 08:05 Mattermost 알림과 같은 계산(engagement-signal-health) */
 export type EngagementSignalOutput = {
   __typename?: 'EngagementSignalOutput';
@@ -625,6 +655,17 @@ export type GroupSection = BaseSection & {
   title: Scalars['String']['output'];
   type: SectionDisplayType;
   viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
+
+/** 일별 성장 지표 한 칸(business_metric_daily) */
+export type GrowthMetricDailyOutput = {
+  __typename?: 'GrowthMetricDailyOutput';
+  /** KST 날짜 YYYY-MM-DD */
+  date: Scalars['String']['output'];
+  /** 채널·방 등, 없으면 빈 값 */
+  dim: Scalars['String']['output'];
+  metric: Scalars['String']['output'];
+  value: Scalars['Float']['output'];
 };
 
 export type HomePage = {
@@ -784,10 +825,19 @@ export type KeywordDealFrequencyOutput = {
   keyword: Scalars['String']['output'];
   /** 마지막으로 뜬 딜 게시 시각 */
   lastDealAt?: Maybe<Scalars['DateTime']['output']>;
+  /** 이 키워드로 알림이 잡았을 최근 딜(최신순, 알림과 같은 매칭·커뮤니티 풀). 키워드 탭 카드용, 최대 10 */
+  recentDeals: Array<ProductOutput>;
   suggestedDealCount?: Maybe<Scalars['Int']['output']>;
   /** 3번 미만이면 넓힐 첫 낱말(대개 브랜드) — 그 낱말이 3~60번일 때만 */
   suggestedKeyword?: Maybe<Scalars['String']['output']>;
+  /** 지난 7일 뜬 횟수 — 같은 날 같은 가격(교차 게시)은 한 번 */
+  weekDealCount: Scalars['Int']['output'];
   windowDays: Scalars['Int']['output'];
+};
+
+/** 키워드 미리보기 — 지난 90일 딜 횟수(키워드 알림과 같은 매칭)와, 드물면 넓힐 첫 낱말 */
+export type KeywordDealFrequencyOutputRecentDealsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type KeywordHubAdminDetailOutput = {
@@ -1035,6 +1085,14 @@ export type MatchRunsByAdminOutput = {
   total: Scalars['Int']['output'];
 };
 
+export type McpAuthorizationRequestOutput = {
+  __typename?: 'McpAuthorizationRequestOutput';
+  /** 연결하려는 AI 비서 이름(클라이언트가 등록 때 보낸 값 — 꾸밀 수 있다) */
+  clientName: Scalars['String']['output'];
+  /** 승인 뒤 돌아갈 주소의 호스트 — 동의 화면이 «어디로 보내는지» 보여 준다 */
+  redirectHost: Scalars['String']['output'];
+};
+
 export type ModelPageAdminItemOutput = {
   __typename?: 'ModelPageAdminItemOutput';
   brand?: Maybe<Scalars['String']['output']>;
@@ -1188,6 +1246,8 @@ export type Mutation = {
   createProductImageUploadUrl: ProductImageUploadUrlOutput;
   /** 유저가 직접 핫딜 상품 등록 (등록된 productId 반환) */
   createUserProduct: Scalars['Int']['output'];
+  /** AI 비서 연결 허용·거절 → 돌아갈 주소(웹이 그리로 보낸다). 요청이 없거나 만료면 null */
+  decideMcpAuthorization?: Maybe<Scalars['String']['output']>;
   /** 어드민) 역할 삭제 — 소속 계정은 역할 없음이 된다 */
   deleteAdminRole: Scalars['Boolean']['output'];
   /** 게스트 로그인 — 로그인 없이 키워드 알림을 받는 기기 계정(x-device-id 필수). 실제 로그인하면 그 계정으로 합쳐진다 */
@@ -1246,6 +1306,8 @@ export type Mutation = {
   reportExpiredProduct: Scalars['Boolean']['output'];
   /** 어드민) 키워드 허브 변경 하나를 그 전 정의·상태로 되돌림 */
   revertKeywordHubChangeByAdmin: KeywordHubAdminOutput;
+  /** 어드민) 이메일 요약 초안 승인·반려 (바뀐 수) */
+  reviewEmailDigestsByAdmin: Scalars['Int']['output'];
   /** 어드민) 알림 발송 */
   sendNotificationByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 광고 on/off (킬스위치) */
@@ -1276,6 +1338,8 @@ export type Mutation = {
   socialLogin: SocialLoginOutput;
   /** 알림 묶음(테마) 구독 — 키워드 시점 매칭, 멱등 */
   subscribeNotificationTheme: Scalars['Boolean']['output'];
+  /** 토스 미니앱 게스트 로그인 — 토스 사용자 식별키(anonKey)로 키워드 알림용 게스트 세션을 받는다 */
+  tossGuestLogin: TokenOutput;
   /** 알림 묶음(테마) 구독 해지 */
   unsubscribeNotificationTheme: Scalars['Boolean']['output'];
   /** 어드민) 광고 수정 */
@@ -1516,6 +1580,11 @@ export type MutationCreateUserProductArgs = {
   url: Scalars['String']['input'];
 };
 
+export type MutationDecideMcpAuthorizationArgs = {
+  approve: Scalars['Boolean']['input'];
+  requestId: Scalars['String']['input'];
+};
+
 export type MutationDeleteAdminRoleArgs = {
   id: Scalars['Int']['input'];
 };
@@ -1621,6 +1690,11 @@ export type MutationRevertKeywordHubChangeByAdminArgs = {
   note?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type MutationReviewEmailDigestsByAdminArgs = {
+  approve: Scalars['Boolean']['input'];
+  ids: Array<Scalars['Int']['input']>;
+};
+
 export type MutationSendNotificationByAdminArgs = {
   message: Scalars['String']['input'];
   target?: InputMaybe<NotificationTarget>;
@@ -1709,6 +1783,10 @@ export type MutationSocialLoginArgs = {
 
 export type MutationSubscribeNotificationThemeArgs = {
   themeId: Scalars['Int']['input'];
+};
+
+export type MutationTossGuestLoginArgs = {
+  anonKey: Scalars['String']['input'];
 };
 
 export type MutationUnsubscribeNotificationThemeArgs = {
@@ -2694,6 +2772,10 @@ export type Query = {
   coupangSearchCta?: Maybe<CoupangSearchCtaOutput>;
   /** 어드민) 일별/주별/월별 서비스 조회수 합계 */
   dailyServiceViewStats: Array<DateCountOutput>;
+  /** 어드민) 이메일 요약 본문 미리보기 */
+  emailDigestBodyByAdmin: EmailDigestBodyOutput;
+  /** 어드민) 이메일 요약 초안·발송 목록 */
+  emailDigestsByAdmin: Array<EmailDigestOutput>;
   /** 안읽은 알림 존재 여부 조회 */
   existUnreadNotification: Scalars['Boolean']['output'];
   existsUnreadNotice: Scalars['Boolean']['output'];
@@ -2764,6 +2846,8 @@ export type Query = {
   matchRunByAdmin?: Maybe<MatchRun>;
   /** 어드민) 매칭 실행 목록 조회 (페이징) */
   matchRunsByAdmin: MatchRunsByAdminOutput;
+  /** AI 비서 연결 승인 요청 — 10분 지났거나 이미 처리했으면 null */
+  mcpAuthorizationRequest?: Maybe<McpAuthorizationRequestOutput>;
   /** 로그인한 유저 정보 조회 */
   me?: Maybe<User>;
   modelPage?: Maybe<ModelPageOutput>;
@@ -3008,6 +3092,15 @@ export type QueryDailyServiceViewStatsArgs = {
   startDate: Scalars['DateTime']['input'];
 };
 
+export type QueryEmailDigestBodyByAdminArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type QueryEmailDigestsByAdminArgs = {
+  digestDate?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<EmailDigestStatus>;
+};
+
 export type QueryExistsUserArgs = {
   email: Scalars['String']['input'];
 };
@@ -3151,6 +3244,10 @@ export type QueryMatchRunsByAdminArgs = {
   to?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
+export type QueryMcpAuthorizationRequestArgs = {
+  requestId: Scalars['String']['input'];
+};
+
 export type QueryModelPageArgs = {
   slug: Scalars['String']['input'];
 };
@@ -3212,6 +3309,7 @@ export type QueryParseNotificationIntentArgs = {
 };
 
 export type QueryPendingVerificationsArgs = {
+  agentHeld?: InputMaybe<Scalars['Boolean']['input']>;
   aiSuggestion?: InputMaybe<ProductMappingAiSuggestion>;
   brandProductId?: InputMaybe<Scalars['Int']['input']>;
   limit: Scalars['Int']['input'];
@@ -3228,6 +3326,7 @@ export type QueryPendingVerificationsArgs = {
 };
 
 export type QueryPendingVerificationsTotalCountArgs = {
+  agentHeld?: InputMaybe<Scalars['Boolean']['input']>;
   aiSuggestion?: InputMaybe<ProductMappingAiSuggestion>;
   brandProductId?: InputMaybe<Scalars['Int']['input']>;
   matchStatus?: InputMaybe<Array<ProductMappingMatchStatus>>;
@@ -3693,6 +3792,8 @@ export type UserOverviewOutput = {
   activeMembers30d: Scalars['Int']['output'];
   /** 기간 안 일별 스냅숏(2026-10-11 부터) — 지난 날짜의 접속 수는 이것만 있다 */
   dailyActivity: Array<UserActivityDailyOutput>;
+  /** 기간 안 일별 성장 지표 — 웹·앱 사용자, 알림 경유 재방문, 푸시 수신, 키워드 등록, 카톡방 */
+  dailyGrowth: Array<GrowthMetricDailyOutput>;
   /** 기간 안 일별·가입 경로별 신규 계정 */
   dailySignups: Array<UserSignupDailyOutput>;
   /** 게스트 계정 수(로그인 없이 알림만 받는 기기) */

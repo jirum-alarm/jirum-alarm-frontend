@@ -22,6 +22,7 @@
     "./hangul-search": "./src/hangul-search.ts",
     "./home-sections": "./src/home-sections.ts",
     "./image": "./src/image.ts",
+    "./keyword-board": "./src/keyword-board.ts",
     "./keyword-frequency": "./src/keyword-frequency.ts",
     "./keyword-hub": "./src/keyword-hub.ts",
     "./keyword-options": "./src/keyword-options.ts",

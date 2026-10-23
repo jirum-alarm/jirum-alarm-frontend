@@ -44,6 +44,7 @@ export const ProductCardStatus = ({
   product,
   showHotdealBadge = true,
   squareThumb = false,
+  compact = false,
 }: {
   product: Pick<
     ProductCardType,
@@ -61,9 +62,11 @@ export const ProductCardStatus = ({
   showHotdealBadge?: boolean;
   /** 사진 틀 아래 모서리가 각진 카드(랭킹) — 라벨이 둥근 모서리를 가정하면 사진 귀퉁이가 삐져나온다. */
   squareThumb?: boolean;
+  /** 좁은 사진(목록 카드 76px·키워드 상황판 줄) — 배지를 모서리에 붙이고 「쿠팡 21%↓」 짧은 꼴(2026-10-23 하네스에서 잘림). */
+  compact?: boolean;
 }) => {
   const { isEnd, hotDealType, earliestExpiryDate, isRising, isYearLowest } = product;
-  const savingLabel = priceSavingLabel(product.priceSaving);
+  const savingLabel = priceSavingLabel(product.priceSaving, compact ? 'compact' : 'full');
   const badgeType = visibleHotDealType(hotDealType, earliestExpiryDate);
   // 토스 하루특가는 핫딜 배지 자리에 토스 앱 배지를 그대로 단다(앱 ProductCardStatus 와 같다).
   // 선착순이 끝나면 crawler 가 isEnd 도 켠다 — 「판매종료」보다 「선착순 마감」이 무슨 일인지 말해 주므로 먼저 본다.
@@ -75,7 +78,12 @@ export const ProductCardStatus = ({
     <>
       {/* 1년 최저가·기준가 대비(쿠팡보다 21%↓)·급상승(랭킹 목록만) — 오른쪽 위에 세로로. 왼쪽 위는 순위 숫자, 아래는 핫딜 배지·유통기한 띠 자리. 앱 ProductCardStatus 와 같다. */}
       {(isYearLowest || savingLabel || isRising) && !isEnd ? (
-        <div className="absolute top-1.5 right-1.5 z-10 flex flex-col items-end gap-1">
+        <div
+          className={cn(
+            'absolute z-10 flex flex-col items-end gap-1',
+            compact ? 'top-1 right-1' : 'top-1.5 right-1.5',
+          )}
+        >
           {isYearLowest ? (
             <Badge variant="solid" tone="secondary" size="xs">
               1년 최저가
