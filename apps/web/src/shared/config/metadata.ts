@@ -1,3 +1,4 @@
+import { COMMUNITY_COUNT } from '@jirum/domain/service-facts';
 import { Metadata } from 'next';
 
 import { IS_INDEXABLE_DEPLOYMENT, METADATA_SERVICE_URL } from './env';
@@ -11,9 +12,13 @@ export const robotsDirective = IS_INDEXABLE_DEPLOYMENT
   ? { index: true, follow: true }
   : { index: false, follow: false };
 
-const title = '지름알림: 실시간 초특가 핫딜 정보 모아보기 | 지금 놓치면 끝!';
-const description =
-  '전자제품부터 패션까지 초특가 할인 정보를 실시간으로 만나보세요. 모두가 알뜰하게 쇼핑하는 그날까지🔥';
+// 홈·기본 제목과 설명은 사람들이 실제로 치는 검색 표현(핫딜 모음·핫딜 사이트·핫딜 알림·핫딜 앱)을 그대로 담는다.
+// 전 문구 「실시간 초특가 핫딜 정보 모아보기 | 지금 놓치면 끝!」은 브랜드 질의 밖에선 네이버 AI 브리핑·구글 1페이지에
+// 걸리지 않았다(2026-10-23 실측, 판독 obs_seo_home_title_generic). (home)/page.tsx 의 og·twitter 와 HomeContainerV2 의 h1 이 같은 값을 쓴다.
+export const homeTitle = `지름알림 — 커뮤니티 ${COMMUNITY_COUNT} 핫딜 모음 사이트, 실시간 핫딜 알림 앱`;
+export const homeDescription = `뽐뿌·에펨코리아 등 커뮤니티 ${COMMUNITY_COUNT}의 핫딜·특가를 실시간으로 한곳에 모은 핫딜 사이트예요. 진짜 싼지 근거를 붙이고, 원하는 상품이 올라오면 iOS·Android 앱으로 바로 알려주는 무료 핫딜 알림 서비스예요.`;
+const title = homeTitle;
+const description = homeDescription;
 const applicationName = '지름알림';
 const siteName = '지름알림';
 const locale = 'ko_KR';

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { checkDevice } from '@/shared/actions/agent';
 import { AdvertiseSlotLocation } from '@/shared/api/gql/graphql';
 import { Advertisement } from '@/shared/config/advertisement';
+import { homeTitle } from '@/shared/config/metadata';
 import { getQueryClient } from '@/shared/lib/react-query/query-client';
 
 import { AdvertisementQueries } from '@/entities/advertisement/api';
@@ -81,7 +82,7 @@ async function HomeContainerV2() {
       <HydrationBoundary state={dehydrate(queryClient)}>
         {!isMobile ? renderDesktop() : renderMobile()}
         <main className="pc:mt-[770px] pc:w-full pc:max-w-none pc:rounded-t-3xl pc:pt-[72px] max-w-mobile-max rounded-t-sheet relative z-10 mt-40 bg-white pt-3">
-          <h1 className="sr-only">지름알림 · 실시간 초특가 핫딜 정보 모아보기</h1>
+          <h1 className="sr-only">{homeTitle}</h1>
           <div className="pc:mx-auto pc:max-w-layout-max">
             {!isMobile ? null : renderMobileRanking()}
             <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-14">
