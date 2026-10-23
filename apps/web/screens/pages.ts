@@ -53,6 +53,7 @@ export const PAGES: ScreenPage[] = [
   { name: 'mypage-notification', path: '/mypage/notification', auth: 'user' },
   { name: 'mypage-categories', path: '/mypage/categories', auth: 'user' },
   { name: 'mypage-account', path: '/mypage/account', auth: 'user' },
+  { name: 'mypage-help', path: '/mypage/help', auth: 'user', desktop: true },
   { name: 'alarm-user', path: '/alarm', auth: 'user', states: true },
   { name: 'like-user', path: '/like', auth: 'user', states: true },
 ];

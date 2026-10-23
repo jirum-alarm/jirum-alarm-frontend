@@ -14,7 +14,7 @@ import Link from '@/shared/ui/Link';
 
 import { AuthQueries } from '@/entities/auth';
 
-import { MYPAGE_GROUPS, MYPAGE_MENU } from '@/features/mypage/model/menu';
+import { MYPAGE_GROUPS, MYPAGE_MENU, pcMenuUrl } from '@/features/mypage/model/menu';
 
 const itemClass =
   'flex w-full cursor-pointer items-center rounded-lg px-2.5 py-1.5 text-sm text-gray-900 outline-none data-[highlighted]:bg-gray-50';
@@ -64,7 +64,7 @@ export default function UserMenu({ color }: { color: string }) {
               {MYPAGE_MENU.filter((menu) => menu.group === group.key).map((menu) => (
                 <DropdownMenu.Item key={menu.url} asChild>
                   <Link
-                    href={menu.url}
+                    href={pcMenuUrl(menu)}
                     className={itemClass}
                     onClick={menu.url === PAGE.ALARM ? () => trackAlarmLink('gnb_menu') : undefined}
                   >

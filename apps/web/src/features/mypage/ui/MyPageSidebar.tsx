@@ -14,7 +14,7 @@ import Link from '@/shared/ui/Link';
 
 import { AuthQueries } from '@/entities/auth';
 
-import { MYPAGE_GROUPS, MYPAGE_MENU } from '../model/menu';
+import { MYPAGE_GROUPS, MYPAGE_MENU, pcMenuUrl } from '../model/menu';
 
 const rowClass = 'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-gray-900';
 
@@ -49,9 +49,9 @@ export default function MyPageSidebar() {
               {MYPAGE_MENU.filter((menu) => menu.group === group.key).map((menu) => (
                 <li key={menu.url}>
                   <Link
-                    href={menu.url}
+                    href={pcMenuUrl(menu)}
                     className={cn(rowClass, 'hover:bg-gray-50', {
-                      'bg-gray-100 font-semibold': isActive(menu.url),
+                      'bg-gray-100 font-semibold': isActive(pcMenuUrl(menu)),
                     })}
                   >
                     {menu.icon}

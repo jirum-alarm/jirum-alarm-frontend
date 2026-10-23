@@ -4,7 +4,7 @@ import { cn } from '@/shared/lib/cn';
 import { ArrowRight } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
 
-import { MYPAGE_GROUPS, MYPAGE_MENU } from '../model/menu';
+import { MYPAGE_GROUPS, MYPAGE_MENU, pcMenuUrl } from '../model/menu';
 
 /** PC 마이페이지 첫 화면 — 메뉴를 설명 붙은 카드로, 사이드바와 같은 묶음. 프로필·고객센터·약관은 사이드바에만 있다. */
 export default function MyPageOverview() {
@@ -18,7 +18,7 @@ export default function MyPageOverview() {
             {MYPAGE_MENU.filter((menu) => menu.group === group.key).map((menu) => (
               <li key={menu.url}>
                 <Link
-                  href={menu.url}
+                  href={pcMenuUrl(menu)}
                   className="flex h-full items-center gap-4 rounded-xl border border-gray-200 px-5 py-5 hover:bg-gray-50"
                 >
                   {menu.icon}

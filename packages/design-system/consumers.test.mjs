@@ -162,7 +162,7 @@ test('web 어디에도 칩·태그 모양을 손으로 다시 적지 않는다(�
 // 갈렸고 대부분 눌림 반응이 없었다(2026-10-22).
 const WEB_PRIMARY_BUTTON_EXCEPTIONS = {
   // 도움말 본문 안 아이콘 달린 작은 권유 링크 — 화면 아래 주 버튼(lg)이 아니고 레시피 md 는 짙은 판이라 맞는 모양이 없다.
-  'apps/web/src/app/(desktop-ready)/help/page.tsx': 1,
+  'apps/web/src/app/(desktop-ready)/help/HelpArticle.tsx': 1,
   // 떠 있는 글쓰기 버튼(FAB) — 알약·그림자, 버튼 레시피의 모양이 아니다.
   'apps/web/src/features/community/ui/CommunityList.tsx': 1,
 };

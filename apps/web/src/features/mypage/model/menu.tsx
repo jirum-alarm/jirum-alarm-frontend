@@ -25,6 +25,10 @@ const WEB_MENU: Record<MypageMenuKey, { icon: React.ReactNode; url: string }> = 
 
 /** 마이페이지 메뉴. 모바일 목록(MenuList)·PC 사이드바·PC 첫 화면 카드가 같은 목록을 쓴다.
  *  pcOnly: 모바일엔 따로 길이 있는 것(알림 = 바텀 탭). PC 는 GNB 아이콘뿐이라 마이페이지 메뉴로 묶는다. */
+/** PC(사이드바·첫 화면 카드·GNB 드롭다운)에서는 도움말을 마이페이지 틀 안(/mypage/help)에서 연다 — /help 로 가면 왼쪽 메뉴가 사라진다. 모바일 목록은 그대로 /help. */
+export const pcMenuUrl = (menu: { url: string }) =>
+  menu.url === PAGE.HELP ? PAGE.MYPAGE_HELP : menu.url;
+
 export const MYPAGE_MENU: Array<
   Omit<MypageMenuItem, 'key'> & { icon: React.ReactNode; url: string }
 > = MENU.map(({ key, ...item }) => ({ ...item, ...WEB_MENU[key] }));

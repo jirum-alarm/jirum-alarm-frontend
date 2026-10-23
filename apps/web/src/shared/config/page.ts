@@ -36,6 +36,8 @@ export enum PAGE {
   MYPAGE_ACCOUNT_PERSONAL = '/mypage/account/personal',
   MYPAGE_ACCOUNT_PASSWORD = '/mypage/account/password',
   MYPAGE_TERMS_POLICIES = '/mypage/terms-policies',
+  /** PC 마이페이지 틀 안에서 여는 /help — 왼쪽 메뉴를 잃지 않게. 모바일·앱은 /help. */
+  MYPAGE_HELP = '/mypage/help',
 
   POLICIES_PRIVACY = '/policies/privacy',
   POLICIES_TERMS = '/policies/terms',
