@@ -13,6 +13,8 @@ import DealsMobileHeader from '../deals/[slug]/DealsMobileHeader';
  */
 const PATH = '/mcp';
 const MCP_URL = 'https://mcp.jirum-alarm.com/mcp';
+/** Claude 커넥터 디렉터리 등록 페이지(2026-10-23 게시) — 주소를 붙이지 않고 바로 연결된다. */
+const CLAUDE_DIRECTORY_URL = 'https://claude.ai/directory/jirum-alarm';
 const title = 'AI 비서에서 지름알림 쓰기 — Claude·ChatGPT 연결(MCP) | 지름알림';
 const description =
   'Claude·ChatGPT 에 지름알림을 연결하면 «이거 지금 사도 돼?»에 커뮤니티 핫딜 90일 기록으로 답해요. 좋은 가격, 그 가격이 얼마나 자주 오는지, 지금 올라온 핫딜까지 알려 주고, «싸지면 알려줘»라고 하면 내 계정에 가격 알림도 걸어요.';
@@ -26,12 +28,12 @@ export const metadata: Metadata = {
 
 const CLIENTS = [
   {
-    name: 'Claude (웹·데스크톱)',
+    name: 'Claude (웹·데스크톱·모바일)',
+    link: { href: CLAUDE_DIRECTORY_URL, label: 'Claude 디렉터리에서 지름알림 열기' },
     steps: [
-      '설정 → 커넥터에서 «커스텀 커넥터 추가»를 눌러요.',
-      '이름은 «지름알림», 주소엔 아래 MCP 주소를 붙이고 추가해요.',
-      '«연결»을 누르면 지름알림 로그인 창이 떠요 — 로그인하고 «허용»을 누르면 끝이에요.',
-      '대화창의 «+» → 커넥터에서 지름알림을 켜요. 무료 플랜도 커스텀 커넥터 1개를 쓸 수 있어요.',
+      'Claude 커넥터 디렉터리의 지름알림 페이지(아래 버튼)에서 «연결»을 눌러요. 설정 → 커넥터에서 «지름알림»을 검색해도 돼요.',
+      '지름알림 로그인 창이 뜨면 로그인하고 «허용»을 누르면 끝이에요.',
+      '대화창의 «+» → 커넥터에서 지름알림을 켜요.',
     ],
   },
   {
@@ -86,6 +88,16 @@ export default function McpGuidePage() {
                 <li key={s}>{s}</li>
               ))}
             </ol>
+            {'link' in c && c.link ? (
+              <a
+                href={c.link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex rounded-full bg-gray-900 px-4 py-2 text-sm font-semibold text-white"
+              >
+                {c.link.label}
+              </a>
+            ) : null}
           </section>
         ))}
 
