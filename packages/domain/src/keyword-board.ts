@@ -118,32 +118,33 @@ export function summarizeKeywordBoard(entries: readonly KeywordBoardEntry[]): Ke
 }
 
 /**
- * 상황판 머리말 — «내 키워드가 일하고 있다»를 숫자로. 푸시를 못 받는 사람(등록자의 74%)에게는 이 줄이 알림의 전부다.
- * 지금 사기 좋은 딜이 있으면 그걸 먼저 — 서비스의 답(«지금 사도 되나»)이 키워드 탭에서도 나오게.
+ * 상황판 요약 한 줄 — «내 키워드가 일하고 있다»를 숫자로. 푸시를 못 받는 사람(등록자의 74%)에게는 이 줄이 알림의 전부다.
+ * 지금 사기 좋은 딜이 있으면 그걸 먼저(emphasis — 화면이 강조색으로) — 서비스의 답(«지금 사도 되나»)이 키워드 탭에서도 나오게.
+ * 2026-10-23 머리말 상자(제목+설명 두 줄)를 «내 키워드» 제목 아래 한 줄로 줄였다 — 상자·띠가 쌓여 카드가 첫 화면 밖으로 밀렸다.
  */
-export function keywordBoardHeadline(summary: KeywordBoardSummary): { title: string; description: string } {
+export function keywordBoardSummaryLine(summary: KeywordBoardSummary): { emphasis: string | null; text: string } {
   if (summary.goodDealCount > 0) {
     return {
-      title: `지금 사기 좋은 딜 ${summary.goodDealCount}건이 있어요`,
-      description: `이번 주 내 키워드에 올라온 핫딜 ${summary.weekDealCount}건 중 1년 최저가거나 기준가보다 싼 딜이에요.`,
+      emphasis: `지금 사기 좋은 딜 ${summary.goodDealCount}건`,
+      text: `이번 주 ${summary.weekDealCount}건 올라왔어요`,
     };
   }
   if (summary.weekDealCount > 0) {
     return {
-      title: `이번 주 내 키워드에 올라온 핫딜 ${summary.weekDealCount}건`,
-      description: `키워드 ${summary.keywordCount}개 중 ${summary.activeKeywordCount}개에서 올라왔어요. 평소보다 싼 딜이 뜨면 카드에 표시해 드려요.`,
+      emphasis: null,
+      text: `이번 주 키워드 ${summary.activeKeywordCount}개에서 ${summary.weekDealCount}건 올라왔어요`,
     };
   }
-  return {
-    title: '이번 주엔 조용했어요',
-    description: `키워드 ${summary.keywordCount}개를 지켜보고 있어요. 올라오면 바로 알려드려요.`,
-  };
+  return { emphasis: null, text: `이번 주엔 조용했어요 · 키워드 ${summary.keywordCount}개를 지켜보고 있어요` };
 }
 
 /** 키워드 탭 문구 — web·앱이 같은 말. */
 export const KEYWORD_BOARD_COPY = {
   mineTitle: '내 키워드',
   manage: '알림 관리',
+  /** PC 3열 첫 줄 밖 키워드 펼치기. */
+  showMore: (count: number) => `키워드 ${count}개 더 보기`,
+  showLess: '접기',
   /** 공개 허브인 키워드 — 30일 모음으로. */
   hub: '모아보기',
   /** 허브가 아닌 키워드 — 지금 올라온 딜 검색으로. */

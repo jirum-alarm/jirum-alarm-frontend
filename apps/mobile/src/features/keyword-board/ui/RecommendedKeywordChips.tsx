@@ -1,7 +1,7 @@
 import {addChip, text} from '@jirum/design-system/recipes';
 import {KEYWORD_BOARD_COPY} from '@jirum/domain/keyword-board';
 import React from 'react';
-import {Pressable, View} from 'react-native';
+import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
 import {HomeQueries} from '@/entities/home/api/home.queries';
@@ -27,10 +27,13 @@ const MAX_CHIPS = 8;
 export default function RecommendedKeywordChips({
   registered,
   onRegister,
+  wrap = false,
 }: {
   registered: Set<string>;
   /** 「직접 입력해서 걸기」 — 내 키워드 화면(입력칸)으로. */
   onRegister: () => void;
+  /** 키워드가 없을 때(칩이 화면의 본체, 회색 상자 안) — 한 줄로 넘기지 않고 다 보이게 감는다. 아니면 화면 폭 한 줄로 넘긴다. */
+  wrap?: boolean;
 }) {
   const queryClient = useQueryClient();
   const {data} = useQuery(HomeQueries.recommendedKeywords());
@@ -54,38 +57,61 @@ export default function RecommendedKeywordChips({
       ),
   });
 
+  const addMore = (
+    <Pressable
+      onPress={onRegister}
+      hitSlop={8}
+      accessibilityRole="link"
+      style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+      <Text className={cn('underline', text.caption)}>
+        {KEYWORD_BOARD_COPY.addMore}
+      </Text>
+    </Pressable>
+  );
+  const chipButtons = chips.map(keyword => (
+    <PressableScale
+      key={keyword}
+      disabled={isPending}
+      onPress={() => mutate(keyword)}
+      accessibilityRole="button"
+      accessibilityLabel={`${keyword} 키워드 알림 등록`}
+      className={cn('flex-row items-center gap-1.5', addChip.box)}>
+      <Text className={addChip.text}>{keyword}</Text>
+      <Text className={addChip.plus}>+</Text>
+    </PressableScale>
+  ));
+
+  // 칩은 한 줄로 넘긴다(여러 줄로 감기면 카드보다 칩이 커 보였다). 「직접 입력해서 걸기」는 제목 줄 오른쪽. web 과 같은 모양.
+  if (chips.length === 0) {
+    return <View className={wrap ? undefined : 'px-5'}>{addMore}</View>;
+  }
   return (
     <View>
-      {chips.length > 0 ? (
-        <>
-          <Text className={text.caption}>
-            {KEYWORD_BOARD_COPY.recommendedTitle}
-          </Text>
-          <View className="mt-2 flex-row flex-wrap gap-2">
-            {chips.map(keyword => (
-              <PressableScale
-                key={keyword}
-                disabled={isPending}
-                onPress={() => mutate(keyword)}
-                accessibilityRole="button"
-                accessibilityLabel={`${keyword} 키워드 알림 등록`}
-                className={cn('flex-row items-center gap-1.5', addChip.box)}>
-                <Text className={addChip.text}>{keyword}</Text>
-                <Text className={addChip.plus}>+</Text>
-              </PressableScale>
-            ))}
-          </View>
-        </>
-      ) : null}
-      <Pressable
-        onPress={onRegister}
-        hitSlop={8}
-        accessibilityRole="link"
-        style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-        <Text className={cn('mt-3 underline', text.caption)}>
-          {KEYWORD_BOARD_COPY.addMore}
+      <View
+        className={cn(
+          'flex-row items-baseline justify-between gap-3',
+          !wrap && 'px-5',
+        )}>
+        <Text className={text.caption}>
+          {KEYWORD_BOARD_COPY.recommendedTitle}
         </Text>
-      </Pressable>
+        {addMore}
+      </View>
+      {wrap ? (
+        <View className="mt-2 flex-row flex-wrap gap-2">{chipButtons}</View>
+      ) : (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          className="mt-2"
+          contentContainerStyle={styles.strip}>
+          {chipButtons}
+        </ScrollView>
+      )}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  strip: {paddingHorizontal: 20, gap: 8},
+});
