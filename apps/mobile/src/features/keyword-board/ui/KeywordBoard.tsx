@@ -6,7 +6,13 @@ import {
   summarizeKeywordBoard,
 } from '@jirum/domain/keyword-board';
 import React from 'react';
-import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
 import {findKeywordHubForQuery} from '@/entities/keyword-hub/lib/keyword-hub';
@@ -17,7 +23,6 @@ import {
 } from '@/entities/mypage/model/myKeywords';
 import {MyPageService} from '@/shared/api/mypage';
 import PressableScale from '@/shared/components/PressableScale';
-import {useContentWidth} from '@/shared/components/SideSafeArea';
 import {SkeletonBox} from '@/shared/components/Skeletons';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {trackKeywordRegister} from '@/shared/lib/analytics/keyword-tracking';
@@ -67,7 +72,8 @@ export default function KeywordBoard({
   const names = (keywords ?? []).map(k => k.keyword);
   const board = useKeywordBoard(names);
   const push = usePushPermissionStatus();
-  const contentWidth = useContentWidth();
+  // 이 runtime 엔 SideSafeArea(useContentWidth)가 없다 — 듀오 전체 화면 전(1.5.8) 바이너리라 창 폭 그대로.
+  const {width: contentWidth} = useWindowDimensions();
   const cardWidth = Math.min(
     Math.round(contentWidth * CARD_WIDTH_RATIO),
     CARD_MAX_WIDTH,
