@@ -60,12 +60,12 @@ REQUIRED = {
 # 본문 글자 수 하한(머리·바닥 글자 ~250자 포함). 10/19 실측 최저의 절반 안팎 — 본문이 빠지면 머리·바닥만 남아 여기 아래로 떨어진다.
 MIN_TEXT = {
     'home': 2000, 'product': 600, 'model': 500, 'keyword': 1500, 'deals': 5000, 'keywords': 1500,
-    'ranking': 1500, 'toss': 500, 'help': 1500, 'guide': 500,
+    'ranking': 1500, 'toss': 500, 'help': 1500, 'guide': 500, 'guide-sites': 500,
 }
 # 정본 주소. 랭킹은 탭 0 이 정본이다(탭 12+ 도 여기로 canonical, v1.28.1).
 PAGES = [
     ('home', '/'), ('deals', '/deals'), ('keywords', '/keywords'), ('ranking', '/trending/ranking?tab=0'),
-    ('toss', '/toss'), ('help', '/help'), ('guide', '/guide/hotdeal-alarm'),
+    ('toss', '/toss'), ('help', '/help'), ('guide', '/guide/hotdeal-alarm'), ('guide-sites', '/guide/hotdeal-sites'),
 ]
 SKIP_TAGS = {'script', 'style', 'noscript', 'template', 'svg'}
 VOID_TAGS = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}

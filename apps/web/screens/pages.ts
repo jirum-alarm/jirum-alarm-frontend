@@ -36,6 +36,7 @@ export const PAGES: ScreenPage[] = [
   { name: 'community', path: '/community', states: true, desktop: true },
   { name: 'themes', path: '/themes', desktop: true },
   { name: 'help', path: '/help', desktop: true },
+  { name: 'guide-hotdeal-sites', path: '/guide/hotdeal-sites', desktop: true },
   { name: 'mcp', path: '/mcp', desktop: true },
   { name: 'mcp-authorize', path: '/mcp/authorize' },
   { name: 'recommend', path: '/recommend', desktop: true },

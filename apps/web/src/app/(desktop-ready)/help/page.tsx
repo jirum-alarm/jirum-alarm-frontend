@@ -328,6 +328,12 @@ const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
         link: { href: OKACHAT_LINK, label: '카톡방 들어가기' },
       },
       {
+        id: 'choose',
+        q: '핫딜 사이트·앱이 많은데 어떻게 고르나요?',
+        a: '커뮤니티 모음, 쇼핑몰 가격 추적, 모음에 가격 근거를 붙인 서비스 세 갈래예요. 어디서 얼마나 빨리 모으는지, 같은 상품인지 가려 주는지, 「싸다」의 기준이 무엇인지부터 봐 주세요.',
+        link: { href: '/guide/hotdeal-sites', label: '핫딜 사이트·앱 고르는 법' },
+      },
+      {
         id: 'contact',
         q: '문의는 어디로 하나요?',
         a: '마이페이지 → 고객센터에서 채팅으로 문의하거나, jirumalarm@gmail.com 으로 메일을 보내 주세요.',

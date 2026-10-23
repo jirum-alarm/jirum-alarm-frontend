@@ -25,6 +25,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.5,
     },
+    {
+      url: `${METADATA_SERVICE_URL}/guide/hotdeal-sites`,
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
     // 얇은 허브(최근 딜 KEYWORD_HUB_MIN_DEALS 미만)는 페이지가 noindex 라 싣지 않는다 — 사이트맵의 noindex URL 은
     // 크롤 예산만 쓰고 «제출됐지만 noindex» 로 남는다(2026-10-22: 80개 중 3개). 기준은 buildKeywordHubSeo.indexable 과 같다.
     ...hubs
