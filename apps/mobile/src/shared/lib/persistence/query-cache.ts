@@ -33,7 +33,7 @@ const SCHEMA_VERSION = 1;
  * GraphQL 문서(코드젠 gql.ts + 손으로 쓴 TypedDocumentString) 지문 — 쿼리 필드가 바뀌면 결과 모양도 바뀌므로 캐시를 버린다.
  * 손으로 맞출 필요 없다: 문서가 바뀌면 query-cache 테스트가 실패하며 새 값을 알려 준다(CI 가 OTA 전에 막는다).
  */
-export const QUERY_DOCS_FINGERPRINT = 'ab203a0b8eca';
+export const QUERY_DOCS_FINGERPRINT = '3ea4ede83db5';
 const MAX_AGE_MS = 24 * 60 * 60 * 1000;
 // 복원은 첫 렌더 전에 **동기로** JSON.parse 한다 — 너무 크면 그만큼 첫 화면이 늦으니 상한을 둔다.
 const MAX_BYTES = 1_000_000;

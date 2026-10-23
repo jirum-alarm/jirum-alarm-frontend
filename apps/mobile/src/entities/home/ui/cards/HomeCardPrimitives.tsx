@@ -37,10 +37,13 @@ export function CardThumbnail({
   style,
   thumbnailType = 'product',
   showHotdealBadge = true,
+  compact = false,
 }: {
   product: ProductCardType;
   style: {width: number | `${number}%`; height?: number; aspectRatio?: number};
   thumbnailType?: 'product' | 'hotDeal';
+  /** 좁은 사진(76px 목록형) — 배지 짧은 꼴(ProductCardStatus compact). */
+  compact?: boolean;
   /**
    * 썸네일 좌하단 핫딜 뱃지. **목록형 카드는 끈다** — 거기선 가격 옆에
    * `badgeVariant="page"` 뱃지가 이미 붙어 한 행에 같은 뱃지가 두 번 나온다
@@ -60,6 +63,7 @@ export function CardThumbnail({
       <ProductCardStatus
         product={product}
         showHotdealBadge={showHotdealBadge}
+        compact={compact}
       />
     </View>
   );

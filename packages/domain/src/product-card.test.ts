@@ -23,3 +23,9 @@ test('기준가 대비 라벨 — 기준별 문구 + 내린 정수 %, 모르는 
   assert.equal(priceSavingLabel({ basis: 'USUAL', percent: 0 }), null);
   assert.equal(priceSavingLabel(null), null);
 });
+
+test('좁은 사진용 compact 라벨 — 「보다」를 뺀다', () => {
+  assert.equal(priceSavingLabel({ basis: 'COUPANG', percent: 21 }, 'compact'), '쿠팡 21%↓');
+  assert.equal(priceSavingLabel({ basis: 'USUAL', percent: 11.9 }, 'compact'), '평소 11%↓');
+  assert.equal(priceSavingLabel({ basis: 'NAVER', percent: 11 }, 'compact'), null);
+});

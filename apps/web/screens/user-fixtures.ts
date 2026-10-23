@@ -14,6 +14,8 @@ import type {
 // 앱(apps/mobile)은 같은 데이터를 다른 오퍼레이션 이름으로 부른다 — 앱 하네스(screens-ios.sh SCREENS_API=fixture)용.
 import type {
   MyFavoriteCategoriesQuery,
+  PriceSavingBasis,
+  QueryKeywordBoardQuery,
   QueryMyNotificationKeywordsQuery,
   QueryMyProfileQuery,
   QueryMyPushSettingQuery,
@@ -165,6 +167,71 @@ export const USER_FIXTURES: Record<string, (variables: Record<string, unknown>) 
       keywordAlertLevel: 'ALL' as QueryMyPushSettingQuery['pushSetting']['keywordAlertLevel'],
     },
   }),
+  // 키워드 탭 «내 키워드 상황판»(web 수기 문서 keyword-board.service · 앱 QueryKeywordBoard — 같은 이름·같은 모양).
+  // 세제 = 이번 주 2건(하나는 1년 최저가), 7800X3D = 끝난 딜 하나·조용함, 긴 키워드 = 90일 0건(넓혀 받기 제안).
+  QueryKeywordBoard: (): QueryKeywordBoardQuery => {
+    const deal = (
+      p: (typeof PRODUCTS)[number],
+      over: Partial<
+        QueryKeywordBoardQuery['keywordDealFrequencies'][number]['recentDeals'][number]
+      >,
+    ) => ({
+      id: p.id,
+      title: p.title,
+      price: p.price,
+      thumbnail: p.thumbnail,
+      postedAt: minutesAgo(90),
+      categoryId: p.categoryId,
+      isEnd: false,
+      isHot: p.isHot,
+      hotDealType: null,
+      mallName: null,
+      isYearLowest: false,
+      priceSaving: null,
+      provider: { nameKr: '뽐뿌' },
+      ...over,
+    });
+    return {
+      keywordDealFrequencies: [
+        {
+          keyword: '세제',
+          dealCount: 31,
+          windowDays: 90,
+          lastDealAt: minutesAgo(90),
+          suggestedKeyword: null,
+          suggestedDealCount: null,
+          weekDealCount: 2,
+          recentDeals: [
+            deal(PRODUCTS[0], { isYearLowest: true }),
+            deal(PRODUCTS[2], {
+              postedAt: minutesAgo(60 * 30),
+              priceSaving: { basis: 'USUAL' as PriceSavingBasis, percent: 12 },
+            }),
+          ],
+        },
+        {
+          keyword: '7800X3D',
+          dealCount: 4,
+          windowDays: 90,
+          lastDealAt: minutesAgo(60 * 24 * 12),
+          suggestedKeyword: null,
+          suggestedDealCount: null,
+          weekDealCount: 0,
+          recentDeals: [deal(PRODUCTS[1], { postedAt: minutesAgo(60 * 24 * 12), isEnd: true })],
+        },
+        {
+          keyword: '아주 긴 키워드로 줄바꿈이 어떻게 되는지 보는 칸',
+          dealCount: 0,
+          windowDays: 90,
+          lastDealAt: null,
+          suggestedKeyword: '아주',
+          suggestedDealCount: 7,
+          weekDealCount: 0,
+          recentDeals: [],
+        },
+      ],
+    };
+  },
   // 알림함 「좋은 가격만 받기」 제안(수기 문서 good-price.service).
   QueryGoodPriceSuggestion: (v) => ({
     goodPriceSuggestion: {

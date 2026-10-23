@@ -47,7 +47,7 @@ export default function ListProductCard({
               sizes="120px"
               priority={priority}
             />
-            <ProductCardStatus product={product} showHotdealBadge={false} />
+            <ProductCardStatus product={product} showHotdealBadge={false} compact />
           </div>
           <div className="flex h-full flex-col justify-between gap-1">
             <span className="line-clamp-2 text-sm break-all text-gray-700">{product.title}</span>

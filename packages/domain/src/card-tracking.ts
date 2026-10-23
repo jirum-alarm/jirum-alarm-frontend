@@ -18,6 +18,7 @@ export type ProductCardSource =
   | 'category_popular' // 카테고리 인기
   | 'notification_theme' // 알림 묶음 상세 라이브딜
   | 'keyword_hub' // 키워드 허브 화면 목록(지금은 앱만 — web 허브 그리드는 아직 source 를 안 붙인다)
+  | 'keyword_tab' // 키워드 탭 «내 키워드» 카드의 최근 딜(web /keywords·앱 KeywordsTab)
   | 'expired_latest' // 종료 딜 상세의 '최신 핫딜' 블록(지금은 web 만)
   | 'live_alternative' // 진행 중 딜 상세의 '다른 곳 진행 중인 딜' 블록
   | 'toss_internal_link' // 토스 상세의 '토스에서 함께 보는 상품'(실험 toss_internal_link_v1, web 만)

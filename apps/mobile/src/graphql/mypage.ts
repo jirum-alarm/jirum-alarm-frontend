@@ -327,6 +327,44 @@ export const QueryKeywordDealFrequencies = graphql(`
   }
 `);
 
+/**
+ * 키워드 탭 «내 키워드 상황판» — 횟수에 더해 7일 건수·알림이 잡았을 최근 딜(limit). web keyword-board.service 와 같은 문서.
+ * 횟수만 쓰는 QueryKeywordDealFrequencies 와 따로 둔다 — 입력칸 미리보기까지 상품을 받지 않게.
+ */
+export const QueryKeywordBoard = graphql(`
+  query QueryKeywordBoard($keywords: [String!]!, $limit: Int!) {
+    keywordDealFrequencies(keywords: $keywords) {
+      keyword
+      dealCount
+      windowDays
+      lastDealAt
+      suggestedKeyword
+      suggestedDealCount
+      weekDealCount
+      recentDeals(limit: $limit) {
+        id
+        title
+        price
+        thumbnail
+        postedAt
+        categoryId
+        isEnd
+        isHot
+        hotDealType
+        mallName
+        isYearLowest
+        priceSaving {
+          basis
+          percent
+        }
+        provider {
+          nameKr
+        }
+      }
+    }
+  }
+`);
+
 /** 내 키워드를 「좋은 가격만 받기」로 — 하락만 받기 + 단위 기준가(서버가 판정). */
 export const MutationApplyGoodPriceOnly = graphql(`
   mutation MutationApplyGoodPriceOnly($keyword: String!) {
