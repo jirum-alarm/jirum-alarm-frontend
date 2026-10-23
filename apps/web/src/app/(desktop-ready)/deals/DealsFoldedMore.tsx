@@ -47,8 +47,14 @@ export default function DealsFoldedMore({
         if (e.currentTarget.open && state === 'closed') void load();
       }}
     >
-      <summary className="cursor-pointer list-none rounded-xl border border-gray-200 py-3 text-center text-sm font-medium text-gray-700 group-open:hidden">
-        {links.length}개 더 보기
+      {/* 가벼운 글자 링크 — 카드 폭 전체를 가로지르는 상자는 카드보다 눈에 띄었다(2026-10-23). */}
+      <summary
+        className={cn(
+          text.muted,
+          'cursor-pointer list-none py-2 text-center group-open:hidden hover:text-gray-900',
+        )}
+      >
+        {links.length}개 더 보기 ›
       </summary>
       {Array.isArray(state) ? (
         variant === 'grid' ? (

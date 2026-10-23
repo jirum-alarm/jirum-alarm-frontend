@@ -131,15 +131,12 @@ export function DealCard({ item: p }: { item: ListItem }) {
               </Badge>
             )}
             <p className={text.title}>{p.activePrice!.toLocaleString()}원</p>
-            <p className={text.caption}>
-              {[
-                relativeTimeLabel(p.activePostedAt),
-                p.activeDealCount > 1 ? `진행 ${p.activeDealCount}건` : null,
-              ]
-                .filter(Boolean)
-                .join(' · ')}
-            </p>
-            <TrendLine prices={p.trendPrices ?? []} tone={verdict?.tone ?? 'gray'} />
+            {/* 「진행 N건」은 뺐다 — 카드에선 뜻이 안 읽혀 소음이었다(진행 중인 딜 목록은 상세에). 2026-10-23 */}
+            <p className={text.caption}>{relativeTimeLabel(p.activePostedAt)}</p>
+            {/* 좋은 가격(최저·평소보다 쌈) 카드는 선이 늘 바닥 점으로 끝나 배지와 같은 말을 한다 — 판정이 다를 때만 그린다. */}
+            {verdict?.tone !== 'success' && (
+              <TrendLine prices={p.trendPrices ?? []} tone={verdict?.tone ?? 'gray'} />
+            )}
           </div>
         ) : (
           <div className="mt-auto">
