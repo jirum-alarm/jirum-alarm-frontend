@@ -1,6 +1,6 @@
 # 지름알림 뷰티(apps/beauty-web) — jirum-alarm.com/beauty/* (게이트웨이가 /beauty 접두를 이 파드로 보낸다)
 # 골격은 apps/ai Dockerfile 과 같다(turbo prune → 이미지 안에서 빌드 → standalone 만 담는 런너).
-ARG NODE_VERSION=22.18
+ARG NODE_VERSION=22.23.4
 ARG PNPM_VERSION=10.30.3
 
 FROM --platform=linux/amd64 node:${NODE_VERSION}-alpine AS base

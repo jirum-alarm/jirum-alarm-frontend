@@ -1,4 +1,4 @@
-ARG NODE_VERSION=22.18
+ARG NODE_VERSION=22.23.4
 ARG PNPM_VERSION=10.30.3
 
 # ========================================

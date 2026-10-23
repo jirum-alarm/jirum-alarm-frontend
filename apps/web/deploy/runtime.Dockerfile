@@ -2,7 +2,7 @@
 # (이전: 이미지 안에서 빌드 → 호스티드 러너는 매번 새 VM 이라 컴파일 캐시가 늘 비어 있었다)
 # ★glibc(slim) 필수: 러너(ubuntu)에서 설치된 sharp 네이티브 바이너리가 standalone 에 실린다.
 #   alpine(musl) 이면 sharp 가 안 떠서 /_next/image 이미지 최적화가 깨진다.
-FROM node:22.18-slim
+FROM node:22.23.4-slim
 
 # libjemalloc2: glibc malloc 대신 jemalloc 으로 돌린다(아래 LD_PRELOAD). 경로를 아키텍처와 무관하게 고정하려고 심볼릭 링크.
 RUN apt-get update && apt-get install -y --no-install-recommends dumb-init libjemalloc2 && rm -rf /var/lib/apt/lists/* && \
