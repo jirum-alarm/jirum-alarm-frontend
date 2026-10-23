@@ -9,6 +9,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 import { checkDevice } from '@/shared/actions/agent';
+import { PromotionService } from '@/shared/api/promotion';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
@@ -115,6 +116,12 @@ const faqLd = {
 
 export default async function HotdealSitesGuidePage() {
   const { isJirumAlarmApp } = await checkDevice();
+  // 쇼핑몰별 핫딜 모음(/curation/mall-group-{id}) — 이 글이 그 페이지들의 거의 유일한 안쪽 링크다(홈은 서버 구성에 든 몰만).
+  const mallGroups = await PromotionService.getMallGroups()
+    .then((r) =>
+      r.mallGroups.filter((m) => m.isActive).sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0)),
+    )
+    .catch(() => []);
 
   return (
     <main className="max-w-mobile-max pc:pt-24 mx-auto w-full px-5 pt-14 pb-24">
@@ -146,6 +153,20 @@ export default async function HotdealSitesGuidePage() {
             ))}
           </ul>
           <p className={cn(text.muted, 'mt-3')}>쇼핑몰 특가: {SHOPPING_SOURCES.join(' · ')}</p>
+          {mallGroups.length > 0 ? (
+            <ul className="mt-3 flex flex-wrap gap-2" aria-label="쇼핑몰별 핫딜 모음">
+              {mallGroups.map((m) => (
+                <li key={m.id}>
+                  <Link
+                    href={m.title === '토스' ? '/toss' : `/curation/mall-group-${Math.trunc(m.id)}`}
+                    className={cn('inline-block', linkChip)}
+                  >
+                    {m.title} 핫딜 모음
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </section>
 
         <section>

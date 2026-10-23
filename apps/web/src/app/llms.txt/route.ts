@@ -39,6 +39,7 @@ export function GET() {
 - [뷰티 핫딜](${base}/beauty): 화장품·스킨케어 핫딜을 커뮤니티 반응 순으로 모은 곳
 - [키워드별 핫딜](${base}/keywords): 삼다수·기저귀·노트북 등 검색어별 최근 핫딜과 올라오는 빈도
 - [핫딜 알림 받는 법](${base}/guide/hotdeal-alarm): 키워드 알림 설정·알림이 안 올 때
+- 쇼핑몰별 핫딜 모음(커뮤니티에 올라온 그 쇼핑몰 딜): [쿠팡](${base}/curation/mall-group-16) · [알리익스프레스](${base}/curation/mall-group-20) · [네이버](${base}/curation/mall-group-1) · [지마켓](${base}/curation/mall-group-7) · [11번가](${base}/curation/mall-group-9) · [무신사](${base}/curation/mall-group-23) · [오늘의집](${base}/curation/mall-group-31) · 토스 하루특가는 위 /toss
 - [핫딜 사이트·앱 고르는 법](${base}/guide/hotdeal-sites): 핫딜이 올라오는 커뮤니티, 핫딜 사이트 세 갈래(커뮤니티 모음·쇼핑몰 가격 추적·모음+가격 근거), 고를 때 볼 것
 - [2026 블프·광군제 해외직구 달력](${base}/season/2026-black-friday): 알리익스프레스 광군제(11.11)·블랙프라이데이·12.12 일정(2025 기준, 공식 발표 때 갱신)·쿠폰 확인처·면세 한도와 KC 인증 주의·지금 올라온 해외직구 핫딜
 
