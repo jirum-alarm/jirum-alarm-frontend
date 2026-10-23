@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
 const {
   describeKeywordActivity,
   isGoodDeal,
-  keywordBoardHeadline,
+  keywordBoardSummaryLine,
   sortKeywordBoard,
   summarizeKeywordBoard,
 } = require('./keyword-board.ts') as typeof import('./keyword-board');
@@ -87,7 +87,7 @@ describe('sortKeywordBoard', () => {
   });
 });
 
-describe('summarizeKeywordBoard · keywordBoardHeadline', () => {
+describe('summarizeKeywordBoard · keywordBoardSummaryLine', () => {
   it('이번 주 건수는 키워드별 합, 좋은 딜은 같은 딜을 한 번만', () => {
     const summary = summarizeKeywordBoard([
       entry({
@@ -107,24 +107,20 @@ describe('summarizeKeywordBoard · keywordBoardHeadline', () => {
       goodDealCount: 2,
       activeKeywordCount: 2,
     });
-    assert.deepEqual(keywordBoardHeadline(summary), {
-      title: '지금 사기 좋은 딜 2건이 있어요',
-      description: '이번 주 내 키워드에 올라온 핫딜 5건 중 1년 최저가거나 기준가보다 싼 딜이에요.',
+    assert.deepEqual(keywordBoardSummaryLine(summary), {
+      emphasis: '지금 사기 좋은 딜 2건',
+      text: '이번 주 5건 올라왔어요',
     });
   });
 
   it('좋은 딜이 없으면 건수부터, 아무것도 없으면 지켜보는 중', () => {
-    assert.equal(
-      keywordBoardHeadline({ keywordCount: 2, weekDealCount: 4, goodDealCount: 0, activeKeywordCount: 1 })
-        .title,
-      '이번 주 내 키워드에 올라온 핫딜 4건',
+    assert.deepEqual(
+      keywordBoardSummaryLine({ keywordCount: 2, weekDealCount: 4, goodDealCount: 0, activeKeywordCount: 1 }),
+      { emphasis: null, text: '이번 주 키워드 1개에서 4건 올라왔어요' },
     );
     assert.deepEqual(
-      keywordBoardHeadline({ keywordCount: 2, weekDealCount: 0, goodDealCount: 0, activeKeywordCount: 0 }),
-      {
-        title: '이번 주엔 조용했어요',
-        description: '키워드 2개를 지켜보고 있어요. 올라오면 바로 알려드려요.',
-      },
+      keywordBoardSummaryLine({ keywordCount: 2, weekDealCount: 0, goodDealCount: 0, activeKeywordCount: 0 }),
+      { emphasis: null, text: '이번 주엔 조용했어요 · 키워드 2개를 지켜보고 있어요' },
     );
   });
 });
