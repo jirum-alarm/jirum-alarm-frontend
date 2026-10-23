@@ -466,3 +466,42 @@ jobs:
           fi
           jq -n --arg text "$msg" '{channel: "alert-deploy", text: $text}' \
             | curl -fsS -X POST -H 'Content-Type: application/json' -d @- "$MATTERMOST_WEBHOOK_URL" >/dev/null
+
+  # OTA 가 막혔으면 소리를 낸다. validation 이 빨가면 위 잡이 전부 skipped 라 이 실행은 «skipped» 회색으로 끝나고,
+  # boot-check 가 빨가면 publish 가 skipped 라 그 Notify 도 안 돈다 — 그래서 고칠 때까지 main 의 앱 변경이 조용히 안 나갔다
+  # (10/10 푸시 8번, 10/12 jest exit 1, 10/20 RN Directory, 10/21 native:check 하루 가까이, 10/22 mock 누락 — 다섯 번 모두 몇 시간~하루 뒤 발견).
+  # 실패한 푸시마다 alert-deploy 에 알리고 이 실행을 빨갛게 끝낸다(Actions 목록·푸시한 사람 메일에도 보이게).
+  ota-blocked:
+    needs: [changes, boot-check, boot-check-android]
+    if: >-
+      always() &&
+      github.event_name == 'workflow_run' &&
+      github.event.workflow_run.event == 'push' &&
+      vars.MOBILE_AUTO_OTA == 'true' && (
+      contains(fromJSON('["failure", "timed_out", "startup_failure"]'), github.event.workflow_run.conclusion) ||
+      contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify OTA blocked
+        env:
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
+          VALIDATION: ${{ github.event.workflow_run.conclusion }}
+          VALIDATION_URL: ${{ github.event.workflow_run.html_url }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+          COMMIT_MESSAGE: ${{ github.event.workflow_run.head_commit.message }}
+          RESULTS: changes=${{ needs.changes.result }} boot-check=${{ needs.boot-check.result }} boot-check-android=${{ needs.boot-check-android.result }}
+        run: |
+          set -euo pipefail
+          subject=${COMMIT_MESSAGE%%$'\n'*}
+          run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          if [ "$VALIDATION" != "success" ]; then
+            msg="🚫 앱 자동 OTA 막힘 — mobile-validation ${VALIDATION}(${SHA:0:8} ${subject}). 고칠 때까지 main 의 앱 변경은 OTA 로 안 나간다. ${VALIDATION_URL}"
+          else
+            msg="🚫 앱 자동 OTA 막힘 — OTA 준비·기동 확인 실패(${RESULTS}; ${SHA:0:8} ${subject}). 발행 안 함, 화면은 boot-evidence 아티팩트. ${run_url}"
+          fi
+          echo "::error::$msg"
+          if [ -n "${MATTERMOST_WEBHOOK_URL:-}" ]; then
+            jq -n --arg text "$msg" '{channel: "alert-deploy", text: $text}' \
+              | curl -fsS -X POST -H 'Content-Type: application/json' -d @- "$MATTERMOST_WEBHOOK_URL" >/dev/null
+          fi
+          exit 1

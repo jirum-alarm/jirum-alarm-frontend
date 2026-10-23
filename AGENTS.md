@@ -178,6 +178,8 @@ pnpm build            # Production build
   - **자동 OTA(`mobile-ota`, `MOBILE_AUTO_OTA=true`, 2026-10-09 켬)**: main push → mobile-validation 성공 →
     `boot-check`(iOS, macOS)·`boot-check-android`(에뮬레이터) 잡 통과(Release 앱·APK 는 네이티브 지문으로 캐시) → production 발행 → Mattermost `alert-deploy`.
     그래서 JS 는 **main 에 푸시하면 나간다** — 위 1~3번을 손으로 할 일은 없고, 푸시 뒤 `gh run watch` 로 mobile-ota 결과를 확인한다.
+    단 main runtime 이 스토어보다 앞서 있으면 아무에게도 안 닿는다 — 아래 «네이티브 변경» 의 백포트까지가 한 묶음.
+    validation·기동 확인이 빨가면 mobile-ota 의 `ota-blocked` 잡이 alert-deploy 에 «🚫 앱 자동 OTA 막힘» 을 올리고 실행을 빨갛게 끝낸다 — 받으면 그 빨간 원인부터 고친다(그동안의 앱 푸시가 전부 멈춰 있다).
     기동 확인은 "켜지다 죽거나 JS 가 못 도는 것" 만 잡는다(오류 없는 화면 깨짐은 못 봄) — 바뀐 화면이 큰 변경이면 푸시 전에 로컬에서 띄워 본다.
     기동 확인은 회차마다 녹화·스크린샷을 아티팩트 `boot-evidence-ios`·`boot-evidence-android`(7일)로 남긴다 — 실패 원인이나 첫 화면이 맞는지는 `gh run download <run> -n boot-evidence-<ios|android>` 로 화면을 본다(로컬 실행은 `BOOT_EVIDENCE=<dir>`).
     사고 때 첫 조치: 저장소 변수 `MOBILE_AUTO_OTA` 를 끄고(`gh variable set MOBILE_AUTO_OTA -b false`) 4번으로 롤백.
@@ -185,8 +187,12 @@ pnpm build            # Production build
   플러그인이 바뀌면 **같은 커밋에서** 버전·runtimeVersion 을 올리고(app.json·Expo.plist·strings.xml 등 —
   `ota-updates-config` 테스트가 정렬을 본다) `pnpm --filter mobile native:write` 로 지문 기준을 새로 찍는다.
   안 하면 CI `native:check` 가 막는다(그대로 OTA 가 나가면 옛 바이너리가 실행 즉시 죽는다). 그다음 스토어 빌드·제출.
-  - 버전을 올린 뒤 OTA 는 새 runtime 바이너리에만 간다 — 옛 버전용 OTA·hotfix 브랜치는 기본으로 만들지 않는다(하위호환 안 챙김).
-    **요청이 있으면 옛 runtime 에도 백포트한다**(2026-10-09 1.4.7·1.4.6 실적): main 을 그대로 보내지 말고(그 사이 네이티브가 바뀌어 죽는다)
+  - 버전을 올린 뒤 main 자동 OTA 는 새 runtime 바이너리에만 간다. **main runtime 이 스토어 출시 버전보다 앞서 있는 동안엔 자동 OTA 가 스토어 사용자 누구에게도 안 닿는다**
+    (10/21 실측: main 이 1.5.7 로 올라간 뒤 나간 수정이 백포트 전까지 아무에게도 안 갔다). 그래서 **사용자에게 보이는 JS 수정은 요청이 없어도 기본으로 출시된 runtime 에 백포트한다** — 푸시 직후 같은 작업 안에서.
+    판정: main `apps/mobile/app.json` `expo.runtimeVersion`(= 바이너리 버전) vs 스토어 실물 버전 — iOS `curl -s "https://itunes.apple.com/lookup?bundleId=com.jirum-alarm.jirumalarm&country=kr" | jq -r '.results[0].version'`,
+    Android 는 `app-store-lag` 워크플로가 읽는 Play 공개 페이지(단계 출시 중이면 옛 버전으로 보인다 — 그 버전도 낸다). main 이 앞서 있으면 출시 버전 이하 전부, 같으면 아래 «어느 runtime 까지?» 기준의 옛 runtime 만.
+    runtime 을 올리는 커밋 전에 `ota/runtime-<지금 버전>` 을 그 runtime 의 마지막 자동 OTA 커밋에서 만들어 둔다. 보고엔 runtime 별 발행 group 을 적는다.
+    백포트 방법(첫 실적 2026-10-09 1.4.7·1.4.6): main 을 그대로 보내지 말고(그 사이 네이티브가 바뀌어 죽는다)
     `eas update:view <그 runtime 의 마지막 group> --json` 의 `gitCommitHash` 에 워크트리 → 변경 cherry-pick → 그 커밋 lockfile 로
     `pnpm install --frozen-lockfile` → tsc·`native:check`·jest → **그 커밋으로 Release 시뮬 빌드** 콜드 스타트 2회 → `pnpm ota:publish`(origin 에 `ota/runtime-<runtime>` 이 있으면 브랜치를 먼저 push 해 끝을 차지하고, 거절·원격이 앞섬·미커밋 변경이면 발행하지 않는다 — 10/12 다른 세션 발행을 두 번 덮은 뒤 넣음).
     로컬 빌드 함정: Xcode 27 은 `IPHONEOS_DEPLOYMENT_TARGET=15.1` 을 넘겨야 옛 Pod 이 빌드되고, `/tmp` 아래 워크트리는 번들 단계가
