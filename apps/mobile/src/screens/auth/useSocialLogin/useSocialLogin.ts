@@ -50,7 +50,7 @@ export const useSocialLogin = () => {
         });
       },
       onError: async () => {
-        await handleLoginError('로그인에 실패했어요. 다시 시도해주세요.');
+        await handleLoginError('로그인하지 못했어요. 다시 시도해 주세요.');
       },
     });
 
@@ -82,7 +82,7 @@ export const useSocialLogin = () => {
       // 취소는 사용자가 한 일이라 실패 토스트를 띄우지 않는다.
       if (/cancel/i.test(String((err as Error)?.message ?? err))) return;
       console.error('Kakao login error:', err);
-      showToast.error('카카오 로그인에 실패했어요.');
+      showToast.error('카카오로 로그인하지 못했어요.');
     }
   };
 
@@ -99,7 +99,7 @@ export const useSocialLogin = () => {
         console.error('Naver login failure:', failureResponse);
         // 취소는 사용자가 한 일이라 토스트를 띄우지 않는다.
         if (!failureResponse?.isCancel) {
-          showToast.error('네이버 로그인에 실패했어요.');
+          showToast.error('네이버로 로그인하지 못했어요.');
         }
       }
     } catch (err) {
@@ -124,7 +124,7 @@ export const useSocialLogin = () => {
       const {identityToken} = appleAuthRequestResponse;
 
       if (!identityToken) {
-        showToast.error('Apple 로그인 정보를 가져오는 데 실패했어요.');
+        showToast.error('Apple 로그인 정보를 가져오지 못했어요.');
         return;
       }
 

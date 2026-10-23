@@ -71,7 +71,7 @@ export function useKeywordViewModel() {
     onError: (error: unknown) =>
       showToast.error(
         (error instanceof Error && error.message) ||
-          '키워드 저장에 실패했어요.',
+          '키워드를 저장하지 못했어요.',
       ),
   });
 
@@ -100,7 +100,7 @@ export function useKeywordViewModel() {
           context.previous,
         );
       }
-      showToast.error('키워드 삭제에 실패했어요.');
+      showToast.error('키워드를 삭제하지 못했어요.');
     },
     // ★확인 시트 대신 되돌리기 — 원탭 삭제는 빠르지만 잘못 누르면 가격 하락 설정까지 날아갔다.
     // 되살릴 땐 설정(priceDropOnly)도 그대로 다시 건다. 새 id 로 만들어지지만 사용자에겐 같은 키워드다.
