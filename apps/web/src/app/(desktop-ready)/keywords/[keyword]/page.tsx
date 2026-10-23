@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { ModelPageService } from '@/shared/api/model-page';
 import { themePath, ThemeService } from '@/shared/api/notification/theme.service';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { robotsDirective } from '@/shared/config/metadata';
@@ -11,6 +12,7 @@ import { cn } from '@/shared/lib/cn';
 import { jsonLdHtml } from '@/shared/lib/json-ld';
 
 import { fetchKeywordHub, fetchKeywordHubs } from '@/entities/keyword-hub/api/fetchKeywordHub';
+import { buildHubModelChips, type HubModelChip } from '@/entities/keyword-hub/lib/hub-model-pages';
 import {
   buildKeywordHubSeo,
   findThemesForHub,
@@ -82,6 +84,15 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
   const loaded = await loadHub(params);
   if (!loaded) notFound();
   const { hub, deals, modelPages, seo } = loaded;
+  // 칩의 «지금 싼가»는 /deals·/keywords 가 쓰는 판정 목록에서(데이터 캐시 10분). 실패하면 판정 없이 이름만.
+  const modelChips =
+    modelPages.length > 0
+      ? buildHubModelChips(
+          hub.name,
+          modelPages,
+          await ModelPageService.getPublishedModelPages().catch(() => []),
+        )
+      : null;
 
   // 서버가 진행 중 먼저·최신순으로 최대 40개를 준다. 건수(제목·설명)는 30일 전체로 센 값.
   const cards: ProductCardType[] = deals.map((d) => ({
@@ -198,26 +209,33 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
         </section>
       ) : null}
 
-      {modelPages.length > 0 && (
+      {modelChips && (
         // 같은 키워드 안에서도 상품이 갈린다(삼다수 2L·500ml). 상품별 가격 비교는 모델 페이지가 한다 —
         // 허브에서 가격을 섞어 비교하지 않는 대신 그쪽으로 보낸다. 구글은 모델 페이지로 사람을 데려오는 쪽이라
-        // 모델 페이지 → 허브 링크와 짝이다.
+        // 모델 페이지 → 허브 링크와 짝이다. 지금 싼 상품을 앞에, 나머지는 접는다(hub-model-pages.ts).
+        // 접힌 칩도 <details> 안 HTML 링크라 크롤러는 그대로 따라간다.
         <nav aria-label={`${hub.name} 상품별 최저가`} className="mb-6">
-          <h2 className={cn(text.subtitle, 'mb-2')}>상품별 최저가 모음</h2>
-          <ul className="flex flex-wrap gap-2">
-            {modelPages.map((page) => (
-              <li key={page.slug}>
-                <Link
-                  href={`/deals/${page.slug}`}
-                  data-track="model-page-cta"
-                  data-source="keyword_hub"
-                  className={cn('inline-block', linkChip)}
-                >
-                  {[page.brand?.trim(), page.modelName].filter(Boolean).join(' ')}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className="mb-2 flex items-baseline justify-between gap-3">
+            <h2 className={text.subtitle}>상품별 최저가 모음</h2>
+            <span className={cn(text.caption, 'shrink-0')}>
+              {modelChips.goodCount > 0 ? `지금 싼 상품 ${modelChips.goodCount}개 · ` : ''}
+              {modelPages.length}개
+            </span>
+          </div>
+          <ModelChipList chips={modelChips.visible} />
+          {modelChips.folded.length > 0 && (
+            <details className="group mt-2">
+              <summary
+                className={cn(
+                  text.muted,
+                  'cursor-pointer list-none py-1 group-open:hidden hover:text-gray-900',
+                )}
+              >
+                {modelChips.folded.length}개 더 보기 ›
+              </summary>
+              <ModelChipList chips={modelChips.folded} />
+            </details>
+          )}
         </nav>
       )}
 
@@ -295,5 +313,27 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
         </ul>
       </nav>
     </main>
+  );
+}
+
+function ModelChipList({ chips }: { chips: HubModelChip[] }) {
+  return (
+    <ul className="flex flex-wrap gap-2">
+      {chips.map((chip) => (
+        <li key={chip.slug}>
+          <Link
+            href={`/deals/${chip.slug}`}
+            data-track="model-page-cta"
+            data-source="keyword_hub"
+            className={cn('inline-block', linkChip)}
+          >
+            {chip.label}
+            {chip.good ? (
+              <span className="text-success-600 font-semibold"> · {chip.good}</span>
+            ) : null}
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }
