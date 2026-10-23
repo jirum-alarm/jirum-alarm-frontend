@@ -108,7 +108,9 @@ export default function FirstAlertSheet() {
     setSaving(false);
     setVisible(false);
     if (added.length === 0) {
-      showToast.error('키워드 저장에 실패했어요. 잠시 뒤 다시 시도해 주세요.');
+      showToast.error(
+        '키워드를 저장하지 못했어요. 잠시 뒤 다시 시도해 주세요.',
+      );
       return;
     }
     const rest = added.length > 1 ? ` 외 ${added.length - 1}개` : '';

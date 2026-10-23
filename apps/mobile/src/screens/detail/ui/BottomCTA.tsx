@@ -97,7 +97,7 @@ export default function BottomCTA({
       })),
     onSuccess: (_data, next) => {
       invalidate();
-      if (next) showToast.success('찜 목록에 추가되었어요.', {haptic: false});
+      if (next) showToast.success('찜 목록에 추가했어요.', {haptic: false});
     },
     onError: (_err, _next, rollback) => {
       rollback?.();

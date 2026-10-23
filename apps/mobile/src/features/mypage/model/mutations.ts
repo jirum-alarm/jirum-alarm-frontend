@@ -92,7 +92,7 @@ export function useWithdraw() {
   return useMutation({
     mutationFn: MyPageService.withdraw,
     onSuccess: () => logout(),
-    onError: () => showToast.error('회원탈퇴에 실패했어요'),
+    onError: () => showToast.error('탈퇴하지 못했어요. 다시 시도해 주세요.'),
   });
 }
 
@@ -111,7 +111,7 @@ export function useUpdateKeywordOptions() {
     },
     onError: () => {
       showToast.error(
-        '알림 설정 저장에 실패했어요. 최소 가격이 최대 가격보다 크지 않은지 확인해 주세요.',
+        '알림 설정을 저장하지 못했어요. 최소 가격이 최대 가격보다 크지 않은지 확인해 주세요.',
       );
       return invalidate();
     },
@@ -137,7 +137,7 @@ export function useUpdatePushSetting() {
     },
     onError: (_error, _variables, context) => {
       queryClient.setQueryData(key, context?.previous);
-      showToast.error('알림 설정 변경에 실패했어요.');
+      showToast.error('알림 설정을 바꾸지 못했어요.');
     },
     onSuccess: (_data, variables) => {
       // 광고성 정보 수신 동의·철회는 처리 결과(일자)를 알려야 한다(정보통신망법 §50 ⑦).

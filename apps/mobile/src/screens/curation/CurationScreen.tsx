@@ -169,7 +169,7 @@ export default function CurationScreen({
       <View className="flex-1 items-center justify-center bg-white px-5">
         <Text className={text.subtitle}>페이지를 찾을 수 없어요</Text>
         <Text className={cn(text.muted, 'mt-2 text-center')}>
-          종료되었거나 주소가 바뀐 모아보기예요.
+          끝났거나 주소가 바뀐 모아보기예요.
         </Text>
       </View>
     );
