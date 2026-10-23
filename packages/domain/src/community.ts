@@ -12,7 +12,7 @@ export const REPORT_REASON_OPTIONS = [
 ] as const;
 
 export const COMMUNITY_COPY = {
-  commentDeleted: '댓글이 삭제되었어요.',
+  commentDeleted: '댓글을 삭제했어요.',
 } as const;
 
 /** 커뮤니티 목록 탭 — 순서·라벨. */

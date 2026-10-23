@@ -124,7 +124,7 @@ function ButtonDemo() {
           비활성
         </Button>
         <Button size="md" loading>
-          불러오는 중
+          저장하기
         </Button>
       </Row>
       <Button size="lg" disabled>

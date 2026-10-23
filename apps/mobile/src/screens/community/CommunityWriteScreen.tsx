@@ -1,10 +1,13 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {Alert} from 'react-native';
-import {usePreventRemove} from '@react-navigation/native';
+import {
+  usePreventRemove,
+  type NavigationAction,
+} from '@react-navigation/native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useQueryClient} from '@tanstack/react-query';
 
 import {CommunityQueries} from '@/entities/community';
+import ConfirmSheet from '@/shared/components/ConfirmSheet';
 import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {StackWebView} from '@/screens/detail/ProductDetailWebViewScreen';
@@ -73,24 +76,32 @@ export default function CommunityWriteScreen({route, navigation}: Props) {
    * 닫으므로 그때는 묻지 않는다. usePreventRemove 는 막는 동안 iOS 스와이프 제스처도 꺼 준다.
    */
   const [hasDraft, setHasDraft] = useState(false);
-  usePreventRemove(hasDraft, ({data}) => {
-    Alert.alert('작성 중인 글이 있어요', '나가면 쓰던 내용이 사라져요.', [
-      {text: '계속 쓰기', style: 'cancel'},
-      {
-        text: '나가기',
-        style: 'destructive',
-        onPress: () => navigation.dispatch(data.action),
-      },
-    ]);
-  });
+  const [leaveAction, setLeaveAction] = useState<NavigationAction | null>(null);
+  usePreventRemove(hasDraft, ({data}) => setLeaveAction(data.action));
 
   return (
-    <StackWebView
-      onDraftChange={setHasDraft}
-      // web 은 수정을 `?edit=<id>` 쿼리로 받는다(라우트가 아니다).
-      path={postId ? `/community/write?edit=${postId}` : '/community/write'}
-      navigation={navigation}
-      hideWebNav
-    />
+    <>
+      <StackWebView
+        onDraftChange={setHasDraft}
+        // web 은 수정을 `?edit=<id>` 쿼리로 받는다(라우트가 아니다).
+        path={postId ? `/community/write?edit=${postId}` : '/community/write'}
+        navigation={navigation}
+        hideWebNav
+      />
+      <ConfirmSheet
+        visible={leaveAction !== null}
+        title="작성 중인 글이 있어요"
+        description="나가면 쓰던 내용이 사라져요."
+        cancelLabel="계속 쓰기"
+        confirmLabel="나가기"
+        tone="danger"
+        onCancel={() => setLeaveAction(null)}
+        onConfirm={() => {
+          const action = leaveAction;
+          setLeaveAction(null);
+          if (action) navigation.dispatch(action);
+        }}
+      />
+    </>
   );
 }

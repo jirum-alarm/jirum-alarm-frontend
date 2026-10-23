@@ -90,14 +90,14 @@ export function useCommunityCommentsViewModel(postId: number) {
       CommunityService.addComment({parentId: postId, content}),
     // 카드의 댓글 수(replyCount)는 목록이 따로 들고 있어 같이 고친다 — 안 하면 그대로다.
     onSuccess: () => afterCountChange(1),
-    onError: () => showToast.error('댓글 등록에 실패했어요.'),
+    onError: () => showToast.error('댓글을 올리지 못했어요.'),
   });
 
   const {mutate: updateComment, isPending: isUpdating} = useMutation({
     mutationFn: ({id, content}: {id: number; content: string}) =>
       CommentService.updateComment({id, content}),
     onSuccess: invalidate,
-    onError: () => showToast.error('수정에 실패했어요.'),
+    onError: () => showToast.error('댓글을 고치지 못했어요.'),
   });
 
   const {mutate: removeComment} = useMutation({
@@ -109,7 +109,7 @@ export function useCommunityCommentsViewModel(postId: number) {
     },
     onError: (_err, _id, context) => {
       rollback(context);
-      showToast.error('삭제에 실패했어요.');
+      showToast.error('댓글을 삭제하지 못했어요.');
     },
   });
 
@@ -125,7 +125,7 @@ export function useCommunityCommentsViewModel(postId: number) {
       optimistic(page => applyCommentLike(page, id, isMyLike)),
     onError: (_err, _vars, context) => {
       rollback(context);
-      showToast.error('좋아요 처리에 실패했어요.');
+      showToast.error('좋아요를 누르지 못했어요.');
     },
   });
 

@@ -133,7 +133,7 @@ describe('댓글 삭제·수정·작성', () => {
   it('삭제 실패는 롤백 + 토스트', () => {
     expect(commentsViewModel).toMatch(/removeComment/);
     expect(commentsViewModel).toMatch(/rollback\(context\)/);
-    expect(commentsViewModel).toMatch(/삭제에 실패했어요/);
+    expect(commentsViewModel).toMatch(/댓글을 삭제하지 못했어요/);
   });
 
   it('삭제 성공 토스트 문구는 정본 COMMUNITY_COPY(web 도 같은 상수)', () => {
@@ -221,7 +221,7 @@ describe('글 삭제', () => {
 
   it('성공하면 커뮤니티 캐시를 통째로 버리고 목록으로 나간다', () => {
     expect(postMenu).toMatch(/CommunityQueries\.keys\.all/);
-    expect(postMenu).toContain('게시글이 삭제되었어요.');
+    expect(postMenu).toContain('글을 삭제했어요.');
     expect(postScreen).toMatch(/onDeleted=\{\(\) => navigation\.goBack\(\)\}/);
   });
 });

@@ -36,6 +36,7 @@ export default function AffiliateNotice({
     return (
       <View className="mx-5 flex-row items-center gap-3 rounded-xl bg-gray-100 px-3.5 py-3.5">
         <Text className="text-xs font-medium text-gray-700">안내</Text>
+        {/* eslint-disable-next-line no-restricted-syntax -- 쿠팡 파트너스 고지 문구(정해진 문장이라 해요체로 바꾸지 않는다) */}
         <Text className="flex-1 text-xs text-gray-600">
           쿠팡 파트너스 활동으로 지름알림이 일정 금액의 수수료를 지급 받습니다.
         </Text>
@@ -47,8 +48,8 @@ export default function AffiliateNotice({
     <View className="mt-6 bg-gray-100 px-5 py-5">
       <Text className="mb-1 text-sm font-semibold text-gray-700">안내</Text>
       <Text className="text-sm text-gray-600">
-        일부 링크는 제휴 마케팅이 적용되어 지름알림에 커미션이 지급될 수
-        있습니다.
+        일부 링크는 제휴 링크예요. 이 링크로 사면 지름알림이 수수료를 받을 수
+        있어요.
       </Text>
     </View>
   );

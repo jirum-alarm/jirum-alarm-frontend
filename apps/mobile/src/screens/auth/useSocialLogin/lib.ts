@@ -34,7 +34,7 @@ export const handleLoginSuccess = async (
 
 /** `errorMessage: null` = 화면이 직접 안내하므로 토스트를 띄우지 않는다. */
 export const handleLoginError = async (
-  errorMessage: string | null = '로그인에 실패했어요.',
+  errorMessage: string | null = '로그인하지 못했어요.',
 ) => {
   try {
     // 게스트가 로그인 창(LoginModalScreen)에서 실패한 거면 지금 토큰은 게스트 것이다 — 지우면 게스트 세션까지
