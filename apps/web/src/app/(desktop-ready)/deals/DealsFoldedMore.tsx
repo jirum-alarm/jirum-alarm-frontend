@@ -4,6 +4,7 @@ import { text } from '@jirum/design-system/recipes';
 import { useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
+import { LoadingSpinner } from '@/shared/ui/common/icons';
 
 import { DealGrid, DealRows, type ListItem } from './DealsListParts';
 
@@ -58,7 +59,9 @@ export default function DealsFoldedMore({
       ) : (
         <>
           {state === 'loading' && (
-            <p className={cn(text.muted, 'py-6 text-center')}>불러오는 중…</p>
+            <div className="flex justify-center py-6">
+              <LoadingSpinner />
+            </div>
           )}
           <ul
             className={state === 'loading' ? 'hidden' : cn(text.body, 'mt-2 flex flex-col gap-2')}

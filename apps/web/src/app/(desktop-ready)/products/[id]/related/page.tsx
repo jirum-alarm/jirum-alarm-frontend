@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import { checkDevice } from '@/shared/actions/agent';
 
 import { parseProductId } from '@/entities/product/lib/product-id';
+import { ProductGridListSkeleton } from '@/entities/product-list/ui/grid';
 
 import { getProductInfoCached } from './getProductInfoCached';
 import RelatedProductsView from './RelatedProductsView';
@@ -28,7 +29,13 @@ export default async function RelatedProductsPage({ params }: { params: Promise<
   }
 
   return (
-    <Suspense fallback={<div className="flex h-40 items-center justify-center">로딩중...</div>}>
+    <Suspense
+      fallback={
+        <div className="pc:px-0 px-5 pb-10">
+          <ProductGridListSkeleton length={isMobile ? 6 : 10} />
+        </div>
+      }
+    >
       <RelatedProductsView productId={productId} isMobile={isMobile} />
     </Suspense>
   );

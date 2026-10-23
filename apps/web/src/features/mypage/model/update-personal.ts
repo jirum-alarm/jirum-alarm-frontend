@@ -18,7 +18,7 @@ export const useUpdatePersonal = () => {
       goBack();
     },
     onError: () => {
-      toast.error('개인정보 저장중 에러가 발생했어요.');
+      toast.error('개인정보를 저장하지 못했어요.');
     },
   });
 };

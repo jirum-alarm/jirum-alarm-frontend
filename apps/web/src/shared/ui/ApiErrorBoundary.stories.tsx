@@ -24,7 +24,7 @@ export default meta;
 export const Failed: StoryObj<typeof meta> = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.getByText('서버에러가 발생했습니다')).toBeVisible();
+    await expect(canvas.getByText('화면을 불러오지 못했어요')).toBeVisible();
     await userEvent.click(canvas.getByRole('button', { name: '다시 시도' }));
   },
 };

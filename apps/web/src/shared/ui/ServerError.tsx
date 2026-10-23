@@ -15,8 +15,8 @@ const ServerError = ({ onClick }: ServerErrorProps) => {
           <IllustWarning />
         </div>
         <div className="pb-7 text-center">
-          <div className={text.display}>서버에러가 발생했습니다</div>
-          <div className="text-gray-500">잠시 후 다시 시도해주세요</div>
+          <div className={text.display}>화면을 불러오지 못했어요</div>
+          <div className="text-gray-500">잠시 후 다시 시도해 주세요</div>
         </div>
         <Button size="md" onClick={onClick}>
           다시 시도

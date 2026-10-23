@@ -71,7 +71,7 @@ export async function GET() {
   <channel>
     <title>지름알림 - 실시간 핫딜</title>
     <link>${base}</link>
-    <description>뽐뿌·클리앙·루리웹·퀘이사존 등 커뮤니티 핫딜을 실시간으로 모아 최저가와 비교합니다.</description>
+    <description>뽐뿌·클리앙·루리웹·퀘이사존 등 커뮤니티 핫딜을 실시간으로 모아 최저가와 비교해요.</description>
     <language>ko</language>
 ${items}
   </channel>

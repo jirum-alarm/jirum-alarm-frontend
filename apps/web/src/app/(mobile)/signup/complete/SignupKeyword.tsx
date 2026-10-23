@@ -67,7 +67,7 @@ export default function SignupKeyword({ productId }: { productId: number | null 
         setDone(value.trim());
         return;
       }
-      toast.error(message || '키워드 저장에 실패했습니다.');
+      toast.error(message || '키워드를 저장하지 못했어요.');
     },
   });
 

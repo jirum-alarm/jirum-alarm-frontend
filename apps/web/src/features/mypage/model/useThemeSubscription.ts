@@ -42,7 +42,7 @@ export const useThemeSubscription = () => {
     },
     onError: (_e, _themeId, ctx) => {
       if (ctx?.prev) queryClient.setQueryData(key, ctx.prev);
-      toast.error('알림 켜기에 실패했어요.');
+      toast.error('알림을 켜지 못했어요.');
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   });
@@ -60,7 +60,7 @@ export const useThemeSubscription = () => {
     },
     onError: (_e, _themeId, ctx) => {
       if (ctx?.prev) queryClient.setQueryData(key, ctx.prev);
-      toast.error('알림 끄기에 실패했어요.');
+      toast.error('알림을 끄지 못했어요.');
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   });

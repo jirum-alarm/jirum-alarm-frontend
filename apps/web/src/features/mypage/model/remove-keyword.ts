@@ -17,7 +17,7 @@ export const useRemoveKeyword = () => {
     },
     onError: () => {
       triggerHaptic('error');
-      toast.error('키워드 삭제에 실패했습니다.');
+      toast.error('키워드를 삭제하지 못했어요.');
     },
   });
 };

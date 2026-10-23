@@ -11,6 +11,17 @@ import { PAGE } from '@/shared/config/page';
 import { getLastAlarmReadAt, setLastAlarmReadAt } from '@/shared/lib/alarmReadState';
 import { cn } from '@/shared/lib/cn';
 import { pushDataLayer } from '@/shared/lib/data-layer';
+import {
+  Action,
+  AlertDialog,
+  Cancel,
+  Content,
+  Description,
+  Footer,
+  Header,
+  Title,
+} from '@/shared/ui/common/AlertDialog/AlertDialog';
+import { buttonClass } from '@/shared/ui/common/Button';
 import { useToast } from '@/shared/ui/common/Toast';
 import Link from '@/shared/ui/Link';
 
@@ -52,6 +63,7 @@ export default function AlarmList() {
   const setEditMode = useSetAtom(alarmEditModeAtom);
 
   const lastReadAt = useMemo(() => getLastAlarmReadAt(), []);
+  const [confirmRemoveAll, setConfirmRemoveAll] = useState(false);
 
   // 알림 → 그 알림의 설정(키워드는 펼친 채로·관심사 화면·알림 설정). 지운 키워드·없어진 관심사엔
   // 링크를 안 단다 — 눌러도 갈 데가 없다.
@@ -137,12 +149,8 @@ export default function AlarmList() {
           <div className="flex h-11 items-center justify-end gap-x-3 px-5">
             <button
               type="button"
-              onClick={() => {
-                // 되돌릴 수 없어 한 번 묻는다(앱과 같은 문구).
-                if (!window.confirm('알림을 모두 삭제할까요?')) return;
-                onRemoveAll();
-                setEditMode(false);
-              }}
+              // 되돌릴 수 없어 한 번 묻는다(앱 ConfirmSheet 와 같은 문구).
+              onClick={() => setConfirmRemoveAll(true)}
               className="px-1 text-sm font-medium text-gray-600"
             >
               {ALARM_COPY.deleteAll}
@@ -161,6 +169,35 @@ export default function AlarmList() {
             </button>
           </div>
         </div>
+      )}
+      {confirmRemoveAll && (
+        <AlertDialog
+          defaultOpen
+          onOpenChange={(open) => {
+            if (!open) setConfirmRemoveAll(false);
+          }}
+        >
+          <Content>
+            <Header>
+              <Title className={text.subtitle}>알림을 모두 삭제할까요?</Title>
+              <Description className={text.muted}>삭제한 알림은 다시 볼 수 없어요.</Description>
+            </Header>
+            <Footer>
+              <Cancel className={cn(buttonClass({ size: 'md', color: 'secondary' }), 'flex-1')}>
+                취소
+              </Cancel>
+              <Action
+                className={cn(buttonClass({ size: 'md', color: 'error' }), 'flex-1')}
+                onClick={() => {
+                  onRemoveAll();
+                  setEditMode(false);
+                }}
+              >
+                {ALARM_COPY.deleteAll}
+              </Action>
+            </Footer>
+          </Content>
+        </AlertDialog>
       )}
       {!isEditMode && (
         <div className="pc:hidden sticky top-14 z-40 border-b border-gray-200 bg-gray-50">

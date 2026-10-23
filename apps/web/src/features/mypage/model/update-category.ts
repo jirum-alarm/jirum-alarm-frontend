@@ -20,7 +20,7 @@ export const useUpdateCategory = () => {
       goBack();
     },
     onError: () => {
-      toast.error('관심 카테고리 저장중 에러가 발생했어요.');
+      toast.error('관심 카테고리를 저장하지 못했어요.');
     },
   });
 };

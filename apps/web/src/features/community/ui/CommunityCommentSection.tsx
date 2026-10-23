@@ -26,6 +26,7 @@ import {
   Title,
 } from '@/shared/ui/common/AlertDialog/AlertDialog';
 import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
+import { LoadingSpinner } from '@/shared/ui/common/icons';
 import { Skeleton } from '@/shared/ui/common/Skeleton';
 import { useToast } from '@/shared/ui/common/Toast';
 
@@ -197,7 +198,7 @@ function CommunityCommentList({
       setEditContent('');
       queryClient.invalidateQueries({ queryKey: CommunityQueries.comments(postId).queryKey });
     },
-    onError: () => toast.error('수정에 실패했어요.'),
+    onError: () => toast.error('댓글을 고치지 못했어요.'),
   });
 
   const { mutate: removeComment } = useMutation({
@@ -206,7 +207,7 @@ function CommunityCommentList({
       toast.success(COMMUNITY_COPY.commentDeleted);
       queryClient.invalidateQueries({ queryKey: CommunityQueries.comments(postId).queryKey });
     },
-    onError: () => toast.error('삭제에 실패했어요.'),
+    onError: () => toast.error('댓글을 삭제하지 못했어요.'),
   });
 
   const { mutate: likeComment } = useMutation({
@@ -237,7 +238,7 @@ function CommunityCommentList({
     },
     onError: (_err, _vars, ctx) => {
       if (ctx?.prev) queryClient.setQueryData(CommunityQueries.comments(postId).queryKey, ctx.prev);
-      toast.error('좋아요 처리에 실패했어요.');
+      toast.error('좋아요를 누르지 못했어요.');
     },
   });
 
@@ -300,8 +301,8 @@ function CommunityCommentList({
       })}
       <div ref={ref} className="h-1" />
       {isFetchingNextPage && (
-        <div className={cn(text.muted, 'flex items-center justify-center py-4')}>
-          불러오는 중...
+        <div className="flex justify-center py-4">
+          <LoadingSpinner />
         </div>
       )}
     </div>

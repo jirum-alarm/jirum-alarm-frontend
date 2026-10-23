@@ -47,7 +47,7 @@ export default function useProductCreateForm() {
       const imageUrl = await ProductService.uploadProductImage(file);
       setThumbnail(imageUrl);
     } catch {
-      toast.error('이미지 업로드에 실패했어요.');
+      toast.error('사진을 올리지 못했어요.');
     } finally {
       setIsUploadingThumbnail(false);
     }
@@ -88,7 +88,7 @@ export default function useProductCreateForm() {
     },
     onSuccess: (productId) => {
       queryClient.invalidateQueries({ queryKey: ProductQueries.all() });
-      toast.success('핫딜이 등록되었어요.');
+      toast.success('핫딜을 등록했어요.');
       router.replace(`${PAGE.DETAIL}/${productId}`);
     },
     onError: (error) => {

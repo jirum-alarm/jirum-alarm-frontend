@@ -29,7 +29,7 @@ export default function CommentMenu({ comment }: { comment: TComment }) {
         }).queryKey,
       });
       setIsOpen(false);
-      toast.success('댓글이 삭제되었어요.');
+      toast.success('댓글을 삭제했어요.');
     },
   });
 

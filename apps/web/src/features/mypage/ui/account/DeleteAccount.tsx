@@ -20,7 +20,7 @@ const DeleteAccount = () => {
       logout();
     },
     onError: () => {
-      toast.error('회원탈퇴에 실패했어요');
+      toast.error('탈퇴하지 못했어요. 다시 시도해 주세요.');
     },
   });
   const onDeleteAccount = () => {

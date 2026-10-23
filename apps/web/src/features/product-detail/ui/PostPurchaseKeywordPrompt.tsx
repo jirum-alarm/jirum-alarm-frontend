@@ -93,7 +93,7 @@ export default function PostPurchaseKeywordPrompt({
         return;
       }
       // 나머지(최대 20개 초과 등)는 서버가 준 이유를 그대로 보여준다.
-      toast.error(message || '키워드 저장에 실패했습니다.');
+      toast.error(message || '키워드를 저장하지 못했어요.');
     },
   });
 

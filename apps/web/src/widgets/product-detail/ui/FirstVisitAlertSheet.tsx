@@ -293,7 +293,7 @@ function KeywordAlertSheet({
   const { mutateAsync: addKeyword } = useUpdateKeyword({
     source: appBridge ? 'kakao_bridge' : 'first_visit',
     onError: (error) => {
-      toast.error(getGraphqlErrorMessage(error) || '키워드 저장에 실패했습니다.');
+      toast.error(getGraphqlErrorMessage(error) || '키워드를 저장하지 못했어요.');
     },
   });
 

@@ -46,7 +46,7 @@ export const useSentenceAlert = () => {
       reset();
       promptPushChannel(registered);
     },
-    onError: (error) => toast.error(getGraphqlErrorMessage(error) || '키워드 저장에 실패했습니다.'),
+    onError: (error) => toast.error(getGraphqlErrorMessage(error) || '키워드를 저장하지 못했어요.'),
   });
 
   const trimmed = text.trim();

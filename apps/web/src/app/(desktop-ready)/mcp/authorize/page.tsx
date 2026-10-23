@@ -60,7 +60,7 @@ export default async function McpAuthorizePage({
                 type="submit"
                 name="approve"
                 value="0"
-                className="flex-1 rounded-full bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-900"
+                className={cn(text.label, 'flex-1 rounded-full bg-gray-100 px-4 py-3')}
               >
                 거절
               </button>

@@ -3,11 +3,11 @@
 export const META_DESCRIPTION_MAX = 220;
 
 export const MISSING_PRODUCT_METADATA = {
-  title: '상품을 찾을 수 없습니다 | 지름알림',
+  title: '상품을 찾을 수 없어요 | 지름알림',
   description: '요청하신 핫딜 상품을 찾을 수 없습니다.',
   robots: { index: false, follow: false },
   openGraph: {
-    title: '상품을 찾을 수 없습니다 | 지름알림',
+    title: '상품을 찾을 수 없어요 | 지름알림',
     description: '요청하신 핫딜 상품을 찾을 수 없습니다.',
   },
 } as const;

@@ -138,7 +138,7 @@ for (const page of PAGES) {
         `### ${project} · ${page.name}${scenario === 'default' ? '' : ` [${scenario}]`} — \`${page.path}\``,
         `\`${project}/${base.split('/').pop()}.png\` · \`.full.png\` · status ${res?.status()}`,
         ...errors.map((e) => `- ${mark} JS 오류: ${e}`),
-        ...(boundary ? ['- ❌ 오류 경계: 「서버에러가 발생했습니다」가 그려짐'] : []),
+        ...(boundary ? ['- ❌ 오류 경계: 「화면을 불러오지 못했어요」가 그려짐'] : []),
         ...missing.map((m) => `- ${mark} 녹화 안 된 쿼리: ${m}`),
         ...overflow.map((o) => `- ❌ 가로 넘침: ${o}`),
         ...overlap.map((o) => `- ⚠️ 글자 겹침: ${o}`),

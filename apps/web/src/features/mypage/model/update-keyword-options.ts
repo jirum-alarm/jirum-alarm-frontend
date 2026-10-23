@@ -35,7 +35,7 @@ export const useUpdateKeywordOptions = ({ onSuccess }: { onSuccess?: () => void 
     onError: () => {
       queryClient.invalidateQueries({ queryKey: AuthQueries.keyword() });
       toast.error(
-        '알림 설정 저장에 실패했어요. 최소 가격이 최대 가격보다 크지 않은지 확인해 주세요.',
+        '알림 설정을 저장하지 못했어요. 최소 가격이 최대 가격보다 크지 않은지 확인해 주세요.',
       );
     },
   });

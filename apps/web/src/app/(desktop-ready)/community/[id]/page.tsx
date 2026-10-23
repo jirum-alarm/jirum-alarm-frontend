@@ -28,7 +28,7 @@ export async function generateMetadata({
   const post = data?.comment;
 
   if (!post) {
-    return { title: '게시글을 찾을 수 없습니다 | 지름알림' };
+    return { title: '게시글을 찾을 수 없어요 | 지름알림' };
   }
 
   const displayContent = getPostDisplayContent(post.content);

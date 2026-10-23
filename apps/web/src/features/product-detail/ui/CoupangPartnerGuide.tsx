@@ -16,6 +16,7 @@ export default function CoupangPartnerGuide({ productId }: { productId: number }
   return (
     <div className="flex h-12 items-center justify-start gap-3 self-stretch rounded-xl bg-gray-100 px-3.5 py-3.5">
       <div className="justify-start text-xs leading-none font-medium text-gray-700">안내</div>
+      {/* eslint-disable-next-line no-restricted-syntax -- 쿠팡 파트너스 고지 문구(정해진 문장이라 해요체로 바꾸지 않는다) */}
       <div className="flex-1 justify-start text-xs leading-none font-normal text-gray-600">
         쿠팡 파트너스 활동으로 지름알림이 일정 금액의 수수료를 지급 받습니다.
       </div>

@@ -9,6 +9,8 @@
  *
  * ⚠️ no-restricted-syntax 는 설정끼리 합쳐지지 않고 마지막 것이 이긴다. 다른 금지 문법을 더하려면 이 배열에 붙일 것.
  *
+ * 문구·상호작용 규칙(해요체·기본 확인창 금지)도 같은 배열에 들어간다 — writing.js.
+ *
  * 정말 예외인 자리(캠페인 페이지·광고 소재·외부 브랜드 그림)는 이유를 남기고 끈다:
  *   // eslint-disable-next-line no-restricted-syntax -- 캠페인 전용 색
  *   파일 전체면 맨 위에 eslint-disable no-restricted-syntax 블록 주석(이유 포함).
@@ -118,6 +120,8 @@ const banned = [
 // 로그인 이메일 아이콘(#344054)이 다크에서 바탕에 묻혔다. 회색 토큰과 같은 hex·검정은 테마를 따라야 하는 색이다
 // → 한 색 아이콘은 currentColor, 회색 그림은 var(--color-gray-N)(앱은 useColors()). 브랜드·그림 고유색 hex 는 막지 않는다.
 // mask·clipPath 의 검정·흰색은 색이 아니라 가림 범위라 뺀다.
+const writing = require('./writing.js');
+
 const GRAY_HEX = Object.values(require('./tokens.js').light.gray).map((hex) => hex.slice(1));
 const SVG_THEME_COLOR = `^(?:black|#000|#000000|#(?:${GRAY_HEX.join('|')}))$`;
 const SVG_COLOR_ATTR = '/^(?:fill|stroke|color|stopColor|floodColor)$/';
@@ -140,6 +144,8 @@ module.exports = {
         {selector: `TemplateElement[value.raw=/${pattern}/]`, message: message + GUIDE},
       ]),
       ...svgSelectors.map((selector) => ({selector, message: SVG_MESSAGE + GUIDE})),
+      // 문구(해요체·「~하지 못했어요」)·기본 확인창 금지 — writing.js
+      ...writing.syntax,
     ],
   },
 };

@@ -67,7 +67,7 @@ export default function RecommendedKeywordSection() {
       const failed = inFlight.current;
       if (failed) setJustAdded((prev) => prev.filter((k) => k !== failed));
       // 서버가 '이미 등록된 키워드', '최대 20개 초과' 같은 구체적 이유를 준다.
-      toast.error(getGraphqlErrorMessage(error) || '키워드 저장에 실패했습니다.');
+      toast.error(getGraphqlErrorMessage(error) || '키워드를 저장하지 못했어요.');
     },
   });
 

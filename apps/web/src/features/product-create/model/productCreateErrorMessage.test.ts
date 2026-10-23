@@ -65,7 +65,7 @@ describe('productCreateErrorMessage', () => {
     });
     assert.equal(
       productCreateErrorMessage(error),
-      '핫딜 등록에 실패했어요. 잠시 후 다시 시도해 주세요.',
+      '핫딜을 등록하지 못했어요. 잠시 후 다시 시도해 주세요.',
     );
   });
 

@@ -54,7 +54,7 @@ export default function CommunityPostDetailClient({
     },
     onError: (_err, _vars, ctx) => {
       if (ctx?.prev) queryClient.setQueryData(CommunityQueries.post(postId).queryKey, ctx.prev);
-      toast.error('좋아요 처리에 실패했어요.');
+      toast.error('좋아요를 누르지 못했어요.');
     },
   });
 

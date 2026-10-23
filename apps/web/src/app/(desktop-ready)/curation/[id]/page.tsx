@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!section) {
     return {
-      title: '페이지를 찾을 수 없습니다',
+      title: '페이지를 찾을 수 없어요',
     };
   }
 

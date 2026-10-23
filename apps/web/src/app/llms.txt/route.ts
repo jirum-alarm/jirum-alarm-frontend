@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- AI 크롤러가 읽는 사실 문서(사람 화면 아님): 인용되기 쉬운 평서문으로 둔다(writing.js) */
 import { INTEREST_CATEGORIES } from '@jirum/domain/categories';
 import { COMMUNITY_COUNT, DAILY_COMMUNITY_DEALS } from '@jirum/domain/service-facts';
 import { NextResponse } from 'next/server';

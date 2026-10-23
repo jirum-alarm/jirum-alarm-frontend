@@ -136,7 +136,7 @@ const Login = () => {
                   {isLoading ? (
                     <>
                       <LoadingSpinner className="size-5" />
-                      로딩 중...
+                      로그인 중…
                     </>
                   ) : (
                     <>

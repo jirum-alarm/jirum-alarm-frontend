@@ -304,7 +304,7 @@ describe('clipMetaDescription', () => {
 
 describe('MISSING_PRODUCT_METADATA', () => {
   it('홈 타이틀을 쓰지 않고 noindex 한다', () => {
-    assert.equal(MISSING_PRODUCT_METADATA.title, '상품을 찾을 수 없습니다 | 지름알림');
+    assert.equal(MISSING_PRODUCT_METADATA.title, '상품을 찾을 수 없어요 | 지름알림');
     assert.notEqual(MISSING_PRODUCT_METADATA.title.includes('실시간 초특가'), true);
     assert.equal(MISSING_PRODUCT_METADATA.robots.index, false);
   });

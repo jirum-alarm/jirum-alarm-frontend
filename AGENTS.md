@@ -292,7 +292,10 @@ Code formatting standards:
 2. **ESLint**: Follow `@jirum/eslint-config-jirum` rules
 3. **Prettier**: Use `@jirum/prettier` for consistent formatting
 4. **Design System**: 색·글자 크기·모서리·그림자는 토큰만 쓴다(`bg-[#…]`·`text-[13px]`·`text-emerald-700` 금지 — 린트가 막는다). 의미별 색은 `packages/design-system/README.md`
-5. **디자인 시스템이 정본 — 틀렸으면 거기부터 고친다**(2026-10-20). 화면 모양(색·간격·글자·부품 모양)이 이상하면 화면에서 값을 손으로 맞추기 전에
+5. **말과 흐름도 정본이 있다**(2026-10-23, 토스식): 화면 문구는 해요체 한 가지·못 한 일은 「~하지 못했어요」·능동형, 되돌릴 수 있는 동작은 묻지 말고 실행 + 「되돌리기」 토스트,
+   확인은 web `AlertDialog`·앱 `ConfirmSheet`(브라우저 confirm·OS Alert 금지), 기다림은 스켈레톤. 린트(`packages/design-system/writing.js`)가 기계로 볼 수 있는 것을 막고,
+   나머지는 design-system README 「사용성 — 말과 흐름」. 새 문구·새 흐름은 그 표부터 본다.
+6. **디자인 시스템이 정본 — 틀렸으면 거기부터 고친다**(2026-10-20). 화면 모양(색·간격·글자·부품 모양)이 이상하면 화면에서 값을 손으로 맞추기 전에
    원인이 `packages/design-system`(tokens·recipes·layout·catalog 부품)에 있는지 먼저 본다. 정본이 틀렸거나 비었으면 **정본을 먼저 고치고**(web·앱이 함께 바뀐다),
    화면은 정본을 쓰도록만 고친다. 화면 한 곳의 국소 보정은 같은 깨짐이 다른 화면·다른 플랫폼에 남고, 다음 사람이 정본과 화면 중 무엇이 맞는지 모르게 만든다.
    web↔앱 «같아야 하는 것»도 서로의 소스를 대조하지 말고 각자 정본(design-system·`packages/domain`)을 쓰는지로 검사한다.

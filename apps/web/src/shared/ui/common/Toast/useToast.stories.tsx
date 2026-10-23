@@ -11,7 +11,7 @@ const ToastStoryDisplay = ({ message }: { message?: React.ReactNode } = { messag
   return (
     <div className="grid gap-y-4">
       <ToastStory message={message || '개인정보가 저장됐어요.'} buttonText="저장" />
-      <ToastStory message={message || '확인되었습니다.'} buttonText="확인" />
+      <ToastStory message={message || '저장했어요.'} buttonText="확인" />
       <Toaster />
     </div>
   );

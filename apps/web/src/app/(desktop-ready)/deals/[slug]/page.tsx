@@ -402,7 +402,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
               {/* h1 다음 첫 문단 = 답. 수치가 UI 토큰으로만 흩어져 있으면 AI 가 인용할 문장이
                   없다. 아래 카드와 같은 값을 문장으로 한 번 더 쓴다(JSON-LD description 도 동일). */}
               <p className="mt-1 text-sm text-gray-600">
-                {leadSentence ?? '커뮤니티 핫딜을 단위가로 모아, 사도 되는 가격을 알려드립니다.'}
+                {leadSentence ?? '커뮤니티 핫딜을 단위가로 모아, 사도 되는 가격을 알려 드려요.'}
               </p>
               <p className={cn(text.caption, 'mt-1')}>
                 {page.brand ? `${page.brand} · ` : ''}지금까지 핫딜 {page.dealCount}건

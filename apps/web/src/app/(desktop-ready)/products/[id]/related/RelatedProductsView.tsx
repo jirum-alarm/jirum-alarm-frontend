@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { cn } from '@/shared/lib/cn';
+import { LoadingSpinner } from '@/shared/ui/common/icons';
 
 import { ProductQueries } from '@/entities/product';
 import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
@@ -52,7 +53,7 @@ export default function RelatedProductsView({ productId, isMobile }: RelatedProd
   if (allProducts.length === 0) {
     return (
       <div className={cn('flex h-40 items-center justify-center', emptyText)}>
-        유사한 상품이 없습니다.
+        비슷한 상품이 없어요.
       </div>
     );
   }
@@ -66,7 +67,7 @@ export default function RelatedProductsView({ productId, isMobile }: RelatedProd
       />
       {hasMore && (
         <div ref={ref} className="flex h-20 items-center justify-center">
-          <div className="text-gray-500">로딩중...</div>
+          <LoadingSpinner />
         </div>
       )}
     </div>

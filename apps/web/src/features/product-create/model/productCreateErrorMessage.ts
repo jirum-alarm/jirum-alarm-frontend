@@ -7,7 +7,7 @@ type GraphqlErrorLike = {
   };
 };
 
-const FALLBACK = '핫딜 등록에 실패했어요. 잠시 후 다시 시도해 주세요.';
+const FALLBACK = '핫딜을 등록하지 못했어요. 잠시 후 다시 시도해 주세요.';
 const HANGUL = /[가-힣]/;
 
 function firstGraphqlError(error: unknown): GraphqlErrorLike | undefined {

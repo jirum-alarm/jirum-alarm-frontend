@@ -94,7 +94,7 @@ export default function usePostForm(
       );
       setImages((prev) => [...prev, ...uploaded].slice(0, MAX_POST_IMAGES));
     } catch {
-      toast.error('이미지 업로드에 실패했어요.');
+      toast.error('사진을 올리지 못했어요.');
     } finally {
       setIsUploadingImages(false);
     }
@@ -124,7 +124,7 @@ export default function usePostForm(
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: CommunityQueries.all() });
-      toast.success(editPostId ? '게시글이 수정되었어요.' : '게시글이 등록되었어요.');
+      toast.success(editPostId ? '글을 고쳤어요.' : '글을 올렸어요.');
 
       // ★앱의 네이티브 스택 위에 얹힌 웹뷰면 웹 라우팅을 하지 않는다.
       // 커뮤니티 탭이 네이티브가 된 뒤(2026-09-08) 이 폼만 웹뷰로 남았는데,
@@ -153,7 +153,7 @@ export default function usePostForm(
       }
     },
     onError: () => {
-      toast.error('게시글 등록에 실패했어요.');
+      toast.error('글을 올리지 못했어요.');
     },
   });
 

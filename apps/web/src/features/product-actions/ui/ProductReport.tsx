@@ -54,7 +54,7 @@ const ProductReportModal = ({ productId }: { productId: number }) => {
     },
     onError: () => {
       setIsModalOpen(false);
-      toast('이미 종료 제보된 상품입니다 :(');
+      toast('이미 종료 제보가 들어온 상품이에요.');
     },
   });
 

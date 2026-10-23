@@ -46,7 +46,7 @@ export default function LikeButton({
         queryClient.invalidateQueries({ queryKey: productKey }),
         queryClient.invalidateQueries({ queryKey: WishlistQueries.lists() }),
       ]);
-      toast.success('찜 목록에 추가되었어요.', {
+      toast.success('찜 목록에 추가했어요.', {
         action: { label: '보러가기', onClick: () => router.push(PAGE.LIKE) },
       });
     },

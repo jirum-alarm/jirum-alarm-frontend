@@ -154,6 +154,6 @@ export const accessibility = async (page: Page) => {
 /** 라우트 오류 경계가 그려졌는가(error.tsx → ServerError). */
 export const errorBoundary = (page: Page) =>
   page
-    .getByText('서버에러가 발생했습니다')
+    .getByText('화면을 불러오지 못했어요')
     .isVisible()
     .catch(() => false);

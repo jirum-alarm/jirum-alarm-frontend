@@ -25,7 +25,7 @@ interface CurationProductListProps {
 
 const LIMIT = CURATION_PAGE_SIZE;
 
-const EmptyState = () => <div className={cn('py-10 text-center', emptyText)}>상품이 없습니다.</div>;
+const EmptyState = () => <div className={cn('py-10 text-center', emptyText)}>상품이 없어요.</div>;
 
 const ByKeyword = ({ section }: CurationProductListProps) => {
   const queryVariables: QueryProductsByKeywordQueryVariables = {

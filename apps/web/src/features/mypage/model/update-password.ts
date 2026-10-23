@@ -16,7 +16,7 @@ export const useUpdatePassword = () => {
       router.push(COMPLETE_ROUTE);
     },
     onError: () => {
-      toast.error('비밀번호 변경중 에러가 발생했어요.');
+      toast.error('비밀번호를 바꾸지 못했어요.');
     },
   });
 };

@@ -13,7 +13,6 @@ import SectionHeader from '@/shared/ui/SectionHeader';
 import { navigateToSearch } from '../hooks/useSearchInputViewModel';
 
 export default function RecentKeywords() {
-  const [loading, setLoading] = useState(true);
   const [keywords, setKeywords] = useState<string[]>([]);
 
   const { device } = useDevice();
@@ -23,7 +22,6 @@ export default function RecentKeywords() {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- 최근 검색어는 localStorage(외부 저장소)에 있다. 서버 HTML 과 맞추려 마운트 뒤·검색어가 바뀔 때 다시 읽는다.
     setKeywords(JSON.parse(localStorage.getItem('gr-recent-keywords') ?? '[]'));
-    setLoading(false);
   }, [searchParams]);
 
   const handleRemoveRecentKeyword = (keyword: string) => {
@@ -42,23 +40,20 @@ export default function RecentKeywords() {
         <section className="pc:px-0 px-5">
           <SectionHeader title="최근 검색어" shouldShowMobileUI />
           <div className={cn(device.isMobile && 'no-scrollbar h-[42px] overflow-x-scroll')}>
-            {loading ? (
-              <div className="flex items-center text-sm">최근 검색어를 불러오는 중입니다...</div>
-            ) : (
-              <div className={cn('flex gap-2', !device.isMobile && 'flex-wrap')}>
-                {keywords.length !== 0 ? (
-                  keywords.map((keyword, i) => (
-                    <Chip
-                      key={i}
-                      keyword={keyword}
-                      handleRemoveRecentKeyword={handleRemoveRecentKeyword}
-                    />
-                  ))
-                ) : (
-                  <span className={emptyText}>검색 내역이 없어요.</span>
-                )}
-              </div>
-            )}
+            {/* 목록은 마운트 뒤 localStorage 에서 읽은 그 순간 함께 생긴다 — 기다리는 상태가 따로 없다. */}
+            <div className={cn('flex gap-2', !device.isMobile && 'flex-wrap')}>
+              {keywords.length !== 0 ? (
+                keywords.map((keyword, i) => (
+                  <Chip
+                    key={i}
+                    keyword={keyword}
+                    handleRemoveRecentKeyword={handleRemoveRecentKeyword}
+                  />
+                ))
+              ) : (
+                <span className={emptyText}>검색 내역이 없어요.</span>
+              )}
+            </div>
           </div>
         </section>
       )}

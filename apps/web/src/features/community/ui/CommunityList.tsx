@@ -7,6 +7,7 @@ import { Fragment, useEffect } from 'react';
 
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
+import { LoadingSpinner } from '@/shared/ui/common/icons';
 
 import { AuthQueries } from '@/entities/auth';
 import { CommunityTab } from '@/entities/community';
@@ -98,8 +99,8 @@ export default function CommunityList({ tab, insertAfterIndex, insertContent }: 
       {/* 무한 스크롤 트리거 */}
       <div ref={ref} className="h-1" />
       {isFetchingNextPage && (
-        <div className={cn(text.muted, 'flex items-center justify-center py-4')}>
-          불러오는 중...
+        <div className="flex justify-center py-4">
+          <LoadingSpinner />
         </div>
       )}
 

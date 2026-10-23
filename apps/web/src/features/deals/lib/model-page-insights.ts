@@ -307,10 +307,12 @@ export function buildDealsLeadSentence(input: {
   if (timing.tone === 'mall' && timing.mallPrice != null && timing.totalPrice != null) {
     const pack = timing.bestPackLabel ? `${timing.bestPackLabel} ` : '';
     sentences.push(
+      // eslint-disable-next-line no-restricted-syntax -- AI 답변·네이버 브리핑이 인용하는 정의문(JSON-LD description 과 같은 문장) — 평서문 유지
       `${withTopicParticle(name)} 지금 핫딜(${pack}${won(timing.totalPrice)})보다 다나와 최저가(${won(timing.mallPrice)})가 더 쌉니다.`,
     );
   } else if (timing.buyLine != null && timing.buyLine > 0) {
     sentences.push(
+      // eslint-disable-next-line no-restricted-syntax -- 위와 같은 인용용 정의문
       `${withTopicParticle(name)} ${formatPrice(timing.buyLine)} 이하면 사도 되는 가격입니다.`,
     );
   }

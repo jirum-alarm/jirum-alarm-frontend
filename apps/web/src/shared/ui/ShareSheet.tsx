@@ -78,7 +78,7 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
       await navigator.clipboard.writeText(buildShareMessage(title, url, description));
       setCopied(true);
     } catch {
-      toast.error(<>복사에 실패했어요. 주소창의 링크를 직접 복사해주세요.</>);
+      toast.error(<>링크를 복사하지 못했어요. 주소창의 링크를 직접 복사해 주세요.</>);
     }
   };
 

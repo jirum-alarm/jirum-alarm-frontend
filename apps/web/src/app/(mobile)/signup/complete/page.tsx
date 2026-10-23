@@ -52,7 +52,7 @@ const Completed = () => {
               <Illust />
             </div>
             <div>
-              <p className="pb-3 text-2xl font-semibold">가입을 축하합니다!</p>
+              <p className="pb-3 text-2xl font-semibold">가입을 축하해요!</p>
             </div>
             <div className="pt-8 pb-28">
               <SignupKeyword productId={productId} />

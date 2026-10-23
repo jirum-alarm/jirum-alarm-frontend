@@ -18,7 +18,7 @@ export const useUpdateNickname = () => {
       goBack();
     },
     onError: () => {
-      toast.error('닉네임 저장중 에러가 발생했어요');
+      toast.error('닉네임을 저장하지 못했어요.');
     },
   });
 };
