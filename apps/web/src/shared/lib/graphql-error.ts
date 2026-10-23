@@ -2,7 +2,7 @@
 const HANGUL = /[가-힣]/;
 
 /**
- * 서버가 사용자에게 보여주라고 준 메시지(예: '이미 등록된 키워드 알림입니다.')를 꺼낸다. 없으면 ''.
+ * 서버가 사용자에게 보여주라고 준 메시지(예: '이미 등록된 키워드 알림이에요.')를 꺼낸다. 없으면 ''.
  *
  * execute 는 GraphQL 에러를 FetchError.data.errors 에 담는다. 예전엔 graphql-request 모양
  * (error.response.errors)을 읽어서 늘 빈 값이었고, 그 뒤 Error.message 로 넘어가면

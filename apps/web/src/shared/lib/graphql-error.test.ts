@@ -25,8 +25,8 @@ const gqlError = (message: string, code: string, statusCode: number): FakeFetchE
 
 describe('getGraphqlErrorMessage', () => {
   it('이미 등록된 키워드 — 서버 메시지를 꺼낸다', () => {
-    const error = gqlError('이미 등록된 키워드 알림입니다.', 'BAD_REQUEST', 400);
-    assert.equal(getGraphqlErrorMessage(error), '이미 등록된 키워드 알림입니다.');
+    const error = gqlError('이미 등록된 키워드 알림이에요.', 'BAD_REQUEST', 400);
+    assert.equal(getGraphqlErrorMessage(error), '이미 등록된 키워드 알림이에요.');
   });
 
   it('FetchError 의 JSON message 는 절대 내보내지 않는다', () => {
