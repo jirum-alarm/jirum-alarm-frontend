@@ -21,6 +21,8 @@ import {
 
 import { relativeTimeLabel } from '@/features/deals/lib/model-page-insights';
 
+import KeywordBoard from '@/widgets/keyword-board/ui/KeywordBoard';
+
 import { FoldedGrid, SectionTitle, splitByVerdict } from '../deals/DealsSections';
 import {
   isSeasonHubLinkOn,
@@ -29,7 +31,6 @@ import {
 } from '../season/2026-black-friday/season-calendar';
 
 import KeywordsTabHeader from './KeywordsTabHeader';
-import MyKeywordsSection from './MyKeywordsSection';
 
 // /keywords — 지름알림의 「모아보기」 첫 화면(2026-10-17 상단 메뉴 「최저가」 자리). 키워드가 위층이다: 알림을 거는 단위와 같아서
 // 보다가 그 자리에서 알림으로 이어진다. 모델 페이지(/deals/{slug}, 상품별 가격 판정)는 각 키워드 허브 안의 아래층이고,
@@ -85,8 +86,9 @@ export default async function KeywordHubIndexPage() {
         <h1 className="text-2xl font-bold text-gray-900">키워드별 핫딜 모음</h1>
         <p className="mt-1 text-sm text-gray-600">{buildDescription(hubs.length)}</p>
       </header>
-      {/* 하단 탭 「키워드」(2026-10-20) — 내 키워드부터. 계정·키워드는 브라우저가 알아서 클라에서 그린다(이 페이지는 캐시되는 공개 화면). */}
-      <MyKeywordsSection />
+      {/* 하단 탭 「키워드」(2026-10-20) — 내 키워드부터. 2026-10-23 칩 목록 → 상황판(이번 주 올라온 딜·지금 사기 좋은 딜·키워드별 최근 딜).
+          계정·키워드는 브라우저가 알아서 클라에서 그린다(이 페이지는 캐시되는 공개 화면). */}
+      <KeywordBoard />
 
       {/* 해외직구 시즌 허브 — 시즌(~12/12) 동안만. 「모아보기」 손님이 직구 일정을 찾는 자리이자 허브의 HTML 크롤 경로(season-calendar 주석). */}
       {isSeasonHubLinkOn(now) && (

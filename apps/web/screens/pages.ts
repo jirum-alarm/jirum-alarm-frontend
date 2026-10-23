@@ -46,6 +46,8 @@ export const PAGES: ScreenPage[] = [
   { name: 'home-user', path: '/', auth: 'user', desktop: true },
   { name: 'mypage-user', path: '/mypage', auth: 'user' },
   { name: 'mypage-keyword', path: '/mypage/keyword', auth: 'user', states: true },
+  // 키워드 탭의 «내 키워드 상황판»(로그인 — 이번 주 건수·최근 딜 카드). 공개 화면은 위 'keywords'.
+  { name: 'keywords-user', path: '/keywords', auth: 'user', states: true },
   { name: 'mypage-notification', path: '/mypage/notification', auth: 'user' },
   { name: 'mypage-categories', path: '/mypage/categories', auth: 'user' },
   { name: 'mypage-account', path: '/mypage/account', auth: 'user' },

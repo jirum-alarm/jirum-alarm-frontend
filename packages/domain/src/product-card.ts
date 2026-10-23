@@ -23,6 +23,12 @@ const SAVING_BASIS_LABEL: Record<PriceSavingBasis, string> = {
   COUPANG: '쿠팡보다',
   DANAWA: '다나와보다',
 };
+/** 좁은 사진(목록 카드 76px) 위 짧은 꼴 — 「쿠팡보다 21%↓」(7자)는 76px 에서 잘렸다(2026-10-23 하네스). */
+const SAVING_BASIS_SHORT: Record<PriceSavingBasis, string> = {
+  USUAL: '평소',
+  COUPANG: '쿠팡',
+  DANAWA: '다나와',
+};
 
 /**
  * 사진 오른쪽 위 「쿠팡보다 21%↓」 라벨 — 서버가 상세 근거 블록 헤드라인과 같은 기준·숫자만 준다(판정은 서버, 여기는 문구만).
@@ -30,8 +36,11 @@ const SAVING_BASIS_LABEL: Record<PriceSavingBasis, string> = {
  */
 export function priceSavingLabel(
   saving: { basis: string; percent: number } | null | undefined,
+  /** compact = 좁은 사진 위 「쿠팡 21%↓」. */
+  size: 'full' | 'compact' = 'full',
 ): string | null {
   if (!saving || !(saving.percent > 0)) return null;
-  const basis = SAVING_BASIS_LABEL[saving.basis as PriceSavingBasis];
+  const table = size === 'compact' ? SAVING_BASIS_SHORT : SAVING_BASIS_LABEL;
+  const basis = table[saving.basis as PriceSavingBasis];
   return basis ? `${basis} ${Math.floor(saving.percent)}%↓` : null;
 }

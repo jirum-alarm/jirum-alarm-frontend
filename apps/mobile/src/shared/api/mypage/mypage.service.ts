@@ -10,6 +10,7 @@ import {
   MutationUpdateMyProfile,
   MutationWithdraw,
   QueryGoodPriceSuggestion,
+  QueryKeywordBoard,
   QueryKeywordDealFrequencies,
   QueryMyNotificationKeywords,
   QueryMyProfile,
@@ -93,6 +94,15 @@ export class MyPageService {
       QueryKeywordDealFrequencies,
       {keywords},
     );
+    return res.data?.keywordDealFrequencies ?? [];
+  }
+
+  /** 키워드 탭 상황판 — 횟수 + 7일 건수 + 최근 딜(limit). web KeywordBoardService.board 와 같다. */
+  static async getKeywordBoard(keywords: string[], limit: number) {
+    const res = await HttpClient.withAccessToken().execute(QueryKeywordBoard, {
+      keywords,
+      limit,
+    });
     return res.data?.keywordDealFrequencies ?? [];
   }
 

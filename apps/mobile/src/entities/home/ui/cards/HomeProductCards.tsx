@@ -198,6 +198,7 @@ export const ListCard = React.memo(function ListCard({
           // 가격 옆에 `badgeVariant="page"` 핫딜 뱃지가 이미 붙는다 — 켜 두면
           // 한 행에 같은 뱃지가 두 번(web ListProductCard 는 안 그린다).
           showHotdealBadge={false}
+          compact
         />
         {/* web `h-full justify-between` — 썸네일(76px) 높이에 맞춰 벌리되, 제목이 두 줄이면
             (40+4+28+4+16=92) 칸이 늘어나야 출처 줄이 다음 카드로 삐져나가지 않는다. */}
