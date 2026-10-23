@@ -41,13 +41,13 @@ export default function BottomCTA({
   // 첫 화면 시트·주소창 애니메이션이 가라앉은 뒤에 잰다.
   // 그려지지 않았으면(삼성 인터넷이 떠 있는 제휴 링크를 숨긴다) 가격 아래 본문에 구매 버튼을 대신 띄운다.
   const buyRef = useRef<HTMLElement>(null);
-  // 삼성 인터넷 바 모양 실험(samsung-cta-experiment.ts). 서버 렌더는 늘 링크, 하이드레이션 직후 군을 정한다.
+  // 삼성 인터넷은 버튼(samsung-cta-experiment.ts — 떠 있는 링크를 숨긴다). 서버 렌더는 늘 링크, 하이드레이션 직후 UA 로 정한다.
   const [variant, setVariant] = useState<CtaVariant | null>(null);
   const variantRef = useRef<CtaVariant | null>(null);
   useEffect(() => {
-    const picked = pickCtaVariant(navigator.userAgent, Math.random());
+    const picked = pickCtaVariant(navigator.userAgent);
     variantRef.current = picked;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- 브라우저 UA·무작위는 마운트 뒤에만 안다
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- 브라우저 UA 는 마운트 뒤에만 안다
     setVariant(picked);
   }, []);
   const setMissingProduct = useSetAtom(bottomCtaMissingProductAtom);
@@ -105,7 +105,7 @@ export default function BottomCTA({
             구매 링크 준비 중
           </Button>
         ) : variant === 'button' ? (
-          // 버튼 군 — href 없는 버튼이 클릭 때 새 창을 연다(떠 있는 외부 링크로 안 보이게).
+          // 삼성 인터넷 — href 없는 버튼이 클릭 때 새 창을 연다(떠 있는 외부 링크로 안 보이게).
           <Button
             ref={buyRef as React.RefObject<HTMLButtonElement>}
             className="h-12 flex-1 px-6 text-base font-semibold"

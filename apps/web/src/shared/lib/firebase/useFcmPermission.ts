@@ -10,6 +10,25 @@ import { firebaseConfig, webPushVapidKey } from '@/shared/config/firebase';
 const COOLDOWN_KEY = 'fcm-permission-cooldown';
 const COOLDOWN_MS = 3 * 24 * 60 * 60 * 1000; // 3 days
 const PERMISSION_WAIT_MS = 8000;
+// 조용한 권한 요청으로 8초를 넘긴 채 아직 답이 없는 요청이 있다는 표시(「어디로 받을까요」 시트가 주소창 아이콘을 안내한다).
+const PERMISSION_PENDING_KEY = 'jirum:push-permission-pending';
+
+const setPermissionPending = (pending: boolean) => {
+  try {
+    if (pending) sessionStorage.setItem(PERMISSION_PENDING_KEY, '1');
+    else sessionStorage.removeItem(PERMISSION_PENDING_KEY);
+  } catch {
+    // 저장소가 막힌 브라우저 — 안내만 빠진다.
+  }
+};
+
+export const isPermissionPending = () => {
+  try {
+    return sessionStorage.getItem(PERMISSION_PENDING_KEY) === '1';
+  } catch {
+    return false;
+  }
+};
 
 const pushPermissionResult = (result: NotificationPermission | 'pending') =>
   (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
@@ -42,6 +61,7 @@ export function useFcmPermission() {
     const asked = Notification.requestPermission().then(async (permission) => {
       // 권유 클릭 뒤 실제로 켰는지 — 클릭만 재면 "알림 받는 사람"이 몇 명 늘었는지 모른다.
       pushPermissionResult(permission);
+      setPermissionPending(false);
       if (permission !== 'granted') {
         localStorage.setItem(COOLDOWN_KEY, String(Date.now()));
         return false;
@@ -74,6 +94,7 @@ export function useFcmPermission() {
     ]);
     if (granted === 'pending') {
       pushPermissionResult('pending');
+      setPermissionPending(true);
       return { granted: false as const };
     }
     return granted ? { granted: true as const } : { granted: false as const };

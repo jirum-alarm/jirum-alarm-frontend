@@ -6,17 +6,17 @@
  *
  * 단위 = 상세 페이지 열기(판정 지표가 페이지당 숨김이고, 첫 방문 기기 id 를 기다리면 바가 늦게 바뀐다).
  * 삼성 인터넷만 대상. 군은 cta_geometry 끝 ` v:button|v:link` 로 남는다(GTM·GA4 변경 없이).
- * 끄려면 PERCENT 를 0 으로(웹 태그). 판정이 나면 진 쪽 코드를 지운다.
+ *
+ * 판정(2026-10-23): 링크 군만 바가 숨겨졌고 버튼 군은 한 번도 숨겨지지 않았다 → 링크가 방아쇠.
+ * 삼성 인터넷은 늘 버튼으로 바꿨다. 다른 브라우저는 숨김이 0% 라 링크 그대로(길게 눌러 새 탭 등 링크 동작 유지).
+ * 버튼이 된 뒤에도 숨김이 다시 생기는지 보려고 cta_geometry 의 v:button 표식은 남긴다.
  */
 export const SAMSUNG_CTA_EXPERIMENT_ID = 'samsung_cta_button_v1';
-export const SAMSUNG_CTA_BUTTON_PERCENT = 50;
 
 export type CtaVariant = 'link' | 'button';
 
 export const isSamsungInternet = (userAgent: string) => /SamsungBrowser\//.test(userAgent);
 
-/** 삼성 인터넷이 아니면 null(실험 밖 — 늘 링크). random 은 0~1. */
-export const pickCtaVariant = (userAgent: string, random: number): CtaVariant | null => {
-  if (!isSamsungInternet(userAgent)) return null;
-  return random * 100 < SAMSUNG_CTA_BUTTON_PERCENT ? 'button' : 'link';
-};
+/** 삼성 인터넷은 버튼, 그 밖은 null(늘 링크). */
+export const pickCtaVariant = (userAgent: string): CtaVariant | null =>
+  isSamsungInternet(userAgent) ? 'button' : null;

@@ -8,7 +8,7 @@ import { useDevice } from '@/shared/hooks/useDevice';
 import { isGuestAtom } from '@/shared/hooks/useIsLoggedIn';
 import { resolveAppDownloadPlatform } from '@/shared/lib/app-handoff/resolvePlatform';
 import { cn } from '@/shared/lib/cn';
-import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
+import { isPermissionPending, useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import {
   pushChannelSheetAtom,
   PushStatus,
@@ -40,6 +40,9 @@ export default function PushChannelSheet() {
   const { device } = useDevice();
   const { requestPermission } = useFcmPermission();
   const [status, setStatus] = useState<PushStatus>('default');
+  // 권한 요청이 창 없이 주소창 아이콘으로만 뜬 채(조용한 요청 — Edge 기본값) 답이 없다.
+  // 2026-10-23 판독(obs_web_push_permission_timeout): Edge 키워드 등록자의 권한 결과 대부분이 이 상태였다.
+  const [quietPending, setQuietPending] = useState(false);
   // 게스트(로그인 없이 등록)의 키워드는 이 기기에만 있다 — 앱으로 가면 로그인 전엔 안 보인다.
   // 그래서 게스트에겐 지금 바로 받는 이 브라우저 알림을 앞에 둔다.
   const isGuest = useAtomValue(isGuestAtom);
@@ -52,6 +55,7 @@ export default function PushChannelSheet() {
     const current = readPushStatus();
     // eslint-disable-next-line react-hooks/set-state-in-effect -- 시트가 열릴 때마다 브라우저 알림 권한(외부 상태)을 다시 읽는다 — 권한은 React 밖에서 바뀐다.
     setStatus(current);
+    setQuietPending(current === 'default' && isPermissionPending());
     pushEvent('push_channel_sheet_view', {
       platform,
       push_status: current,
@@ -89,6 +93,12 @@ export default function PushChannelSheet() {
           </AlertDialog.Title>
           <AlertDialog.Description className={cn(text.muted, 'pt-2')}>
             지금은 이 브라우저로 알림이 오지 않아요.
+            {quietPending && (
+              <>
+                <br />
+                허용 창이 안 보였다면 주소창의 알림(종) 아이콘을 눌러 허용해 주세요.
+              </>
+            )}
           </AlertDialog.Description>
         </AlertDialog.Header>
 
