@@ -9,7 +9,9 @@ export const SPARSE_RANKING_CATEGORY_IDS: readonly number[] = [3, 5, 7, 8, 10];
 
 /** 랭킹을 며칠 전부터 볼지. categoryId null = 전체. */
 export function rankingWindowDays(categoryId: number | null): number {
-  return categoryId !== null && SPARSE_RANKING_CATEGORY_IDS.includes(categoryId) ? 60 : 3;
+  return categoryId !== null && SPARSE_RANKING_CATEGORY_IDS.includes(categoryId)
+    ? 60
+    : 3;
 }
 
 /**
@@ -21,7 +23,9 @@ export function rankingWindowDays(categoryId: number | null): number {
  * 그 자리를 거슬러 이긴 것만 옮겼다. 육아는 화장품 뒤(사용자 지정). 기타는 인기와 무관하게 항상 끝.
  * 판독: crawling-server experiment-registry `trending-tab-order`.
  */
-export const TRENDING_TAB_ORDER: readonly number[] = [1, 9, 2, 4, 6, 3, 10, 8, 7, 5]; // 컴퓨터·디지털·생활식품·의류잡화·가전가구·화장품·육아·상품권·등산레저·도서
+export const TRENDING_TAB_ORDER: readonly number[] = [
+  1, 9, 2, 4, 6, 3, 10, 8, 7, 5,
+]; // 컴퓨터·디지털·생활식품·의류잡화·가전가구·화장품·육아·상품권·등산레저·도서
 const OTHER_CATEGORY_ID = 11; // 기타
 
 const tabRankOf = (id: number) => {
@@ -31,12 +35,14 @@ const tabRankOf = (id: number) => {
   return index === -1 ? TRENDING_TAB_ORDER.length : index;
 };
 
-export function orderTrendingCategories<T extends { id: number }>(categories: readonly T[]): T[] {
+export function orderTrendingCategories<T extends { id: number }>(
+  categories: readonly T[],
+): T[] {
   return [...categories].sort((a, b) => tabRankOf(a.id) - tabRankOf(b.id));
 }
 
 /** 발견 탭이 보여 주는 세 화면 — 주소(/trending/live·hot·ranking)와 1:1. */
-export type TrendingView = 'live' | 'hot' | 'ranking';
+export type TrendingView = "live" | "hot" | "ranking";
 
 /**
  * 발견 탭 위 탭 — 「실시간」·「랭킹」 둘. view 는 그 탭을 누르면 여는 화면.
@@ -45,35 +51,37 @@ export type TrendingView = 'live' | 'hot' | 'ranking';
  * 순서가 같고 거르는 것만 달라 탭 둘로 두면 같은 목록이 두 번 보였다. 랭킹은 순서(점수)·순위 배지·기간이 달라 따로 둔다.
  * 「핫딜만」 기본 켬 — 뽐뿌 인기 탭이 유용한 건 «여러 사람이 고른 것만, 위가 최신»이라서다(실시간은 하루 ~1,200건).
  */
-export const TRENDING_VIEW_TABS: readonly { view: TrendingView; label: string }[] = [
-  { view: 'hot', label: '실시간' },
-  { view: 'ranking', label: '랭킹' },
+export const TRENDING_VIEW_TABS: readonly {
+  view: TrendingView;
+  label: string;
+}[] = [
+  { view: "hot", label: "실시간" },
+  { view: "ranking", label: "랭킹" },
 ];
 
 /** 이 화면이 어느 탭 소속인가 — 실시간(전부)·핫딜만은 둘 다 「실시간」 탭(TRENDING_VIEW_TABS 의 view = hot). */
 export const trendingTabView = (view: TrendingView): TrendingView =>
-  view === 'ranking' ? 'ranking' : 'hot';
+  view === "ranking" ? "ranking" : "hot";
 
-/** 「실시간」 목록 위 칩·한 줄. 기준 정본은 서버 ranking-hot.ts — 왜 여기 있는지 보여 줘야 목록을 믿는다. */
+/** 「실시간」 카테고리 줄 끝 칩·빈 화면·핫딜만 페이지 설명(web 메타). 기준 정본은 서버 ranking-hot.ts. */
 export const HOT_FEED_COPY = {
-  toggle: '핫딜만',
-  lead: '사람들이 몰렸거나 평소보다 확실히 싼 딜만, 핫딜이 된 순서로 모았어요',
-  liveLead: '올라온 딜 전부를 최신순으로 보여 드려요',
-  empty: '지금 올라온 핫딜이 없어요',
+  toggle: "핫딜만",
+  lead: "사람들이 몰렸거나 평소보다 확실히 싼 딜만, 핫딜이 된 순서로 모았어요",
+  empty: "지금 올라온 핫딜이 없어요",
 } as const;
 
 /** 「핫딜만」 한 번에 받는 카드 수(서버 상한 20). */
 export const HOT_FEED_PAGE_SIZE = 20;
 
 /** 「핫딜만」 카드의 노출·클릭 출처 — 백엔드 노출 집계(recordProductImpressions)와 GA4 가 이 문자열로 거른다. */
-export const HOT_FEED_CARD_SOURCE = 'hot_feed' as const;
+export const HOT_FEED_CARD_SOURCE = "hot_feed" as const;
 
 /**
  * 하단 「발견」을 눌렀을 때 갈 화면 — 랭킹을 보고 있으면 「실시간」(핫딜만), 그 밖(실시간·다른 탭)이면 랭킹.
  * web 하단 네비 링크와 앱 탭바(재탭 = 전환, 다른 탭에서 = 랭킹)가 이 규칙 하나를 쓴다.
  */
 export const nextTrendingView = (current: TrendingView | null): TrendingView =>
-  current === 'ranking' ? 'hot' : 'ranking';
+  current === "ranking" ? "hot" : "ranking";
 
 /** 랭킹 목록 카드의 노출·클릭 출처. 백엔드 CTR 집계가 이 문자열로 거른다 — 갈리면 분모가 사라진다. */
-export const RANKING_CARD_SOURCE = 'ranking_tab' as const;
+export const RANKING_CARD_SOURCE = "ranking_tab" as const;

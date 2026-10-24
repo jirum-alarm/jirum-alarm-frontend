@@ -12,19 +12,25 @@ import type {CategoryItem} from '@/shared/types/category';
  * ★ web 은 motion drag 로 스트립을 직접 끌지만 RN 은 ScrollView 가 그 일을
  * 이미 한다 — 279줄이 여기서 60줄이 된 이유다.
  * 활성 탭을 화면 안으로 넣어주는 스크롤만 옮겼다.
+ *
+ * trailing = 줄 오른쪽 끝에 고정되는 조작(「실시간」의 「핫딜만」 칩). 칩 줄만 스크롤되고 끝은 안 움직인다.
  */
 
 const H_PADDING = 20;
 const GAP = 10; // web gap-2.5
+/** 칩 줄 ↔ 끝 조작 사이(구분선 양쪽). web TabBarV2 trailing 의 pl-3 와 같다. */
+const TRAILING_GAP = 12;
 
 export default function CategoryTabBar({
   categories,
   activeId,
   onSelect,
+  trailing,
 }: {
   categories: CategoryItem[];
   activeId: number;
   onSelect: (id: number) => void;
+  trailing?: React.ReactNode;
 }) {
   const scrollRef = useRef<ScrollView>(null);
   // 각 칩의 x 위치·폭. onLayout 으로 모아 활성 칩을 가운데로 보낸다.
@@ -40,7 +46,7 @@ export default function CategoryTabBar({
     scrollRef.current?.scrollTo({x: Math.max(0, target), animated: true});
   }, [activeId, categories.length]);
 
-  return (
+  const strip = (
     <ScrollView
       ref={scrollRef}
       horizontal
@@ -52,7 +58,8 @@ export default function CategoryTabBar({
       // 콘텐츠보다 큰 영역을 잡아 칩 위아래에 빈 띠가 생긴다.
       style={{flexGrow: 0, height: 36}}
       contentContainerStyle={{
-        paddingHorizontal: H_PADDING,
+        paddingLeft: H_PADDING,
+        paddingRight: trailing ? TRAILING_GAP : H_PADDING,
         alignItems: 'center',
         gap: GAP,
       }}>
@@ -76,5 +83,16 @@ export default function CategoryTabBar({
         );
       })}
     </ScrollView>
+  );
+
+  if (!trailing) return strip;
+  return (
+    <View className="flex-row items-center">
+      <View className="flex-1">{strip}</View>
+      <View className="h-5 w-px bg-gray-200" />
+      <View style={{paddingLeft: TRAILING_GAP, paddingRight: H_PADDING}}>
+        {trailing}
+      </View>
+    </View>
   );
 }

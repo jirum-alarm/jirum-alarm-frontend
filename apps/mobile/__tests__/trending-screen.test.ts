@@ -189,7 +189,7 @@ describe('CTR 계측 (web 과 같은 출처·규칙)', () => {
   });
 });
 
-describe('상단 실시간/핫딜만/랭킹 탭 — web 대조', () => {
+describe('상단 실시간/랭킹 탭 — web 대조', () => {
   const tabs = read('src/entities/trending/ui/TrendingTopTabs.tsx');
 
   it('★★flex 를 className 이 아니라 style 로 준다 — 안 그러면 탭이 안 보인다', () => {
@@ -213,9 +213,11 @@ describe('상단 실시간/핫딜만/랭킹 탭 — web 대조', () => {
       '실시간',
       '랭킹',
     ]);
-    // 실시간(live)·핫딜만(hot)은 둘 다 「실시간」 탭 — 칩은 목록 위(FeedList).
+    // 실시간(live)·핫딜만(hot)은 둘 다 「실시간」 탭 — 칩은 카테고리 줄 끝(TrendingScreen).
     expect(tabs).toContain('trendingTabView(active)');
-    expect(feedList).toContain("requestTrendingView(isHot ? 'live' : 'hot')");
+    expect(screen).toContain(
+      "requestTrendingView(view === 'hot' ? 'live' : 'hot')",
+    );
     expect(tabs).toContain('border-b border-gray-200');
   });
 
