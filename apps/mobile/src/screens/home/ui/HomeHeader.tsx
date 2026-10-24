@@ -10,15 +10,15 @@ import IconLogo from '@/shared/components/icons/IconLogo';
 import AlertIcon from '@/shared/components/icons/alert';
 import BubbleChatIcon from '@/shared/components/icons/bubble_chat';
 import SearchIcon from '@/shared/components/icons/search';
-import {MoonIcon, SunIcon} from '@/shared/components/icons/theme-mode';
 import {tabStackNavigations} from '@/shared/constant/navigations';
+import {HELP_PATH} from '@/constants/env';
+import {HelpMenuIcon} from '@/features/mypage/ui/icons';
 import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {navigateToNativeRoute} from '@/shared/lib/navigation/navigation-ref';
 import {useHasNewAlarm} from '@/shared/hooks/useHasNewAlarm';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {useColors} from '@/shared/theme/useColors';
 import {fixed, light} from '@jirum/design-system';
-import {useColorSchemePreference} from '@/shared/theme/color-scheme-preference';
 
 /** 로고 아래 붙는 서비스 한 줄 설명. web LOGO_SUBTITLE 과 같은 문구. */
 const LOGO_SUBTITLE = '커뮤니티 핫딜 모아보기';
@@ -83,7 +83,7 @@ export default function HomeHeader({
   );
 }
 
-/** 로고·부제·화면 모드·검색·커뮤니티·알림 한 줄. 두 겹이 같은 내용을 각자의 색으로 그린다. */
+/** 로고·부제·사용법·검색·커뮤니티·알림 한 줄. 두 겹이 같은 내용을 각자의 색으로 그린다. */
 function HeaderRow({
   inverted,
   onPressLogo,
@@ -131,7 +131,30 @@ function HeaderRow({
       </Pressable>
 
       <View className="flex-row items-center gap-3">
-        <ThemeButton inverted={inverted} />
+        {/* 사용법 — 2026-10-24 화면 모드 자리를 넘겨받았다. 처음 온 사람이 가장 먼저 보는 곳에 입구를 두고,
+            한 번 정하면 다시 안 누르는 화면 모드는 내정보 > 화면 모드로(web 홈 헤더와 같은 자리). */}
+        <Pressable
+          onPress={() => {
+            Analytics.track('help_link_click', {
+              link: 'home_header',
+              platform: 'app',
+            });
+            navigation.push(tabStackNavigations.WEBVIEW, {
+              uri: HELP_PATH,
+              title: '사용법 · 자주 묻는 질문',
+            });
+          }}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="사용법"
+          style={pressedOpacity}
+          className="h-9 w-9 items-center justify-center">
+          <HelpMenuIcon
+            width={28}
+            height={28}
+            color={inverted ? fixed.white : c.gray[900]}
+          />
+        </Pressable>
 
         <Pressable
           onPress={() => navigation.push(tabStackNavigations.SEARCH)}
@@ -194,34 +217,6 @@ function HeaderRow({
         </Pressable>
       </View>
     </View>
-  );
-}
-
-/**
- * 화면 모드 버튼. 지금 모드를 보여 준다(라이트=해, 다크=달) — 누르면 반대로 고정한다.
- * ★처음엔 다음 모드 아이콘(라이트일 때 달)이었는데, 홈 상단 띠가 라이트에서도 어두워 "이미 다크인가?"로
- * 읽혔다(사용자 지적). 그 뒤 스위치로 바꿨다가 "그냥 버튼으로"(10/5) — 현재 모드 아이콘으로 둘 다 피한다.
- * '시스템 설정'으로 되돌리는 건 내정보 > 화면 모드. web ColorSchemeButton 과 같은 아이콘·동작.
- */
-function ThemeButton({inverted}: {inverted: boolean}) {
-  const c = useColors();
-  const isDark = useColorScheme() === 'dark';
-  const [, setColorScheme] = useColorSchemePreference();
-  const color = inverted ? fixed.white : c.gray[900];
-  const Icon = isDark ? MoonIcon : SunIcon;
-
-  return (
-    <Pressable
-      onPress={() => setColorScheme(isDark ? 'light' : 'dark')}
-      hitSlop={8}
-      accessibilityRole="button"
-      accessibilityLabel={
-        isDark ? '라이트 모드로 바꾸기' : '다크 모드로 바꾸기'
-      }
-      style={pressedOpacity}
-      className="h-9 w-9 items-center justify-center">
-      <Icon width={24} height={24} color={color} />
-    </Pressable>
   );
 }
 
