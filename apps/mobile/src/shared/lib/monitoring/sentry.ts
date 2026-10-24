@@ -23,6 +23,17 @@ const isEnabled = () => SENTRY_DSN.length > 0 && !__DEV__;
  */
 const TRACES_SAMPLE_RATE = 0.05;
 
+/**
+ * 시뮬레이터·에뮬레이터에서 난 이벤트는 보내지 않는다 — 운영 DSN 이 박힌 Release 앱을 기동 확인(boot-check)·
+ * 화면 하네스(screens)·로컬 검증이 매일 돌리고, 거기서 난 에러(에뮬레이터 FCM TOO_MANY_REGISTRATIONS 등)가
+ * 사용자 이슈처럼 쌓였다(2026-10-22). 실제 사용자는 시뮬레이터에서 앱을 쓰지 않는다.
+ */
+export const dropHarnessEvent = <
+  T extends {contexts?: {device?: {simulator?: boolean}}},
+>(
+  event: T,
+): T | null => (event.contexts?.device?.simulator === true ? null : event);
+
 let navigationIntegration:
   | ReturnType<typeof Sentry.reactNavigationIntegration>
   | undefined;
@@ -57,6 +68,8 @@ export function initSentry() {
 
     // 앱 시작 시간·느린/멈춘 프레임(네이티브 측정) — 샘플된 트랜잭션에 붙는다.
     enableAutoPerformanceTracing: true,
+
+    beforeSend: dropHarnessEvent,
   });
 
   // 어느 배포 채널(production/preview/test-*)에서 난 에러인지 가른다.
@@ -137,6 +150,18 @@ export type SilentFlow =
 
 const reportedFlows = new Set<SilentFlow>();
 
+// expo-updates 가 서버·CDN 에 못 닿은 것(확인 실패·자산 일부 못 받음) — 다음 복귀 때 다시 확인한다.
+// 메시지에 원인이 없고(「Failed to check for update」) 뿌리는 기기 연결이라 보내도 고칠 게 없다(2026-10-24).
+const TRANSIENT_UPDATE_CODES = new Set([
+  'ERR_UPDATES_CHECK',
+  'ERR_UPDATES_FETCH',
+]);
+
+const isTransientUpdateError = (error: unknown): boolean =>
+  typeof error === 'object' &&
+  error !== null &&
+  TRANSIENT_UPDATE_CODES.has(String((error as {code?: unknown}).code));
+
 /**
  * 앱 사용을 막지 않으려고 **삼키는** 실패(푸시 토큰 등록·계정 연결·OTA 확인)를 남긴다.
  *
@@ -146,7 +171,7 @@ const reportedFlows = new Set<SilentFlow>();
  */
 export function captureSilentFailure(flow: SilentFlow, error: unknown) {
   if (!isEnabled() || reportedFlows.has(flow)) return;
-  if (isOfflineError(error)) return;
+  if (isOfflineError(error) || isTransientUpdateError(error)) return;
   reportedFlows.add(flow);
   Sentry.captureException(error, {level: 'warning', tags: {flow}});
 }

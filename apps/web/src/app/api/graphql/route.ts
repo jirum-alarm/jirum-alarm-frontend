@@ -21,7 +21,14 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const body = await req.json();
+  // 본문이 JSON 이 아니면(스캐너의 curl 등) 400 — 전엔 JSON.parse 가 던져 500 + Sentry 에러로 남았다.
+  const body: unknown = await req.json().catch(() => null);
+  if (body === null || typeof body !== 'object') {
+    return new Response(JSON.stringify({ errors: [{ message: 'Request body must be JSON' }] }), {
+      status: 400,
+      headers: { 'content-type': 'application/json' },
+    });
+  }
 
   // 로그인 토큰이 우선, 없으면 게스트 토큰(만료되면 미들웨어가 다음 페이지 요청 때 guestLogin 으로 다시 받는다).
   const accessToken =
