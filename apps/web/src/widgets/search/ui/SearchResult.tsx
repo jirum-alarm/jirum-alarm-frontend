@@ -1,5 +1,11 @@
 import { emptyText, text } from '@jirum/design-system/recipes';
-import { ESTIMATED_TOTAL_CAP, SEARCH_COPY } from '@jirum/domain/search';
+import {
+  ESTIMATED_TOTAL_CAP,
+  SEARCH_COPY,
+  SEARCH_CORRECTED_COPY,
+  SEARCH_EVENT,
+} from '@jirum/domain/search';
+import Link from 'next/link';
 import { Suspense, useEffect, useRef } from 'react';
 
 import { cn } from '@/shared/lib/cn';
@@ -11,6 +17,8 @@ import { SearchInFeedAd } from '@/features/adsense/ui/SearchInFeedAd';
 
 import { useProductListViewModel } from '../hooks/useProductListViewModel';
 import { useSearchFilters } from '../hooks/useSearchFilters';
+import { pushDataLayer } from '../hooks/useSearchKeywordAlert';
+import { searchHref } from '../lib/search-href';
 
 import EndedDealsRescue from './EndedDealsRescue';
 import ProductNotFound from './ProductNotFound';
@@ -38,7 +46,14 @@ export default function SearchResult({ show }: { show: boolean }) {
     isLoading,
     isPlaceholderData,
     estimatedTotal,
+    correctedKeyword,
   } = useProductListViewModel({ filters });
+
+  // 오타 교정 안내가 보인 횟수 — 교정이 맞는지(그대로 검색을 누르는 비율)는 search_corrected_undo 와 비교한다.
+  useEffect(() => {
+    if (!correctedKeyword || !keyword) return;
+    pushDataLayer({ event: SEARCH_EVENT.correctedView, keyword, corrected: correctedKeyword });
+  }, [correctedKeyword, keyword]);
 
   // 스크롤된 채로 필터만 바뀌면 화면이 그대로라 "안 바뀐 것처럼" 보인다.
   // 첫 마운트(공유 URL·뒤로가기)는 스크롤을 유지하고, 이후 필터 조작만 맨 위로.
@@ -109,6 +124,26 @@ export default function SearchResult({ show }: { show: boolean }) {
             isPlaceholderData && 'pointer-events-none opacity-50',
           )}
         >
+          {/* 서버가 0건·일부 일치 검색어를 사전 낱말로 고쳐 찾았다 — 무엇으로 찾았는지와 원래 말로 돌아갈 길을 보인다. */}
+          {correctedKeyword && keyword && (
+            <p className={cn(text.muted, 'pb-2')}>
+              {SEARCH_CORRECTED_COPY.shown(correctedKeyword)}
+              {' · '}
+              <Link
+                href={searchHref(keyword, { exact: true })}
+                className="text-gray-900 underline underline-offset-2"
+                onClick={() =>
+                  pushDataLayer({
+                    event: SEARCH_EVENT.correctedUndo,
+                    keyword,
+                    corrected: correctedKeyword,
+                  })
+                }
+              >
+                {SEARCH_CORRECTED_COPY.searchOriginal(keyword)}
+              </Link>
+            </p>
+          )}
           {estimatedTotal != null && (
             <p className={cn(text.muted, 'pb-3')}>
               약{' '}

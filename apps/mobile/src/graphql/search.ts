@@ -21,6 +21,7 @@ export const QuerySearchProducts = graphql(`
     $keyword: String
     $isEnd: Boolean
     $providerIds: [Int!]
+    $exactKeyword: Boolean
   ) {
     products(
       limit: $limit
@@ -31,6 +32,7 @@ export const QuerySearchProducts = graphql(`
       keyword: $keyword
       isEnd: $isEnd
       providerIds: $providerIds
+      exactKeyword: $exactKeyword
     ) {
       id
       title
@@ -55,6 +57,7 @@ export const QuerySearchProducts = graphql(`
       }
       searchAfter
       estimatedTotal
+      correctedKeyword
       postedAt
     }
   }
