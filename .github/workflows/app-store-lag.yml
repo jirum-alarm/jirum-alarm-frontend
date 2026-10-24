@@ -46,6 +46,19 @@ jobs:
           released=$(jq -r '.results[0].currentVersionReleaseDate // "-"' <<<"$res" | cut -c1-10)
           echo "repo=$version (set ${days}d ago) live=$live (released $released)"
 
+          # 새 버전이 출시된 지 하루 안이면 업데이트 안내(app-release.json latestVersion)가 따라왔는지 한 번 알린다.
+          # 1.5.7·1.5.8 출시 때 올림이 빠져 iOS 사용자가 안내를 못 받았다. 문구만 바뀐 버전은 일부러 안 올리니 매일 울리지 않게 출시 직후 한 번만.
+          latest=$(jq -r .ios.latestVersion apps/web/public/app-release.json)
+          released_at=$(jq -r '.results[0].currentVersionReleaseDate // empty' <<<"$res")
+          if [ -n "$released_at" ] && [ "$live" != "$latest" ] \
+            && [ "$(printf '%s\n%s\n' "$live" "$latest" | sort -V | tail -1)" = "$live" ] \
+            && [ $(( $(date +%s) - $(date -d "$released_at" +%s) )) -lt 86400 ]; then
+            msg="📱 App Store 에 ${live} 이 출시됐는데 app-release.json iOS latestVersion 은 ${latest} — 사용자 화면이 바뀐 버전이면 apps/web/public/app-release.json 을 올리고 웹 태그(release-tag.py)로 내보내세요(Play 도 같은 버전이면 android 도). ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+            jq -n --arg text "$msg" '{channel: "alert-deploy", text: $text}' \
+              | curl -fsS -X POST -H 'Content-Type: application/json' -d @- "$MATTERMOST_WEBHOOK_URL" >/dev/null
+            echo "::warning::$msg"
+          fi
+
           if [ "$live" = "$version" ] || [ "$days" -le "$LAG_DAYS" ]; then
             exit 0
           fi
