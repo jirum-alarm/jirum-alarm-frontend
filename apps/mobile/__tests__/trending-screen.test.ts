@@ -125,8 +125,8 @@ describe('web 과 같은 데이터 규칙', () => {
   });
 
   it('★물량 적은 카테고리는 60일까지 넓힌다 — 며칠 볼지는 web 과 같은 정본(@jirum/domain/ranking)', () => {
-    expect(queries).toContain(
-      "import {rankingWindowDays} from '@jirum/domain/ranking'",
+    expect(queries).toMatch(
+      /import \{[^}]*\brankingWindowDays\b[^}]*\} from '@jirum\/domain\/ranking'/,
     );
     expect(queries).toContain('rankingWindowDays(categoryId)');
     expect(queries).not.toContain('EXTEND_START_DATE_CATEGORIES');
@@ -188,7 +188,7 @@ describe('CTR 계측 (web 과 같은 출처·규칙)', () => {
   });
 });
 
-describe('상단 실시간/랭킹 탭 — web 대조', () => {
+describe('상단 실시간/핫딜만/랭킹 탭 — web 대조', () => {
   const tabs = read('src/entities/trending/ui/TrendingTopTabs.tsx');
 
   it('★★flex 를 className 이 아니라 style 로 준다 — 안 그러면 탭이 안 보인다', () => {
@@ -205,9 +205,14 @@ describe('상단 실시간/랭킹 탭 — web 대조', () => {
   });
 
   it('라벨·경계선(web PageTabNavigation 과 같은 gray-200 — PageHeader 의 gray-100 아님)', () => {
-    for (const label of ['실시간', '랭킹']) {
-      expect(tabs).toContain(label);
-    }
+    // 순서·이름은 web 과 같은 정본(TRENDING_VIEW_TABS)에서 읽는다.
+    expect(tabs).toContain('TRENDING_VIEW_TABS');
+    const {TRENDING_VIEW_TABS} = require('@jirum/domain/ranking');
+    expect(TRENDING_VIEW_TABS.map((t: {label: string}) => t.label)).toEqual([
+      '실시간',
+      '핫딜만',
+      '랭킹',
+    ]);
     expect(tabs).toContain('border-b border-gray-200');
   });
 
@@ -224,9 +229,10 @@ describe('상단 실시간/랭킹 탭 — web 대조', () => {
   });
 
   it('★밑줄은 하나를 움직인다 — 탭마다 그리면 순간이동이 된다', () => {
-    // 탭 2개가 같은 폭이라 onLayout 측정 없이 left 0%↔50% 로 끝난다.
-    expect(tabs).toContain("width: '50%'");
-    expect(tabs).toContain('progress.value * 50');
+    // 탭이 같은 폭이라 onLayout 측정 없이 left = 인덱스 × 탭 폭으로 끝난다.
+    expect(tabs).toContain('TAB_WIDTH_PERCENT = 100 / TABS.length');
+    expect(tabs).toContain('width: `${TAB_WIDTH_PERCENT}%`');
+    expect(tabs).toContain('progress.value * TAB_WIDTH_PERCENT');
     // 글자색도 같은 progress 로 보간해야 밑줄과 함께 움직인다
     expect(tabs).toContain('interpolateColor');
   });

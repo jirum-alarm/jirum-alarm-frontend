@@ -4,6 +4,7 @@ import {
   QueryExpiringSoonHotDealProducts,
   QueryGuestRecommendedHotDeals,
   QueryHomeProducts,
+  QueryHotDealFeedProducts,
   QueryHotDealRankingProducts,
   QueryMallGroups,
   QueryProductsByKeyword,
@@ -26,6 +27,7 @@ import type {
   GuestRecommendedHotDealsQueryVariables,
   HomeProductsByKeywordQueryVariables,
   HomeProductsQueryVariables,
+  HotDealFeedProductsQueryVariables,
   HotDealRankingProductsQueryVariables,
   RecordAdClickMutationVariables,
   RecordAdImpressionsMutationVariables,
@@ -128,6 +130,17 @@ export class HomeService {
       variables,
     );
     return res.data?.products ?? [];
+  }
+
+  /** 발견 탭 「핫딜만」. */
+  static async getHotDealFeedProducts(
+    variables: HotDealFeedProductsQueryVariables,
+  ) {
+    const res = await HttpClient.withFreshAccessTokenOrNone().execute(
+      QueryHotDealFeedProducts,
+      variables,
+    );
+    return res.data?.hotDealFeedProducts ?? [];
   }
 
   static async getExpiringSoonHotDealProducts(

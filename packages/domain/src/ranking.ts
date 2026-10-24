@@ -1,5 +1,5 @@
 /**
- * 발견 탭(실시간·랭킹)의 규칙 — 랭킹 기간·카테고리 칩 순서. web 발견 탭·앱 발견 탭이 같이 쓴다(2026-10-20 정본화,
+ * 발견 탭(실시간·핫딜만·랭킹)의 규칙 — 랭킹 기간·카테고리 칩 순서. web 발견 탭·앱 발견 탭이 같이 쓴다(2026-10-20 정본화,
  * 전엔 두 앱이 따로 들고 앱 테스트가 web 파일을 읽어 대조했다).
  * 날짜 계산(KST 자정 등)은 플랫폼 도구가 다르니 각 앱에서, «며칠 볼지»만 여기 있다.
  */
@@ -35,8 +35,31 @@ export function orderTrendingCategories<T extends { id: number }>(categories: re
   return [...categories].sort((a, b) => tabRankOf(a.id) - tabRankOf(b.id));
 }
 
-/** 발견 탭이 보여 주는 두 화면. */
-export type TrendingView = 'live' | 'ranking';
+/** 발견 탭이 보여 주는 세 화면. */
+export type TrendingView = 'live' | 'hot' | 'ranking';
+
+/**
+ * 발견 탭 위 화면 탭 — 순서·이름 정본. 「핫딜만」은 전부(실시간)와 점수순(랭킹) 사이: 문턱을 넘은 딜만 시간순.
+ * ★왜(2026-10-24): 뽐뿌 인기 탭이 유용한 건 «여러 사람이 고른 것만, 위가 최신»이라서다. 실시간은 하루 ~1,200건이라
+ * 소음이고 랭킹은 점수를 섞어 왜 거기 있는지 안 보인다 — 그 사이가 비어 있었다(서버 hotDealFeedProducts).
+ */
+export const TRENDING_VIEW_TABS: readonly { view: TrendingView; label: string }[] = [
+  { view: 'live', label: '실시간' },
+  { view: 'hot', label: '핫딜만' },
+  { view: 'ranking', label: '랭킹' },
+];
+
+/** 「핫딜만」 목록 위 한 줄 — 왜 여기 있는지(기준)를 보여 줘야 목록을 믿는다. 기준 정본은 서버 ranking-hot.ts. */
+export const HOT_FEED_COPY = {
+  lead: '사람들이 몰렸거나 평소보다 확실히 싼 딜만, 핫딜이 된 순서로 모았어요',
+  empty: '지금 올라온 핫딜이 없어요',
+} as const;
+
+/** 「핫딜만」 한 번에 받는 카드 수(서버 상한 20). */
+export const HOT_FEED_PAGE_SIZE = 20;
+
+/** 「핫딜만」 카드의 노출·클릭 출처 — 백엔드 노출 집계(recordProductImpressions)와 GA4 가 이 문자열로 거른다. */
+export const HOT_FEED_CARD_SOURCE = 'hot_feed' as const;
 
 /**
  * 하단 「발견」을 눌렀을 때 갈 화면 — 랭킹을 보고 있으면 실시간, 그 밖(실시간·다른 탭)이면 랭킹.

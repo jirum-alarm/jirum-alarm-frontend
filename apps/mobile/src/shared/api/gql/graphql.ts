@@ -2817,6 +2817,8 @@ export type Query = {
   homePage: HomePage;
   /** 어드민) 핫딜 제외 키워드 목록 조회 */
   hotDealExcludeKeywordsByAdmin: Array<HotDealExcludeKeywordOutput>;
+  /** 핫딜만 — 반응 핫딜·대박·초대박 중 진행 중인 딜을 핫딜이 된 시각순으로(최근 3일, 같은 딜은 한 칸). 커서는 searchAfter */
+  hotDealFeedProducts: Array<ProductOutput>;
   /** 어드민) 핫딜 키워드 조회 */
   hotDealKeywordByAdmin?: Maybe<HotDealKeywordOutput>;
   /** 어드민) 리액션 키워드 후보 목록 조회 */
@@ -3156,6 +3158,12 @@ export type QueryHotDealExcludeKeywordsByAdminArgs = {
   limit: Scalars['Int']['input'];
   orderBy: HotDealExcludeKeywordOrderType;
   orderOption: OrderOptionType;
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type QueryHotDealFeedProductsArgs = {
+  categoryIds?: InputMaybe<Array<Scalars['Int']['input']>>;
+  limit: Scalars['Int']['input'];
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
@@ -4484,6 +4492,46 @@ export type HomeProductsQuery = {
     searchAfter?: Array<string> | null;
     postedCommunityCount?: number | null;
     isRising?: boolean | null;
+    postedAt: any;
+    priceSaving?: {
+      __typename?: 'ProductPriceSaving';
+      basis: PriceSavingBasis;
+      percent: number;
+    } | null;
+    provider: {__typename?: 'Provider'; nameKr: string};
+  }>;
+};
+
+export type HotDealFeedProductsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<
+    Array<Scalars['String']['input']> | Scalars['String']['input']
+  >;
+  categoryIds?: InputMaybe<
+    Array<Scalars['Int']['input']> | Scalars['Int']['input']
+  >;
+}>;
+
+export type HotDealFeedProductsQuery = {
+  __typename?: 'Query';
+  hotDealFeedProducts: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    mallId?: number | null;
+    mallName?: string | null;
+    url?: string | null;
+    isHot?: boolean | null;
+    isEnd?: boolean | null;
+    price?: string | null;
+    providerId: number;
+    categoryId: number;
+    category?: string | null;
+    thumbnail?: string | null;
+    hotDealType?: HotDealType | null;
+    isYearLowest: boolean;
+    searchAfter?: Array<string> | null;
+    postedCommunityCount?: number | null;
     postedAt: any;
     priceSaving?: {
       __typename?: 'ProductPriceSaving';
@@ -6107,6 +6155,43 @@ export const HomeProductsDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   HomeProductsQuery,
   HomeProductsQueryVariables
+>;
+export const HotDealFeedProductsDocument = new TypedDocumentString(`
+    query HotDealFeedProducts($limit: Int!, $searchAfter: [String!], $categoryIds: [Int!]) {
+  hotDealFeedProducts(
+    limit: $limit
+    searchAfter: $searchAfter
+    categoryIds: $categoryIds
+  ) {
+    id
+    title
+    mallId
+    mallName
+    url
+    isHot
+    isEnd
+    price
+    providerId
+    categoryId
+    category
+    thumbnail
+    hotDealType
+    isYearLowest
+    priceSaving {
+      basis
+      percent
+    }
+    provider {
+      nameKr
+    }
+    searchAfter
+    postedCommunityCount
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+  HotDealFeedProductsQuery,
+  HotDealFeedProductsQueryVariables
 >;
 export const ExpiringSoonHotDealProductsDocument = new TypedDocumentString(`
     query ExpiringSoonHotDealProducts($daysUntilExpiry: Int!, $limit: Int!, $searchAfter: [String!]) {

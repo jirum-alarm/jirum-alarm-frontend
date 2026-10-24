@@ -32,6 +32,7 @@ SCREENS=(
   "keywords jirumalarm://keywords"
   "keyword-hub jirumalarm://keywords/%EC%84%B8%EC%A0%9C"
   "ranking jirumalarm://trending/ranking"
+  "hot-feed jirumalarm://trending/hot"
   "alarm jirumalarm://alarm"
   "mypage jirumalarm://mypage"
   "design-system jirumalarm://design-system"

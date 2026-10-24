@@ -104,6 +104,49 @@ const QueryProducts = new TypedDocumentString<ProductListResult, ProductListQuer
   }
 `);
 
+export type HotDealFeedQueryVariables = {
+  limit: number;
+  searchAfter?: string[] | null;
+  categoryIds?: number[] | null;
+};
+
+export type HotDealFeedResult = { hotDealFeedProducts: ProductListResult['products'] };
+
+// 발견 탭 「핫딜만」 — 커서가 [핫딜 된 시각, id] 두 칸이라 searchAfter 를 배열째 넘긴다(products 는 첫 칸만 쓴다).
+const QueryHotDealFeedProducts = new TypedDocumentString<
+  HotDealFeedResult,
+  HotDealFeedQueryVariables
+>(`
+  query QueryHotDealFeedProducts($limit: Int!, $searchAfter: [String!], $categoryIds: [Int!]) {
+    hotDealFeedProducts(limit: $limit, searchAfter: $searchAfter, categoryIds: $categoryIds) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      mallName
+      hotDealType
+      isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
+      provider {
+        nameKr
+      }
+      searchAfter
+      postedCommunityCount
+      postedAt
+    }
+  }
+`);
+
 const QueryCommunityRandomRankingProducts = graphql(`
   query QueryCommunityRandomRankingProducts($count: Int!, $limit: Int!) {
     communityRandomRankingProducts(count: $count, limit: $limit) {
@@ -276,6 +319,10 @@ export const ProductListService = {
     // 서버가 keyword 100자 초과를 BAD_REQUEST 로 거절해 상세 렌더가 통째로 실패했다(Sentry 2026-10, 1천여 건).
     const keyword = variables.keyword?.trim().slice(0, KEYWORD_MAX_LENGTH) || undefined;
     return execute(QueryProducts, { ...variables, keyword }, opts).then((res) => res.data);
+  },
+
+  async getHotDealFeedProducts(variables: HotDealFeedQueryVariables) {
+    return execute(QueryHotDealFeedProducts, variables).then((res) => res.data);
   },
 
   async getHotDealProductsRandom(variables: QueryCommunityRandomRankingProductsQueryVariables) {

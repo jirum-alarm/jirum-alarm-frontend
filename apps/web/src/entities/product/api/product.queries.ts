@@ -16,6 +16,7 @@ import {
   QueryReportUserNamesQueryVariables,
 } from '@/shared/api/gql/graphql';
 import { ProductListQueryVariables, ProductService } from '@/shared/api/product';
+import { type HotDealFeedQueryVariables } from '@/shared/api/product/product-list.service';
 
 export const ProductQueries = {
   all: () => ['product'],
@@ -100,6 +101,19 @@ export const ProductQueries = {
       initialPageParam: null as null | string,
       getNextPageParam: (lastPage, allPages) => {
         return lastPage.products.at(-1)?.searchAfter?.[0];
+      },
+    }),
+  /** 발견 탭 「핫딜만」 — 커서는 [핫딜 된 시각, id] 배열째. */
+  infiniteHotDealFeed: (variables: Omit<HotDealFeedQueryVariables, 'searchAfter'>) =>
+    infiniteQueryOptions({
+      queryKey: [...ProductQueries.all(), 'hotDealFeed', variables],
+      queryFn: ({ pageParam }) =>
+        ProductService.getHotDealFeedProducts({ ...variables, searchAfter: pageParam }),
+      initialPageParam: null as null | string[],
+      getNextPageParam: (lastPage) => {
+        if (lastPage.hotDealFeedProducts.length < variables.limit) return undefined;
+        const cursor = lastPage.hotDealFeedProducts.at(-1)?.searchAfter;
+        return cursor && cursor.length > 0 ? cursor : undefined;
       },
     }),
   reportUserNames: (variables: QueryReportUserNamesQueryVariables) =>

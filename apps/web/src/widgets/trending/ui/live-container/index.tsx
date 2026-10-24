@@ -23,6 +23,7 @@ import { cn } from '@/shared/lib/cn';
 import { CategoryQueries } from '@/entities/category';
 import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
 
+import HotFeedList from '../HotFeedList';
 import LiveList from '../LiveList';
 import TabBarV2 from '../TabbarV2';
 
@@ -35,9 +36,13 @@ const SWIPER_OPTIONS: SwiperOptions = {
 
 type Props = {
   initialTab: number;
+  /** 실시간(전부 최신순) 또는 핫딜만(문턱 넘은 딜만 핫딜 된 시각순). 카테고리 칩·스와이프는 같다. */
+  feed?: 'live' | 'hot';
 };
 
-export const LiveContainer = ({ initialTab }: Props) => {
+const DOCUMENT_TITLE = { live: '실시간 핫딜 | 지름알림', hot: '핫딜만 모아보기 | 지름알림' };
+
+export const LiveContainer = ({ initialTab, feed = 'live' }: Props) => {
   const swiperRef = useRef<SwiperClass>(null);
 
   const {
@@ -106,8 +111,8 @@ export const LiveContainer = ({ initialTab }: Props) => {
   );
 
   useEffect(() => {
-    document.title = '실시간 핫딜 | 지름알림';
-  }, []);
+    document.title = DOCUMENT_TITLE[feed];
+  }, [feed]);
 
   useEffect(() => {
     const swiper = swiperRef.current;
@@ -157,7 +162,11 @@ export const LiveContainer = ({ initialTab }: Props) => {
                       }
                     >
                       <div className="overflow-x-hidden">
-                        <LiveList categoryId={category.id === 0 ? null : category.id} />
+                        {feed === 'hot' ? (
+                          <HotFeedList categoryId={category.id === 0 ? null : category.id} />
+                        ) : (
+                          <LiveList categoryId={category.id === 0 ? null : category.id} />
+                        )}
                       </div>
                     </Suspense>
                   ) : (
