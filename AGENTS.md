@@ -191,7 +191,7 @@ pnpm build            # Production build
   안 하면 CI `native:check` 가 막는다(그대로 OTA 가 나가면 옛 바이너리가 실행 즉시 죽는다). 그다음 스토어 빌드·제출.
   - 버전을 올린 뒤 main 자동 OTA 는 새 runtime 바이너리에만 간다. **main runtime 이 스토어 출시 버전보다 앞서 있는 동안엔 자동 OTA 가 스토어 사용자 누구에게도 안 닿는다**
     (10/21 실측: main 이 1.5.7 로 올라간 뒤 나간 수정이 백포트 전까지 아무에게도 안 갔다). 그래서 **사용자에게 보이는 JS 수정은 출시된 runtime 전부에 백포트한다 — 2026-10-24 부터 자동**(`mobile-ota-backport`, 저장소 변수 `MOBILE_AUTO_BACKPORT=true`):
-    main 자동 OTA 가 발행되면 그 발행(과 기준점 `ota/backport-mark` 이후 빠진 발행)에 실린 앱 커밋을 origin `ota/runtime-*` 마다 아래 `ota-backport.sh` 로 낸다(네이티브·의존성 커밋은 뺀다,
+    main 자동 OTA 가 발행되면 그 발행(과 기준점 `ota/backport-mark` 이후 빠진 발행)에 실린 앱 커밋을 origin `ota/runtime-*` 중 지난 7일 앱 사용자 10% 이상인 것(아래 «어느 runtime 까지?», 실행마다 GA4 BigQuery 로 잰다)마다 아래 `ota-backport.sh` 로 낸다(네이티브·의존성 커밋은 뺀다,
     web 이 부딪히면 앱 경로만, 충돌하는 runtime 은 빌드 전에 거름). **세션은 손으로 백포트하지 않는다** — 겹치면 같은 브랜치를 두 번 만진다.
     손이 필요한 건 alert-deploy «🚫 앱 OTA 자동 백포트 막힘»(충돌·테스트·기동 확인 실패)을 받았을 때뿐 — 그 runtime 만 아래 한 줄로 직접 낸다.
     판정: main `apps/mobile/app.json` `expo.runtimeVersion`(= 바이너리 버전) vs 스토어 실물 버전 — iOS `curl -s "https://itunes.apple.com/lookup?bundleId=com.jirum-alarm.jirumalarm&country=kr" | jq -r '.results[0].version'`,
