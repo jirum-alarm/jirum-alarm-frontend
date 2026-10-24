@@ -9,7 +9,7 @@ import Link from '@/shared/ui/Link';
 
 const PageTabNavigation = () => {
   const pathname = usePathname();
-  // 실시간(/trending/live)·핫딜만(/trending/hot)은 둘 다 「최신」 탭이다.
+  // 실시간(/trending/live)·핫딜만(/trending/hot)은 둘 다 「실시간」 탭이다.
   const current = (pathname.match(/\/trending\/(live|hot|ranking)/)?.[1] ?? 'hot') as TrendingView;
 
   return (

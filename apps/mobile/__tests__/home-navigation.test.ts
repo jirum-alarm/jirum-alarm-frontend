@@ -63,8 +63,8 @@ describe('★탭이 이미 가진 화면은 스택에 쌓지 않는다', () => {
     expect(screen).not.toContain("handlePressViewMore('/trending/ranking'");
   });
 
-  it('최신(핫딜만)·랭킹이 같은 헬퍼를 쓴다', () => {
-    // 발견 탭이 네이티브가 된 뒤로는 URL 이 아니라 화면 이름을 넘긴다. 홈 끝 CTA 는 web 과 같이 「최신」(핫딜만).
+  it('실시간(핫딜만)·랭킹이 같은 헬퍼를 쓴다', () => {
+    // 발견 탭이 네이티브가 된 뒤로는 URL 이 아니라 화면 이름을 넘긴다. 홈 끝 CTA 는 web 과 같이 「실시간」(핫딜만).
     expect(screen).toContain("goDiscoverTab('hot')");
     expect(screen).toContain("goDiscoverTab('ranking')");
   });
