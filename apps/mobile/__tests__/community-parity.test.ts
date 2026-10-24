@@ -211,7 +211,6 @@ describe('탭·섹션·목록 변수 — 정본 @jirum/domain/community', () => 
     expect(COMMUNITY_TABS).toBe(canon.COMMUNITY_TABS);
     expect(COMMUNITY_TABS.map((t: {label: string}) => t.label)).toEqual([
       '전체',
-      '인기',
       '공지',
     ]);
   });
@@ -221,7 +220,6 @@ describe('탭·섹션·목록 변수 — 정본 @jirum/domain/community', () => 
       getTabFilter,
     } = require('../src/entities/community/community.queries');
     expect(getTabFilter('all')).toEqual({});
-    expect(getTabFilter('trending')).toEqual({isTrending: true});
     expect(getTabFilter('notice')).toEqual({isNotice: true});
   });
 
