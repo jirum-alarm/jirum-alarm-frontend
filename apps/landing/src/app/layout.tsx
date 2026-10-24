@@ -9,7 +9,7 @@ import '@/styles/globals.css';
 
 // "지름 알림 앱" 검색에 이 페이지가 아니라 엉뚱한 딜 상세가 떴다(2026-10-01 네이버 실측) — 제목에 "앱"이 없었다.
 const title = '지름알림 앱 — 커뮤니티 핫딜 실시간 키워드 알림';
-const description = `지름알림은 뽐뿌·에펨코리아 등 커뮤니티 ${COMMUNITY_COUNT}의 핫딜을 한곳에 모아 진짜 싼지 근거를 붙이고, 등록한 키워드의 핫딜이 올라오면 바로 푸시로 알려주는 무료 앱이에요. iOS·Android 지원.`;
+const description = `지름알림은 뽐뿌·에펨코리아 등 커뮤니티 ${COMMUNITY_COUNT}의 핫딜을 한곳에 모아 진짜 싼지 따져 보고, 등록한 키워드의 핫딜이 올라오면 바로 푸시로 알려주는 무료 앱이에요. iOS·Android 지원.`;
 const URL_BASE = 'https://about-us.jirum-alarm.com';
 // web 과 같은 GA4 스트림(jirum-alarm-web). hostName=about-us 로 갈라 본다.
 // 스토어·카톡 링크 클릭은 향상된 측정의 outbound click 이 link_url 로 잡는다.

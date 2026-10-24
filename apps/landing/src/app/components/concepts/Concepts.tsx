@@ -132,7 +132,7 @@ const Concepts = () => (
         icon="bell"
         iconTone="bg-primary-500 text-fixed-900"
         title="원하는 상품만 알림"
-        text={`키워드 하나로 커뮤니티 ${COMMUNITY_COUNT}을 지켜봐요. 제외 단어와 가격 범위를 정해 필요 없는 알림은 걸러요.`}
+        text={`키워드 하나로 커뮤니티 ${COMMUNITY_COUNT}을 지켜봐요. 제외 단어·가격 범위로 거르고, 원하면 핫딜이 됐을 때만 골라 받아요.`}
       >
         <div className="rounded-2xl bg-white p-4">
           <div className="flex flex-wrap items-center gap-1.5">

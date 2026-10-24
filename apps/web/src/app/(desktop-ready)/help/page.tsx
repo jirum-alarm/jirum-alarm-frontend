@@ -10,7 +10,7 @@ import HelpArticle from './HelpArticle';
 const PATH = '/help';
 // 검색 결과에서 잘리지 않는 길이 — 제목 ~30자, 설명 ~100자(모바일 검색 결과 기준). 예전 제목 43자·설명 170자는 뒤가 잘렸다.
 const title = '지름알림이란? 핫딜 알림 사용법·자주 묻는 질문';
-const description = `뽐뿌·에펨코리아 등 커뮤니티 ${COMMUNITY_COUNT}의 핫딜을 한곳에 모아 진짜 싼지 근거를 붙이고, 원하는 상품이 올라오면 알려주는 무료 서비스예요. 다른 점·사용법·자주 묻는 질문을 모았어요.`;
+const description = `뽐뿌·에펨코리아 등 커뮤니티 ${COMMUNITY_COUNT}의 핫딜을 한곳에 모아 진짜 싼지 따져 보고, 원하는 상품이 올라오면 알려주는 무료 서비스예요. 다른 점·사용법·자주 묻는 질문을 모았어요.`;
 
 export const metadata: Metadata = {
   title,

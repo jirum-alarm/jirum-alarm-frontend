@@ -206,7 +206,7 @@ const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
       {
         id: 'what',
         q: '지름알림은 어떤 서비스인가요?',
-        a: '여러 커뮤니티에 흩어져 올라오는 핫딜을 한곳에 모아 보여주는 무료 핫딜 서비스예요. 모아 보기에서 끝나지 않고, 이 가격이 정말 싼지 근거를 붙이고, 원하는 상품이 올라오면 알려드려요.',
+        a: '여러 커뮤니티에 흩어져 올라오는 핫딜을 한곳에 모아 보여주는 무료 핫딜 서비스예요. 모아 보기에서 끝나지 않고, 이 가격이 정말 싼지 따져 보고, 원하는 상품이 올라오면 알려드려요.',
       },
       {
         id: 'sources',
@@ -265,7 +265,7 @@ const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
       {
         id: 'keyword',
         q: '원하는 상품 핫딜만 알림 받을 수 있나요?',
-        a: `마이페이지 → 키워드 알림에서 상품 이름을 등록하면 그 단어가 들어간 핫딜이 올라올 때 푸시를 보내드려요. 키워드는 ${MAX_KEYWORD_COUNT}개까지, 키워드마다 제외할 단어 ${MAX_EXCLUDE_KEYWORDS}개와 가격 범위를 정할 수 있어요.`,
+        a: `마이페이지 → 키워드 알림에서 상품 이름을 등록하면 그 단어가 들어간 핫딜이 올라올 때 푸시를 보내드려요. 키워드는 ${MAX_KEYWORD_COUNT}개까지, 키워드마다 제외할 단어 ${MAX_EXCLUDE_KEYWORDS}개와 가격 범위를 정할 수 있어요. 알림 설정에서 「핫딜이 되면만 받기」를 켜면 올라오자마자가 아니라 반응이 뜨거워지거나 확실히 싸다고 확인됐을 때만 알려드려요.`,
         link: { href: '/guide/hotdeal-alarm', label: '핫딜 알림 받는 법 자세히 보기' },
       },
       {
@@ -521,7 +521,7 @@ export default function HelpArticle({
             <p className="pc:text-lg mt-4 text-base leading-relaxed text-gray-700">
               지름알림은 커뮤니티 {COMMUNITY_COUNT}과 쇼핑몰 특가의 핫딜을 한곳에 모아,{' '}
               <strong className="font-semibold text-gray-900">
-                지난 핫딜가·다나와·쿠팡 가격과 비교해 진짜 싼지 근거
+                지난 핫딜가·다나와·쿠팡 가격과 비교할 수 있는 딜엔 진짜 싼지 근거
               </strong>
               를 붙여 주고, 원하는 상품이 올라오면 알려주는 무료 핫딜 서비스예요.
             </p>
