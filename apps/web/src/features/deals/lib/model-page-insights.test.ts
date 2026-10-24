@@ -396,7 +396,7 @@ describe('buildDealsAnswer', () => {
     assert.equal(a.guide, null);
   });
 
-  it('진행 딜이 없으면 그게 큰 글씨 — 마지막 딜·올라오면 살 기준', () => {
+  it('진행 딜이 없으면 그게 큰 글씨 — 마지막 딜·평소 값·올라오면 살 기준', () => {
     const a = answer(
       verdict({
         tone: null,
@@ -414,7 +414,7 @@ describe('buildDealsAnswer', () => {
       badge: null,
       headline: '지금은 진행 중인 핫딜이 없어요',
       detail: '마지막 핫딜 25일 전 · 9,000원',
-      compare: null,
+      compare: '평소 핫딜가 100g당 611원',
       guide: '100g당 541원 이하로 올라오면 사기 좋은 가격이에요',
     });
   });

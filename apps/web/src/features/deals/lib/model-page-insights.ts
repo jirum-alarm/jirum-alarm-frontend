@@ -465,7 +465,7 @@ export interface DealsAnswer {
   headline: string;
   /** 구성·단위가(「140g 40개 · 100g당 463원」), 진행 딜이 없으면 「마지막 핫딜 25일 전 · 9,000원」. */
   detail: string | null;
-  /** 평소와 비교 — 「평소 핫딜가(100g당 611원)보다 24% 싸요」. 진행 딜이 없으면 null. */
+  /** 평소와 비교 — 「평소 핫딜가(100g당 611원)보다 24% 싸요」, 진행 딜이 없으면 「평소 핫딜가 100g당 785원」. */
   compare: string | null;
   /**
    * 기다릴 가격 — 「100g당 541원 이하로 올라오면 사기 좋은 가격이에요」. 진행 딜이 이미 싸거나(배지가 답) 다나와가 답이거나
@@ -486,8 +486,8 @@ export function buildDealsAnswer(input: {
   const tone: DealsAnswerTone =
     t.tone === 'good' ? 'success' : t.tone === 'high' || t.tone === 'mall' ? 'warning' : 'gray';
   const badge = { label: t.label, tone };
-  // 기준선(추이 최저~최고의 아래 30%)은 평균보다 높게 나올 때가 있어(값이 한쪽에 몰린 추이) 평균과 나란히 두면
-  // 「평소 375원 / 381원 이하면 사기 좋아요」처럼 서로 어긋나 보였다 — 기다릴 때(진행 딜 없음·평소 수준·비쌈)만 쓴다.
+  // 기준선 = 판정이 «사기 좋은 구간»이 되는 가장 높은 값(서버). 이미 그 구간이면 배지가 답이라 기다릴 때(진행 딜 없음·평소 수준·
+  // 비쌈)만 쓴다. 다나와가 답일 땐 핫딜 기준선이 의미가 없다.
   const guide =
     t.buyLine != null && t.buyLine > 0 && t.tone !== 'mall' && t.tone !== 'good'
       ? `${formatPrice(t.buyLine)} 이하${t.activeDealCount > 0 ? '면' : '로 올라오면'} 사기 좋은 가격이에요`
@@ -539,7 +539,7 @@ export function buildDealsAnswer(input: {
     badge: null,
     headline: '지금은 진행 중인 핫딜이 없어요',
     detail: ago ? [`마지막 핫딜 ${ago}`, lastPrice].filter(Boolean).join(' · ') : null,
-    compare: null,
+    compare: t.avg != null && t.avg > 0 ? `평소 핫딜가 ${formatPrice(t.avg)}` : null,
     guide,
   };
 }
