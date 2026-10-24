@@ -8,274 +8,274 @@
     "data": {
       "products": [
         {
-          "id": "36166693",
-          "title": "유동 번데기 통조림 130g 6개",
-          "mallId": 48,
-          "url": "https://arca.live/b/hotdeal/186542300",
+          "id": "36551570",
+          "title": "다진마늘 2kg (1kg+1kg) 국내산 11,890원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742708",
           "isHot": false,
           "isEnd": false,
-          "price": "5,930원",
-          "providerId": 12,
+          "price": "11,890원",
+          "providerId": 1,
           "categoryId": 2,
-          "category": "식품",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186542300.webp",
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742708.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792811940000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T03:19:00.000Z"
+        },
+        {
+          "id": "36551506",
+          "title": "숨 시그니처 물티슈 63평량 70매 10팩",
+          "mallId": 4800,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742707",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,990원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742707.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792811760000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T03:16:00.000Z"
+        },
+        {
+          "id": "36551564",
+          "title": "르까프 남성용 집업 플리스 자켓 그레이 100 1개 10,900원",
+          "mallId": 4800,
+          "url": "https://www.dogdrip.net/731268331",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,900원",
+          "providerId": 108,
+          "categoryId": 4,
+          "category": "의류",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/731268331.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "searchAfter": [
+            "1792811650000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T03:14:10.000Z"
+        },
+        {
+          "id": "36551498",
+          "title": "고당도 타이백 귤 5kg 중대과 11,820원",
+          "mallId": 15,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14963127?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "11,820원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14963127.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792811548000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T03:12:28.000Z"
+        },
+        {
+          "id": "36551469",
+          "title": "풀무원 직화짜장면 4인분",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/111268950?itemId=335162721&vendorItemId=3822329719",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,280원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "로켓프레시",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/111268950.webp",
           "mallName": "쿠팡",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
           "provider": {
-            "nameKr": "아카"
+            "nameKr": "쿠팡 골드박스"
           },
           "searchAfter": [
-            "1792511582000"
+            "1792811410000"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T15:53:02.000Z"
+          "postedAt": "2026-10-24T03:10:10.000Z"
         },
         {
-          "id": "36166675",
-          "title": "진라면순한맛 40입",
-          "mallId": 4800,
-          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994123",
+          "id": "36551470",
+          "title": "포트메리온 보타닉가든 머그컵 + 코스터 뚜껑",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/320568654?itemId=1025846241&vendorItemId=5469229516",
           "isHot": false,
           "isEnd": false,
-          "price": "￦ 19,900 (KRW)",
-          "providerId": 5,
-          "categoryId": 2,
-          "category": "생활/식품",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994123.webp",
-          "mallName": "토스",
+          "price": "12,270원",
+          "providerId": 109,
+          "categoryId": 6,
+          "category": "주방용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/320568654.webp",
+          "mallName": "쿠팡",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
           "provider": {
-            "nameKr": "퀘이사존"
+            "nameKr": "쿠팡 골드박스"
           },
           "searchAfter": [
-            "1792511298000"
+            "1792811410000"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T15:48:18.000Z"
+          "postedAt": "2026-10-24T03:10:10.000Z"
         },
         {
-          "id": "36166674",
-          "title": "스파클생수 2L x 30개",
-          "mallId": 4800,
-          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994122",
+          "id": "36551472",
+          "title": "슈퍼츄 강아지 육포 1kg",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/2155509062?itemId=1056673889&vendorItemId=5529890887",
           "isHot": false,
           "isEnd": false,
-          "price": "￦ 11,810 (KRW)",
-          "providerId": 5,
-          "categoryId": 2,
-          "category": "생활/식품",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994122.webp",
-          "mallName": "토스",
+          "price": "20,800원",
+          "providerId": 109,
+          "categoryId": 12,
+          "category": "반려/애완용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/2155509062.webp",
+          "mallName": "쿠팡",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
           "provider": {
-            "nameKr": "퀘이사존"
+            "nameKr": "쿠팡 골드박스"
           },
           "searchAfter": [
-            "1792511239000"
+            "1792811410000"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T15:47:19.000Z"
+          "postedAt": "2026-10-24T03:10:10.000Z"
         },
         {
-          "id": "36166668",
-          "title": "몬스터크랩 15개 9,360원",
-          "mallId": 1,
-          "url": "https://www.dogdrip.net/730673765",
+          "id": "36551473",
+          "title": "아베다 우든 패들 브러쉬",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/6559198866?itemId=14676547128&vendorItemId=75310106329",
           "isHot": false,
           "isEnd": false,
-          "price": "9,360원",
-          "providerId": 108,
-          "categoryId": 2,
-          "category": "식품",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730673765.webp",
-          "mallName": "네이버",
+          "price": "31,540원",
+          "providerId": 109,
+          "categoryId": 3,
+          "category": "뷰티",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/6559198866.webp",
+          "mallName": "쿠팡",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
           "provider": {
-            "nameKr": "개드립"
+            "nameKr": "쿠팡 골드박스"
           },
           "searchAfter": [
-            "1792510818000"
+            "1792811410000"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T15:40:18.000Z"
+          "postedAt": "2026-10-24T03:10:10.000Z"
         },
         {
-          "id": "36166672",
-          "title": "스파클 생수 2L 30병",
-          "mallId": 4800,
-          "url": "https://bbs.ruliweb.com/market/board/1020/read/108199",
+          "id": "36551474",
+          "title": "엠보그 버거용 슬라이스 치즈",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/6701873925?itemId=24534325876&vendorItemId=91546918803",
           "isHot": false,
           "isEnd": false,
-          "price": "11,810원",
-          "providerId": 4,
+          "price": "10,480원",
+          "providerId": 109,
           "categoryId": 2,
-          "category": "음식",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/108199.webp",
-          "mallName": "토스",
+          "category": "로켓프레시",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/6701873925.webp",
+          "mallName": "쿠팡",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
           "provider": {
-            "nameKr": "루리웹"
+            "nameKr": "쿠팡 골드박스"
           },
           "searchAfter": [
-            "1792510782000"
+            "1792811410000"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T15:39:42.000Z"
+          "postedAt": "2026-10-24T03:10:10.000Z"
         },
         {
-          "id": "36166670",
-          "title": "오뚜기 진라면 순한맛 40봉 19,900원",
-          "mallId": 4800,
-          "url": "https://eomisae.co.kr/rt/207062459",
+          "id": "36551477",
+          "title": "연세두유 고단백 아몬드 & 잣",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/7331057431?itemId=28007823147&vendorItemId=94965220672",
           "isHot": false,
           "isEnd": false,
-          "price": "19,900원",
-          "providerId": 11,
-          "categoryId": 2,
-          "category": "기타국내",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207062459.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "어미새"
-          },
-          "searchAfter": [
-            "1792510753000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T15:39:13.000Z"
-        },
-        {
-          "id": "36166671",
-          "title": "와페모 데이 (10/21~10/25) (0원/무료)",
-          "mallId": 36466,
-          "url": "https://arca.live/b/hotdeal/186541263",
-          "isHot": false,
-          "isEnd": false,
-          "price": "0원",
-          "providerId": 12,
+          "price": "13,900원",
+          "providerId": 109,
           "categoryId": 2,
           "category": "식품",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186541263.webp",
-          "mallName": "노브랜드 버거 어플",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/7331057431.webp",
+          "mallName": "쿠팡",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
           "provider": {
-            "nameKr": "아카"
+            "nameKr": "쿠팡 골드박스"
           },
           "searchAfter": [
-            "1792510721000"
+            "1792811410000"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T15:38:41.000Z"
-        },
-        {
-          "id": "36166667",
-          "title": "대식가 일키로 부대찌개 1kg 2팩 12,915원",
-          "mallId": 4800,
-          "url": "https://www.dogdrip.net/730673345",
-          "isHot": false,
-          "isEnd": false,
-          "price": "12,915원",
-          "providerId": 108,
-          "categoryId": 2,
-          "category": "식품",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730673345.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "개드립"
-          },
-          "searchAfter": [
-            "1792510700000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T15:38:20.000Z"
-        },
-        {
-          "id": "36166662",
-          "title": "오뚜기 진라면 순한맛 120g 5개입 8개 19,900원",
-          "mallId": 4800,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741788",
-          "isHot": false,
-          "isEnd": false,
-          "price": "19,900원",
-          "providerId": 1,
-          "categoryId": 2,
-          "category": "식품/건강",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741788.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "1792510680000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T15:38:00.000Z"
-        },
-        {
-          "id": "36166661",
-          "title": "몬스터크랩 15개 9,360원",
-          "mallId": 1,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741787",
-          "isHot": false,
-          "isEnd": false,
-          "price": "9,360원",
-          "providerId": 1,
-          "categoryId": 2,
-          "category": "식품/건강",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741787.webp",
-          "mallName": "네이버",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "1792510560000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T15:36:00.000Z"
+          "postedAt": "2026-10-24T03:10:10.000Z"
         }
       ]
     }

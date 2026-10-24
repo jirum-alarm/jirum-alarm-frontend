@@ -1,0 +1,962 @@
+{
+  "variables": {
+    "slug": "갤럭시"
+  },
+  "response": {
+    "data": {
+      "keywordHub": {
+        "hub": {
+          "slug": "갤럭시",
+          "name": "갤럭시",
+          "aliases": [],
+          "excludes": [
+            "케이스",
+            "필름",
+            "강화유리",
+            "거치대",
+            "케이블",
+            "스트랩",
+            "밴드",
+            "터치펜",
+            "호환",
+            "충전기",
+            "파우치",
+            "커버",
+            "보호",
+            "아디다스",
+            "갤럭시런",
+            "galax",
+            "이어팁",
+            "지포스",
+            "rtx",
+            "부가서비스",
+            "소파"
+          ],
+          "recentDealCount": 147,
+          "activeDealCount": 130,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T10:56:00.000Z",
+          "activeDays": 24,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 35
+            },
+            {
+              "name": "뽐뿌",
+              "share": 16
+            }
+          ],
+          "subscriberCount": 1
+        },
+        "deals": [
+          {
+            "id": "36460675",
+            "title": "삼성 갤럭시 버즈4 프로 블랙/화이트 R640 노이즈캔슬링 블루투스 무선 이어폰",
+            "price": "188,956원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9524951.webp",
+            "postedAt": "2026-10-23T10:56:00.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": "ULTRA_DEAL",
+            "isYearLowest": true,
+            "priceSaving": {
+              "basis": "USUAL",
+              "percent": 10
+            },
+            "mallName": "롯데온",
+            "postedCommunityCount": 4,
+            "provider": {
+              "nameKr": "이토랜드"
+            }
+          },
+          {
+            "id": "36458176",
+            "title": "삼성 갤럭시 버즈4 프로",
+            "price": "￦ 188,956 (KRW)",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994871.webp",
+            "postedAt": "2026-10-23T08:34:05.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": "ULTRA_DEAL",
+            "isYearLowest": true,
+            "priceSaving": {
+              "basis": "USUAL",
+              "percent": 11
+            },
+            "mallName": "롯데온",
+            "postedCommunityCount": 5,
+            "provider": {
+              "nameKr": "퀘이사존"
+            }
+          },
+          {
+            "id": "36383167",
+            "title": "갤럭시 S25플러스 가개통 공기계 네이비 256GB 1개",
+            "price": "995,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1617522219.webp",
+            "postedAt": "2026-10-22T14:32:45.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": "SUPER_DEAL",
+            "isYearLowest": false,
+            "priceSaving": {
+              "basis": "DANAWA",
+              "percent": 36
+            },
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "36382442",
+            "title": "리퍼자급제, 삼성전자 갤럭시 S25 엣지 SM-S937, 리퍼급, 256GB, 색상랜덤, 1개",
+            "price": "742,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1413475125.webp",
+            "postedAt": "2026-10-22T14:32:45.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "36382201",
+            "title": "삼성전자 갤럭시 Z 플립5 공기계 256GB A급",
+            "price": "282,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1351044773.webp",
+            "postedAt": "2026-10-22T14:32:45.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "36389252",
+            "title": "삼성전자 갤럭시 Z 폴드8 SM-F971N 512GB 그라파이트 1대",
+            "price": "1,311,100원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2585433825.webp",
+            "postedAt": "2026-10-22T14:32:44.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": "ULTRA_DEAL",
+            "isYearLowest": true,
+            "priceSaving": {
+              "basis": "USUAL",
+              "percent": 42
+            },
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "36382281",
+            "title": "삼성전자 갤럭시 탭 액티브3 8.0 SM-T575 A급 64GB 블랙 Wi-Fi+Cellular 리퍼",
+            "price": "120,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1365873511.webp",
+            "postedAt": "2026-10-22T14:32:43.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "36363855",
+            "title": "삼성전자 갤럭시 버즈4 (직구)",
+            "price": "￦ 193,620원 (KRW)",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994635.webp",
+            "postedAt": "2026-10-22T13:43:21.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": "SUPER_DEAL",
+            "isYearLowest": false,
+            "priceSaving": {
+              "basis": "USUAL",
+              "percent": 11
+            },
+            "mallName": "지마켓",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "퀘이사존"
+            }
+          },
+          {
+            "id": "36316632",
+            "title": "갤럭시 A37 5G 128GB 자급제 499,000원",
+            "price": "499,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742217.webp",
+            "postedAt": "2026-10-22T04:52:00.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": true,
+            "hotDealType": "HOT_DEAL",
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "신세계쇼핑",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "36313846",
+            "title": "삼성전자 갤럭시 버즈4 프로 블루투스 이어폰 아랍어 버전",
+            "price": "196,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/9975171100.webp",
+            "postedAt": "2026-10-22T02:12:00.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": null,
+            "hotDealType": "ULTRA_DEAL",
+            "isYearLowest": true,
+            "priceSaving": {
+              "basis": "USUAL",
+              "percent": 8
+            },
+            "mallName": "쿠팡",
+            "postedCommunityCount": 2,
+            "provider": {
+              "nameKr": "에펨코리아"
+            }
+          },
+          {
+            "id": "36313095",
+            "title": "갤럭시 Z폴드8 256GB/512GB",
+            "price": "2,070,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742134.webp",
+            "postedAt": "2026-10-22T01:08:00.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "W컨셉",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "36229730",
+            "title": "갤럭시 버즈4 프로 해외판 화이트",
+            "price": "196,430원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10469987509.webp",
+            "postedAt": "2026-10-21T10:34:00.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": true,
+            "hotDealType": "SUPER_DEAL",
+            "isYearLowest": false,
+            "priceSaving": {
+              "basis": "USUAL",
+              "percent": 7
+            },
+            "mallName": "쿠팡",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "에펨코리아"
+            }
+          },
+          {
+            "id": "36227027",
+            "title": "삼성 갤럭시탭 S12 Plus 플러스 외 다수 1,441,407원",
+            "price": "1,441,407원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186595057.webp",
+            "postedAt": "2026-10-21T08:02:07.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "컴퓨존",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "아카"
+            }
+          },
+          {
+            "id": "36219031",
+            "title": "갤럭시탭 S12 Ultra WiFi 256GB 외 다수 1,766,721원",
+            "price": "1,766,721원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741943.webp",
+            "postedAt": "2026-10-21T06:26:00.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "컴퓨존",
+            "postedCommunityCount": 2,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "36209430",
+            "title": "갤럭시 유저 | 호작도 테마 무료 배포",
+            "price": "￦ 0 (KRW)",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994215.webp",
+            "postedAt": "2026-10-21T05:13:25.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": true,
+            "hotDealType": "HOT_DEAL",
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "갤럭시스토어",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "퀘이사존"
+            }
+          },
+          {
+            "id": "36156575",
+            "title": "공기계, 삼성전자 갤럭시 Z 플립4 SM-F721, 특S등급, 256GB, 로즈골드, 1개",
+            "price": "299,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1993603379.webp",
+            "postedAt": "2026-10-20T14:05:46.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "36149946",
+            "title": "삼성전자 갤럭시 폴더2 SM-G160N B급 16GB 랜덤 1개",
+            "price": "79,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/216046213.webp",
+            "postedAt": "2026-10-20T14:05:46.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "36159488",
+            "title": "삼성전자 갤럭시 A25 SM-A256 특S급 128GB 라이트블루",
+            "price": "229,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2526147513.webp",
+            "postedAt": "2026-10-20T14:05:45.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "36164000",
+            "title": "갤럭시 Z 폴드8 256GB 크림 완납 공시지원",
+            "price": "878,100원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2663045537.webp",
+            "postedAt": "2026-10-20T14:05:43.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": "ULTRA_DEAL",
+            "isYearLowest": true,
+            "priceSaving": {
+              "basis": "USUAL",
+              "percent": 55
+            },
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "36155799",
+            "title": "삼성 갤럭시 S25 자급제, SM-S931N, 민트, 256GB, 1개",
+            "price": "698,990원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1634068231.webp",
+            "postedAt": "2026-10-20T14:05:43.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": "SUPER_DEAL",
+            "isYearLowest": false,
+            "priceSaving": {
+              "basis": "USUAL",
+              "percent": 16
+            },
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "36123772",
+            "title": "삼성 갤럭시 A57 5G 글로벌판 8+128/8+256 듀얼심 자급제 관부가세 포함",
+            "price": "￦ 460,800 (KRW)",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994073.webp",
+            "postedAt": "2026-10-20T11:40:48.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "롯데온",
+            "postedCommunityCount": 2,
+            "provider": {
+              "nameKr": "퀘이사존"
+            }
+          },
+          {
+            "id": "36124313",
+            "title": "삼성 갤럭시 Z폴드8 512GB 외 갤럭시 S26 플러스 512GB",
+            "price": "2,208,908원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730636135.webp",
+            "postedAt": "2026-10-20T11:12:28.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "카카오",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "개드립"
+            }
+          },
+          {
+            "id": "36133323",
+            "title": "삼성 공식 갤럭시 Z폴드8 512GB SM-F971N 자급제 2,208,908원",
+            "price": "2,208,908원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741724.webp",
+            "postedAt": "2026-10-20T11:08:00.000Z",
+            "categoryId": 6,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "카카오",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "36036673",
+            "title": "삼성전자 갤럭시 A57 5G 글로벌판 8+128GB 460,800원",
+            "price": "460,800원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741441.webp",
+            "postedAt": "2026-10-19T13:47:00.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": true,
+            "hotDealType": "HOT_DEAL",
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "롯데온",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "35951523",
+            "title": "라이드캅 자전거 위치추적기 자물쇠 도난방지 갤럭시태그세트 1개",
+            "price": "49,900원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1815012085.webp",
+            "postedAt": "2026-10-18T14:04:53.000Z",
+            "categoryId": 7,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "35961349",
+            "title": "삼성전자 갤럭시탭 S12+ 5G SM-X846N 256GB 그레이",
+            "price": "1,569,100원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2680152161.webp",
+            "postedAt": "2026-10-18T13:59:05.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "35960581",
+            "title": "갤럭시 S26 코발트 바이올렛 256GB 완납 공시지원",
+            "price": "29,900원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2663045801.webp",
+            "postedAt": "2026-10-18T13:59:05.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "35958536",
+            "title": "삼성 갤럭시 S22 SM-S901 256GB 그린 리퍼급 공기계",
+            "price": "369,900원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2651793701.webp",
+            "postedAt": "2026-10-18T13:59:05.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": {
+              "basis": "DANAWA",
+              "percent": 11
+            },
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "35949110",
+            "title": "삼성 갤럭시 워치 8 골프 블루투스 44mm 그라파이트 1개",
+            "price": "439,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1053608441.webp",
+            "postedAt": "2026-10-18T13:59:05.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "35955559",
+            "title": "삼성전자 갤럭시탭 S9 정품 펜촉 화이트 1세트",
+            "price": "7,900원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2536439879.webp",
+            "postedAt": "2026-10-18T13:59:04.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "35889856",
+            "title": "삼성 갤럭시 버즈3 FE ANC 블루투스 무선 이어폰 99,000원",
+            "price": "99,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/740999.webp",
+            "postedAt": "2026-10-18T00:57:00.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": "SUPER_DEAL",
+            "isYearLowest": false,
+            "priceSaving": {
+              "basis": "USUAL",
+              "percent": 28
+            },
+            "mallName": "카카오",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "35729028",
+            "title": "삼성전자 갤럭시 S26 자급제 SM-S942N, 512GB, 블랙, 1개",
+            "price": "1,656,600원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1090592105.webp",
+            "postedAt": "2026-10-16T14:03:01.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "35736559",
+            "title": "공기계, 삼성 갤럭시 S20 FE SM-G781N, 리퍼급, 128GB, 클라우드 라벤터, 1개",
+            "price": "209,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2671533177.webp",
+            "postedAt": "2026-10-16T14:03:00.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": "SUPER_DEAL",
+            "isYearLowest": false,
+            "priceSaving": {
+              "basis": "DANAWA",
+              "percent": 32
+            },
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "35734544",
+            "title": "삼성전자 갤럭시 S26 5G 자급제 512GB 블랙",
+            "price": "1,452,260원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2641864645.webp",
+            "postedAt": "2026-10-16T14:03:00.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "35733372",
+            "title": "삼성전자 갤럭시 S26 울트라 SM-S948N 블랙 256GB",
+            "price": "647,400원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2583761167.webp",
+            "postedAt": "2026-10-16T14:03:00.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": "SUPER_DEAL",
+            "isYearLowest": false,
+            "priceSaving": {
+              "basis": "DANAWA",
+              "percent": 59
+            },
+            "mallName": "토스",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "35736575",
+            "title": "삼성 갤럭시 S24 256GB 화이트 리퍼급",
+            "price": "479,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2672186613.webp",
+            "postedAt": "2026-10-16T14:02:59.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "35723111",
+            "title": "삼성전자 갤럭시탭 S8 SM-X706 특S등급 그라파이트 128GB Wi-Fi+Cellular",
+            "price": "560,340원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/91156603.webp",
+            "postedAt": "2026-10-16T14:02:52.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "35722510",
+            "title": "삼성전자 갤럭시탭A 10.1 2016 with Pen A등급",
+            "price": "97,000원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/77065267.webp",
+            "postedAt": "2026-10-16T14:02:52.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "35722455",
+            "title": "지니비 갤럭시탭 S펜 블랙젤 탄성촉 3개입",
+            "price": "12,900원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/68074217.webp",
+            "postedAt": "2026-10-16T14:02:50.000Z",
+            "categoryId": 9,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "35700777",
+            "title": "갤럭시 Z폴드8 울트라 256GB 자급제 2,345,340원",
+            "price": "2,345,340원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/740774.webp",
+            "postedAt": "2026-10-16T11:03:00.000Z",
+            "categoryId": 6,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "지마켓",
+            "postedCommunityCount": 2,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          }
+        ],
+        "modelPages": [
+          {
+            "slug": "삼성전자-갤럭시-버즈4-프로-sm-r640",
+            "brand": "삼성전자",
+            "modelName": "갤럭시 버즈4 프로 SM-R640",
+            "dealCount": 63
+          },
+          {
+            "slug": "삼성전자-갤럭시-핏3",
+            "brand": "삼성전자",
+            "modelName": "갤럭시 핏3",
+            "dealCount": 39
+          },
+          {
+            "slug": "삼성전자-갤럭시탭s10-fe",
+            "brand": "삼성전자",
+            "modelName": "갤럭시탭S10 FE",
+            "dealCount": 33
+          },
+          {
+            "slug": "삼성전자-갤럭시탭s10-울트라-wi-fi",
+            "brand": "삼성전자",
+            "modelName": "갤럭시탭S10 울트라 Wi-Fi",
+            "dealCount": 32
+          },
+          {
+            "slug": "삼성전자-갤럭시-버즈3-프로-sm-r630n",
+            "brand": "삼성전자",
+            "modelName": "갤럭시 버즈3 프로 SM-R630N",
+            "dealCount": 28
+          },
+          {
+            "slug": "삼성전자-갤럭시s26-256gb-자급제",
+            "brand": "삼성전자",
+            "modelName": "갤럭시S26 256GB, 자급제",
+            "dealCount": 23
+          },
+          {
+            "slug": "삼성전자-갤럭시-버즈3-sm-r530n",
+            "brand": "삼성전자",
+            "modelName": "갤럭시 버즈3 SM-R530N",
+            "dealCount": 21
+          },
+          {
+            "slug": "삼성전자-갤럭시탭s9-플러스-wi-fi",
+            "brand": "삼성전자",
+            "modelName": "갤럭시탭S9 플러스 Wi-Fi",
+            "dealCount": 19
+          },
+          {
+            "slug": "삼성전자-갤럭시탭s10-울트라-5g",
+            "brand": "삼성전자",
+            "modelName": "갤럭시탭S10 울트라 5G",
+            "dealCount": 16
+          },
+          {
+            "slug": "삼성전자-갤럭시탭s10-플러스-wi-fi",
+            "brand": "삼성전자",
+            "modelName": "갤럭시탭S10 플러스 Wi-Fi",
+            "dealCount": 15
+          },
+          {
+            "slug": "삼성전자-갤럭시탭s10-fe-플러스",
+            "brand": "삼성전자",
+            "modelName": "갤럭시탭S10 FE 플러스",
+            "dealCount": 15
+          },
+          {
+            "slug": "삼성전자-갤럭시s25-엣지-512gb-자급제",
+            "brand": "삼성전자",
+            "modelName": "갤럭시S25 엣지 512GB, 자급제",
+            "dealCount": 14
+          },
+          {
+            "slug": "삼성전자-갤럭시탭s11",
+            "brand": "삼성전자",
+            "modelName": "갤럭시탭S11",
+            "dealCount": 14
+          },
+          {
+            "slug": "삼성전자-갤럭시z-폴드7-512gb-자급제",
+            "brand": "삼성전자",
+            "modelName": "갤럭시Z 폴드7 512GB, 자급제",
+            "dealCount": 13
+          },
+          {
+            "slug": "삼성전자-갤럭시워치8-40mm-블루투스",
+            "brand": "삼성전자",
+            "modelName": "갤럭시워치8 40mm 블루투스",
+            "dealCount": 11
+          },
+          {
+            "slug": "삼성전자-갤럭시워치9-40mm-블루투스",
+            "brand": "삼성전자",
+            "modelName": "갤럭시워치9 40mm 블루투스",
+            "dealCount": 9
+          },
+          {
+            "slug": "삼성전자-갤럭시s24-256gb-자급제",
+            "brand": "삼성전자",
+            "modelName": "갤럭시S24 256GB, 자급제",
+            "dealCount": 8
+          },
+          {
+            "slug": "삼성전자-갤럭시-버즈3-fe-sm-r420",
+            "brand": "삼성전자",
+            "modelName": "갤럭시 버즈3 FE SM-R420",
+            "dealCount": 8
+          },
+          {
+            "slug": "삼성전자-갤럭시북4-프로-nt940xgq-a51a",
+            "brand": "삼성전자",
+            "modelName": "갤럭시북4 프로 NT940XGQ-A51A",
+            "dealCount": 7
+          },
+          {
+            "slug": "삼성전자-갤럭시탭s10-플러스-5g",
+            "brand": "삼성전자",
+            "modelName": "갤럭시탭S10 플러스 5G",
+            "dealCount": 7
+          },
+          {
+            "slug": "삼성전자-갤럭시s26-512gb-자급제",
+            "brand": "삼성전자",
+            "modelName": "갤럭시S26 512GB, 자급제",
+            "dealCount": 7
+          },
+          {
+            "slug": "삼성전자-갤럭시북4-nt750xgr-a51a",
+            "brand": "삼성전자",
+            "modelName": "갤럭시북4 NT750XGR-A51A",
+            "dealCount": 7
+          },
+          {
+            "slug": "삼성전자-갤럭시-버즈4-sm-r540",
+            "brand": "삼성전자",
+            "modelName": "갤럭시 버즈4 SM-R540",
+            "dealCount": 6
+          },
+          {
+            "slug": "삼성전자-갤럭시s25-256gb-자급제",
+            "brand": "삼성전자",
+            "modelName": "갤럭시S25 256GB, 자급제",
+            "dealCount": 4
+          }
+        ]
+      }
+    }
+  }
+}

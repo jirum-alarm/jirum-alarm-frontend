@@ -1,0 +1,670 @@
+{
+  "variables": {
+    "slug": "삼성전자-갤럭시-버즈4-프로-sm-r640"
+  },
+  "response": {
+    "data": {
+      "modelPage": {
+        "slug": "삼성전자-갤럭시-버즈4-프로-sm-r640",
+        "brand": "삼성전자",
+        "modelName": "갤럭시 버즈4 프로 SM-R640",
+        "dealCount": 63,
+        "lastDealAt": "2026-10-23T10:56:00.000Z",
+        "metaDescription": "갤럭시 버즈4 프로 SM-R640 핫딜 모음 — 최근 63건. 최저 188,956원~ 지름알림에서 가격 모아보기.",
+        "payload": {
+          "deals": [
+            {
+              "url": "https://etoland.co.kr/b/hotdeal/article/9524951",
+              "isEnd": false,
+              "price": 188956,
+              "title": "삼성 갤럭시 버즈4 프로 블랙/화이트 R640 노이즈캔슬링 블루투스 무선 이어폰",
+              "mallName": "롯데온",
+              "postedAt": "2026-10-23T10:56:00.000Z",
+              "productId": 36460675,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9524951.webp",
+              "providerId": 107
+            },
+            {
+              "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994871",
+              "isEnd": false,
+              "price": 188956,
+              "title": "토스할인 삼성 갤럭시 버즈4 프로",
+              "mallName": "롯데온",
+              "postedAt": "2026-10-23T08:34:05.000Z",
+              "productId": 36458176,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994871.webp",
+              "providerId": 5
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/186793207",
+              "isEnd": true,
+              "price": 188956,
+              "title": "삼성 갤럭시 버즈4 프로 (188,956원/무료)",
+              "mallName": "롯데온",
+              "postedAt": "2026-10-23T06:03:25.000Z",
+              "productId": 36441382,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186793207.webp",
+              "providerId": 12
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/186767005",
+              "isEnd": false,
+              "price": 188956,
+              "title": "삼성 갤럭시 버즈4 프로 블랙 R640 노이즈캔슬링 블루투스 무선 이어폰 (글로벌워런티/국내 AS 1년) (188,956원/무료)",
+              "mallName": "롯데온",
+              "postedAt": "2026-10-23T00:50:45.000Z",
+              "productId": 36427647,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186767005.webp",
+              "providerId": 12
+            },
+            {
+              "url": "https://www.fmkorea.com/10474887117",
+              "isEnd": false,
+              "price": 188956,
+              "title": "삼성 갤럭시 버즈4 프로 블랙 R640 노이즈캔슬링 블루투스 무선 이어폰 (글로벌워런티/국내 AS 1년) (토스계좌)",
+              "mallName": "롯데온",
+              "postedAt": "2026-10-23T00:26:00.000Z",
+              "productId": 36420908,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10474887117.webp",
+              "providerId": 7
+            },
+            {
+              "url": "https://www.fmkorea.com/10472092761",
+              "isEnd": false,
+              "price": 192350,
+              "title": "삼성 갤럭시 버즈4 프로 SM-R640 블루투스 무선 이어폰",
+              "mallName": "지마켓",
+              "postedAt": "2026-10-22T03:48:00.000Z",
+              "productId": 36315820,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10472092761.webp",
+              "providerId": 7
+            },
+            {
+              "url": "https://www.fmkorea.com/10445162587",
+              "isEnd": true,
+              "price": 194050,
+              "title": "갤럭시 버즈4 프로 해외판, 조금 더 싸짐 (로켓직구 1년 무상보증)",
+              "mallName": "쿠팡  [포텐 터짐 우대 쇼핑몰, 제휴 링크]",
+              "postedAt": "2026-10-14T03:07:00.000Z",
+              "productId": 35426701,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10445162587.webp",
+              "providerId": 7
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742315",
+              "isEnd": false,
+              "price": 194800,
+              "title": "삼성 갤럭시 버즈4 프로 블랙 (194,800원/무료)",
+              "mallName": "롯데온",
+              "postedAt": "2026-10-22T09:46:00.000Z",
+              "productId": 36345241,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742315.webp",
+              "providerId": 1
+            },
+            {
+              "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1992266",
+              "isEnd": true,
+              "price": 196290,
+              "title": "갤럭시 버즈4 프로 블루투스 이어폰_로켓직구",
+              "mallName": null,
+              "postedAt": "2026-10-12T13:02:13.000Z",
+              "productId": 35246138,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1992266.webp",
+              "providerId": 5
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/185726958?p=1",
+              "isEnd": true,
+              "price": 196290,
+              "title": "버즈4 프로 홍콩직구 (196,290원/무료)",
+              "mallName": "쿠팡",
+              "postedAt": "2026-10-12T11:45:10.000Z",
+              "productId": 35226335,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/185726958.webp",
+              "providerId": 12
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/183708329?p=1",
+              "isEnd": true,
+              "price": 196550,
+              "title": "갤럭시 버즈 4 프로  직구 (196,550원/무료)",
+              "mallName": "G마켓",
+              "postedAt": "2026-09-21T16:12:54.000Z",
+              "productId": 33284192,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/183708329.webp",
+              "providerId": 12
+            },
+            {
+              "url": "https://www.fmkorea.com/10369402590",
+              "isEnd": false,
+              "price": 199900,
+              "title": "갤럭시 버즈 4 프로 블랙",
+              "mallName": "크로켓",
+              "postedAt": "2026-09-23T11:13:00.000Z",
+              "productId": 33495391,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10369402590.webp",
+              "providerId": 7
+            },
+            {
+              "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1987668",
+              "isEnd": false,
+              "price": 199960,
+              "title": "삼성전자 갤럭시 버즈4 프로 SM-R640",
+              "mallName": null,
+              "postedAt": "2026-09-21T18:59:20.000Z",
+              "productId": 33310479,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1987668.webp",
+              "providerId": 5
+            },
+            {
+              "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1989045",
+              "isEnd": false,
+              "price": 204731,
+              "title": "갤럭시 버즈4 프로 SM-R640 블랙 & 화이트",
+              "mallName": null,
+              "postedAt": "2026-09-28T12:18:18.000Z",
+              "productId": 34029896,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1989045.webp",
+              "providerId": 5
+            },
+            {
+              "url": "https://www.fmkorea.com/10382141329",
+              "isEnd": true,
+              "price": 204731,
+              "title": "삼성 갤럭시 버즈4 프로 SM-R640 블루투스 이어폰 액티브 노이즈 캔슬링 (토스)",
+              "mallName": "롯데온  [포텐 터짐 우대 쇼핑몰, 제휴 링크]",
+              "postedAt": "2026-09-27T08:45:00.000Z",
+              "productId": 33887600,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10382141329.webp",
+              "providerId": 7
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/180115491?p=1",
+              "isEnd": true,
+              "price": 206450,
+              "title": "버즈4PRO (206,450원/무료)",
+              "mallName": "G마켓",
+              "postedAt": "2026-08-16T16:49:06.000Z",
+              "productId": 28538420,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/180115491.png",
+              "providerId": 12
+            },
+            {
+              "url": "https://zod.kr/deal/8581936",
+              "isEnd": false,
+              "price": 207020,
+              "title": "삼성 갤럭시 버즈4 프로 SM-R640 블루투스 무선 이어폰 (당일항공특 (207,020원 / 무료)",
+              "mallName": "지마켓",
+              "postedAt": "2026-08-13T13:10:27.000Z",
+              "productId": 28112440,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/zod/8581936.webp",
+              "providerId": 16
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=739541",
+              "isEnd": false,
+              "price": 207120,
+              "title": "삼성 갤럭시 버즈4 프로 SM-R640 블루투스 무선 이어폰 (당일항공발송 관부가세포함)(207,120/무료)",
+              "mallName": "G마켓",
+              "postedAt": "2026-10-12T08:33:00.000Z",
+              "productId": 35202678,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/739541.webp",
+              "providerId": 1
+            },
+            {
+              "url": "https://www.fmkorea.com/10235044115",
+              "isEnd": true,
+              "price": 208530,
+              "title": "삼성전자 갤럭시 버즈4 프로 무선블루투스 이어폰 R640",
+              "mallName": "지마켓  [포텐 터짐 우대 쇼핑몰, 제휴 링크]",
+              "postedAt": "2026-08-20T06:41:00.000Z",
+              "productId": 28924773,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10235044115.webp",
+              "providerId": 7
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/184388513?p=1",
+              "isEnd": false,
+              "price": 209980,
+              "title": "삼성 갤럭시 버즈4 프로  (209,980원/무료)",
+              "mallName": "롯데온",
+              "postedAt": "2026-09-29T01:00:08.000Z",
+              "productId": 34094481,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/184388513.webp",
+              "providerId": 12
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=738221",
+              "isEnd": false,
+              "price": 211470,
+              "title": "삼성 갤럭시 버즈4 프로 R640 (211,470원/무료배송)",
+              "mallName": "G마켓",
+              "postedAt": "2026-10-05T15:05:00.000Z",
+              "productId": 34682530,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/738221.webp",
+              "providerId": 1
+            },
+            {
+              "url": "https://www.fmkorea.com/10204620753",
+              "isEnd": false,
+              "price": 211630,
+              "title": "삼성 갤럭시 버즈4 프로 SM-R640 블루투스 무선 관부가세 포함 (삼성카드)",
+              "mallName": "지마켓  [포텐 터짐 우대 쇼핑몰, 제휴 링크]",
+              "postedAt": "2026-08-13T01:31:00.000Z",
+              "productId": 28033554,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10204620753.webp",
+              "providerId": 7
+            },
+            {
+              "url": "https://etoland.co.kr/b/hotdeal/article/9469860",
+              "isEnd": false,
+              "price": 211880,
+              "title": "삼성전자 갤럭시 버즈4 프로 무선블루투스 이어폰 R640",
+              "mallName": "지마켓",
+              "postedAt": "2026-10-01T09:08:00.000Z",
+              "productId": 34325496,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9469860.webp",
+              "providerId": 107
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=728299",
+              "isEnd": false,
+              "price": 213110,
+              "title": "삼성전자 갤럭시 버즈4 프로 무선블루투스 이어폰 R640 (213,110원/무료)",
+              "mallName": "지마켓",
+              "postedAt": "2026-08-20T15:18:00.000Z",
+              "productId": 28966856,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/728299.png",
+              "providerId": 1
+            },
+            {
+              "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1980299",
+              "isEnd": false,
+              "price": 213110,
+              "title": "삼성전자 갤럭시 버즈4 프로 무선블루투스 이어폰 R640",
+              "mallName": null,
+              "postedAt": "2026-08-20T10:56:00.000Z",
+              "productId": 28930455,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1980299.jpg",
+              "providerId": 5
+            },
+            {
+              "url": "https://etoland.co.kr/b/hotdeal/article/9423812",
+              "isEnd": false,
+              "price": 214500,
+              "title": "삼성전자 갤럭시 버즈4 프로 무선블루투스 이어폰 R640 주문당일 발송",
+              "mallName": "지마켓",
+              "postedAt": "2026-09-12T19:50:00.000Z",
+              "productId": 31821847,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9423812.webp",
+              "providerId": 107
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/177547740?p=1",
+              "isEnd": true,
+              "price": 218720,
+              "title": "직구 삼성전자 갤럭시 버즈4 프로 무선 블루투스 이어폰 R640 (218,720원/무료)",
+              "mallName": "지마켓",
+              "postedAt": "2026-07-21T11:33:00.000Z",
+              "productId": 25962769,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/177547740.jpg",
+              "providerId": 12
+            },
+            {
+              "url": "https://www.fmkorea.com/10166731221",
+              "isEnd": false,
+              "price": 224481,
+              "title": "삼성 갤럭시 버즈4 프로 R640",
+              "mallName": "롯데온  [포텐 터짐 우대 쇼핑몰, 제휴 링크]",
+              "postedAt": "2026-08-03T06:59:00.000Z",
+              "productId": 26736555,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10166731221.jpg",
+              "providerId": 7
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/178756588?p=1",
+              "isEnd": true,
+              "price": 227900,
+              "title": "삼성 갤럭시 버즈4 프로 화이트/블랙 (227,900원/무료)",
+              "mallName": "롯데온",
+              "postedAt": "2026-08-02T10:03:05.000Z",
+              "productId": 26679914,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/178756588.jpg",
+              "providerId": 12
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=723987",
+              "isEnd": true,
+              "price": 227900,
+              "title": "삼성전자 갤럭시 버즈4 프로 화이트/블랙 R640 노이즈캔슬링 ANC (글로벌워런티) (227,900원/무료)",
+              "mallName": "롯데온",
+              "postedAt": "2026-08-01T07:00:00.000Z",
+              "productId": 26614377,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/723987.jpg",
+              "providerId": 1
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=736708",
+              "isEnd": false,
+              "price": 323990,
+              "title": "삼성전자 갤럭시 버즈4 프로 블루투스 이어폰 SM-R640 화이트 (323,990원/무료)",
+              "mallName": "네이버",
+              "postedAt": "2026-09-28T00:43:00.000Z",
+              "productId": 33979753,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/736708.webp",
+              "providerId": 1
+            },
+            {
+              "url": "https://www.city.kr/ln/42966388",
+              "isEnd": false,
+              "price": null,
+              "title": "갤럭시 버즈 4 프로 블랙 (199,900원) (0원)",
+              "mallName": null,
+              "postedAt": "2026-09-23T13:23:02.000Z",
+              "productId": 33513257,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/city/42966388.webp",
+              "providerId": 6
+            }
+          ],
+          "danawa": {
+            "danawaUrl": "https://prod.danawa.com/info/?pcode=106702589",
+            "mallCount": 118,
+            "danawaPrice": 311360,
+            "danawaProductId": 106702589
+          },
+          "heroImage": "https://cdn.jirum-alarm.com/community/arca/176341006.jpg",
+          "heroPrice": {
+            "label": "정품",
+            "minPrice": 188956,
+            "unitLabel": null,
+            "unitPrice": null
+          },
+          "priceHistory": {
+            "basis": "total",
+            "points": [
+              {
+                "month": "2026-08-01",
+                "price": 227900
+              },
+              {
+                "month": "2026-08-02",
+                "price": 227900
+              },
+              {
+                "month": "2026-08-03",
+                "price": 224481
+              },
+              {
+                "month": "2026-08-06",
+                "price": 229000
+              },
+              {
+                "month": "2026-08-11",
+                "price": 359000
+              },
+              {
+                "month": "2026-08-13",
+                "price": 207020
+              },
+              {
+                "month": "2026-08-17",
+                "price": 206450
+              },
+              {
+                "month": "2026-08-20",
+                "price": 208530
+              },
+              {
+                "month": "2026-08-21",
+                "price": 213110
+              },
+              {
+                "month": "2026-08-31",
+                "price": 305100
+              },
+              {
+                "month": "2026-09-01",
+                "price": 305940
+              },
+              {
+                "month": "2026-09-13",
+                "price": 214500
+              },
+              {
+                "month": "2026-09-21",
+                "price": 304990
+              },
+              {
+                "month": "2026-09-22",
+                "price": 196550
+              },
+              {
+                "month": "2026-09-23",
+                "price": 199900
+              },
+              {
+                "month": "2026-09-27",
+                "price": 204731
+              },
+              {
+                "month": "2026-09-28",
+                "price": 204731
+              },
+              {
+                "month": "2026-09-29",
+                "price": 209980
+              },
+              {
+                "month": "2026-10-01",
+                "price": 211880
+              },
+              {
+                "month": "2026-10-06",
+                "price": 211470
+              },
+              {
+                "month": "2026-10-12",
+                "price": 196290
+              },
+              {
+                "month": "2026-10-14",
+                "price": 194050
+              },
+              {
+                "month": "2026-10-22",
+                "price": 192350
+              },
+              {
+                "month": "2026-10-23",
+                "price": 188956
+              }
+            ],
+            "currency": "KRW",
+            "granularity": "day"
+          },
+          "priceSummary": {
+            "q1": 203538,
+            "q3": 335152,
+            "max": 359000,
+            "min": 188956,
+            "median": 223310,
+            "source": "danawa_stats"
+          },
+          "relatedModels": [
+            {
+              "slug": "삼성전자-갤럭시-핏3",
+              "dealCount": 39,
+              "modelName": "갤럭시 핏3"
+            },
+            {
+              "slug": "삼성전자-갤럭시탭s10-fe",
+              "dealCount": 33,
+              "modelName": "갤럭시탭S10 FE"
+            },
+            {
+              "slug": "삼성전자-갤럭시탭s10-울트라-wi-fi",
+              "dealCount": 32,
+              "modelName": "갤럭시탭S10 울트라 Wi-Fi"
+            },
+            {
+              "slug": "삼성전자-갤럭시-버즈3-프로-sm-r630n",
+              "dealCount": 28,
+              "modelName": "갤럭시 버즈3 프로 SM-R630N"
+            },
+            {
+              "slug": "삼성전자-갤럭시s26-256gb-자급제",
+              "dealCount": 23,
+              "modelName": "갤럭시S26 256GB, 자급제"
+            },
+            {
+              "slug": "삼성전자-sl-c",
+              "dealCount": 21,
+              "modelName": "SL-C"
+            }
+          ],
+          "representatives": [
+            {
+              "label": "정품",
+              "danawaUrl": "https://prod.danawa.com/info/?pcode=106702589",
+              "mallCount": 118,
+              "priceRank": "1위",
+              "unitLabel": null,
+              "unitPrice": null,
+              "activeDeals": 51,
+              "danawaPrice": 311360,
+              "dealMinPrice": 188956
+            },
+            {
+              "label": "해외구매",
+              "danawaUrl": "https://prod.danawa.com/info/?pcode=108421727",
+              "mallCount": 19,
+              "priceRank": "2위",
+              "unitLabel": null,
+              "unitPrice": null,
+              "activeDeals": 12,
+              "danawaPrice": 207992,
+              "dealMinPrice": 194050
+            }
+          ]
+        },
+        "priceVerdict": {
+          "tone": "lowest",
+          "pendingReason": null,
+          "activeDealCount": 4,
+          "activeProductIds": [
+            36460675,
+            36458176,
+            36315820,
+            36345241
+          ],
+          "bundleProductIds": [],
+          "bestProductId": 36460675,
+          "comparePrice": 188956,
+          "activePrice": 188956,
+          "bestPackLabel": null,
+          "mallPrice": null,
+          "avgPrice": 226867.04166666666,
+          "savePct": 17,
+          "buyLine": 239969.2,
+          "historyPoints": 24
+        },
+        "recentDeals": [
+          {
+            "productId": 36460675,
+            "title": "삼성 갤럭시 버즈4 프로 블랙/화이트 R640 노이즈캔슬링 블루투스 무선 이어폰",
+            "price": 188956,
+            "priceCurrency": "KRW",
+            "mallName": "롯데온",
+            "postedAt": "2026-10-23T10:56:00.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9524951.webp",
+            "isEnd": false,
+            "isVerified": true
+          },
+          {
+            "productId": 36458176,
+            "title": "토스할인 삼성 갤럭시 버즈4 프로",
+            "price": 188956,
+            "priceCurrency": "KRW",
+            "mallName": "롯데온",
+            "postedAt": "2026-10-23T08:34:05.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994871.webp",
+            "isEnd": false,
+            "isVerified": true
+          },
+          {
+            "productId": 36345241,
+            "title": "삼성 갤럭시 버즈4 프로 블랙 (194,800원/무료)",
+            "price": 194800,
+            "priceCurrency": "KRW",
+            "mallName": "롯데온",
+            "postedAt": "2026-10-22T09:46:00.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742315.webp",
+            "isEnd": false,
+            "isVerified": true
+          },
+          {
+            "productId": 36315820,
+            "title": "삼성 갤럭시 버즈4 프로 SM-R640 블루투스 무선 이어폰",
+            "price": 192350,
+            "priceCurrency": "KRW",
+            "mallName": "지마켓",
+            "postedAt": "2026-10-22T03:48:00.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10472092761.webp",
+            "isEnd": false,
+            "isVerified": true
+          },
+          {
+            "productId": 36313846,
+            "title": "삼성전자 갤럭시 버즈4 프로 블루투스 이어폰 아랍어 버전",
+            "price": 196000,
+            "priceCurrency": "KRW",
+            "mallName": "쿠팡",
+            "postedAt": "2026-10-22T02:12:00.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/9975171100.webp",
+            "isEnd": false,
+            "isVerified": false
+          },
+          {
+            "productId": 35426701,
+            "title": "갤럭시 버즈4 프로 해외판, 조금 더 싸짐 (로켓직구 1년 무상보증)",
+            "price": 194050,
+            "priceCurrency": "KRW",
+            "mallName": "쿠팡  [포텐 터짐 우대 쇼핑몰, 제휴 링크]",
+            "postedAt": "2026-10-14T03:07:00.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10445162587.webp",
+            "isEnd": true,
+            "isVerified": true
+          },
+          {
+            "productId": 35246138,
+            "title": "갤럭시 버즈4 프로 블루투스 이어폰_로켓직구",
+            "price": 196290,
+            "priceCurrency": "KRW",
+            "mallName": null,
+            "postedAt": "2026-10-12T13:02:13.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1992266.webp",
+            "isEnd": true,
+            "isVerified": true
+          },
+          {
+            "productId": 35226335,
+            "title": "버즈4 프로 홍콩직구 (196,290원/무료)",
+            "price": 196290,
+            "priceCurrency": "KRW",
+            "mallName": "쿠팡",
+            "postedAt": "2026-10-12T11:45:10.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/arca/185726958.webp",
+            "isEnd": true,
+            "isVerified": true
+          }
+        ],
+        "keywordHub": {
+          "slug": "갤럭시",
+          "name": "갤럭시",
+          "recentDealCount": 147,
+          "countCapped": false
+        }
+      }
+    }
+  }
+}

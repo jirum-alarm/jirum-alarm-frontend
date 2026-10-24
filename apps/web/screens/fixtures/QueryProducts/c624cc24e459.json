@@ -1,0 +1,555 @@
+{
+  "variables": {
+    "limit": 20,
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "mallGroupId": 16,
+    "searchAfter": "1792808497000"
+  },
+  "response": {
+    "data": {
+      "products": [
+        {
+          "id": "36550012",
+          "title": "디벨라 홀 토마토 통조림 2.5kg 1개 7,200원",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186876582",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,200원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186876582.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792808293000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T02:18:13.000Z"
+        },
+        {
+          "id": "36550064",
+          "title": "풀무원자연건면 로스팅 꽃게탕면 4개입 3,010원",
+          "mallId": 48,
+          "url": "https://eomisae.co.kr/rt/207576251",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,010원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207576251.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792808269000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T02:17:49.000Z"
+        },
+        {
+          "id": "36550005",
+          "title": "삼립 돌아온 포켓몬빵 (띠부실 포함) 외 5종",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10478638298",
+          "isHot": null,
+          "isEnd": false,
+          "price": "920원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478638298.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792807380000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T02:03:00.000Z"
+        },
+        {
+          "id": "36549915",
+          "title": "코카콜라 제로 레몬라임 190ml 30개",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10478635487",
+          "isHot": null,
+          "isEnd": false,
+          "price": "13,670원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478635487.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792807200000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T02:00:00.000Z"
+        },
+        {
+          "id": "36549746",
+          "title": "LG전자 2026 그램 AI 16 코어 Ultra5 스노우 화이트 1,799,000원",
+          "mallId": 48,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742688",
+          "isHot": false,
+          "isEnd": false,
+          "price": "1,799,000원",
+          "providerId": 1,
+          "categoryId": 1,
+          "category": "컴퓨터",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742688.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792807080000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T01:58:00.000Z"
+        },
+        {
+          "id": "36549410",
+          "title": "레노버 2026 아이디어패드 슬림3 15AHP10 윈도우 11 포함",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10478556069",
+          "isHot": null,
+          "isEnd": false,
+          "price": "649,000원",
+          "providerId": 7,
+          "categoryId": 1,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478556069.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792804920000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T01:22:00.000Z"
+        },
+        {
+          "id": "36549370",
+          "title": "탄씨엔쯔 탄스트라이더 알루미늄 합금 아웃도어 접이식 캠핑 테이블 M사이즈 8900원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962955?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,900원",
+          "providerId": 18,
+          "categoryId": 7,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962955.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792804808000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T01:20:08.000Z"
+        },
+        {
+          "id": "36549311",
+          "title": "락피도 철분액상 30포 11,440원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962944?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "11,440원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962944.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792804493000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T01:14:53.000Z"
+        },
+        {
+          "id": "36549214",
+          "title": "알루미늄 합금 아웃도어 접이식 캠핑 테이블 8,900원",
+          "mallId": 48,
+          "url": "https://eomisae.co.kr/rt/207566047",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,900원",
+          "providerId": 11,
+          "categoryId": 7,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207566047.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792803527000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T00:58:47.000Z"
+        },
+        {
+          "id": "36540687",
+          "title": "아비브 마데카소사이드 진정 에센셜핏 마스크팩 10매 11700원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962909?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "11,700원",
+          "providerId": 18,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962909.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792803478000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T00:57:58.000Z"
+        },
+        {
+          "id": "36549220",
+          "title": "미에로화이바 210ml 10개",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10478495775",
+          "isHot": null,
+          "isEnd": false,
+          "price": "8,820원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478495775.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792803180000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T00:53:00.000Z"
+        },
+        {
+          "id": "36540443",
+          "title": "이클립스 쿨링 소프트 캔디 레몬민트향 990원",
+          "mallId": 48,
+          "url": "https://eomisae.co.kr/rt/207563343",
+          "isHot": false,
+          "isEnd": false,
+          "price": "990원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207563343.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792801879000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T00:31:19.000Z"
+        },
+        {
+          "id": "36532372",
+          "title": "팔도 라볶이 봉지라면 145g 12개 12,690원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962843?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "12,690원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962843.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792799766000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T23:56:06.000Z"
+        },
+        {
+          "id": "36532358",
+          "title": "미에로화이바 210ml 10개 8,820원",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186868974",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,820원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186868974.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792799717000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T23:55:17.000Z"
+        },
+        {
+          "id": "36532353",
+          "title": "리치팜너트 프리미엄믹스넛 2통 42,100원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962841?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962841.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792799680000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T23:54:40.000Z"
+        },
+        {
+          "id": "36532357",
+          "title": "폰타나 나폴리 뽀모도로 토마토 파스타소스 600g 3개 10,620원",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186868930",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,620원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186868930.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792799668000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T23:54:28.000Z"
+        },
+        {
+          "id": "36532356",
+          "title": "코카콜라 제로 레몬라임 190ml 30개",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186868908",
+          "isHot": false,
+          "isEnd": false,
+          "price": "13,670원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186868908.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792799635000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T23:53:55.000Z"
+        },
+        {
+          "id": "36532355",
+          "title": "너구리 얼큰한맛 120g, 15개",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186868887",
+          "isHot": false,
+          "isEnd": false,
+          "price": "11,820원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186868887.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792799605000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T23:53:25.000Z"
+        },
+        {
+          "id": "36532319",
+          "title": "오레오 웨하스 스틱 초코 510g 1개",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186868853",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,390원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186868853.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792799554000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T23:52:34.000Z"
+        },
+        {
+          "id": "36532266",
+          "title": "1+1 스판 밴딩 4900원 사이즈 L가능",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962827?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,900원",
+          "providerId": 18,
+          "categoryId": 4,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962827.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792798825000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T23:40:25.000Z"
+        }
+      ]
+    }
+  }
+}

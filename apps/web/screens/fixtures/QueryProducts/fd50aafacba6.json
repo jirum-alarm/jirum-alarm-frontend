@@ -11,105 +11,48 @@
     "data": {
       "products": [
         {
-          "id": "36116590",
-          "title": "ORICO USB 3.0 플래시 드라이브 C타입 64GB",
-          "mallId": 143,
-          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994046",
-          "isHot": false,
-          "isEnd": false,
-          "price": "￦ 14,878 (KRW)",
-          "providerId": 5,
-          "categoryId": 1,
-          "category": "PC/하드웨어",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994046.webp",
-          "mallName": "알리",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "퀘이사존"
-          },
-          "searchAfter": [
-            "36116590"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T09:59:35.000Z"
-        },
-        {
-          "id": "36116053",
-          "title": "GIGABYTE G27Q26 260 HDR SS-IPS QHD OC 275Hz 게이밍 모니터 27인치",
-          "mallId": 15,
-          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994041",
-          "isHot": false,
-          "isEnd": false,
-          "price": "￦ 286,260 (KRW)",
-          "providerId": 5,
-          "categoryId": 1,
-          "category": "PC/하드웨어",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994041.webp",
-          "mallName": "지마켓",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": {
-            "basis": "DANAWA",
-            "percent": 12
-          },
-          "provider": {
-            "nameKr": "퀘이사존"
-          },
-          "searchAfter": [
-            "36116053"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T09:11:50.000Z"
-        },
-        {
-          "id": "36115909",
-          "title": "로지텍 MK275 무선 키보드 마우스 콤보",
-          "mallId": 1179,
-          "url": "https://www.fmkorea.com/10466193500",
+          "id": "36509806",
+          "title": "질렉트 프로쉴드 옐로우 면도날 12입",
+          "mallId": 592,
+          "url": "https://www.fmkorea.com/10477638541",
           "isHot": null,
           "isEnd": false,
-          "price": "24,750원",
+          "price": "33,857원",
           "providerId": 7,
           "categoryId": 1,
           "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10466193500.webp",
-          "mallName": "하이마트",
-          "hotDealType": "SUPER_DEAL",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10477638541.webp",
+          "mallName": "오늘의집",
+          "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": {
-            "basis": "DANAWA",
-            "percent": 23
+            "basis": "USUAL",
+            "percent": 7
           },
           "provider": {
             "nameKr": "에펨코리아"
           },
           "searchAfter": [
-            "36115909"
+            "36509806"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T09:00:00.000Z"
+          "postedAt": "2026-10-23T15:24:00.000Z"
         },
         {
-          "id": "36114537",
-          "title": "인텔 225F + RTX5060 + 16G + 1TB 완본체",
-          "mallId": 1179,
-          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994033",
+          "id": "36509754",
+          "title": "긱스타 라이젠5 7500F에 RTX 5060 Ti 게이밍 조립PC",
+          "mallId": 8,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994945",
           "isHot": false,
           "isEnd": false,
-          "price": "￦ 1,358,990원 (KRW)",
+          "price": "￦ 1,920,260 (KRW)",
           "providerId": 5,
           "categoryId": 1,
           "category": "PC/하드웨어",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994033.webp",
-          "mallName": "하이마트",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994945.webp",
+          "mallName": "롯데온",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
@@ -117,26 +60,53 @@
             "nameKr": "퀘이사존"
           },
           "searchAfter": [
-            "36114537"
+            "36509754"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T08:05:55.000Z"
+          "postedAt": "2026-10-23T15:20:41.000Z"
         },
         {
-          "id": "36114504",
-          "title": "기가바이트 G27Q26 27인치 QHD 275Hz 게이밍 모니터",
-          "mallId": 15,
-          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994032",
+          "id": "36509714",
+          "title": "LG 그램북 AI 2026 15UD50U-GX5JK 타이탄 블랙 256GB 8GB Free DOS",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9525456",
           "isHot": false,
           "isEnd": false,
-          "price": "￦ 286,260 (KRW)",
+          "price": "939,890원",
+          "providerId": 107,
+          "categoryId": 1,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9525456.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "36509714"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T15:14:00.000Z"
+        },
+        {
+          "id": "36477966",
+          "title": "한입발견회 쿠폰 4종",
+          "mallId": 1,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994930",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 0 (KRW)",
           "providerId": 5,
           "categoryId": 1,
           "category": "PC/하드웨어",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994032.webp",
-          "mallName": "지마켓",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994930.webp",
+          "mallName": "네이버",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
@@ -144,52 +114,25 @@
             "nameKr": "퀘이사존"
           },
           "searchAfter": [
-            "36114504"
+            "36477966"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T08:01:42.000Z"
+          "postedAt": "2026-10-23T13:17:20.000Z"
         },
         {
-          "id": "36113823",
-          "title": "9800X3D + RTX5070Ti + 32G + 1TB 완본체",
+          "id": "36460799",
+          "title": "라이젠 9800X3D + RTX 5070 Ti + 32GB + 1TB 완본체",
           "mallId": 35,
-          "url": "https://www.fmkorea.com/10465836585",
-          "isHot": null,
-          "isEnd": false,
-          "price": "3,499,360원",
-          "providerId": 7,
-          "categoryId": 1,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465836585.webp",
-          "mallName": "11번가",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "에펨코리아"
-          },
-          "searchAfter": [
-            "36113823"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T07:19:00.000Z"
-        },
-        {
-          "id": "36103852",
-          "title": "올화이트 9950X3D + 윙치킨 RTX 5090 + 64GB + 2TB",
-          "mallId": 35,
-          "url": "https://www.fmkorea.com/10465538501",
+          "url": "https://www.fmkorea.com/10476748886",
           "isHot": true,
           "isEnd": false,
-          "price": "14,900,160원",
+          "price": "3,499,200원",
           "providerId": 7,
           "categoryId": 1,
           "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465538501.webp",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10476748886.webp",
           "mallName": "11번가",
           "hotDealType": "HOT_DEAL",
           "isYearLowest": false,
@@ -198,80 +141,26 @@
             "nameKr": "에펨코리아"
           },
           "searchAfter": [
-            "36103852"
+            "36460799"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T05:29:00.000Z"
+          "postedAt": "2026-10-23T11:21:00.000Z"
         },
         {
-          "id": "36103534",
-          "title": "짱구 피카츄 블루투스 버티컬마우스 27,810원",
-          "mallId": 28,
-          "url": "https://eomisae.co.kr/rt/206978795",
-          "isHot": false,
-          "isEnd": false,
-          "price": "27,810원",
-          "providerId": 11,
-          "categoryId": 1,
-          "category": "기타국내",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206978795.webp",
-          "mallName": "카카오",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "어미새"
-          },
-          "searchAfter": [
-            "36103534"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T05:12:39.000Z"
-        },
-        {
-          "id": "36103533",
-          "title": "와칠 WA7-K RGB 미들타워 케이스 블랙 39,000원",
-          "mallId": 530,
-          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993990",
-          "isHot": false,
-          "isEnd": false,
-          "price": "￦ 39,000 (KRW)",
-          "providerId": 5,
-          "categoryId": 1,
-          "category": "PC/하드웨어",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993990.webp",
-          "mallName": "컴퓨존",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "퀘이사존"
-          },
-          "searchAfter": [
-            "36103533"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T05:10:52.000Z"
-        },
-        {
-          "id": "36103209",
-          "title": "LG전자 스마트모니터 27U511SBW 외 1종",
-          "mallId": 28,
-          "url": "https://coolenjoy.net/bbs/jirum/3571109",
+          "id": "36459280",
+          "title": "GIGABYTE A520M K V2 (+ 발키리 AQ125 무상증정)",
+          "mallId": 49831,
+          "url": "https://coolenjoy.net/bbs/jirum/3573040",
           "isHot": false,
           "isEnd": false,
           "price": null,
           "providerId": 2,
           "categoryId": 1,
           "category": "PC관련",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/coolnjoy/3571109.webp",
-          "mallName": "카카오",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coolnjoy/3573040.webp",
+          "mallName": "자사몰",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
@@ -279,39 +168,153 @@
             "nameKr": "쿨엔조이"
           },
           "searchAfter": [
-            "36103209"
+            "36459280"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T04:50:01.000Z"
+          "postedAt": "2026-10-23T08:58:50.000Z"
         },
         {
-          "id": "36103208",
-          "title": "FIREBAT AM02 H255 미니PC 외 2종",
-          "mallId": 143,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102328",
+          "id": "36458276",
+          "title": "다크플래쉬 DLX21 RGB MESH 강화유리 블랙 (팬 6개 장착 출고) 외 주말특가",
+          "mallId": null,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994873",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 76,000 (KRW)",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994873.webp",
+          "mallName": "darkflash",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "DANAWA",
+            "percent": 19
+          },
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "36458276"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T08:48:47.000Z"
+        },
+        {
+          "id": "36458222",
+          "title": "LG 모니터 전 품목 특가 (10/26~11/8)",
+          "mallId": 1,
+          "url": "https://coolenjoy.net/bbs/jirum/3573031",
           "isHot": false,
           "isEnd": false,
           "price": null,
-          "providerId": 1,
+          "providerId": 2,
           "categoryId": 1,
-          "category": "",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102328.webp",
-          "mallName": "알리",
+          "category": "PC관련",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coolnjoy/3573031.webp",
+          "mallName": "네이버",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
           "provider": {
-            "nameKr": "뽐뿌"
+            "nameKr": "쿨엔조이"
           },
           "searchAfter": [
-            "36103208"
+            "36458222"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T04:47:00.000Z"
+          "postedAt": "2026-10-23T08:42:07.000Z"
+        },
+        {
+          "id": "36457770",
+          "title": "AOC DAYS OLED·480Hz·4K 게이밍 모니터 특가, AGON부터 Q27G4 시리즈까지",
+          "mallId": 51600,
+          "url": "https://coolenjoy.net/bbs/jirum/3573012",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 2,
+          "categoryId": 1,
+          "category": "PC관련",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coolnjoy/3573012.webp",
+          "mallName": "알파스캔 공식 홈페이지",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿨엔조이"
+          },
+          "searchAfter": [
+            "36457770"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T08:08:21.000Z"
+        },
+        {
+          "id": "36448238",
+          "title": "씨넥스PC 라이젠 7500X3D RTX5060Ti 32G 1TB 완본체",
+          "mallId": 35,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994835",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 1,898,600 (KRW)",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994835.webp",
+          "mallName": "11번가",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "36448238"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T06:34:22.000Z"
+        },
+        {
+          "id": "36441691",
+          "title": "PALIT 지포스 RTX 5060 Ti DUAL D7 8GB 이엠텍",
+          "mallId": 15,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994834",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 677,000 (KRW)",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994834.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "DANAWA",
+            "percent": 11
+          },
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "36441691"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T06:27:02.000Z"
         }
       ]
     }

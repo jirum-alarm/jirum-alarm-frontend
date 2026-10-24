@@ -10,240 +10,218 @@
     "data": {
       "productsByKeyword": [
         {
-          "id": "36164999",
-          "title": "헤리 스트라이프 셔츠 니트 BK1LK004 라이트그레이 FFF 1개 17,010원",
-          "price": "15,150원",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/764941301.webp",
+          "id": "35733757",
+          "title": "반디 키토래쉬 올데이 듀얼 앰플, 무색, 8ml, 1개",
+          "price": "14,890원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2611041559.webp",
           "data": {
             "toss": {
-              "rating": 4.3,
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/b1aba53052644f5cd91b81ed97c3d83328121938.webp"
+              ],
               "section": "daily",
-              "delivery": "무료배송",
-              "dealEndAt": "2026-10-22T00:00:00",
-              "salePrice": 15150,
+              "dealEndAt": "2026-10-25T00:00:00",
+              "salePrice": 14890,
               "dealStatus": "ON_GOING",
-              "lastSeenAt": "2026-10-20T15:31:06.450Z",
-              "sellerName": "주식회사 에프엠씨패션코리아",
-              "deliveryFee": 0,
-              "reviewCount": 159,
-              "discountRate": 82,
+              "lastSeenAt": "2026-10-24T03:00:23.121Z",
+              "discountRate": 53,
               "campaignEndAt": "2026-10-26T00:00:00",
-              "originalPrice": 87000,
-              "pageViewCount": 7695,
+              "originalPrice": 32000,
+              "pageViewCount": 917,
               "todayDealRank": 1,
-              "couponDiscount": 1890,
               "lowestIn30Days": true,
-              "todayDealEndAt": "2026-10-22T00:00:00",
-              "detailCheckedAt": "2026-10-20T15:31:06.450Z",
-              "todayDealStartAt": "2026-10-21T00:00:00"
+              "todayDealEndAt": "2026-10-25T00:00:00",
+              "todayDealStartAt": "2026-10-24T00:00:00"
             }
           },
           "searchAfter": [
             "0"
           ],
-          "postedAt": "2026-10-20T15:00:36.000Z"
+          "postedAt": "2026-10-16T14:12:28.000Z"
         },
         {
-          "id": "33818862",
-          "title": "세븐피엠 멀티 립밤 4.8g 1개",
-          "price": "4,190원",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2604769859.webp",
+          "id": "34920429",
+          "title": "오늘부터 1분 비빔곤약밥 김간장맛 110g 18개",
+          "price": "36,030원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2311450693.webp",
           "data": {
             "toss": {
-              "images": [
-                "https://cdn.jirum-alarm.com/community/toss/u/0a270d8fea581157e0cf4669d84e82187d9194fb.webp"
-              ],
-              "rating": 4.4,
+              "rating": 4.6,
               "section": "daily",
-              "delivery": "무료배송 · 오늘출발",
-              "dealEndAt": "2026-10-22T00:00:00",
-              "salePrice": 4190,
-              "unitPrice": "10g당 8,730원",
+              "dealEndAt": "2026-10-25T00:00:00",
+              "salePrice": 36030,
+              "unitPrice": "100g당 1,820원",
+              "bestSeller": true,
               "dealStatus": "ON_GOING",
-              "lastSeenAt": "2026-10-20T15:31:26.007Z",
-              "sellerName": "(주)황철원",
-              "deliveryFee": 0,
-              "reviewCount": 13,
-              "discountRate": 61,
+              "lastSeenAt": "2026-10-24T03:00:22.992Z",
+              "reviewCount": 9,
+              "discountRate": 57,
               "campaignEndAt": "2026-10-26T00:00:00",
-              "originalPrice": 10900,
-              "pageViewCount": 5531,
+              "originalPrice": 84000,
+              "pageViewCount": 1555,
               "todayDealRank": 1,
               "lowestIn30Days": true,
-              "todayDealEndAt": "2026-10-22T00:00:00",
-              "todayDealStartAt": "2026-10-21T00:00:00"
+              "todayDealEndAt": "2026-10-25T00:00:00",
+              "detailCheckedAt": "2026-10-23T15:30:37.695Z",
+              "todayDealStartAt": "2026-10-24T00:00:00"
             }
           },
           "searchAfter": [
             "1"
           ],
-          "postedAt": "2026-09-26T14:02:38.000Z"
+          "postedAt": "2026-10-08T13:39:09.000Z"
         },
         {
-          "id": "33424398",
-          "title": "백년본가 국내산 무항생제 난각번호 1번 유정란 대란 40구 1개",
-          "price": "18,340원",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2651615095.webp",
+          "id": "34164568",
+          "title": "일양약품 비타민C1000 200정 4개",
+          "price": "27,140원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2636334645.webp",
           "data": {
             "toss": {
               "images": [
-                "https://cdn.jirum-alarm.com/community/toss/u/3500586bfa1ae77a5fdad6e063f9605e72a7f6ae.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/6914bd404cace149347e15459c960f7249125ddc.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/65c3527f4297995927ce950b24078ff24351b19f.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/1a9f833e2c0c7520c0685aee71653a0cf4ee75b6.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/1df8ec06d4d1f4731084bbe4aa664f8b6c33c623.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/968fbba8f810fae84ed8ab188b2026a671e8ba4c.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/3acb3450bee4caa8dd05989768aad83aca741c2f.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/debd9c4feab8967aba3cbe5bc0e5e3434f502dfb.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/4c03bea4de9879860daca4e2d8b24284a9bd9901.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/7a82389f60257350b3606e3ad642532dbae7411c.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/4cd2f091deb9e612c28be554c7a788cc63370d33.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/1a595d6419915c5b006fc711985c1d3d8ad65fba.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/b2e76d40adc6f23cdda8714d1231da818ec9e265.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/1d77af05cbdd794224f85a956a741f83a5c9160d.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/b825662c146fea8df8cb3be86c8228b7826629ab.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/6588c1e884e0a86e23b4c345aa1499936baf6942.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/c0581410134938f5324440a16d145e9cb5e521ab.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/f2a08415aab064bb5b55156434361d8d32c9e34c.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/0373c4b8c77ebc61e49b780093617c1bc7696cd7.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/d4b0b72ab342b28fef5fec0c4310677a4db76f93.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/aff376964b6f972a04be56ecd594fb9f0e5fb831.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/4c2c56462aa796daed6935545bb3d1a644d259c5.webp"
+                "https://cdn.jirum-alarm.com/community/toss/u/1378b84f2a7efc42fc887e4b47a156355167ba7f.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/bc8c211287af258242a05a1d8d770c8df10f853b.webp"
               ],
-              "rating": 4.6,
+              "rating": 4.7,
               "section": "daily",
-              "delivery": "무료배송 · 오늘출발",
-              "dealEndAt": "2026-10-22T00:00:00",
-              "salePrice": 18340,
+              "dealEndAt": "2026-10-25T00:00:00",
+              "salePrice": 27140,
+              "unitPrice": "1정당 34원",
               "bestSeller": true,
               "dealStatus": "ON_GOING",
-              "lastSeenAt": "2026-10-20T15:31:18.030Z",
-              "sellerName": "주식회사 에즈투",
-              "deliveryFee": 0,
-              "reviewCount": 15,
-              "discountRate": 54,
+              "lastSeenAt": "2026-10-24T03:00:22.871Z",
+              "sellerName": "하루 45원",
+              "reviewCount": 26,
+              "discountRate": 44,
               "campaignEndAt": "2026-10-26T00:00:00",
-              "originalPrice": 39900,
-              "pageViewCount": 3079,
+              "originalPrice": 49200,
+              "pageViewCount": 1253,
               "todayDealRank": 1,
-              "couponDiscount": 100,
               "lowestIn30Days": true,
-              "todayDealEndAt": "2026-10-22T00:00:00",
-              "todayDealStartAt": "2026-10-21T00:00:00"
+              "todayDealEndAt": "2026-10-25T00:00:00",
+              "todayDealStartAt": "2026-10-24T00:00:00"
             }
           },
           "searchAfter": [
             "2"
           ],
-          "postedAt": "2026-09-22T15:00:50.000Z"
+          "postedAt": "2026-09-29T14:27:25.000Z"
         },
         {
-          "id": "33282263",
-          "title": "가벼운 여행 출장 노트북 등 수납 방수 백팩 블랙 대 1팩",
-          "price": "8,904원",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2650811419.webp",
+          "id": "26245248",
+          "title": "무색소 저염 백명란젓 파지 400g 2개",
+          "price": "17,140원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2483822353.png",
           "data": {
             "toss": {
               "images": [
-                "https://cdn.jirum-alarm.com/community/toss/u/79944cdef46d2d48b04307afe3fd1675807fc97e.webp",
-                "https://cdn.jirum-alarm.com/community/toss/u/856c934d9357ac6285cde27bb5e96fcf91d440b8.webp"
+                "https://cdn.jirum-alarm.com/community/toss/u/5350de29e1b200cd5acc34a121eed6b8bb5056de.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/3a0a6c98219d74dd2bc837f239d17a55b204f3ad.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/905660006205d38254dad70e86b287c692e7c00b.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/ed90d4a8e4d4abd19a8f6db4ae7a8e1252b38b95.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/a058caa6f5113faaadef8617ac73b8594a31fb5e.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/307701961755f69c96eaea9769069db59421d695.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/92b1ecbe441fcdc772191b6f8da9b4633f0e6ead.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/af169958e2e343bde77e3ff095825160bd93a2d7.webp"
               ],
-              "rating": 3.8,
+              "rating": 4.6,
               "section": "daily",
-              "delivery": "무료배송",
-              "dealEndAt": "2026-10-22T00:00:00",
-              "salePrice": 8904,
+              "dealEndAt": "2026-10-25T00:00:00",
+              "salePrice": 17140,
+              "unitPrice": "10g당 215원",
+              "bestSeller": true,
               "dealStatus": "ON_GOING",
-              "lastSeenAt": "2026-10-20T15:30:48.530Z",
-              "sellerName": "주식회사 케이앤에스컴퍼니",
-              "deliveryFee": 0,
-              "reviewCount": 44,
-              "discountRate": 77,
+              "lastSeenAt": "2026-10-24T03:00:23.063Z",
+              "reviewCount": 117,
+              "discountRate": 50,
               "campaignEndAt": "2026-10-26T00:00:00",
-              "originalPrice": 39900,
-              "pageViewCount": 10276,
+              "originalPrice": 34900,
+              "pageViewCount": 1444,
               "todayDealRank": 1,
-              "couponDiscount": 495,
               "lowestIn30Days": true,
-              "todayDealEndAt": "2026-10-22T00:00:00",
-              "todayDealStartAt": "2026-10-21T00:00:00"
+              "todayDealEndAt": "2026-10-25T00:00:00",
+              "todayDealStartAt": "2026-10-24T00:00:00"
             }
           },
           "searchAfter": [
             "3"
           ],
-          "postedAt": "2026-09-21T15:00:38.000Z"
+          "postedAt": "2026-07-25T15:00:34.000Z"
         },
         {
-          "id": "26373453",
-          "title": "유한메디카 고함량 마그네슘 엔 탑 400 맥스, 90정, 1개",
-          "price": "7,080원",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/63317.jpeg",
+          "id": "25979203",
+          "title": "도무스 에어 글라스 오븐 올인원 바스켓 2종, 블랙, 1세트",
+          "price": "60,640원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2236329791.jpeg",
           "data": {
             "toss": {
-              "rating": 4.6,
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/234dce8f377d28752288908720fad737a1f052e0.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/5b0eed9c4ca7fe678934b61eafb7afbb41a66079.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/13fe3780fe4d8918dfeb796bd7caf6d3f67dfa58.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/8638bef3b3ed427fbaa60f8c3a1187ad0fe906cf.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/715212e84493a9418abebfcaeeb83d341680096b.webp"
+              ],
+              "rating": 4.4,
               "section": "daily",
-              "delivery": "무료배송",
-              "dealEndAt": "2026-10-22T00:00:00",
-              "salePrice": 7080,
-              "unitPrice": "1정당 79원",
-              "bestSeller": true,
+              "dealEndAt": "2026-10-25T00:00:00",
+              "salePrice": 60640,
               "dealStatus": "ON_GOING",
-              "lastSeenAt": "2026-10-20T15:30:35.990Z",
-              "sellerName": "주식회사 엔탑",
-              "deliveryFee": 0,
-              "reviewCount": 767,
-              "discountRate": 85,
+              "lastSeenAt": "2026-10-24T03:00:22.804Z",
+              "sellerName": "바스켓 2개 구성",
+              "reviewCount": 62,
+              "discountRate": 79,
               "campaignEndAt": "2026-10-26T00:00:00",
-              "originalPrice": 47900,
-              "pageViewCount": 6913,
+              "originalPrice": 298000,
+              "pageViewCount": 11504,
               "todayDealRank": 1,
               "lowestIn30Days": true,
-              "todayDealEndAt": "2026-10-22T00:00:00",
-              "detailCheckedAt": "2026-10-20T15:30:35.990Z",
-              "todayDealStartAt": "2026-10-21T00:00:00",
-              "arrivalGuaranteed": true
+              "todayDealEndAt": "2026-10-25T00:00:00",
+              "todayDealStartAt": "2026-10-24T00:00:00"
             }
           },
           "searchAfter": [
             "4"
           ],
-          "postedAt": "2026-07-28T15:03:42.000Z"
+          "postedAt": "2026-07-21T14:32:54.000Z"
         },
         {
-          "id": "25873586",
-          "title": "스파클 생수, 무라벨, 2L, 30개",
-          "price": "11,810원",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/43252057.jpeg",
+          "id": "25707331",
+          "title": "맘스럽 아토클래식 물티슈, 100매입, 20팩",
+          "price": "10,710원",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2334877747.jpeg",
           "data": {
             "toss": {
-              "rating": 4.8,
+              "images": [
+                "https://cdn.jirum-alarm.com/community/toss/u/c50cc2295f8b5297483457672820fdebd0ed2d0e.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/8d64b5de7c71c0f59b055f52dc066efc7bd47f7c.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/d5186eebba63374f3105aa812e7e6b6c81172d21.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/fb4eb4fee6b8787b7e2e032d9c6395d141162b66.webp",
+                "https://cdn.jirum-alarm.com/community/toss/u/7ee21aeb6318b654f79b30b16c13ee48ebfb8c06.webp"
+              ],
+              "rating": 4.6,
               "section": "daily",
-              "delivery": "무료배송 · 오늘출발",
-              "dealEndAt": "2026-10-22T00:00:00",
-              "salePrice": 11810,
-              "unitPrice": "100ml당 20원",
+              "dealEndAt": "2026-10-25T00:00:00",
+              "salePrice": 10710,
+              "unitPrice": "1매입당 6원",
               "bestSeller": true,
               "dealStatus": "ON_GOING",
-              "lastSeenAt": "2026-10-20T15:30:15.960Z",
-              "sellerName": "스파클",
-              "deliveryFee": 0,
-              "reviewCount": 10698,
-              "discountRate": 52,
+              "lastSeenAt": "2026-10-24T03:00:22.720Z",
+              "reviewCount": 19676,
+              "discountRate": 56,
               "campaignEndAt": "2026-10-26T00:00:00",
-              "originalPrice": 25000,
-              "pageViewCount": 23481,
+              "categoryLabel": "출산/유아동",
+              "originalPrice": 24800,
+              "pageViewCount": 344731,
               "todayDealRank": 1,
-              "lowestIn30Days": true,
-              "todayDealEndAt": "2026-10-22T00:00:00",
-              "detailCheckedAt": "2026-10-20T15:30:15.959Z",
-              "todayDealStartAt": "2026-10-21T00:00:00"
+              "todayDealEndAt": "2026-10-25T00:00:00",
+              "todayDealStartAt": "2026-10-24T00:00:00"
             }
           },
           "searchAfter": [
             "5"
           ],
-          "postedAt": "2026-07-19T15:00:30.000Z"
+          "postedAt": "2026-07-15T16:23:25.000Z"
         }
       ]
     }

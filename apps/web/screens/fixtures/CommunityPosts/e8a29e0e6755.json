@@ -9,6 +9,68 @@
     "data": {
       "comments": [
         {
+          "id": "86",
+          "productId": 36440386,
+          "parentId": null,
+          "title": "진짜 최저가에여! 옥주부 돈까스 10팩+소스 27,810원",
+          "content": ":::jirum-images\nhttps://cdn.jirum-alarm.com/user-product/ba178f58-28c2-4238-af04-5b73c3d263c1.png\n:::\n옥주부 돈까스 10팩(등심/안심/치즈/치즈치킨)+소스 27,810원\n\nhttps://ktmembership.page.link/fkBTo1paxjDvVq1m8\n\n찐찐찐찐특특특초초특특특특가가가가가가가\nKT고객만 접속 가능~~~~~",
+          "createdAt": "2026-10-23T06:40:25.596Z",
+          "searchAfter": [
+            "86",
+            "0",
+            "86"
+          ],
+          "isNotice": false,
+          "likeCount": 1,
+          "replyCount": 0,
+          "viewCount": 15,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "4063",
+            "nickname": "짜증난당근363"
+          },
+          "taggedProduct": {
+            "id": "36440386",
+            "title": "옥주부 돈까스 10팩 (등심3+안심2+치즈2+치즈치킨3)+특제소스 10개",
+            "thumbnail": "https://cdn.jirum-alarm.com/user-product/902833f4-a286-4437-9f42-d821c081c2d5.png",
+            "price": "27810",
+            "postedAt": "2026-10-23T05:54:55.000Z",
+            "url": "https://ktmembership.page.link/fkBTo1paxjDvVq1m8"
+          }
+        },
+        {
+          "id": "85",
+          "productId": 36314081,
+          "parentId": null,
+          "title": null,
+          "content": "30개입 기준으로 11,900원에 카쇼페 추가쿠폰? 할인 붙네요.",
+          "createdAt": "2026-10-22T02:32:21.673Z",
+          "searchAfter": [
+            "85",
+            "0",
+            "85"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 40,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "580",
+            "nickname": "medivh"
+          },
+          "taggedProduct": {
+            "id": "36314081",
+            "title": "[본사직영] 국산 따뜻한 포켓형 핫팩 90g 간절기 및 미리 겨울 준비 내손에 외",
+            "thumbnail": "https://cdn.jirum-alarm.com/user-product/3d5b5c50-fede-4f2b-968d-7bc0a0161d99.png",
+            "price": "400",
+            "postedAt": "2026-10-22T02:31:40.000Z",
+            "url": "https://store.kakao.com/myhot/products/625281010"
+          }
+        },
+        {
           "id": "80",
           "productId": null,
           "parentId": null,
@@ -23,7 +85,7 @@
           "isNotice": true,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 672,
+          "viewCount": 1713,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -47,7 +109,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 957,
+          "viewCount": 1877,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -78,7 +140,7 @@
           "isNotice": false,
           "likeCount": 1,
           "replyCount": 1,
-          "viewCount": 982,
+          "viewCount": 2036,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -109,7 +171,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 1,
-          "viewCount": 891,
+          "viewCount": 1886,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -140,7 +202,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 915,
+          "viewCount": 1969,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -171,7 +233,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 1,
-          "viewCount": 926,
+          "viewCount": 1702,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -202,7 +264,7 @@
           "isNotice": false,
           "likeCount": 1,
           "replyCount": 0,
-          "viewCount": 869,
+          "viewCount": 1632,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -233,7 +295,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 760,
+          "viewCount": 1553,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -264,7 +326,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 724,
+          "viewCount": 1707,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -295,7 +357,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 815,
+          "viewCount": 1668,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -326,7 +388,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 742,
+          "viewCount": 1582,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -357,7 +419,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 2395,
+          "viewCount": 3244,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -388,7 +450,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 619,
+          "viewCount": 1735,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -419,7 +481,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 574,
+          "viewCount": 953,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -450,7 +512,7 @@
           "isNotice": false,
           "likeCount": 1,
           "replyCount": 0,
-          "viewCount": 545,
+          "viewCount": 1533,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -481,7 +543,7 @@
           "isNotice": false,
           "likeCount": 1,
           "replyCount": 0,
-          "viewCount": 521,
+          "viewCount": 1669,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -512,7 +574,7 @@
           "isNotice": false,
           "likeCount": 1,
           "replyCount": 0,
-          "viewCount": 503,
+          "viewCount": 1383,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -543,7 +605,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 525,
+          "viewCount": 1470,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -557,68 +619,6 @@
             "price": "80,855원",
             "postedAt": "2026-01-04T02:09:15.000Z",
             "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&hotlist_flag=999&no=674705"
-          }
-        },
-        {
-          "id": "17",
-          "productId": 16321791,
-          "parentId": null,
-          "title": null,
-          "content": "와 맛있겠다",
-          "createdAt": "2026-07-27T02:33:17.035Z",
-          "searchAfter": [
-            "17",
-            "0",
-            "17"
-          ],
-          "isNotice": false,
-          "likeCount": 1,
-          "replyCount": 0,
-          "viewCount": 515,
-          "isMyLike": null,
-          "isMyReported": false,
-          "author": {
-            "id": "325",
-            "nickname": "유유탱5"
-          },
-          "taggedProduct": {
-            "id": "16321791",
-            "title": "다이롱 케오데오 망고젤리 600g",
-            "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14022451.jpg",
-            "price": "7,500원",
-            "postedAt": "2025-11-12T08:05:04.000Z",
-            "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14022451?menuid=2&referrerAllArticles=false"
-          }
-        },
-        {
-          "id": "16",
-          "productId": 15288437,
-          "parentId": null,
-          "title": null,
-          "content": "페이코 할인 어떻게 해요??",
-          "createdAt": "2026-07-27T02:33:17.035Z",
-          "searchAfter": [
-            "16",
-            "0",
-            "16"
-          ],
-          "isNotice": false,
-          "likeCount": 0,
-          "replyCount": 0,
-          "viewCount": 529,
-          "isMyLike": null,
-          "isMyReported": false,
-          "author": {
-            "id": "815",
-            "nickname": "감사한토마토355"
-          },
-          "taggedProduct": {
-            "id": "15288437",
-            "title": "프로쉬 식기세척기 세제 30개입 x 4개 + 세척기 클리너 + 커팅케이스 + 쇼핑백",
-            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/657472.jpg",
-            "price": "35,120원",
-            "postedAt": "2025-10-19T08:04:29.000Z",
-            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=657472"
           }
         }
       ]

@@ -1,0 +1,555 @@
+{
+  "variables": {
+    "limit": 20,
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "categoryId": null,
+    "searchAfter": "1792807373000"
+  },
+  "response": {
+    "data": {
+      "products": [
+        {
+          "id": "36549921",
+          "title": "제이숲 단백질 샴푸/트리트먼트 1L 1+1 외",
+          "mallId": 28,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742693",
+          "isHot": false,
+          "isEnd": false,
+          "price": "26,910원",
+          "providerId": 1,
+          "categoryId": 3,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742693.webp",
+          "mallName": "카카오",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792807320000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T02:02:00.000Z"
+        },
+        {
+          "id": "36549933",
+          "title": "네이버쇼핑 쿠폰 모음",
+          "mallId": 1,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994982",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 0 (KRW)",
+          "providerId": 5,
+          "categoryId": 8,
+          "category": "상품권/쿠폰",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994982.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "1792807308000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T02:01:48.000Z"
+        },
+        {
+          "id": "36549929",
+          "title": "오라덴스 퍼펙트케어 치약 5개 2000원",
+          "mallId": 1,
+          "url": "https://eomisae.co.kr/rt/207573190",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,000원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207573190.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792807277000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T02:01:17.000Z"
+        },
+        {
+          "id": "36549918",
+          "title": "벤션 CCC 45W 20000mAh 휴대용 보조 배터리",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102673",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 1,
+          "categoryId": 9,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102673.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792807260000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T02:01:00.000Z"
+        },
+        {
+          "id": "36549919",
+          "title": "롱누들 밀떡볶이 300g+소스60g 3세트",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742691",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742691.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792807260000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T02:01:00.000Z"
+        },
+        {
+          "id": "36549920",
+          "title": "큐브베이컨 10팩 17,100원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742692",
+          "isHot": false,
+          "isEnd": false,
+          "price": "17,100원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742692.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792807260000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T02:01:00.000Z"
+        },
+        {
+          "id": "36549917",
+          "title": "넾다세일쿠폰 받아두기 사용은 26일가능",
+          "mallId": 1,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14963025?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 18,
+          "categoryId": 8,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14963025.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792807256000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T02:00:56.000Z"
+        },
+        {
+          "id": "36549915",
+          "title": "코카콜라 제로 레몬라임 190ml 30개",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10478635487",
+          "isHot": null,
+          "isEnd": false,
+          "price": "13,670원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478635487.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792807200000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T02:00:00.000Z"
+        },
+        {
+          "id": "36549916",
+          "title": "오징어젓갈 250g 4통",
+          "mallId": 1936,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742690",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,760원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742690.webp",
+          "mallName": "떠리몰",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792807200000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T02:00:00.000Z"
+        },
+        {
+          "id": "36549747",
+          "title": "네네치킨 저당 닭다리살 5종 25팩 + 곤약야채주먹밥 1팩",
+          "mallId": 28,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742689",
+          "isHot": false,
+          "isEnd": false,
+          "price": "42,120원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742689.webp",
+          "mallName": "카카오",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792807140000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T01:59:00.000Z"
+        },
+        {
+          "id": "36549745",
+          "title": "조선호텔 특제육수 포기김치 4kg",
+          "mallId": 592,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742687",
+          "isHot": false,
+          "isEnd": false,
+          "price": "33,516원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742687.webp",
+          "mallName": "오늘의집",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792807080000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T01:58:00.000Z"
+        },
+        {
+          "id": "36549746",
+          "title": "LG전자 2026 그램 AI 16 코어 Ultra5 스노우 화이트 1,799,000원",
+          "mallId": 48,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742688",
+          "isHot": false,
+          "isEnd": false,
+          "price": "1,799,000원",
+          "providerId": 1,
+          "categoryId": 1,
+          "category": "컴퓨터",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742688.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792807080000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T01:58:00.000Z"
+        },
+        {
+          "id": "36549744",
+          "title": "어린이 삼국지 7 : 배신자 여포와 급변하는 천하",
+          "mallId": 49798,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14963017?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 18,
+          "categoryId": 11,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14963017.webp",
+          "mallName": "알라딘",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792807009000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T01:56:49.000Z"
+        },
+        {
+          "id": "36549913",
+          "title": "이롬 국산콩 고단백 플레인 체험팩 190ml 6팩",
+          "mallId": 1,
+          "url": "https://www.fmkorea.com/10478622696",
+          "isHot": null,
+          "isEnd": false,
+          "price": "3,000원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478622696.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792806840000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T01:54:00.000Z"
+        },
+        {
+          "id": "36549914",
+          "title": "베베앙 K8 82gsm 프리미엄 엠보싱 물티슈 캡형 70매 20팩",
+          "mallId": 51166,
+          "url": "https://www.fmkorea.com/10478623182",
+          "isHot": null,
+          "isEnd": false,
+          "price": "17,640원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478623182.webp",
+          "mallName": "W컨셉",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792806840000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T01:54:00.000Z"
+        },
+        {
+          "id": "36549718",
+          "title": "여아 레니아 구스다운 롱패딩 202,576원",
+          "mallId": null,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14963015?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "202,576원",
+          "providerId": 18,
+          "categoryId": 4,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14963015.webp",
+          "mallName": "naver",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792806789000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T01:53:09.000Z"
+        },
+        {
+          "id": "36549719",
+          "title": "파나소닉 RM31 전기면도기 3중날 외 2종",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102672",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 1,
+          "categoryId": 6,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102672.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792806780000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T01:53:00.000Z"
+        },
+        {
+          "id": "36549717",
+          "title": "26년산 수향미 상등급 10kg 35,910원",
+          "mallId": null,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14963011?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "35,910원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14963011.webp",
+          "mallName": "자연이랑쌀이랑/멤버십쿠폰",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792806723000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T01:52:03.000Z"
+        },
+        {
+          "id": "36549703",
+          "title": "이롬 국산콩 99% 고칼슘두유 190ml 16팩",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742686",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742686.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792806540000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T01:49:00.000Z"
+        },
+        {
+          "id": "36550369",
+          "title": "트래블 데님 파라슈트 팬츠 12,000원",
+          "mallId": 333,
+          "url": "https://eomisae.co.kr/os/207571418",
+          "isHot": false,
+          "isEnd": false,
+          "price": "12,000원",
+          "providerId": 11,
+          "categoryId": 4,
+          "category": "패션국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207571418.webp",
+          "mallName": "무신사",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792805943000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T01:39:03.000Z"
+        }
+      ]
+    }
+  }
+}

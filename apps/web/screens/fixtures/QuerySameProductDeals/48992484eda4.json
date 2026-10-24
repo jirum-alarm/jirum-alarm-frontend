@@ -1,0 +1,89 @@
+{
+  "variables": {
+    "id": 36089133
+  },
+  "response": {
+    "data": {
+      "sameProductDeals": [
+        {
+          "id": "36089428",
+          "title": "AMD Ryzen 7 7800X3D CPU 직구",
+          "mallId": 143,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1993895",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 302,084 (KRW)",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993895.webp",
+          "mallName": "알리",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "DANAWA",
+            "percent": 25
+          },
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "36089428"
+          ],
+          "estimatedTotal": null,
+          "postedAt": "2026-10-19T23:45:20.000Z"
+        },
+        {
+          "id": "24806435",
+          "title": "AMD Ryzen 7 7800X3D 외 다양, 수량 10개, 1.5kg",
+          "mallId": 143,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1959354",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 341,847 (KRW)",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": null,
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "24806435"
+          ],
+          "estimatedTotal": null,
+          "postedAt": "2026-06-06T15:19:00.000Z"
+        },
+        {
+          "id": "24060811",
+          "title": "7800X3D 체감가 32만원..5월1일 자정부터",
+          "mallId": 143,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1947088",
+          "isHot": false,
+          "isEnd": false,
+          "price": "320,000원",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1947088.jpg",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "24060811"
+          ],
+          "estimatedTotal": null,
+          "postedAt": "2026-04-30T11:06:00.000Z"
+        }
+      ]
+    }
+  }
+}

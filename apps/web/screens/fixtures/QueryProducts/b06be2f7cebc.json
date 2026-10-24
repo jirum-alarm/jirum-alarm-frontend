@@ -1,0 +1,187 @@
+{
+  "variables": {
+    "limit": 6,
+    "orderBy": "COMMUNITY_RANKING",
+    "startDate": "2026-10-23T15:00:00.000Z",
+    "categoryId": 1,
+    "orderOption": "DESC",
+    "isEnd": false
+  },
+  "response": {
+    "data": {
+      "products": [
+        {
+          "id": "36460799",
+          "title": "라이젠 9800X3D + RTX 5070 Ti + 32GB + 1TB 완본체",
+          "mallId": 35,
+          "url": "https://www.fmkorea.com/10476748886",
+          "isHot": true,
+          "isEnd": false,
+          "price": "3,499,200원",
+          "providerId": 7,
+          "categoryId": 1,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10476748886.webp",
+          "mallName": "11번가",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "151.64",
+            "36460799"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-23T11:21:00.000Z"
+        },
+        {
+          "id": "36228995",
+          "title": "7800X3D 9070XT vram16GB DDR5 32GB 1TB (PCIe 4.0, TLC, DRAM X)",
+          "mallId": 35,
+          "url": "https://www.fmkorea.com/10469618640",
+          "isHot": true,
+          "isEnd": false,
+          "price": "가격별상이",
+          "providerId": 7,
+          "categoryId": 1,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10469618640.webp",
+          "mallName": "11번가",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "124.19",
+            "36228995"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-21T09:44:00.000Z"
+        },
+        {
+          "id": "36103852",
+          "title": "올화이트 9950X3D + 윙치킨 RTX 5090 + 64GB + 2TB",
+          "mallId": 35,
+          "url": "https://www.fmkorea.com/10465538501",
+          "isHot": true,
+          "isEnd": false,
+          "price": "14,900,160원",
+          "providerId": 7,
+          "categoryId": 1,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465538501.webp",
+          "mallName": "11번가",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "114.26",
+            "36103852"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-20T05:29:00.000Z"
+        },
+        {
+          "id": "36343830",
+          "title": "LEADJOY XENO Pro 무선 게임패드 충전독세트",
+          "mallId": 15,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994565",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 35,720 (KRW)",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994565.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "96.12",
+            "36343830"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-22T08:57:06.000Z"
+        },
+        {
+          "id": "36345647",
+          "title": "라이젠 7500X3D + RTX 5060 Ti + 32GB + 1TB 완본체",
+          "mallId": 35,
+          "url": "https://www.fmkorea.com/10473206702",
+          "isHot": null,
+          "isEnd": false,
+          "price": "1,898,600원",
+          "providerId": 7,
+          "categoryId": 1,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10473206702.webp",
+          "mallName": "11번가",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "85.62",
+            "36345647"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-22T10:17:00.000Z"
+        },
+        {
+          "id": "36440408",
+          "title": "ASUS TUF GAMING X870E-PLUS WIFI7",
+          "mallId": 15,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994824",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 344,700 (KRW)",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994824.webp",
+          "mallName": "지마켓",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "DANAWA",
+            "percent": 19
+          },
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "85.47",
+            "36440408"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-23T05:57:14.000Z"
+        }
+      ]
+    }
+  }
+}

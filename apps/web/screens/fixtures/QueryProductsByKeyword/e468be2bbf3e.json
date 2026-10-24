@@ -1,0 +1,495 @@
+{
+  "variables": {
+    "limit": 20,
+    "keyword": "만원이하",
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "searchAfter": "1792771725000"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36510454",
+          "title": "쿠크다스 화이트 토르테 289g 2개 5,610원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962675?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,610원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962675.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792771679000"
+          ],
+          "postedAt": "2026-10-23T16:07:59.000Z"
+        },
+        {
+          "id": "36510418",
+          "title": "레이지 레몬주스 200ml x 6개 7,900원",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742655",
+          "isHot": true,
+          "isEnd": false,
+          "price": "7,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742655.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792771560000"
+          ],
+          "postedAt": "2026-10-23T16:06:00.000Z"
+        },
+        {
+          "id": "36510416",
+          "title": "마켓오네이처 오그래놀라 다이제 초코츄러스 시리얼 300g",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186852258",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,480원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186852258.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792771328000"
+          ],
+          "postedAt": "2026-10-23T16:02:08.000Z"
+        },
+        {
+          "id": "36510372",
+          "title": "허쉬 씨솔트 카라멜 초코 팝콘 40g 3개",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186852198",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,400원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186852198.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792771279000"
+          ],
+          "postedAt": "2026-10-23T16:01:19.000Z"
+        },
+        {
+          "id": "36510373",
+          "title": "오발 대왕발16번지 10개 외 1종",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102668",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,822원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102668.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792771140000"
+          ],
+          "postedAt": "2026-10-23T15:59:00.000Z"
+        },
+        {
+          "id": "36510196",
+          "title": "오뚜기 참깨라면 115g 12개 9,300원",
+          "mallId": 48,
+          "url": "https://eomisae.co.kr/rt/207544535",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,300원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207544535.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792770844000"
+          ],
+          "postedAt": "2026-10-23T15:54:04.000Z"
+        },
+        {
+          "id": "36510186",
+          "title": "아이깨끗해 핸드워시 리필 1.8L + 용기 250ml + 공용기 250ml 9,984원",
+          "mallId": 592,
+          "url": "https://arca.live/b/hotdeal/186851398",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,984원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "생활용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186851398.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792770641000"
+          ],
+          "postedAt": "2026-10-23T15:50:41.000Z"
+        },
+        {
+          "id": "36510174",
+          "title": "아이깨끗해 핸드워시 리필 1.8L + 용기 250ml + 공용기 250ml",
+          "mallId": 592,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9525663",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,984원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9525663.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792770540000"
+          ],
+          "postedAt": "2026-10-23T15:49:00.000Z"
+        },
+        {
+          "id": "36510092",
+          "title": "오뚜기 참깨라면 115g 12개",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10477685528",
+          "isHot": null,
+          "isEnd": false,
+          "price": "9,300원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10477685528.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792769760000"
+          ],
+          "postedAt": "2026-10-23T15:36:00.000Z"
+        },
+        {
+          "id": "36510025",
+          "title": "닭정육 뼈없는 순살 닭다리살 2kg",
+          "mallId": 1,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994950",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 10,000 (KRW)",
+          "providerId": 5,
+          "categoryId": 2,
+          "category": "생활/식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994950.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792769749000"
+          ],
+          "postedAt": "2026-10-23T15:35:49.000Z"
+        },
+        {
+          "id": "36509963",
+          "title": "당일수확 무농약 유러피안 샐러드 1kg 6,900원",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742649",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742649.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792769400000"
+          ],
+          "postedAt": "2026-10-23T15:30:00.000Z"
+        },
+        {
+          "id": "36510127",
+          "title": "10-24 네이버페이 70원 + 랜덤 포인트",
+          "mallId": 1,
+          "url": "https://damoang.net/economy/82017",
+          "isHot": false,
+          "isEnd": false,
+          "price": "",
+          "providerId": 106,
+          "categoryId": 8,
+          "category": "",
+          "thumbnail": null,
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "다모앙"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792769400000"
+          ],
+          "postedAt": "2026-10-23T15:30:00.000Z"
+        },
+        {
+          "id": "36509807",
+          "title": "이클립스 쿨링 소프트 캔디 레몬민트향 45g 990원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962663?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "990원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962663.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792769214000"
+          ],
+          "postedAt": "2026-10-23T15:26:54.000Z"
+        },
+        {
+          "id": "36509993",
+          "title": "남자 긴팔 무지 기능성 빅사이즈 카라 티셔츠",
+          "mallId": 1,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9525580",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,000원",
+          "providerId": 107,
+          "categoryId": 4,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9525580.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792768980000"
+          ],
+          "postedAt": "2026-10-23T15:23:00.000Z"
+        },
+        {
+          "id": "36509981",
+          "title": "명작 발바닥 패치 목초수액 시트 대용량 50개 1박스",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9525558",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,680원",
+          "providerId": 107,
+          "categoryId": 3,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9525558.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792768920000"
+          ],
+          "postedAt": "2026-10-23T15:22:00.000Z"
+        },
+        {
+          "id": "36509985",
+          "title": "서가 3중 구조 일회용 덴탈 마스크 MB필터 화이트 50매",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9525566",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,170원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9525566.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792768920000"
+          ],
+          "postedAt": "2026-10-23T15:22:00.000Z"
+        },
+        {
+          "id": "36509972",
+          "title": "남성 몸빼 긴 바지 FREE 1세트",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9525538",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,810원",
+          "providerId": 107,
+          "categoryId": 4,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9525538.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792768860000"
+          ],
+          "postedAt": "2026-10-23T15:21:00.000Z"
+        },
+        {
+          "id": "36509973",
+          "title": "루즈핏 양면 방수 포켓 조끼형 앞치마 블랙 1개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9525539",
+          "isHot": false,
+          "isEnd": true,
+          "price": "7,900원",
+          "providerId": 107,
+          "categoryId": 4,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9525539.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792768860000"
+          ],
+          "postedAt": "2026-10-23T15:21:00.000Z"
+        },
+        {
+          "id": "36509980",
+          "title": "한미양행 낙산균을 채우다 500mg 30정 2개",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9525556",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,140원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9525556.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792768860000"
+          ],
+          "postedAt": "2026-10-23T15:21:00.000Z"
+        },
+        {
+          "id": "36509782",
+          "title": "라티아 논슬립 요가 필라테스 발레코어 X밴드 덧신 양말 FREE 골고루(색상랜덤) 5켤레",
+          "mallId": 4800,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9525523",
+          "isHot": false,
+          "isEnd": true,
+          "price": "5,850원",
+          "providerId": 107,
+          "categoryId": 4,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9525523.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792768800000"
+          ],
+          "postedAt": "2026-10-23T15:20:00.000Z"
+        }
+      ]
+    }
+  }
+}

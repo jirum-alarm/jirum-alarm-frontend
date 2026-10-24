@@ -9,79 +9,17 @@
     "data": {
       "productsByKeyword": [
         {
-          "id": "36163502",
-          "title": "Apple 맥미니 M6 실버 256GB 24GB 1개",
-          "mallId": 4800,
-          "url": "https://shopping.toss.im/c/2655730843",
+          "id": "36549746",
+          "title": "LG전자 2026 그램 AI 16 코어 Ultra5 스노우 화이트 1,799,000원",
+          "mallId": 48,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742688",
           "isHot": false,
           "isEnd": false,
-          "price": "1,829,000원",
-          "providerId": 21,
-          "categoryId": 1,
-          "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2655730843.webp",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "토스쇼핑"
-          },
-          "data": {
-            "toss": {
-              "images": [
-                "https://cdn.jirum-alarm.com/community/toss/u/c7334e5cb424bc47e18bd6d222c55603fa572226.webp"
-              ],
-              "delivery": "무료배송",
-              "salePrice": 1829000,
-              "lastSeenAt": "2026-10-20T14:05:26.907Z",
-              "sellerName": "온에디트",
-              "deliveryFee": 0,
-              "discountRate": 1,
-              "categoryLabel": "가전/디지털",
-              "originalPrice": 1849000
-            }
-          },
-          "searchAfter": [
-            "1792505127000"
-          ],
-          "postedAt": "2026-10-20T14:05:27.000Z"
-        },
-        {
-          "id": "36124313",
-          "title": "삼성 갤럭시 Z폴드8 512GB 외 갤럭시 S26 플러스 512GB",
-          "mallId": 28,
-          "url": "https://www.dogdrip.net/730636135",
-          "isHot": false,
-          "isEnd": false,
-          "price": "2,208,908원",
-          "providerId": 108,
-          "categoryId": 9,
-          "category": "전자",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730636135.webp",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "개드립"
-          },
-          "data": null,
-          "searchAfter": [
-            "1792494748000"
-          ],
-          "postedAt": "2026-10-20T11:12:28.000Z"
-        },
-        {
-          "id": "36133323",
-          "title": "삼성 공식 갤럭시 Z폴드8 512GB SM-F971N 자급제 2,208,908원",
-          "mallId": 28,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741724",
-          "isHot": false,
-          "isEnd": false,
-          "price": "2,208,908원",
+          "price": "1,799,000원",
           "providerId": 1,
-          "categoryId": 6,
-          "category": "가전/가구",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741724.webp",
+          "categoryId": 1,
+          "category": "컴퓨터",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742688.webp",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
@@ -90,33 +28,81 @@
           },
           "data": null,
           "searchAfter": [
-            "1792494480000"
+            "1792807080000"
           ],
-          "postedAt": "2026-10-20T11:08:00.000Z"
+          "postedAt": "2026-10-24T01:58:00.000Z"
         },
         {
-          "id": "36123707",
-          "title": "삼성 비스포크 1등급 키친핏 김치냉장고 3도어 RQ33DB74C1AP 313L",
-          "mallId": 15,
-          "url": "https://www.fmkorea.com/10466599654",
-          "isHot": null,
+          "id": "36549584",
+          "title": "9800X3D + 9070XT 완본체 (2,699,900원/무료)",
+          "mallId": 51294,
+          "url": "https://arca.live/b/hotdeal/186873550",
+          "isHot": true,
           "isEnd": false,
-          "price": "1,394,070원",
-          "providerId": 7,
-          "categoryId": 6,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10466599654.webp",
+          "price": "2,699,900원",
+          "providerId": 12,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186873550.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792805340000"
+          ],
+          "postedAt": "2026-10-24T01:29:00.000Z"
+        },
+        {
+          "id": "36509754",
+          "title": "긱스타 라이젠5 7500F에 RTX 5060 Ti 게이밍 조립PC",
+          "mallId": 8,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994945",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 1,920,260 (KRW)",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994945.webp",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
           "provider": {
-            "nameKr": "에펨코리아"
+            "nameKr": "퀘이사존"
           },
           "data": null,
           "searchAfter": [
-            "1792494060000"
+            "1792768841000"
           ],
-          "postedAt": "2026-10-20T11:01:00.000Z"
+          "postedAt": "2026-10-23T15:20:41.000Z"
+        },
+        {
+          "id": "36462203",
+          "title": "7500X3D / 5060 Ti / 32GB / 1TB 1,924,900원",
+          "mallId": 15,
+          "url": "https://arca.live/b/hotdeal/186830050",
+          "isHot": true,
+          "isEnd": false,
+          "price": "1,924,900원",
+          "providerId": 12,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186830050.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792757770000"
+          ],
+          "postedAt": "2026-10-23T12:16:10.000Z"
         }
       ]
     }

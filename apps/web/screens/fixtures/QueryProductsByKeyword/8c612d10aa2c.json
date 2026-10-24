@@ -1,0 +1,523 @@
+{
+  "variables": {
+    "limit": 20,
+    "keyword": "만원이하",
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "searchAfter": "1792801680000"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36533347",
+          "title": "정지선 티엔미미 밀키트 홍소우육탕면 250g",
+          "mallId": 1,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9526347",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,400원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9526347.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792800480000"
+          ],
+          "postedAt": "2026-10-24T00:08:00.000Z"
+        },
+        {
+          "id": "36533342",
+          "title": "된장찌개 밀키트 2인분 야채 두부포함 간편식 한식 캠핑",
+          "mallId": 1,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9526341",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,900원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9526341.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792800360000"
+          ],
+          "postedAt": "2026-10-24T00:06:00.000Z"
+        },
+        {
+          "id": "36533285",
+          "title": "피스워커 에센셜 블루 진",
+          "mallId": 15,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9526325",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,720원",
+          "providerId": 107,
+          "categoryId": 4,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9526325.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792799940000"
+          ],
+          "postedAt": "2026-10-23T23:59:00.000Z"
+        },
+        {
+          "id": "36532358",
+          "title": "미에로화이바 210ml 10개 8,820원",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186868974",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,820원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186868974.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792799717000"
+          ],
+          "postedAt": "2026-10-23T23:55:17.000Z"
+        },
+        {
+          "id": "36532339",
+          "title": "질레트 포오미 센서티브 175g 4개 9940원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742662",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,940원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "의류/잡화",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742662.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792799580000"
+          ],
+          "postedAt": "2026-10-23T23:53:00.000Z"
+        },
+        {
+          "id": "36540661",
+          "title": "1996스탠다드 에센셜 미들 삭스 10팩 7,990원",
+          "mallId": 51061,
+          "url": "https://eomisae.co.kr/os/207559684",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,990원",
+          "providerId": 11,
+          "categoryId": 4,
+          "category": "패션국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207559684.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792799426000"
+          ],
+          "postedAt": "2026-10-23T23:50:26.000Z"
+        },
+        {
+          "id": "36532286",
+          "title": "옛날떡볶이 간편식 795g 2인분 8,790원",
+          "mallId": 8,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742660",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,790원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742660.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792799160000"
+          ],
+          "postedAt": "2026-10-23T23:46:00.000Z"
+        },
+        {
+          "id": "36532266",
+          "title": "1+1 스판 밴딩 4900원 사이즈 L가능",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962827?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,900원",
+          "providerId": 18,
+          "categoryId": 4,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962827.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792798825000"
+          ],
+          "postedAt": "2026-10-23T23:40:25.000Z"
+        },
+        {
+          "id": "36532260",
+          "title": "확장형 대용량 레더 파우치 2,300원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962825?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,300원",
+          "providerId": 18,
+          "categoryId": 4,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962825.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792798717000"
+          ],
+          "postedAt": "2026-10-23T23:38:37.000Z"
+        },
+        {
+          "id": "36532250",
+          "title": "샤워메이트 바디워시 유자 1.2kg 2개",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962822?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,900원",
+          "providerId": 18,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962822.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792798635000"
+          ],
+          "postedAt": "2026-10-23T23:37:15.000Z"
+        },
+        {
+          "id": "36532022",
+          "title": "푸디버디 마시는 프로틴 샤인머스캣맛 100ml 10개 7,310원(카드할인)",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962806?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,310원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962806.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792797872000"
+          ],
+          "postedAt": "2026-10-23T23:24:32.000Z"
+        },
+        {
+          "id": "36531852",
+          "title": "찰순대400g+내장모듬500g 8,400원",
+          "mallId": 4800,
+          "url": "https://www.dogdrip.net/731241680",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,400원",
+          "providerId": 108,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/731241680.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792796234000"
+          ],
+          "postedAt": "2026-10-23T22:57:14.000Z"
+        },
+        {
+          "id": "36531673",
+          "title": "버거킹 와퍼주니어+비프불고기버거 7,980원",
+          "mallId": 15,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962771?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,980원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962771.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792796059000"
+          ],
+          "postedAt": "2026-10-23T22:54:19.000Z"
+        },
+        {
+          "id": "36531851",
+          "title": "통통왕족발 1kg 8,140원",
+          "mallId": 4800,
+          "url": "https://www.dogdrip.net/731241458",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,140원",
+          "providerId": 108,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/731241458.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792795875000"
+          ],
+          "postedAt": "2026-10-23T22:51:15.000Z"
+        },
+        {
+          "id": "36531850",
+          "title": "솔리치 진한 원액 보리차 300ml 2개 10,000원",
+          "mallId": 4800,
+          "url": "https://www.dogdrip.net/731241385",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,000원",
+          "providerId": 108,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/731241385.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792795696000"
+          ],
+          "postedAt": "2026-10-23T22:48:16.000Z"
+        },
+        {
+          "id": "36531574",
+          "title": "리르 PDRN 리포좀 14 앰플 50ml 1개 2,670원",
+          "mallId": 35,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962764?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,670원",
+          "providerId": 18,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962764.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792794889000"
+          ],
+          "postedAt": "2026-10-23T22:34:49.000Z"
+        },
+        {
+          "id": "36531249",
+          "title": "스카치 투명 테이프 550 리필 18mm x 20m",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/1234247193?itemId=9017195346&vendorItemId=4404081063",
+          "isHot": false,
+          "isEnd": true,
+          "price": "9,710원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "문구/사무용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/1234247193.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "data": {
+            "coupangGoldbox": {
+              "rank": 20,
+              "isRocket": true,
+              "productId": 1234247193,
+              "categoryName": "문구/사무용품"
+            }
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        },
+        {
+          "id": "36531250",
+          "title": "케라시스 데빌스 퍼퓸 에디션 샴푸 미드나잇 판타지",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/5307855301?itemId=7680087171&vendorItemId=74970389975",
+          "isHot": false,
+          "isEnd": true,
+          "price": "9,500원",
+          "providerId": 109,
+          "categoryId": 3,
+          "category": "뷰티",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/5307855301.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "data": {
+            "coupangGoldbox": {
+              "rank": 13,
+              "isRocket": true,
+              "productId": 5307855301,
+              "categoryName": "뷰티"
+            }
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        },
+        {
+          "id": "36531258",
+          "title": "모잇 PD25W 2포트 PPS 초고속충전기 + 8핀 라이트닝 아이폰 케이블 1.3m",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/7180459944?itemId=19517729815&vendorItemId=86626435420",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,990원",
+          "providerId": 109,
+          "categoryId": 9,
+          "category": "가전디지털",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/7180459944.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "data": {
+            "coupangGoldbox": {
+              "rank": 11,
+              "isRocket": true,
+              "productId": 7180459944,
+              "categoryName": "가전디지털"
+            }
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        },
+        {
+          "id": "36531259",
+          "title": "셀렉트팜 못난이 사과 얌",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/7544446654?itemId=19840455514&vendorItemId=86941995779",
+          "isHot": false,
+          "isEnd": true,
+          "price": "8,980원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "로켓프레시",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/7544446654.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "data": {
+            "coupangGoldbox": {
+              "rank": 21,
+              "isRocket": true,
+              "productId": 7544446654,
+              "categoryName": "로켓프레시"
+            }
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        }
+      ]
+    }
+  }
+}

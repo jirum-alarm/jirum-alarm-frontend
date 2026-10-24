@@ -1,0 +1,498 @@
+{
+  "variables": {
+    "limit": 20,
+    "keyword": "만원이하",
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "searchAfter": "1792804920000"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36549370",
+          "title": "탄씨엔쯔 탄스트라이더 알루미늄 합금 아웃도어 접이식 캠핑 테이블 M사이즈 8900원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962955?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,900원",
+          "providerId": 18,
+          "categoryId": 7,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962955.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792804808000"
+          ],
+          "postedAt": "2026-10-24T01:20:08.000Z"
+        },
+        {
+          "id": "36549372",
+          "title": "섬백리향 향수 50ml 8,420원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742678",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,420원",
+          "providerId": 1,
+          "categoryId": 3,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742678.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792804800000"
+          ],
+          "postedAt": "2026-10-24T01:20:00.000Z"
+        },
+        {
+          "id": "36549368",
+          "title": "우지 라면 삼양 1963 4입 외 100원",
+          "mallId": 28,
+          "url": "https://www.dogdrip.net/731254149",
+          "isHot": false,
+          "isEnd": false,
+          "price": "100원",
+          "providerId": 108,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/731254149.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792804690000"
+          ],
+          "postedAt": "2026-10-24T01:18:10.000Z"
+        },
+        {
+          "id": "36549310",
+          "title": "네츄럴라이프 루테인/오메가3/유산균/마그네슘/코큐텐/그린아세로라 모음전",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742677",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,000원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742677.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792804380000"
+          ],
+          "postedAt": "2026-10-24T01:13:00.000Z"
+        },
+        {
+          "id": "36549305",
+          "title": "오라덴스 센서티브프로텍션 시린이케어 치약 35g 3개",
+          "mallId": 1,
+          "url": "https://eomisae.co.kr/rt/207567187",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,000원",
+          "providerId": 11,
+          "categoryId": 3,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207567187.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792804133000"
+          ],
+          "postedAt": "2026-10-24T01:08:53.000Z"
+        },
+        {
+          "id": "36549281",
+          "title": "코비노 홀그레인 머스터드 330g x 2개",
+          "mallId": 241,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9526447",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,400원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9526447.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792803960000"
+          ],
+          "postedAt": "2026-10-24T01:06:00.000Z"
+        },
+        {
+          "id": "36549279",
+          "title": "튼튼한 올스텐 미끄럼방지 코팅 옷걸이 30개",
+          "mallId": 241,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9526441",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,890원",
+          "providerId": 107,
+          "categoryId": 6,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9526441.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792803780000"
+          ],
+          "postedAt": "2026-10-24T01:03:00.000Z"
+        },
+        {
+          "id": "36549214",
+          "title": "알루미늄 합금 아웃도어 접이식 캠핑 테이블 8,900원",
+          "mallId": 48,
+          "url": "https://eomisae.co.kr/rt/207566047",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,900원",
+          "providerId": 11,
+          "categoryId": 7,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207566047.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792803527000"
+          ],
+          "postedAt": "2026-10-24T00:58:47.000Z"
+        },
+        {
+          "id": "36543121",
+          "title": "예지미인 숲속이야기 비건 오버나이트 20P 1+1",
+          "mallId": 51831,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742671",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,000원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742671.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792803480000"
+          ],
+          "postedAt": "2026-10-24T00:58:00.000Z"
+        },
+        {
+          "id": "36549215",
+          "title": "우지 짜장라면 짜르르 4입 외",
+          "mallId": 28,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9526429",
+          "isHot": false,
+          "isEnd": false,
+          "price": "100원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9526429.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792803480000"
+          ],
+          "postedAt": "2026-10-24T00:58:00.000Z"
+        },
+        {
+          "id": "36549222",
+          "title": "완숙토마토 2kg",
+          "mallId": 15,
+          "url": "https://www.fmkorea.com/10478504196",
+          "isHot": null,
+          "isEnd": false,
+          "price": "9,990원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478504196.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792803300000"
+          ],
+          "postedAt": "2026-10-24T00:55:00.000Z"
+        },
+        {
+          "id": "36549220",
+          "title": "미에로화이바 210ml 10개",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10478495775",
+          "isHot": null,
+          "isEnd": false,
+          "price": "8,820원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478495775.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792803180000"
+          ],
+          "postedAt": "2026-10-24T00:53:00.000Z"
+        },
+        {
+          "id": "36549218",
+          "title": "메가MGC커피 (HOT) 아메리카노",
+          "mallId": 35,
+          "url": "https://www.fmkorea.com/10478487748",
+          "isHot": null,
+          "isEnd": false,
+          "price": "1,270원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478487748.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792802880000"
+          ],
+          "postedAt": "2026-10-24T00:48:00.000Z"
+        },
+        {
+          "id": "36540565",
+          "title": "브라질 닭정육 뼈없는 순살 닭다리살 2kg",
+          "mallId": 1,
+          "url": "https://arca.live/b/hotdeal/186870978",
+          "isHot": true,
+          "isEnd": false,
+          "price": "10,000원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186870978.webp",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792802554000"
+          ],
+          "postedAt": "2026-10-24T00:42:34.000Z"
+        },
+        {
+          "id": "36540533",
+          "title": "메가MGC커피 아메리카노 1,270원",
+          "mallId": 35,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962893?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "1,270원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962893.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792802547000"
+          ],
+          "postedAt": "2026-10-24T00:42:27.000Z"
+        },
+        {
+          "id": "36540443",
+          "title": "이클립스 쿨링 소프트 캔디 레몬민트향 990원",
+          "mallId": 48,
+          "url": "https://eomisae.co.kr/rt/207563343",
+          "isHot": false,
+          "isEnd": false,
+          "price": "990원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207563343.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792801879000"
+          ],
+          "postedAt": "2026-10-24T00:31:19.000Z"
+        },
+        {
+          "id": "36533730",
+          "title": "로메인청상추 1kg 4,990원",
+          "mallId": 8,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742669",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,990원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742669.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792801800000"
+          ],
+          "postedAt": "2026-10-24T00:30:00.000Z"
+        },
+        {
+          "id": "36540481",
+          "title": "숨 시그니처 물티슈 63gsm 70매 10팩",
+          "mallId": 4800,
+          "url": "https://bbasak.com/bbs/board.php?bo_table=bbasak1&wr_id=116708",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,990원",
+          "providerId": 110,
+          "categoryId": 2,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/bbasak/116708.webp",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 17
+          },
+          "provider": {
+            "nameKr": "빠삭"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792801800000"
+          ],
+          "postedAt": "2026-10-24T00:30:00.000Z"
+        },
+        {
+          "id": "36533729",
+          "title": "아이깨끗해 핸드워시 리필 1.8L 증정 9,983원",
+          "mallId": 592,
+          "url": "https://arca.live/b/hotdeal/186870399",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,983원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "생활용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186870399.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792801758000"
+          ],
+          "postedAt": "2026-10-24T00:29:18.000Z"
+        },
+        {
+          "id": "36533566",
+          "title": "맵돼지국밥/순대국밥 1봉 (3,900원)",
+          "mallId": 1186,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742667",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742667.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792801680000"
+          ],
+          "postedAt": "2026-10-24T00:28:00.000Z"
+        }
+      ]
+    }
+  }
+}

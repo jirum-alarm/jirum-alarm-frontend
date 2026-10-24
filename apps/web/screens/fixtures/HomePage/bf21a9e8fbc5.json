@@ -296,17 +296,6 @@
                 "viewMoreLink": "/curation/provider-12"
               },
               {
-                "id": "provider-16",
-                "label": "조드",
-                "variables": {
-                  "providerId": 16,
-                  "providerIds": [
-                    16
-                  ]
-                },
-                "viewMoreLink": "/curation/provider-16"
-              },
-              {
                 "id": "provider-18",
                 "label": "맘이베베",
                 "variables": {

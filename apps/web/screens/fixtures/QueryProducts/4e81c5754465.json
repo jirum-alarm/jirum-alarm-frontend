@@ -1,0 +1,193 @@
+{
+  "variables": {
+    "limit": 6,
+    "orderBy": "COMMUNITY_RANKING",
+    "startDate": "2026-10-22T15:00:00.000Z",
+    "categoryId": 2,
+    "orderOption": "DESC",
+    "isEnd": false
+  },
+  "response": {
+    "data": {
+      "products": [
+        {
+          "id": "36396787",
+          "title": "국내산 세척사과 2kg 1박스 7,900원",
+          "mallId": 4800,
+          "url": "https://eomisae.co.kr/rt/207385798",
+          "isHot": true,
+          "isEnd": false,
+          "price": "7,900원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207385798.webp",
+          "mallName": "토스",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": true,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "157.48",
+            "36396787"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-22T15:01:17.000Z"
+        },
+        {
+          "id": "36457477",
+          "title": "라인바싸 탄산수 500ml 9종 택 2박스",
+          "mallId": 8,
+          "url": "https://bbs.ruliweb.com/market/board/1020/read/108285",
+          "isHot": false,
+          "isEnd": false,
+          "price": "13,940원",
+          "providerId": 4,
+          "categoryId": 2,
+          "category": "음식",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/108285.webp",
+          "mallName": "롯데온",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "루리웹"
+          },
+          "searchAfter": [
+            "142.89",
+            "36457477"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-23T07:47:51.000Z"
+        },
+        {
+          "id": "36448453",
+          "title": "국내산 다진마늘 1kg 2팩",
+          "mallId": 35,
+          "url": "https://www.fmkorea.com/10475881676",
+          "isHot": null,
+          "isEnd": false,
+          "price": "신한10,890원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10475881676.webp",
+          "mallName": "11번가",
+          "hotDealType": "ULTRA_DEAL",
+          "isYearLowest": true,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 14
+          },
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "137.91",
+            "36448453"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-23T06:56:00.000Z"
+        },
+        {
+          "id": "36441397",
+          "title": "풀무원 샘물 생수 무라벨 500ml 40개 6,900원",
+          "mallId": 4800,
+          "url": "https://eomisae.co.kr/rt/207472873",
+          "isHot": true,
+          "isEnd": false,
+          "price": "6,900원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207472873.webp",
+          "mallName": "토스",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 18
+          },
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "137.85",
+            "36441397"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-23T06:06:56.000Z"
+        },
+        {
+          "id": "36438447",
+          "title": "할리스 시그니처 페트커피 골라담기 12+12입 총24개",
+          "mallId": 15,
+          "url": "https://www.fmkorea.com/10475262400",
+          "isHot": true,
+          "isEnd": false,
+          "price": "22,650원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10475262400.webp",
+          "mallName": "지마켓",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": true,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 8
+          },
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "137.72",
+            "36438447"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-23T02:56:00.000Z"
+        },
+        {
+          "id": "36448276",
+          "title": "파래 도시락김 4g 32봉",
+          "mallId": 15,
+          "url": "https://bbs.ruliweb.com/market/board/1020/read/108283",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,710원",
+          "providerId": 4,
+          "categoryId": 2,
+          "category": "음식",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/108283.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "루리웹"
+          },
+          "searchAfter": [
+            "119.47",
+            "36448276"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-23T06:38:38.000Z"
+        }
+      ]
+    }
+  }
+}

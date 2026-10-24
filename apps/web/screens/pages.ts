@@ -13,6 +13,8 @@ export type ScreenPage = {
 
 export const PRODUCT_ID = '36089133';
 export const KEYWORD = '세제';
+export const MODEL_SLUG = 'lg생활건강-홈스타-락스와-세제-후로랄';
+export const MODEL_SLUG_ACTIVE = '삼성전자-갤럭시-버즈4-프로-sm-r640';
 
 export const PAGES: ScreenPage[] = [
   { name: 'home', path: '/', states: true, desktop: true },
@@ -33,6 +35,13 @@ export const PAGES: ScreenPage[] = [
   { name: 'trending-ranking', path: '/trending/ranking', states: true, desktop: true },
   { name: 'trending-live', path: '/trending/live', desktop: true },
   { name: 'deals', path: '/deals', states: true, desktop: true },
+  // 모델 페이지 — 진행 딜 없음(허브 세제의 홈스타 줄)·진행 딜이 기록상 최저(허브 갤럭시의 버즈 줄) 두 상태의 답 카드·같은 줄 칩.
+  { name: 'deal-model', path: `/deals/${encodeURIComponent(MODEL_SLUG)}`, desktop: true },
+  {
+    name: 'deal-model-active',
+    path: `/deals/${encodeURIComponent(MODEL_SLUG_ACTIVE)}`,
+    desktop: true,
+  },
   { name: 'community', path: '/community', states: true, desktop: true },
   { name: 'themes', path: '/themes', desktop: true },
   { name: 'help', path: '/help', desktop: true },

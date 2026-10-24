@@ -211,7 +211,7 @@
               "deal": {
                 "id": 36089428,
                 "title": "AMD Ryzen 7 7800X3D CPU 직구",
-                "displayTitle": "AMD Ryzen 7 7800X3D CPU 직구 302,084원",
+                "displayTitle": "AMD Ryzen 7 7800X3D CPU 직구",
                 "parsedPrice": 302084,
                 "price": "￦ 302,084 (KRW)",
                 "priceCurrency": "KRW",
@@ -227,7 +227,7 @@
                 {
                   "id": 36089428,
                   "title": "AMD Ryzen 7 7800X3D CPU 직구",
-                  "displayTitle": "AMD Ryzen 7 7800X3D CPU 직구 302,084원",
+                  "displayTitle": "AMD Ryzen 7 7800X3D CPU 직구",
                   "parsedPrice": 302084,
                   "postedAt": "2026-10-19T23:45:20.000Z",
                   "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993895.webp",
@@ -252,7 +252,7 @@
           "slug": "amd-라이젠7-5세대-7800x3d-라파엘",
           "modelName": "라이젠7-5세대 7800X3D (라파엘)",
           "brand": "AMD",
-          "dealCount": 43
+          "dealCount": 44
         }
       }
     }

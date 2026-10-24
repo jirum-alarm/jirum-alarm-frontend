@@ -1,0 +1,303 @@
+{
+  "variables": {
+    "limit": 12,
+    "keyword": "만원이하",
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "searchAfter": "1792808293000"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36550064",
+          "title": "풀무원자연건면 로스팅 꽃게탕면 4개입 3,010원",
+          "mallId": 48,
+          "url": "https://eomisae.co.kr/rt/207576251",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,010원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207576251.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792808269000"
+          ],
+          "postedAt": "2026-10-24T02:17:49.000Z"
+        },
+        {
+          "id": "36549991",
+          "title": "선더즈매터 선크림 2개 9,500원",
+          "mallId": 333,
+          "url": "https://eomisae.co.kr/rt/207574089",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,500원",
+          "providerId": 11,
+          "categoryId": 3,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207574089.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792807718000"
+          ],
+          "postedAt": "2026-10-24T02:08:38.000Z"
+        },
+        {
+          "id": "36550005",
+          "title": "삼립 돌아온 포켓몬빵 (띠부실 포함) 외 5종",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10478638298",
+          "isHot": null,
+          "isEnd": false,
+          "price": "920원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478638298.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792807380000"
+          ],
+          "postedAt": "2026-10-24T02:03:00.000Z"
+        },
+        {
+          "id": "36549929",
+          "title": "오라덴스 퍼펙트케어 치약 5개 2000원",
+          "mallId": 1,
+          "url": "https://eomisae.co.kr/rt/207573190",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,000원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207573190.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792807277000"
+          ],
+          "postedAt": "2026-10-24T02:01:17.000Z"
+        },
+        {
+          "id": "36549919",
+          "title": "롱누들 밀떡볶이 300g+소스60g 3세트",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742691",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742691.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792807260000"
+          ],
+          "postedAt": "2026-10-24T02:01:00.000Z"
+        },
+        {
+          "id": "36549913",
+          "title": "이롬 국산콩 고단백 플레인 체험팩 190ml 6팩",
+          "mallId": 1,
+          "url": "https://www.fmkorea.com/10478622696",
+          "isHot": null,
+          "isEnd": false,
+          "price": "3,000원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478622696.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792806840000"
+          ],
+          "postedAt": "2026-10-24T01:54:00.000Z"
+        },
+        {
+          "id": "36549703",
+          "title": "이롬 국산콩 99% 고칼슘두유 190ml 16팩",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742686",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742686.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792806540000"
+          ],
+          "postedAt": "2026-10-24T01:49:00.000Z"
+        },
+        {
+          "id": "36549374",
+          "title": "아망떼 물티슈 70평량 70매 10팩 9,990원",
+          "mallId": 8,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742680",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,990원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742680.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792804920000"
+          ],
+          "postedAt": "2026-10-24T01:22:00.000Z"
+        },
+        {
+          "id": "36549370",
+          "title": "탄씨엔쯔 탄스트라이더 알루미늄 합금 아웃도어 접이식 캠핑 테이블 M사이즈 8900원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962955?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,900원",
+          "providerId": 18,
+          "categoryId": 7,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962955.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792804808000"
+          ],
+          "postedAt": "2026-10-24T01:20:08.000Z"
+        },
+        {
+          "id": "36549372",
+          "title": "섬백리향 향수 50ml 8,420원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742678",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,420원",
+          "providerId": 1,
+          "categoryId": 3,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742678.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792804800000"
+          ],
+          "postedAt": "2026-10-24T01:20:00.000Z"
+        },
+        {
+          "id": "36549368",
+          "title": "우지 라면 삼양 1963 4입 외 100원",
+          "mallId": 28,
+          "url": "https://www.dogdrip.net/731254149",
+          "isHot": false,
+          "isEnd": false,
+          "price": "100원",
+          "providerId": 108,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/731254149.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792804690000"
+          ],
+          "postedAt": "2026-10-24T01:18:10.000Z"
+        },
+        {
+          "id": "36549310",
+          "title": "네츄럴라이프 루테인/오메가3/유산균/마그네슘/코큐텐/그린아세로라 모음전",
+          "mallId": 1,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742677",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,000원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742677.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792804380000"
+          ],
+          "postedAt": "2026-10-24T01:13:00.000Z"
+        }
+      ]
+    }
+  }
+}

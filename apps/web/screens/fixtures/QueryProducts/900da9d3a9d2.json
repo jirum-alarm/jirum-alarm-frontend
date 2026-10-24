@@ -8,17 +8,98 @@
     "data": {
       "products": [
         {
-          "id": "36164863",
-          "title": "타이글 베이킹소다 대용량 액체 세탁세제 2.5L 코튼향 외 1종",
+          "id": "36531234",
+          "title": "유니레버 썬 식기세척기용 타블렛 세제 레몬 50개입 500g 2개",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962751?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "12,740원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962751.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "20"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:06:16.000Z"
+        },
+        {
+          "id": "36512776",
+          "title": "스파크 스마트 클린 분말세제 리필 9.5kg 2개",
+          "mallId": 48,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9525988",
+          "isHot": false,
+          "isEnd": false,
+          "price": "18,550원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9525988.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "20"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T18:08:00.000Z"
+        },
+        {
+          "id": "36510129",
+          "title": "녹차 뽀드득 어드밴스 주방세제 500g 6개 10,760원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962669?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,760원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962669.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "20"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T15:47:07.000Z"
+        },
+        {
+          "id": "36508393",
+          "title": "3+1 타이글 베이킹소다 대용량 액체 세탁세제 2.5L 코튼향 외 1종",
           "mallId": 143,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102404",
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102663",
           "isHot": false,
           "isEnd": false,
           "price": null,
           "providerId": 1,
           "categoryId": 2,
           "category": "",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102404.webp",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102663.webp",
           "mallName": "알리",
           "hotDealType": null,
           "isYearLowest": false,
@@ -32,20 +113,20 @@
           "estimatedTotal": 5300,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T14:58:00.000Z"
+          "postedAt": "2026-10-23T14:59:00.000Z"
         },
         {
-          "id": "36156955",
-          "title": "액츠 퍼펙트 베이킹소다 액체세제 3L 4개",
+          "id": "36502763",
+          "title": "세제 주입 회전 주방솔 360도 1개",
           "mallId": 4800,
-          "url": "https://shopping.toss.im/c/2122387039",
+          "url": "https://shopping.toss.im/c/2596716865",
           "isHot": false,
           "isEnd": false,
-          "price": "40,570원",
+          "price": "6,730원",
           "providerId": 21,
           "categoryId": 2,
           "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2122387039.webp",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2596716865.webp",
           "mallName": "토스",
           "hotDealType": null,
           "isYearLowest": false,
@@ -59,20 +140,20 @@
           "estimatedTotal": 5300,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T13:55:42.000Z"
+          "postedAt": "2026-10-23T14:08:21.000Z"
         },
         {
-          "id": "36153899",
-          "title": "피지 모락셀라 액체세제 코튼향 2.1L 1개 18,600원",
+          "id": "36502012",
+          "title": "애경 순샘 레몬 주방세제 1.2L 4개",
           "mallId": 4800,
-          "url": "https://shopping.toss.im/c/1037170389",
+          "url": "https://shopping.toss.im/c/2548229819",
           "isHot": false,
           "isEnd": false,
-          "price": "18,600원",
+          "price": "11,990원",
           "providerId": 21,
           "categoryId": 2,
           "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1037170389.webp",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2548229819.webp",
           "mallName": "토스",
           "hotDealType": null,
           "isYearLowest": false,
@@ -86,20 +167,20 @@
           "estimatedTotal": 5300,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T13:55:43.000Z"
+          "postedAt": "2026-10-23T13:55:36.000Z"
         },
         {
-          "id": "36148966",
-          "title": "LG생활건강 퐁퐁 친환경 주방세제 리필형 코코넛 1.2L 2개",
+          "id": "36501933",
+          "title": "애경 울샴푸 중성세탁세제 4.5L",
           "mallId": 4800,
-          "url": "https://shopping.toss.im/c/170790913",
+          "url": "https://shopping.toss.im/c/2543978575",
           "isHot": false,
           "isEnd": false,
-          "price": "8,900원",
+          "price": "13,590원",
           "providerId": 21,
           "categoryId": 2,
           "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/170790913.webp",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2543978575.webp",
           "mallName": "토스",
           "hotDealType": null,
           "isYearLowest": false,
@@ -113,20 +194,20 @@
           "estimatedTotal": 5300,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T14:18:36.000Z"
+          "postedAt": "2026-10-23T13:56:30.000Z"
         },
         {
-          "id": "36148936",
-          "title": "자연퐁 솔잎 주방세제 리필 1.4L 1개 6,890원",
+          "id": "36488903",
+          "title": "애경 스파크 오리지널 분말세제 리필 3kg",
           "mallId": 4800,
-          "url": "https://shopping.toss.im/c/168957479",
+          "url": "https://shopping.toss.im/c/177963989",
           "isHot": false,
           "isEnd": false,
-          "price": "6,890원",
+          "price": "7,270원",
           "providerId": 21,
           "categoryId": 2,
           "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/168957479.webp",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/177963989.webp",
           "mallName": "토스",
           "hotDealType": null,
           "isYearLowest": false,
@@ -140,20 +221,20 @@
           "estimatedTotal": 5300,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T13:56:48.000Z"
+          "postedAt": "2026-10-23T14:31:48.000Z"
         },
         {
-          "id": "36145849",
-          "title": "맑은나라 주거용 세정제 락스 세제 청소대장 13L",
+          "id": "36488669",
+          "title": "닥터케이콩 베이킹소다 주방세제 1kg",
           "mallId": 4800,
-          "url": "https://shopping.toss.im/c/96140281",
+          "url": "https://shopping.toss.im/c/172227209",
           "isHot": false,
           "isEnd": false,
-          "price": "12,900원",
+          "price": "3,990원",
           "providerId": 21,
           "categoryId": 2,
           "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/96140281.webp",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/172227209.webp",
           "mallName": "토스",
           "hotDealType": null,
           "isYearLowest": false,
@@ -167,26 +248,26 @@
           "estimatedTotal": 5300,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T14:18:44.000Z"
+          "postedAt": "2026-10-23T14:31:50.000Z"
         },
         {
-          "id": "36141270",
-          "title": "마이비 고농축 캡슐세제 30개입 4팩",
-          "mallId": 1,
-          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14955584?menuid=2&referrerAllArticles=false",
+          "id": "36486213",
+          "title": "베르블랑 고농축 천연 아기 세탁 세제 화이트향 1L 1+1",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/137397427",
           "isHot": false,
           "isEnd": false,
-          "price": "22,700원",
-          "providerId": 18,
+          "price": "22,900원",
+          "providerId": 21,
           "categoryId": 2,
           "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14955584.webp",
-          "mallName": "네이버",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/137397427.webp",
+          "mallName": "토스",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
           "provider": {
-            "nameKr": "맘이베베"
+            "nameKr": "토스쇼핑"
           },
           "searchAfter": [
             "20"
@@ -194,107 +275,26 @@
           "estimatedTotal": 5300,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T13:49:57.000Z"
+          "postedAt": "2026-10-23T14:11:16.000Z"
         },
         {
-          "id": "36140810",
-          "title": "참그린 구연산 뽀드득 주방세제 레몬향 용기 1kg 4개 15,780원",
-          "mallId": 15,
-          "url": "https://etoland.co.kr/b/hotdeal/article/9517646",
+          "id": "36484442",
+          "title": "LG생활건강 피지 파워업 녹는 시트 듀얼 에이 세탁세제 드럼 일반 겸용 120매 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/98425637",
           "isHot": false,
           "isEnd": false,
-          "price": "15,780원",
-          "providerId": 107,
-          "categoryId": 2,
-          "category": "",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9517646.webp",
-          "mallName": "지마켓",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "이토랜드"
-          },
-          "searchAfter": [
-            "20"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T13:01:00.000Z"
-        },
-        {
-          "id": "36133332",
-          "title": "슈퍼비 캡슐 세제 100개입 8,900원",
-          "mallId": 1,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741734",
-          "isHot": false,
-          "isEnd": false,
-          "price": "8,900원",
-          "providerId": 1,
-          "categoryId": 2,
-          "category": "기타",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741734.webp",
-          "mallName": "네이버",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "20"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T11:42:00.000Z"
-        },
-        {
-          "id": "36133331",
-          "title": "참그린 구연산 주방세제 레몬향 용기 1kg 4개 13,380원",
-          "mallId": 15,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741733",
-          "isHot": false,
-          "isEnd": false,
-          "price": "13,380원",
-          "providerId": 1,
-          "categoryId": 2,
-          "category": "기타",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741733.webp",
-          "mallName": "지마켓",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "20"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T11:32:00.000Z"
-        },
-        {
-          "id": "36116591",
-          "title": "네이쳐러브메레 아기 세탁세제 1300ml 8팩 21,300원",
-          "mallId": null,
-          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14955169?menuid=2&referrerAllArticles=false",
-          "isHot": false,
-          "isEnd": false,
-          "price": "21,300원",
-          "providerId": 18,
+          "price": "36,900원",
+          "providerId": 21,
           "categoryId": 2,
           "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14955169.webp",
-          "mallName": "자사몰",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/98425637.webp",
+          "mallName": "토스",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
           "provider": {
-            "nameKr": "맘이베베"
+            "nameKr": "토스쇼핑"
           },
           "searchAfter": [
             "20"
@@ -302,26 +302,53 @@
           "estimatedTotal": 5300,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T10:00:39.000Z"
+          "postedAt": "2026-10-23T14:31:48.000Z"
         },
         {
-          "id": "36114106",
-          "title": "액츠 세탁세제 퍼펙트 실내건조(일반/드럼겸용) 3L 용기 x 1개+2.2L 리필 x 1개",
+          "id": "36482649",
+          "title": "대용량 세탁세제 10kg",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/55866491",
+          "isHot": false,
+          "isEnd": false,
+          "price": "12,500원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/55866491.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "20"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T14:31:48.000Z"
+        },
+        {
+          "id": "36461107",
+          "title": "비트제로 울트라콤팩트 캡슐세제 40캡슐 2팩 19,860원",
           "mallId": 8,
-          "url": "https://www.fmkorea.com/10465907746",
-          "isHot": null,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742614",
+          "isHot": false,
           "isEnd": false,
-          "price": "14,900원",
-          "providerId": 7,
+          "price": "19,860원",
+          "providerId": 1,
           "categoryId": 2,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465907746.webp",
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742614.webp",
           "mallName": "롯데온",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
           "provider": {
-            "nameKr": "에펨코리아"
+            "nameKr": "뽐뿌"
           },
           "searchAfter": [
             "20"
@@ -329,21 +356,21 @@
           "estimatedTotal": 5300,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T07:45:00.000Z"
+          "postedAt": "2026-10-23T11:51:00.000Z"
         },
         {
-          "id": "36103146",
-          "title": "슈퍼딥큐 캡슐세제 42개입 2개 오션브리즈 3,900원",
-          "mallId": 1,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741575",
+          "id": "36457031",
+          "title": "유한양행 해피홈 파워캡슐 세제 30개입 7,500원",
+          "mallId": 241,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742536",
           "isHot": false,
           "isEnd": false,
-          "price": "3,900원",
+          "price": "7,500원",
           "providerId": 1,
           "categoryId": 2,
           "category": "기타",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741575.webp",
-          "mallName": "네이버",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742536.webp",
+          "mallName": "옥션",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
@@ -356,26 +383,26 @@
           "estimatedTotal": 5300,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T04:31:00.000Z"
+          "postedAt": "2026-10-23T07:07:00.000Z"
         },
         {
-          "id": "36102105",
-          "title": "맘스럽 워싱소다 버킷 5kg 탄산소다 100% 프리미엄 세탁세제 1등급품질 초강력 세탁보조제 100% 탈취인증 찌든때 박살 전문세탁소용",
-          "mallId": 48,
-          "url": "https://www.coupang.com/vp/products/9700797458?itemId=29019008394&vendorItemId=92424463296",
+          "id": "36439624",
+          "title": "피지 모락셀라 빨래쉰내 세탁세제 일반드럼 겸용 리필 2.3L 화이트머스크 2개",
+          "mallId": 1,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9524282",
           "isHot": false,
           "isEnd": false,
-          "price": "9,000원",
-          "providerId": 109,
+          "price": "28,900원",
+          "providerId": 107,
           "categoryId": 2,
-          "category": "생활용품",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/9700797458.webp",
-          "mallName": "쿠팡",
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9524282.webp",
+          "mallName": "네이버",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
           "provider": {
-            "nameKr": "쿠팡 골드박스"
+            "nameKr": "이토랜드"
           },
           "searchAfter": [
             "20"
@@ -383,26 +410,26 @@
           "estimatedTotal": 5300,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T03:10:10.000Z"
+          "postedAt": "2026-10-23T04:45:00.000Z"
         },
         {
-          "id": "36099742",
-          "title": "딥큐 3in1 고농축 캡슐세제 오션브리즈 200개 X 2세트 26,230원",
+          "id": "36439614",
+          "title": "비트 딥클린파워 액체세탁세제 일반/드럼 겸용 용기 4L 3개 21,760원",
           "mallId": 15,
-          "url": "https://www.dealbada.com/bbs/board.php?bo_table=deal_domestic&wr_id=572208",
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742500",
           "isHot": false,
           "isEnd": false,
-          "price": "26,230원",
-          "providerId": 104,
+          "price": "21,760원",
+          "providerId": 1,
           "categoryId": 2,
-          "category": "",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/dealbada/572208.webp",
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742500.webp",
           "mallName": "지마켓",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
           "provider": {
-            "nameKr": "딜바다"
+            "nameKr": "뽐뿌"
           },
           "searchAfter": [
             "20"
@@ -410,134 +437,26 @@
           "estimatedTotal": 5300,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T00:58:48.000Z"
+          "postedAt": "2026-10-23T04:44:00.000Z"
         },
         {
-          "id": "36099122",
-          "title": "퍼실 디스크 컬러 세탁세제 26개입",
-          "mallId": 48,
-          "url": "https://www.fmkorea.com/10464807915",
-          "isHot": null,
-          "isEnd": false,
-          "price": "10,150원",
-          "providerId": 7,
-          "categoryId": 2,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10464807915.webp",
-          "mallName": "쿠팡",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "에펨코리아"
-          },
-          "searchAfter": [
-            "20"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T00:23:00.000Z"
-        },
-        {
-          "id": "36088470",
-          "title": "맘스럽 울트라 퍼퓸 캡슐세제 16g x 100개입",
-          "mallId": 48,
-          "url": "https://www.coupang.com/vp/products/7826482313?itemId=28741968147&vendorItemId=88412702713",
+          "id": "36436955",
+          "title": "피지 모락셀라 빨래쉰내 세탁세제 일반드럼 겸용 코튼향 용기 2.1L + 리필 2.3L",
+          "mallId": 1,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14961071?menuid=2&referrerAllArticles=false",
           "isHot": false,
           "isEnd": false,
-          "price": "9,660원",
-          "providerId": 109,
-          "categoryId": 2,
-          "category": "생활용품",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/7826482313.webp",
-          "mallName": "쿠팡",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "쿠팡 골드박스"
-          },
-          "searchAfter": [
-            "20"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-19T22:10:08.000Z"
-        },
-        {
-          "id": "36073928",
-          "title": "프로코 실내건조 7종효소 라벤더 세탁세제 2.5L 4개",
-          "mallId": 4800,
-          "url": "https://etoland.co.kr/b/hotdeal/article/9515573",
-          "isHot": false,
-          "isEnd": false,
-          "price": "8,600원",
-          "providerId": 107,
-          "categoryId": 2,
-          "category": "",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9515573.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "이토랜드"
-          },
-          "searchAfter": [
-            "20"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-19T15:19:00.000Z"
-        },
-        {
-          "id": "36073892",
-          "title": "리퀴드 주방세제 레몬향 4L 2개",
-          "mallId": 4800,
-          "url": "https://etoland.co.kr/b/hotdeal/article/9515504",
-          "isHot": false,
-          "isEnd": false,
-          "price": "6,890원",
-          "providerId": 107,
-          "categoryId": 2,
-          "category": "",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9515504.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "이토랜드"
-          },
-          "searchAfter": [
-            "20"
-          ],
-          "estimatedTotal": 5300,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-19T15:14:00.000Z"
-        },
-        {
-          "id": "36072419",
-          "title": "네이쳐러브메레 울트라 젤 아기세제+아기유연제 1500ml 4팩+4팩 8팩",
-          "mallId": 4800,
-          "url": "https://shopping.toss.im/c/2684074813",
-          "isHot": false,
-          "isEnd": false,
-          "price": "16,500원",
-          "providerId": 21,
+          "price": null,
+          "providerId": 18,
           "categoryId": 2,
           "category": null,
-          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2684074813.webp",
-          "mallName": "토스",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14961071.webp",
+          "mallName": "네이버",
           "hotDealType": null,
           "isYearLowest": false,
           "priceSaving": null,
           "provider": {
-            "nameKr": "토스쇼핑"
+            "nameKr": "맘이베베"
           },
           "searchAfter": [
             "20"
@@ -545,7 +464,88 @@
           "estimatedTotal": 5300,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-19T14:06:43.000Z"
+          "postedAt": "2026-10-23T02:01:30.000Z"
+        },
+        {
+          "id": "36436372",
+          "title": "프로쉬 독일 식기세척기세제 미니 50개입 2개+수세미 1개 증정 27,500원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742446",
+          "isHot": false,
+          "isEnd": false,
+          "price": "27,500원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742446.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "20"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T01:20:00.000Z"
+        },
+        {
+          "id": "36420600",
+          "title": "딥큐 3in1 캡슐세제 200개 X 2세트",
+          "mallId": 15,
+          "url": "https://www.dogdrip.net/731060567",
+          "isHot": false,
+          "isEnd": false,
+          "price": "29,800원",
+          "providerId": 108,
+          "categoryId": 2,
+          "category": "생활용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/731060567.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "searchAfter": [
+            "20"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T00:01:10.000Z"
+        },
+        {
+          "id": "36419391",
+          "title": "네이쳐러브메레 아기세제 4 + 유연제 4개 18,900원",
+          "mallId": 1,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14960702?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "18,900원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14960702.webp",
+          "mallName": "네이버",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "20"
+          ],
+          "estimatedTotal": 5300,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-22T23:31:55.000Z"
         }
       ]
     }

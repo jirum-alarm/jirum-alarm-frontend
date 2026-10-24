@@ -4,14 +4,76 @@
     "orderBy": "ID",
     "orderOption": "DESC",
     "searchAfter": [
-      "16",
+      "19",
       "0",
-      "16"
+      "19"
     ]
   },
   "response": {
     "data": {
       "comments": [
+        {
+          "id": "17",
+          "productId": 16321791,
+          "parentId": null,
+          "title": null,
+          "content": "와 맛있겠다",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "17",
+            "0",
+            "17"
+          ],
+          "isNotice": false,
+          "likeCount": 1,
+          "replyCount": 0,
+          "viewCount": 1504,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "325",
+            "nickname": "유유탱5"
+          },
+          "taggedProduct": {
+            "id": "16321791",
+            "title": "다이롱 케오데오 망고젤리 600g",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14022451.jpg",
+            "price": "7,500원",
+            "postedAt": "2025-11-12T08:05:04.000Z",
+            "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14022451?menuid=2&referrerAllArticles=false"
+          }
+        },
+        {
+          "id": "16",
+          "productId": 15288437,
+          "parentId": null,
+          "title": null,
+          "content": "페이코 할인 어떻게 해요??",
+          "createdAt": "2026-07-27T02:33:17.035Z",
+          "searchAfter": [
+            "16",
+            "0",
+            "16"
+          ],
+          "isNotice": false,
+          "likeCount": 0,
+          "replyCount": 0,
+          "viewCount": 1536,
+          "isMyLike": null,
+          "isMyReported": false,
+          "author": {
+            "id": "815",
+            "nickname": "감사한토마토355"
+          },
+          "taggedProduct": {
+            "id": "15288437",
+            "title": "프로쉬 식기세척기 세제 30개입 x 4개 + 세척기 클리너 + 커팅케이스 + 쇼핑백",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/657472.jpg",
+            "price": "35,120원",
+            "postedAt": "2025-10-19T08:04:29.000Z",
+            "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=657472"
+          }
+        },
         {
           "id": "15",
           "productId": 14990999,
@@ -27,7 +89,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 356,
+          "viewCount": 369,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -58,7 +120,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 296,
+          "viewCount": 312,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -89,7 +151,7 @@
           "isNotice": false,
           "likeCount": 1,
           "replyCount": 0,
-          "viewCount": 207,
+          "viewCount": 220,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -120,7 +182,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 274,
+          "viewCount": 284,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -151,7 +213,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 385,
+          "viewCount": 397,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -182,7 +244,7 @@
           "isNotice": false,
           "likeCount": 1,
           "replyCount": 0,
-          "viewCount": 440,
+          "viewCount": 451,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -213,7 +275,7 @@
           "isNotice": false,
           "likeCount": 2,
           "replyCount": 0,
-          "viewCount": 132,
+          "viewCount": 142,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -244,7 +306,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 213,
+          "viewCount": 224,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -275,7 +337,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 104,
+          "viewCount": 114,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -306,7 +368,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 135,
+          "viewCount": 145,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -337,7 +399,7 @@
           "isNotice": false,
           "likeCount": 1,
           "replyCount": 0,
-          "viewCount": 99,
+          "viewCount": 109,
           "isMyLike": null,
           "isMyReported": false,
           "author": {
@@ -368,7 +430,7 @@
           "isNotice": false,
           "likeCount": 0,
           "replyCount": 0,
-          "viewCount": 174,
+          "viewCount": 184,
           "isMyLike": null,
           "isMyReported": false,
           "author": {

@@ -11,18 +11,108 @@
     "data": {
       "products": [
         {
-          "id": "36133329",
-          "title": "박재서 명인 안동소주 22도 8병, 35도 8병",
-          "mallId": 8,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741731",
+          "id": "36397200",
+          "title": "풀무원 샘물 생수 무라벨 500ml 40개",
+          "mallId": 4800,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742382",
           "isHot": true,
           "isEnd": false,
-          "price": "29,800원",
+          "price": "6,900원",
           "providerId": 1,
           "categoryId": 2,
           "category": "식품/건강",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741731.webp",
-          "mallName": "롯데온",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742382.webp",
+          "mallName": "토스",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 18
+          },
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "257.19",
+            "36397200"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 2,
+          "isRising": null,
+          "postedAt": "2026-10-22T15:02:00.000Z"
+        },
+        {
+          "id": "36531276",
+          "title": "동원샘물 무라벨 500ml 60개",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10478231856",
+          "isHot": null,
+          "isEnd": false,
+          "price": "7,620원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478231856.webp",
+          "mallName": "쿠팡",
+          "hotDealType": "ULTRA_DEAL",
+          "isYearLowest": true,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 31
+          },
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "256.13",
+            "36531276"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:05:00.000Z"
+        },
+        {
+          "id": "36549912",
+          "title": "1998 플랫헤드 이어폰 차이파이",
+          "mallId": 143,
+          "url": "https://www.fmkorea.com/10478511558",
+          "isHot": null,
+          "isEnd": false,
+          "price": "13,850원",
+          "providerId": 7,
+          "categoryId": 9,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478511558.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "217.33",
+            "36549912"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": true,
+          "postedAt": "2026-10-24T01:29:00.000Z"
+        },
+        {
+          "id": "36439563",
+          "title": "홈런볼 4번들 x 4팩 (41g 16개) *2세트 삼성카드 24,560원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742498",
+          "isHot": true,
+          "isEnd": false,
+          "price": "24,560원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742498.webp",
+          "mallName": "지마켓",
           "hotDealType": "HOT_DEAL",
           "isYearLowest": false,
           "priceSaving": null,
@@ -30,57 +120,138 @@
             "nameKr": "뽐뿌"
           },
           "searchAfter": [
-            "306.58",
-            "36133329"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": 1,
-          "isRising": true,
-          "postedAt": "2026-10-20T11:27:00.000Z"
-        },
-        {
-          "id": "36089133",
-          "title": "7800X3D 302,469원",
-          "mallId": 143,
-          "url": "https://arca.live/b/hotdeal/186459565",
-          "isHot": true,
-          "isEnd": false,
-          "price": "302,469원",
-          "providerId": 12,
-          "categoryId": 1,
-          "category": "PC/하드웨어",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186459565.webp",
-          "mallName": "알리",
-          "hotDealType": "SUPER_DEAL",
-          "isYearLowest": false,
-          "priceSaving": {
-            "basis": "USUAL",
-            "percent": 11
-          },
-          "provider": {
-            "nameKr": "아카"
-          },
-          "searchAfter": [
-            "248.95",
-            "36089133"
+            "182.91",
+            "36439563"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": 1,
           "isRising": null,
-          "postedAt": "2026-10-19T23:19:37.000Z"
+          "postedAt": "2026-10-23T04:34:00.000Z"
         },
         {
-          "id": "36123488",
-          "title": "보쉬 유선해머드릴 easyimpact 600",
+          "id": "36345639",
+          "title": "레이즈 스파이시 마라맛 감자칩 170g x 12개 8,811원",
+          "mallId": 143,
+          "url": "https://arca.live/b/hotdeal/186713000",
+          "isHot": true,
+          "isEnd": false,
+          "price": "8,811원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186713000.webp",
+          "mallName": "알리",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "168.87",
+            "36345639"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-22T10:20:36.000Z"
+        },
+        {
+          "id": "36396787",
+          "title": "국내산 세척사과 2kg 1박스 7,900원",
+          "mallId": 4800,
+          "url": "https://eomisae.co.kr/rt/207385798",
+          "isHot": true,
+          "isEnd": false,
+          "price": "7,900원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207385798.webp",
+          "mallName": "토스",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": true,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "157.48",
+            "36396787"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-22T15:01:17.000Z"
+        },
+        {
+          "id": "36457741",
+          "title": "아디다스키즈 삼바OG 운동화 28,090원",
+          "mallId": 241,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742558",
+          "isHot": true,
+          "isEnd": false,
+          "price": "28,090원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "의류/잡화",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742558.webp",
+          "mallName": "옥션",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "155.61",
+            "36457741"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-23T08:07:00.000Z"
+        },
+        {
+          "id": "36459406",
+          "title": "믈레코비타 3.5퍼센트 멸균우유 1L 12개",
           "mallId": 48,
-          "url": "https://www.fmkorea.com/10466495752",
+          "url": "https://arca.live/b/hotdeal/186811836",
+          "isHot": true,
+          "isEnd": false,
+          "price": "18,630원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186811836.webp",
+          "mallName": "쿠팡",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "153.75",
+            "36459406"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": 1,
+          "isRising": null,
+          "postedAt": "2026-10-23T09:21:19.000Z"
+        },
+        {
+          "id": "36529098",
+          "title": "이클립스 캔디",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10478105338",
           "isHot": null,
           "isEnd": false,
-          "price": "22,900원",
+          "price": "990원",
           "providerId": 7,
-          "categoryId": 6,
+          "categoryId": 2,
           "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10466495752.webp",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478105338.webp",
           "mallName": "쿠팡",
           "hotDealType": null,
           "isYearLowest": false,
@@ -89,145 +260,27 @@
             "nameKr": "에펨코리아"
           },
           "searchAfter": [
-            "243.46",
-            "36123488"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": 2,
-          "isRising": null,
-          "postedAt": "2026-10-20T10:32:00.000Z"
-        },
-        {
-          "id": "36089062",
-          "title": "포켓몬스터 모션감지 센서등 무드등",
-          "mallId": 4800,
-          "url": "https://eomisae.co.kr/rt/206921816",
-          "isHot": true,
-          "isEnd": false,
-          "price": null,
-          "providerId": 11,
-          "categoryId": 6,
-          "category": "기타국내",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206921816.webp",
-          "mallName": "토스",
-          "hotDealType": "HOT_DEAL",
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "어미새"
-          },
-          "searchAfter": [
-            "227.61",
-            "36089062"
+            "152.89",
+            "36529098"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": 1,
           "isRising": null,
-          "postedAt": "2026-10-19T22:57:29.000Z"
+          "postedAt": "2026-10-23T19:55:00.000Z"
         },
         {
-          "id": "36123501",
-          "title": "프로젝트엠 순면 반팔 티셔츠 3팩",
-          "mallId": 8,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741715",
+          "id": "36460799",
+          "title": "라이젠 9800X3D + RTX 5070 Ti + 32GB + 1TB 완본체",
+          "mallId": 35,
+          "url": "https://www.fmkorea.com/10476748886",
           "isHot": true,
           "isEnd": false,
-          "price": "6,770원",
-          "providerId": 1,
-          "categoryId": 4,
-          "category": "의류/잡화",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741715.webp",
-          "mallName": "롯데온",
-          "hotDealType": "HOT_DEAL",
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "225.93",
-            "36123501"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": 1,
-          "isRising": null,
-          "postedAt": "2026-10-20T10:41:00.000Z"
-        },
-        {
-          "id": "36103851",
-          "title": "레이저 Viper V3 Pro SE 유무선 게이밍 마우스",
-          "mallId": 48,
-          "url": "https://www.fmkorea.com/10465533857",
-          "isHot": null,
-          "isEnd": false,
-          "price": "109,000원",
+          "price": "3,499,200원",
           "providerId": 7,
           "categoryId": 1,
           "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10465533857.webp",
-          "mallName": "쿠팡",
-          "hotDealType": "SUPER_DEAL",
-          "isYearLowest": false,
-          "priceSaving": {
-            "basis": "USUAL",
-            "percent": 17
-          },
-          "provider": {
-            "nameKr": "에펨코리아"
-          },
-          "searchAfter": [
-            "214",
-            "36103851"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": 1,
-          "isRising": null,
-          "postedAt": "2026-10-20T05:21:00.000Z"
-        },
-        {
-          "id": "36113817",
-          "title": "스타벅스 캡슐커피 대용량 90캡슐+머그컵증정 47,880원",
-          "mallId": 8,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741624",
-          "isHot": true,
-          "isEnd": false,
-          "price": "47,880원",
-          "providerId": 1,
-          "categoryId": 2,
-          "category": "기타",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741624.webp",
-          "mallName": "롯데온",
-          "hotDealType": "HOT_DEAL",
-          "isYearLowest": false,
-          "priceSaving": {
-            "basis": "USUAL",
-            "percent": 7
-          },
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "195.84",
-            "36113817"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": 1,
-          "isRising": null,
-          "postedAt": "2026-10-20T07:17:00.000Z"
-        },
-        {
-          "id": "36123228",
-          "title": "삼양 짜르르 140g 4개 4,270원",
-          "mallId": 48,
-          "url": "https://www.fmkorea.com/10466450968",
-          "isHot": true,
-          "isEnd": false,
-          "price": "4,270원",
-          "providerId": 7,
-          "categoryId": 2,
-          "category": "핫딜",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10466450968.webp",
-          "mallName": "쿠팡",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10476748886.webp",
+          "mallName": "11번가",
           "hotDealType": "HOT_DEAL",
           "isYearLowest": false,
           "priceSaving": null,
@@ -235,75 +288,13 @@
             "nameKr": "에펨코리아"
           },
           "searchAfter": [
-            "194.96",
-            "36123228"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": 1,
-          "isRising": true,
-          "postedAt": "2026-10-20T10:19:00.000Z"
-        },
-        {
-          "id": "36100947",
-          "title": "LG 32GS75Q QHD 울트라기어 게이밍모니터 381,040원",
-          "mallId": 48,
-          "url": "https://arca.live/b/hotdeal/186469796",
-          "isHot": true,
-          "isEnd": false,
-          "price": "381,040원",
-          "providerId": 12,
-          "categoryId": 1,
-          "category": "PC/하드웨어",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186469796.webp",
-          "mallName": "쿠팡",
-          "hotDealType": "SUPER_DEAL",
-          "isYearLowest": false,
-          "priceSaving": {
-            "basis": "DANAWA",
-            "percent": 19
-          },
-          "provider": {
-            "nameKr": "아카"
-          },
-          "searchAfter": [
-            "190.35",
-            "36100947"
+            "151.64",
+            "36460799"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": 1,
           "isRising": null,
-          "postedAt": "2026-10-20T02:38:09.000Z"
-        },
-        {
-          "id": "36103495",
-          "title": "크리넥스 3겹 데코앤소프트 와이드 33MX24롤 2팩 두루마리 화장지 28,900원",
-          "mallId": 15,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741583",
-          "isHot": true,
-          "isEnd": false,
-          "price": "28,900원",
-          "providerId": 1,
-          "categoryId": 2,
-          "category": "기타",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741583.webp",
-          "mallName": "지마켓",
-          "hotDealType": "HOT_DEAL",
-          "isYearLowest": false,
-          "priceSaving": {
-            "basis": "USUAL",
-            "percent": 9
-          },
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "188.89",
-            "36103495"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": 1,
-          "isRising": null,
-          "postedAt": "2026-10-20T05:02:00.000Z"
+          "postedAt": "2026-10-23T11:21:00.000Z"
         }
       ]
     }

@@ -1,0 +1,525 @@
+{
+  "variables": {
+    "slug": "lg생활건강-홈스타-락스와-세제-후로랄"
+  },
+  "response": {
+    "data": {
+      "modelPage": {
+        "slug": "lg생활건강-홈스타-락스와-세제-후로랄",
+        "brand": "LG생활건강",
+        "modelName": "홈스타 락스와 세제 후로랄",
+        "dealCount": 21,
+        "lastDealAt": "2026-10-17T14:15:03.000Z",
+        "metaDescription": "홈스타 락스와 세제 후로랄 핫딜 모음 — 최근 21건. 최저 12,840원~ 지름알림에서 가격 모아보기.",
+        "payload": {
+          "deals": [
+            {
+              "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14593267?menuid=2&referrerAllArticles=false",
+              "isEnd": false,
+              "price": 9970,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml 4개 9,970원",
+              "mallName": "지마켓",
+              "postedAt": "2026-05-17T14:32:53.000Z",
+              "productId": 24410887,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14593267.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 277,
+              "providerId": 18
+            },
+            {
+              "url": "https://www.fmkorea.com/10448156044",
+              "isEnd": false,
+              "price": 12840,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개",
+              "mallName": "지마켓  [포텐 터짐 우대 쇼핑몰, 제휴 링크]",
+              "postedAt": "2026-10-15T00:15:00.000Z",
+              "productId": 35543533,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10448156044.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 357,
+              "providerId": 7
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/185910613?p=1",
+              "isEnd": false,
+              "price": 12840,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개 (12,840원/무료)",
+              "mallName": "지마켓",
+              "postedAt": "2026-10-14T09:03:08.000Z",
+              "productId": 35474729,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/185910613.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 357,
+              "providerId": 12
+            },
+            {
+              "url": "https://etoland.co.kr/b/hotdeal/article/9510292",
+              "isEnd": false,
+              "price": 12930,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개",
+              "mallName": "지마켓",
+              "postedAt": "2026-10-17T14:05:00.000Z",
+              "productId": 35825462,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9510292.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 359,
+              "providerId": 107
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/186204888",
+              "isEnd": false,
+              "price": 12930,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개 (12,930원/무료)",
+              "mallName": "지마켓",
+              "postedAt": "2026-10-17T06:42:57.000Z",
+              "productId": 35802163,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186204888.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 359,
+              "providerId": 12
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/181625179?p=1",
+              "isEnd": true,
+              "price": 12930,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개 (12,930원/무료)",
+              "mallName": "지마켓",
+              "postedAt": "2026-08-31T14:01:10.000Z",
+              "productId": 30114154,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/181625179.png",
+              "unitLabel": "100ml당",
+              "unitPrice": 359,
+              "providerId": 12
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/181292401?p=1",
+              "isEnd": true,
+              "price": 12930,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개 (12,930원/무료)",
+              "mallName": "지마켓",
+              "postedAt": "2026-08-28T06:33:46.000Z",
+              "productId": 29791049,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/181292401.png",
+              "unitLabel": "100ml당",
+              "unitPrice": 359,
+              "providerId": 12
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=728650",
+              "isEnd": false,
+              "price": 12930,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개 (12,930원/무료)",
+              "mallName": "지마켓",
+              "postedAt": "2026-08-22T14:37:00.000Z",
+              "productId": 29173508,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/728650.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 359,
+              "providerId": 1
+            },
+            {
+              "url": "https://zod.kr/deal/8618416",
+              "isEnd": false,
+              "price": 12930,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개 (12,930원 / 무료)",
+              "mallName": "지마켓",
+              "postedAt": "2026-08-22T12:35:29.000Z",
+              "productId": 29172361,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/zod/8618416.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 359,
+              "providerId": 16
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/180711567?p=1",
+              "isEnd": true,
+              "price": 12930,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개 (12,930원/무료)",
+              "mallName": "지마켓",
+              "postedAt": "2026-08-22T12:35:17.000Z",
+              "productId": 29156066,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/180711567.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 359,
+              "providerId": 12
+            },
+            {
+              "url": "https://www.fmkorea.com/10244508356",
+              "isEnd": false,
+              "price": 12930,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개",
+              "mallName": "G마켓  [포텐 터짐 우대 쇼핑몰, 제휴 링크]",
+              "postedAt": "2026-08-22T12:16:00.000Z",
+              "productId": 29155131,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10244508356.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 359,
+              "providerId": 7
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/184949092?p=1",
+              "isEnd": false,
+              "price": 13110,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개 (13,110원/무료)",
+              "mallName": "지마켓",
+              "postedAt": "2026-10-04T11:14:57.000Z",
+              "productId": 34569490,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/184949092.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 364,
+              "providerId": 12
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/179204516?p=1",
+              "isEnd": true,
+              "price": 13120,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개 (13,120원/무료)",
+              "mallName": "지마켓",
+              "postedAt": "2026-08-07T05:12:41.000Z",
+              "productId": 27270083,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/179204516.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 364,
+              "providerId": 12
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/183574846?p=1",
+              "isEnd": true,
+              "price": 13210,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개 (13,210원/무료)",
+              "mallName": "지마켓",
+              "postedAt": "2026-09-20T09:47:14.000Z",
+              "productId": 33089344,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/183574846.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 367,
+              "providerId": 12
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/181057380?p=1",
+              "isEnd": true,
+              "price": 13860,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개 (13,860원/무료)",
+              "mallName": "지마켓",
+              "postedAt": "2026-08-26T01:56:27.000Z",
+              "productId": 29556847,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/181057380.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 385,
+              "providerId": 12
+            },
+            {
+              "url": "https://shopping.toss.im/c/2665122251",
+              "isEnd": false,
+              "price": 14100,
+              "title": "홈스타 락스와세제 스프레이, 후로랄, 900ml, 4개",
+              "mallName": null,
+              "postedAt": "2026-10-05T14:07:43.000Z",
+              "productId": 34681931,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2665122251.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 392,
+              "providerId": 21
+            },
+            {
+              "url": "https://www.fmkorea.com/10197052674",
+              "isEnd": false,
+              "price": 14160,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개",
+              "mallName": "지마켓  [포텐 터짐 우대 쇼핑몰, 제휴 링크]",
+              "postedAt": "2026-08-11T01:45:00.000Z",
+              "productId": 27767174,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10197052674.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 393,
+              "providerId": 7
+            },
+            {
+              "url": "https://www.fmkorea.com/10176358441",
+              "isEnd": false,
+              "price": 14460,
+              "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개",
+              "mallName": "지마켓  [포텐 터짐 우대 쇼핑몰, 제휴 링크]",
+              "postedAt": "2026-08-05T13:05:00.000Z",
+              "productId": 27020328,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10176358441.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 402,
+              "providerId": 7
+            },
+            {
+              "url": "https://shopping.toss.im/c/2668152833",
+              "isEnd": false,
+              "price": 15700,
+              "title": "홈스타 락스와세제 스프레이, 후로랄, 900ml, 4개",
+              "mallName": null,
+              "postedAt": "2026-10-17T14:15:03.000Z",
+              "productId": 35846539,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2668152833.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 436,
+              "providerId": 21
+            },
+            {
+              "url": "https://shopping.toss.im/c/2342107025",
+              "isEnd": false,
+              "price": 15770,
+              "title": "홈스타 락스와세제 스프레이, 후로랄, 900ml, 4개",
+              "mallName": null,
+              "postedAt": "2026-09-26T15:17:32.000Z",
+              "productId": 33816778,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2342107025.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 438,
+              "providerId": 21
+            },
+            {
+              "url": "https://shopping.toss.im/c/2527982597",
+              "isEnd": false,
+              "price": 16800,
+              "title": "홈스타 락스와세제 스프레이, 후로랄, 900ml, 4개",
+              "mallName": null,
+              "postedAt": "2026-09-28T14:20:31.000Z",
+              "productId": 34049937,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2527982597.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 467,
+              "providerId": 21
+            }
+          ],
+          "danawa": {
+            "danawaUrl": "https://prod.danawa.com/info/?pcode=102882392",
+            "mallCount": 12,
+            "danawaPrice": 16640,
+            "danawaProductId": 102882392
+          },
+          "heroImage": "https://cdn.jirum-alarm.com/community/mommybebe/14593267.jpg",
+          "heroPrice": {
+            "label": "900ml 4개",
+            "minPrice": 9970,
+            "unitLabel": "100ml당",
+            "unitPrice": 277
+          },
+          "priceHistory": {
+            "basis": "unit",
+            "points": [
+              {
+                "month": "2026-08-05",
+                "price": 402
+              },
+              {
+                "month": "2026-08-07",
+                "price": 364
+              },
+              {
+                "month": "2026-08-11",
+                "price": 393
+              },
+              {
+                "month": "2026-08-22",
+                "price": 359
+              },
+              {
+                "month": "2026-08-26",
+                "price": 385
+              },
+              {
+                "month": "2026-08-28",
+                "price": 359
+              },
+              {
+                "month": "2026-08-31",
+                "price": 359
+              },
+              {
+                "month": "2026-09-20",
+                "price": 367
+              },
+              {
+                "month": "2026-09-27",
+                "price": 438
+              },
+              {
+                "month": "2026-10-04",
+                "price": 364
+              },
+              {
+                "month": "2026-10-05",
+                "price": 392
+              },
+              {
+                "month": "2026-10-14",
+                "price": 357
+              },
+              {
+                "month": "2026-10-15",
+                "price": 357
+              },
+              {
+                "month": "2026-10-17",
+                "price": 359
+              }
+            ],
+            "currency": "KRW",
+            "unitLabel": "100ml당",
+            "granularity": "day"
+          },
+          "priceSummary": {
+            "q1": 12930,
+            "q3": 13980,
+            "max": 15770,
+            "min": 12840,
+            "median": 12930,
+            "source": "danawa_stats"
+          },
+          "relatedModels": [
+            {
+              "slug": "lg생활건강-페리오-뉴-후레쉬-알파-치약",
+              "dealCount": 21,
+              "modelName": "페리오 뉴 후레쉬 알파 치약"
+            },
+            {
+              "slug": "lg생활건강-홈스타-max-세면대-배수관-클리너",
+              "dealCount": 17,
+              "modelName": "홈스타 MAX 세면대 배수관 클리너"
+            },
+            {
+              "slug": "lg생활건강-온더바디-수퍼보타닉-바디워시-900g-3종세트",
+              "dealCount": 16,
+              "modelName": "온더바디 수퍼보타닉 바디워시 900g 3종세트"
+            },
+            {
+              "slug": "lg생활건강-홈스타-뿌리는-곰팡이싹",
+              "dealCount": 15,
+              "modelName": "홈스타 뿌리는 곰팡이싹"
+            },
+            {
+              "slug": "lg생활건강-홈스타-핑크파워-욕실찌든때-클리너",
+              "dealCount": 14,
+              "modelName": "홈스타 핑크파워 욕실찌든때 클리너"
+            },
+            {
+              "slug": "lg생활건강-피지fiji-모락셀라-냄새제거-세탁세제-겸용-코튼향",
+              "dealCount": 12,
+              "modelName": "피지(FiJi) 모락셀라 냄새제거 세탁세제 겸용 코튼향"
+            }
+          ],
+          "representatives": [
+            {
+              "label": "900ml 4개",
+              "danawaUrl": "https://prod.danawa.com/info/?pcode=102882392",
+              "mallCount": 12,
+              "priceRank": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 277,
+              "activeDeals": 21,
+              "danawaPrice": 16640,
+              "dealMinPrice": 9970
+            }
+          ]
+        },
+        "priceVerdict": {
+          "tone": null,
+          "pendingReason": "NO_ACTIVE",
+          "activeDealCount": 0,
+          "activeProductIds": [],
+          "bundleProductIds": [],
+          "bestProductId": null,
+          "comparePrice": null,
+          "activePrice": null,
+          "bestPackLabel": null,
+          "mallPrice": null,
+          "avgPrice": 375.35714285714283,
+          "savePct": null,
+          "buyLine": 381.3,
+          "historyPoints": 14
+        },
+        "recentDeals": [
+          {
+            "productId": 35846539,
+            "title": "홈스타 락스와세제 스프레이, 후로랄, 900ml, 4개",
+            "price": 15700,
+            "priceCurrency": "KRW",
+            "mallName": null,
+            "postedAt": "2026-10-17T14:15:03.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2668152833.webp",
+            "isEnd": false,
+            "isVerified": true
+          },
+          {
+            "productId": 35825462,
+            "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개",
+            "price": 12930,
+            "priceCurrency": "KRW",
+            "mallName": "지마켓",
+            "postedAt": "2026-10-17T14:05:00.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9510292.webp",
+            "isEnd": false,
+            "isVerified": true
+          },
+          {
+            "productId": 35543533,
+            "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개",
+            "price": 12840,
+            "priceCurrency": "KRW",
+            "mallName": "지마켓  [포텐 터짐 우대 쇼핑몰, 제휴 링크]",
+            "postedAt": "2026-10-15T00:15:00.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10448156044.webp",
+            "isEnd": false,
+            "isVerified": true
+          },
+          {
+            "productId": 34681931,
+            "title": "홈스타 락스와세제 스프레이, 후로랄, 900ml, 4개",
+            "price": 14100,
+            "priceCurrency": "KRW",
+            "mallName": null,
+            "postedAt": "2026-10-05T14:07:43.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2665122251.webp",
+            "isEnd": false,
+            "isVerified": true
+          },
+          {
+            "productId": 34569490,
+            "title": "홈스타 락스와세제 스프레이 후로랄 900ml x 4개 (13,110원/무료)",
+            "price": 13110,
+            "priceCurrency": "KRW",
+            "mallName": "지마켓",
+            "postedAt": "2026-10-04T11:14:57.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/arca/184949092.webp",
+            "isEnd": false,
+            "isVerified": true
+          },
+          {
+            "productId": 34049937,
+            "title": "홈스타 락스와세제 스프레이, 후로랄, 900ml, 4개",
+            "price": 16800,
+            "priceCurrency": "KRW",
+            "mallName": null,
+            "postedAt": "2026-09-28T14:20:31.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2527982597.webp",
+            "isEnd": false,
+            "isVerified": true
+          },
+          {
+            "productId": 33816778,
+            "title": "홈스타 락스와세제 스프레이, 후로랄, 900ml, 4개",
+            "price": 15770,
+            "priceCurrency": "KRW",
+            "mallName": null,
+            "postedAt": "2026-09-26T15:17:32.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2342107025.webp",
+            "isEnd": false,
+            "isVerified": true
+          }
+        ],
+        "keywordHub": {
+          "slug": "세제",
+          "name": "세제",
+          "recentDealCount": 704,
+          "countCapped": false
+        }
+      }
+    }
+  }
+}

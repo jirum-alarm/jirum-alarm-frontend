@@ -1,0 +1,306 @@
+{
+  "variables": {
+    "limit": 12,
+    "keyword": "만원이하",
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "searchAfter": "1792801879000"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36533730",
+          "title": "로메인청상추 1kg 4,990원",
+          "mallId": 8,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742669",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,990원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742669.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792801800000"
+          ],
+          "postedAt": "2026-10-24T00:30:00.000Z"
+        },
+        {
+          "id": "36540481",
+          "title": "숨 시그니처 물티슈 63gsm 70매 10팩",
+          "mallId": 4800,
+          "url": "https://bbasak.com/bbs/board.php?bo_table=bbasak1&wr_id=116708",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,990원",
+          "providerId": 110,
+          "categoryId": 2,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/bbasak/116708.webp",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 17
+          },
+          "provider": {
+            "nameKr": "빠삭"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792801800000"
+          ],
+          "postedAt": "2026-10-24T00:30:00.000Z"
+        },
+        {
+          "id": "36533729",
+          "title": "아이깨끗해 핸드워시 리필 1.8L 증정 9,983원",
+          "mallId": 592,
+          "url": "https://arca.live/b/hotdeal/186870399",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,983원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "생활용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186870399.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792801758000"
+          ],
+          "postedAt": "2026-10-24T00:29:18.000Z"
+        },
+        {
+          "id": "36533566",
+          "title": "맵돼지국밥/순대국밥 1봉 (3,900원)",
+          "mallId": 1186,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742667",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742667.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792801680000"
+          ],
+          "postedAt": "2026-10-24T00:28:00.000Z"
+        },
+        {
+          "id": "36533347",
+          "title": "정지선 티엔미미 밀키트 홍소우육탕면 250g",
+          "mallId": 1,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9526347",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,400원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9526347.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792800480000"
+          ],
+          "postedAt": "2026-10-24T00:08:00.000Z"
+        },
+        {
+          "id": "36533342",
+          "title": "된장찌개 밀키트 2인분 야채 두부포함 간편식 한식 캠핑",
+          "mallId": 1,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9526341",
+          "isHot": false,
+          "isEnd": false,
+          "price": "3,900원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9526341.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792800360000"
+          ],
+          "postedAt": "2026-10-24T00:06:00.000Z"
+        },
+        {
+          "id": "36533285",
+          "title": "피스워커 에센셜 블루 진",
+          "mallId": 15,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9526325",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,720원",
+          "providerId": 107,
+          "categoryId": 4,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9526325.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792799940000"
+          ],
+          "postedAt": "2026-10-23T23:59:00.000Z"
+        },
+        {
+          "id": "36532358",
+          "title": "미에로화이바 210ml 10개 8,820원",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186868974",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,820원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186868974.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792799717000"
+          ],
+          "postedAt": "2026-10-23T23:55:17.000Z"
+        },
+        {
+          "id": "36532339",
+          "title": "질레트 포오미 센서티브 175g 4개 9940원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742662",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,940원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "의류/잡화",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742662.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792799580000"
+          ],
+          "postedAt": "2026-10-23T23:53:00.000Z"
+        },
+        {
+          "id": "36540661",
+          "title": "1996스탠다드 에센셜 미들 삭스 10팩 7,990원",
+          "mallId": 51061,
+          "url": "https://eomisae.co.kr/os/207559684",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,990원",
+          "providerId": 11,
+          "categoryId": 4,
+          "category": "패션국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207559684.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792799426000"
+          ],
+          "postedAt": "2026-10-23T23:50:26.000Z"
+        },
+        {
+          "id": "36532286",
+          "title": "옛날떡볶이 간편식 795g 2인분 8,790원",
+          "mallId": 8,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742660",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,790원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742660.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792799160000"
+          ],
+          "postedAt": "2026-10-23T23:46:00.000Z"
+        },
+        {
+          "id": "36532266",
+          "title": "1+1 스판 밴딩 4900원 사이즈 L가능",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962827?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,900원",
+          "providerId": 18,
+          "categoryId": 4,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962827.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792798825000"
+          ],
+          "postedAt": "2026-10-23T23:40:25.000Z"
+        }
+      ]
+    }
+  }
+}

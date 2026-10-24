@@ -1,0 +1,555 @@
+{
+  "variables": {
+    "limit": 20,
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "mallGroupId": 16,
+    "searchAfter": "1792798825000"
+  },
+  "response": {
+    "data": {
+      "products": [
+        {
+          "id": "36532260",
+          "title": "확장형 대용량 레더 파우치 2,300원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962825?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,300원",
+          "providerId": 18,
+          "categoryId": 4,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962825.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792798717000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T23:38:37.000Z"
+        },
+        {
+          "id": "36532250",
+          "title": "샤워메이트 바디워시 유자 1.2kg 2개",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962822?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,900원",
+          "providerId": 18,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962822.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792798635000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T23:37:15.000Z"
+        },
+        {
+          "id": "36532236",
+          "title": "밴프 세인트 기내용 캐리어 옐로우 20인치 21920원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962816?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "21,920원",
+          "providerId": 18,
+          "categoryId": 4,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962816.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792798427000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T23:33:47.000Z"
+        },
+        {
+          "id": "36532022",
+          "title": "푸디버디 마시는 프로틴 샤인머스캣맛 100ml 10개 7,310원(카드할인)",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962806?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,310원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962806.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792797872000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T23:24:32.000Z"
+        },
+        {
+          "id": "36531922",
+          "title": "닌자 트위스티 하이 스피드 블렌더 듀오 세트",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962788?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 18,
+          "categoryId": 6,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962788.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792796857000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T23:07:37.000Z"
+        },
+        {
+          "id": "36531569",
+          "title": "동원샘물 무라벨 생수 500ml 60개",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962762?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": null,
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962762.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792794778000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:32:58.000Z"
+        },
+        {
+          "id": "36531274",
+          "title": "오아 강력한 바람 소닉플로우 BLDC 모터 1800W 헤어 드라이기 34900원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962755?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "34,900원",
+          "providerId": 18,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962755.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792793480000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:11:20.000Z"
+        },
+        {
+          "id": "36531273",
+          "title": "뉴에라 남녀공용 MLB LA 다저스 베이직 로고 맨투맨 27,280원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962754?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "27,280원",
+          "providerId": 18,
+          "categoryId": 4,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962754.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792793422000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:10:22.000Z"
+        },
+        {
+          "id": "36531244",
+          "title": "오레오 웨하스 스틱 초코",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/877132?itemId=6527649106&vendorItemId=73821782643",
+          "isHot": false,
+          "isEnd": false,
+          "price": "12,680원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/877132.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        },
+        {
+          "id": "36531245",
+          "title": "가그린 어린이용 구강세정제 사과향",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/2783169?itemId=570280463&vendorItemId=3070199324",
+          "isHot": false,
+          "isEnd": true,
+          "price": "10,460원",
+          "providerId": 109,
+          "categoryId": 10,
+          "category": "생활용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/2783169.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        },
+        {
+          "id": "36531246",
+          "title": "코멧 깨끗한 천연펄프 2겹 키친타월 150매",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/169280610?itemId=18366710784&vendorItemId=85510322367",
+          "isHot": false,
+          "isEnd": true,
+          "price": "13,560원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "생활용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/169280610.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        },
+        {
+          "id": "36531247",
+          "title": "곰곰 김자반",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/328377858?itemId=19224263444&vendorItemId=86340937454",
+          "isHot": false,
+          "isEnd": true,
+          "price": "10,980원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/328377858.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        },
+        {
+          "id": "36531248",
+          "title": "쿠팡 베이직 천연펄프 3겹 롤 화장지",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/328677319?itemId=1051091399&vendorItemId=5517808550",
+          "isHot": false,
+          "isEnd": false,
+          "price": "11,890원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "생활용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/328677319.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        },
+        {
+          "id": "36531249",
+          "title": "스카치 투명 테이프 550 리필 18mm x 20m",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/1234247193?itemId=9017195346&vendorItemId=4404081063",
+          "isHot": false,
+          "isEnd": true,
+          "price": "9,710원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "문구/사무용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/1234247193.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        },
+        {
+          "id": "36531250",
+          "title": "케라시스 데빌스 퍼퓸 에디션 샴푸 미드나잇 판타지",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/5307855301?itemId=7680087171&vendorItemId=74970389975",
+          "isHot": false,
+          "isEnd": true,
+          "price": "9,500원",
+          "providerId": 109,
+          "categoryId": 3,
+          "category": "뷰티",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/5307855301.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        },
+        {
+          "id": "36531251",
+          "title": "폰타나 나폴리 뽀모도로 토마토 파스타소스",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/5717449507?itemId=25003839352&vendorItemId=89566640639",
+          "isHot": false,
+          "isEnd": true,
+          "price": "12,500원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/5717449507.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        },
+        {
+          "id": "36531252",
+          "title": "대패킹 진짜 정삼겹 대패삼겹살 (냉동)",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/6305684520?itemId=13061642503&vendorItemId=80324238279",
+          "isHot": false,
+          "isEnd": true,
+          "price": "21,990원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "로켓프레시",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/6305684520.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        },
+        {
+          "id": "36531253",
+          "title": "피지오겔 데일리 모이스쳐 테라피 페이셜 크림",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/6492007298?itemId=12822350&vendorItemId=3019823343",
+          "isHot": false,
+          "isEnd": true,
+          "price": "13,900원",
+          "providerId": 109,
+          "categoryId": 3,
+          "category": "뷰티",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/6492007298.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        },
+        {
+          "id": "36531254",
+          "title": "르샤트라1802 인퓨전 초고농축 실내건조 섬유유연제 피오니부케향 리필",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/6612343792?itemId=18037611250&vendorItemId=85192001677",
+          "isHot": false,
+          "isEnd": true,
+          "price": "15,900원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "생활용품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/6612343792.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        },
+        {
+          "id": "36531255",
+          "title": "다조은 청도반시",
+          "mallId": 48,
+          "url": "https://www.coupang.com/vp/products/6784225161?itemId=15965272847&vendorItemId=83171492587",
+          "isHot": false,
+          "isEnd": true,
+          "price": "11,800원",
+          "providerId": 109,
+          "categoryId": 2,
+          "category": "로켓프레시",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/coupanggoldbox/6784225161.webp",
+          "mallName": "쿠팡",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "쿠팡 골드박스"
+          },
+          "searchAfter": [
+            "1792793409000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-23T22:10:09.000Z"
+        }
+      ]
+    }
+  }
+}

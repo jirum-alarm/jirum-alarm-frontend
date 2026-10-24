@@ -75,8 +75,8 @@
             "캔쿨러",
             "보냉"
           ],
-          "subscriberCount": 6,
-          "weeklyAlertCount": 19
+          "subscriberCount": 7,
+          "weeklyAlertCount": 20
         },
         {
           "id": "58",
@@ -157,8 +157,8 @@
           "excludeKeywords": [
             "슬라이스"
           ],
-          "subscriberCount": 1,
-          "weeklyAlertCount": 20
+          "subscriberCount": 2,
+          "weeklyAlertCount": 23
         },
         {
           "id": "59",
@@ -210,8 +210,8 @@
             "해피포인트"
           ],
           "excludeKeywords": [],
-          "subscriberCount": 1,
-          "weeklyAlertCount": 16
+          "subscriberCount": 4,
+          "weeklyAlertCount": 17
         },
         {
           "id": "60",
@@ -254,8 +254,8 @@
           "excludeKeywords": [
             "부분유료"
           ],
-          "subscriberCount": 0,
-          "weeklyAlertCount": 19
+          "subscriberCount": 1,
+          "weeklyAlertCount": 17
         },
         {
           "id": "61",
@@ -322,7 +322,7 @@
             "코엔자임"
           ],
           "excludeKeywords": [],
-          "subscriberCount": 0,
+          "subscriberCount": 1,
           "weeklyAlertCount": 21
         },
         {
@@ -371,8 +371,8 @@
             "핸드드립"
           ],
           "excludeKeywords": [],
-          "subscriberCount": 0,
-          "weeklyAlertCount": 13
+          "subscriberCount": 1,
+          "weeklyAlertCount": 9
         },
         {
           "id": "63",
@@ -462,8 +462,8 @@
             "냉장고 정리",
             "에어컨필터"
           ],
-          "subscriberCount": 0,
-          "weeklyAlertCount": 18
+          "subscriberCount": 1,
+          "weeklyAlertCount": 17
         },
         {
           "id": "64",
@@ -550,8 +550,8 @@
             "테마파크"
           ],
           "excludeKeywords": [],
-          "subscriberCount": 0,
-          "weeklyAlertCount": 20
+          "subscriberCount": 1,
+          "weeklyAlertCount": 23
         },
         {
           "id": "65",
@@ -616,8 +616,8 @@
             "복합기",
             "프린터"
           ],
-          "subscriberCount": 0,
-          "weeklyAlertCount": 18
+          "subscriberCount": 1,
+          "weeklyAlertCount": 20
         },
         {
           "id": "66",
@@ -728,8 +728,8 @@
             "밀레니즈",
             "타미야"
           ],
-          "subscriberCount": 0,
-          "weeklyAlertCount": 21
+          "subscriberCount": 1,
+          "weeklyAlertCount": 23
         },
         {
           "id": "68",
@@ -789,8 +789,8 @@
             "아이스박스포장",
             "공구특가"
           ],
-          "subscriberCount": 0,
-          "weeklyAlertCount": 15
+          "subscriberCount": 1,
+          "weeklyAlertCount": 13
         },
         {
           "id": "69",
@@ -846,8 +846,8 @@
             "스팀판"
           ],
           "excludeKeywords": [],
-          "subscriberCount": 0,
-          "weeklyAlertCount": 11
+          "subscriberCount": 1,
+          "weeklyAlertCount": 7
         },
         {
           "id": "70",
@@ -901,8 +901,8 @@
             "클리커",
             "클릭커"
           ],
-          "subscriberCount": 1,
-          "weeklyAlertCount": 19
+          "subscriberCount": 2,
+          "weeklyAlertCount": 17
         },
         {
           "id": "71",
@@ -988,7 +988,7 @@
             "버즈릭슨",
             "케이블니트"
           ],
-          "subscriberCount": 0,
+          "subscriberCount": 1,
           "weeklyAlertCount": 21
         },
         {
@@ -1070,8 +1070,8 @@
             "버거",
             "잔스포츠"
           ],
-          "subscriberCount": 0,
-          "weeklyAlertCount": 21
+          "subscriberCount": 1,
+          "weeklyAlertCount": 23
         },
         {
           "id": "73",
@@ -1166,8 +1166,8 @@
           "excludeKeywords": [
             "스윙칩"
           ],
-          "subscriberCount": 1,
-          "weeklyAlertCount": 21
+          "subscriberCount": 2,
+          "weeklyAlertCount": 24
         },
         {
           "id": "74",
@@ -1284,8 +1284,8 @@
             "육회소스",
             "소고기맛"
           ],
-          "subscriberCount": 1,
-          "weeklyAlertCount": 21
+          "subscriberCount": 2,
+          "weeklyAlertCount": 22
         },
         {
           "id": "75",
@@ -1359,8 +1359,8 @@
             "클리너"
           ],
           "excludeKeywords": [],
-          "subscriberCount": 1,
-          "weeklyAlertCount": 21
+          "subscriberCount": 2,
+          "weeklyAlertCount": 23
         }
       ]
     }

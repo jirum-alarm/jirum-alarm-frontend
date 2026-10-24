@@ -4,6 +4,27 @@
     "data": {
       "keywordHubs": [
         {
+          "slug": "오뚜기",
+          "name": "오뚜기",
+          "aliases": [],
+          "excludes": [
+            "노즈워크",
+            "주걱"
+          ],
+          "recentDealCount": 732,
+          "activeDealCount": 720,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T17:29:00.000Z",
+          "activeDays": 30,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 67
+            }
+          ],
+          "subscriberCount": 1
+        },
+        {
           "slug": "세제",
           "name": "세제",
           "aliases": [],
@@ -19,18 +40,18 @@
             "보관함",
             "정리대"
           ],
-          "recentDealCount": 640,
-          "activeDealCount": 610,
+          "recentDealCount": 704,
+          "activeDealCount": 666,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T11:42:00.000Z",
-          "activeDays": 27,
+          "lastDealAt": "2026-10-23T22:06:16.000Z",
+          "activeDays": 30,
           "topSources": [
             {
               "name": "토스쇼핑",
               "share": 60
             }
           ],
-          "subscriberCount": 0
+          "subscriberCount": 1
         },
         {
           "slug": "샴푸",
@@ -61,10 +82,10 @@
             "샴푸의자",
             "애견"
           ],
-          "recentDealCount": 560,
-          "activeDealCount": 529,
+          "recentDealCount": 603,
+          "activeDealCount": 570,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T09:06:56.000Z",
+          "lastDealAt": "2026-10-23T22:10:09.000Z",
           "activeDays": 30,
           "topSources": [
             {
@@ -84,22 +105,64 @@
             "워머",
             "홀더"
           ],
-          "recentDealCount": 400,
-          "activeDealCount": 364,
+          "recentDealCount": 392,
+          "activeDealCount": 357,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T12:12:39.000Z",
+          "lastDealAt": "2026-10-23T15:11:00.000Z",
           "activeDays": 30,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 37
+            },
+            {
+              "name": "뽐뿌",
+              "share": 18
+            }
+          ],
+          "subscriberCount": 4
+        },
+        {
+          "slug": "오리온",
+          "name": "오리온",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 392,
+          "activeDealCount": 368,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T18:39:26.000Z",
+          "activeDays": 29,
           "topSources": [
             {
               "name": "토스쇼핑",
               "share": 36
             },
             {
-              "name": "뽐뿌",
-              "share": 19
+              "name": "아카",
+              "share": 15
             }
           ],
-          "subscriberCount": 4
+          "subscriberCount": 1
+        },
+        {
+          "slug": "농심",
+          "name": "농심",
+          "aliases": [],
+          "excludes": [
+            "라이필"
+          ],
+          "recentDealCount": 382,
+          "activeDealCount": 362,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T14:36:35.000Z",
+          "activeDays": 29,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 55
+            }
+          ],
+          "subscriberCount": 2
         },
         {
           "slug": "두유",
@@ -113,18 +176,18 @@
             "도넛",
             "두유기"
           ],
-          "recentDealCount": 342,
-          "activeDealCount": 310,
+          "recentDealCount": 343,
+          "activeDealCount": 308,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T10:32:00.000Z",
-          "activeDays": 24,
+          "lastDealAt": "2026-10-23T18:50:27.000Z",
+          "activeDays": 28,
           "topSources": [
             {
               "name": "토스쇼핑",
-              "share": 55
+              "share": 48
             }
           ],
-          "subscriberCount": 3
+          "subscriberCount": 5
         },
         {
           "slug": "칫솔",
@@ -144,15 +207,15 @@
             "덴탈껌",
             "칫솔케이스"
           ],
-          "recentDealCount": 325,
-          "activeDealCount": 306,
+          "recentDealCount": 339,
+          "activeDealCount": 318,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T12:12:00.000Z",
+          "lastDealAt": "2026-10-23T20:16:51.000Z",
           "activeDays": 30,
           "topSources": [
             {
               "name": "토스쇼핑",
-              "share": 63
+              "share": 64
             }
           ],
           "subscriberCount": 0
@@ -180,11 +243,11 @@
             "세차",
             "에어펌프"
           ],
-          "recentDealCount": 291,
-          "activeDealCount": 270,
+          "recentDealCount": 326,
+          "activeDealCount": 302,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T11:26:00.000Z",
-          "activeDays": 29,
+          "lastDealAt": "2026-10-23T10:57:00.000Z",
+          "activeDays": 28,
           "topSources": [
             {
               "name": "뽐뿌",
@@ -192,10 +255,28 @@
             },
             {
               "name": "토스쇼핑",
-              "share": 34
+              "share": 32
             }
           ],
           "subscriberCount": 3
+        },
+        {
+          "slug": "cj제일제당",
+          "name": "CJ제일제당",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 305,
+          "activeDealCount": 298,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T15:18:00.000Z",
+          "activeDays": 27,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 92
+            }
+          ],
+          "subscriberCount": 0
         },
         {
           "slug": "닭가슴살",
@@ -210,18 +291,18 @@
             "반려",
             "애견"
           ],
-          "recentDealCount": 281,
-          "activeDealCount": 263,
+          "recentDealCount": 299,
+          "activeDealCount": 280,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T10:16:56.000Z",
-          "activeDays": 30,
+          "lastDealAt": "2026-10-23T14:35:14.000Z",
+          "activeDays": 29,
           "topSources": [
             {
               "name": "토스쇼핑",
               "share": 46
             }
           ],
-          "subscriberCount": 4
+          "subscriberCount": 5
         },
         {
           "slug": "보조배터리",
@@ -233,22 +314,22 @@
             "거치대",
             "흡착"
           ],
-          "recentDealCount": 275,
-          "activeDealCount": 263,
+          "recentDealCount": 285,
+          "activeDealCount": 273,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T12:11:00.000Z",
+          "lastDealAt": "2026-10-23T15:16:00.000Z",
           "activeDays": 30,
           "topSources": [
             {
               "name": "뽐뿌",
-              "share": 59
+              "share": 57
             },
             {
               "name": "토스쇼핑",
-              "share": 21
+              "share": 18
             }
           ],
-          "subscriberCount": 3
+          "subscriberCount": 4
         },
         {
           "slug": "프로틴",
@@ -261,18 +342,42 @@
             "헤어",
             "치즈"
           ],
-          "recentDealCount": 266,
-          "activeDealCount": 255,
+          "recentDealCount": 280,
+          "activeDealCount": 267,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T10:16:56.000Z",
-          "activeDays": 28,
+          "lastDealAt": "2026-10-23T23:24:32.000Z",
+          "activeDays": 29,
           "topSources": [
             {
               "name": "토스쇼핑",
-              "share": 63
+              "share": 64
             }
           ],
           "subscriberCount": 5
+        },
+        {
+          "slug": "나이키",
+          "name": "나이키",
+          "aliases": [
+            "NIKE"
+          ],
+          "excludes": [],
+          "recentDealCount": 260,
+          "activeDealCount": 248,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T23:46:00.000Z",
+          "activeDays": 30,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 42
+            },
+            {
+              "name": "어미새",
+              "share": 20
+            }
+          ],
+          "subscriberCount": 1
         },
         {
           "slug": "참치",
@@ -292,122 +397,50 @@
             "묘설렘",
             "애견"
           ],
-          "recentDealCount": 235,
-          "activeDealCount": 233,
+          "recentDealCount": 251,
+          "activeDealCount": 248,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T02:54:18.000Z",
+          "lastDealAt": "2026-10-23T14:34:22.000Z",
           "activeDays": 25,
           "topSources": [
             {
               "name": "토스쇼핑",
-              "share": 83
+              "share": 80
             }
           ],
           "subscriberCount": 5
         },
         {
-          "slug": "사이다",
-          "name": "사이다",
+          "slug": "모니터",
+          "name": "모니터",
           "aliases": [],
           "excludes": [
-            "비니거",
-            "애플사이다",
-            "식초"
+            "모니터암",
+            "받침",
+            "거치",
+            "모니터링",
+            "조명",
+            "모니터스탠드",
+            "피벗스탠드",
+            "라이트바",
+            "베이비",
+            "홈캠",
+            "클리너",
+            "필름"
           ],
-          "recentDealCount": 232,
-          "activeDealCount": 215,
+          "recentDealCount": 250,
+          "activeDealCount": 245,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T08:29:00.000Z",
+          "lastDealAt": "2026-10-23T08:42:07.000Z",
           "activeDays": 29,
           "topSources": [
             {
-              "name": "에펨코리아",
-              "share": 22
+              "name": "쿨엔조이",
+              "share": 33
             },
             {
               "name": "토스쇼핑",
-              "share": 18
-            }
-          ],
-          "subscriberCount": 0
-        },
-        {
-          "slug": "계란",
-          "name": "계란",
-          "aliases": [
-            "달걀",
-            "유정란"
-          ],
-          "excludes": [
-            "팬",
-            "찜기",
-            "보관",
-            "트레이",
-            "정리",
-            "과자",
-            "빵",
-            "계란틀",
-            "거품기",
-            "집게",
-            "기계",
-            "계란맛",
-            "달걀맛",
-            "계란옷",
-            "계란국",
-            "계란찜",
-            "간장",
-            "계란말이",
-            "달걀말이",
-            "계란밥",
-            "수세미",
-            "단백질",
-            "후라이",
-            "삶는",
-            "쿠커",
-            "죽",
-            "도시락",
-            "샐러드",
-            "분리기",
-            "계란판",
-            "김밥"
-          ],
-          "recentDealCount": 223,
-          "activeDealCount": 203,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T11:28:45.000Z",
-          "activeDays": 30,
-          "topSources": [
-            {
-              "name": "토스쇼핑",
-              "share": 41
-            },
-            {
-              "name": "뽐뿌",
-              "share": 21
-            }
-          ],
-          "subscriberCount": 4
-        },
-        {
-          "slug": "나이키",
-          "name": "나이키",
-          "aliases": [
-            "NIKE"
-          ],
-          "excludes": [],
-          "recentDealCount": 223,
-          "activeDealCount": 211,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T09:50:05.000Z",
-          "activeDays": 29,
-          "topSources": [
-            {
-              "name": "토스쇼핑",
-              "share": 42
-            },
-            {
-              "name": "어미새",
-              "share": 17
+              "share": 15
             }
           ],
           "subscriberCount": 1
@@ -423,127 +456,22 @@
             "불판",
             "그릴팬"
           ],
-          "recentDealCount": 216,
-          "activeDealCount": 183,
+          "recentDealCount": 242,
+          "activeDealCount": 208,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T12:00:20.000Z",
+          "lastDealAt": "2026-10-23T22:10:09.000Z",
           "activeDays": 30,
           "topSources": [
             {
-              "name": "뽐뿌",
+              "name": "이토랜드",
               "share": 21
             },
             {
-              "name": "이토랜드",
-              "share": 20
+              "name": "뽐뿌",
+              "share": 21
             }
           ],
           "subscriberCount": 5
-        },
-        {
-          "slug": "이어폰",
-          "name": "이어폰",
-          "aliases": [],
-          "excludes": [
-            "케이스",
-            "이어팁",
-            "젠더",
-            "거치대",
-            "파우치",
-            "이어패드",
-            "앰프",
-            "dac"
-          ],
-          "recentDealCount": 216,
-          "activeDealCount": 184,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T09:03:00.000Z",
-          "activeDays": 30,
-          "topSources": [
-            {
-              "name": "뽐뿌",
-              "share": 28
-            },
-            {
-              "name": "토스쇼핑",
-              "share": 25
-            }
-          ],
-          "subscriberCount": 1
-        },
-        {
-          "slug": "콜라",
-          "name": "콜라",
-          "aliases": [],
-          "excludes": [
-            "콜라겐",
-            "콜라보",
-            "쇼콜라",
-            "콜라비",
-            "리콜라",
-            "루콜라",
-            "콜라주",
-            "콜라이",
-            "앵콜라",
-            "피나콜라",
-            "차콜라",
-            "콜라트리",
-            "캔디",
-            "젤리",
-            "하이츄",
-            "버거",
-            "와퍼",
-            "프라이",
-            "콜라r",
-            "+콜라",
-            "&콜라",
-            "사탕",
-            "주물러",
-            "팝콘",
-            "앵콜"
-          ],
-          "recentDealCount": 206,
-          "activeDealCount": 183,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T09:07:00.000Z",
-          "activeDays": 29,
-          "topSources": [
-            {
-              "name": "에펨코리아",
-              "share": 23
-            },
-            {
-              "name": "아카",
-              "share": 19
-            }
-          ],
-          "subscriberCount": 8
-        },
-        {
-          "slug": "펩시",
-          "name": "펩시",
-          "aliases": [],
-          "excludes": [
-            "선풍기",
-            "시계",
-            "충전기"
-          ],
-          "recentDealCount": 206,
-          "activeDealCount": 186,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T04:29:40.000Z",
-          "activeDays": 29,
-          "topSources": [
-            {
-              "name": "아카",
-              "share": 22
-            },
-            {
-              "name": "에펨코리아",
-              "share": 22
-            }
-          ],
-          "subscriberCount": 9
         },
         {
           "slug": "커피",
@@ -604,11 +532,11 @@
             "지갑",
             "동전"
           ],
-          "recentDealCount": 206,
-          "activeDealCount": 201,
+          "recentDealCount": 241,
+          "activeDealCount": 234,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T12:11:25.000Z",
-          "activeDays": 13,
+          "lastDealAt": "2026-10-23T23:52:00.000Z",
+          "activeDays": 12,
           "topSources": [
             {
               "name": "토스쇼핑",
@@ -620,6 +548,186 @@
             }
           ],
           "subscriberCount": 1
+        },
+        {
+          "slug": "계란",
+          "name": "계란",
+          "aliases": [
+            "달걀",
+            "유정란"
+          ],
+          "excludes": [
+            "팬",
+            "찜기",
+            "보관",
+            "트레이",
+            "정리",
+            "과자",
+            "빵",
+            "계란틀",
+            "거품기",
+            "집게",
+            "기계",
+            "계란맛",
+            "달걀맛",
+            "계란옷",
+            "계란국",
+            "계란찜",
+            "간장",
+            "계란말이",
+            "달걀말이",
+            "계란밥",
+            "수세미",
+            "단백질",
+            "후라이",
+            "삶는",
+            "쿠커",
+            "죽",
+            "도시락",
+            "샐러드",
+            "분리기",
+            "계란판",
+            "김밥"
+          ],
+          "recentDealCount": 241,
+          "activeDealCount": 219,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T15:11:00.000Z",
+          "activeDays": 30,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 39
+            },
+            {
+              "name": "뽐뿌",
+              "share": 20
+            }
+          ],
+          "subscriberCount": 4
+        },
+        {
+          "slug": "사이다",
+          "name": "사이다",
+          "aliases": [],
+          "excludes": [
+            "비니거",
+            "애플사이다",
+            "식초"
+          ],
+          "recentDealCount": 225,
+          "activeDealCount": 216,
+          "countCapped": false,
+          "lastDealAt": "2026-10-24T00:15:00.000Z",
+          "activeDays": 29,
+          "topSources": [
+            {
+              "name": "에펨코리아",
+              "share": 23
+            },
+            {
+              "name": "토스쇼핑",
+              "share": 19
+            }
+          ],
+          "subscriberCount": 0
+        },
+        {
+          "slug": "콜라",
+          "name": "콜라",
+          "aliases": [],
+          "excludes": [
+            "콜라겐",
+            "콜라보",
+            "쇼콜라",
+            "콜라비",
+            "리콜라",
+            "루콜라",
+            "콜라주",
+            "콜라이",
+            "앵콜라",
+            "피나콜라",
+            "차콜라",
+            "콜라트리",
+            "캔디",
+            "젤리",
+            "하이츄",
+            "버거",
+            "와퍼",
+            "프라이",
+            "콜라r",
+            "+콜라",
+            "&콜라",
+            "사탕",
+            "주물러",
+            "팝콘",
+            "앵콜"
+          ],
+          "recentDealCount": 219,
+          "activeDealCount": 198,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T23:53:55.000Z",
+          "activeDays": 29,
+          "topSources": [
+            {
+              "name": "에펨코리아",
+              "share": 23
+            },
+            {
+              "name": "아카",
+              "share": 18
+            }
+          ],
+          "subscriberCount": 9
+        },
+        {
+          "slug": "이어폰",
+          "name": "이어폰",
+          "aliases": [],
+          "excludes": [
+            "케이스",
+            "이어팁",
+            "젠더",
+            "거치대",
+            "파우치",
+            "이어패드",
+            "앰프",
+            "dac"
+          ],
+          "recentDealCount": 216,
+          "activeDealCount": 184,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T13:50:05.000Z",
+          "activeDays": 29,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 25
+            },
+            {
+              "name": "뽐뿌",
+              "share": 25
+            }
+          ],
+          "subscriberCount": 1
+        },
+        {
+          "slug": "크리넥스",
+          "name": "크리넥스",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 212,
+          "activeDealCount": 200,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T07:59:00.000Z",
+          "activeDays": 28,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 58
+            }
+          ],
+          "subscriberCount": 3
         },
         {
           "slug": "면도기",
@@ -641,10 +749,10 @@
             "세정액",
             "면도기커버"
           ],
-          "recentDealCount": 202,
-          "activeDealCount": 195,
+          "recentDealCount": 211,
+          "activeDealCount": 204,
           "countCapped": false,
-          "lastDealAt": "2026-10-19T14:22:37.000Z",
+          "lastDealAt": "2026-10-23T14:30:36.000Z",
           "activeDays": 28,
           "topSources": [
             {
@@ -653,63 +761,10 @@
             },
             {
               "name": "뽐뿌",
-              "share": 18
+              "share": 17
             }
           ],
           "subscriberCount": 1
-        },
-        {
-          "slug": "모니터",
-          "name": "모니터",
-          "aliases": [],
-          "excludes": [
-            "모니터암",
-            "받침",
-            "거치",
-            "모니터링",
-            "조명",
-            "모니터스탠드",
-            "피벗스탠드",
-            "라이트바",
-            "베이비",
-            "홈캠",
-            "클리너",
-            "필름"
-          ],
-          "recentDealCount": 201,
-          "activeDealCount": 195,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T09:11:50.000Z",
-          "activeDays": 28,
-          "topSources": [
-            {
-              "name": "쿨엔조이",
-              "share": 33
-            },
-            {
-              "name": "토스쇼핑",
-              "share": 16
-            }
-          ],
-          "subscriberCount": 1
-        },
-        {
-          "slug": "크리넥스",
-          "name": "크리넥스",
-          "aliases": [],
-          "excludes": [],
-          "recentDealCount": 194,
-          "activeDealCount": 183,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T11:05:13.000Z",
-          "activeDays": 27,
-          "topSources": [
-            {
-              "name": "토스쇼핑",
-              "share": 59
-            }
-          ],
-          "subscriberCount": 3
         },
         {
           "slug": "휴지",
@@ -729,104 +784,22 @@
             "휴지걸이",
             "휴지케이스"
           ],
-          "recentDealCount": 188,
-          "activeDealCount": 172,
+          "recentDealCount": 207,
+          "activeDealCount": 188,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T10:12:00.000Z",
-          "activeDays": 28,
-          "topSources": [
-            {
-              "name": "토스쇼핑",
-              "share": 35
-            },
-            {
-              "name": "뽐뿌",
-              "share": 22
-            }
-          ],
-          "subscriberCount": 6
-        },
-        {
-          "slug": "키보드",
-          "name": "키보드",
-          "aliases": [],
-          "excludes": [
-            "스티커",
-            "키링",
-            "키보드매트",
-            "팜레스트",
-            "키보드커버",
-            "받침",
-            "키스킨"
-          ],
-          "recentDealCount": 179,
-          "activeDealCount": 168,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T10:16:56.000Z",
+          "lastDealAt": "2026-10-23T22:10:09.000Z",
           "activeDays": 29,
           "topSources": [
             {
               "name": "토스쇼핑",
-              "share": 56
-            }
-          ],
-          "subscriberCount": 3
-        },
-        {
-          "slug": "건전지",
-          "name": "건전지",
-          "aliases": [],
-          "excludes": [
-            "건전지형",
-            "건전지식",
-            "건전지타입",
-            "충전기",
-            "증정",
-            "홀더",
-            "양초",
-            "캔들"
-          ],
-          "recentDealCount": 176,
-          "activeDealCount": 173,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T09:27:00.000Z",
-          "activeDays": 28,
-          "topSources": [
+              "share": 32
+            },
             {
-              "name": "토스쇼핑",
-              "share": 81
+              "name": "뽐뿌",
+              "share": 23
             }
           ],
-          "subscriberCount": 3
-        },
-        {
-          "slug": "기저귀",
-          "name": "기저귀",
-          "aliases": [],
-          "excludes": [
-            "갈이대",
-            "봉투",
-            "가방",
-            "강아지",
-            "수컷",
-            "암컷",
-            "반려",
-            "배변",
-            "고양이",
-            "애견"
-          ],
-          "recentDealCount": 171,
-          "activeDealCount": 166,
-          "countCapped": false,
-          "lastDealAt": "2026-10-19T14:06:25.000Z",
-          "activeDays": 26,
-          "topSources": [
-            {
-              "name": "토스쇼핑",
-              "share": 77
-            }
-          ],
-          "subscriberCount": 2
+          "subscriberCount": 6
         },
         {
           "slug": "라면",
@@ -845,33 +818,137 @@
             "증정",
             "부대찌개"
           ],
-          "recentDealCount": 166,
-          "activeDealCount": 156,
+          "recentDealCount": 198,
+          "activeDealCount": 188,
           "countCapped": false,
-          "lastDealAt": "2026-10-19T17:00:00.000Z",
-          "activeDays": 29,
+          "lastDealAt": "2026-10-23T23:56:06.000Z",
+          "activeDays": 30,
           "topSources": [
             {
               "name": "토스쇼핑",
-              "share": 34
-            },
-            {
-              "name": "아카",
-              "share": 15
+              "share": 31
             }
           ],
           "subscriberCount": 2
+        },
+        {
+          "slug": "건전지",
+          "name": "건전지",
+          "aliases": [],
+          "excludes": [
+            "건전지형",
+            "건전지식",
+            "건전지타입",
+            "충전기",
+            "증정",
+            "홀더",
+            "양초",
+            "캔들"
+          ],
+          "recentDealCount": 191,
+          "activeDealCount": 188,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T18:04:00.000Z",
+          "activeDays": 30,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 80
+            }
+          ],
+          "subscriberCount": 3
+        },
+        {
+          "slug": "펩시",
+          "name": "펩시",
+          "aliases": [],
+          "excludes": [
+            "선풍기",
+            "시계",
+            "충전기"
+          ],
+          "recentDealCount": 190,
+          "activeDealCount": 176,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T17:17:48.000Z",
+          "activeDays": 28,
+          "topSources": [
+            {
+              "name": "아카",
+              "share": 22
+            },
+            {
+              "name": "뽐뿌",
+              "share": 21
+            }
+          ],
+          "subscriberCount": 9
+        },
+        {
+          "slug": "기저귀",
+          "name": "기저귀",
+          "aliases": [],
+          "excludes": [
+            "갈이대",
+            "봉투",
+            "가방",
+            "강아지",
+            "수컷",
+            "암컷",
+            "반려",
+            "배변",
+            "고양이",
+            "애견"
+          ],
+          "recentDealCount": 185,
+          "activeDealCount": 179,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T14:31:21.000Z",
+          "activeDays": 27,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 78
+            }
+          ],
+          "subscriberCount": 2
+        },
+        {
+          "slug": "키보드",
+          "name": "키보드",
+          "aliases": [],
+          "excludes": [
+            "스티커",
+            "키링",
+            "키보드매트",
+            "팜레스트",
+            "키보드커버",
+            "받침",
+            "키스킨"
+          ],
+          "recentDealCount": 181,
+          "activeDealCount": 170,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T09:39:19.000Z",
+          "activeDays": 28,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 51
+            }
+          ],
+          "subscriberCount": 3
         },
         {
           "slug": "햇반",
           "name": "햇반",
           "aliases": [],
           "excludes": [],
-          "recentDealCount": 164,
-          "activeDealCount": 137,
+          "recentDealCount": 169,
+          "activeDealCount": 144,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T06:34:16.000Z",
-          "activeDays": 28,
+          "lastDealAt": "2026-10-23T00:51:00.000Z",
+          "activeDays": 27,
           "topSources": [
             {
               "name": "토스쇼핑",
@@ -879,60 +956,6 @@
             }
           ],
           "subscriberCount": 16
-        },
-        {
-          "slug": "신라면",
-          "name": "신라면",
-          "aliases": [],
-          "excludes": [],
-          "recentDealCount": 158,
-          "activeDealCount": 140,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T07:08:00.000Z",
-          "activeDays": 28,
-          "topSources": [
-            {
-              "name": "토스쇼핑",
-              "share": 18
-            },
-            {
-              "name": "에펨코리아",
-              "share": 17
-            }
-          ],
-          "subscriberCount": 0
-        },
-        {
-          "slug": "마우스",
-          "name": "마우스",
-          "aliases": [],
-          "excludes": [
-            "패드",
-            "마우스피스",
-            "워시",
-            "가드",
-            "밴드",
-            "마우스링",
-            "번지",
-            "손목",
-            "스프레이"
-          ],
-          "recentDealCount": 139,
-          "activeDealCount": 131,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T09:00:00.000Z",
-          "activeDays": 29,
-          "topSources": [
-            {
-              "name": "토스쇼핑",
-              "share": 19
-            },
-            {
-              "name": "뽐뿌",
-              "share": 17
-            }
-          ],
-          "subscriberCount": 2
         },
         {
           "slug": "생수",
@@ -950,41 +973,41 @@
             "위생수건",
             "인생수업"
           ],
-          "recentDealCount": 137,
-          "activeDealCount": 121,
+          "recentDealCount": 166,
+          "activeDealCount": 147,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T06:30:00.000Z",
-          "activeDays": 29,
+          "lastDealAt": "2026-10-24T00:13:00.000Z",
+          "activeDays": 30,
           "topSources": [
             {
               "name": "토스쇼핑",
-              "share": 25
+              "share": 23
             },
             {
               "name": "이토랜드",
-              "share": 23
+              "share": 22
             }
           ],
           "subscriberCount": 11
         },
         {
-          "slug": "시나노골드",
-          "name": "시나노골드",
+          "slug": "신라면",
+          "name": "신라면",
           "aliases": [],
           "excludes": [],
-          "recentDealCount": 125,
-          "activeDealCount": 118,
+          "recentDealCount": 163,
+          "activeDealCount": 144,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T12:00:18.000Z",
-          "activeDays": 27,
+          "lastDealAt": "2026-10-23T14:34:01.000Z",
+          "activeDays": 28,
           "topSources": [
             {
               "name": "토스쇼핑",
-              "share": 56
+              "share": 18
             },
             {
-              "name": "뽐뿌",
-              "share": 16
+              "name": "에펨코리아",
+              "share": 18
             }
           ],
           "subscriberCount": 0
@@ -1016,10 +1039,10 @@
             "부가서비스",
             "소파"
           ],
-          "recentDealCount": 124,
-          "activeDealCount": 105,
+          "recentDealCount": 147,
+          "activeDealCount": 130,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T11:40:48.000Z",
+          "lastDealAt": "2026-10-23T10:56:00.000Z",
           "activeDays": 24,
           "topSources": [
             {
@@ -1028,69 +1051,231 @@
             },
             {
               "name": "뽐뿌",
-              "share": 20
+              "share": 16
             }
           ],
-          "subscriberCount": 2
+          "subscriberCount": 1
         },
         {
           "slug": "족발",
           "name": "족발",
           "aliases": [],
           "excludes": [],
-          "recentDealCount": 123,
-          "activeDealCount": 113,
+          "recentDealCount": 143,
+          "activeDealCount": 130,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T12:10:34.000Z",
-          "activeDays": 27,
+          "lastDealAt": "2026-10-23T22:51:15.000Z",
+          "activeDays": 29,
           "topSources": [
             {
               "name": "토스쇼핑",
-              "share": 46
+              "share": 42
             },
             {
               "name": "이토랜드",
-              "share": 24
+              "share": 26
             }
           ],
           "subscriberCount": 4
+        },
+        {
+          "slug": "마우스",
+          "name": "마우스",
+          "aliases": [],
+          "excludes": [
+            "패드",
+            "마우스피스",
+            "워시",
+            "가드",
+            "밴드",
+            "마우스링",
+            "번지",
+            "손목",
+            "스프레이"
+          ],
+          "recentDealCount": 141,
+          "activeDealCount": 132,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T08:25:27.000Z",
+          "activeDays": 28,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 21
+            },
+            {
+              "name": "뽐뿌",
+              "share": 18
+            }
+          ],
+          "subscriberCount": 2
+        },
+        {
+          "slug": "시나노골드",
+          "name": "시나노골드",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 137,
+          "activeDealCount": 129,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T15:00:57.000Z",
+          "activeDays": 29,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 55
+            },
+            {
+              "name": "뽐뿌",
+              "share": 16
+            }
+          ],
+          "subscriberCount": 0
         },
         {
           "slug": "비비고",
           "name": "비비고",
           "aliases": [],
           "excludes": [],
-          "recentDealCount": 119,
-          "activeDealCount": 114,
+          "recentDealCount": 133,
+          "activeDealCount": 127,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T08:28:05.000Z",
-          "activeDays": 24,
+          "lastDealAt": "2026-10-23T14:35:34.000Z",
+          "activeDays": 27,
           "topSources": [
             {
               "name": "토스쇼핑",
-              "share": 45
+              "share": 44
             },
             {
               "name": "맘이베베",
-              "share": 15
+              "share": 16
             }
           ],
           "subscriberCount": 1
+        },
+        {
+          "slug": "깨끗한나라",
+          "name": "깨끗한나라",
+          "aliases": [],
+          "excludes": [
+            "포포몽"
+          ],
+          "recentDealCount": 122,
+          "activeDealCount": 121,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T14:34:00.000Z",
+          "activeDays": 21,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 74
+            }
+          ],
+          "subscriberCount": 0
         },
         {
           "slug": "켈로그",
           "name": "켈로그",
           "aliases": [],
           "excludes": [],
-          "recentDealCount": 107,
+          "recentDealCount": 119,
+          "activeDealCount": 114,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T14:36:37.000Z",
+          "activeDays": 25,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 52
+            }
+          ],
+          "subscriberCount": 0
+        },
+        {
+          "slug": "목우촌",
+          "name": "목우촌",
+          "aliases": [],
+          "excludes": [
+            "펫9단",
+            "멍수무강"
+          ],
+          "recentDealCount": 115,
+          "activeDealCount": 102,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T16:11:00.000Z",
+          "activeDays": 25,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 30
+            },
+            {
+              "name": "뽐뿌",
+              "share": 20
+            }
+          ],
+          "subscriberCount": 1
+        },
+        {
+          "slug": "스팸",
+          "name": "스팸",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 110,
           "activeDealCount": 104,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T04:02:00.000Z",
-          "activeDays": 24,
+          "lastDealAt": "2026-10-22T14:44:04.000Z",
+          "activeDays": 18,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 75
+            }
+          ],
+          "subscriberCount": 2
+        },
+        {
+          "slug": "롯데웰푸드",
+          "name": "롯데웰푸드",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 103,
+          "activeDealCount": 97,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T14:36:36.000Z",
+          "activeDays": 20,
           "topSources": [
             {
               "name": "토스쇼핑",
               "share": 54
+            },
+            {
+              "name": "맘이베베",
+              "share": 16
+            }
+          ],
+          "subscriberCount": 0
+        },
+        {
+          "slug": "팔도",
+          "name": "팔도",
+          "aliases": [],
+          "excludes": [
+            "조선팔도",
+            "팔도식후경",
+            "팔도진미",
+            "친환경팔도"
+          ],
+          "recentDealCount": 102,
+          "activeDealCount": 100,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T23:56:06.000Z",
+          "activeDays": 26,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 74
             }
           ],
           "subscriberCount": 0
@@ -1100,11 +1285,11 @@
           "name": "삼다수",
           "aliases": [],
           "excludes": [],
-          "recentDealCount": 106,
-          "activeDealCount": 91,
+          "recentDealCount": 101,
+          "activeDealCount": 89,
           "countCapped": false,
-          "lastDealAt": "2026-10-19T23:16:00.000Z",
-          "activeDays": 25,
+          "lastDealAt": "2026-10-23T21:44:00.000Z",
+          "activeDays": 26,
           "topSources": [
             {
               "name": "뽐뿌",
@@ -1112,80 +1297,10 @@
             },
             {
               "name": "에펨코리아",
-              "share": 16
-            }
-          ],
-          "subscriberCount": 17
-        },
-        {
-          "slug": "스팸",
-          "name": "스팸",
-          "aliases": [],
-          "excludes": [],
-          "recentDealCount": 104,
-          "activeDealCount": 98,
-          "countCapped": false,
-          "lastDealAt": "2026-10-18T13:45:00.000Z",
-          "activeDays": 16,
-          "topSources": [
-            {
-              "name": "토스쇼핑",
-              "share": 77
-            }
-          ],
-          "subscriberCount": 2
-        },
-        {
-          "slug": "나랑드",
-          "name": "나랑드사이다",
-          "aliases": [
-            "나랑드"
-          ],
-          "excludes": [],
-          "recentDealCount": 99,
-          "activeDealCount": 86,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T08:29:00.000Z",
-          "activeDays": 26,
-          "topSources": [
-            {
-              "name": "에펨코리아",
-              "share": 21
-            },
-            {
-              "name": "토스쇼핑",
               "share": 17
             }
           ],
-          "subscriberCount": 3
-        },
-        {
-          "slug": "ps5",
-          "name": "PS5",
-          "aliases": [
-            "플스5",
-            "플레이스테이션5"
-          ],
-          "excludes": [
-            "sps5",
-            "wps5",
-            "콜라보",
-            "스테이션5만",
-            "ps56",
-            "ps58"
-          ],
-          "recentDealCount": 92,
-          "activeDealCount": 51,
-          "countCapped": false,
-          "lastDealAt": "2026-10-19T07:08:24.000Z",
-          "activeDays": 25,
-          "topSources": [
-            {
-              "name": "루리웹",
-              "share": 72
-            }
-          ],
-          "subscriberCount": 5
+          "subscriberCount": 17
         },
         {
           "slug": "메가커피",
@@ -1198,19 +1313,19 @@
             "증정",
             "면도"
           ],
-          "recentDealCount": 90,
-          "activeDealCount": 80,
+          "recentDealCount": 88,
+          "activeDealCount": 82,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T09:10:18.000Z",
-          "activeDays": 22,
+          "lastDealAt": "2026-10-23T07:38:00.000Z",
+          "activeDays": 21,
           "topSources": [
             {
               "name": "에펨코리아",
-              "share": 24
+              "share": 25
             },
             {
               "name": "뽐뿌",
-              "share": 19
+              "share": 20
             }
           ],
           "subscriberCount": 6
@@ -1234,44 +1349,137 @@
             "시리얼맛",
             "요거트볼"
           ],
-          "recentDealCount": 81,
-          "activeDealCount": 73,
+          "recentDealCount": 82,
+          "activeDealCount": 78,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T08:02:00.000Z",
+          "lastDealAt": "2026-10-23T16:02:08.000Z",
           "activeDays": 26,
           "topSources": [
             {
               "name": "에펨코리아",
-              "share": 21
+              "share": 22
             },
             {
-              "name": "아카",
-              "share": 20
+              "name": "토스쇼핑",
+              "share": 21
             }
           ],
           "subscriberCount": 1
+        },
+        {
+          "slug": "나랑드",
+          "name": "나랑드사이다",
+          "aliases": [
+            "나랑드"
+          ],
+          "excludes": [],
+          "recentDealCount": 82,
+          "activeDealCount": 77,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T15:01:00.000Z",
+          "activeDays": 24,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 22
+            },
+            {
+              "name": "에펨코리아",
+              "share": 21
+            }
+          ],
+          "subscriberCount": 3
+        },
+        {
+          "slug": "ps5",
+          "name": "PS5",
+          "aliases": [
+            "플스5",
+            "플레이스테이션5"
+          ],
+          "excludes": [
+            "sps5",
+            "wps5",
+            "콜라보",
+            "스테이션5만",
+            "ps56",
+            "ps58"
+          ],
+          "recentDealCount": 76,
+          "activeDealCount": 42,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T05:00:00.000Z",
+          "activeDays": 25,
+          "topSources": [
+            {
+              "name": "루리웹",
+              "share": 74
+            }
+          ],
+          "subscriberCount": 5
+        },
+        {
+          "slug": "탄산수",
+          "name": "탄산수",
+          "aliases": [],
+          "excludes": [
+            "샴푸",
+            "제조기"
+          ],
+          "recentDealCount": 75,
+          "activeDealCount": 70,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T12:44:00.000Z",
+          "activeDays": 25,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 44
+            }
+          ],
+          "subscriberCount": 9
         },
         {
           "slug": "맥심",
           "name": "맥심",
           "aliases": [],
           "excludes": [],
-          "recentDealCount": 75,
-          "activeDealCount": 69,
+          "recentDealCount": 73,
+          "activeDealCount": 68,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T03:59:00.000Z",
-          "activeDays": 27,
+          "lastDealAt": "2026-10-23T02:01:00.000Z",
+          "activeDays": 26,
           "topSources": [
             {
               "name": "토스쇼핑",
-              "share": 40
+              "share": 44
             },
             {
               "name": "뽐뿌",
-              "share": 27
+              "share": 25
             }
           ],
           "subscriberCount": 4
+        },
+        {
+          "slug": "하림",
+          "name": "하림",
+          "aliases": [],
+          "excludes": [
+            "하림펫푸드"
+          ],
+          "recentDealCount": 73,
+          "activeDealCount": 70,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T14:35:42.000Z",
+          "activeDays": 23,
+          "topSources": [
+            {
+              "name": "토스쇼핑",
+              "share": 47
+            }
+          ],
+          "subscriberCount": 0
         },
         {
           "slug": "선풍기",
@@ -1284,39 +1492,47 @@
             "브러쉬",
             "청소"
           ],
-          "recentDealCount": 75,
-          "activeDealCount": 72,
+          "recentDealCount": 69,
+          "activeDealCount": 68,
           "countCapped": false,
-          "lastDealAt": "2026-10-19T15:20:00.000Z",
-          "activeDays": 16,
+          "lastDealAt": "2026-10-22T15:28:53.000Z",
+          "activeDays": 14,
           "topSources": [
             {
               "name": "토스쇼핑",
-              "share": 79
+              "share": 84
             }
           ],
           "subscriberCount": 3
         },
         {
-          "slug": "탄산수",
-          "name": "탄산수",
+          "slug": "크록스",
+          "name": "크록스",
           "aliases": [],
           "excludes": [
-            "샴푸",
-            "제조기"
+            "호환",
+            "접착제",
+            "깔창",
+            "지비츠",
+            "파라코드",
+            "크록스슬리퍼"
           ],
-          "recentDealCount": 69,
-          "activeDealCount": 64,
+          "recentDealCount": 65,
+          "activeDealCount": 65,
           "countCapped": false,
-          "lastDealAt": "2026-10-19T21:35:00.000Z",
-          "activeDays": 23,
+          "lastDealAt": "2026-10-23T14:26:28.000Z",
+          "activeDays": 19,
           "topSources": [
             {
               "name": "토스쇼핑",
-              "share": 46
+              "share": 60
+            },
+            {
+              "name": "뽐뿌",
+              "share": 15
             }
           ],
-          "subscriberCount": 9
+          "subscriberCount": 3
         },
         {
           "slug": "냉장고",
@@ -1360,19 +1576,19 @@
             "마그넷",
             "멀티탭"
           ],
-          "recentDealCount": 62,
-          "activeDealCount": 56,
+          "recentDealCount": 59,
+          "activeDealCount": 53,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T11:01:00.000Z",
-          "activeDays": 23,
+          "lastDealAt": "2026-10-23T13:14:00.000Z",
+          "activeDays": 21,
           "topSources": [
             {
               "name": "뽐뿌",
-              "share": 44
+              "share": 46
             },
             {
               "name": "토스쇼핑",
-              "share": 23
+              "share": 29
             }
           ],
           "subscriberCount": 5
@@ -1384,131 +1600,64 @@
             "edifier"
           ],
           "excludes": [],
-          "recentDealCount": 61,
-          "activeDealCount": 58,
+          "recentDealCount": 53,
+          "activeDealCount": 51,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T00:02:21.000Z",
-          "activeDays": 18,
-          "topSources": [
-            {
-              "name": "뽐뿌",
-              "share": 52
-            },
-            {
-              "name": "에펨코리아",
-              "share": 21
-            }
-          ],
-          "subscriberCount": 4
-        },
-        {
-          "slug": "크록스",
-          "name": "크록스",
-          "aliases": [],
-          "excludes": [
-            "호환",
-            "접착제",
-            "깔창",
-            "지비츠",
-            "파라코드",
-            "크록스슬리퍼"
-          ],
-          "recentDealCount": 57,
-          "activeDealCount": 57,
-          "countCapped": false,
-          "lastDealAt": "2026-10-19T14:19:08.000Z",
+          "lastDealAt": "2026-10-22T06:45:29.000Z",
           "activeDays": 17,
           "topSources": [
             {
-              "name": "토스쇼핑",
-              "share": 60
-            },
-            {
               "name": "뽐뿌",
-              "share": 16
-            }
-          ],
-          "subscriberCount": 3
-        },
-        {
-          "slug": "상품권",
-          "name": "상품권",
-          "aliases": [],
-          "excludes": [
-            "증정",
-            "가능",
-            "+상품권",
-            "주는",
-            "봉투",
-            "구매시",
-            "상품권1만",
-            "상품권5천",
-            "gs상품권"
-          ],
-          "recentDealCount": 48,
-          "activeDealCount": 36,
-          "countCapped": false,
-          "lastDealAt": "2026-10-19T23:40:38.000Z",
-          "activeDays": 15,
-          "topSources": [
-            {
-              "name": "아카",
-              "share": 27
+              "share": 49
             },
             {
               "name": "에펨코리아",
-              "share": 19
+              "share": 23
             }
           ],
-          "subscriberCount": 6
-        },
-        {
-          "slug": "스위치2",
-          "name": "스위치2",
-          "aliases": [
-            "스위치 2"
-          ],
-          "excludes": [
-            "멀티탭",
-            "콘센트",
-            "전등",
-            "케이스",
-            "파우치",
-            "호환",
-            "필름",
-            "강화유리",
-            "그립"
-          ],
-          "recentDealCount": 44,
-          "activeDealCount": 29,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T07:59:11.000Z",
-          "activeDays": 21,
-          "topSources": [
-            {
-              "name": "루리웹",
-              "share": 68
-            }
-          ],
-          "subscriberCount": 5
+          "subscriberCount": 4
         },
         {
           "slug": "일리윤",
           "name": "일리윤",
           "aliases": [],
           "excludes": [],
-          "recentDealCount": 43,
-          "activeDealCount": 41,
+          "recentDealCount": 49,
+          "activeDealCount": 45,
           "countCapped": false,
-          "lastDealAt": "2026-10-18T01:04:30.000Z",
-          "activeDays": 19,
+          "lastDealAt": "2026-10-23T22:10:09.000Z",
+          "activeDays": 23,
           "topSources": [
             {
               "name": "토스쇼핑",
-              "share": 67
+              "share": 61
             }
           ],
           "subscriberCount": 2
+        },
+        {
+          "slug": "스파클생수",
+          "name": "스파클 생수",
+          "aliases": [
+            "스파클생수"
+          ],
+          "excludes": [],
+          "recentDealCount": 48,
+          "activeDealCount": 42,
+          "countCapped": false,
+          "lastDealAt": "2026-10-24T00:13:00.000Z",
+          "activeDays": 20,
+          "topSources": [
+            {
+              "name": "이토랜드",
+              "share": 40
+            },
+            {
+              "name": "뽐뿌",
+              "share": 17
+            }
+          ],
+          "subscriberCount": 3
         },
         {
           "slug": "닌텐도",
@@ -1522,19 +1671,19 @@
             "필름",
             "강화유리"
           ],
-          "recentDealCount": 42,
-          "activeDealCount": 35,
+          "recentDealCount": 46,
+          "activeDealCount": 37,
           "countCapped": false,
-          "lastDealAt": "2026-10-20T01:34:00.000Z",
-          "activeDays": 19,
+          "lastDealAt": "2026-10-23T03:49:30.000Z",
+          "activeDays": 18,
           "topSources": [
             {
-              "name": "루리웹",
-              "share": 36
+              "name": "토스쇼핑",
+              "share": 37
             },
             {
-              "name": "토스쇼핑",
-              "share": 33
+              "name": "루리웹",
+              "share": 35
             }
           ],
           "subscriberCount": 6
@@ -1546,11 +1695,11 @@
           "excludes": [
             "빅토리아"
           ],
-          "recentDealCount": 42,
-          "activeDealCount": 39,
+          "recentDealCount": 46,
+          "activeDealCount": 43,
           "countCapped": false,
-          "lastDealAt": "2026-10-19T00:54:15.000Z",
-          "activeDays": 13,
+          "lastDealAt": "2026-10-23T15:41:00.000Z",
+          "activeDays": 15,
           "topSources": [
             {
               "name": "토스쇼핑",
@@ -1558,274 +1707,10 @@
             },
             {
               "name": "에펨코리아",
-              "share": 19
+              "share": 20
             }
           ],
           "subscriberCount": 3
-        },
-        {
-          "slug": "포카리",
-          "name": "포카리스웨트",
-          "aliases": [
-            "포카리"
-          ],
-          "excludes": [],
-          "recentDealCount": 41,
-          "activeDealCount": 40,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T00:39:06.000Z",
-          "activeDays": 13,
-          "topSources": [
-            {
-              "name": "토스쇼핑",
-              "share": 54
-            }
-          ],
-          "subscriberCount": 4
-        },
-        {
-          "slug": "수향미",
-          "name": "수향미",
-          "aliases": [],
-          "excludes": [],
-          "recentDealCount": 40,
-          "activeDealCount": 30,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T01:11:31.000Z",
-          "activeDays": 22,
-          "topSources": [
-            {
-              "name": "맘이베베",
-              "share": 45
-            },
-            {
-              "name": "뽐뿌",
-              "share": 18
-            }
-          ],
-          "subscriberCount": 6
-        },
-        {
-          "slug": "요금제",
-          "name": "요금제",
-          "aliases": [],
-          "excludes": [
-            "제미나이",
-            "폰슐랭"
-          ],
-          "recentDealCount": 38,
-          "activeDealCount": 27,
-          "countCapped": false,
-          "lastDealAt": "2026-10-19T07:38:00.000Z",
-          "activeDays": 21,
-          "topSources": [
-            {
-              "name": "뽐뿌",
-              "share": 29
-            },
-            {
-              "name": "퀘이사존",
-              "share": 16
-            }
-          ],
-          "subscriberCount": 3
-        },
-        {
-          "slug": "rtx5080",
-          "name": "RTX 5080",
-          "aliases": [
-            "5080"
-          ],
-          "excludes": [
-            "완본체",
-            "조립pc",
-            "본체",
-            "게이밍pc",
-            "노트북",
-            "데스크탑",
-            "컴퓨터",
-            "반본체",
-            "감성pc",
-            "32g",
-            "+32",
-            "/32",
-            "1tb",
-            "오멘",
-            "코덱스",
-            "구성",
-            "5080원"
-          ],
-          "recentDealCount": 35,
-          "activeDealCount": 33,
-          "countCapped": false,
-          "lastDealAt": "2026-10-14T07:27:13.000Z",
-          "activeDays": 12,
-          "topSources": [
-            {
-              "name": "퀘이사존",
-              "share": 46
-            },
-            {
-              "name": "아카",
-              "share": 29
-            }
-          ],
-          "subscriberCount": 8
-        },
-        {
-          "slug": "노트북",
-          "name": "노트북",
-          "aliases": [],
-          "excludes": [
-            "거치대",
-            "백팩",
-            "가방",
-            "파우치",
-            "스티커",
-            "스탠드",
-            "받침",
-            "테이블",
-            "선반",
-            "책상",
-            "티니핑",
-            "쿨러",
-            "클립",
-            "노트북용",
-            "케이스",
-            "슬리브",
-            "거치",
-            "부스트캠프",
-            "충전기",
-            "어댑터",
-            "필름",
-            "모니터",
-            "보조배터리",
-            "스피커",
-            "이어폰",
-            "매트",
-            "랜카드",
-            "동글",
-            "라이트"
-          ],
-          "recentDealCount": 33,
-          "activeDealCount": 33,
-          "countCapped": false,
-          "lastDealAt": "2026-10-19T02:32:00.000Z",
-          "activeDays": 19,
-          "topSources": [
-            {
-              "name": "이토랜드",
-              "share": 33
-            },
-            {
-              "name": "뽐뿌",
-              "share": 21
-            }
-          ],
-          "subscriberCount": 8
-        },
-        {
-          "slug": "ssd",
-          "name": "SSD",
-          "aliases": [],
-          "excludes": [
-            "케이스",
-            "인클로저",
-            "미니pc",
-            "조립pc",
-            "게이밍pc",
-            "rtx",
-            "rx9",
-            "라이젠",
-            "7500f",
-            "x3d",
-            "5500gt",
-            "도킹",
-            "ssdarter",
-            "조립PC",
-            "미니PC",
-            "미니 PC",
-            "노트북",
-            "그램"
-          ],
-          "recentDealCount": 33,
-          "activeDealCount": 30,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T02:06:00.000Z",
-          "activeDays": 18,
-          "topSources": [
-            {
-              "name": "토스쇼핑",
-              "share": 27
-            },
-            {
-              "name": "퀘이사존",
-              "share": 24
-            }
-          ],
-          "subscriberCount": 4
-        },
-        {
-          "slug": "기프트카드",
-          "name": "기프트카드",
-          "aliases": [],
-          "excludes": [],
-          "recentDealCount": 31,
-          "activeDealCount": 21,
-          "countCapped": false,
-          "lastDealAt": "2026-10-20T08:20:23.000Z",
-          "activeDays": 14,
-          "topSources": [
-            {
-              "name": "에펨코리아",
-              "share": 23
-            },
-            {
-              "name": "아카",
-              "share": 19
-            }
-          ],
-          "subscriberCount": 4
-        },
-        {
-          "slug": "아이폰",
-          "name": "아이폰",
-          "aliases": [
-            "iphone"
-          ],
-          "excludes": [
-            "케이스",
-            "필름",
-            "강화유리",
-            "거치대",
-            "케이블",
-            "호환",
-            "충전기",
-            "젠더",
-            "이어폰",
-            "보험",
-            "맥세이프",
-            "에어클로",
-            "배터리",
-            "충전",
-            "파우치",
-            "부가서비스",
-            "보조배터리",
-            "아이폰용",
-            "즉시개통"
-          ],
-          "recentDealCount": 29,
-          "activeDealCount": 27,
-          "countCapped": false,
-          "lastDealAt": "2026-10-19T07:38:00.000Z",
-          "activeDays": 10,
-          "topSources": [
-            {
-              "name": "토스쇼핑",
-              "share": 55
-            }
-          ],
-          "subscriberCount": 4
         }
       ]
     }

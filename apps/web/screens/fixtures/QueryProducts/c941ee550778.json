@@ -9,152 +9,17 @@
     "data": {
       "products": [
         {
-          "id": "36166675",
-          "title": "진라면순한맛 40입",
+          "id": "36551506",
+          "title": "숨 시그니처 물티슈 63평량 70매 10팩",
           "mallId": 4800,
-          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994123",
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742707",
           "isHot": false,
           "isEnd": false,
-          "price": "￦ 19,900 (KRW)",
-          "providerId": 5,
-          "categoryId": 2,
-          "category": "생활/식품",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994123.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "퀘이사존"
-          },
-          "searchAfter": [
-            "1792511298000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T15:48:18.000Z"
-        },
-        {
-          "id": "36166674",
-          "title": "스파클생수 2L x 30개",
-          "mallId": 4800,
-          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994122",
-          "isHot": false,
-          "isEnd": false,
-          "price": "￦ 11,810 (KRW)",
-          "providerId": 5,
-          "categoryId": 2,
-          "category": "생활/식품",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994122.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "퀘이사존"
-          },
-          "searchAfter": [
-            "1792511239000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T15:47:19.000Z"
-        },
-        {
-          "id": "36166672",
-          "title": "스파클 생수 2L 30병",
-          "mallId": 4800,
-          "url": "https://bbs.ruliweb.com/market/board/1020/read/108199",
-          "isHot": false,
-          "isEnd": false,
-          "price": "11,810원",
-          "providerId": 4,
-          "categoryId": 2,
-          "category": "음식",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/108199.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "루리웹"
-          },
-          "searchAfter": [
-            "1792510782000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T15:39:42.000Z"
-        },
-        {
-          "id": "36166670",
-          "title": "오뚜기 진라면 순한맛 40봉 19,900원",
-          "mallId": 4800,
-          "url": "https://eomisae.co.kr/rt/207062459",
-          "isHot": false,
-          "isEnd": false,
-          "price": "19,900원",
-          "providerId": 11,
-          "categoryId": 2,
-          "category": "기타국내",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207062459.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "어미새"
-          },
-          "searchAfter": [
-            "1792510753000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T15:39:13.000Z"
-        },
-        {
-          "id": "36166667",
-          "title": "대식가 일키로 부대찌개 1kg 2팩 12,915원",
-          "mallId": 4800,
-          "url": "https://www.dogdrip.net/730673345",
-          "isHot": false,
-          "isEnd": false,
-          "price": "12,915원",
-          "providerId": 108,
-          "categoryId": 2,
-          "category": "식품",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/730673345.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "개드립"
-          },
-          "searchAfter": [
-            "1792510700000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T15:38:20.000Z"
-        },
-        {
-          "id": "36166662",
-          "title": "오뚜기 진라면 순한맛 120g 5개입 8개 19,900원",
-          "mallId": 4800,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741788",
-          "isHot": false,
-          "isEnd": false,
-          "price": "19,900원",
+          "price": "6,990원",
           "providerId": 1,
           "categoryId": 2,
-          "category": "식품/건강",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741788.webp",
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742707.webp",
           "mallName": "토스",
           "hotDealType": null,
           "isYearLowest": false,
@@ -163,12 +28,147 @@
             "nameKr": "뽐뿌"
           },
           "searchAfter": [
-            "1792510680000"
+            "1792811760000"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T15:38:00.000Z"
+          "postedAt": "2026-10-24T03:16:00.000Z"
+        },
+        {
+          "id": "36551564",
+          "title": "르까프 남성용 집업 플리스 자켓 그레이 100 1개 10,900원",
+          "mallId": 4800,
+          "url": "https://www.dogdrip.net/731268331",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,900원",
+          "providerId": 108,
+          "categoryId": 4,
+          "category": "의류",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/731268331.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "searchAfter": [
+            "1792811650000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T03:14:10.000Z"
+        },
+        {
+          "id": "36551563",
+          "title": "횟감가능 활새우 1kg 2개 25,900원",
+          "mallId": 4800,
+          "url": "https://www.dogdrip.net/731267026",
+          "isHot": false,
+          "isEnd": false,
+          "price": "25,900원",
+          "providerId": 108,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/731267026.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "searchAfter": [
+            "1792811051000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T03:04:11.000Z"
+        },
+        {
+          "id": "36551399",
+          "title": "제주 타이벡 감귤 로얄과 5kg 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2684659037",
+          "isHot": false,
+          "isEnd": false,
+          "price": "15,500원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2684659037.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "1792810832000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T03:00:32.000Z"
+        },
+        {
+          "id": "36551405",
+          "title": "제주 극조생 감귤 중대과 10kg 1박스",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2687443487",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,920원",
+          "providerId": 21,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2687443487.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "1792810826000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T03:00:26.000Z"
+        },
+        {
+          "id": "36551383",
+          "title": "그 비스크 돌은 사랑을 한다 키타가와 마린 메이드 버전 피규어 1개",
+          "mallId": 4800,
+          "url": "https://shopping.toss.im/c/2675965531",
+          "isHot": false,
+          "isEnd": false,
+          "price": "30,000원",
+          "providerId": 21,
+          "categoryId": 11,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2675965531.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "토스쇼핑"
+          },
+          "searchAfter": [
+            "1792810824000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T03:00:24.000Z"
         }
       ]
     }

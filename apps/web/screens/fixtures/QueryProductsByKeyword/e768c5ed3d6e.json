@@ -1,0 +1,501 @@
+{
+  "variables": {
+    "limit": 20,
+    "keyword": "만원이하",
+    "orderBy": "POSTED_AT",
+    "orderOption": "DESC",
+    "searchAfter": "1792793409000"
+  },
+  "response": {
+    "data": {
+      "productsByKeyword": [
+        {
+          "id": "36531235",
+          "title": "럽센트 플라워마켓 핸드워시 화이트튤립향 300ml 2,450원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962753?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,450원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962753.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792793254000"
+          ],
+          "postedAt": "2026-10-23T22:07:34.000Z"
+        },
+        {
+          "id": "36531276",
+          "title": "동원샘물 무라벨 500ml 60개",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10478231856",
+          "isHot": null,
+          "isEnd": false,
+          "price": "7,620원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478231856.webp",
+          "hotDealType": "ULTRA_DEAL",
+          "isYearLowest": true,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 31
+          },
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792793100000"
+          ],
+          "postedAt": "2026-10-23T22:05:00.000Z"
+        },
+        {
+          "id": "36531208",
+          "title": "케라시스 케라마이드 EX 더 프리미엄 살롱 헤어트리트먼트 1L 6,270원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962749?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,270원",
+          "providerId": 18,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962749.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792793029000"
+          ],
+          "postedAt": "2026-10-23T22:03:49.000Z"
+        },
+        {
+          "id": "36531182",
+          "title": "2080 키즈크리닉 3스텝 치약 메론향 80g 6개 4,650원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962747?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "4,650원",
+          "providerId": 18,
+          "categoryId": 3,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962747.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792792942000"
+          ],
+          "postedAt": "2026-10-23T22:02:22.000Z"
+        },
+        {
+          "id": "36531181",
+          "title": "홈즈 에어후레쉬 옷장용 탈취제 리프레쉬 허브향 본품 32g 1개 1,270원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962746?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "1,270원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962746.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792792874000"
+          ],
+          "postedAt": "2026-10-23T22:01:14.000Z"
+        },
+        {
+          "id": "36530949",
+          "title": "남도식 진짜 파김치 1kg",
+          "mallId": 15,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9526180",
+          "isHot": false,
+          "isEnd": false,
+          "price": "8,380원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9526180.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792791780000"
+          ],
+          "postedAt": "2026-10-23T21:43:00.000Z"
+        },
+        {
+          "id": "36529204",
+          "title": "덴티포레 부드러운 이중 미세모 칫솔 21개 5,540원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962726?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,540원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962726.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792786611000"
+          ],
+          "postedAt": "2026-10-23T20:16:51.000Z"
+        },
+        {
+          "id": "36529098",
+          "title": "이클립스 캔디",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10478105338",
+          "isHot": null,
+          "isEnd": false,
+          "price": "990원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10478105338.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792785300000"
+          ],
+          "postedAt": "2026-10-23T19:55:00.000Z"
+        },
+        {
+          "id": "36528843",
+          "title": "라방 랜덤 5원",
+          "mallId": 1,
+          "url": "https://bbs.ruliweb.com/market/board/1020/read/108292",
+          "isHot": true,
+          "isEnd": false,
+          "price": "5원",
+          "providerId": 4,
+          "categoryId": 8,
+          "category": "상품권",
+          "thumbnail": null,
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "루리웹"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792783788000"
+          ],
+          "postedAt": "2026-10-23T19:29:48.000Z"
+        },
+        {
+          "id": "36519888",
+          "title": "맛뜨락 볶음흑참깨 200g",
+          "mallId": 1936,
+          "url": "https://thirtymall.com/detail?id=136658053",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,000원",
+          "providerId": 20,
+          "categoryId": 2,
+          "category": "가공식품 > 소스/조미료/오일/장류 > ‘가루/분말류/육수’",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/thirtymall/136658053.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "떠리몰"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792781427000"
+          ],
+          "postedAt": "2026-10-23T18:50:27.000Z"
+        },
+        {
+          "id": "36519798",
+          "title": "오리온 예감 치즈그라탕 12p 204g 2개",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186860622",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,940원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186860622.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792780766000"
+          ],
+          "postedAt": "2026-10-23T18:39:26.000Z"
+        },
+        {
+          "id": "36519830",
+          "title": "오리온 예감 치즈그라탕 12p 204g 2개 5,940원",
+          "mallId": 48,
+          "url": "https://eomisae.co.kr/rt/207550010",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,940원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207550010.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792780433000"
+          ],
+          "postedAt": "2026-10-23T18:33:53.000Z"
+        },
+        {
+          "id": "36512767",
+          "title": "듀라셀 알카라인 AA 건전지 20개입",
+          "mallId": 48,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9525977",
+          "isHot": false,
+          "isEnd": false,
+          "price": "9,730원",
+          "providerId": 107,
+          "categoryId": 9,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9525977.webp",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "DANAWA",
+            "percent": 35
+          },
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792778640000"
+          ],
+          "postedAt": "2026-10-23T18:04:00.000Z"
+        },
+        {
+          "id": "36512856",
+          "title": "오리온 예감 치즈그라탕 12p 204g 2개",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10477969739",
+          "isHot": null,
+          "isEnd": false,
+          "price": "5,940원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10477969739.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792778460000"
+          ],
+          "postedAt": "2026-10-23T18:01:00.000Z"
+        },
+        {
+          "id": "36512746",
+          "title": "생면식감 매운맛 95.9g 4개",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962710?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,680원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962710.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792778240000"
+          ],
+          "postedAt": "2026-10-23T17:57:20.000Z"
+        },
+        {
+          "id": "36511297",
+          "title": "생면식감 매운맛 95.9g 4개",
+          "mallId": 48,
+          "url": "https://www.fmkorea.com/10477911013",
+          "isHot": null,
+          "isEnd": false,
+          "price": "2,680원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10477911013.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792776300000"
+          ],
+          "postedAt": "2026-10-23T17:25:00.000Z"
+        },
+        {
+          "id": "36511209",
+          "title": "생면식감 매운맛 95.9g 4개 1팩 2,680원",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186856534",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,680원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186856534.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792775304000"
+          ],
+          "postedAt": "2026-10-23T17:08:24.000Z"
+        },
+        {
+          "id": "36510969",
+          "title": "생면식감 매운맛 95.9g 4개 2,680원",
+          "mallId": 48,
+          "url": "https://eomisae.co.kr/rt/207547106",
+          "isHot": false,
+          "isEnd": false,
+          "price": "2,680원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207547106.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792774226000"
+          ],
+          "postedAt": "2026-10-23T16:50:26.000Z"
+        },
+        {
+          "id": "36510566",
+          "title": "오리온 예감 치즈그라탕 12p 204g 2개 5,940원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962683?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "5,940원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962683.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792772734000"
+          ],
+          "postedAt": "2026-10-23T16:25:34.000Z"
+        },
+        {
+          "id": "36510455",
+          "title": "구운감자 구운나초 130g 1개 990원",
+          "mallId": 48,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962676?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "990원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962676.webp",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "data": null,
+          "searchAfter": [
+            "1792771725000"
+          ],
+          "postedAt": "2026-10-23T16:08:45.000Z"
+        }
+      ]
+    }
+  }
+}

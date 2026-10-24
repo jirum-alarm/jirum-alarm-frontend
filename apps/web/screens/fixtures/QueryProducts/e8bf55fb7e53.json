@@ -12,152 +12,17 @@
     "data": {
       "products": [
         {
-          "id": "36166662",
-          "title": "오뚜기 진라면 순한맛 120g 5개입 8개 19,900원",
-          "mallId": 4800,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741788",
-          "isHot": false,
-          "isEnd": false,
-          "price": "19,900원",
-          "providerId": 1,
-          "categoryId": 2,
-          "category": "식품/건강",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741788.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "1792510680000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T15:38:00.000Z"
-        },
-        {
-          "id": "36166661",
-          "title": "몬스터크랩 15개 9,360원",
-          "mallId": 1,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741787",
-          "isHot": false,
-          "isEnd": false,
-          "price": "9,360원",
-          "providerId": 1,
-          "categoryId": 2,
-          "category": "식품/건강",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741787.webp",
-          "mallName": "네이버",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "1792510560000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T15:36:00.000Z"
-        },
-        {
-          "id": "36166660",
-          "title": "KT망 200분 20GB 월 2,900원 평생",
-          "mallId": 51306,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741786",
-          "isHot": false,
-          "isEnd": false,
-          "price": "2,900원",
-          "providerId": 1,
-          "categoryId": 9,
-          "category": "기타",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741786.webp",
-          "mallName": "핀다이렉트",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "1792510440000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T15:34:00.000Z"
-        },
-        {
-          "id": "36166405",
-          "title": "바닐라향 바디워시 1L 4개 15,500원",
-          "mallId": 4800,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741785",
-          "isHot": false,
-          "isEnd": false,
-          "price": "15,500원",
-          "providerId": 1,
-          "categoryId": 3,
-          "category": "기타",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741785.webp",
-          "mallName": "토스",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "1792510200000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T15:30:00.000Z"
-        },
-        {
-          "id": "36166404",
-          "title": "안흥 쌀찐빵 4가지맛 25개 9,940원",
-          "mallId": 241,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741784",
-          "isHot": false,
-          "isEnd": false,
-          "price": "9,940원",
-          "providerId": 1,
-          "categoryId": 2,
-          "category": "식품/건강",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741784.webp",
-          "mallName": "옥션",
-          "hotDealType": null,
-          "isYearLowest": false,
-          "priceSaving": null,
-          "provider": {
-            "nameKr": "뽐뿌"
-          },
-          "searchAfter": [
-            "1792510080000"
-          ],
-          "estimatedTotal": null,
-          "postedCommunityCount": null,
-          "isRising": null,
-          "postedAt": "2026-10-20T15:28:00.000Z"
-        },
-        {
-          "id": "36166312",
-          "title": "피코크 떡갈비 450g 4개",
+          "id": "36551570",
+          "title": "다진마늘 2kg (1kg+1kg) 국내산 11,890원",
           "mallId": 15,
-          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=741782",
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742708",
           "isHot": false,
           "isEnd": false,
-          "price": "20,050원",
+          "price": "11,890원",
           "providerId": 1,
           "categoryId": 2,
           "category": "식품/건강",
-          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741782.webp",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742708.webp",
           "mallName": "지마켓",
           "hotDealType": null,
           "isYearLowest": false,
@@ -166,12 +31,147 @@
             "nameKr": "뽐뿌"
           },
           "searchAfter": [
-            "1792509600000"
+            "1792811940000"
           ],
           "estimatedTotal": null,
           "postedCommunityCount": null,
           "isRising": null,
-          "postedAt": "2026-10-20T15:20:00.000Z"
+          "postedAt": "2026-10-24T03:19:00.000Z"
+        },
+        {
+          "id": "36551506",
+          "title": "숨 시그니처 물티슈 63평량 70매 10팩",
+          "mallId": 4800,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742707",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,990원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742707.webp",
+          "mallName": "토스",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792811760000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T03:16:00.000Z"
+        },
+        {
+          "id": "36551442",
+          "title": "Vention CCC 20000mAh 22.5W C케이블 내장",
+          "mallId": 143,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu8&page=1&divpage=89&no=102677",
+          "isHot": false,
+          "isEnd": false,
+          "price": "$14.00",
+          "providerId": 1,
+          "categoryId": 9,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/102677.webp",
+          "mallName": "알리",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792810980000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T03:03:00.000Z"
+        },
+        {
+          "id": "36551448",
+          "title": "곰표한일 워셔블 전기매트 소/중/대형 균일가 21,510원",
+          "mallId": 28,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742706",
+          "isHot": false,
+          "isEnd": false,
+          "price": "21,510원",
+          "providerId": 1,
+          "categoryId": 6,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742706.webp",
+          "mallName": "카카오",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792810980000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T03:03:00.000Z"
+        },
+        {
+          "id": "36551443",
+          "title": "컬로그 시리얼 대용량 골라담기 10,900원",
+          "mallId": 65,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742705",
+          "isHot": false,
+          "isEnd": false,
+          "price": "10,900원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742705.webp",
+          "mallName": "GS샵",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792810920000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T03:02:00.000Z"
+        },
+        {
+          "id": "36551416",
+          "title": "베어래빗 털실내화 1+1",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742704",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,960원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "의류/잡화",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742704.webp",
+          "mallName": "지마켓",
+          "hotDealType": null,
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792810860000"
+          ],
+          "estimatedTotal": null,
+          "postedCommunityCount": null,
+          "isRising": null,
+          "postedAt": "2026-10-24T03:01:00.000Z"
         }
       ]
     }
