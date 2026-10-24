@@ -37,6 +37,7 @@ concurrency:
 
 permissions:
   contents: write
+  actions: read # notify 가 이 실행의 runtime 별 결과를 읽는다
 
 env:
   NODE_VERSION: 22.23.4
@@ -73,6 +74,8 @@ jobs:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           INPUT_COMMITS: ${{ inputs.commits }}
           INPUT_RUNTIMES: ${{ inputs.runtimes }}
+          BQ_SA_JSON: ${{ secrets.BQ_GA4_READER_SA_JSON }}
+          BQ_GA4_DATASET: ${{ vars.BQ_GA4_DATASET }}
         run: |
           set -euo pipefail
           head=$(git rev-parse HEAD)
@@ -119,6 +122,11 @@ jobs:
             runtimes=$(printf '%s' "$INPUT_RUNTIMES" | jq -Rc 'split(",") | map(gsub("^\\s+|\\s+$"; ""))')
           else
             runtimes=$(git ls-remote --heads origin 'ota/runtime-*' | sed 's#.*refs/heads/ota/runtime-##' | sort -rV | jq -Rsc 'split("\n") | map(select(length > 0))')
+            # 지난 7일 앱 활성의 10% 이상인 runtime 만(AGENTS «어느 runtime 까지?») — 못 읽으면 전부
+            if [ -n "${BQ_SA_JSON:-}" ] && [ -n "${BQ_GA4_DATASET:-}" ]; then
+              pip install --quiet google-auth requests
+              runtimes=$(printf '%s' "$runtimes" | python3 scripts/store/active-runtimes.py 2> >(tee -a "$GITHUB_STEP_SUMMARY" >&2))
+            fi
           fi
           [ -n "${commits// /}" ] || runtimes='[]'
           {
@@ -253,19 +261,7 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
-      - name: Alert on failure
-        if: failure() && !(github.event_name == 'workflow_dispatch' && inputs.dry_run)
-        env:
-          MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
-          COMMITS: ${{ needs.plan.outputs.commits }}
-        run: |
-          [ -n "${MATTERMOST_WEBHOOK_URL:-}" ] || exit 0
-          short=$(for c in $COMMITS; do printf '%s ' "${c:0:8}"; done)
-          msg="🚫 앱 OTA 자동 백포트 막힘 — runtime ${RT}(커밋 ${short}). 그 버전 사용자에게 이 수정이 안 갔습니다. 손으로: scripts/ota-backport.sh --runtime ${RT} <커밋>. ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-          jq -n --arg text "$msg" '{channel: "alert-deploy", text: $text}' \
-            | curl -fsS -X POST -H 'Content-Type: application/json' -d @- "$MATTERMOST_WEBHOOK_URL" >/dev/null
-
-  # 자동 실행(발행이 있었던)이 끝나면 기준점을 옮긴다 — 일부 runtime 이 막혀도 옮긴다(그건 위에서 알렸다). 취소되면 안 옮긴다.
+  # 자동 실행(발행이 있었던)이 끝나면 기준점을 옮긴다 — 일부 runtime 이 막혀도 옮긴다(그건 notify 가 알린다). 취소되면 안 옮긴다.
   mark:
     needs: [plan, backport]
     if: ${{ !cancelled() && needs.plan.outputs.mark != '' && !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
@@ -280,3 +276,24 @@ jobs:
           gh api -X PATCH "repos/$GITHUB_REPOSITORY/git/refs/heads/ota/backport-mark" -f sha="$MARK" -F force=true >/dev/null 2>&1 \
             || gh api -X POST "repos/$GITHUB_REPOSITORY/git/refs" -f ref=refs/heads/ota/backport-mark -f sha="$MARK" >/dev/null
           echo "ota/backport-mark → ${MARK:0:8}" | tee -a "$GITHUB_STEP_SUMMARY"
+
+  # 막힌 runtime 을 실행당 한 통으로 알린다 — runtime 마다 보내면 옛 runtime 이 많을 때 알림이 쏟아진다.
+  notify:
+    needs: [plan, backport]
+    if: ${{ always() && needs.backport.result == 'failure' && !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post to alert-deploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
+          COMMITS: ${{ needs.plan.outputs.commits }}
+        run: |
+          set -euo pipefail
+          [ -n "${MATTERMOST_WEBHOOK_URL:-}" ] || exit 0
+          failed=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs?per_page=100" \
+            --jq '[.jobs[] | select(.name | startswith("backport (")) | select(.conclusion == "failure") | .name | ltrimstr("backport (") | rtrimstr(")")] | join(", ")')
+          short=$(for c in $COMMITS; do printf '%s ' "${c:0:8}"; done)
+          msg="🚫 앱 OTA 자동 백포트 막힘 — runtime ${failed}(커밋 ${short}). 그 버전 사용자에게 이 수정이 안 갔습니다. 손으로: scripts/ota-backport.sh --runtime <버전> <커밋>. ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          jq -n --arg text "$msg" '{channel: "alert-deploy", text: $text}' \
+            | curl -fsS -X POST -H 'Content-Type: application/json' -d @- "$MATTERMOST_WEBHOOK_URL" >/dev/null
