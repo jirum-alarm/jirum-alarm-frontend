@@ -1,6 +1,6 @@
 'use client';
 
-import { TRENDING_VIEW_TABS } from '@jirum/domain/ranking';
+import { TRENDING_VIEW_TABS, trendingTabView, type TrendingView } from '@jirum/domain/ranking';
 import * as m from 'motion/react-m';
 import { usePathname } from 'next/navigation';
 
@@ -9,12 +9,14 @@ import Link from '@/shared/ui/Link';
 
 const PageTabNavigation = () => {
   const pathname = usePathname();
+  // 실시간(/trending/live)·핫딜만(/trending/hot)은 둘 다 「최신」 탭이다.
+  const current = (pathname.match(/\/trending\/(live|hot|ranking)/)?.[1] ?? 'hot') as TrendingView;
 
   return (
     <div className="w-full border-b border-gray-200 bg-white">
       <div className="flex">
         {TRENDING_VIEW_TABS.map(({ view, label }) => {
-          const isActive = pathname.includes(`/trending/${view}`);
+          const isActive = trendingTabView(current) === view;
           return (
             <Link key={view} href={`/trending/${view}`} className="relative flex-1 text-center">
               <m.div

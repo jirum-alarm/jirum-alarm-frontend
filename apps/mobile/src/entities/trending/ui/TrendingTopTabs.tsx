@@ -1,5 +1,9 @@
 import {pageHeader} from '@jirum/design-system/recipes';
-import {TRENDING_VIEW_TABS, type TrendingView} from '@jirum/domain/ranking';
+import {
+  TRENDING_VIEW_TABS,
+  trendingTabView,
+  type TrendingView,
+} from '@jirum/domain/ranking';
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import Animated, {
@@ -15,7 +19,8 @@ import {cn} from '@/shared/lib/styling';
 import {useColors} from '@/shared/theme/useColors';
 
 /**
- * 발견 탭 상단 탭(실시간 · 핫딜만 · 랭킹 — 순서·이름 정본은 @jirum/domain/ranking TRENDING_VIEW_TABS).
+ * 발견 탭 상단 탭(최신 · 랭킹 — 순서·이름 정본은 @jirum/domain/ranking TRENDING_VIEW_TABS).
+ * 「최신」은 핫딜만 켬(hot)·끔(live) 둘 다 — 칩은 목록 위(FeedList).
  * web: widgets/trending/ui/PageTabNavigation.tsx — 하단 밑줄로 활성 표시.
  *
  * ★ web 은 Link 들(라우트가 갈린다)이지만 앱은 한 화면 안 상태 전환이다.
@@ -42,7 +47,7 @@ export default function TrendingTopTabs({
   onSelect: (view: TrendingView) => void;
 }) {
   const c = useColors();
-  const activeIndex = TABS.findIndex(t => t.view === active);
+  const activeIndex = TABS.findIndex(t => t.view === trendingTabView(active));
   // 탭 인덱스(0 = 실시간 …). 밑줄 위치와 글자색을 같은 값으로 움직인다.
   const progress = useSharedValue(activeIndex);
 
@@ -76,7 +81,7 @@ export default function TrendingTopTabs({
             label={tab.label}
             index={index}
             progress={progress}
-            isActive={tab.view === active}
+            isActive={tab.view === trendingTabView(active)}
             onPress={() => onSelect(tab.view)}
           />
         ))}
