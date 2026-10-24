@@ -5,7 +5,7 @@ import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
 import LiveContainerServer from '@/widgets/trending/ui/live-container/server';
 
-const hotTitle = '최신 핫딜 | 지름알림';
+const hotTitle = '실시간 핫딜만 | 지름알림';
 const hotDescription = `${HOT_FEED_COPY.lead}. 커뮤니티 인기글과 평소보다 확실히 싼 딜만 최신순으로 확인하세요.`;
 const hotUrl = `${METADATA_SERVICE_URL}/trending/hot`;
 const hotOgImage = `${METADATA_SERVICE_URL}/opengraph-image.webp`;
@@ -39,7 +39,7 @@ const HotPage = async ({ searchParams }: { searchParams: Promise<{ tab: string }
 
   return (
     <>
-      <h1 className="sr-only">최신 핫딜 · 커뮤니티 인기 핫딜</h1>
+      <h1 className="sr-only">실시간 핫딜만 · 커뮤니티 인기 핫딜</h1>
       <LiveContainerServer tab={tabNumber} feed="hot" />
     </>
   );
