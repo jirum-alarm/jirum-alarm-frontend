@@ -22,7 +22,8 @@ import {
   useTrendingCategory,
   useTrendingView,
 } from '@/shared/lib/navigation/trending-view-store';
-import {orderTrendingCategories} from '@jirum/domain/ranking';
+import {HOT_FEED_COPY, orderTrendingCategories} from '@jirum/domain/ranking';
+import Chip from '@/shared/components/ui/Chip';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
@@ -36,7 +37,7 @@ import {
 } from '@/shared/components/Skeletons';
 
 /**
- * 발견 탭(「실시간」·「랭킹」 — 실시간 안 「핫딜만」 칩이 hot·live). web: app/(desktop-ready)/trending/{hot,live,ranking}
+ * 발견 탭(「실시간」·「랭킹」 — 실시간의 카테고리 줄 끝 「핫딜만」 칩이 hot·live). web: app/(desktop-ready)/trending/{hot,live,ranking}
  *
  * ★ web 은 라우트 셋(/trending/live · /trending/hot · /trending/ranking)으로 갈리고 카테고리는
  * `?tab=` 쿼리에 담는다. 앱은 **한 화면 안의 상태**다 — 라우트를 나누면 탭
@@ -193,6 +194,18 @@ export default function TrendingScreen() {
             categories={allCategories}
             activeId={activeCategoryId}
             onSelect={handleSelectCategory}
+            trailing={
+              view === 'ranking' ? undefined : (
+                <Chip
+                  size="sm"
+                  label={HOT_FEED_COPY.toggle}
+                  selected={view === 'hot'}
+                  onPress={() =>
+                    requestTrendingView(view === 'hot' ? 'live' : 'hot')
+                  }
+                />
+              )
+            }
           />
 
           <CategoryPager
