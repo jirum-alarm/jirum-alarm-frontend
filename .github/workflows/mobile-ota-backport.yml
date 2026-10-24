@@ -10,6 +10,8 @@ name: mobile-ota-backport
 #   설치·지문·tsc·jest → 기동 확인 → 원격 끝 재확인 → ota:publish(브랜치 선점) → push → 매니페스트 확인).
 #   하나라도 막히면 그 runtime 만 멈추고 alert-deploy 에 알린다 — 손으로: scripts/ota-backport.sh --runtime <버전> <커밋>.
 # 끄기: 저장소 변수 MOBILE_AUTO_BACKPORT 를 false 로. 수동 실행은 dry_run 기본(발행 직전까지).
+# 기준점: 자동 실행이 끝나면 ota/backport-mark 를 그 발행 커밋으로 옮긴다. 다음 실행은 직전 발행이 아니라 이 기준점부터 모은다 —
+#   동시성 그룹은 대기 실행을 하나만 두고 나머지를 취소해서, 직전 발행부터만 모으면 취소된 실행의 커밋이 빠진다(10/24 61898fac 실측).
 
 on:
   workflow_run:
@@ -28,8 +30,9 @@ on:
         type: boolean
         default: true
 
+# dry-run 은 따로 줄 세운다 — 수동 dry-run(9 runtime·1시간+)이 자동 백포트를 막았다(10/24 실측).
 concurrency:
-  group: mobile-ota-backport
+  group: mobile-ota-backport${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && '-dry' || '' }}
   cancel-in-progress: false
 
 permissions:
@@ -48,6 +51,7 @@ jobs:
     outputs:
       commits: ${{ steps.plan.outputs.commits }}
       runtimes: ${{ steps.plan.outputs.runtimes }}
+      mark: ${{ steps.plan.outputs.mark }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -87,6 +91,13 @@ jobs:
               echo "commits=" >> "$GITHUB_OUTPUT"; echo 'runtimes=[]' >> "$GITHUB_OUTPUT"; exit 0
             fi
             prev=${shas[1]}
+            # 기준점이 직전 발행보다 앞이면 그 사이 발행은 백포트되지 않았다(대기 중 취소) — 기준점부터 모은다.
+            mark=$(git ls-remote origin refs/heads/ota/backport-mark | cut -f1)
+            if [ -n "$mark" ] && [ "$mark" != "$prev" ] && git merge-base --is-ancestor "$mark" "$prev" 2>/dev/null; then
+              echo "기준점 ${mark:0:8} 부터 모은다(직전 발행 ${prev:0:8} 앞에 백포트 안 된 발행이 있다)" | tee -a "$GITHUB_STEP_SUMMARY"
+              prev=$mark
+            fi
+            echo "mark=$head" >> "$GITHUB_OUTPUT"
             # mobile-ota 「앱 번들 입력 변경」과 같은 경로 규칙
             mapfile -t cand < <(git rev-list --reverse --no-merges "$prev..$head" -- \
               ':(top)apps/mobile' ':(top)packages' \
@@ -162,22 +173,38 @@ jobs:
             echo "xcode=$(xcodebuild -version | head -1 | tr ' ' '-')"
           } >> "$GITHUB_OUTPUT"
 
+      # 충돌하는 runtime 은 빌드(캐시 없으면 40~55분) 전에 걸러낸다 — 전엔 빌드 뒤 cherry-pick 에서 몇 초 만에 막혔다(10/24 1.5.4·1.5.5·1.5.6).
+      - name: Cherry-pick check
+        id: pick
+        env:
+          COMMITS: ${{ needs.plan.outputs.commits }}
+        run: |
+          set -uo pipefail
+          # shellcheck disable=SC2086 # 커밋 목록은 공백으로 나눈다
+          bash apps/mobile/scripts/ota-backport.sh --runtime "$RT" --pick-only $COMMITS && rc=0 || rc=$?
+          case $rc in
+            0) echo "new=true" >> "$GITHUB_OUTPUT" ;;
+            3) echo "new=false" >> "$GITHUB_OUTPUT"; echo "runtime $RT — 새로 들어갈 커밋 없음" >> "$GITHUB_STEP_SUMMARY" ;;
+            *) exit "$rc" ;;
+          esac
+
       - name: Restore Release simulator app
         id: app-cache
+        if: steps.pick.outputs.new == 'true'
         uses: actions/cache/restore@v4
         with:
           path: ${{ env.RT_DIR }}/apps/mobile/ios/build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app
           key: ios-release-sim-${{ steps.rt.outputs.xcode }}-rt${{ matrix.runtime }}-${{ steps.rt.outputs.fp }}
 
       - name: Set up Ruby
-        if: steps.app-cache.outputs.cache-hit != 'true'
+        if: steps.pick.outputs.new == 'true' && steps.app-cache.outputs.cache-hit != 'true'
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
           bundler-cache: false
 
       - name: Build Release simulator app (runtime branch)
-        if: steps.app-cache.outputs.cache-hit != 'true'
+        if: steps.pick.outputs.new == 'true' && steps.app-cache.outputs.cache-hit != 'true'
         working-directory: ${{ env.RT_DIR }}/apps/mobile
         env:
           MOBILE_IOS_GOOGLE_SERVICE_INFO_PLIST_B64: ${{ secrets.MOBILE_IOS_GOOGLE_SERVICE_INFO_PLIST_B64 }}
@@ -197,13 +224,14 @@ jobs:
           rm -f ios/GoogleService-Info.plist
 
       - name: Save Release simulator app
-        if: steps.app-cache.outputs.cache-hit != 'true'
+        if: steps.pick.outputs.new == 'true' && steps.app-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
           path: ${{ env.RT_DIR }}/apps/mobile/ios/build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app
           key: ${{ steps.app-cache.outputs.cache-primary-key }}
 
       - name: Backport and publish
+        if: steps.pick.outputs.new == 'true'
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           COMMITS: ${{ needs.plan.outputs.commits }}
@@ -236,3 +264,19 @@ jobs:
           msg="🚫 앱 OTA 자동 백포트 막힘 — runtime ${RT}(커밋 ${short}). 그 버전 사용자에게 이 수정이 안 갔습니다. 손으로: scripts/ota-backport.sh --runtime ${RT} <커밋>. ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
           jq -n --arg text "$msg" '{channel: "alert-deploy", text: $text}' \
             | curl -fsS -X POST -H 'Content-Type: application/json' -d @- "$MATTERMOST_WEBHOOK_URL" >/dev/null
+
+  # 자동 실행(발행이 있었던)이 끝나면 기준점을 옮긴다 — 일부 runtime 이 막혀도 옮긴다(그건 위에서 알렸다). 취소되면 안 옮긴다.
+  mark:
+    needs: [plan, backport]
+    if: ${{ !cancelled() && needs.plan.outputs.mark != '' && !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Move ota/backport-mark
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MARK: ${{ needs.plan.outputs.mark }}
+        run: |
+          set -euo pipefail
+          gh api -X PATCH "repos/$GITHUB_REPOSITORY/git/refs/heads/ota/backport-mark" -f sha="$MARK" -F force=true >/dev/null 2>&1 \
+            || gh api -X POST "repos/$GITHUB_REPOSITORY/git/refs" -f ref=refs/heads/ota/backport-mark -f sha="$MARK" >/dev/null
+          echo "ota/backport-mark → ${MARK:0:8}" | tee -a "$GITHUB_STEP_SUMMARY"

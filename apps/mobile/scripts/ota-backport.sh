@@ -4,6 +4,7 @@
 #   scripts/ota-backport.sh --runtime 1.5.0 --app <그 runtime 의 Release .app> [--message "…"] [--dry-run] [--keep] <커밋…>
 #   scripts/ota-backport.sh --runtime all <커밋…>          # origin 의 ota/runtime-* 전부를 차례로(하나가 실패해도 나머지는 간다)
 #   scripts/ota-backport.sh --runtime 1.5.0,1.4.8 <커밋…>  # 골라서
+#   scripts/ota-backport.sh --runtime 1.5.0 --pick-only <커밋…>  # cherry-pick 만 해 보고 멈춘다(앱 불필요) — 0 적용됨·3 새 커밋 없음·1 충돌
 #   --app 을 안 주면 ~/.cache/jirum/ota-apps/<runtime>.app 을 쓴다(남의 scratchpad 사본은 사라진다 — 여기 두고 쓴다).
 #
 # 왜: main 은 다음 스토어 버전(runtime)으로 먼저 올라가 있어서 main 푸시 자동 OTA 는 스토어 사용자에게 안 간다.
@@ -27,6 +28,7 @@ APP=""
 MESSAGE=""
 DRY=0
 KEEP=0
+PICK_ONLY=0
 COMMITS=()
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -35,6 +37,7 @@ while [ $# -gt 0 ]; do
     --message) MESSAGE=$2; shift 2 ;;
     --dry-run) DRY=1; shift ;;
     --keep) KEEP=1; shift ;;
+    --pick-only) PICK_ONLY=1; shift ;;
     -h|--help) sed -n '2,20p' "$0"; exit 0 ;;
     *) COMMITS+=("$1"); shift ;;
   esac
@@ -64,7 +67,7 @@ if [ "$RUNTIME" = all ] || [[ "$RUNTIME" == *,* ]]; then
 fi
 
 [ -n "$APP" ] || APP="$HOME/.cache/jirum/ota-apps/$RUNTIME.app"
-[ -d "$APP" ] || { echo "--app 에 그 runtime 의 Release .app 경로가 필요하다(기동 확인용)" >&2; exit 2; }
+[ $PICK_ONLY = 1 ] || [ -d "$APP" ] || { echo "--app 에 그 runtime 의 Release .app 경로가 필요하다(기동 확인용)" >&2; exit 2; }
 [ ${#COMMITS[@]} -gt 0 ] || { echo "백포트할 커밋을 하나 이상 준다" >&2; exit 2; }
 
 MOBILE=$(cd "$(dirname "$0")/.." && pwd)
@@ -82,16 +85,18 @@ die() {
   exit 1
 }
 
-# 앱 버전이 runtime 과 맞는지 — 엉뚱한 .app 으로 기동 확인하면 판정이 무의미하다.
-APP_VERSION=$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' "$APP/Info.plist" 2>/dev/null || echo '?')
-[ "$APP_VERSION" = "$RUNTIME" ] || { echo "--app 의 버전($APP_VERSION) ≠ runtime($RUNTIME)" >&2; exit 2; }
+if [ $PICK_ONLY = 0 ]; then
+  # 앱 버전이 runtime 과 맞는지 — 엉뚱한 .app 으로 기동 확인하면 판정이 무의미하다.
+  APP_VERSION=$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' "$APP/Info.plist" 2>/dev/null || echo '?')
+  [ "$APP_VERSION" = "$RUNTIME" ] || { echo "--app 의 버전($APP_VERSION) ≠ runtime($RUNTIME)" >&2; exit 2; }
 
-# 기동 확인용 앱을 먼저 복사해 둔다 — 남의 scratchpad 사본을 가리키면 도중에 지워질 수 있다(10/12 실측).
-APP_DIR=$(mktemp -d "${TMPDIR:-/tmp}/ota-backport-app-XXXX")
-trap 'rm -rf "$APP_DIR"' EXIT
-APP_COPY=$APP_DIR/app.app
-cp -R "$APP" "$APP_COPY"
-APP=$APP_COPY
+  # 기동 확인용 앱을 먼저 복사해 둔다 — 남의 scratchpad 사본을 가리키면 도중에 지워질 수 있다(10/12 실측).
+  APP_DIR=$(mktemp -d "${TMPDIR:-/tmp}/ota-backport-app-XXXX")
+  trap 'rm -rf "$APP_DIR"' EXIT
+  APP_COPY=$APP_DIR/app.app
+  cp -R "$APP" "$APP_COPY"
+  APP=$APP_COPY
+fi
 
 step "워크트리 — origin/$BRANCH 끝에서"
 git -C "$REPO" fetch -q origin "$BRANCH"
@@ -142,6 +147,13 @@ done
 git -C "$WT" log --oneline "$BASE..HEAD"
 if [ "$(git -C "$WT" rev-parse --short HEAD)" = "$BASE" ]; then
   echo "  새로 들어간 커밋이 없다 — 발행하지 않는다"
+  cd "$REPO"
+  [ $KEEP = 1 ] || { git worktree remove --force "$WT"; git branch -q -D "$LOCAL_BRANCH"; }
+  [ $PICK_ONLY = 1 ] && exit 3
+  exit 0
+fi
+if [ $PICK_ONLY = 1 ]; then
+  echo "  적용된다 — --pick-only 라 여기서 멈춘다"
   cd "$REPO"
   [ $KEEP = 1 ] || { git worktree remove --force "$WT"; git branch -q -D "$LOCAL_BRANCH"; }
   exit 0
