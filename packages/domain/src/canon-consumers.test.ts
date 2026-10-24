@@ -66,6 +66,7 @@ const SHARED_BY_BOTH: Record<string, string[]> = {
     'describeKeywordHubRhythm',
     'KEYWORD_HUB_MIN_DEALS',
   ],
+  'hub-model-pages': ['buildHubModelGroups'],
   categories: ['INTEREST_CATEGORIES', 'MAX_INTEREST_CATEGORIES'],
   'color-scheme': ['COLOR_SCHEME_COOKIE'],
   'home-sections': [

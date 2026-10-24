@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { describe, it } from 'node:test';
 
 const require = createRequire(import.meta.url);
-const { buildHubModelGroups, BUNDLE_GROUP, HUB_MODEL_SINGLES_VISIBLE } =
+const { buildHubModelGroups, findHubModelLine, BUNDLE_GROUP, HUB_MODEL_SINGLES_VISIBLE } =
   require('./hub-model-pages.ts') as typeof import('./hub-model-pages');
 
 type Page = import('./hub-model-pages').HubModelPageLink;
@@ -186,5 +186,118 @@ describe('buildHubModelGroups', () => {
       r.groups.map((g) => g.name),
       ['베베숲 시그니처', '슈퍼대디 시그니처'],
     );
+  });
+});
+
+describe('buildHubModelGroups — 운영 허브에서 나온 어긋남(2026-10-24)', () => {
+  it('흔한 말을 빼다 이름이 겹치면 그 칩만 다 쓴다 — 「칠성사이다 제로」와 「칠성사이다」', () => {
+    const r = buildHubModelGroups(
+      '사이다',
+      [
+        page('a', '롯데칠성음료', '칠성사이다 제로', 9),
+        page('b', '롯데칠성음료', '칠성사이다', 5),
+        page('c', '롯데칠성음료', '칠성사이다 제로 유자', 3),
+        page('d', '동아오츠카', '나랑드 사이다 제로'),
+        page('e', '일화', '천연사이다 제로'),
+        page('f', '해태htb', '갈배사이다 제로'),
+      ],
+      [],
+    );
+    assert.deepEqual(show(r.groups), [['칠성사이다', ['제로', '칠성사이다', '유자']]]);
+  });
+
+  it('이름까지 같은 칩(카탈로그 중복 페이지)은 딜 많은 하나만 — 공백만 다른 것도', () => {
+    const r = buildHubModelGroups(
+      '콜라',
+      [
+        page('a', '코카콜라음료', '코카콜라 제로', 20),
+        page('b', '코카콜라음료', '코카콜라 제로', 3),
+        page('c', '코카콜라음료', '코카콜라 제로 제로', 4),
+        page('d', '코카콜라음료', '코카콜라 제로제로', 2),
+        page('e', '코카콜라음료', '코카콜라', 9),
+      ],
+      [],
+    );
+    // 묶인 줄이든 그 밖의 상품이든 — 여기선 「코카콜라」가 거의 모든 상품에 붙어 줄이 못 되고 전부 그 밖의 상품.
+    const chips = [...r.groups.flatMap((g) => g.chips), ...r.visible, ...r.folded];
+    assert.deepEqual(
+      chips.map((c) => c.slug),
+      ['a', 'e', 'c'],
+    );
+    assert.equal(r.total, 3);
+  });
+
+  it('줄 이름은 그 브랜드의 말 — 여러 브랜드에 붙는 맛·성분(검은콩)보다 「베지밀」', () => {
+    const r = buildHubModelGroups(
+      '두유',
+      [
+        page('a', '정식품', '베지밀 뼈에좋은 칼슘두유 검은콩'),
+        page('b', '정식품', '베지밀 검은콩 두유 고칼슘'),
+        page('c', '서울우유', '고칼슘 검은콩 블랙9곡 두유'),
+        page('d', '매일유업', '매일두유 검은콩 고단백'),
+        page('e', '이롬', '황성주 국산콩 두유 검은콩 고칼슘'),
+        page('f', '매일유업', '매일두유 렌틸콩'),
+      ],
+      [],
+    );
+    assert.ok(r.groups.some((g) => g.name === '베지밀'));
+    assert.ok(!r.groups.some((g) => g.name === '검은콩'));
+  });
+
+  it('괄호로 시작하는 낱말(업소용)·맛 정도(마일드)는 줄 이름이 못 된다', () => {
+    const pepsi = buildHubModelGroups(
+      '펩시',
+      [
+        page('a', '롯데칠성음료', '펩시콜라 제로슈거 라임향 245ml (업소용)'),
+        page('b', '롯데칠성음료', '펩시콜라 제로슈거 라임향 355ml (업소용)'),
+        page('c', '롯데칠성음료', '펩시콜라 엑스트라 피즈'),
+        page('d', '롯데칠성음료', '펩시콜라'),
+      ],
+      [],
+    );
+    assert.ok(!pepsi.groups.some((g) => g.name.startsWith('(')));
+    const maxim = buildHubModelGroups(
+      '맥심',
+      [
+        page('a', '동서식품', '맥심 모카골드 마일드 커피믹스 400T'),
+        page('b', '동서식품', '맥심 화이트골드 커피믹스 400T'),
+        page('c', '동서식품', '맥심 카누 마일드 로스트 아메리카노 미니 130T'),
+        page('d', '동서식품', '맥심 티오피 마스터 라떼'),
+      ],
+      [],
+    );
+    assert.deepEqual(show(maxim.groups), [['커피믹스', ['모카골드 마일드 400T', '화이트골드 400T']]]);
+  });
+});
+
+describe('findHubModelLine', () => {
+  const pages = [
+    page('a', '오뚜기', '진라면 매운맛', 3),
+    page('b', '오뚜기', '진라면 순한맛', 2),
+    page('c', '오뚜기', '진라면 매운맛 컵'),
+    page('d', '오뚜기', '참깨라면'),
+    page('e', '농심', '신라면5개 + 짜파게티5개'),
+    page('f', '농심', '너구리5개 + 안성탕면5개'),
+  ];
+  const { groups } = buildHubModelGroups('라면', pages, []);
+
+  it('모델 페이지가 허브에서 묶인 줄을 허브와 같은 순서로 돌려준다', () => {
+    const line = findHubModelLine(groups, 'c');
+    assert.equal(line?.name, '진라면');
+    assert.deepEqual(
+      line?.chips.map((c) => [c.slug, c.label]),
+      [
+        ['a', '매운맛'],
+        ['b', '순한맛'],
+        ['c', '매운맛 컵'],
+      ],
+    );
+  });
+
+  it('줄에 안 묶인 상품·서로 다른 구성의 「여러 개 묶음」은 null', () => {
+    assert.equal(findHubModelLine(groups, 'd'), null);
+    assert.equal(findHubModelLine(groups, 'e'), null);
+    assert.ok(groups.some((g) => g.name === BUNDLE_GROUP));
+    assert.equal(findHubModelLine(groups, 'zzz'), null);
   });
 });

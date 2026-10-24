@@ -1,5 +1,8 @@
 /** /deals/[slug] 화면 문구·목록 순서. 구매 판단(지금 살까)은 서버 priceVerdict 를 읽는다. */
 
+import { deriveKeyword } from '@jirum/domain/derive-keyword';
+import { relativeTimeLabel } from '@jirum/domain/relative-time';
+
 export interface Deal {
   productId: number;
   title: string;
@@ -60,6 +63,14 @@ const DAY_MS = 24 * 60 * 60 * 1000;
  */
 export function isForeignPriceDeal(deal: Deal, currency: 'KRW' | 'USD' = 'KRW'): boolean {
   return currency === 'KRW' && deal.price != null && !Number.isInteger(deal.price);
+}
+
+/** 딜 한 줄 가격 — 직구 딜(달러 페이지 전체, 또는 원화 페이지에 섞인 소수 가격 딜)은 달러로(예전엔 $219.76 이 "220원"으로 보였다). */
+export function formatDealPrice(deal: Deal, currency: 'KRW' | 'USD'): string {
+  if (deal.price == null) return '-';
+  return currency === 'USD' || isForeignPriceDeal(deal, currency)
+    ? `$${deal.price.toLocaleString(undefined, { maximumFractionDigits: 2 })}`
+    : `${Math.round(deal.price).toLocaleString()}원`;
 }
 
 /** 크롤링 제목에 섞여 온 HTML 태그(`<img src=...>`)·엔티티 제거. */
@@ -136,6 +147,12 @@ const PENDING_LABEL: Record<string, string> = {
   THIN_HISTORY: '추이 대비 판단 불가',
 };
 
+/**
+ * 추이 점이 이보다 적으면 서버가 판정도 «이하면 사도 됨»(buyLine)도 내지 않는다(model-page-price-verdict.ts MIN_HISTORY_POINTS).
+ * 여기선 그 이유를 말로 하는 데만 쓴다(「기록이 짧아 …」).
+ */
+export const MIN_HISTORY_POINTS = 5;
+
 /** 서버 판정을 화면 문구로. 진행 딜이 없으면 히어로가(지난 핫딜 최저)를 보여 주되 "지금"이라 부르지 않는다. */
 export function timingFromVerdict(input: {
   verdict: PriceVerdict | null | undefined;
@@ -151,14 +168,13 @@ export function timingFromVerdict(input: {
       : (heroPrice?.minPrice ?? null);
   const current = isActivePrice ? (verdict?.comparePrice as number) : fallback;
   const known = verdict?.tone ? TONE_LABEL[verdict.tone] : undefined;
+  const historyPoints = verdict?.historyPoints ?? 0;
+  // 지난 가격이 없어도 서버가 «진행 중인 핫딜 없음»이라 했으면 그게 답이다 — 「가격 정보 부족」은 판정 자체가 없을 때만.
+  const pending = verdict ? PENDING_LABEL[verdict.pendingReason ?? 'NO_ACTIVE'] : undefined;
   return {
     tone: current == null ? 'unknown' : (known?.tone ?? 'unknown'),
     label:
-      current == null
-        ? '가격 정보 부족'
-        : (known?.label ??
-          PENDING_LABEL[verdict?.pendingReason ?? 'NO_ACTIVE'] ??
-          '추이 대비 판단 불가'),
+      known?.label ?? pending ?? (current == null ? '가격 정보 부족' : PENDING_LABEL.NO_ACTIVE),
     current: current ?? 0,
     avg: verdict?.avgPrice ?? null,
     buyLine: verdict?.buyLine ?? null,
@@ -171,7 +187,7 @@ export function timingFromVerdict(input: {
     isActivePrice,
     bestPackLabel: isActivePrice ? (verdict?.bestPackLabel ?? null) : null,
     mallPrice: isActivePrice ? (verdict?.mallPrice ?? null) : null,
-    historyPoints: verdict?.historyPoints ?? 0,
+    historyPoints,
   };
 }
 
@@ -281,6 +297,19 @@ export function withTopicParticle(word: string): string {
   return `${trimmed}는`;
 }
 
+const KOREAN_DATE = new Intl.DateTimeFormat('ko-KR', {
+  timeZone: 'Asia/Seoul',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+/** 「2026년 9월 29일」 — 한국 날짜로(운영 파드는 UTC 라 그대로 찍으면 밤 딜이 하루 앞당겨진다). */
+function koreanDate(at: string): string | null {
+  const t = Date.parse(at);
+  return Number.isNaN(t) ? null : KOREAN_DATE.format(t);
+}
+
 /**
  * 모델 페이지 리드 문장 — "답을 먼저, 근거를 뒤에".
  *
@@ -295,8 +324,10 @@ export function buildDealsLeadSentence(input: {
   timing: TimingInsight;
   dealCount: number;
   formatPrice: (price: number) => string;
+  /** 진행 딜이 없을 때 마지막 딜 — 「지금 사도 될까?」 아래 첫 문단이 지금 상태를 날짜로 답한다(인용돼도 낡지 않게 날짜로). */
+  lastDeal?: { postedAt: string; price?: number | null } | null;
 }): string | null {
-  const { modelName, timing, dealCount, formatPrice } = input;
+  const { modelName, timing, dealCount, formatPrice, lastDeal } = input;
   const name = modelName.trim();
   if (!name) return null;
 
@@ -306,9 +337,13 @@ export function buildDealsLeadSentence(input: {
   // 상시몰이 더 싸면 그게 답이다 — "○원 이하면 사도 됨"보다 먼저, 그리고 대신.
   if (timing.tone === 'mall' && timing.mallPrice != null && timing.totalPrice != null) {
     const pack = timing.bestPackLabel ? `${timing.bestPackLabel} ` : '';
+    // 같은 값이면 「더 쌉니다」가 틀린 말이다(2026-10-24 진라면 매운맛 3,050원 = 3,050원).
     sentences.push(
-      // eslint-disable-next-line no-restricted-syntax -- AI 답변·네이버 브리핑이 인용하는 정의문(JSON-LD description 과 같은 문장) — 평서문 유지
-      `${withTopicParticle(name)} 지금 핫딜(${pack}${won(timing.totalPrice)})보다 다나와 최저가(${won(timing.mallPrice)})가 더 쌉니다.`,
+      timing.mallPrice < timing.totalPrice
+        ? // eslint-disable-next-line no-restricted-syntax -- AI 답변·네이버 브리핑이 인용하는 정의문(JSON-LD description 과 같은 문장) — 평서문 유지
+          `${withTopicParticle(name)} 지금 핫딜(${pack}${won(timing.totalPrice)})보다 다나와 최저가(${won(timing.mallPrice)})가 더 쌉니다.`
+        : // eslint-disable-next-line no-restricted-syntax -- 위와 같은 인용용 정의문
+          `${withTopicParticle(name)} 지금 핫딜(${pack}${won(timing.totalPrice)})이 다나와 최저가와 같습니다.`,
     );
   } else if (timing.buyLine != null && timing.buyLine > 0) {
     sentences.push(
@@ -328,6 +363,11 @@ export function buildDealsLeadSentence(input: {
     const cheaper =
       timing.savePct != null && timing.savePct > 0 ? ` (평균보다 약 ${timing.savePct}% 저렴)` : '';
     evidence.push(`지금 진행 중 최저가 ${formatPrice(timing.current)}${cheaper}`);
+  }
+  if (timing.activeDealCount === 0 && lastDeal) {
+    const price = lastDeal.price != null && lastDeal.price > 0 ? `(${won(lastDeal.price)})` : '';
+    const day = koreanDate(lastDeal.postedAt);
+    if (day) evidence.push(`마지막 핫딜 ${day}${price}`);
   }
   if (evidence.length > 0) {
     sentences.push(`${evidence.join(' · ')}.`);
@@ -410,5 +450,139 @@ export function recentDealRows(deals: RecentDeal[], now = Date.now()): RecentDea
   }));
 }
 
+/** 답 카드 배지 색 — 좋음=success·비쌈(다나와가 더 쌈 포함)=warning·그 밖=gray(/deals 목록 판정 배지와 같다). */
+export type DealsAnswerTone = 'success' | 'warning' | 'gray';
+
+/**
+ * 「지금 사도 될까?」 바로 아래 답 카드의 글. 숫자 세 칸(지금 최저·평균 대비·이하면 사도 됨)을 나란히 두면 진행 딜이 없을 때
+ * 아무 답도 안 보였다 — 판정 배지는 진행 딜이 있을 때만 그려져(tone=unknown 이면 숨김) 「진행 중인 핫딜 없음」이 화면에 한 번도
+ * 안 나갔고, 모델 페이지 대부분이 그 상태다(2026-10-24). 그래서 지금 상태를 큰 글씨 한 줄로 먼저 말하고, 비교·기준은 문장으로 붙인다.
+ */
+export interface DealsAnswer {
+  /** 판정 배지. 진행 딜이 없으면 큰 글씨가 같은 말을 해서 null. */
+  badge: { label: string; tone: DealsAnswerTone } | null;
+  /** 「지금 가장 싼 핫딜 25,910원」·「지금은 진행 중인 핫딜이 없어요」. */
+  headline: string;
+  /** 구성·단위가(「140g 40개 · 100g당 463원」), 진행 딜이 없으면 「마지막 핫딜 25일 전 · 9,000원」. */
+  detail: string | null;
+  /** 평소와 비교 — 「평소 핫딜가(100g당 611원)보다 24% 싸요」. 진행 딜이 없으면 null. */
+  compare: string | null;
+  /**
+   * 기다릴 가격 — 「100g당 541원 이하로 올라오면 사기 좋은 가격이에요」. 진행 딜이 이미 싸거나(배지가 답) 다나와가 답이거나
+   * 추이가 짧으면(서버가 기준선을 안 준다) null.
+   */
+  guide: string | null;
+}
+
+export function buildDealsAnswer(input: {
+  timing: TimingInsight;
+  /** 판정 축 가격 표기(단위 축이면 「100g당 463원」). */
+  formatPrice: (price: number) => string;
+  lastDeal?: { postedAt: string; price?: number | null } | null;
+  now?: number;
+}): DealsAnswer {
+  const { timing: t, formatPrice, lastDeal, now = Date.now() } = input;
+  const won = (n: number) => `${Math.round(n).toLocaleString('ko-KR')}원`;
+  const tone: DealsAnswerTone =
+    t.tone === 'good' ? 'success' : t.tone === 'high' || t.tone === 'mall' ? 'warning' : 'gray';
+  const badge = { label: t.label, tone };
+  // 기준선(추이 최저~최고의 아래 30%)은 평균보다 높게 나올 때가 있어(값이 한쪽에 몰린 추이) 평균과 나란히 두면
+  // 「평소 375원 / 381원 이하면 사기 좋아요」처럼 서로 어긋나 보였다 — 기다릴 때(진행 딜 없음·평소 수준·비쌈)만 쓴다.
+  const guide =
+    t.buyLine != null && t.buyLine > 0 && t.tone !== 'mall' && t.tone !== 'good'
+      ? `${formatPrice(t.buyLine)} 이하${t.activeDealCount > 0 ? '면' : '로 올라오면'} 사기 좋은 가격이에요`
+      : null;
+
+  if (t.isActivePrice) {
+    const price = t.totalPrice != null ? won(t.totalPrice) : formatPrice(t.current);
+    const unit = t.basis === 'unit' && t.totalPrice != null ? formatPrice(t.current) : null;
+    let compare: string | null = null;
+    if (t.tone === 'mall' && t.mallPrice != null && t.totalPrice != null) {
+      compare =
+        t.mallPrice < t.totalPrice
+          ? `다나와 같은 구성 최저가 ${won(t.mallPrice)} — 핫딜보다 ${won(t.totalPrice - t.mallPrice)} 싸요`
+          : `다나와 같은 구성 최저가도 ${won(t.mallPrice)}으로 같아요`;
+    } else if (t.savePct != null && t.avg != null) {
+      const avg = formatPrice(t.avg);
+      compare =
+        t.savePct > 0
+          ? `평소 핫딜가(${avg})보다 ${t.savePct}% 싸요`
+          : t.savePct < 0
+            ? `평소 핫딜가(${avg})보다 ${-t.savePct}% 비싸요`
+            : `평소 핫딜가(${avg})와 비슷해요`;
+    } else if (t.historyPoints < MIN_HISTORY_POINTS) {
+      compare = '모인 핫딜 기록이 짧아 싼지 비싼지는 아직 말하지 않아요';
+    }
+    return {
+      badge,
+      headline: `${t.activeDealCount > 1 ? '지금 가장 싼 핫딜' : '지금 핫딜'} ${price}`,
+      detail: [t.bestPackLabel, unit].filter(Boolean).join(' · ') || null,
+      compare,
+      guide,
+    };
+  }
+
+  // 진행 딜은 있는데 판정 축 가격이 없다(증정 딜만·단가 없음) — 배지가 이유를 말하고 목록으로 보낸다.
+  if (t.activeDealCount > 0) {
+    return {
+      badge,
+      headline: `진행 중인 핫딜 ${t.activeDealCount}건`,
+      detail: null,
+      compare: null,
+      guide,
+    };
+  }
+
+  const ago = lastDeal ? relativeTimeLabel(lastDeal.postedAt, now) : null;
+  const lastPrice = lastDeal?.price != null && lastDeal.price > 0 ? won(lastDeal.price) : null;
+  return {
+    badge: null,
+    headline: '지금은 진행 중인 핫딜이 없어요',
+    detail: ago ? [`마지막 핫딜 ${ago}`, lastPrice].filter(Boolean).join(' · ') : null,
+    compare: null,
+    guide,
+  };
+}
+
+/** 모델명이 지난 딜 제목의 이만큼 넘게 걸리면 모델명을 그대로 건다 — 상품을 가장 좁게 부르는 이름이라. */
+const MODEL_NAME_KEEP_RATIO = 0.5;
+
+/**
+ * 모델 페이지 알림 버튼이 걸 키워드. 키워드 알림은 제목에 키워드가 (공백 무시) 그대로 들어 있어야 간다 — 모델명(카탈로그 이름)은
+ * 제목 표기와 자주 달라(「진라면 매운맛 컵」↔「진라면 컵 매운맛」, 「Q9000 AF17B6474GZS」) 그 상품 지난 딜 제목 어디에도 안 걸리는
+ * 페이지가 많았다(2026-10-24 무작위 150쪽 중 54쪽, 평균 46%만 걸림).
+ * 모델명이 제목 절반 이상에 걸리면 그대로 두고, 아니면 이 상품 딜 제목마다 상세 알림 제안과 같은 규칙(deriveKeyword)으로 뽑은 후보 중
+ * 제목에 가장 많이 걸리는 것(같으면 긴 것 — 더 좁다)을 고른다 — 같은 표본에서 평균 82%, 안 걸리는 페이지 0.
+ * 브랜드·상위 키워드 이름 그대로는 후보에서 뺀다(그 브랜드·키워드의 다른 상품에 다 걸린다).
+ */
+export function pickModelAlertKeyword(input: {
+  modelName: string;
+  brand?: string | null;
+  hubName?: string | null;
+  titles: readonly string[];
+}): string {
+  const fold = (s: string) => s.normalize('NFC').toLowerCase().replace(/\s+/g, '');
+  const titles = input.titles.map(fold);
+  const share = (keyword: string) => {
+    const k = fold(keyword);
+    return k && titles.length ? titles.filter((t) => t.includes(k)).length / titles.length : 0;
+  };
+  let best = input.modelName.trim();
+  let bestShare = share(best);
+  if (bestShare >= MODEL_NAME_KEEP_RATIO) return best;
+  const banned = new Set(
+    [input.brand, input.hubName].filter((s): s is string => !!s?.trim()).map(fold),
+  );
+  for (const keyword of new Set(input.titles.map((t) => deriveKeyword(t).trim()))) {
+    if (keyword.length < 2 || banned.has(fold(keyword))) continue;
+    const s = share(keyword);
+    if (s > bestShare || (s === bestShare && keyword.length > best.length)) {
+      best = keyword;
+      bestShare = s;
+    }
+  }
+  return best;
+}
+
 // 앱 키워드 탭도 같은 말을 해야 해서 @jirum/domain 으로 옮겼다(2026-10-20). 기존 import 경로는 그대로 둔다.
-export { relativeTimeLabel } from '@jirum/domain/relative-time';
+export { relativeTimeLabel };

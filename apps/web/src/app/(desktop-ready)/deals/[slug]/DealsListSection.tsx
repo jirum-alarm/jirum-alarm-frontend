@@ -12,21 +12,13 @@ import {
   cleanDealTitle,
   Deal,
   dealComparePrice,
+  formatDealPrice,
   HistBasis,
-  isForeignPriceDeal,
 } from '@/features/deals/lib/model-page-insights';
 
 function won(n?: number | null): string {
   if (n == null) return '-';
   return `${Math.round(n).toLocaleString()}원`;
-}
-
-/** 직구 딜(달러 페이지 전체, 또는 원화 페이지에 섞인 소수 가격 딜)은 달러로 — 예전엔 $219.76 이 "220원"으로 보였다. */
-function dealPrice(deal: Deal, currency: 'KRW' | 'USD'): string {
-  if (deal.price == null) return '-';
-  return currency === 'USD' || isForeignPriceDeal(deal, currency)
-    ? `$${deal.price.toLocaleString(undefined, { maximumFractionDigits: 2 })}`
-    : won(deal.price);
 }
 
 type Tab = 'active' | 'history';
@@ -36,7 +28,7 @@ interface Props {
   historyDeals: Deal[];
   histBasis: HistBasis;
   histUnitLabel?: string | null;
-  /** 추이 최저 — 동일 축 비교용. 이력 탭에서만 '역대 최저' 배지. */
+  /** 추이 최저 — 동일 축 비교용. 이력 탭에서만 '기록상 최저' 배지(우리가 모은 핫딜 기록이라 «역대»라 부르지 않는다 — 판정 배지와 같은 말). */
   histMin: number;
   listTitleSuffix: string;
   currency: 'KRW' | 'USD';
@@ -100,7 +92,7 @@ export default function DealsListSection({
         {deals.map((deal) => {
           const comparePrice = dealComparePrice(deal, histBasis, histUnitLabel);
           const isBundle = bundleIds.has(deal.productId);
-          // 역대 최저: 이력 탭 + 비번들 + 동일 축. 진행 탭에선 '지금 추천'만.
+          // 기록상 최저: 이력 탭 + 비번들 + 동일 축. 진행 탭에선 '지금 추천'만.
           const isAllTimeLow =
             tab === 'history' &&
             !isBundle &&
@@ -137,8 +129,13 @@ export default function DealsListSection({
                   <div className="line-clamp-2 text-sm">{title}</div>
                   <div className={cn(text.caption, 'mt-1 flex flex-wrap items-center gap-2')}>
                     {deal.mallName && <span className="text-gray-500">{deal.mallName}</span>}
+                    {/* 한국 날짜로 — 서버(UTC)와 브라우저가 다른 날을 찍어 밤 딜마다 하이드레이션이 깨졌다(2026-10-24 화면 하네스). */}
                     {deal.postedAt && (
-                      <span>{new Date(deal.postedAt).toLocaleDateString('ko-KR')}</span>
+                      <span>
+                        {new Date(deal.postedAt).toLocaleDateString('ko-KR', {
+                          timeZone: 'Asia/Seoul',
+                        })}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -156,13 +153,13 @@ export default function DealsListSection({
                   )}
                   {isAllTimeLow && (
                     <Badge size="xs" tone="error">
-                      역대 최저
+                      기록상 최저
                     </Badge>
                   )}
                   <span
                     className={`text-sm font-medium ${deal.isEnd ? 'text-gray-500 line-through' : 'text-gray-700'}`}
                   >
-                    {dealPrice(deal, currency)}
+                    {formatDealPrice(deal, currency)}
                   </span>
                   {deal.unitPrice != null && deal.unitLabel && (
                     <span className="text-11 text-gray-500">

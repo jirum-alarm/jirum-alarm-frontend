@@ -5,7 +5,9 @@ import { describe, it } from 'node:test';
 const require = createRequire(import.meta.url);
 const {
   withTopicParticle,
+  buildDealsAnswer,
   buildDealsLeadSentence,
+  pickModelAlertKeyword,
   recentDealRows,
   splitDealsForList,
   timingFromVerdict,
@@ -269,6 +271,221 @@ describe('timingFromVerdict', () => {
   it('판정이 없으면(옛 응답) 가격 정보만으로 판정 없음', () => {
     assert.equal(timingFromVerdict({ ...base, verdict: null }).tone, 'unknown');
     assert.equal(timingFromVerdict({ histBasis: 'total', verdict: null }).label, '가격 정보 부족');
+  });
+
+  it('지난 가격이 없어도 서버가 진행 딜 없음이라 했으면 그 말을 한다', () => {
+    const t = timingFromVerdict({
+      histBasis: 'total',
+      verdict: verdict({ tone: null, pendingReason: 'NO_ACTIVE', comparePrice: null }),
+    });
+    assert.equal(t.label, '진행 중인 핫딜 없음');
+  });
+
+  it('다나와와 같은 값이면 「더 쌉니다」가 아니라 「같습니다」', () => {
+    const t = timingFromVerdict({
+      ...base,
+      verdict: verdict({
+        tone: 'mall_cheaper',
+        activePrice: 3050,
+        mallPrice: 3050,
+        bestPackLabel: '120g 5개',
+      }),
+    });
+    const lead = buildDealsLeadSentence({
+      modelName: '오뚜기 진라면 매운맛',
+      timing: t,
+      dealCount: 60,
+      formatPrice: fmt,
+    });
+    assert.match(
+      lead ?? '',
+      /^오뚜기 진라면 매운맛은 지금 핫딜\(120g 5개 3,050원\)이 다나와 최저가와 같습니다\./,
+    );
+  });
+
+  it('진행 딜이 없으면 리드 문장에 마지막 핫딜을 한국 날짜로 — 인용돼도 낡지 않게', () => {
+    const none = timingFromVerdict({
+      ...base,
+      verdict: verdict({
+        tone: null,
+        pendingReason: 'NO_ACTIVE',
+        comparePrice: null,
+        activeDealCount: 0,
+      }),
+    });
+    const lead = buildDealsLeadSentence({
+      modelName: '오뚜기 진라면 매운맛 컵',
+      timing: none,
+      dealCount: 10,
+      formatPrice: fmt,
+      // UTC 9/28 18시 = 한국 9/29 새벽
+      lastDeal: { postedAt: '2026-09-28T18:33:45.000Z', price: 9000 },
+    });
+    assert.match(lead ?? '', /마지막 핫딜 2026년 9월 29일\(9,000원\)\.$/);
+  });
+});
+
+describe('buildDealsAnswer', () => {
+  type Verdict = NonNullable<Parameters<typeof timingFromVerdict>[0]['verdict']>;
+  const NOW = Date.parse('2026-10-24T12:00:00+09:00');
+  const DAY = 24 * 60 * 60 * 1000;
+  const verdict = (over: Partial<Verdict> = {}): Verdict => ({
+    tone: 'lowest',
+    pendingReason: null,
+    activeDealCount: 2,
+    activeProductIds: [1, 2],
+    bundleProductIds: [],
+    bestProductId: 1,
+    comparePrice: 463,
+    activePrice: 25910,
+    bestPackLabel: '140g 40개',
+    mallPrice: null,
+    avgPrice: 611,
+    savePct: 24,
+    buyLine: 541,
+    historyPoints: 19,
+    ...over,
+  });
+  const g = (n: number) => `100g당 ${Math.round(n).toLocaleString('ko-KR')}원`;
+  const answer = (v: Verdict, lastDeal?: { postedAt: string; price?: number | null }) =>
+    buildDealsAnswer({
+      timing: timingFromVerdict({ verdict: v, histBasis: 'unit', histUnitLabel: '100g당' }),
+      formatPrice: g,
+      lastDeal,
+      now: NOW,
+    });
+
+  it('진행 딜이 싸면 — 지금 값(총액)을 큰 글씨로, 단위가·평소 대비는 문장으로(기준선은 배지가 이미 답이라 뺀다)', () => {
+    assert.deepEqual(answer(verdict()), {
+      badge: { label: '기록상 최저 · 사기 좋은 구간', tone: 'success' },
+      headline: '지금 가장 싼 핫딜 25,910원',
+      detail: '140g 40개 · 100g당 463원',
+      compare: '평소 핫딜가(100g당 611원)보다 24% 싸요',
+      guide: null,
+    });
+  });
+
+  it('평소보다 비싸면 비싸다고 + 기다릴 가격, 진행 딜이 하나면 「지금 핫딜」', () => {
+    const a = answer(verdict({ tone: 'high', savePct: -61, activeDealCount: 1 }));
+    assert.equal(a.badge?.tone, 'warning');
+    assert.equal(a.headline, '지금 핫딜 25,910원');
+    assert.equal(a.compare, '평소 핫딜가(100g당 611원)보다 61% 비싸요');
+    assert.equal(a.guide, '100g당 541원 이하면 사기 좋은 가격이에요');
+  });
+
+  it('다나와가 답이면 다나와 값으로 비교하고 «이하면 사도 됨»은 말하지 않는다', () => {
+    const cheaper = answer(verdict({ tone: 'mall_cheaper', mallPrice: 24000 }));
+    assert.equal(cheaper.compare, '다나와 같은 구성 최저가 24,000원 — 핫딜보다 1,910원 싸요');
+    assert.equal(cheaper.guide, null);
+    const same = answer(verdict({ tone: 'mall_cheaper', mallPrice: 25910 }));
+    assert.equal(same.compare, '다나와 같은 구성 최저가도 25,910원으로 같아요');
+  });
+
+  it('기록이 짧으면 비교 대신 이유를(서버는 그땐 기준선도 안 준다)', () => {
+    const a = answer(
+      verdict({
+        tone: null,
+        pendingReason: 'THIN_HISTORY',
+        savePct: null,
+        buyLine: null,
+        historyPoints: 3,
+      }),
+    );
+    assert.equal(a.badge?.label, '추이 대비 판단 불가');
+    assert.equal(a.compare, '모인 핫딜 기록이 짧아 싼지 비싼지는 아직 말하지 않아요');
+    assert.equal(a.guide, null);
+  });
+
+  it('진행 딜이 없으면 그게 큰 글씨 — 마지막 딜·올라오면 살 기준', () => {
+    const a = answer(
+      verdict({
+        tone: null,
+        pendingReason: 'NO_ACTIVE',
+        activeDealCount: 0,
+        activeProductIds: [],
+        bestProductId: null,
+        comparePrice: null,
+        activePrice: null,
+        savePct: null,
+      }),
+      { postedAt: new Date(NOW - 25 * DAY).toISOString(), price: 9000 },
+    );
+    assert.deepEqual(a, {
+      badge: null,
+      headline: '지금은 진행 중인 핫딜이 없어요',
+      detail: '마지막 핫딜 25일 전 · 9,000원',
+      compare: null,
+      guide: '100g당 541원 이하로 올라오면 사기 좋은 가격이에요',
+    });
+  });
+
+  it('증정 딜만 진행 중이면 건수와 이유(배지)만', () => {
+    const a = answer(
+      verdict({
+        tone: null,
+        pendingReason: 'BUNDLE_ONLY',
+        comparePrice: null,
+        savePct: null,
+        activeDealCount: 1,
+      }),
+    );
+    assert.equal(a.badge?.label, '증정·혜택 딜만 진행 중');
+    assert.equal(a.headline, '진행 중인 핫딜 1건');
+  });
+});
+
+describe('pickModelAlertKeyword', () => {
+  it('모델명이 지난 딜 제목 절반 이상에 걸리면 그대로 — 가장 좁게 부르는 이름', () => {
+    assert.equal(
+      pickModelAlertKeyword({
+        modelName: '진라면 매운맛 컵',
+        brand: '오뚜기',
+        hubName: '오뚜기',
+        titles: [
+          '오뚜기 진라면 매운맛 컵 65gx18개',
+          '오뚜기 진라면 매운맛 컵라면',
+          '오뚜기 진라면 컵 매운맛 65g, 12개',
+          '진라면 컵 매운맛 65g 12개',
+        ],
+      }),
+      '진라면 매운맛 컵',
+    );
+  });
+
+  it('모델명이 제목에 거의 안 걸리면 제목에서 뽑은 후보 중 가장 많이 걸리는 것', () => {
+    assert.equal(
+      pickModelAlertKeyword({
+        modelName: '울트라기어 27GS85Q',
+        brand: 'LG전자',
+        titles: [
+          'LG 27GS85Q 게이밍 모니터 (299,000원/무료)',
+          '[쿠팡] LG 27GS85Q 울트라기어',
+          'LG전자 27인치 QHD 180Hz',
+          '울트라기어 27GS85Q 역대가',
+        ],
+      }),
+      'LG 27GS85Q',
+    );
+  });
+
+  it('브랜드·상위 키워드 이름 그대로는 고르지 않는다 — 그 브랜드 전 상품에 걸린다', () => {
+    assert.equal(
+      pickModelAlertKeyword({
+        modelName: '데코 앤 소프트 와이드 33m (24롤)',
+        brand: '크리넥스',
+        hubName: '휴지',
+        titles: [
+          '크리넥스 3겹 데코앤소프트 30m 24롤',
+          '크리넥스 3겹 화장지 27m',
+          '크리넥스 휴지 특가',
+        ],
+      }),
+      '크리넥스 3겹',
+    );
+  });
+
+  it('제목이 없으면 모델명', () => {
+    assert.equal(pickModelAlertKeyword({ modelName: ' WX242 ', titles: [] }), 'WX242');
   });
 });
 

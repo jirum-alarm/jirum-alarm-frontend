@@ -1,4 +1,5 @@
 import { emptyText, linkChip, text } from '@jirum/design-system/recipes';
+import { buildHubModelGroups } from '@jirum/domain/hub-model-pages';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -12,7 +13,6 @@ import { cn } from '@/shared/lib/cn';
 import { jsonLdHtml } from '@/shared/lib/json-ld';
 
 import { fetchKeywordHub, fetchKeywordHubs } from '@/entities/keyword-hub/api/fetchKeywordHub';
-import { buildHubModelGroups, type HubModelChip } from '@/entities/keyword-hub/lib/hub-model-pages';
 import {
   buildKeywordHubSeo,
   findThemesForHub,
@@ -25,6 +25,7 @@ import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
 
 import { toSeoImageUrl } from '@/features/product-detail/lib/product-seo';
 
+import HubModelChipList from '@/widgets/keyword-hub/ui/HubModelChipList';
 import KeywordHubAlertButton from '@/widgets/keyword-hub/ui/KeywordHubAlertButton';
 import { searchHref } from '@/widgets/search/lib/search-href';
 
@@ -219,7 +220,7 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
             <h2 className={text.subtitle}>상품별 최저가 모음</h2>
             <span className={cn(text.caption, 'shrink-0')}>
               {modelChips.goodCount > 0 ? `지금 싼 상품 ${modelChips.goodCount}개 · ` : ''}
-              {modelPages.length}개
+              {modelChips.total}개
             </span>
           </div>
           {modelChips.groups.length > 0 && (
@@ -229,7 +230,7 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
                   <p className={cn(text.label, 'pc:w-32 w-20 shrink-0 pt-1.5 break-keep')}>
                     {group.name}
                   </p>
-                  <ModelChipList chips={group.chips} />
+                  <HubModelChipList chips={group.chips} source="keyword_hub" />
                 </li>
               ))}
             </ul>
@@ -237,7 +238,7 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
           {modelChips.groups.length > 0 && modelChips.visible.length > 0 && (
             <p className={cn(text.caption, 'mb-2')}>그 밖의 상품</p>
           )}
-          <ModelChipList chips={modelChips.visible} />
+          <HubModelChipList chips={modelChips.visible} source="keyword_hub" />
           {modelChips.folded.length > 0 && (
             <details className="group mt-2">
               <summary
@@ -248,7 +249,7 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
               >
                 {modelChips.folded.length}개 더 보기 ›
               </summary>
-              <ModelChipList chips={modelChips.folded} />
+              <HubModelChipList chips={modelChips.folded} source="keyword_hub" />
             </details>
           )}
         </nav>
@@ -328,29 +329,5 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
         </ul>
       </nav>
     </main>
-  );
-}
-
-function ModelChipList({ chips }: { chips: HubModelChip[] }) {
-  return (
-    <ul className="flex flex-wrap gap-2">
-      {chips.map((chip) => (
-        <li key={chip.slug}>
-          <Link
-            href={`/deals/${chip.slug}`}
-            data-track="model-page-cta"
-            data-source="keyword_hub"
-            className={cn('inline-block', linkChip)}
-          >
-            {/* 묶음 안 칩은 줄 이름을 뺀 말만 보이지만, 링크 글은 「진라면 매운맛」으로 읽혀야 한다(검색·스크린리더). */}
-            {chip.prefix ? <span className="sr-only">{chip.prefix} </span> : null}
-            {chip.label}
-            {chip.good ? (
-              <span className="text-success-600 font-semibold"> · {chip.good}</span>
-            ) : null}
-          </Link>
-        </li>
-      ))}
-    </ul>
   );
 }

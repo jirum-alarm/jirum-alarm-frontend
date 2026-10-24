@@ -1,4 +1,5 @@
-import { infoBox, linkChip, text } from '@jirum/design-system/recipes';
+import { linkChip, text } from '@jirum/design-system/recipes';
+import { buildHubModelGroups, findHubModelLine } from '@jirum/domain/hub-model-pages';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -12,7 +13,7 @@ import { convertToWebp } from '@/shared/lib/utils/image';
 import Badge from '@/shared/ui/common/Badge';
 import ImageComponent from '@/shared/ui/ImageComponent';
 
-import { fetchKeywordHubs } from '@/entities/keyword-hub/api/fetchKeywordHub';
+import { fetchKeywordHub, fetchKeywordHubs } from '@/entities/keyword-hub/api/fetchKeywordHub';
 import {
   findKeywordHubsForTitle,
   formatHubCount,
@@ -20,12 +21,18 @@ import {
 } from '@/entities/keyword-hub/lib/keyword-hub';
 
 import {
+  buildDealsAnswer,
   buildDealsLeadSentence,
   buildModelDisplayName,
+  cleanDealTitle,
   Deal,
+  formatDealPrice,
   HeroPrice,
+  MIN_HISTORY_POINTS,
+  pickModelAlertKeyword,
   rankRepresentatives,
   recentDealRows,
+  relativeTimeLabel,
   Representative,
   splitDealsForList,
   timingFromVerdict,
@@ -33,8 +40,10 @@ import {
 } from '@/features/deals/lib/model-page-insights';
 import { toSeoImageUrl } from '@/features/product-detail/lib/product-seo';
 
+import HubModelChipList from '@/widgets/keyword-hub/ui/HubModelChipList';
 import KeywordHubAlertButton from '@/widgets/keyword-hub/ui/KeywordHubAlertButton';
 
+import DealsAnswerCard, { type AnswerDealRow } from './DealsAnswerCard';
 import DealsListSection from './DealsListSection';
 import DealsMobileHeader from './DealsMobileHeader';
 import DealsTracking from './DealsTracking';
@@ -130,11 +139,33 @@ function rankedRepsForHint(
 type ModelPageData = NonNullable<Awaited<ReturnType<typeof ModelPageService.getModelPage>>>;
 
 /**
+ * 마지막 딜 — 진행 딜이 없을 때 「지금 사도 될까?」의 답(마지막 핫딜 N일 전 · 가격). 검수된 딜 먼저(검수 전 딜은 다른 상품일 수 있다),
+ * 없으면 검수 전 딜. 서버 순서를 믿지 않고 날짜로 고른다. 직구 달러 가격은 원으로 못 쓰니 가격만 뺀다.
+ */
+function latestDeal(page: ModelPageData) {
+  type Row = NonNullable<ModelPageData['recentDeals']>[number];
+  const newest = (rows: Row[]) =>
+    rows.reduce<Row | null>(
+      (a, d) => (!a || Date.parse(d.postedAt) > Date.parse(a.postedAt) ? d : a),
+      null,
+    );
+  const rows = page.recentDeals ?? [];
+  const d = newest(rows.filter((r) => r.isVerified)) ?? newest(rows);
+  if (!d) return null;
+  return {
+    productId: d.productId,
+    postedAt: d.postedAt,
+    price: d.priceCurrency === 'USD' ? null : (d.price ?? null),
+  };
+}
+
+/**
  * 가격 추이·구매 타이밍·리드 문장. 본문 첫 문단·JSON-LD description·meta description 이 같은 문장을 쓴다.
  * meta description 을 백엔드 metaDescription 대신 이걸로 쓰는 이유: 단위가 모델(SSD GB당 등)에서
  * 백엔드 문구가 "최저 108.06원~" 처럼 단위 없이 나갔다(2026-09-23 실측). 리드 문장은 단위를 문장 안에 넣는다.
  */
 function deriveModelPageInsights(page: ModelPageData, displayName: string) {
+  const lastDeal = latestDeal(page);
   const payload = (page.payload ?? {}) as ModelPagePayload;
   const { heroPrice, priceHistory } = payload;
   const histCurrency = priceHistory?.currency ?? 'KRW';
@@ -160,8 +191,24 @@ function deriveModelPageInsights(page: ModelPageData, displayName: string) {
     timing,
     dealCount: page.dealCount,
     formatPrice: fmtWithUnit,
+    lastDeal,
   });
-  return { fmtHist, histPrices, timing, leadSentence };
+  return { fmtHist, fmtWithUnit, histPrices, timing, leadSentence, lastDeal };
+}
+
+/**
+ * 허브에서 이 상품이 묶인 줄(진라면 → 순한맛·매운맛·매운맛 컵) — 허브 「상품별 최저가 모음」 칩을 눌러 온 사람이 옆 맛·구성으로
+ * 건너가게 허브와 같은 묶음·순서로. 묶음은 이름만으로 정해지니 먼저 판정 없이 줄이 있는지 보고, 있을 때만 판정 목록(허브와 같은
+ * 데이터 캐시)을 읽어 「지금 싼」 칩을 앞으로. 링크는 부가 요소라 실패하면 줄 없이 그린다.
+ */
+async function loadModelLine(hubSlug: string, slug: string) {
+  const hub = await fetchKeywordHub(hubSlug).catch(() => null);
+  if (!hub || hub.modelPages.length < 2) return null;
+  if (!findHubModelLine(buildHubModelGroups(hub.hub.name, hub.modelPages, []).groups, slug)) {
+    return null;
+  }
+  const verdicts = await ModelPageService.getPublishedModelPages().catch(() => []);
+  return findHubModelLine(buildHubModelGroups(hub.hub.name, hub.modelPages, verdicts).groups, slug);
 }
 
 export async function generateMetadata({
@@ -209,6 +256,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   ]
     .filter((hub, i, all) => all.findIndex((h) => h.slug === hub.slug) === i)
     .slice(0, 2);
+  const modelLine = parentHub ? await loadModelLine(parentHub.slug, page.slug) : null;
 
   const payload = (page.payload ?? {}) as ModelPagePayload;
   const {
@@ -232,7 +280,8 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
         ? '주별 핫딜 최저가 추이'
         : '월별 핫딜 최저가 추이';
   const displayName = buildModelDisplayName(page.brand, page.modelName);
-  const { fmtHist, histPrices, timing, leadSentence } = deriveModelPageInsights(page, displayName);
+  const { fmtHist, fmtWithUnit, histPrices, timing, leadSentence, lastDeal } =
+    deriveModelPageInsights(page, displayName);
   const histMax = histPrices.length ? Math.max(...histPrices) : 0;
   const histMin = histPrices.length ? Math.min(...histPrices) : 0;
   const histBarH = (price: number) => {
@@ -305,13 +354,6 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   const rankedReps = rankRepresentatives(representatives);
   const bestRep = rankedReps.find((r) => r.isBestUnit);
 
-  // 판정 색 — 좋음=success·비쌈=warning·평소=gray(/deals 목록 판정 배지와 같다).
-  const timingTone =
-    timing.tone === 'good'
-      ? 'success'
-      : timing.tone === 'high' || timing.tone === 'mall'
-        ? 'warning'
-        : 'gray';
   // 판정은 지금 딜과 같은 구성 안에서만 한다 — 다른 구성이 단위가로 훨씬 싸면 따로 알려 준다(2026-10-19 보성녹차:
   // 350ml 24개 100ml당 140원 「사기 좋은 구간」인데 1.5L 12개는 다나와 100ml당 63원). 같은 단위·20% 넘게 쌀 때만.
   const cheaperPack =
@@ -324,10 +366,43 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   const listTitleSuffix =
     histBasis === 'unit' && histUnitLabel ? `${histUnitLabel} 싼 순` : '싼 순';
 
+  // 답 카드 — 지금 상태 → 평소와 비교 → 살 기준 → 살 곳. 진행 딜이 있으면 판정한 딜(없으면 진행 목록 첫 줄)을 바로 누를 수 있게.
+  const answer = buildDealsAnswer({ timing, formatPrice: fmtWithUnit, lastDeal });
+  const answerDeal =
+    timing.activeDealCount > 0
+      ? (activeDeals.find((d) => d.productId === page.priceVerdict?.bestProductId) ??
+        activeDeals[0] ??
+        null)
+      : null;
+  const answerDealRow: AnswerDealRow | null = answerDeal
+    ? {
+        productId: answerDeal.productId,
+        title: cleanDealTitle(answerDeal.title),
+        thumbnail: answerDeal.thumbnail,
+        meta:
+          [answerDeal.mallName, relativeTimeLabel(answerDeal.postedAt)]
+            .filter(Boolean)
+            .join(' · ') || null,
+        priceText: formatDealPrice(answerDeal, histCurrency),
+        unitText:
+          answerDeal.unitPrice != null && answerDeal.unitLabel
+            ? `${answerDeal.unitLabel} ${won(answerDeal.unitPrice)}`
+            : null,
+      }
+    : null;
+  // 알림 키워드 — 모델명이 이 상품 딜 제목에 잘 안 걸리면 제목에서 뽑은 이름으로(알림은 제목에 그 글자가 있어야 간다).
+  const alertKeyword = pickModelAlertKeyword({
+    modelName: page.modelName,
+    brand: page.brand,
+    hubName: parentHub?.name,
+    titles: [...deals.map((d) => d.title), ...(page.recentDeals ?? []).map((d) => d.title)],
+  });
+
   // 추이 막대에 "지금" 표시 — 현재가에 가장 가까운 막대 하나만(2% 안일 때, 동률이면 최근).
   // 예전엔 2% 안의 막대마다 "지금 N원" 을 찍어 평평한 추이에서 라벨 10개가 겹쳤다(2026-10-05 스팸).
   // 최저·최고 라벨도 같은 값이 여러 막대면 하나씩만(최저=최근, 최고=처음).
-  const nowPrice = timing.current > 0 ? timing.current : null;
+  // 진행 딜이 없으면 timing.current 는 지난 핫딜 가격(히어로 폴백)이라 「지금」이라 부르지 않는다.
+  const nowPrice = timing.isActivePrice && timing.current > 0 ? timing.current : null;
   let nowIdx = -1;
   if (nowPrice != null) {
     let bestDiff = Infinity;
@@ -375,177 +450,221 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
         )}
       </nav>
 
+      {/* 허브에서 온 사람이 어디쯤인지 — 허브 「상품별 최저가 모음」의 같은 줄 칩을 그대로, 지금 상품은 고른 칩. */}
+      {modelLine && (
+        <nav aria-label={`${modelLine.name} 다른 상품`} className="mb-5 flex items-start gap-3">
+          <p className={cn(text.label, 'shrink-0 pt-1.5')}>{modelLine.name}</p>
+          <HubModelChipList
+            chips={modelLine.chips}
+            source="model_page_line"
+            currentSlug={page.slug}
+          />
+        </nav>
+      )}
+
       <div className="pc:grid pc:grid-cols-3 pc:items-start pc:gap-x-10">
         <div className="pc:col-span-2">
-          {/* 히어로 — 구매 판단 */}
-          <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start">
-            {heroImage && (
-              <div className="relative h-40 w-40 shrink-0 overflow-hidden rounded-lg bg-gray-50">
-                {/* webp 우선 + 없으면 원본 폴백. S3 webp 변환 커버리지가 91.8% 라
-                    (2026-09-02 전수 실측) 폴백 없이 webp 를 쓰면
-                    8% 가 403 으로 깨진다 — CDN 은 폴백을 안 해준다(실측 403).
-                    ImageComponent 는 fallbackSrc 가 있으면 클라 컴포넌트로 가서 priority
-                    preload 가 빠지는데, 히어로 1장 preload 보다 안 깨지는 게 우선. */}
-                <ImageComponent
-                  src={convertToWebp(heroImage) ?? heroImage}
-                  fallbackSrc={heroImage}
-                  alt={displayName}
-                  width={160}
-                  height={160}
-                  priority
-                  className="h-full w-full object-contain"
-                />
+          {/* 히어로 — 무엇에 대한 답인지(이름·사진) 다음 바로 답 카드. 사진은 딜 화면 캡처가 많아 작게 — 폰 첫 화면에 답이 들어오게. */}
+          <header className="mb-4">
+            <div className="flex items-start gap-4">
+              {heroImage && (
+                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-gray-50 sm:h-24 sm:w-24">
+                  {/* webp 우선 + 없으면 원본 폴백. S3 webp 변환 커버리지가 91.8% 라
+                      (2026-09-02 전수 실측) 폴백 없이 webp 를 쓰면
+                      8% 가 403 으로 깨진다 — CDN 은 폴백을 안 해준다(실측 403).
+                      ImageComponent 는 fallbackSrc 가 있으면 클라 컴포넌트로 가서 priority
+                      preload 가 빠지는데, 히어로 1장 preload 보다 안 깨지는 게 우선. */}
+                  <ImageComponent
+                    src={convertToWebp(heroImage) ?? heroImage}
+                    fallbackSrc={heroImage}
+                    alt={displayName}
+                    width={96}
+                    height={96}
+                    priority
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+              )}
+              <div className="min-w-0 flex-1">
+                <h1 className="text-xl font-bold">{displayName}, 지금 사도 될까?</h1>
+                <p className={cn(text.caption, 'mt-1')}>
+                  {page.brand ? `${page.brand} · ` : ''}지금까지 핫딜 {page.dealCount}건
+                  {page.lastDealAt
+                    ? ` · 마지막 ${new Date(page.lastDealAt).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' })}`
+                    : ''}
+                </p>
               </div>
-            )}
-            <div className="min-w-0 flex-1">
-              <h1 className="text-xl font-bold">{displayName}, 지금 사도 될까?</h1>
-              {/* h1 다음 첫 문단 = 답. 수치가 UI 토큰으로만 흩어져 있으면 AI 가 인용할 문장이
-                  없다. 아래 카드와 같은 값을 문장으로 한 번 더 쓴다(JSON-LD description 도 동일). */}
-              <p className="mt-1 text-sm text-gray-600">
-                {leadSentence ?? '커뮤니티 핫딜을 단위가로 모아, 사도 되는 가격을 알려 드려요.'}
-              </p>
-              <p className={cn(text.caption, 'mt-1')}>
-                {page.brand ? `${page.brand} · ` : ''}지금까지 핫딜 {page.dealCount}건
-                {page.lastDealAt
-                  ? ` · 마지막 ${new Date(page.lastDealAt).toLocaleDateString('ko-KR')}`
-                  : ''}
-              </p>
+            </div>
+            {/* h1 다음 첫 문단 = 답. 수치가 UI 토큰으로만 흩어져 있으면 AI 가 인용할 문장이
+                없다. 아래 카드와 같은 값을 문장으로 한 번 더 쓴다(JSON-LD description 도 동일). */}
+            <p className="mt-3 text-sm leading-relaxed text-gray-600">
+              {leadSentence ?? '커뮤니티 핫딜을 단위가로 모아, 사도 되는 가격을 알려 드려요.'}
+            </p>
+          </header>
 
-              {(timing.current > 0 || heroPrice?.minPrice != null) && (
-                <div className={cn('mt-3 p-3', infoBox)}>
-                  <div className="flex flex-wrap items-center gap-2">
-                    {timing.tone !== 'unknown' && (
-                      <Badge pill tone={timingTone}>
-                        {timing.label}
-                      </Badge>
-                    )}
-                    {timing.activeDealCount > 0 && (
-                      <span className="text-11 text-gray-500">
-                        진행 중 {timing.activeDealCount}건
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
-                    <div>
-                      <p className="text-11 text-gray-500">
-                        {timing.isActivePrice ? '지금 진행 최저' : '지난 핫딜 최저'}
-                        {timing.basis === 'unit' && timing.unitLabel
-                          ? ` (${timing.unitLabel})`
-                          : ''}
-                      </p>
-                      <p className={text.title}>
-                        {timing.current > 0
-                          ? won(timing.current)
-                          : histBasis === 'unit' && heroPrice?.unitPrice != null
-                            ? won(heroPrice.unitPrice)
-                            : won(heroPrice?.minPrice)}
-                      </p>
-                      {timing.isActivePrice && timing.bestPackLabel ? (
-                        <p className={text.caption}>
-                          {timing.bestPackLabel}
-                          {timing.totalPrice != null ? ` · 총액 ${won(timing.totalPrice)}` : ''}
-                        </p>
-                      ) : (
-                        heroPrice?.label && (
-                          <p className={text.caption}>
-                            {heroPrice.label}
-                            {heroPrice.minPrice != null ? ` · 총액 ${won(heroPrice.minPrice)}` : ''}
-                          </p>
-                        )
-                      )}
-                    </div>
-                    {timing.avg != null && (
-                      <div>
-                        <p className="text-11 text-gray-500">추이 평균 대비</p>
-                        <p className={text.title}>
-                          {timing.savePct != null
-                            ? timing.savePct > 0
-                              ? `약 ${timing.savePct}% 저렴`
-                              : timing.savePct < 0
-                                ? `약 ${Math.abs(timing.savePct)}% 비쌈`
-                                : '평균 수준'
-                            : '-'}
-                        </p>
-                        <p className={text.caption}>평균 {fmtHist(timing.avg)}</p>
-                      </div>
-                    )}
-                    {timing.buyLine != null && (
-                      <div>
-                        <p className="text-11 text-gray-500">이하면 사도 됨</p>
-                        <p className={text.title}>{fmtHist(timing.buyLine)}</p>
-                        <p className={text.caption}>추이 최저~최고의 하위 30%</p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 판정 근거 — 결론이 어느 구성·몇 점의 추이·어떤 비교에서 나왔는지 한 자리에서 보이게. */}
-                  {timing.isActivePrice && (
-                    <ul className="mt-3 flex flex-col gap-1 border-t border-gray-200 pt-2 text-xs text-gray-600">
-                      {timing.mallPrice != null && timing.totalPrice != null && (
-                        <li>
-                          다나와 같은 구성 최저가{' '}
-                          <span className="font-semibold text-gray-900">
-                            {won(timing.mallPrice)}
-                          </span>
-                          {timing.mallPrice <= timing.totalPrice
-                            ? ` — 핫딜이 ${won(timing.totalPrice - timing.mallPrice)} 더 비싸요`
-                            : ` — 핫딜이 ${won(timing.mallPrice - timing.totalPrice)} 더 싸요`}
-                        </li>
-                      )}
-                      {histPrices.length > 0 && (
-                        <li>
-                          {timing.bestPackLabel ? `${timing.bestPackLabel} 기준 · ` : ''}핫딜 추이{' '}
-                          {timing.historyPoints}
-                          {histSpanLabel}치 (최저 {fmtHist(histMin)} · 최고 {fmtHist(histMax)})
-                          {timing.historyPoints < 5 ? ' — 추이가 짧아 판정하지 않아요' : ''}
-                        </li>
-                      )}
-                      {cheaperPack && cheaperPack.unitPrice != null && (
-                        <li>
-                          다른 구성 {withTopicParticle(cheaperPack.label)} {cheaperPack.unitLabel}{' '}
-                          <span className="font-semibold text-gray-900">
-                            {won(cheaperPack.unitPrice)}
-                          </span>
-                          {cheaperPack.dealMinPrice != null ? '(핫딜)' : '(다나와)'}로 더 싸요
-                        </li>
-                      )}
-                    </ul>
+          <DealsAnswerCard
+            answer={answer}
+            activeDealCount={timing.activeDealCount}
+            deal={answerDealRow}
+            lastDealHref={
+              timing.activeDealCount === 0 && lastDeal ? `/products/${lastDeal.productId}` : null
+            }
+            evidence={
+              // 판정 근거 — 결론이 어느 구성·몇 점의 추이·어떤 비교에서 나왔는지 한 자리에서 보이게.
+              timing.isActivePrice ? (
+                <ul className="mt-3 flex flex-col gap-1 border-t border-gray-200 pt-2 text-xs text-gray-600">
+                  {histPrices.length > 0 && (
+                    <li>
+                      {timing.bestPackLabel ? `${timing.bestPackLabel} 기준 · ` : ''}핫딜 추이{' '}
+                      {timing.historyPoints}
+                      {histSpanLabel}치 (최저 {fmtHist(histMin)} · 최고 {fmtHist(histMax)})
+                      {timing.historyPoints < MIN_HISTORY_POINTS
+                        ? ' — 추이가 짧아 판정하지 않아요'
+                        : ''}
+                    </li>
                   )}
-
+                  {/* 다나와가 같거나 더 싸면 위 비교 문장이 이미 말한다(그땐 판정이 «다나와가 더 쌈»). */}
+                  {timing.tone !== 'mall' &&
+                    timing.mallPrice != null &&
+                    timing.totalPrice != null && (
+                      <li>
+                        다나와 같은 구성 최저가{' '}
+                        <span className="font-semibold text-gray-900">{won(timing.mallPrice)}</span>
+                        {` — 핫딜이 ${won(timing.mallPrice - timing.totalPrice)} 더 싸요`}
+                      </li>
+                    )}
+                  {cheaperPack && cheaperPack.unitPrice != null && (
+                    <li>
+                      다른 구성 {withTopicParticle(cheaperPack.label)} {cheaperPack.unitLabel}{' '}
+                      <span className="font-semibold text-gray-900">
+                        {won(cheaperPack.unitPrice)}
+                      </span>
+                      {cheaperPack.dealMinPrice != null ? '(핫딜)' : '(다나와)'}로 더 싸요
+                    </li>
+                  )}
+                </ul>
+              ) : null
+            }
+            actions={
+              (timing.tone === 'mall' && danawa?.danawaUrl) || activeDeals.length > 1 ? (
+                <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
                   {timing.tone === 'mall' && danawa?.danawaUrl && (
                     <a
                       href={danawa.danawaUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={cn(
-                        text.label,
-                        'mt-3 mr-4 inline-flex underline-offset-2 hover:underline',
-                      )}
+                      className={cn(text.label, 'underline-offset-2 hover:underline')}
                     >
                       다나와 최저가 보기 →
                     </a>
                   )}
-                  {activeDeals.length > 0 && (
+                  {activeDeals.length > 1 && (
                     <a
                       href="#deals-list"
-                      className={cn(
-                        text.label,
-                        'mt-3 inline-flex underline-offset-2 hover:underline',
-                      )}
+                      className={cn(text.label, 'underline-offset-2 hover:underline')}
                     >
-                      지금 살 수 있는 딜 보기 →
+                      진행 중 핫딜 {activeDeals.length}건 모두 보기 →
                     </a>
                   )}
                 </div>
-              )}
-              {/* 모델 페이지 → 키워드 알림. 검색으로 온 사람을 북극성(알림 경유 재방문)으로 올리는 자리라
-                  딜 유무와 상관없이 늘 둔다. 키워드는 최근 딜 검색에 쓰는 모델명 그대로(브랜드를 붙이면 제목에 안 걸린다). */}
-              <KeywordHubAlertButton keyword={page.modelName} placement="model_page" />
-            </div>
-          </header>
+              ) : null
+            }
+          >
+            {/* 모델 페이지 → 키워드 알림. 검색으로 온 사람을 북극성(알림 경유 재방문)으로 올리는 자리라 딜 유무와 상관없이
+                늘 둔다 — 진행 딜이 없을 땐 이게 답의 끝(다음 핫딜이 오면 알려 준다). */}
+            <KeywordHubAlertButton keyword={alertKeyword} placement="model_page" />
+          </DealsAnswerCard>
 
           <RecentDealsSection rows={recentRows} />
+
+          {/* 핫딜 최저가 추이 + 지금 위치 */}
+          {histPoints.length >= 2 && (
+            <section className="mb-6">
+              <div className="mb-1 flex items-baseline justify-between">
+                <h2 className="text-base font-semibold">{histTitle}</h2>
+                <span className={text.caption}>
+                  {histBasis === 'unit' && histUnitLabel
+                    ? histUnitLabel
+                    : histCurrency === 'USD'
+                      ? '직구가($)'
+                      : '원화'}
+                </span>
+              </div>
+              <p className={cn(text.caption, 'mb-3')}>
+                {nowPrice != null && (
+                  <>
+                    지금 <span className="font-semibold text-gray-800">{fmtHist(nowPrice)}</span>
+                    <span className="text-gray-300"> · </span>
+                  </>
+                )}
+                추이 최저 <span className="text-error-600 font-semibold">{fmtHist(histMin)}</span>
+                <span className="text-gray-300"> · </span>
+                최고 {fmtHist(histMax)}
+                {timing.buyLine != null && (
+                  <>
+                    <span className="text-gray-300"> · </span>
+                    사기 좋은 가격 {fmtHist(timing.buyLine)} 이하
+                  </>
+                )}
+              </p>
+              <div className="relative">
+                {timing.buyLine != null && histMax > histMin && (
+                  <div
+                    className="pointer-events-none absolute right-0 left-0 border-t border-dashed border-gray-300"
+                    style={{
+                      // 막대 영역 96px 중 라벨(~16) + 바(72 max) + x라벨. 바 bottom≈12px(x라벨).
+                      bottom: `${12 + histBarH(timing.buyLine)}px`,
+                    }}
+                    title={`사기 좋은 가격 ${fmtHist(timing.buyLine)} 이하`}
+                  />
+                )}
+                <div className="flex items-end gap-1" style={{ height: 96 }}>
+                  {histPoints.map((p, i) => {
+                    const isLow = p.price === histMin;
+                    const isNearNow = i === nowIdx;
+                    const showPriceLabel = isNearNow || i === lowIdx || i === highIdx;
+                    // 막대가 많으면 x라벨이 겹친다 — 최근 막대부터 거꾸로 세어 ~8개만.
+                    const labelStep = Math.max(2, Math.ceil(histPoints.length / 8));
+                    const showLabel = (histPoints.length - 1 - i) % labelStep === 0;
+                    return (
+                      <div
+                        key={p.month}
+                        className="flex flex-1 flex-col items-center justify-end gap-1"
+                      >
+                        {showPriceLabel && (
+                          <span
+                            className={`text-10 whitespace-nowrap ${
+                              isNearNow
+                                ? 'text-success-700 font-semibold'
+                                : isLow
+                                  ? 'text-error-600 font-semibold'
+                                  : 'text-gray-500'
+                            }`}
+                          >
+                            {isNearNow ? `지금 ${fmtHist(p.price)}` : fmtHist(p.price)}
+                          </span>
+                        )}
+                        <div
+                          className={`w-full rounded-t ${
+                            isNearNow
+                              ? 'bg-success-500'
+                              : isLow
+                                ? 'bg-error-400'
+                                : 'bg-secondary-300'
+                          }`}
+                          style={{ height: `${histBarH(p.price)}px` }}
+                          title={`${p.month}: ${fmtHist(p.price)}`}
+                        />
+                        <span className="text-10 h-3 text-gray-500">
+                          {showLabel ? histPeriodLabel(p.month, histGranularity) : ''}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </section>
+          )}
 
           {/* 용량·수량 — 추천 팩 */}
           {rankedReps.length > 0 && (
@@ -613,95 +732,6 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                     </Card>
                   );
                 })}
-              </div>
-            </section>
-          )}
-
-          {/* 핫딜 최저가 추이 + 지금 위치 */}
-          {histPoints.length >= 2 && (
-            <section className="mb-6">
-              <div className="mb-1 flex items-baseline justify-between">
-                <h2 className="text-base font-semibold">{histTitle}</h2>
-                <span className={text.caption}>
-                  {histBasis === 'unit' && histUnitLabel
-                    ? histUnitLabel
-                    : histCurrency === 'USD'
-                      ? '직구가($)'
-                      : '원화'}
-                </span>
-              </div>
-              <p className={cn(text.caption, 'mb-3')}>
-                {nowPrice != null && (
-                  <>
-                    지금 <span className="font-semibold text-gray-800">{fmtHist(nowPrice)}</span>
-                    <span className="text-gray-300"> · </span>
-                  </>
-                )}
-                추이 최저 <span className="text-error-600 font-semibold">{fmtHist(histMin)}</span>
-                <span className="text-gray-300"> · </span>
-                최고 {fmtHist(histMax)}
-                {timing.buyLine != null && (
-                  <>
-                    <span className="text-gray-300"> · </span>
-                    기준 {fmtHist(timing.buyLine)}
-                  </>
-                )}
-              </p>
-              <div className="relative">
-                {timing.buyLine != null && histMax > histMin && (
-                  <div
-                    className="pointer-events-none absolute right-0 left-0 border-t border-dashed border-gray-300"
-                    style={{
-                      // 막대 영역 96px 중 라벨(~16) + 바(72 max) + x라벨. 바 bottom≈12px(x라벨).
-                      bottom: `${12 + histBarH(timing.buyLine)}px`,
-                    }}
-                    title={`기준 ${fmtHist(timing.buyLine)}`}
-                  />
-                )}
-                <div className="flex items-end gap-1" style={{ height: 96 }}>
-                  {histPoints.map((p, i) => {
-                    const isLow = p.price === histMin;
-                    const isNearNow = i === nowIdx;
-                    const showPriceLabel = isNearNow || i === lowIdx || i === highIdx;
-                    // 막대가 많으면 x라벨이 겹친다 — 최근 막대부터 거꾸로 세어 ~8개만.
-                    const labelStep = Math.max(2, Math.ceil(histPoints.length / 8));
-                    const showLabel = (histPoints.length - 1 - i) % labelStep === 0;
-                    return (
-                      <div
-                        key={p.month}
-                        className="flex flex-1 flex-col items-center justify-end gap-1"
-                      >
-                        {showPriceLabel && (
-                          <span
-                            className={`text-10 whitespace-nowrap ${
-                              isNearNow
-                                ? 'text-success-600 font-semibold'
-                                : isLow
-                                  ? 'text-error-600 font-semibold'
-                                  : 'text-gray-500'
-                            }`}
-                          >
-                            {isNearNow ? `지금 ${fmtHist(p.price)}` : fmtHist(p.price)}
-                          </span>
-                        )}
-                        <div
-                          className={`w-full rounded-t ${
-                            isNearNow
-                              ? 'bg-success-500'
-                              : isLow
-                                ? 'bg-error-400'
-                                : 'bg-secondary-300'
-                          }`}
-                          style={{ height: `${histBarH(p.price)}px` }}
-                          title={`${p.month}: ${fmtHist(p.price)}`}
-                        />
-                        <span className="text-10 h-3 text-gray-500">
-                          {showLabel ? histPeriodLabel(p.month, histGranularity) : ''}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
               </div>
             </section>
           )}

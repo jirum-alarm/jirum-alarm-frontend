@@ -8,7 +8,7 @@
  * ③ 「신라면5개 + 짜파게티5개」 같은 묶음 구성은 한 줄로 ④ 브랜드가 섞인 허브는 남은 것을 브랜드로 묶는다
  * ⑤ 지금 싼 상품(모델 페이지 판정 기록상 최저·평소보다 쌈, 진행 중 딜)을 앞에 판정과 함께 ⑥ 묶이지 않은 것은 몇 개만 펼친다.
  * 판정은 서버 publishedModelPages 값을 그대로 쓴다 — 여기서 «싸다»를 새로 정하지 않는다.
- * 이 파일은 @/ 경로를 import 하지 않는다(node 테스트가 그대로 읽는다).
+ * web 허브·모델 페이지(같은 줄 칩)와 앱 허브가 같은 묶음을 그리도록 여기 둔다(2026-10-24 web 에서 옮김).
  */
 
 export type HubModelPageLink = {
@@ -77,6 +77,9 @@ const NOT_A_LINE = new Set([
   '업소용',
   'NEW',
   '신제품',
+  '해외구매',
+  // 맛·향의 정도 — 「마일드」로 맥심 모카골드와 카누를 한 상품으로 묶었다(2026-10-24).
+  '마일드',
   // 맛·색 — 「초코」로 다이제와 통크를 한 상품으로 묶었다.
   '초코',
   '치즈',
@@ -130,6 +133,20 @@ type Item = {
   index: number;
 };
 
+/**
+ * 이름까지 같은 칩은 한 상품의 페이지가 둘인 것(카탈로그 중복 — 「코카콜라 제로」가 두 페이지)이라 앞(지금 싼·딜 많은) 것만 남긴다.
+ * 공백·대소문자만 다른 것(「제로제로」·「제로 제로」)도 같다.
+ */
+function uniqueChips(chips: HubModelChip[]): HubModelChip[] {
+  const seen = new Set<string>();
+  return chips.filter((c) => {
+    const key = squash(`${c.prefix ?? ''} ${c.label}`);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 const byGoodThenDeals = (a: Item, b: Item) =>
   Number(!a.good) - Number(!b.good) ||
   a.rank - b.rank ||
@@ -146,6 +163,8 @@ export function buildHubModelGroups(
   visible: HubModelChip[];
   folded: HubModelChip[];
   goodCount: number;
+  /** 보이는 칩 수(같은 상품 중복 페이지를 하나로 센 것) — 제목 옆 「N개」. */
+  total: number;
 } {
   const bySlug = new Map(verdicts.map((v) => [v.slug, v]));
   const brandSet = new Set(pages.map((p) => squash(p.brand ?? '')));
@@ -168,16 +187,28 @@ export function buildHubModelGroups(
   });
 
   // ② 줄 이름 후보의 빈도 — 상품마다 한 번씩. 거의 모든 상품에 붙는 말은 줄 이름이 아니다.
+  // 괄호로 시작하는 낱말(「(업소용)」「(파우치)」)은 구성·판매 조건이라 줄 이름이 아니다(「피지(FiJi)」는 이름).
   const usable = (line: string) =>
     line.length >= 2 &&
     !/\d/.test(line) &&
+    !/^[([]/.test(line) &&
     !NOT_A_LINE.has(line) &&
     !MODIFIER.test(line) &&
     !hub.includes(squash(line));
   const candidatesOf = (item: Item) =>
     [...new Set(words(item.page.modelName).flatMap(lineCandidates))].filter(usable);
+  const brandOf = (item: Item) => squash(item.page.brand ?? '');
   const freq = new Map<string, number>();
-  for (const item of items) for (const c of candidatesOf(item)) freq.set(c, (freq.get(c) ?? 0) + 1);
+  // 같은 브랜드 안 빈도 — 줄은 같은 브랜드 안에서만 묶이니 거기서 두 번 이상 나와야 줄이 된다.
+  const brandFreq = new Map<string, number>();
+  const brandsWith = new Map<string, Set<string>>();
+  for (const item of items)
+    for (const c of candidatesOf(item)) {
+      freq.set(c, (freq.get(c) ?? 0) + 1);
+      const k = `${brandOf(item)}|${c}`;
+      brandFreq.set(k, (brandFreq.get(k) ?? 0) + 1);
+      brandsWith.set(c, (brandsWith.get(c) ?? new Set()).add(brandOf(item)));
+    }
   const tooCommon = Math.max(2, Math.floor(items.length * 0.6));
   // 칩 이름에서 빼는 말 — 허브 이름이 이미 말한 것(「물티슈」)·거의 모든 상품에 붙는 것(「캡형」).
   const wordFreq = new Map<string, number>();
@@ -192,11 +223,18 @@ export function buildHubModelGroups(
   const loose: Item[] = [];
   for (const item of items) {
     const brand = item.page.brand?.trim() ?? '';
+    // 같은 브랜드 안에서 많이 나오는 말 → 다른 브랜드 여럿에 붙는 말은 뒤로(맛·성분 — 「베지밀」이 네 브랜드에 붙는
+    // 「검은콩」에 밀려 두유 허브 줄 이름이 「검은콩」이 됐다, 2026-10-24) → 허브 전체에서 많이 나오는 말 순.
+    const local = (c: string) => brandFreq.get(`${brandOf(item)}|${c}`) ?? 0;
+    const shared = (c: string) => Number((brandsWith.get(c)?.size ?? 0) > 2);
     const best = item.page.modelName.includes('+')
       ? BUNDLE_GROUP
       : candidatesOf(item)
-          .filter((c) => (freq.get(c) ?? 0) >= 2 && (freq.get(c) ?? 0) <= tooCommon)
-          .sort((a, b) => freq.get(b)! - freq.get(a)!)[0];
+          .filter((c) => local(c) >= 2 && (freq.get(c) ?? 0) <= tooCommon)
+          .sort(
+            (a, b) =>
+              local(b) - local(a) || shared(a) - shared(b) || freq.get(b)! - freq.get(a)!,
+          )[0];
     if (!best) {
       loose.push(item);
       continue;
@@ -220,17 +258,24 @@ export function buildHubModelGroups(
       continue;
     }
     const name = (lineCount.get(line) ?? 0) > 1 && brand ? `${brand} ${line}` : line;
-    const chips = [...members].sort(byGoodThenDeals).map((item) => {
+    const chipOf = (item: Item, dropNoise: boolean): HubModelChip => {
       if (line === BUNDLE_GROUP) {
         return { slug: item.page.slug, label: item.display, prefix: null, good: item.good };
       }
       const rest = withoutLine(words(item.page.modelName), line)
-        .filter((w) => !noise(w))
+        .filter((w) => !dropNoise || !noise(w))
         .join(' ');
       return rest
         ? { slug: item.page.slug, label: rest, prefix: name, good: item.good }
         : { slug: item.page.slug, label: line, prefix: null, good: item.good };
-    });
+    };
+    const sorted = [...members].sort(byGoodThenDeals);
+    // 흔한 말(「제로」)을 빼다 「칠성사이다 제로」와 「칠성사이다」가 둘 다 「칠성사이다」가 됐다 — 이름이 겹치면 그 칩만 다 쓴다.
+    const trimmed = sorted.map((item) => chipOf(item, true));
+    const clashes = new Set(trimmed.map((c) => c.label).filter((l, i, all) => all.indexOf(l) !== i));
+    const chips = uniqueChips(
+      sorted.map((item, i) => (clashes.has(trimmed[i].label) ? chipOf(item, false) : trimmed[i])),
+    );
     groups.push({ name, chips, items: members });
   }
 
@@ -246,15 +291,17 @@ export function buildHubModelGroups(
     for (const [brand, members] of byBrand) {
       if (members.length < 2) continue;
       members.forEach((m) => grouped.add(m));
-      const chips = [...members].sort(byGoodThenDeals).map((item) => ({
-        slug: item.page.slug,
-        label:
-          words(item.page.modelName)
-            .filter((w) => !noise(w))
-            .join(' ') || item.page.modelName,
-        prefix: brand,
-        good: item.good,
-      }));
+      const chips = uniqueChips(
+        [...members].sort(byGoodThenDeals).map((item) => ({
+          slug: item.page.slug,
+          label:
+            words(item.page.modelName)
+              .filter((w) => !noise(w))
+              .join(' ') || item.page.modelName,
+          prefix: brand,
+          good: item.good,
+        })),
+      );
       groups.push({ name: brand, chips, items: members });
     }
     singles = loose.filter((item) => !grouped.has(item));
@@ -272,15 +319,17 @@ export function buildHubModelGroups(
     return x.bundle - y.bundle || x.good - y.good || y.deals - x.deals;
   });
 
-  const loneChips = [...singles].sort(byGoodThenDeals).map((item) => ({
-    slug: item.page.slug,
-    label:
-      words(item.display)
-        .filter((w) => !hub.includes(squash(w)))
-        .join(' ') || item.display,
-    prefix: null,
-    good: item.good,
-  }));
+  const loneChips = uniqueChips(
+    [...singles].sort(byGoodThenDeals).map((item) => ({
+      slug: item.page.slug,
+      label:
+        words(item.display)
+          .filter((w) => !hub.includes(squash(w)))
+          .join(' ') || item.display,
+      prefix: null,
+      good: item.good,
+    })),
+  );
   const goodSingles = loneChips.filter((c) => c.good).length;
   const cut = Math.max(HUB_MODEL_SINGLES_VISIBLE, goodSingles);
   return {
@@ -288,5 +337,18 @@ export function buildHubModelGroups(
     visible: loneChips.slice(0, cut),
     folded: loneChips.slice(cut),
     goodCount: items.filter((i) => i.good).length,
+    total: groups.reduce((n, g) => n + g.chips.length, 0) + loneChips.length,
   };
+}
+
+/**
+ * 모델 페이지 위 「같은 줄」 — 허브에서 이 상품이 묶인 줄(진라면 → 순한맛·매운맛·매운맛 컵). 허브 칩을 눌러 온 사람이
+ * 옆 맛·구성으로 바로 건너가게 허브와 같은 묶음·순서를 그대로 쓴다. 줄에 안 묶였거나 「여러 개 묶음」(서로 다른 구성의 모음)이면 null.
+ */
+export function findHubModelLine(
+  groups: readonly HubModelGroup[],
+  slug: string,
+): HubModelGroup | null {
+  const line = groups.find((g) => g.chips.some((c) => c.slug === slug));
+  return line && line.name !== BUNDLE_GROUP ? line : null;
 }
