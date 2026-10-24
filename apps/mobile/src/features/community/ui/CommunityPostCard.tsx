@@ -1,3 +1,4 @@
+import {isNewNotice} from '@jirum/domain/community';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import PressableOpacity from '@/shared/components/PressableOpacity';
@@ -63,7 +64,7 @@ export default function CommunityPostCard({
           <Text className="text-xs text-gray-500">
             {displayTime(post.createdAt, now)}
           </Text>
-          {post.isNotice ? (
+          {post.isNotice && isNewNotice(post.createdAt, now) ? (
             <Badge size="md" variant="solid" tone="secondary">
               NEW
             </Badge>

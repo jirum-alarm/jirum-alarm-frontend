@@ -23,7 +23,7 @@ export default async function CommunityWritePage({
   searchParams: Promise<{ edit?: string }>;
 }) {
   const token = await getAccessToken();
-  if (!token) redirect(PAGE.LOGIN);
+  if (!token) redirect(`${PAGE.LOGIN}?rtnUrl=${encodeURIComponent(PAGE.COMMUNITY_WRITE)}`);
 
   const { isMobile } = await checkDevice();
   const { edit } = await searchParams;

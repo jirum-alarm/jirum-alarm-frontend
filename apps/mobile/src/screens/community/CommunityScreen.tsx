@@ -1,4 +1,5 @@
 import {emptyText} from '@jirum/design-system/recipes';
+import {isNewNotice} from '@jirum/domain/community';
 import {fixed} from '@jirum/design-system';
 import React, {useCallback, useState} from 'react';
 import {
@@ -84,8 +85,12 @@ export default function CommunityScreen() {
   const renderItem = useCallback(
     ({item, index}: {item: CommunityPost; index: number}) =>
       tab === 'notice' ? (
-        // web: 공지 탭 첫 줄만 NEW
-        <NoticePostCard post={item} isNew={index === 0} onPress={openPost} />
+        // web: 공지 탭 첫 줄이 최근(7일) 공지일 때만 NEW
+        <NoticePostCard
+          post={item}
+          isNew={index === 0 && isNewNotice(item.createdAt)}
+          onPress={openPost}
+        />
       ) : (
         <CommunityPostCard post={item} onPress={openPost} />
       ),

@@ -54,7 +54,8 @@ export default function CommunityPageClient({
   const [tab, setTab] = useQueryState<CommunityTab>('tab', {
     defaultValue: 'all',
     parse: (value) => {
-      if (value === 'all' || value === 'trending' || value === 'notice') return value;
+      // 옛 「인기」 링크(?tab=trending)는 전체로.
+      if (value === 'all' || value === 'notice') return value;
       return 'all';
     },
     serialize: String,
@@ -66,15 +67,18 @@ export default function CommunityPageClient({
     <div>
       <div className="flex items-center justify-between pr-5">
         <TabBar activeTab={tab} onChange={setTab} />
-        {isUserLogin && (
-          <Link
-            href={PAGE.COMMUNITY_WRITE}
-            className="bg-primary-500 hover:bg-primary-600 text-fixed-900 hidden items-center gap-x-1 rounded-lg px-4 py-2 text-sm font-semibold transition-transform active:scale-95 md:flex"
-          >
-            <span className="text-base leading-none">+</span>
-            글쓰기
-          </Link>
-        )}
+        <Link
+          // 비로그인도 글쓰기 입구를 본다 — 로그인 뒤 글쓰기로 돌아온다(전엔 버튼이 아예 없어 쓸 수 있는 줄 몰랐다).
+          href={
+            isUserLogin
+              ? PAGE.COMMUNITY_WRITE
+              : `${PAGE.LOGIN}?rtnUrl=${encodeURIComponent(PAGE.COMMUNITY_WRITE)}`
+          }
+          className="bg-primary-500 hover:bg-primary-600 text-fixed-900 hidden items-center gap-x-1 rounded-lg px-4 py-2 text-sm font-semibold transition-transform active:scale-95 md:flex"
+        >
+          <span className="text-base leading-none">+</span>
+          글쓰기
+        </Link>
       </div>
       <Suspense fallback={<CommunityListSkeleton />}>
         <CommunityList
