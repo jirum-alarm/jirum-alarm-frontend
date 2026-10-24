@@ -114,9 +114,9 @@ const FEATURE_GROUPS: { title: string; tone: Tone; items: Feature[] }[] = [
       { icon: 'home', name: '홈', text: '카테고리별로 지금 올라온 핫딜', href: PAGE.HOME },
       {
         icon: 'zap',
-        name: '실시간',
-        text: '방금 올라온 핫딜을 시간순으로',
-        href: PAGE.TRENDING_LIVE,
+        name: '최신',
+        text: '핫딜이 된 순서로 — 「핫딜만」을 끄면 올라온 딜 전부',
+        href: PAGE.TRENDING_HOT,
       },
       {
         icon: 'trophy',

@@ -16,7 +16,7 @@ const read = (p: string) =>
 const screen = read('src/screens/trending/TrendingScreen.tsx');
 const queries = read('src/entities/trending/api/trending.queries.ts');
 const rankingList = read('src/entities/trending/ui/RankingList.tsx');
-const liveList = read('src/entities/trending/ui/LiveList.tsx');
+const feedList = read('src/screens/trending/FeedList.tsx');
 const stack = read('src/navigations/tab/TabStackNavigator.tsx');
 
 describe('탭 배선', () => {
@@ -47,7 +47,8 @@ describe('★웹뷰 주입에 기대던 경로를 전부 옮겼다', () => {
     const {nextTrendingView} = require('@jirum/domain/ranking');
     expect(nextTrendingView(null)).toBe('ranking');
     expect(nextTrendingView('live')).toBe('ranking');
-    expect(nextTrendingView('ranking')).toBe('live');
+    expect(nextTrendingView('hot')).toBe('ranking');
+    expect(nextTrendingView('ranking')).toBe('hot');
     const nav = read('src/navigations/tab/MainTabNavigator.tsx');
     const block = nav.slice(
       nav.indexOf('const handleNavigateToRoot'),
@@ -156,7 +157,7 @@ describe('CTR 계측 (web 과 같은 출처·규칙)', () => {
 
   it('노출은 화면에 보인 카드만 — 50개를 다 세지 않는다', () => {
     expect(rankingList).toContain('recordImpression');
-    expect(liveList).toContain('onViewableIndexes');
+    expect(feedList).toContain('onViewableIndexes');
     const grid = read('src/entities/home/ui/CurationGrid.tsx');
     expect(grid).toContain('itemVisiblePercentThreshold: 50');
   });
@@ -169,8 +170,8 @@ describe('CTR 계측 (web 과 같은 출처·규칙)', () => {
   });
 
   it('★카테고리를 바꾸면 dedup 집합을 버린다', () => {
-    // 유지하면 새 카테고리 상단이 "이미 본 것"이 되어 분모가 빈다.
-    expect(screen).toContain('key={`live-${category.id}`}');
+    // 유지하면 새 카테고리 상단이 "이미 본 것"이 되어 분모가 빈다. 「핫딜만」 칩을 바꿔도(hot↔live) 새로 센다.
+    expect(screen).toContain('key={`${view}-${category.id}`}');
     expect(screen).toContain('key={`ranking-${category.id}`}');
   });
 
@@ -209,10 +210,12 @@ describe('상단 실시간/핫딜만/랭킹 탭 — web 대조', () => {
     expect(tabs).toContain('TRENDING_VIEW_TABS');
     const {TRENDING_VIEW_TABS} = require('@jirum/domain/ranking');
     expect(TRENDING_VIEW_TABS.map((t: {label: string}) => t.label)).toEqual([
-      '실시간',
-      '핫딜만',
+      '최신',
       '랭킹',
     ]);
+    // 실시간(live)·핫딜만(hot)은 둘 다 「최신」 탭 — 칩은 목록 위(FeedList).
+    expect(tabs).toContain('trendingTabView(active)');
+    expect(feedList).toContain("requestTrendingView(isHot ? 'live' : 'hot')");
     expect(tabs).toContain('border-b border-gray-200');
   });
 

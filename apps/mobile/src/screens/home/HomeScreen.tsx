@@ -253,9 +253,9 @@ export default function HomeScreen() {
     navigation.push(tabStackNavigations.THEMES);
   }, [navigation]);
 
-  /** "실시간 특가 더 보기" → 발견 탭의 실시간 화면. */
+  /** "최신 핫딜 더보기" → 발견 탭 「최신」(핫딜만). web HomeEndCta 와 같은 곳. */
   const handlePressLiveDeals = useCallback(
-    () => goDiscoverTab('live'),
+    () => goDiscoverTab('hot'),
     [goDiscoverTab],
   );
 
@@ -416,7 +416,7 @@ export default function HomeScreen() {
 
 /**
  * 목록 끝 CTA. web HomeEndCta.
- * 실시간 특가(/trending/live)는 발견 탭 소속이라 그 탭으로 보낸다 —
+ * 최신 핫딜(/trending/hot)은 발견 탭 소속이라 그 탭으로 보낸다 —
  * 웹뷰를 새로 띄우면 탭 구조 밖으로 나가버린다.
  */
 function HomeEndCta({onPress}: {onPress: () => void}) {
@@ -430,10 +430,10 @@ function HomeEndCta({onPress}: {onPress: () => void}) {
       <PressableScale
         onPress={onPress}
         accessibilityRole="button"
-        accessibilityLabel="실시간 특가 더보기"
+        accessibilityLabel="최신 핫딜 더보기"
         className="bg-secondary-600 flex-row items-center gap-x-1 rounded-full px-6 py-3">
         <Text className="text-sm font-semibold text-white">
-          실시간 특가 더보기
+          최신 핫딜 더보기
         </Text>
         <ArrowRightIcon color={c.white} width={16} height={16} />
       </PressableScale>
