@@ -10,6 +10,7 @@ export type ProductCardSource =
   | 'search_recommend' // 검색 초기 추천 캐러셀
   | 'ranking_tab' // 트렌딩 랭킹 그리드 (기존 추적과 동일 명칭)
   | 'trending_live' // 트렌딩 실시간 핫딜 캐러셀
+  | 'hot_feed' // 발견 탭 「핫딜만」 목록(서버 hotDealFeedProducts)
   | 'trending_recommend' // 트렌딩 추천 핫딜 캐러셀
   | 'wishlist' // 찜 목록
   | 'related' // 관련 상품
