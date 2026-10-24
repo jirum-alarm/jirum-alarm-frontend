@@ -4,6 +4,11 @@ import {
   linkChip,
   text as textRole,
 } from '@jirum/design-system/recipes';
+import {
+  buildHubModelGroups,
+  type HubModelChip,
+  type HubModelPageLink,
+} from '@jirum/domain/hub-model-pages';
 import React, {useCallback, useLayoutEffect, useState} from 'react';
 import {Pressable, ScrollView, View} from 'react-native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -177,31 +182,16 @@ export default function KeywordHubScreen({navigation, route}: Props) {
       {data.modelPages.length > 0 ? (
         // 같은 키워드 안에서도 상품이 갈린다(삼다수 2L·500ml). 상품별 가격 비교는 모델 페이지(web)가 한다 —
         // 허브에서 가격을 섞어 비교하지 않는 대신 그쪽으로 보낸다. 앱엔 모델 페이지 화면이 없어 웹뷰로 연다.
-        <View className="mt-6">
-          <Text className={textRole.subtitle}>상품별 최저가 모음</Text>
-          <View className="mt-2 flex-row flex-wrap gap-2">
-            {data.modelPages.map(page => {
-              const label = [page.brand?.trim(), page.modelName]
-                .filter(Boolean)
-                .join(' ');
-              return (
-                <PressableScale
-                  key={page.slug}
-                  onPress={() =>
-                    navigation.push(tabStackNavigations.WEBVIEW, {
-                      uri: `/deals/${encodeURIComponent(page.slug)}`,
-                      title: label,
-                    })
-                  }
-                  accessibilityRole="link"
-                  accessibilityLabel={`${label} 최저가 모음`}
-                  className={modelChip.box}>
-                  <Text className={modelChip.text}>{label}</Text>
-                </PressableScale>
-              );
-            })}
-          </View>
-        </View>
+        <HubModelSection
+          hubName={hub.name}
+          pages={data.modelPages}
+          onOpen={(modelSlug, modelName) =>
+            navigation.push(tabStackNavigations.WEBVIEW, {
+              uri: `/deals/${encodeURIComponent(modelSlug)}`,
+              title: modelName,
+            })
+          }
+        />
       ) : null}
 
       {parentThemes.length > 0 ? (
@@ -282,6 +272,97 @@ export default function KeywordHubScreen({navigation, route}: Props) {
       />
       {shareSheet}
     </>
+  );
+}
+
+/**
+ * 「상품별 최저가 모음」 — web 허브와 같은 묶음(@jirum/domain hub-model-pages): 같은 상품 줄(진라면 매운맛·순한맛·컵)은 한 줄,
+ * 허브 이름이 말한 브랜드는 빼고, 묶이지 않은 건 몇 개만 펼친다. 예전엔 「오뚜기 진라면 매운맛」… 35개가 같은 칩으로 깔렸다(10/23 web 만 고침).
+ * 앱 허브 응답엔 모델 페이지 판정이 없어 «지금 싼» 표시·순서는 빼고 묶음만 같다.
+ */
+function HubModelSection({
+  hubName,
+  pages,
+  onOpen,
+}: {
+  hubName: string;
+  pages: HubModelPageLink[];
+  onOpen: (slug: string, name: string) => void;
+}) {
+  const [showFolded, setShowFolded] = useState(false);
+  const {groups, visible, folded, total} = buildHubModelGroups(
+    hubName,
+    pages,
+    [],
+  );
+  const chips = (list: HubModelChip[]) => (
+    <View className="min-w-0 flex-1 flex-row flex-wrap gap-2">
+      {list.map(chip => {
+        // 묶음 안 칩은 줄 이름을 뺀 말만 보이지만, 읽어 주는 말·웹뷰 제목은 「진라면 매운맛」.
+        const name = chip.prefix ? `${chip.prefix} ${chip.label}` : chip.label;
+        return (
+          <PressableScale
+            key={chip.slug}
+            onPress={() => onOpen(chip.slug, name)}
+            accessibilityRole="link"
+            accessibilityLabel={`${name} 최저가 모음`}
+            className={modelChip.box}>
+            <Text className={modelChip.text}>{chip.label}</Text>
+          </PressableScale>
+        );
+      })}
+    </View>
+  );
+  return (
+    <View className="mt-6">
+      <View className="flex-row items-baseline justify-between gap-3">
+        <Text className={textRole.subtitle}>상품별 최저가 모음</Text>
+        <Text className={textRole.caption}>{`${total}개`}</Text>
+      </View>
+      {groups.length > 0 ? (
+        <View className="mt-1">
+          {groups.map((group, i) => (
+            <View
+              key={group.name}
+              className={cn(
+                'flex-row gap-3 py-2',
+                i < groups.length - 1 && 'border-b border-gray-100',
+              )}>
+              <Text className={cn('w-20 shrink-0 pt-1.5', textRole.label)}>
+                {group.name}
+              </Text>
+              {chips(group.chips)}
+            </View>
+          ))}
+        </View>
+      ) : null}
+      {groups.length > 0 && visible.length > 0 ? (
+        <Text className={cn('mb-2 mt-2', textRole.caption)}>그 밖의 상품</Text>
+      ) : null}
+      {visible.length > 0 ? (
+        <View className={groups.length > 0 ? '' : 'mt-2'}>
+          {chips(visible)}
+        </View>
+      ) : null}
+      {folded.length > 0 ? (
+        showFolded ? (
+          <View className="mt-2">{chips(folded)}</View>
+        ) : (
+          // 배치는 바깥 View 가 — Pressable 엔 누름 opacity 만(SearchAllLink 와 같은 이유).
+          <View className="mt-2 flex-row">
+            <Pressable
+              onPress={() => setShowFolded(true)}
+              accessibilityRole="button"
+              hitSlop={8}
+              style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+              <Text className={cn('py-1', textRole.muted)}>
+                {`${folded.length}개 더 보기 ›`}
+              </Text>
+            </Pressable>
+          </View>
+        )
+      ) : null}
+    </View>
   );
 }
 
