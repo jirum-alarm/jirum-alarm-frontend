@@ -16,7 +16,7 @@ import {cn} from '@/shared/lib/styling';
 import {requestTrendingView} from '@/shared/lib/navigation/trending-view-store';
 
 /**
- * 발견 탭 「최신」 목록. web: widgets/trending/ui/FeedList.tsx
+ * 발견 탭 「실시간」 목록. web: widgets/trending/ui/FeedList.tsx
  * 「핫딜만」 칩을 켜면 문턱 넘은 딜만 핫딜 된 시각순(hot), 끄면 올라온 딜 전부 최신순(live) — 모양은 하나, 조회만 다르다.
  * 홈 카드 UI(GridCard·CurationGrid)를 그리므로 entities 끼리 import 를 피해 screens 층에 둔다.
  *

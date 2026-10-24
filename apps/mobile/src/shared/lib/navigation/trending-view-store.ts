@@ -16,7 +16,7 @@ import {useSyncExternalStore} from 'react';
 export type {TrendingView};
 
 /**
- * 신호가 한 번도 없을 때의 값. web /trending 이 /trending/hot(「최신」·핫딜만)으로 리다이렉트하는 것과 같다.
+ * 신호가 한 번도 없을 때의 값. web /trending 이 /trending/hot(「실시간」·핫딜만)으로 리다이렉트하는 것과 같다.
  * ★탭바로 들어오는 경로는 이 값을 쓰지 않는다 — 다른 탭에서 발견 탭을 누르면
  * MainTabNavigator 가 'ranking' 을 요청한다(web 하단 네비가 /trending/ranking 으로 보낸다).
  */

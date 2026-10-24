@@ -19,8 +19,8 @@ import {cn} from '@/shared/lib/styling';
 import {useColors} from '@/shared/theme/useColors';
 
 /**
- * 발견 탭 상단 탭(최신 · 랭킹 — 순서·이름 정본은 @jirum/domain/ranking TRENDING_VIEW_TABS).
- * 「최신」은 핫딜만 켬(hot)·끔(live) 둘 다 — 칩은 목록 위(FeedList).
+ * 발견 탭 상단 탭(실시간 · 랭킹 — 순서·이름 정본은 @jirum/domain/ranking TRENDING_VIEW_TABS).
+ * 「실시간」은 핫딜만 켬(hot)·끔(live) 둘 다 — 칩은 목록 위(FeedList).
  * web: widgets/trending/ui/PageTabNavigation.tsx — 하단 밑줄로 활성 표시.
  *
  * ★ web 은 Link 들(라우트가 갈린다)이지만 앱은 한 화면 안 상태 전환이다.

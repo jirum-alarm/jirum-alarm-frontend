@@ -10,7 +10,7 @@ const HomeEndCta = () => {
         href="/trending/hot"
         className="bg-secondary-600 hover:bg-secondary-700 flex items-center gap-x-1 rounded-full px-6 py-3 text-sm font-semibold text-white"
       >
-        최신 핫딜 더 보기
+        실시간 핫딜 더 보기
         <ArrowRight color="var(--color-white)" className="size-4" />
       </Link>
     </div>

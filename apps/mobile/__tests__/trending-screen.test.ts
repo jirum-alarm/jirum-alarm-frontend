@@ -210,10 +210,10 @@ describe('상단 실시간/핫딜만/랭킹 탭 — web 대조', () => {
     expect(tabs).toContain('TRENDING_VIEW_TABS');
     const {TRENDING_VIEW_TABS} = require('@jirum/domain/ranking');
     expect(TRENDING_VIEW_TABS.map((t: {label: string}) => t.label)).toEqual([
-      '최신',
+      '실시간',
       '랭킹',
     ]);
-    // 실시간(live)·핫딜만(hot)은 둘 다 「최신」 탭 — 칩은 목록 위(FeedList).
+    // 실시간(live)·핫딜만(hot)은 둘 다 「실시간」 탭 — 칩은 목록 위(FeedList).
     expect(tabs).toContain('trendingTabView(active)');
     expect(feedList).toContain("requestTrendingView(isHot ? 'live' : 'hot')");
     expect(tabs).toContain('border-b border-gray-200');

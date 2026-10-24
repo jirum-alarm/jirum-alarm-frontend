@@ -28,7 +28,7 @@ const SIZE = 10;
 const LIVE_CARD_SOURCE = 'live_tab';
 
 /**
- * 발견 탭 「최신」 목록 — 「핫딜만」 칩을 켜면 문턱 넘은 딜만 핫딜 된 시각순(/trending/hot), 끄면 올라온 딜 전부 최신순(/trending/live).
+ * 발견 탭 「실시간」 목록 — 「핫딜만」 칩을 켜면 문턱 넘은 딜만 핫딜 된 시각순(/trending/hot), 끄면 올라온 딜 전부 최신순(/trending/live).
  * 두 주소는 그대로 둔다(검색 색인·딥링크). 데이터만 다르고 모양은 하나라 FeedGrid 를 같이 쓴다.
  */
 const FeedList = ({ feed, categoryId }: FeedListProps) =>
