@@ -1,0 +1,784 @@
+{
+  "variables": {
+    "slug": "삼다수"
+  },
+  "response": {
+    "data": {
+      "keywordHub": {
+        "hub": {
+          "slug": "삼다수",
+          "name": "삼다수",
+          "aliases": [],
+          "excludes": [],
+          "recentDealCount": 101,
+          "activeDealCount": 89,
+          "countCapped": false,
+          "lastDealAt": "2026-10-23T21:44:00.000Z",
+          "activeDays": 26,
+          "topSources": [
+            {
+              "name": "뽐뿌",
+              "share": 23
+            },
+            {
+              "name": "에펨코리아",
+              "share": 17
+            }
+          ],
+          "subscriberCount": 17
+        },
+        "deals": [
+          {
+            "id": "36530985",
+            "title": "제주삼다수 500ml 40병",
+            "price": "15,900원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9526185.webp",
+            "postedAt": "2026-10-23T21:44:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "지마켓",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "이토랜드"
+            }
+          },
+          {
+            "id": "36479586",
+            "title": "제주 삼다수 330ml 40개",
+            "price": "16,740원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/8829705.webp",
+            "postedAt": "2026-10-23T13:51:51.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "36418590",
+            "title": "제주삼다수 무라벨 2L 24병",
+            "price": "19,900원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/108267.webp",
+            "postedAt": "2026-10-22T22:20:32.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "지마켓",
+            "postedCommunityCount": 2,
+            "provider": {
+              "nameKr": "루리웹"
+            }
+          },
+          {
+            "id": "36227103",
+            "title": "삼다수 500ml 40병 + 330ml 20병 증정 17,280원",
+            "price": "17,280원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741983.webp",
+            "postedAt": "2026-10-21T08:26:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "롯데온",
+            "postedCommunityCount": 3,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "36206703",
+            "title": "하늘보리,삼다수,유정란,피자,홍어,순대,포카칩,닭다리살,올리브오일,닭갈비,연세두유,다향오리 (다양/무료)",
+            "price": null,
+            "thumbnail": null,
+            "postedAt": "2026-10-21T02:58:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": true,
+            "hotDealType": "HOT_DEAL",
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "지마켓",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "36141318",
+            "title": "제주삼다수 그린 무라벨 2L 18개",
+            "price": "17,100원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9517743.webp",
+            "postedAt": "2026-10-20T13:52:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "쿠팡",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "이토랜드"
+            }
+          },
+          {
+            "id": "36089109",
+            "title": "삼다수 2L 24병 + 500mL 20병 증정 21,700원",
+            "price": "21,700원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/741468.webp",
+            "postedAt": "2026-10-19T23:16:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "롯데온",
+            "postedCommunityCount": 6,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "36088120",
+            "title": "삼다수 그린(무라벨) 2L 12개입",
+            "price": "11,020원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9516022.webp",
+            "postedAt": "2026-10-19T21:34:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": true,
+            "hotDealType": "HOT_DEAL",
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "지마켓",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "이토랜드"
+            }
+          },
+          {
+            "id": "36024526",
+            "title": "제주삼다수 무라벨 2L*24입 (4팩) + 500ml*20입 (1팩) 증정",
+            "price": "￦ 21,514 (KRW)",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1993753.webp",
+            "postedAt": "2026-10-19T09:36:13.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "오늘의집",
+            "postedCommunityCount": 5,
+            "provider": {
+              "nameKr": "퀘이사존"
+            }
+          },
+          {
+            "id": "35904578",
+            "title": "삼다수 2L 24병 + 500mL 20병 추가 증정",
+            "price": "21,700원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9511879.webp",
+            "postedAt": "2026-10-18T06:09:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": true,
+            "hotDealType": "HOT_DEAL",
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "롯데온",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "이토랜드"
+            }
+          },
+          {
+            "id": "35587001",
+            "title": "제주삼다수 그린 2L 6개x5팩",
+            "price": "22,158원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/740529.webp",
+            "postedAt": "2026-10-15T12:12:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "삼다수몰",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "35551341",
+            "title": "삼다수 2L 6입 4팩 (총 24개)+500ml 20입 증정 23,220원",
+            "price": "23,220원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/729682212.webp",
+            "postedAt": "2026-10-15T01:38:21.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "네이버",
+            "postedCommunityCount": 2,
+            "provider": {
+              "nameKr": "개드립"
+            }
+          },
+          {
+            "id": "35551245",
+            "title": "삼다수 25920원",
+            "price": "25,920원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14944334.webp",
+            "postedAt": "2026-10-15T01:27:29.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "네이버",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "맘이베베"
+            }
+          },
+          {
+            "id": "35543532",
+            "title": "삼다수 500mL 20입 2팩(총 40개)+330ml 20입",
+            "price": "17,180원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10448153420.webp",
+            "postedAt": "2026-10-15T00:14:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": null,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "네이버",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "에펨코리아"
+            }
+          },
+          {
+            "id": "35543388",
+            "title": "삼다수 500mL 20입 2팩(총 40개) 17,180원",
+            "price": "17,180원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/206192908.webp",
+            "postedAt": "2026-10-15T00:00:43.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "네이버",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "어미새"
+            }
+          },
+          {
+            "id": "35532613",
+            "title": "지그재그 직뷰페 50% 쿠폰 · 삼다수 2L 개당 662원",
+            "price": "23,850원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14944034.webp",
+            "postedAt": "2026-10-14T23:28:43.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "naver",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "맘이베베"
+            }
+          },
+          {
+            "id": "35319408",
+            "title": "제주 삼다수 무라벨 2L X 6병(유/무라벨 랜덤발송) 3,030원",
+            "price": "3,030원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/arca/185773254.webp",
+            "postedAt": "2026-10-13T02:09:37.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": "SUPER_DEAL",
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "SK스토아",
+            "postedCommunityCount": 5,
+            "provider": {
+              "nameKr": "아카"
+            }
+          },
+          {
+            "id": "35102727",
+            "title": "삼다수 2리터 24개 + 삼다수 500미리 20개 네멤 21,920원",
+            "price": "21,920원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/739216.webp",
+            "postedAt": "2026-10-11T01:58:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "네이버",
+            "postedCommunityCount": 2,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "35029314",
+            "title": "제주 삼다수 2L x 12입",
+            "price": "8,990원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9491219.webp",
+            "postedAt": "2026-10-10T03:17:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": {
+              "basis": "USUAL",
+              "percent": 8
+            },
+            "mallName": "토스",
+            "postedCommunityCount": 6,
+            "provider": {
+              "nameKr": "이토랜드"
+            }
+          },
+          {
+            "id": "34907345",
+            "title": "제주 삼다수 500ml 80개 (라벨랜덤)",
+            "price": "38,240원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/41459313.webp",
+            "postedAt": "2026-10-08T13:55:35.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "34889674",
+            "title": "삼다수 500mL 40병",
+            "price": "17,280원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/city/43093976.webp",
+            "postedAt": "2026-10-08T10:11:19.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": null,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "롯데온",
+            "postedCommunityCount": 3,
+            "provider": {
+              "nameKr": "시티"
+            }
+          },
+          {
+            "id": "34843279",
+            "title": "삼다수 330ml x 40개 10,500원",
+            "price": "10,500원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/738694.webp",
+            "postedAt": "2026-10-07T15:42:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": {
+              "basis": "USUAL",
+              "percent": 30
+            },
+            "mallName": "토스",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "34842630",
+            "title": "제주 삼다수 라벨 랜덤 330ml 40개",
+            "price": "10,500원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10423114891.webp",
+            "postedAt": "2026-10-07T15:17:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": null,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": {
+              "basis": "USUAL",
+              "percent": 37
+            },
+            "mallName": "토스",
+            "postedCommunityCount": 2,
+            "provider": {
+              "nameKr": "에펨코리아"
+            }
+          },
+          {
+            "id": "34732403",
+            "title": "제주 삼다수 라벨랜덤 1L 36개",
+            "price": "26,580원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1974747375.webp",
+            "postedAt": "2026-10-06T12:01:03.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "34725650",
+            "title": "삼다수 2L 24팩",
+            "price": null,
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/738369.webp",
+            "postedAt": "2026-10-06T08:21:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "삼다수몰",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "34684292",
+            "title": "제주 삼다수 2L 24개",
+            "price": "21,920원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9480706.webp",
+            "postedAt": "2026-10-05T17:30:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": true,
+            "hotDealType": "HOT_DEAL",
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "네이버",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "이토랜드"
+            }
+          },
+          {
+            "id": "34684582",
+            "title": "삼다수 2L 24개 외 500ml 20개",
+            "price": "21,920원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/107793.webp",
+            "postedAt": "2026-10-05T16:48:38.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "네이버",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "루리웹"
+            }
+          },
+          {
+            "id": "34682909",
+            "title": "제주 삼다수 2L 6입 4팩 외 삼다수 500ml 20개",
+            "price": "21,920원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/arca/185075149.webp",
+            "postedAt": "2026-10-05T15:49:14.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "네이버",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "아카"
+            }
+          },
+          {
+            "id": "34629294",
+            "title": "제주 삼다수 그린 무라벨 2L 24병",
+            "price": "23,330원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/738129.webp",
+            "postedAt": "2026-10-05T02:55:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "롯데온",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "34548811",
+            "title": "제주 삼다수 라벨랜덤 2L 18개",
+            "price": "19,750원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/84137033.webp",
+            "postedAt": "2026-10-04T03:01:22.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "34536093",
+            "title": "삼다수 2L x 24개",
+            "price": "18,620원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/737943.webp",
+            "postedAt": "2026-10-03T22:49:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": true,
+            "hotDealType": "HOT_DEAL",
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "지마켓",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "34524002",
+            "title": "제주 삼다수 라벨랜덤 500ml 100개",
+            "price": "48,800원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/41459325.webp",
+            "postedAt": "2026-10-03T18:03:25.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "34490291",
+            "title": "제주삼다수 그린 무라벨 1L 27개",
+            "price": "22,220원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/182462581.webp",
+            "postedAt": "2026-10-03T12:01:53.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "34473343",
+            "title": "제주 삼다수 라벨랜덤 2L 30개",
+            "price": "32,840원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/38945401.webp",
+            "postedAt": "2026-10-03T06:01:11.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "34455541",
+            "title": "제주삼다수 무라벨 1L 27개 18,150원",
+            "price": "18,150원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/arca/184796102.webp",
+            "postedAt": "2026-10-02T22:18:27.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "쿠팡",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "아카"
+            }
+          },
+          {
+            "id": "34353234",
+            "title": "제주 삼다수 라벨랜덤 1L 45개",
+            "price": "35,840원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1974747377.webp",
+            "postedAt": "2026-10-01T14:37:12.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          },
+          {
+            "id": "34325123",
+            "title": "제주 삼다수 2L 48통",
+            "price": "33,570원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/737533.webp",
+            "postedAt": "2026-10-01T08:49:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "11번가",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "34304520",
+            "title": "제주삼다수 그린 500mL 20개 4팩",
+            "price": "22,986원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/737375.webp",
+            "postedAt": "2026-10-01T00:49:00.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "삼다수몰",
+            "postedCommunityCount": 2,
+            "provider": {
+              "nameKr": "뽐뿌"
+            }
+          },
+          {
+            "id": "34304193",
+            "title": "삼다수 2L 24펫 외 500ml 20펫 23,180원",
+            "price": "23,180원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14917257.webp",
+            "postedAt": "2026-10-01T00:46:02.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "옥션",
+            "postedCommunityCount": 1,
+            "provider": {
+              "nameKr": "맘이베베"
+            }
+          },
+          {
+            "id": "34166392",
+            "title": "제주 삼다수 라벨랜덤 500ml 20개",
+            "price": "9,600원",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/toss/8828021.webp",
+            "postedAt": "2026-09-29T15:02:22.000Z",
+            "categoryId": 2,
+            "isEnd": false,
+            "isHot": false,
+            "hotDealType": null,
+            "isYearLowest": false,
+            "priceSaving": null,
+            "mallName": "토스",
+            "postedCommunityCount": 0,
+            "provider": {
+              "nameKr": "토스쇼핑"
+            }
+          }
+        ],
+        "modelPages": [
+          {
+            "slug": "광동제약-제주-삼다수",
+            "brand": "광동제약",
+            "modelName": "제주 삼다수",
+            "dealCount": 366
+          },
+          {
+            "slug": "광동제약-제주-삼다수-그린",
+            "brand": "광동제약",
+            "modelName": "제주 삼다수 그린",
+            "dealCount": 151
+          },
+          {
+            "slug": "광동제약-제주삼다수-무라벨-2l-x-12펫",
+            "brand": "광동제약",
+            "modelName": "제주삼다수 무라벨 2L x 12펫",
+            "dealCount": 27
+          }
+        ]
+      }
+    }
+  }
+}

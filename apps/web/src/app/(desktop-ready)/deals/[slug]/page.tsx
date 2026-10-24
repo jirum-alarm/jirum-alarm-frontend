@@ -30,12 +30,14 @@ import {
   HeroPrice,
   MIN_HISTORY_POINTS,
   pickModelAlertKeyword,
+  RankedRepresentative,
   rankRepresentatives,
   recentDealRows,
   relativeTimeLabel,
   Representative,
   splitDealsForList,
   timingFromVerdict,
+  type TimingInsight,
   withTopicParticle,
 } from '@/features/deals/lib/model-page-insights';
 import { toSeoImageUrl } from '@/features/product-detail/lib/product-seo';
@@ -352,7 +354,14 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   };
   const jsonLd = productLd ? [productLd, breadcrumbLd] : [breadcrumbLd];
   const rankedReps = rankRepresentatives(representatives);
-  const bestRep = rankedReps.find((r) => r.isBestUnit);
+  // 구성별 가격 표 — 단위가 싼 순(값 없는 구성은 뒤).
+  const packRows = [...rankedReps].sort(
+    (a, b) => (a.unitPrice ?? Number.POSITIVE_INFINITY) - (b.unitPrice ?? Number.POSITIVE_INFINITY),
+  );
+  // 서버 추이(priceHistory)는 하루 최저 단위가를 구성 구분 없이 섞는다 — 구성이 여럿이면 막대 높낮이가 가격이 아니라
+  // «그날 2L 이 올라왔나 500ml 가 올라왔나»를 그리고, 한 구성으로 정한 「사기 좋은 가격」 선과도 기준이 다르다(2026-10-24).
+  // 그땐 막대 대신 구성별 표가 비교를 맡는다. 구성이 하나(총액 기준·전자제품)면 추이가 곧 가격 변화라 막대를 둔다.
+  const showHistChart = histPoints.length >= 2 && !(histBasis === 'unit' && packRows.length >= 2);
 
   // 판정은 지금 딜과 같은 구성 안에서만 한다 — 다른 구성이 단위가로 훨씬 싸면 따로 알려 준다(2026-10-19 보성녹차:
   // 350ml 24개 100ml당 140원 「사기 좋은 구간」인데 1.5L 12개는 다나와 100ml당 63원). 같은 단위·20% 넘게 쌀 때만.
@@ -517,7 +526,11 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                     <li>
                       {timing.bestPackLabel ? `${timing.bestPackLabel} 기준 · ` : ''}핫딜 추이{' '}
                       {timing.historyPoints}
-                      {histSpanLabel}치 (최저 {fmtHist(histMin)} · 최고 {fmtHist(histMax)})
+                      {histSpanLabel}치
+                      {/* 구성이 여럿이면 추이 최저·최고는 다른 구성 값이 섞인 것(「2L 24개 기준」인데 최고가 500ml) — 뺀다. */}
+                      {showHistChart
+                        ? ` (최저 ${fmtHist(histMin)} · 최고 ${fmtHist(histMax)})`
+                        : ''}
                       {timing.historyPoints < MIN_HISTORY_POINTS
                         ? ' — 추이가 짧아 판정하지 않아요'
                         : ''}
@@ -577,8 +590,8 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
 
           <RecentDealsSection rows={recentRows} />
 
-          {/* 핫딜 최저가 추이 + 지금 위치 */}
-          {histPoints.length >= 2 && (
+          {/* 핫딜 최저가 추이 + 지금 위치 — 구성이 하나일 때만(showHistChart) */}
+          {showHistChart && (
             <section className="mb-6">
               <div className="mb-1 flex items-baseline justify-between">
                 <h2 className="text-base font-semibold">{histTitle}</h2>
@@ -666,73 +679,30 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             </section>
           )}
 
-          {/* 용량·수량 — 추천 팩 */}
-          {rankedReps.length > 0 && (
+          {/* 구성별 가격 — 구성마다 지난 핫딜 최저·단위가·다나와 지금을 한 줄로. 「핫딜 X원」만 쓰면 지금 가격으로 읽혀
+              (실제론 지난 최저) 「지난 최저」라고 쓴다. 지금 진행 중인 핫딜의 구성엔 그 가격을 붙인다. 2026-10-24 카드 8장 → 표. */}
+          {packRows.length >= 2 && (
             <section className="mb-6">
-              <div className="mb-3 flex items-baseline justify-between gap-2">
-                <h2 className="text-base font-semibold">용량·수량별 대표 상품</h2>
-                {bestRep && (
-                  <span className={text.caption}>
-                    가성비 1위 {bestRep.label}
-                    {bestRep.unitPrice != null && bestRep.unitLabel
-                      ? ` · ${bestRep.unitLabel} ${won(bestRep.unitPrice)}`
-                      : ''}
-                  </span>
-                )}
+              <div className="mb-2 flex items-baseline justify-between gap-2">
+                <h2 className="text-base font-semibold">구성별 가격</h2>
+                <span className={text.caption}>
+                  {packRows[0].unitLabel ? `${packRows[0].unitLabel} 싼 순` : '싼 순'}
+                </span>
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                {rankedReps.map((rep, i) => {
-                  const Card = rep.danawaUrl ? 'a' : 'div';
-                  const danawaDisplay =
-                    rep.danawaPrice != null && rep.danawaPrice > 0 ? rep.danawaPrice : null;
-                  return (
-                    <Card
-                      key={i}
-                      {...(rep.danawaUrl
-                        ? { href: rep.danawaUrl, target: '_blank', rel: 'noopener noreferrer' }
-                        : {})}
-                      className={`flex flex-col gap-1 rounded-lg border p-3 hover:bg-gray-50 ${
-                        rep.isBestUnit ? 'border-success-300 bg-success-50/40' : 'border-gray-200'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-1">
-                        <span className="text-sm font-medium">{rep.label}</span>
-                        <div className="flex shrink-0 flex-wrap justify-end gap-1">
-                          {rep.isBestUnit && (
-                            <Badge size="xs" tone="success">
-                              단위가 최저
-                            </Badge>
-                          )}
-                          {(rep.activeDeals > 0 || rep.dealMinPrice != null) && (
-                            <Badge size="xs" tone="secondary">
-                              핫딜
-                            </Badge>
-                          )}
-                          {rep.priceRank && (
-                            <Badge size="xs" tone="warning">
-                              다나와 {rep.priceRank}
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                      {rep.dealMinPrice != null && (
-                        <span className={text.label}>핫딜 {won(rep.dealMinPrice)}</span>
-                      )}
-                      {rep.unitPrice != null && (
-                        <span className={text.caption}>
-                          {rep.unitLabel} {won(rep.unitPrice)}
-                        </span>
-                      )}
-                      <span className={text.caption}>
-                        {danawaDisplay != null ? `다나와 ${won(danawaDisplay)}` : ''}
-                        {rep.mallCount ? ` · ${rep.mallCount}곳` : ''}
-                        {rep.danawaSaving != null ? ` · ${won(rep.danawaSaving)} 절약` : ''}
-                        {rep.danawaUrl ? ' ›' : ''}
-                      </span>
-                    </Card>
-                  );
-                })}
-              </div>
+              <PackRows rows={packRows.slice(0, PACK_ROWS_VISIBLE)} timing={timing} />
+              {packRows.length > PACK_ROWS_VISIBLE && (
+                <details className="group">
+                  <summary
+                    className={cn(
+                      text.muted,
+                      'cursor-pointer list-none py-2 group-open:hidden hover:text-gray-900',
+                    )}
+                  >
+                    {packRows.length - PACK_ROWS_VISIBLE}개 구성 더 보기 ›
+                  </summary>
+                  <PackRows rows={packRows.slice(PACK_ROWS_VISIBLE)} timing={timing} />
+                </details>
+              )}
             </section>
           )}
 
@@ -808,5 +778,69 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
         </aside>
       </div>
     </main>
+  );
+}
+
+/** 구성별 가격 표에서 펼쳐 둘 줄 수. */
+const PACK_ROWS_VISIBLE = 5;
+
+function PackRows({
+  rows,
+  timing,
+}: {
+  rows: RankedRepresentative[];
+  timing: Pick<TimingInsight, 'isActivePrice' | 'bestPackLabel' | 'totalPrice'>;
+}) {
+  return (
+    <ul className="divide-y divide-gray-100 border-y border-gray-100">
+      {rows.map((rep) => {
+        const nowHere =
+          timing.isActivePrice && timing.totalPrice != null && rep.label === timing.bestPackLabel;
+        const danawa = rep.danawaPrice != null && rep.danawaPrice > 0 ? rep.danawaPrice : null;
+        const Row = rep.danawaUrl ? 'a' : 'div';
+        return (
+          <li key={rep.label}>
+            <Row
+              {...(rep.danawaUrl
+                ? { href: rep.danawaUrl, target: '_blank', rel: 'noopener noreferrer' }
+                : {})}
+              className="flex items-center gap-3 py-2.5 hover:bg-gray-50"
+            >
+              <div className="min-w-0 flex-1">
+                <p className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                  <span className={text.label}>{rep.label}</span>
+                  {rep.isBestUnit && (
+                    <Badge size="xs" tone="success">
+                      단위가 최저
+                    </Badge>
+                  )}
+                  {nowHere && (
+                    <span className="text-success-700 text-xs font-semibold">
+                      지금 핫딜 {won(timing.totalPrice!)}
+                    </span>
+                  )}
+                </p>
+                <p className={cn(text.caption, 'mt-0.5')}>
+                  {[
+                    rep.dealMinPrice != null ? `지난 핫딜 최저 ${won(rep.dealMinPrice)}` : null,
+                    rep.unitPrice != null && rep.unitLabel
+                      ? `${rep.unitLabel} ${won(rep.unitPrice)}`
+                      : null,
+                  ]
+                    .filter(Boolean)
+                    .join(' · ')}
+                </p>
+              </div>
+              {danawa != null && (
+                <span className={cn(text.caption, 'shrink-0 text-right')}>
+                  다나와 {won(danawa)}
+                  {rep.danawaUrl ? ' ›' : ''}
+                </span>
+              )}
+            </Row>
+          </li>
+        );
+      })}
+    </ul>
   );
 }

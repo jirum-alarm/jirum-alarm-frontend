@@ -43,6 +43,12 @@ export const PAGES: ScreenPage[] = [
     path: `/deals/${encodeURIComponent(MODEL_SLUG_ACTIVE)}`,
     desktop: true,
   },
+  // 구성이 여럿(2L·500ml…)인 단위가 모델 — 추이 막대 대신 「구성별 가격」 표가 나온다(2026-10-24).
+  {
+    name: 'deal-model-packs',
+    path: `/deals/${encodeURIComponent('광동제약-제주-삼다수-그린')}`,
+    desktop: true,
+  },
   { name: 'community', path: '/community', states: true, desktop: true },
   { name: 'themes', path: '/themes', desktop: true },
   { name: 'help', path: '/help', desktop: true },

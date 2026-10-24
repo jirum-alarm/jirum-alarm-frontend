@@ -1,0 +1,957 @@
+{
+  "variables": {
+    "slug": "광동제약-제주-삼다수-그린"
+  },
+  "response": {
+    "data": {
+      "modelPage": {
+        "slug": "광동제약-제주-삼다수-그린",
+        "brand": "광동제약",
+        "modelName": "제주 삼다수 그린",
+        "dealCount": 151,
+        "lastDealAt": "2026-10-22T22:20:32.000Z",
+        "metaDescription": "제주 삼다수 그린 핫딜 모음 — 최근 151건. 최저 38원~ 지름알림에서 가격 모아보기.",
+        "payload": {
+          "deals": [
+            {
+              "url": "https://www.fmkorea.com/8005041469",
+              "isEnd": true,
+              "price": 15449,
+              "title": "삼다수 2L 30병",
+              "mallName": null,
+              "postedAt": "2025-02-07T08:07:00.000Z",
+              "productId": 10128129,
+              "thumbnail": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 26,
+              "providerId": 7
+            },
+            {
+              "url": "https://www.fmkorea.com/10222745194",
+              "isEnd": true,
+              "price": 13232,
+              "title": "제주 삼다수 그린 2L 24입(귀찮음 주의)",
+              "mallName": "오늘의집  [포텐 터짐 우대 쇼핑몰, 제휴 링크]",
+              "postedAt": "2026-08-17T04:34:00.000Z",
+              "productId": 28585055,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10222745194.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 28,
+              "providerId": 7
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/128285360?p=1",
+              "isEnd": true,
+              "price": 17292,
+              "title": "삼다수몰 2L 30병 첫구매만 (17,292원/무료)",
+              "mallName": "                      삼다수몰                                          ",
+              "postedAt": "2025-02-07T00:38:52.000Z",
+              "productId": 10130723,
+              "thumbnail": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 29,
+              "providerId": 12
+            },
+            {
+              "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/13688114?menuid=2&referrerAllArticles=false",
+              "isEnd": false,
+              "price": 14630,
+              "title": "한정수량 삼다수 그린(무라벨) 2L 24개입 14,630원 초핫딜",
+              "mallName": null,
+              "postedAt": "2025-08-03T01:04:02.000Z",
+              "productId": 13385446,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/13688114.png",
+              "unitLabel": "100ml당",
+              "unitPrice": 30,
+              "providerId": 18
+            },
+            {
+              "url": "https://bbs.ruliweb.com/market/board/1020/read/101077",
+              "isEnd": false,
+              "price": 11580,
+              "title": "삼다수 1L 36개 (11,580원/무료)",
+              "mallName": null,
+              "postedAt": "2026-01-21T02:35:16.000Z",
+              "productId": 21732212,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/101077.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 32,
+              "providerId": 4
+            },
+            {
+              "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1914190",
+              "isEnd": false,
+              "price": 11580,
+              "title": "삼다수 1L 36개 (11,580원/무료)",
+              "mallName": null,
+              "postedAt": "2026-01-21T02:27:00.000Z",
+              "productId": 21732069,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1914190.png",
+              "unitLabel": "100ml당",
+              "unitPrice": 32,
+              "providerId": 5
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=634266",
+              "isEnd": true,
+              "price": 15790,
+              "title": "삼다수 그린(무라벨) 2L 24개입(유클 15,790원/무료)",
+              "mallName": "옥션",
+              "postedAt": "2025-07-06T17:46:48.000Z",
+              "productId": 12878646,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/634266.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 33,
+              "providerId": 1
+            },
+            {
+              "url": "https://www.fmkorea.com/7758025771",
+              "isEnd": true,
+              "price": 7960,
+              "title": "제주삼다수 그린 무라벨, 2L, 12개",
+              "mallName": null,
+              "postedAt": "2024-11-29T10:45:00.000Z",
+              "productId": 8317665,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/7758025771.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 33,
+              "providerId": 7
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=670838",
+              "isEnd": false,
+              "price": 12490,
+              "title": "삼다수 1리터 x36병 (12490/무료)",
+              "mallName": "지마켓",
+              "postedAt": "2025-12-12T10:00:04.000Z",
+              "productId": 19225187,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/670838.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 35,
+              "providerId": 1
+            },
+            {
+              "url": "https://www.fmkorea.com/7927722745",
+              "isEnd": false,
+              "price": 16736,
+              "title": "삼다수 그린(무라벨) 2L 24입 (무/유라벨 랜덤발송)",
+              "mallName": null,
+              "postedAt": "2025-01-16T01:54:00.000Z",
+              "productId": 9630282,
+              "thumbnail": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 35,
+              "providerId": 7
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=596158",
+              "isEnd": false,
+              "price": 16736,
+              "title": "삼다수 그린(무라벨) 2L 24입 (무/유라벨 랜덤발송) (페이코 16,736원/무료)",
+              "mallName": "광동상회",
+              "postedAt": "2025-01-16T01:30:08.000Z",
+              "productId": 9630013,
+              "thumbnail": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 35,
+              "providerId": 1
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=683421",
+              "isEnd": true,
+              "price": 17180,
+              "title": "삼다수 그린 (무라벨) 2L 24개입(17,180원/무료)",
+              "mallName": "G마켓",
+              "postedAt": "2026-02-10T14:59:00.000Z",
+              "productId": 22416056,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/683421.jpeg",
+              "unitLabel": "100ml당",
+              "unitPrice": 36,
+              "providerId": 1
+            },
+            {
+              "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/13547596?menuid=2&referrerAllArticles=false",
+              "isEnd": false,
+              "price": 8738,
+              "title": "제주 삼다수 그린 2L 12입 8,738원 무배 핫딜",
+              "mallName": null,
+              "postedAt": "2025-06-24T15:30:13.000Z",
+              "productId": 12663497,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/13547596.png",
+              "unitLabel": "100ml당",
+              "unitPrice": 36,
+              "providerId": 18
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/140563045?p=1",
+              "isEnd": false,
+              "price": 8738,
+              "title": "제주 삼다수 그린 2L 12개 (8,738원/무료)",
+              "mallName": "                      오늘의집                                          ",
+              "postedAt": "2025-06-24T15:14:56.000Z",
+              "productId": 12668750,
+              "thumbnail": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 36,
+              "providerId": 12
+            },
+            {
+              "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/13547524?menuid=2&referrerAllArticles=false",
+              "isEnd": false,
+              "price": 8738,
+              "title": "제주 삼다수 그린 2L 12개 8,738원 무배(라벨랜덤)",
+              "mallName": null,
+              "postedAt": "2025-06-24T15:07:36.000Z",
+              "productId": 12663255,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/13547524.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 36,
+              "providerId": 18
+            },
+            {
+              "url": "https://www.fmkorea.com/8568788542",
+              "isEnd": false,
+              "price": 8738,
+              "title": "제주 삼다수 그린 2L 12개",
+              "mallName": null,
+              "postedAt": "2025-06-24T15:04:00.000Z",
+              "productId": 12663453,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/8568788542.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 36,
+              "providerId": 7
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/139180223?p=1",
+              "isEnd": false,
+              "price": 8955,
+              "title": "제주 삼다수 그린 2L 12입 (8,955원/무료)",
+              "mallName": "                      오늘의집                                          ",
+              "postedAt": "2025-06-10T01:05:39.000Z",
+              "productId": 12368151,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/139180223.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 37,
+              "providerId": 12
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=613812",
+              "isEnd": false,
+              "price": 8900,
+              "title": "제주 삼다수 그린 무라벨 2L X 12병 (8,900원/선착순무료)",
+              "mallName": "NS몰",
+              "postedAt": "2025-04-11T15:20:49.000Z",
+              "productId": 11457539,
+              "thumbnail": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 37,
+              "providerId": 1
+            },
+            {
+              "url": "https://www.fmkorea.com/8148989891",
+              "isEnd": false,
+              "price": 8900,
+              "title": "제주 삼다수 그린 무라벨 2L x 12병",
+              "mallName": null,
+              "postedAt": "2025-03-18T23:02:00.000Z",
+              "productId": 10976231,
+              "thumbnail": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 37,
+              "providerId": 7
+            },
+            {
+              "url": "https://www.fmkorea.com/8091627577",
+              "isEnd": true,
+              "price": 8900,
+              "title": "제주 삼다수 그린 무라벨 2L X 12병",
+              "mallName": null,
+              "postedAt": "2025-03-03T11:23:00.000Z",
+              "productId": 10683604,
+              "thumbnail": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 37,
+              "providerId": 7
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=592177",
+              "isEnd": false,
+              "price": 17900,
+              "title": "삼다수 그린(무라벨) 2L 24개 외 (17,900원/무료)",
+              "mallName": "광동상회",
+              "postedAt": "2024-12-27T01:25:00.000Z",
+              "productId": 9109876,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/592177.gif",
+              "unitLabel": "100ml당",
+              "unitPrice": 37,
+              "providerId": 1
+            },
+            {
+              "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14274154?menuid=2&referrerAllArticles=false",
+              "isEnd": false,
+              "price": 18100,
+              "title": "삼다수 그린 2L 24개입 (라벨랜덤) 18100원",
+              "mallName": "지마켓",
+              "postedAt": "2026-01-28T03:42:54.000Z",
+              "productId": 22026360,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14274154.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 38,
+              "providerId": 18
+            },
+            {
+              "url": "https://www.fmkorea.com/9429845566",
+              "isEnd": false,
+              "price": 18100,
+              "title": "삼다수 그린 (무라벨) 2L 24개입",
+              "mallName": null,
+              "postedAt": "2026-01-28T03:34:00.000Z",
+              "productId": 22026743,
+              "thumbnail": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 38,
+              "providerId": 7
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=679934",
+              "isEnd": false,
+              "price": 18100,
+              "title": "삼다수 그린 (무라벨) 2L 24개입 (18,100원/무료)",
+              "mallName": "G마켓",
+              "postedAt": "2026-01-28T03:21:44.000Z",
+              "productId": 22026206,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/679934.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 38,
+              "providerId": 1
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=603038",
+              "isEnd": false,
+              "price": 18260,
+              "title": "삼다수 2리터 24병 (18,260원/무료)",
+              "mallName": "롯데온",
+              "postedAt": "2025-02-20T15:14:56.000Z",
+              "productId": 10446005,
+              "thumbnail": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 38,
+              "providerId": 1
+            },
+            {
+              "url": "https://www.fmkorea.com/8053324189",
+              "isEnd": false,
+              "price": 18260,
+              "title": "제주 삼다수 그린(무라벨) 2L 24병 생수 (카드)",
+              "mallName": null,
+              "postedAt": "2025-02-20T15:05:00.000Z",
+              "productId": 10445701,
+              "thumbnail": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 38,
+              "providerId": 7
+            },
+            {
+              "url": "https://eomisae.co.kr/fs/146267814",
+              "isEnd": false,
+              "price": 9124,
+              "title": "제주 삼다수 그린 2L 12입 9,124원",
+              "mallName": null,
+              "postedAt": "2025-01-26T15:05:01.000Z",
+              "productId": 9844635,
+              "thumbnail": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 38,
+              "providerId": 11
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=596517",
+              "isEnd": false,
+              "price": 9070,
+              "title": "제주삼다수 그린 무라벨, 2L, 12개(9,070원/와우무료)",
+              "mallName": "쿠팡",
+              "postedAt": "2025-01-17T08:58:24.000Z",
+              "productId": 9659084,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/596517.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 38,
+              "providerId": 1
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=596144",
+              "isEnd": false,
+              "price": 9070,
+              "title": "제주삼다수 그린 무라벨, 2L, 12개 (9,070원/와우무료)",
+              "mallName": "쿠팡",
+              "postedAt": "2025-01-16T00:53:02.000Z",
+              "productId": 9629405,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/596144.png",
+              "unitLabel": "100ml당",
+              "unitPrice": 38,
+              "providerId": 1
+            },
+            {
+              "url": "https://www.fmkorea.com/7927552012",
+              "isEnd": false,
+              "price": 9070,
+              "title": "제주삼다수 그린 무라벨, 2L, 12개",
+              "mallName": null,
+              "postedAt": "2025-01-16T00:36:00.000Z",
+              "productId": 9629219,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/7927552012.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 38,
+              "providerId": 7
+            },
+            {
+              "url": "https://bbs.ruliweb.com/market/board/1020/read/108267",
+              "isEnd": false,
+              "price": 19900,
+              "title": "제주삼다수 무라벨 2L 24병 (19,900원/무료)",
+              "mallName": null,
+              "postedAt": "2026-10-22T22:20:32.000Z",
+              "productId": 36418590,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/108267.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 41,
+              "providerId": 4
+            },
+            {
+              "url": "https://www.fmkorea.com/10256289296",
+              "isEnd": false,
+              "price": 9880,
+              "title": "제주 삼다수 그린 2L 12입",
+              "mallName": "오늘의집  [포텐 터짐 우대 쇼핑몰, 제휴 링크]",
+              "postedAt": "2026-08-25T09:35:00.000Z",
+              "productId": 29466804,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10256289296.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 41,
+              "providerId": 7
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=729126",
+              "isEnd": false,
+              "price": 9880,
+              "title": "제주 삼다수 그린 2L 12병 (9,880원/무료)",
+              "mallName": "오늘의집",
+              "postedAt": "2026-08-25T00:50:00.000Z",
+              "productId": 29435056,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/729126.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 41,
+              "providerId": 1
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=729023",
+              "isEnd": false,
+              "price": 20990,
+              "title": "삼다수 그린 (무라벨) 2L 24개입 유/무라벨 랜덤발송 (20,990원/무료)",
+              "mallName": "지마켓",
+              "postedAt": "2026-08-24T10:12:00.000Z",
+              "productId": 29348960,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/729023.png",
+              "unitLabel": "100ml당",
+              "unitPrice": 44,
+              "providerId": 1
+            },
+            {
+              "url": "https://etoland.co.kr/b/hotdeal/article/9511159",
+              "isEnd": false,
+              "price": 21770,
+              "title": "삼다수 그린(무라벨) 2L 24개입",
+              "mallName": "지마켓",
+              "postedAt": "2026-10-17T22:12:00.000Z",
+              "productId": 35870658,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9511159.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 45,
+              "providerId": 107
+            },
+            {
+              "url": "https://etoland.co.kr/b/hotdeal/article/9516022",
+              "isEnd": false,
+              "price": 11020,
+              "title": "삼다수 그린(무라벨) 2L 12개입",
+              "mallName": "지마켓",
+              "postedAt": "2026-10-19T21:34:00.000Z",
+              "productId": 36088120,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9516022.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 46,
+              "providerId": 107
+            },
+            {
+              "url": "https://etoland.co.kr/b/hotdeal/article/9517743",
+              "isEnd": false,
+              "price": 17100,
+              "title": "제주삼다수 그린 무라벨, 2L, 18개",
+              "mallName": "쿠팡",
+              "postedAt": "2026-10-20T13:52:00.000Z",
+              "productId": 36141318,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9517743.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 48,
+              "providerId": 107
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/179855533?p=1",
+              "isEnd": true,
+              "price": 22800,
+              "title": "제주삼다수 그린 무라벨, 2L, 24개 (22,800원/무료)",
+              "mallName": "쿠팡",
+              "postedAt": "2026-08-13T23:20:15.000Z",
+              "productId": 28150222,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/179855533.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 48,
+              "providerId": 12
+            },
+            {
+              "url": "https://store.ohou.se/goods/2545282",
+              "isEnd": false,
+              "price": 13200,
+              "title": "제주 삼다수 그린 2L 12입 (무라벨/유라벨 랜덤발송)",
+              "mallName": null,
+              "postedAt": "2026-08-10T12:03:35.000Z",
+              "productId": 27665569,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ohou/2545282.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 55,
+              "providerId": 102
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=738694",
+              "isEnd": false,
+              "price": 10500,
+              "title": "삼다수 330ml x 40개 (10,500원/무료)",
+              "mallName": "토스",
+              "postedAt": "2026-10-07T15:42:00.000Z",
+              "productId": 34843279,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/738694.webp",
+              "unitLabel": "100ml당",
+              "unitPrice": 80,
+              "providerId": 1
+            },
+            {
+              "url": "https://arca.live/b/hotdeal/180041293?p=1",
+              "isEnd": true,
+              "price": 16630,
+              "title": "제주삼다수 그린 무라벨, 500ml, 40개 (16,630원/무료)",
+              "mallName": "쿠팡",
+              "postedAt": "2026-08-16T00:50:03.000Z",
+              "productId": 28451156,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/arca/180041293.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 83,
+              "providerId": 12
+            },
+            {
+              "url": "https://www.city.kr/ln/42746269",
+              "isEnd": false,
+              "price": 17520,
+              "title": "(광동 직영) 삼다수 그린(무라벨) 500ml 40개입 <17,520원 / 무료배송>",
+              "mallName": null,
+              "postedAt": "2026-08-22T12:14:52.000Z",
+              "productId": 29148873,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/city/42746269.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 88,
+              "providerId": 6
+            },
+            {
+              "url": "https://shopping.toss.im/c/184174649",
+              "isEnd": false,
+              "price": 23940,
+              "title": "제주삼다수, 1L, 27개",
+              "mallName": null,
+              "postedAt": "2026-08-05T18:04:23.000Z",
+              "productId": 27049427,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/toss/184174649.jpeg",
+              "unitLabel": "100ml당",
+              "unitPrice": 89,
+              "providerId": 21
+            },
+            {
+              "url": "https://shopping.toss.im/c/1321487639",
+              "isEnd": false,
+              "price": 18768,
+              "title": "제주삼다수 그린(무라벨) 생수, 500ml, 40병",
+              "mallName": null,
+              "postedAt": "2026-08-06T12:01:37.000Z",
+              "productId": 27148205,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1321487639.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 94,
+              "providerId": 21
+            },
+            {
+              "url": "https://shopping.toss.im/c/1064143681",
+              "isEnd": false,
+              "price": 16800,
+              "title": "제주삼다수 그린 무라벨, 330ml, 40병",
+              "mallName": null,
+              "postedAt": "2026-08-11T12:03:13.000Z",
+              "productId": 27808424,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1064143681.jpeg",
+              "unitLabel": "100ml당",
+              "unitPrice": 127,
+              "providerId": 21
+            },
+            {
+              "url": "https://shopping.toss.im/c/1605696385",
+              "isEnd": false,
+              "price": 16900,
+              "title": "제주 삼다수, 무라벨, 330ml, 40개",
+              "mallName": null,
+              "postedAt": "2026-09-04T15:02:54.000Z",
+              "productId": 30651311,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1605696385.jpeg",
+              "unitLabel": "100ml당",
+              "unitPrice": 128,
+              "providerId": 21
+            },
+            {
+              "url": "https://shopping.toss.im/c/1961194779",
+              "isEnd": false,
+              "price": 17200,
+              "title": "제주 삼다수, 무라벨, 330ml, 40개",
+              "mallName": null,
+              "postedAt": "2026-08-25T09:01:34.000Z",
+              "productId": 29465770,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1961194779.jpg",
+              "unitLabel": "100ml당",
+              "unitPrice": 130,
+              "providerId": 21
+            },
+            {
+              "url": "https://shopping.toss.im/c/12358975",
+              "isEnd": false,
+              "price": 8960,
+              "title": "제주 삼다수, 무라벨, 330ml, 20개",
+              "mallName": null,
+              "postedAt": "2026-08-06T12:02:09.000Z",
+              "productId": 27147591,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/toss/12358975.png",
+              "unitLabel": "100ml당",
+              "unitPrice": 136,
+              "providerId": 21
+            },
+            {
+              "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=740529",
+              "isEnd": false,
+              "price": 22158,
+              "title": "제주삼다수 그린 2L 6개x5팩(토스페이 22,158원/무료)",
+              "mallName": "삼다수몰",
+              "postedAt": "2026-10-15T12:12:00.000Z",
+              "productId": 35587001,
+              "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/740529.webp",
+              "providerId": 1
+            }
+          ],
+          "danawa": {
+            "danawaUrl": "https://prod.danawa.com/info/?pcode=14740118",
+            "mallCount": 999,
+            "danawaPrice": 18700,
+            "danawaProductId": 14740118
+          },
+          "heroImage": "https://cdn.jirum-alarm.com/community/mommybebe/14711388.jpg",
+          "heroPrice": {
+            "label": "2L 24개",
+            "minPrice": 13232,
+            "unitLabel": "100ml당",
+            "unitPrice": 28
+          },
+          "priceHistory": {
+            "basis": "unit",
+            "points": [
+              {
+                "month": "2026-07-30",
+                "price": 53
+              },
+              {
+                "month": "2026-08-01",
+                "price": 82
+              },
+              {
+                "month": "2026-08-05",
+                "price": 64
+              },
+              {
+                "month": "2026-08-06",
+                "price": 89
+              },
+              {
+                "month": "2026-08-10",
+                "price": 55
+              },
+              {
+                "month": "2026-08-14",
+                "price": 48
+              },
+              {
+                "month": "2026-08-16",
+                "price": 83
+              },
+              {
+                "month": "2026-08-17",
+                "price": 28
+              },
+              {
+                "month": "2026-08-22",
+                "price": 88
+              },
+              {
+                "month": "2026-08-24",
+                "price": 44
+              },
+              {
+                "month": "2026-08-25",
+                "price": 41
+              },
+              {
+                "month": "2026-10-08",
+                "price": 80
+              },
+              {
+                "month": "2026-10-18",
+                "price": 45
+              },
+              {
+                "month": "2026-10-20",
+                "price": 46
+              },
+              {
+                "month": "2026-10-23",
+                "price": 41
+              }
+            ],
+            "currency": "KRW",
+            "unitLabel": "100ml당",
+            "granularity": "day"
+          },
+          "priceSummary": {
+            "max": 86,
+            "min": 38,
+            "median": 43,
+            "source": "brand_item_stats"
+          },
+          "relatedModels": [
+            {
+              "slug": "광동제약-제주-삼다수",
+              "dealCount": 366,
+              "modelName": "제주 삼다수"
+            },
+            {
+              "slug": "광동제약-비타500-제로-스파클링",
+              "dealCount": 39,
+              "modelName": "비타500 제로 스파클링"
+            },
+            {
+              "slug": "광동제약-밀싹-보리차",
+              "dealCount": 33,
+              "modelName": "밀싹 보리차"
+            },
+            {
+              "slug": "광동제약-비타500-이온킥-제로",
+              "dealCount": 28,
+              "modelName": "비타500 이온킥 제로"
+            },
+            {
+              "slug": "광동제약-제주삼다수-무라벨-2l-x-12펫",
+              "dealCount": 27,
+              "modelName": "제주삼다수 무라벨 2L x 12펫"
+            },
+            {
+              "slug": "광동제약-비타500-제로-스파클링-유자",
+              "dealCount": 21,
+              "modelName": "비타500 제로 스파클링 유자"
+            }
+          ],
+          "representatives": [
+            {
+              "label": "2L 24개",
+              "danawaUrl": "https://prod.danawa.com/info/?pcode=14740118",
+              "mallCount": 999,
+              "priceRank": "1위",
+              "unitLabel": "100ml당",
+              "unitPrice": 28,
+              "activeDeals": 48,
+              "danawaPrice": 18700,
+              "dealMinPrice": 13232
+            },
+            {
+              "label": "2L 12개",
+              "danawaUrl": "https://prod.danawa.com/info/?pcode=14740100",
+              "mallCount": 999,
+              "priceRank": "2위",
+              "unitLabel": "100ml당",
+              "unitPrice": 33,
+              "activeDeals": 52,
+              "danawaPrice": 12480,
+              "dealMinPrice": 7960
+            },
+            {
+              "label": "500ml 40개",
+              "danawaUrl": "https://prod.danawa.com/info/?pcode=14756399",
+              "mallCount": 999,
+              "priceRank": "1위",
+              "unitLabel": "100ml당",
+              "unitPrice": 48,
+              "activeDeals": 19,
+              "danawaPrice": 14750,
+              "dealMinPrice": 9600
+            },
+            {
+              "label": "330ml 40개",
+              "danawaUrl": "https://prod.danawa.com/info/?pcode=15926714",
+              "mallCount": 778,
+              "priceRank": "1위",
+              "unitLabel": "100ml당",
+              "unitPrice": 80,
+              "activeDeals": 4,
+              "danawaPrice": 12560,
+              "dealMinPrice": 10500
+            },
+            {
+              "label": "500ml 60개",
+              "danawaUrl": "https://prod.danawa.com/info/?pcode=14756408",
+              "mallCount": 719,
+              "priceRank": "2위",
+              "unitLabel": "100ml당",
+              "unitPrice": 82,
+              "activeDeals": 1,
+              "danawaPrice": 25210,
+              "dealMinPrice": 24560
+            },
+            {
+              "label": "500ml 20개",
+              "danawaUrl": "https://prod.danawa.com/info/?pcode=14756420",
+              "mallCount": 718,
+              "priceRank": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 58,
+              "activeDeals": 1,
+              "danawaPrice": 6110,
+              "dealMinPrice": 5820
+            },
+            {
+              "label": "2L 18개",
+              "danawaUrl": "https://prod.danawa.com/info/?pcode=14740109",
+              "mallCount": 712,
+              "priceRank": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 48,
+              "activeDeals": 3,
+              "danawaPrice": 17490,
+              "dealMinPrice": 17100
+            },
+            {
+              "label": "500ml 80개",
+              "danawaUrl": "https://prod.danawa.com/info/?pcode=15060146",
+              "mallCount": 644,
+              "priceRank": null,
+              "unitLabel": "100ml당",
+              "unitPrice": 74,
+              "activeDeals": 2,
+              "danawaPrice": 34230,
+              "dealMinPrice": 29592
+            }
+          ]
+        },
+        "priceVerdict": {
+          "tone": "mall_cheaper",
+          "pendingReason": null,
+          "activeDealCount": 1,
+          "activeProductIds": [
+            36418590
+          ],
+          "bundleProductIds": [],
+          "bestProductId": 36418590,
+          "comparePrice": 41,
+          "activePrice": 19900,
+          "bestPackLabel": "2L 24개",
+          "mallPrice": 18700,
+          "avgPrice": 59.13333333333333,
+          "savePct": 31,
+          "buyLine": 53,
+          "historyPoints": 15
+        },
+        "recentDeals": [
+          {
+            "productId": 36418590,
+            "title": "제주삼다수 무라벨 2L 24병 (19,900원/무료)",
+            "price": 19900,
+            "priceCurrency": "KRW",
+            "mallName": null,
+            "postedAt": "2026-10-22T22:20:32.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/108267.webp",
+            "isEnd": false,
+            "isVerified": true
+          },
+          {
+            "productId": 36141318,
+            "title": "제주삼다수 그린 무라벨, 2L, 18개",
+            "price": 17100,
+            "priceCurrency": "KRW",
+            "mallName": "쿠팡",
+            "postedAt": "2026-10-20T13:52:00.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9517743.webp",
+            "isEnd": false,
+            "isVerified": true
+          },
+          {
+            "productId": 36088120,
+            "title": "삼다수 그린(무라벨) 2L 12개입",
+            "price": 11020,
+            "priceCurrency": "KRW",
+            "mallName": "지마켓",
+            "postedAt": "2026-10-19T21:34:00.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9516022.webp",
+            "isEnd": false,
+            "isVerified": true
+          },
+          {
+            "productId": 35870658,
+            "title": "삼다수 그린(무라벨) 2L 24개입",
+            "price": 21770,
+            "priceCurrency": "KRW",
+            "mallName": "지마켓",
+            "postedAt": "2026-10-17T22:12:00.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9511159.webp",
+            "isEnd": false,
+            "isVerified": true
+          },
+          {
+            "productId": 35587001,
+            "title": "제주삼다수 그린 2L 6개x5팩(토스페이 22,158원/무료)",
+            "price": 22158,
+            "priceCurrency": "KRW",
+            "mallName": "삼다수몰",
+            "postedAt": "2026-10-15T12:12:00.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/740529.webp",
+            "isEnd": false,
+            "isVerified": true
+          },
+          {
+            "productId": 34843279,
+            "title": "삼다수 330ml x 40개 (10,500원/무료)",
+            "price": 10500,
+            "priceCurrency": "KRW",
+            "mallName": "토스",
+            "postedAt": "2026-10-07T15:42:00.000Z",
+            "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/738694.webp",
+            "isEnd": false,
+            "isVerified": true
+          }
+        ],
+        "keywordHub": {
+          "slug": "삼다수",
+          "name": "삼다수",
+          "recentDealCount": 101,
+          "countCapped": false
+        }
+      }
+    }
+  }
+}
