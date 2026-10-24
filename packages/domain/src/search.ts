@@ -104,7 +104,14 @@ export function searchOrderBy(sort: SearchSort): 'RELEVANCE' | 'COMMENT_COUNT' |
  * 「품절 포함」은 ON 일 때만 isEnd: true(서버에서 true 는 «종료 포함»). startDate 는 기간이 바뀔 때만 다시 잡게 밖에서 받는다.
  */
 export function searchFilterVariables(
-  filters: { categoryIds: number[]; providerIds: number[]; ended: boolean; sort: SearchSort },
+  filters: {
+    categoryIds: number[];
+    providerIds: number[];
+    ended: boolean;
+    sort: SearchSort;
+    /** 오타 교정 없이 입력 그대로 — 교정 안내의 「‘원래’ 그대로 검색」이 켠다. 새 검색이면 다시 꺼진다. */
+    exact?: boolean;
+  },
   startDate: string | undefined,
 ) {
   return {
@@ -113,8 +120,18 @@ export function searchFilterVariables(
     startDate,
     isEnd: filters.ended ? true : undefined,
     orderBy: searchOrderBy(filters.sort),
+    exactKeyword: filters.exact ? true : undefined,
   };
 }
+
+/**
+ * 오타 교정 안내 — 서버가 0건·일부 일치 검색어를 사전 낱말로 고쳐 찾았을 때(응답 correctedKeyword) 결과 위 한 줄.
+ * 「‘낫또’ 검색 결과예요 · ‘낫뗘’ 그대로 검색」. 둘째 조각은 exact 를 켜고 같은 검색어로 다시 찾는 링크(web)·버튼(앱).
+ */
+export const SEARCH_CORRECTED_COPY = {
+  shown: (corrected: string) => `‘${corrected}’ 검색 결과예요`,
+  searchOriginal: (original: string) => `‘${original}’ 그대로 검색`,
+} as const;
 
 /**
  * 진짜 0건일 때 같은 검색어를 종료 포함으로 한 번 더 세는 조회. limit 은 목록과 같은 쪽 크기 —
@@ -127,6 +144,9 @@ export const endedRescueVariables = (keyword: string) =>
 export const SEARCH_EVENT = {
   noResult: 'search_no_result',
   endedRescueClick: 'search_ended_rescue_click',
+  /** 오타 교정 안내가 보였다(keyword=입력, corrected=교정어) / 「그대로 검색」을 눌렀다 */
+  correctedView: 'search_corrected_view',
+  correctedUndo: 'search_corrected_undo',
 } as const;
 
 /** 결과 위 한 줄 「'X' 새 핫딜, 놓치지 마세요 [알림 받기]」 — 키워드 뒤에 붙는 말. */

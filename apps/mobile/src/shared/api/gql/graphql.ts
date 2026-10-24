@@ -2428,6 +2428,8 @@ export type ProductOutput = {
   consumptionDate?: Maybe<Scalars['DateTime']['output']>;
   /** 상품 설명(유저 등록 상품) */
   content?: Maybe<Scalars['String']['output']>;
+  /** 오타 교정 — 입력 검색어가 0건이거나 일부 낱말만 맞아 이 말로 대신 찾았다(모든 행 동일). 화면은 「‘X’ 검색 결과예요 · ‘원래’로 검색」을 보이고, 원래 말은 exactKeyword: true 로 다시 찾는다. */
+  correctedKeyword?: Maybe<Scalars['String']['output']>;
   /** 소스별 확장 정보(toss 등) */
   data?: Maybe<Scalars['JSONObject']['output']>;
   /** 왜 핫딜인지 — 근거 하나 + 다른 종류 한 줄 + 엇갈림 단서 + 가격 조건(상세 전용) */
@@ -3393,6 +3395,7 @@ export type QueryProductsArgs = {
   categoryId?: InputMaybe<Scalars['Int']['input']>;
   categoryIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   endDate?: InputMaybe<Scalars['DateTime']['input']>;
+  exactKeyword?: InputMaybe<Scalars['Boolean']['input']>;
   isApp?: InputMaybe<Scalars['Boolean']['input']>;
   isEnd?: InputMaybe<Scalars['Boolean']['input']>;
   isGame?: InputMaybe<Scalars['Boolean']['input']>;
@@ -5592,6 +5595,7 @@ export type SearchProductsQueryVariables = Exact<{
   providerIds?: InputMaybe<
     Array<Scalars['Int']['input']> | Scalars['Int']['input']
   >;
+  exactKeyword?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type SearchProductsQuery = {
@@ -5614,6 +5618,7 @@ export type SearchProductsQuery = {
     isYearLowest: boolean;
     searchAfter?: Array<string> | null;
     estimatedTotal?: number | null;
+    correctedKeyword?: string | null;
     postedAt: any;
     priceSaving?: {
       __typename?: 'ProductPriceSaving';
@@ -7171,7 +7176,7 @@ export const RecordProductImpressionsDocument = new TypedDocumentString(`
   RecordProductImpressionsMutationVariables
 >;
 export const SearchProductsDocument = new TypedDocumentString(`
-    query SearchProducts($limit: Int!, $searchAfter: [String!], $startDate: DateTime, $orderBy: ProductOrderType, $categoryIds: [Int!], $keyword: String, $isEnd: Boolean, $providerIds: [Int!]) {
+    query SearchProducts($limit: Int!, $searchAfter: [String!], $startDate: DateTime, $orderBy: ProductOrderType, $categoryIds: [Int!], $keyword: String, $isEnd: Boolean, $providerIds: [Int!], $exactKeyword: Boolean) {
   products(
     limit: $limit
     searchAfter: $searchAfter
@@ -7181,6 +7186,7 @@ export const SearchProductsDocument = new TypedDocumentString(`
     keyword: $keyword
     isEnd: $isEnd
     providerIds: $providerIds
+    exactKeyword: $exactKeyword
   ) {
     id
     title
@@ -7205,6 +7211,7 @@ export const SearchProductsDocument = new TypedDocumentString(`
     }
     searchAfter
     estimatedTotal
+    correctedKeyword
     postedAt
   }
 }

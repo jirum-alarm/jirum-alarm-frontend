@@ -1,6 +1,11 @@
 import {emptyText, text} from '@jirum/design-system/recipes';
-import {ESTIMATED_TOTAL_CAP, SEARCH_COPY} from '@jirum/domain/search';
-import React, {useCallback, useMemo, useRef} from 'react';
+import {
+  ESTIMATED_TOTAL_CAP,
+  SEARCH_COPY,
+  SEARCH_CORRECTED_COPY,
+  SEARCH_EVENT,
+} from '@jirum/domain/search';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import PressableOpacity from '@/shared/components/PressableOpacity';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -19,6 +24,7 @@ import SearchFilterBar from './SearchFilterBar';
 import SearchNotFound from './SearchNotFound';
 import SearchKeywordHubSummary from './SearchKeywordHubSummary';
 import KeywordAlertButton from '@/features/keyword-prompt/ui/KeywordAlertButton';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';
 import {cn} from '@/shared/lib/styling';
 
@@ -77,6 +83,15 @@ export default function SearchResults({
 
   // 총량은 모든 행에 같은 값이 주입되므로 첫 행에서만 읽는다(web 과 같다).
   const estimatedTotal = products[0]?.estimatedTotal ?? null;
+  // 오타 교정어 — 서버가 0건·일부 일치 검색어를 사전 낱말로 고쳐 찾았다(web SearchResult 와 같은 안내).
+  const correctedKeyword = products[0]?.correctedKeyword ?? null;
+  useEffect(() => {
+    if (!correctedKeyword) return;
+    Analytics.track(SEARCH_EVENT.correctedView, {
+      keyword,
+      corrected: correctedKeyword,
+    });
+  }, [correctedKeyword, keyword]);
 
   const {recordImpression, recordClick} =
     useRankingImpressionTracker(SEARCH_SOURCE);
@@ -143,6 +158,29 @@ export default function SearchResults({
           header={
             <>
               <SearchFilterBar controller={controller} />
+              {correctedKeyword ? (
+                <View className="flex-row flex-wrap items-center px-5 pb-2">
+                  <Text className={text.muted}>
+                    {`${SEARCH_CORRECTED_COPY.shown(correctedKeyword)} · `}
+                  </Text>
+                  <PressableOpacity
+                    onPress={() => {
+                      Analytics.track(SEARCH_EVENT.correctedUndo, {
+                        keyword,
+                        corrected: correctedKeyword,
+                      });
+                      setFilters({exact: true});
+                    }}
+                    accessibilityRole="button"
+                    accessibilityLabel={SEARCH_CORRECTED_COPY.searchOriginal(
+                      keyword,
+                    )}>
+                    <Text className={cn(text.muted, 'text-gray-900 underline')}>
+                      {SEARCH_CORRECTED_COPY.searchOriginal(keyword)}
+                    </Text>
+                  </PressableOpacity>
+                </View>
+              ) : null}
               {estimatedTotal != null ? (
                 <View className="px-5 pb-3">
                   <Text className={text.muted}>

@@ -32,6 +32,8 @@ export const useSearchFilters = () => {
       sort: parseAsStringLiteral(SEARCH_SORTS).withDefault('recent'),
       period: parseAsStringLiteral(SEARCH_PERIODS).withDefault('all'),
       ended: parseAsBoolean.withDefault(false),
+      // 오타 교정 없이 그대로 — 교정 안내의 「그대로 검색」이 켠다(searchHref exact). 새 검색 주소엔 안 붙어 저절로 꺼진다.
+      exact: parseAsBoolean.withDefault(false),
     },
     { history: 'replace', shallow: true, scroll: false },
   );
@@ -45,6 +47,7 @@ export const useSearchFilters = () => {
       sort: null,
       period: null,
       ended: null,
+      exact: null,
     });
 
   const toggleCategoryId = (id: number) => {

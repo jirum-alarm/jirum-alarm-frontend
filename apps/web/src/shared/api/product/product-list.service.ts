@@ -20,6 +20,8 @@ export type ProductListQueryVariables = QueryProductsQueryVariables & {
   providerId?: number | null;
   providerIds?: number[] | null;
   mallGroupId?: number | null;
+  /** 오타 교정 없이 keyword 그대로(2026-10-24). */
+  exactKeyword?: boolean | null;
 };
 
 // ponytail: 카드에 판매처를 노출하려고 목록 쿼리에 mallName 을 추가했다. codegen 이 이 레포에서
@@ -35,6 +37,8 @@ export type ProductListResult = Omit<QueryProductsQuery, 'products'> & {
     postedCommunityCount?: number | null;
     /** 급상승(서버 ranking/rising.ts). 랭킹 아닌 목록은 null. */
     isRising?: boolean | null;
+    /** 오타 교정 — 이 말로 대신 찾았다(모든 행 동일, keyword 검색만). */
+    correctedKeyword?: string | null;
   })[];
 };
 
@@ -57,6 +61,7 @@ const QueryProducts = new TypedDocumentString<ProductListResult, ProductListQuer
     $providerId: Int
     $providerIds: [Int!]
     $mallGroupId: Int
+    $exactKeyword: Boolean
   ) {
     products(
       limit: $limit
@@ -67,6 +72,7 @@ const QueryProducts = new TypedDocumentString<ProductListResult, ProductListQuer
       categoryId: $categoryId
       categoryIds: $categoryIds
       keyword: $keyword
+      exactKeyword: $exactKeyword
       thumbnailType: $thumbnailType
       isEnd: $isEnd
       isHot: $isHot
@@ -97,6 +103,7 @@ const QueryProducts = new TypedDocumentString<ProductListResult, ProductListQuer
       }
       searchAfter
       estimatedTotal
+      correctedKeyword
       postedCommunityCount
       isRising
       postedAt
