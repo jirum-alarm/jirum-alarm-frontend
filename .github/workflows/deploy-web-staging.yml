@@ -7,6 +7,8 @@ on:
     paths:
       - apps/web/**
       - packages/**
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
   workflow_dispatch:
 
 concurrency:

@@ -28,7 +28,8 @@ import time
 
 REPO = 'jirum-alarm/jirum-alarm-frontend'
 PUSH_URL = 'git@github.com-tjsry0466:jirum-alarm/jirum-alarm-frontend.git'  # HTTPS origin 은 회사 계정으로 403
-WEB_PATHS = ['apps/web', 'packages']
+# 루트 lockfile·overrides 도 웹 이미지에 들어간다 — 빼면 보안 의존성 고정이 운영에 안 나간다(2026-10-24).
+WEB_PATHS = ['apps/web', 'packages', 'pnpm-lock.yaml', 'pnpm-workspace.yaml']
 PROD_SCHEMA = 'https://jirum-api.kyojs.com/graphql'
 CACHE = os.path.expanduser('~/.cache/jirum-release-tag')
 GITOPS = os.environ.get('JIRUM_GITOPS', os.path.expanduser('~/Documents/github/jirum-alarm/jirum-alarm-gitops'))

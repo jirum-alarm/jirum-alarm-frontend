@@ -13,6 +13,8 @@ on:
     paths:
       - apps/beauty-web/**
       - packages/**
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
   workflow_dispatch:
 
 concurrency:
