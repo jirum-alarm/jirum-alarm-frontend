@@ -180,6 +180,7 @@ export const QueryNotificationThemes = graphql(`
       keywords
       excludeKeywords
       weeklyAlertCount
+      subscriberCount
     }
   }
 `);

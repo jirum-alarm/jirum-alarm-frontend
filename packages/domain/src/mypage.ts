@@ -123,6 +123,15 @@ export const THEME_COPY = {
   criteriaExcludeWords: '이런 단어가 들어간 딜도 빼요',
 } as const;
 
+/**
+ * 관심사 카드의 «N명이 받고 있어요» — 구독자가 이 수 이상일 때만 붙인다(2026-10-24).
+ * 적은 숫자는 사회적 증거가 아니라 «아무도 안 쓰는 기능»이라는 신호가 되어 문턱 아래선 숨긴다.
+ * 목록 순서(구독자 많은 순)는 서버가 정하므로 문구가 없어도 순서는 그대로다.
+ */
+export const THEME_SUBSCRIBER_COUNT_MIN = 10;
+export const themeSubscriberLabel = (subscriberCount: number) =>
+  subscriberCount >= THEME_SUBSCRIBER_COUNT_MIN ? `${subscriberCount}명이 받고 있어요` : null;
+
 /** 약관 두 문서 — 목차 이름과 web 주소(앱은 같은 web 페이지를 웹뷰로 띄운다 — 법무 문서를 복사하지 않는다). */
 export const POLICY_DOCS = {
   terms: { title: '서비스 이용약관', path: '/policies/terms' },
