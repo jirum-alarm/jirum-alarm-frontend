@@ -12,8 +12,7 @@ import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
 export default function KeywordsTabHeader() {
   return (
     <PageHeader
-      // 본문 main 의 px-5 안에 놓여 fixed 가 20px 밀린다 — 좌우를 0 에 붙이고 가운데로.
-      className="pc:hidden inset-x-0 mx-auto"
+      className="pc:hidden"
       title={<span className={cn(text.title, 'truncate')}>키워드</span>}
       actions={<SearchLinkButton color="var(--color-gray-900)" />}
     />

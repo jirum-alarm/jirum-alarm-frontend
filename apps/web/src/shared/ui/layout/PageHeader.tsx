@@ -36,9 +36,11 @@ export default function PageHeader({
   children,
 }: PageHeaderProps) {
   return (
+    // inset-x-0 mx-auto: 좌우를 화면에 붙이고 가운데로. 안 그러면 fixed 가 놓인 자리(정적 위치)를 따라가
+    // 본문 main 의 px-5 안에 둔 헤더가 오른쪽으로 20px 밀린다(공유 버튼이 화면 끝에 붙음 — 2026-10-24 앱 사용법 화면).
     <header
       className={cn(
-        'max-w-mobile-max fixed top-0 z-50 flex w-full items-center justify-between gap-2',
+        'max-w-mobile-max fixed inset-x-0 top-0 z-50 mx-auto flex w-full items-center justify-between gap-2',
         pageHeader.bar,
         pageHeader.height,
         bordered && pageHeader.border,
