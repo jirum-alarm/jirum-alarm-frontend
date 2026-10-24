@@ -117,12 +117,31 @@ PY
     GIT_EDITOR=true git -C "$WT" cherry-pick --continue >/dev/null
 }
 for c in "${COMMITS[@]}"; do
-  if ! git -C "$WT" cherry-pick "$c" >/dev/null 2>&1; then
-    resolve_fingerprint_only && { echo "  $c — 화면 캐시 지문 줄 충돌만 풀었다(아래에서 이 브랜치 값으로 맞춘다)"; continue; }
-    die "$c cherry-pick 충돌 — 그 버전에 있던 코드로 손으로 풀고(git -C $WT status) 이 스크립트 대신 나머지 단계를 따른다"
+  git -C "$WT" cherry-pick -x "$c" >/dev/null 2>&1 && continue
+  # 빈 변경 = 이미 들어 있다(세션이 손으로 먼저 냈다) — 건너뛴다.
+  if [ -z "$(git -C "$WT" status --porcelain --untracked-files=no)" ]; then
+    git -C "$WT" cherry-pick --skip >/dev/null 2>&1 || true
+    echo "  $c — 이미 들어 있다, 건너뜀"
+    continue
   fi
+  resolve_fingerprint_only && { echo "  $c — 화면 캐시 지문 줄 충돌만 풀었다(아래에서 이 브랜치 값으로 맞춘다)"; continue; }
+  # web 과 같이 바꾼 커밋은 옛 브랜치의 web 파일과 부딪히기 쉽다 — 앱 번들 경로만 다시 적용해 본다(손으로 하던 「web 파일 제외」).
+  git -C "$WT" cherry-pick --abort
+  if git -C "$REPO" diff "$c^" "$c" -- apps/mobile packages | git -C "$WT" apply --3way >/dev/null 2>&1; then
+    git -C "$WT" commit -q -m "$(git -C "$REPO" log -1 --format=%B "$c")" \
+      -m "(cherry picked from commit $c — apps/mobile·packages 만)"
+    echo "  $c — web 등 다른 경로가 부딪혀 앱 경로만 적용"
+    continue
+  fi
+  die "$c cherry-pick 충돌 — 그 버전에 있던 코드로 손으로 풀고(git -C $WT status) 이 스크립트 대신 나머지 단계를 따른다"
 done
 git -C "$WT" log --oneline "$BASE..HEAD"
+if [ "$(git -C "$WT" rev-parse --short HEAD)" = "$BASE" ]; then
+  echo "  새로 들어간 커밋이 없다 — 발행하지 않는다"
+  cd "$REPO"
+  [ $KEEP = 1 ] || { git worktree remove --force "$WT"; git branch -q -D "$LOCAL_BRANCH"; }
+  exit 0
+fi
 
 cd "$WT/apps/mobile"
 

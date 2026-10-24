@@ -1,0 +1,236 @@
+name: mobile-ota-backport
+
+# main 자동 OTA(mobile-ota)가 발행되면, 그 발행에 실린 앱 JS 커밋을 스토어에 나가 있는 옛 runtime 전부에 낸다.
+# main 의 runtime 이 스토어보다 앞서 있으면 main OTA 는 스토어 사용자에게 안 닿는다 — 손으로 하던 백포트(AGENTS §Mobile App)를 자동으로.
+#
+# 범위: 이 발행과 그 runtime 의 직전 발행 사이 main 커밋 중 앱 번들 경로를 바꾼 것(mobile-ota 와 같은 경로 규칙).
+#   네이티브·의존성(ios·android·app.json·지문·package.json·lockfile)을 건드린 커밋은 옛 바이너리에 못 내니 뺀다.
+# 대상: origin 의 ota/runtime-* 전부(그 브랜치를 지우면 그 runtime 은 끝).
+# runtime 마다: 그 브랜치로 만든 Release 시뮬 앱(지문으로 캐시) → scripts/ota-backport.sh(cherry-pick·web 충돌이면 앱 경로만 →
+#   설치·지문·tsc·jest → 기동 확인 → 원격 끝 재확인 → ota:publish(브랜치 선점) → push → 매니페스트 확인).
+#   하나라도 막히면 그 runtime 만 멈추고 alert-deploy 에 알린다 — 손으로: scripts/ota-backport.sh --runtime <버전> <커밋>.
+# 끄기: 저장소 변수 MOBILE_AUTO_BACKPORT 를 false 로. 수동 실행은 dry_run 기본(발행 직전까지).
+
+on:
+  workflow_run:
+    workflows: [mobile-ota]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      commits:
+        description: 'main 커밋(공백 구분). 비우면 마지막 main OTA 에 실린 앱 커밋'
+        required: false
+      runtimes:
+        description: '쉼표 구분(예: 1.5.8,1.5.7). 비우면 ota/runtime-* 전부'
+        required: false
+      dry_run:
+        description: '발행·push 직전까지만'
+        type: boolean
+        default: true
+
+concurrency:
+  group: mobile-ota-backport
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  NODE_VERSION: 22.23.4
+  PNPM_VERSION: 10.30.3
+
+jobs:
+  plan:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' && vars.MOBILE_AUTO_BACKPORT == 'true')
+    runs-on: ubuntu-latest
+    outputs:
+      commits: ${{ steps.plan.outputs.commits }}
+      runtimes: ${{ steps.plan.outputs.runtimes }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+      - run: pnpm install --frozen-lockfile
+
+      - name: Commits and runtimes
+        id: plan
+        working-directory: apps/mobile
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          INPUT_COMMITS: ${{ inputs.commits }}
+          INPUT_RUNTIMES: ${{ inputs.runtimes }}
+        run: |
+          set -euo pipefail
+          head=$(git rev-parse HEAD)
+          if [ -n "${INPUT_COMMITS:-}" ]; then
+            commits="$INPUT_COMMITS"
+          else
+            # 이 실행이 실제로 발행했나 — main runtime 의 가장 최근 production 발행이 이 커밋이어야 한다(app=false 면 발행 없음).
+            runtime=$(jq -r .expo.runtimeVersion app.json)
+            # 목록은 gitCommitHash 를 비워 준다 — 최근 두 group 을 update:view 로 읽는다(mobile-ota 와 같은 방식).
+            mapfile -t groups < <(npx eas update:list --branch production --limit 50 --json --non-interactive \
+              | jq -r --arg rt "$runtime" '[.currentPage[] | select(.runtimeVersion == $rt) | .group] | .[0:2] | .[]')
+            shas=()
+            for g in "${groups[@]}"; do shas+=("$(npx eas update:view "$g" --json | jq -r '.[0].gitCommitHash // empty')"); done
+            if [ "${shas[0]:-}" != "$head" ] || [ -z "${shas[1]:-}" ]; then
+              echo "이 커밋으로 발행된 main OTA 가 없다(또는 직전 발행을 못 찾음) — 백포트할 것 없음" | tee -a "$GITHUB_STEP_SUMMARY"
+              echo "commits=" >> "$GITHUB_OUTPUT"; echo 'runtimes=[]' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            prev=${shas[1]}
+            # mobile-ota 「앱 번들 입력 변경」과 같은 경로 규칙
+            mapfile -t cand < <(git rev-list --reverse --no-merges "$prev..$head" -- \
+              ':(top)apps/mobile' ':(top)packages' \
+              ':(top,exclude)apps/mobile/scripts' ':(top,exclude)apps/mobile/ios' ':(top,exclude)apps/mobile/android' \
+              ':(top,exclude)apps/mobile/store' \
+              ':(top,glob,exclude)**/__tests__/**' ':(top,glob,exclude)**/*.test.*' ':(top,glob,exclude)**/*.md' \
+              ':(top,glob,exclude)**/eslint.js' ':(top,glob,exclude)**/.eslintrc*')
+            commits=""
+            for c in "${cand[@]}"; do
+              if git diff-tree --no-commit-id --name-only -r "$c" \
+                  | grep -Eq '^(apps/mobile/(ios|android)/|apps/mobile/app\.json$|apps/mobile/native-fingerprint\.json$|apps/mobile/package\.json$|package\.json$|pnpm-lock\.yaml$|pnpm-workspace\.yaml$)'; then
+                echo "건너뜀(네이티브·의존성): $(git log -1 --format='%h %s' "$c")" | tee -a "$GITHUB_STEP_SUMMARY"
+                continue
+              fi
+              commits+="$c "
+            done
+          fi
+          if [ -n "${INPUT_RUNTIMES:-}" ]; then
+            runtimes=$(printf '%s' "$INPUT_RUNTIMES" | jq -Rc 'split(",") | map(gsub("^\\s+|\\s+$"; ""))')
+          else
+            runtimes=$(git ls-remote --heads origin 'ota/runtime-*' | sed 's#.*refs/heads/ota/runtime-##' | sort -rV | jq -Rsc 'split("\n") | map(select(length > 0))')
+          fi
+          [ -n "${commits// /}" ] || runtimes='[]'
+          {
+            echo "### 백포트 계획"
+            echo "커밋: ${commits:-없음}"
+            for c in $commits; do echo "- $(git log -1 --format='%h %s' "$c")"; done
+            echo "runtime: $runtimes"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "commits=$commits" >> "$GITHUB_OUTPUT"
+          echo "runtimes=$runtimes" >> "$GITHUB_OUTPUT"
+
+  backport:
+    needs: plan
+    if: needs.plan.outputs.runtimes != '[]' && needs.plan.outputs.runtimes != ''
+    runs-on: macos-latest
+    timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        runtime: ${{ fromJSON(needs.plan.outputs.runtimes) }}
+    env:
+      RT: ${{ matrix.runtime }}
+      RT_DIR: ${{ github.workspace }}/.rt
+    steps:
+      # main 의 스크립트(ota-backport.sh·boot-check.sh)와 main 커밋 객체가 필요하다.
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Runtime branch worktree
+        id: rt
+        run: |
+          set -euo pipefail
+          git config --global user.name 'jirum-ota-backport'
+          git config --global user.email 'dev@jirum-alarm.com'
+          git fetch -q origin "ota/runtime-$RT"
+          git worktree add -q --detach "$RT_DIR" "origin/ota/runtime-$RT"
+          {
+            echo "fp=$(shasum -a 256 "$RT_DIR/apps/mobile/native-fingerprint.json" | cut -c1-16)"
+            echo "target=$(grep -o 'IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*' "$RT_DIR/apps/mobile/ios/jirumAlarmMobile.xcodeproj/project.pbxproj" | head -1 | awk '{print $3}')"
+            echo "xcode=$(xcodebuild -version | head -1 | tr ' ' '-')"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Restore Release simulator app
+        id: app-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.RT_DIR }}/apps/mobile/ios/build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app
+          key: ios-release-sim-${{ steps.rt.outputs.xcode }}-rt${{ matrix.runtime }}-${{ steps.rt.outputs.fp }}
+
+      - name: Set up Ruby
+        if: steps.app-cache.outputs.cache-hit != 'true'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: false
+
+      - name: Build Release simulator app (runtime branch)
+        if: steps.app-cache.outputs.cache-hit != 'true'
+        working-directory: ${{ env.RT_DIR }}/apps/mobile
+        env:
+          MOBILE_IOS_GOOGLE_SERVICE_INFO_PLIST_B64: ${{ secrets.MOBILE_IOS_GOOGLE_SERVICE_INFO_PLIST_B64 }}
+          DEPLOYMENT_TARGET: ${{ steps.rt.outputs.target }}
+        run: |
+          set -euo pipefail
+          umask 077
+          (cd ../.. && pnpm install --frozen-lockfile)
+          node -e "const fs=require('fs');fs.writeFileSync('ios/GoogleService-Info.plist',Buffer.from(process.env.MOBILE_IOS_GOOGLE_SERVICE_INFO_PLIST_B64,'base64'))"
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
+          bundle exec pod install --project-directory=ios
+          # 옛 Pod 은 최신 Xcode 에서 앱과 같은 최소 버전을 넘겨야 빌드된다(AGENTS §Mobile App 백포트 함정).
+          xcodebuild -workspace ios/jirumAlarmMobile.xcworkspace -scheme jirumAlarmMobile -configuration Release \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath ios/build \
+            CODE_SIGNING_ALLOWED=NO SKIP_BUNDLING=1 IPHONEOS_DEPLOYMENT_TARGET="$DEPLOYMENT_TARGET" build -quiet
+          rm -f ios/GoogleService-Info.plist
+
+      - name: Save Release simulator app
+        if: steps.app-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.RT_DIR }}/apps/mobile/ios/build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app
+          key: ${{ steps.app-cache.outputs.cache-primary-key }}
+
+      - name: Backport and publish
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          COMMITS: ${{ needs.plan.outputs.commits }}
+          DRY: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+          BOOT_EVIDENCE: ${{ runner.temp }}/boot-evidence
+        run: |
+          set -euo pipefail
+          args=(--runtime "$RT" --app "$RT_DIR/apps/mobile/ios/build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app")
+          [ "$DRY" = "true" ] && args+=(--dry-run)
+          # shellcheck disable=SC2086 # 커밋 목록은 공백으로 나눈다
+          bash apps/mobile/scripts/ota-backport.sh "${args[@]}" $COMMITS
+
+      - name: Upload boot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boot-evidence-backport-${{ matrix.runtime }}
+          path: ${{ runner.temp }}/boot-evidence
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Alert on failure
+        if: failure() && !(github.event_name == 'workflow_dispatch' && inputs.dry_run)
+        env:
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
+          COMMITS: ${{ needs.plan.outputs.commits }}
+        run: |
+          [ -n "${MATTERMOST_WEBHOOK_URL:-}" ] || exit 0
+          short=$(for c in $COMMITS; do printf '%s ' "${c:0:8}"; done)
+          msg="🚫 앱 OTA 자동 백포트 막힘 — runtime ${RT}(커밋 ${short}). 그 버전 사용자에게 이 수정이 안 갔습니다. 손으로: scripts/ota-backport.sh --runtime ${RT} <커밋>. ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          jq -n --arg text "$msg" '{channel: "alert-deploy", text: $text}' \
+            | curl -fsS -X POST -H 'Content-Type: application/json' -d @- "$MATTERMOST_WEBHOOK_URL" >/dev/null
