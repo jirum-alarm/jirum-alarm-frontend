@@ -134,10 +134,12 @@ jobs:
       RT_DIR: ${{ github.workspace }}/.rt
     steps:
       # main 의 스크립트(ota-backport.sh·boot-check.sh)와 main 커밋 객체가 필요하다.
+      # fetch-depth: 0 은 쓰지 않는다 — 대소문자만 다른 옛 ref(hotfix ↔ HOTFIX/…)가 macOS 파일시스템에서 부딪혀 체크아웃이 실패한다.
       - uses: actions/checkout@v4
         with:
           ref: main
-          fetch-depth: 0
+      - name: Full main history
+        run: git fetch -q --no-tags --unshallow origin main
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
