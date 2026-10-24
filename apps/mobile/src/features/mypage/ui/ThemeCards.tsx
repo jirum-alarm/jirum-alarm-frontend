@@ -58,7 +58,9 @@ export function ThemeCard({
             </Text>
           </Text>
           {subscriberLabel ? (
-            <Text className="mt-1 text-xs text-gray-500">{subscriberLabel}</Text>
+            <Text className="mt-1 text-xs text-gray-500">
+              {subscriberLabel}
+            </Text>
           ) : null}
         </View>
         <Pressable
