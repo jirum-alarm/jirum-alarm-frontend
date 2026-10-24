@@ -128,6 +128,10 @@ for c in "${COMMITS[@]}"; do
   # web 과 같이 바꾼 커밋은 옛 브랜치의 web 파일과 부딪히기 쉽다 — 앱 번들 경로만 다시 적용해 본다(손으로 하던 「web 파일 제외」).
   git -C "$WT" cherry-pick --abort
   if git -C "$REPO" diff "$c^" "$c" -- apps/mobile packages | git -C "$WT" apply --3way >/dev/null 2>&1; then
+    if git -C "$WT" diff --cached --quiet; then
+      echo "  $c — 앱 경로 변경은 이미 들어 있다, 건너뜀"
+      continue
+    fi
     git -C "$WT" commit -q -m "$(git -C "$REPO" log -1 --format=%B "$c")" \
       -m "(cherry picked from commit $c — apps/mobile·packages 만)"
     echo "  $c — web 등 다른 경로가 부딪혀 앱 경로만 적용"
