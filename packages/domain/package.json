@@ -21,6 +21,7 @@
     "./guide-content": "./src/guide-content.ts",
     "./hangul-search": "./src/hangul-search.ts",
     "./home-sections": "./src/home-sections.ts",
+    "./hub-model-pages": "./src/hub-model-pages.ts",
     "./image": "./src/image.ts",
     "./keyword-board": "./src/keyword-board.ts",
     "./keyword-frequency": "./src/keyword-frequency.ts",
