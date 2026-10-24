@@ -6,7 +6,7 @@ import * as Sentry from '@sentry/nextjs';
 
 import { isCrawlerUA } from '@/shared/config/user-agent';
 import {
-  createBurstLimiter,
+  createClientErrorFilter,
   createTransactionFilter,
   SENTRY_DENY_URLS,
   SENTRY_ENVIRONMENT,
@@ -36,7 +36,7 @@ Sentry.init({
   sampleRate: SENTRY_ERROR_SAMPLE_RATE,
   ignoreErrors: SENTRY_IGNORE_ERRORS,
   denyUrls: SENTRY_DENY_URLS,
-  beforeSend: createBurstLimiter(),
+  beforeSend: createClientErrorFilter(isCrawlerUA),
   beforeSendTransaction: createTransactionFilter(isCrawlerUA),
 
   sendDefaultPii: false,

@@ -44,8 +44,11 @@ jest.mock('../src/shared/lib/analytics/ga4', () => ({
   Analytics: {track: (...args: unknown[]) => mockTrack(...args)},
 }));
 
-import {FetchError} from '../src/shared/lib/client';
-import {queryErrorReportKey} from '../src/shared/lib/monitoring/query-errors';
+import {FetchError, HttpStatusError} from '../src/shared/lib/client';
+import {
+  isOfflineError,
+  queryErrorReportKey,
+} from '../src/shared/lib/monitoring/query-errors';
 
 type SentryModule = typeof import('../src/shared/lib/monitoring/sentry');
 type SentrySdk = typeof import('@sentry/react-native');
@@ -99,8 +102,68 @@ describe('queryErrorReportKey — 정상 흐름인 실패는 보내지 않는다
     ['거절 403', fetchError(403)],
     ['지워진 글 404', fetchError(404)],
     ['UNAUTHENTICATED', fetchError('UNAUTHENTICATED')],
+    [
+      'Expo fetch 의 DNS 실패',
+      new Error(
+        'fetch failed: java.net.UnknownHostException: Unable to resolve host "jirum-api.kyojs.com": No address associated with hostname',
+      ),
+    ],
+    [
+      'iOS 연결 유실',
+      new Error(
+        'fetch failed: UnexpectedException: 네트워크 연결이 유실되었습니다. (at ExpoModulesCore/Promise.swift:56)',
+      ),
+    ],
   ])('%s → null', (_label, error) => {
     expect(queryErrorReportKey(error, query)).toBeNull();
+  });
+
+  it('뮤테이션의 400 은 사용자 입력 거절(「이미 등록된 키워드」) — 화면이 보여 주니 보내지 않는다', () => {
+    const rejected = fetchError(400, '이미 등록된 키워드 알림이에요.');
+    expect(
+      queryErrorReportKey(rejected, {kind: 'mutation', key: ['keyword']}),
+    ).toBeNull();
+    expect(
+      queryErrorReportKey(fetchError('BAD_REQUEST', '최대 20개'), {
+        kind: 'mutation',
+        key: ['keyword'],
+      }),
+    ).toBeNull();
+  });
+
+  it('조회의 400 은 앱이 잘못된 변수를 보낸 것 — 보낸다', () => {
+    expect(
+      queryErrorReportKey(
+        fetchError(400, '100글자 미만으로 입력해주세요'),
+        query,
+      ),
+    ).toBe('graphql:400|query:product|100글자 미만으로 입력해주세요');
+  });
+
+  it('프록시 5xx(HTML) 는 쿼리 이름 없이 상태 코드로만 묶는다 — 롤아웃 한 번에 이슈가 쿼리마다 갈라지지 않게', () => {
+    expect(queryErrorReportKey(new HttpStatusError(504), query)).toBe(
+      'http:504',
+    );
+    expect(
+      queryErrorReportKey(new HttpStatusError(504), {
+        kind: 'mutation',
+        key: ['keyword'],
+      }),
+    ).toBe('http:504');
+    expect(new HttpStatusError(503).message).toBe(
+      'HTTP 503 — GraphQL 응답이 JSON 이 아님',
+    );
+  });
+
+  it('서버가 준 GraphQL 에러는 메시지에 «네트워크»가 있어도 오프라인이 아니다', () => {
+    expect(isOfflineError(fetchError(500, '네트워크 연결 오류'))).toBe(false);
+    expect(
+      isOfflineError(
+        new Error(
+          '[messaging/unknown] java.io.IOException: SERVICE_NOT_AVAILABLE',
+        ),
+      ),
+    ).toBe(true);
   });
 
   it.each<[string, unknown, string]>([
@@ -113,11 +176,6 @@ describe('queryErrorReportKey — 정상 흐름인 실패는 보내지 않는다
       '스키마 드리프트',
       fetchError('GRAPHQL_VALIDATION_FAILED', 'Cannot query field "x"'),
       'graphql:GRAPHQL_VALIDATION_FAILED|query:product|Cannot query field "x"',
-    ],
-    [
-      '프록시 502 HTML',
-      new Error('HTTP 502 — GraphQL 응답이 JSON 이 아님'),
-      'Error|query:product|HTTP 502 — GraphQL 응답이 JSON 이 아님',
     ],
     [
       'queryFn 가공 중 예외',
@@ -233,6 +291,42 @@ describe('Sentry 보고 (DSN 있음·릴리스)', () => {
     captureSilentFailure('push_token', new TypeError('Network request failed'));
     captureSilentFailure('ota_check', new Error('The request timed out.'));
     expect(Sentry.captureException).not.toHaveBeenCalled();
+  });
+
+  it('expo-updates 가 서버·CDN 에 못 닿은 것(ERR_UPDATES_CHECK·FETCH)은 보내지 않는다', () => {
+    const {captureSilentFailure} = loadEnabledSentry();
+    captureSilentFailure(
+      'ota_check',
+      Object.assign(
+        new Error(
+          "Call to function 'ExpoUpdates.checkForUpdateAsync' has been rejected.",
+        ),
+        {
+          code: 'ERR_UPDATES_CHECK',
+        },
+      ),
+    );
+    captureSilentFailure(
+      'ota_check',
+      Object.assign(new Error('ERR_UPDATES_FETCH: Failed to load all assets'), {
+        code: 'ERR_UPDATES_FETCH',
+      }),
+    );
+    expect(Sentry.captureException).not.toHaveBeenCalled();
+  });
+
+  it('시뮬레이터·에뮬레이터(기동 확인·화면 하네스)에서 난 이벤트는 보내지 않는다', () => {
+    const {dropHarnessEvent, initSentry} = loadEnabledSentry();
+    initSentry();
+    expect(Sentry.init).toHaveBeenCalledWith(
+      expect.objectContaining({beforeSend: dropHarnessEvent}),
+    );
+    const onDevice = {contexts: {device: {simulator: false}}};
+    expect(dropHarnessEvent(onDevice)).toBe(onDevice);
+    expect(dropHarnessEvent({contexts: {}})).toEqual({contexts: {}});
+    expect(
+      dropHarnessEvent({contexts: {device: {simulator: true}}}),
+    ).toBeNull();
   });
 
   it('정상 실행이면 아무것도 보내지 않는다', () => {
