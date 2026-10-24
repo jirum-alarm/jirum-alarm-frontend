@@ -15,6 +15,7 @@ const Talk = () => {
             <span>카톡으로 핫딜 먼저 만나보세요</span>
           </>
         }
+        sub="커뮤니티에서 반응이 붙은 인기 핫딜만 골라 보내드려요. 앱 설치나 지름알림 가입 없이 바로 들어올 수 있어요."
         className="pb-8 lg:pb-20"
       />
       <div className="mb-7 flex w-full max-w-7xl flex-col items-center gap-5 px-5 lg:flex-row lg:justify-center lg:gap-6">

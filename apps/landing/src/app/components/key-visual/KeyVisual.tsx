@@ -33,7 +33,7 @@ const KeyVisual = () => (
           </h1>
           <p className="text-fixed-300 mt-5 max-w-xl text-base leading-relaxed md:text-lg">
             커뮤니티 {COMMUNITY_COUNT}의 핫딜을 한곳에 모으고, 같은 상품의 지난 핫딜가·다나와·쿠팡
-            가격과 비교한 근거를 붙여요. 키워드만 걸어 두면 올라오는 순간 알려드려요.
+            가격과 비교할 수 있는 딜엔 근거를 붙여요. 키워드만 걸어 두면 올라오는 순간 알려드려요.
           </p>
 
           <AppDownload type="key-visual" />
