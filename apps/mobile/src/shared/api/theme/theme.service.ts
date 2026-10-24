@@ -19,6 +19,8 @@ export type ThemeWithKeywords = {
   excludeKeywords: string[];
   /** 지난 7일 이 조건이었다면 받았을 알림 수 */
   weeklyAlertCount: number;
+  /** 구독자 수 — 카드 문구는 정본 themeSubscriberLabel(문턱 아래면 숨김) */
+  subscriberCount: number;
 };
 
 export type ThemeLiveDeal = {
