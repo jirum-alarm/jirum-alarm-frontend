@@ -134,6 +134,11 @@ export default async function HotdealAlarmGuidePage() {
             (최대 {MAX_EXCLUDE_KEYWORDS}개)를 넣거나, <strong>가격 범위</strong>를 정해 그 밖의 딜은
             빼세요. 가격을 읽지 못한 글은 놓치지 않도록 조건과 상관없이 알려드려요.
           </p>
+          <p className="mt-3">
+            올라오는 딜을 다 받기보다 진짜 핫딜만 받고 싶다면 알림 설정에서{' '}
+            <strong>핫딜이 되면만 받기</strong>를 켜세요. 올라오자마자가 아니라 반응이 뜨거워지거나
+            확실히 싸다고 확인됐을 때만 알려드려요.
+          </p>
         </section>
 
         <section>
