@@ -87,7 +87,10 @@ export default function SearchResults({
   const correctedKeyword = products[0]?.correctedKeyword ?? null;
   useEffect(() => {
     if (!correctedKeyword) return;
-    Analytics.track(SEARCH_EVENT.correctedView, {keyword, corrected: correctedKeyword});
+    Analytics.track(SEARCH_EVENT.correctedView, {
+      keyword,
+      corrected: correctedKeyword,
+    });
   }, [correctedKeyword, keyword]);
 
   const {recordImpression, recordClick} =

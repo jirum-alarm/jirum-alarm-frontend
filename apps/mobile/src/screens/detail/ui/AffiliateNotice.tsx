@@ -36,7 +36,7 @@ export default function AffiliateNotice({
     return (
       <View className="mx-5 flex-row items-center gap-3 rounded-xl bg-gray-100 px-3.5 py-3.5">
         <Text className="text-xs font-medium text-gray-700">안내</Text>
-        {/* eslint-disable-next-line no-restricted-syntax -- 쿠팡 파트너스 고지 문구(정해진 문장이라 해요체로 바꾸지 않는다) */}
+        {}
         <Text className="flex-1 text-xs text-gray-600">
           쿠팡 파트너스 활동으로 지름알림이 일정 금액의 수수료를 지급 받습니다.
         </Text>
