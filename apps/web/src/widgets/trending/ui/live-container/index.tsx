@@ -35,11 +35,11 @@ const SWIPER_OPTIONS: SwiperOptions = {
 
 type Props = {
   initialTab: number;
-  /** 「최신」 탭의 핫딜만 켬(hot)·끔(live). 카테고리 칩·스와이프는 같다. */
+  /** 「실시간」 탭의 핫딜만 켬(hot)·끔(live). 카테고리 칩·스와이프는 같다. */
   feed?: 'live' | 'hot';
 };
 
-const DOCUMENT_TITLE = { live: '실시간 핫딜 | 지름알림', hot: '최신 핫딜 | 지름알림' };
+const DOCUMENT_TITLE = { live: '실시간 핫딜 | 지름알림', hot: '실시간 핫딜만 | 지름알림' };
 
 export const LiveContainer = ({ initialTab, feed = 'live' }: Props) => {
   const swiperRef = useRef<SwiperClass>(null);

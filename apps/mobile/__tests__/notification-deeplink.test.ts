@@ -183,7 +183,7 @@ describe('푸시·딥링크 → 네이티브 화면', () => {
     expectTabRoot('DiscoverTab');
   });
 
-  it('/trending 은 web 리다이렉트와 같이 「최신」(핫딜만)이 기본, /trending/live 는 핫딜만 끔', () => {
+  it('/trending 은 web 리다이렉트와 같이 「실시간」(핫딜만)이 기본, /trending/live 는 핫딜만 끔', () => {
     navigateToNativeRoute(url('/trending'));
     expect(mockRequestTrendingView).toHaveBeenLastCalledWith('hot');
     navigateToNativeRoute(url('/trending/live'));

@@ -38,24 +38,24 @@ describe('orderTrendingCategories — 발견 탭 카테고리 순서(web·앱)',
   });
 });
 
-describe('발견 탭 「최신 · 랭킹」 — 실시간·핫딜만은 같은 「최신」 탭', () => {
-  it('탭은 둘, 「최신」은 핫딜만(hot)으로 연다', () => {
+describe('발견 탭 「실시간 · 랭킹」 — 전부·핫딜만은 같은 「실시간」 탭', () => {
+  it('탭은 둘, 「실시간」은 핫딜만(hot)으로 연다', () => {
     assert.deepEqual(
       TRENDING_VIEW_TABS.map((t) => [t.view, t.label]),
       [
-        ['hot', '최신'],
+        ['hot', '실시간'],
         ['ranking', '랭킹'],
       ],
     );
   });
 
-  it('실시간·핫딜만은 「최신」 소속, 랭킹은 랭킹', () => {
+  it('전부(live)·핫딜만(hot)은 「실시간」 소속, 랭킹은 랭킹', () => {
     assert.equal(trendingTabView('live'), 'hot');
     assert.equal(trendingTabView('hot'), 'hot');
     assert.equal(trendingTabView('ranking'), 'ranking');
   });
 
-  it('하단 「발견」: 랭킹이면 최신(핫딜만), 그 밖이면 랭킹', () => {
+  it('하단 「발견」: 랭킹이면 실시간(핫딜만), 그 밖이면 랭킹', () => {
     assert.equal(nextTrendingView('ranking'), 'hot');
     assert.equal(nextTrendingView('hot'), 'ranking');
     assert.equal(nextTrendingView('live'), 'ranking');

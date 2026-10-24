@@ -36,7 +36,7 @@ import {
 } from '@/shared/components/Skeletons';
 
 /**
- * 발견 탭(「최신」·「랭킹」 — 최신 안 「핫딜만」 칩이 hot·live). web: app/(desktop-ready)/trending/{hot,live,ranking}
+ * 발견 탭(「실시간」·「랭킹」 — 실시간 안 「핫딜만」 칩이 hot·live). web: app/(desktop-ready)/trending/{hot,live,ranking}
  *
  * ★ web 은 라우트 셋(/trending/live · /trending/hot · /trending/ranking)으로 갈리고 카테고리는
  * `?tab=` 쿼리에 담는다. 앱은 **한 화면 안의 상태**다 — 라우트를 나누면 탭

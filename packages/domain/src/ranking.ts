@@ -1,5 +1,5 @@
 /**
- * 발견 탭(최신[핫딜만·전부]·랭킹)의 규칙 — 랭킹 기간·카테고리 칩 순서. web 발견 탭·앱 발견 탭이 같이 쓴다(2026-10-20 정본화,
+ * 발견 탭(실시간[핫딜만·전부]·랭킹)의 규칙 — 랭킹 기간·카테고리 칩 순서. web 발견 탭·앱 발견 탭이 같이 쓴다(2026-10-20 정본화,
  * 전엔 두 앱이 따로 들고 앱 테스트가 web 파일을 읽어 대조했다).
  * 날짜 계산(KST 자정 등)은 플랫폼 도구가 다르니 각 앱에서, «며칠 볼지»만 여기 있다.
  */
@@ -39,22 +39,22 @@ export function orderTrendingCategories<T extends { id: number }>(categories: re
 export type TrendingView = 'live' | 'hot' | 'ranking';
 
 /**
- * 발견 탭 위 탭 — 「최신」·「랭킹」 둘. view 는 그 탭을 누르면 여는 화면.
- * 「최신」 안에서 「핫딜만」 칩을 켜면 hot(문턱 넘은 딜만 핫딜 된 시각순), 끄면 live(올라온 딜 전부 최신순).
+ * 발견 탭 위 탭 — 「실시간」·「랭킹」 둘. view 는 그 탭을 누르면 여는 화면.
+ * 「실시간」 안에서 「핫딜만」 칩을 켜면 hot(문턱 넘은 딜만 핫딜 된 시각순), 끄면 live(올라온 딜 전부 최신순).
  * ★왜(2026-10-24): 세 화면은 두 축이다 — 무엇을(전부·문턱 넘은 것) × 어떤 순서(시간·점수). 실시간과 핫딜만은
  * 순서가 같고 거르는 것만 달라 탭 둘로 두면 같은 목록이 두 번 보였다. 랭킹은 순서(점수)·순위 배지·기간이 달라 따로 둔다.
  * 「핫딜만」 기본 켬 — 뽐뿌 인기 탭이 유용한 건 «여러 사람이 고른 것만, 위가 최신»이라서다(실시간은 하루 ~1,200건).
  */
 export const TRENDING_VIEW_TABS: readonly { view: TrendingView; label: string }[] = [
-  { view: 'hot', label: '최신' },
+  { view: 'hot', label: '실시간' },
   { view: 'ranking', label: '랭킹' },
 ];
 
-/** 이 화면이 어느 탭 소속인가 — 실시간·핫딜만은 둘 다 「최신」(TRENDING_VIEW_TABS 의 view = hot). */
+/** 이 화면이 어느 탭 소속인가 — 실시간(전부)·핫딜만은 둘 다 「실시간」 탭(TRENDING_VIEW_TABS 의 view = hot). */
 export const trendingTabView = (view: TrendingView): TrendingView =>
   view === 'ranking' ? 'ranking' : 'hot';
 
-/** 「최신」 목록 위 칩·한 줄. 기준 정본은 서버 ranking-hot.ts — 왜 여기 있는지 보여 줘야 목록을 믿는다. */
+/** 「실시간」 목록 위 칩·한 줄. 기준 정본은 서버 ranking-hot.ts — 왜 여기 있는지 보여 줘야 목록을 믿는다. */
 export const HOT_FEED_COPY = {
   toggle: '핫딜만',
   lead: '사람들이 몰렸거나 평소보다 확실히 싼 딜만, 핫딜이 된 순서로 모았어요',
@@ -69,7 +69,7 @@ export const HOT_FEED_PAGE_SIZE = 20;
 export const HOT_FEED_CARD_SOURCE = 'hot_feed' as const;
 
 /**
- * 하단 「발견」을 눌렀을 때 갈 화면 — 랭킹을 보고 있으면 「최신」(핫딜만), 그 밖(최신·다른 탭)이면 랭킹.
+ * 하단 「발견」을 눌렀을 때 갈 화면 — 랭킹을 보고 있으면 「실시간」(핫딜만), 그 밖(실시간·다른 탭)이면 랭킹.
  * web 하단 네비 링크와 앱 탭바(재탭 = 전환, 다른 탭에서 = 랭킹)가 이 규칙 하나를 쓴다.
  */
 export const nextTrendingView = (current: TrendingView | null): TrendingView =>
