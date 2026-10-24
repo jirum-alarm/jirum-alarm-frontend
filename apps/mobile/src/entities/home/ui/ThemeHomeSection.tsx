@@ -7,6 +7,7 @@ import type {ThemeWithKeywords} from '@/shared/api/theme/theme.service';
 import PressableScale from '@/shared/components/PressableScale';
 import SectionHeader from '@/shared/components/ui/SectionHeader';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {themeSubscriberLabel} from '@jirum/domain/mypage';
 
 /**
  * 홈 알림 묶음(관심사) 캐러셀. web: widgets/home/ui/ThemeSection.tsx
@@ -51,6 +52,7 @@ function ThemeHomeCard({
   theme: ThemeWithKeywords;
   onPress: () => void;
 }) {
+  const subscriberLabel = themeSubscriberLabel(theme.subscriberCount);
   return (
     <PressableScale
       onPress={onPress}
@@ -73,6 +75,11 @@ function ThemeHomeCard({
           {theme.weeklyAlertCount}건
         </Text>
       </Text>
+      {subscriberLabel ? (
+        <Text className="text-xs text-gray-500" numberOfLines={1}>
+          {subscriberLabel}
+        </Text>
+      ) : null}
     </PressableScale>
   );
 }

@@ -35,7 +35,12 @@ export const useThemeSubscription = () => {
       optimistic(themeId, true);
       return { prev };
     },
-    onSuccess: () => {
+    onSuccess: (_data, themeId) => {
+      // 계측은 GTM 경유(dataLayer customEvent 트리거) — 앱 Analytics.track('theme_subscribe') 와 같은 이름·값.
+      (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+        event: 'theme_subscribe',
+        theme_id: themeId,
+      });
       // 켠 직후 "그래서 뭐가 오는지"를 한 번 알려준다 — 키워드처럼 딜마다 오는 게 아니라서.
       toast.success('알림을 켰어요. 반응 좋은 딜만 골라 하루 최대 3건 보내드릴게요.');
       promptPushChannel();

@@ -1,4 +1,4 @@
-import {THEME_COPY} from '@jirum/domain/mypage';
+import {THEME_COPY, themeSubscriberLabel} from '@jirum/domain/mypage';
 import React from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
 import PressableOpacity from '@/shared/components/PressableOpacity';
@@ -29,6 +29,7 @@ export function ThemeCard({
   onPress: () => void;
   onToggleSubscribe: () => void;
 }) {
+  const subscriberLabel = themeSubscriberLabel(theme.subscriberCount);
   return (
     <PressableOpacity
       onPress={onPress}
@@ -56,6 +57,9 @@ export function ThemeCard({
               {theme.weeklyAlertCount}건
             </Text>
           </Text>
+          {subscriberLabel ? (
+            <Text className="mt-1 text-xs text-gray-500">{subscriberLabel}</Text>
+          ) : null}
         </View>
         <Pressable
           onPress={() => {
