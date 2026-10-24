@@ -1,0 +1,554 @@
+{
+  "variables": {
+    "limit": 20,
+    "categoryIds": null,
+    "searchAfter": [
+      "1792731808000",
+      "36438540"
+    ]
+  },
+  "response": {
+    "data": {
+      "hotDealFeedProducts": [
+        {
+          "id": "36439733",
+          "title": "10/23 네이버포인트",
+          "mallId": null,
+          "url": "https://eomisae.co.kr/fs/207387965",
+          "isHot": true,
+          "isEnd": false,
+          "price": null,
+          "providerId": 11,
+          "categoryId": 8,
+          "category": "이벤트",
+          "thumbnail": null,
+          "mallName": "eomisae",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792731488000",
+            "36439733"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-22T15:04:35.000Z"
+        },
+        {
+          "id": "36437089",
+          "title": "널담 고단백 배꼽 베이글 맛혼합 10개 9600원",
+          "mallId": 4800,
+          "url": "https://eomisae.co.kr/rt/207441417",
+          "isHot": true,
+          "isEnd": false,
+          "price": "9,600원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207441417.webp",
+          "mallName": "토스",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792731231000",
+            "36437089"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T02:18:20.000Z"
+        },
+        {
+          "id": "36398120",
+          "title": "소프트 코튼 카라 립 롱슬리브 7,900원",
+          "mallId": 8,
+          "url": "https://eomisae.co.kr/os/207390055",
+          "isHot": true,
+          "isEnd": false,
+          "price": "7,900원",
+          "providerId": 11,
+          "categoryId": 4,
+          "category": "패션국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207390055.webp",
+          "mallName": "롯데온",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792731230000",
+            "36398120"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-22T15:13:40.000Z"
+        },
+        {
+          "id": "36439264",
+          "title": "TPU 샤워장갑 목욕 때밀이 7,900원",
+          "mallId": 15,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14961445?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,900원",
+          "providerId": 18,
+          "categoryId": 2,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14961445.webp",
+          "mallName": "지마켓",
+          "hotDealType": "ULTRA_DEAL",
+          "isYearLowest": true,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 20
+          },
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792729564000",
+            "36439264"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T04:26:04.000Z"
+        },
+        {
+          "id": "36418588",
+          "title": "켈로그 프로틴 그래놀라 제로슈거 다크초코 350g 3,980원",
+          "mallId": 48,
+          "url": "https://eomisae.co.kr/rt/207407086",
+          "isHot": true,
+          "isEnd": false,
+          "price": "3,980원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207407086.webp",
+          "mallName": "쿠팡",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 14
+          },
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792728067000",
+            "36418588"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-22T22:23:29.000Z"
+        },
+        {
+          "id": "36436792",
+          "title": "꽃대패삼겹살 1kg 9,980원",
+          "mallId": 1,
+          "url": "https://arca.live/b/hotdeal/186771133",
+          "isHot": true,
+          "isEnd": false,
+          "price": "9,980원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186771133.webp",
+          "mallName": "네이버",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792727775000",
+            "36436792"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T01:55:15.000Z"
+        },
+        {
+          "id": "36437451",
+          "title": "삼성카드 홈런볼 32개",
+          "mallId": 15,
+          "url": "https://arca.live/b/hotdeal/186774822",
+          "isHot": true,
+          "isEnd": false,
+          "price": "24,560원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186774822.webp",
+          "mallName": "지마켓",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792724458000",
+            "36437451"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T02:47:38.000Z"
+        },
+        {
+          "id": "36345961",
+          "title": "블랙야크 26FW 방풍 2L 롱패딩 L이지스벤치다운자켓 128,520원",
+          "mallId": 8,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742334",
+          "isHot": true,
+          "isEnd": false,
+          "price": "128,520원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "의류/잡화",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742334.webp",
+          "mallName": "롯데온",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "COUPANG",
+            "percent": 19
+          },
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792724219000",
+            "36345961"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-22T10:50:00.000Z"
+        },
+        {
+          "id": "36438447",
+          "title": "할리스 시그니처 페트커피 골라담기 12+12입 총24개",
+          "mallId": 15,
+          "url": "https://www.fmkorea.com/10475262400",
+          "isHot": true,
+          "isEnd": false,
+          "price": "22,650원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10475262400.webp",
+          "mallName": "지마켓",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": true,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 8
+          },
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792724160000",
+            "36438447"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T02:56:00.000Z"
+        },
+        {
+          "id": "36437393",
+          "title": "드리미 L50s 프로 울트라 올인원 로봇 청소기 598,920원",
+          "mallId": 28,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742476",
+          "isHot": false,
+          "isEnd": false,
+          "price": "598,920원",
+          "providerId": 1,
+          "categoryId": 9,
+          "category": "디지털",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742476.webp",
+          "mallName": "카카오",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "DANAWA",
+            "percent": 29
+          },
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792723500000",
+            "36437393"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T02:45:00.000Z"
+        },
+        {
+          "id": "36427442",
+          "title": "이치란 돈코츠라멘 5인분",
+          "mallId": 28,
+          "url": "https://eomisae.co.kr/rt/207421660",
+          "isHot": true,
+          "isEnd": false,
+          "price": null,
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207421660.webp",
+          "mallName": "카카오",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792722885000",
+            "36427442"
+          ],
+          "postedCommunityCount": 2,
+          "postedAt": "2026-10-23T00:32:50.000Z"
+        },
+        {
+          "id": "36437328",
+          "title": "카스 올제로 0.000 330ml 20개",
+          "mallId": 1,
+          "url": "https://eomisae.co.kr/rt/207443788",
+          "isHot": false,
+          "isEnd": false,
+          "price": "11,250원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207443788.webp",
+          "mallName": "네이버",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792722833000",
+            "36437328"
+          ],
+          "postedCommunityCount": 2,
+          "postedAt": "2026-10-23T02:33:53.000Z"
+        },
+        {
+          "id": "36437131",
+          "title": "국내산 깍두기 2kg 7,380원",
+          "mallId": 15,
+          "url": "https://arca.live/b/hotdeal/186773480",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,380원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186773480.webp",
+          "mallName": "지마켓",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792722547000",
+            "36437131"
+          ],
+          "postedCommunityCount": 2,
+          "postedAt": "2026-10-23T02:29:07.000Z"
+        },
+        {
+          "id": "36396787",
+          "title": "국내산 세척사과 2kg 1박스 7,900원",
+          "mallId": 4800,
+          "url": "https://eomisae.co.kr/rt/207385798",
+          "isHot": true,
+          "isEnd": false,
+          "price": "7,900원",
+          "providerId": 11,
+          "categoryId": 2,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207385798.webp",
+          "mallName": "토스",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": true,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792722204000",
+            "36396787"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-22T15:01:17.000Z"
+        },
+        {
+          "id": "36345483",
+          "title": "제이킨 3D 입체 수면안대 귀마개 세트",
+          "mallId": 4800,
+          "url": "https://eomisae.co.kr/rt/207344008",
+          "isHot": true,
+          "isEnd": false,
+          "price": "5,350원",
+          "providerId": 11,
+          "categoryId": 4,
+          "category": "기타국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207344008.webp",
+          "mallName": "토스",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792722204000",
+            "36345483"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-22T09:59:11.000Z"
+        },
+        {
+          "id": "36437126",
+          "title": "냉동 듀록 꽃대패삼겹살 1kg",
+          "mallId": 1,
+          "url": "https://www.fmkorea.com/10475104436",
+          "isHot": true,
+          "isEnd": false,
+          "price": "9,980원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10475104436.webp",
+          "mallName": "네이버",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792722180000",
+            "36437126"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T02:23:00.000Z"
+        },
+        {
+          "id": "36436412",
+          "title": "무신사 스탠다드 ~80% 할인 상품 모음",
+          "mallId": 333,
+          "url": "https://eomisae.co.kr/os/207428682",
+          "isHot": true,
+          "isEnd": false,
+          "price": null,
+          "providerId": 11,
+          "categoryId": 4,
+          "category": "패션국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207428682.webp",
+          "mallName": "무신사",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792722105000",
+            "36436412"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T01:23:47.000Z"
+        },
+        {
+          "id": "36437102",
+          "title": "브리타 정수기 필터 막스트라 프로 퓨어 퍼포먼스 3입",
+          "mallId": 15,
+          "url": "https://www.fmkorea.com/10475161314",
+          "isHot": null,
+          "isEnd": false,
+          "price": "17,600원",
+          "providerId": 7,
+          "categoryId": 6,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10475161314.webp",
+          "mallName": "지마켓",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "DANAWA",
+            "percent": 19
+          },
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792722000000",
+            "36437102"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T02:20:00.000Z"
+        },
+        {
+          "id": "36342496",
+          "title": "오어슬로우 퍼티그 17.1만",
+          "mallId": 51061,
+          "url": "https://eomisae.co.kr/os/207308125",
+          "isHot": true,
+          "isEnd": false,
+          "price": null,
+          "providerId": 11,
+          "categoryId": 4,
+          "category": "패션국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207308125.webp",
+          "mallName": "사구일공",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792721375000",
+            "36342496"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-22T06:03:20.000Z"
+        },
+        {
+          "id": "36437028",
+          "title": "목란 짬뽕 2인분",
+          "mallId": 1,
+          "url": "https://www.fmkorea.com/10475114138",
+          "isHot": true,
+          "isEnd": false,
+          "price": "11,740원",
+          "providerId": 7,
+          "categoryId": 2,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10475114138.webp",
+          "mallName": "네이버",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792721280000",
+            "36437028"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T02:08:00.000Z"
+        }
+      ]
+    }
+  }
+}
