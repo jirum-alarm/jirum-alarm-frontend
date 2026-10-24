@@ -119,10 +119,24 @@ export class HttpClient {
     // GraphQL 서버는 4xx 에도 JSON 본문을 주므로 본문을 먼저 읽고, 못 읽을 때만 상태로 실패시킨다.
     // (인증 실패로 분류되지 않는다 — 서버 장애로 로그아웃되면 안 된다)
     const res = await response.json().catch(() => {
-      throw new Error(`HTTP ${response.status} — GraphQL 응답이 JSON 이 아님`);
+      throw new HttpStatusError(response.status);
     });
     await rejectIfNeeded(res);
     return res;
+  }
+}
+
+/**
+ * 프록시·게이트웨이가 GraphQL 대신 HTML 을 돌려준 응답(502·503·504 — 서버 롤아웃·장애 동안).
+ * 상태 코드를 들고 다녀야 모니터링이 «어느 쿼리에서 났나»가 아니라 «서버가 N 을 줬다»로 묶는다
+ * (2026-10-22 롤아웃 한 번에 쿼리마다 Sentry 이슈가 20개 넘게 갈라졌다).
+ */
+export class HttpStatusError extends Error {
+  name = 'HttpStatusError';
+  status: number;
+  constructor(status: number) {
+    super(`HTTP ${status} — GraphQL 응답이 JSON 이 아님`);
+    this.status = status;
   }
 }
 

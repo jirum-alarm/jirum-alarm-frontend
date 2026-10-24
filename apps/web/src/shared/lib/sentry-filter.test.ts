@@ -5,7 +5,7 @@ import { test } from 'node:test';
 import type { ErrorEvent, Event } from '@sentry/nextjs';
 
 const require = createRequire(import.meta.url);
-const { createBurstLimiter, createTransactionFilter } =
+const { createBurstLimiter, createClientErrorFilter, createTransactionFilter } =
   require('./sentry-filter.ts') as typeof import('./sentry-filter');
 const { isCrawlerUA } = require('../config/user-agent.ts') as typeof import('../config/user-agent');
 const dropUnneededTransaction = createTransactionFilter(isCrawlerUA);
@@ -33,6 +33,24 @@ test('10분이 지나면 다시 보낸다', () => {
   assert.equal(limit(errorEvent('a')), null);
   t = 10 * 60 * 1000 + 1;
   assert.ok(limit(errorEvent('a')));
+});
+
+test('브라우저 필터 — 헤드리스·크롤러 UA 의 에러는 버리고, 사람 UA 는 폭주 제한만 거친다', () => {
+  // Node 의 globalThis.navigator 는 getter 뿐이라 defineProperty 로 바꿔 끼운다.
+  const prev = Object.getOwnPropertyDescriptor(globalThis, 'navigator');
+  const setUA = (userAgent: string) =>
+    Object.defineProperty(globalThis, 'navigator', { value: { userAgent }, configurable: true });
+  try {
+    setUA('Mozilla/5.0 (Macintosh) AppleWebKit/537.36 HeadlessChrome/145.0 Safari/537.36');
+    assert.equal(createClientErrorFilter(isCrawlerUA)(errorEvent('reading call')), null);
+    setUA('Mozilla/5.0 (iPhone) Safari/604.1');
+    const filter = createClientErrorFilter(isCrawlerUA);
+    assert.ok(filter(errorEvent('a')));
+    for (let i = 0; i < 3; i += 1) filter(errorEvent('a'));
+    assert.equal(filter(errorEvent('a')), null);
+  } finally {
+    if (prev) Object.defineProperty(globalThis, 'navigator', prev);
+  }
 });
 
 const transactionEvent = (headers?: Record<string, string>, extra: Partial<Event> = {}): Event =>

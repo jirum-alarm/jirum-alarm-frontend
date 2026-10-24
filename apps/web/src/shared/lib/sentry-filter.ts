@@ -21,6 +21,11 @@ export const SENTRY_IGNORE_ERRORS: (string | RegExp)[] = [
   'PRODUCT_NOT_FOUND',
   /^aborted$/,
   'The destination stream closed early',
+  // 브라우저가 받는 RSC 실패의 껍데기 — 메시지가 가려져 있고(digest 뿐) 진짜 원인은 서버 Sentry 에 그대로 남는다.
+  // 10/22 서버 롤아웃 때처럼 같은 장애 하나가 브라우저마다 한 건씩 쌓였다(2025/10~ 4.4천 건).
+  'An error occurred in the Server Components render',
+  'Connection closed.', // RSC 스트림이 끊김 — 이동·새로고침·파드 교체 중. 서버 쪽은 stream closed early 로 이미 거른다
+  'Failed to find Server Action', // 옛 배포의 액션 id·스캐너의 임의 POST — 다음 페이지 요청이 새 번들을 받는다
   'Talisman extension',
   'Non-Error promise rejection captured with value: undefined',
   /Blocked a frame with origin/,
@@ -61,6 +66,18 @@ export function createBurstLimiter(now: () => number = Date.now) {
     }
     entry.count += 1;
     return entry.count <= BURST_MAX ? event : null;
+  };
+}
+
+/**
+ * 브라우저 에러 필터 — 헤드리스·크롤러 UA 에서 난 에러는 버리고(우리 SEO 점검·외부 스캐너가 옛 청크를 밟는 것뿐),
+ * 나머지는 폭주 제한. 서버 에러엔 쓰지 않는다 — 봇이 밟아 난 서버 에러는 사람도 곧 밟는다.
+ */
+export function createClientErrorFilter(isCrawler: (ua: string) => boolean) {
+  const limit = createBurstLimiter();
+  return (event: ErrorEvent): ErrorEvent | null => {
+    if (typeof navigator !== 'undefined' && isCrawler(navigator.userAgent)) return null;
+    return limit(event);
   };
 }
 
