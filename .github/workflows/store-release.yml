@@ -1,0 +1,141 @@
+name: store-release
+
+# 스토어 출시 한 번에 — main 의 커밋을 `store-release` 브랜치에 밀면 돈다.
+#   git push origin <main 의 커밋>:store-release
+# 관문 → EAS 빌드(iOS·Android) + 두 스토어 자동 제출 → iOS 심사 제출(App Store Connect API) → alert-deploy 알림.
+# Android 는 eas.json 이 production 트랙·전체 출시라 제출되면 그대로 Google 심사로 들어간다. iOS 는 eas submit 이
+# 빌드만 올려서 ios-submit-review.py 가 「심사에 제출」까지 한다. 승인되면 두 스토어 모두 자동 출시.
+# 사람 승인은 위 push 하나다(Claude 세션은 prod-release-guard 훅이 그 push 를 묻는다).
+# 시험: Actions 에서 수동 실행(dry_run 기본 켬) — 관문과 iOS 심사 계획만 보고 빌드·제출은 안 한다.
+# 필요: secrets.EXPO_TOKEN · ASC_KEY_ID · ASC_ISSUER_ID · ASC_KEY_P8 · MATTERMOST_WEBHOOK_URL
+
+on:
+  push:
+    branches: [store-release]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: '관문·iOS 심사 계획만 본다(빌드·제출 안 함)'
+        type: boolean
+        default: true
+
+concurrency:
+  group: store-release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 22.23.4
+  PNPM_VERSION: 10.30.3
+  DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.check.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Release gate
+        id: check
+        run: |
+          set -euo pipefail
+          fail() { echo "::error::$1"; exit 1; }
+          git fetch -q origin main
+          git merge-base --is-ancestor HEAD origin/main || fail "main 에 없는 커밋 — main 에 합친 커밋만 스토어에 낸다"
+
+          app=apps/mobile/app.json
+          version=$(jq -r .expo.version "$app")
+          runtime=$(jq -r .expo.runtimeVersion "$app")
+          [ "$version" = "$runtime" ] || fail "app.json version($version) ≠ runtimeVersion($runtime)"
+
+          notes=apps/mobile/store/release-notes.json
+          [ "$(jq -r .version "$notes")" = "$version" ] || fail "$notes 의 version 이 $version 이 아니다 — 이번 버전 «새로운 기능» 문구를 먼저 쓴다"
+          [ -n "$(jq -r '.ko // empty' "$notes")" ] || fail "$notes 의 ko 가 비었다"
+
+          bundle=$(jq -r .expo.ios.bundleIdentifier "$app")
+          live=$(curl -fsS "https://itunes.apple.com/lookup?bundleId=$bundle&country=kr" | jq -r '.results[0].version')
+          [ "$live" != "$version" ] && [ "$(printf '%s\n%s\n' "$live" "$version" | sort -V | tail -1)" = "$version" ] \
+            || fail "App Store 는 이미 $live — $version 을 올려야 낸다"
+          # 새 runtime 이 나가면 옛 runtime 사용자에게 JS 수정을 보낼 끝(ota/runtime-<옛 버전>)이 있어야 한다(AGENTS §Mobile App).
+          git ls-remote --exit-code --heads origin "ota/runtime-$live" >/dev/null \
+            || fail "origin 에 ota/runtime-$live 가 없다 — 그 runtime 의 마지막 자동 OTA 커밋에서 먼저 만든다"
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "App Store $live → $version"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+      - run: pnpm install --frozen-lockfile
+      - name: Native fingerprint matches
+        run: pnpm --filter mobile native:check
+
+  build-submit:
+    needs: gate
+    if: github.event_name == 'push' || inputs.dry_run == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+      - run: pnpm install --frozen-lockfile
+      - name: EAS build + submit (iOS·Android)
+        working-directory: apps/mobile
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: npx eas build --platform all --profile production --non-interactive --auto-submit --wait
+
+  ios-review:
+    needs: [gate, build-submit]
+    if: always() && needs.gate.result == 'success' && contains(fromJSON('["success","skipped"]'), needs.build-submit.result)
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install --quiet cryptography
+      - name: Submit for App Store review
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          args=(--notes apps/mobile/store/release-notes.json)
+          [ "$DRY_RUN" = "true" ] && args+=(--dry-run)
+          python3 apps/mobile/scripts/store/ios-submit-review.py "${args[@]}"
+
+  notify:
+    needs: [gate, build-submit, ios-review]
+    if: always() && (github.event_name == 'push' || inputs.dry_run == false)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post to alert-deploy
+        env:
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
+          VERSION: ${{ needs.gate.outputs.version }}
+          RESULTS: ${{ needs.gate.result }}/${{ needs.build-submit.result }}/${{ needs.ios-review.result }}
+        run: |
+          [ -n "${MATTERMOST_WEBHOOK_URL:-}" ] || exit 0
+          url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          if [ "$RESULTS" = "success/success/success" ]; then
+            msg="📦 앱 ${VERSION} 스토어 제출 — iOS 심사 제출·Android 제출 완료(승인되면 자동 출시). ${url}"
+          else
+            msg="🚫 앱 스토어 출시 실패(관문/빌드·제출/iOS 심사 = ${RESULTS}) ${url}"
+          fi
+          jq -n --arg text "$msg" '{channel: "alert-deploy", text: $text}' \
+            | curl -fsS -X POST -H 'Content-Type: application/json' -d @- "$MATTERMOST_WEBHOOK_URL" >/dev/null

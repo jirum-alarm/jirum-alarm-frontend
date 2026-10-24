@@ -208,6 +208,10 @@ pnpm build            # Production build
     `ota/runtime-1.5.3` 은 1.5.3 마지막 자동 OTA 커밋(57a5ca0f)에서 시작(10/16 Android 앱 링크 경로로 1.5.4 를 올리기 직전). `ota/runtime-1.5.1` 은 1.5.1 마지막 자동 OTA 커밋(620b2b75)에서 시작(10/13 1.5.2 를 main 에 합치기 직전). `ota/runtime-1.4.7` 은 1.4.8 브랜치 JS 를 runtime 1.4.7 로 낸 것(10/13) — 기동 확인 .app 은 EAS 1.4.7 sim-check 빌드
     (`eas build:list` 의 a7a48ab7 artifacts), 안드로이드는 스토어 AAB → `bundletool build-apks --mode=universal`.
   - 네이티브 변경은 몇 주에 한 번 묶어 낸다(스토어 업데이트를 사용자가 마주치는 횟수를 줄인다).
+  - **스토어 출시 = `store-release` 브랜치 푸시**(2026-10-24): `apps/mobile/store/release-notes.json` 에 이번 버전·「새로운 기능」을 쓰고 main 에 합친 뒤
+    `git push origin <main 의 커밋>:store-release` → 워크플로 `store-release` 가 관문(main 포함·version=runtime·스토어보다 높음·`ota/runtime-<스토어 버전>` 있음·`native:check`)
+    → `eas build --platform all --auto-submit` → iOS 심사 제출(`apps/mobile/scripts/store/ios-submit-review.py`, App Store Connect API) → alert-deploy.
+    Android 는 제출되면 바로 Google 심사. 승인되면 둘 다 자동 출시. 시험은 Actions 에서 수동 실행(dry_run 기본 켬). 이 push 는 사람 승인 대상이다(Claude 세션은 훅이 묻는다).
 - **업데이트 안내 = `apps/web/public/app-release.json`**(웹 운영 배포로 발효, 플랫폼별 값).
   - `latestVersion`(권유): 새 스토어 버전이 **출시된 뒤** 그 플랫폼만 올린다 → 버전당 한 번 "새 버전이 나왔어요" 시트.
   - `minSupportedVersion`(강제): **옛 버전이 실제로 깨질 때만**(API 변경·보안). 평소엔 올리지 않는다 — 막는 화면은 나쁜 경험.

@@ -86,6 +86,7 @@ jobs:
           if [ -n "$last" ] && git cat-file -e "$last^{commit}" 2>/dev/null && git diff --quiet "$last" HEAD -- \
               ':(top)apps/mobile' ':(top)packages' ':(top)package.json' ':(top)pnpm-lock.yaml' \
               ':(top,exclude)apps/mobile/scripts' ':(top,exclude)apps/mobile/ios' ':(top,exclude)apps/mobile/android' \
+              ':(top,exclude)apps/mobile/store' \
               ':(top,glob,exclude)**/__tests__/**' ':(top,glob,exclude)**/*.test.*' ':(top,glob,exclude)**/*.md' \
               ':(top,glob,exclude)**/eslint.js' ':(top,glob,exclude)**/.eslintrc*'; then
             app=false
