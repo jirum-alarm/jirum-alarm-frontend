@@ -270,7 +270,7 @@ export function resolveNativeRoute(
   }
 
   if (path.startsWith('/trending')) {
-    // web 은 `/trending` → `/trending/live` 로 리다이렉트한다. 같은 기본값을 쓴다.
+    // web 은 `/trending` → `/trending/hot`(「최신」·핫딜만)으로 리다이렉트한다. 같은 기본값을 쓴다.
     // 카테고리는 `?tab=N`. web(nuqs parse)처럼 없거나 숫자가 아니면 '전체'(0)로 연다 —
     // 안 넣으면 이전에 보던 카테고리가 남아 "전체 랭킹 더보기"가 다른 카테고리를 보여준다.
     const tab = Number(url.match(/[?&]tab=([^&#]*)/)?.[1]);
@@ -278,9 +278,9 @@ export function resolveNativeRoute(
       tab: tabNavigations.DISCOVER,
       trendingView: path.startsWith('/trending/ranking')
         ? 'ranking'
-        : path.startsWith('/trending/hot')
-        ? 'hot'
-        : 'live',
+        : path.startsWith('/trending/live')
+        ? 'live'
+        : 'hot',
       trendingCategoryId: Number.isInteger(tab) && tab > 0 ? tab : 0,
     };
   }

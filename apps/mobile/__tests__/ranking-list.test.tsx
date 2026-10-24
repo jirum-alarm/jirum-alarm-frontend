@@ -225,7 +225,7 @@ describe('CurationGrid 공용 그리드(6화면) — 가상화·고정된 카드
       'src/screens/detail/RelatedProductsScreen.tsx',
       'src/screens/mypage/LikeScreen.tsx',
       'src/screens/search/ui/SearchResults.tsx',
-      'src/entities/trending/ui/LiveList.tsx',
+      'src/screens/trending/FeedList.tsx',
     ];
     for (const file of callers) {
       const src: string = fs.readFileSync(

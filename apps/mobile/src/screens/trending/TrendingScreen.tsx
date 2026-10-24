@@ -14,7 +14,6 @@ import {
 import {TrendingQueries} from '@/entities/trending/api/trending.queries';
 import CategoryPager from '@/entities/trending/ui/CategoryPager';
 import CategoryTabBar from '@/entities/trending/ui/CategoryTabBar';
-import LiveList from '@/entities/trending/ui/LiveList';
 import RankingList from '@/entities/trending/ui/RankingList';
 import TrendingTopTabs from '@/entities/trending/ui/TrendingTopTabs';
 import {
@@ -28,7 +27,7 @@ import {Analytics} from '@/shared/lib/analytics/ga4';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
-import HotFeedList from './HotFeedList';
+import FeedList from './FeedList';
 import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {
   ChipRowSkeleton,
@@ -37,7 +36,7 @@ import {
 } from '@/shared/components/Skeletons';
 
 /**
- * 발견 탭. web: app/(desktop-ready)/trending/{live,hot,ranking}
+ * 발견 탭(「최신」·「랭킹」 — 최신 안 「핫딜만」 칩이 hot·live). web: app/(desktop-ready)/trending/{hot,live,ranking}
  *
  * ★ web 은 라우트 셋(/trending/live · /trending/hot · /trending/ranking)으로 갈리고 카테고리는
  * `?tab=` 쿼리에 담는다. 앱은 **한 화면 안의 상태**다 — 라우트를 나누면 탭
@@ -122,10 +121,8 @@ export default function TrendingScreen() {
   const prefetchNeighbors = useCallback(
     (ids: number[]) => {
       for (const id of ids) {
-        if (view === 'live') {
-          queryClient.prefetchInfiniteQuery(TrendingQueries.live(id));
-        } else if (view === 'hot') {
-          queryClient.prefetchInfiniteQuery(TrendingQueries.hot(id));
+        if (view !== 'ranking') {
+          queryClient.prefetchInfiniteQuery(TrendingQueries.feed(view, id));
         } else {
           queryClient.prefetchQuery(TrendingQueries.ranking(id));
           queryClient.prefetchQuery(TrendingQueries.rankingLive(id));
@@ -151,25 +148,19 @@ export default function TrendingScreen() {
   */
   const renderPage = useCallback(
     (category: CategoryItem) =>
-      view === 'live' ? (
-        <LiveList
-          key={`live-${category.id}`}
-          categoryId={category.id}
-          onPressProduct={handlePressProduct}
-          bottomInset={reservedBottom}
-        />
-      ) : view === 'hot' ? (
-        <HotFeedList
-          key={`hot-${category.id}`}
-          categoryId={category.id}
-          onPressProduct={handlePressProduct}
-          bottomInset={reservedBottom}
-        />
-      ) : (
+      view === 'ranking' ? (
         <RankingList
           key={`ranking-${category.id}`}
           categoryId={category.id}
           categoryName={category.name}
+          onPressProduct={handlePressProduct}
+          bottomInset={reservedBottom}
+        />
+      ) : (
+        <FeedList
+          key={`${view}-${category.id}`}
+          feed={view}
+          categoryId={category.id}
           onPressProduct={handlePressProduct}
           bottomInset={reservedBottom}
         />

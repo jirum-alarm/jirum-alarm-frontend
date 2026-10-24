@@ -3,7 +3,14 @@ import { createRequire } from 'node:module';
 import { describe, it, test } from 'node:test';
 
 const require = createRequire(import.meta.url);
-const { orderTrendingCategories, rankingWindowDays, SPARSE_RANKING_CATEGORY_IDS } =
+const {
+  nextTrendingView,
+  orderTrendingCategories,
+  rankingWindowDays,
+  SPARSE_RANKING_CATEGORY_IDS,
+  TRENDING_VIEW_TABS,
+  trendingTabView,
+} =
   require('./ranking.ts') as typeof import('./ranking');
 
 test('딜이 드문 카테고리는 60일, 그 밖·전체는 3일', () => {
@@ -28,5 +35,30 @@ describe('orderTrendingCategories — 발견 탭 카테고리 순서(web·앱)',
   it('모르는 새 카테고리는 아는 것 뒤·기타 앞', () => {
     const server: { id: number }[] = [{ id: 11 }, { id: 12 }, { id: 5 }];
     assert.deepEqual(ids(orderTrendingCategories(server)), [5, 12, 11]);
+  });
+});
+
+describe('발견 탭 「최신 · 랭킹」 — 실시간·핫딜만은 같은 「최신」 탭', () => {
+  it('탭은 둘, 「최신」은 핫딜만(hot)으로 연다', () => {
+    assert.deepEqual(
+      TRENDING_VIEW_TABS.map((t) => [t.view, t.label]),
+      [
+        ['hot', '최신'],
+        ['ranking', '랭킹'],
+      ],
+    );
+  });
+
+  it('실시간·핫딜만은 「최신」 소속, 랭킹은 랭킹', () => {
+    assert.equal(trendingTabView('live'), 'hot');
+    assert.equal(trendingTabView('hot'), 'hot');
+    assert.equal(trendingTabView('ranking'), 'ranking');
+  });
+
+  it('하단 「발견」: 랭킹이면 최신(핫딜만), 그 밖이면 랭킹', () => {
+    assert.equal(nextTrendingView('ranking'), 'hot');
+    assert.equal(nextTrendingView('hot'), 'ranking');
+    assert.equal(nextTrendingView('live'), 'ranking');
+    assert.equal(nextTrendingView(null), 'ranking');
   });
 });

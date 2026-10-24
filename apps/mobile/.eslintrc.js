@@ -9,7 +9,6 @@ const FSD_ALLOWLIST = {
   // 로그인 요구 훅이 로그인 상태(entities/auth)·내 정보(entities/user) 둘 다 읽고 소비처가 features 여러 슬라이스 — 엔티티 한 곳으로 못 올린다
   'shared/hooks/useRequireLogin.ts': ['@/entities/auth', '@/entities/user'],
   // 발견 탭 목록이 홈 카드 UI(GridCard·CurationGrid·CarouselList)를 그대로 그린다 — 카드 UI 를 entities/product 로 옮기는 설계 변경 필요
-  'entities/trending/ui/LiveList.tsx': ['@/entities/home'],
   'entities/trending/ui/RankingList.tsx': ['@/entities/home'],
   // 홈 카드가 상품 상세 prefetch(상품 쿼리)·테마 쿼리를 쓴다 — 쿼리라 shared 로 못 내린다
   'entities/home/ui/JirumRankingSlider.tsx': ['@/entities/product'],

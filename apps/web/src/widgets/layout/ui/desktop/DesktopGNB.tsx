@@ -31,14 +31,11 @@ const NAV_LINKS = [
     isActive: (pathname: string) => pathname === PAGE.HOME,
   },
   {
-    href: PAGE.TRENDING_LIVE,
-    label: '실시간',
-    isActive: (pathname: string) => pathname === PAGE.TRENDING_LIVE,
-  },
-  {
+    // 「최신」 = 핫딜만 켬(/trending/hot)·끔(/trending/live) 둘 다(2026-10-24 실시간·핫딜만 통합).
     href: PAGE.TRENDING_HOT,
-    label: '핫딜만',
-    isActive: (pathname: string) => pathname === PAGE.TRENDING_HOT,
+    label: '최신',
+    isActive: (pathname: string) =>
+      pathname === PAGE.TRENDING_HOT || pathname === PAGE.TRENDING_LIVE,
   },
   {
     href: PAGE.TRENDING_RANKING,
