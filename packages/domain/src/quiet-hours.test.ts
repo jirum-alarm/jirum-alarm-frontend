@@ -27,21 +27,14 @@ describe('toQuietHours', () => {
 describe('describeQuietHours', () => {
   it('끝 시각에 모아 보낸다고 안내한다', () => {
     assert.equal(
-      describeQuietHours({ start: 9, end: 18 }, false),
+      describeQuietHours({ start: 9, end: 18 }),
       '오전 9시부터 오후 6시 전까지 온 알림은 오후 6시에 모아서 보내드려요',
     );
   });
 
-  it('야간 미동의인데 밤 시간만 고르면 원래 안 오는 시간이라고 알린다', () => {
-    assert.match(describeQuietHours({ start: 23, end: 7 }, false), /원래 알림이 오지 않아요/);
-  });
-
-  it('야간 동의자가 밤 시간을 고르면 그대로 모아 보낸다', () => {
-    assert.match(describeQuietHours({ start: 23, end: 7 }, true), /오전 7시에 모아서/);
-  });
-
-  it('밤에 걸쳐도 낮 시간이 끼면 일반 안내', () => {
-    assert.match(describeQuietHours({ start: 6, end: 10 }, false), /오전 10시에 모아서/);
+  // 2026-10-24~ 키워드 알림은 야간 동의와 무관하게 밤에도 오므로, 밤 시간 방해금지도 그대로 모아 보낸다.
+  it('밤 시간을 골라도 끝 시각에 모아 보낸다', () => {
+    assert.match(describeQuietHours({ start: 23, end: 7 }), /오전 7시에 모아서/);
   });
 });
 

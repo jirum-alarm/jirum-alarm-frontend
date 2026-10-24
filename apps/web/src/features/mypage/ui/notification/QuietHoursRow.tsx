@@ -16,7 +16,6 @@ import Switch from '@/shared/ui/common/Switch';
 type Props = {
   start: number | null;
   end: number | null;
-  nightAlerts: boolean;
   disabled: boolean;
   onChange: (next: { quietHoursStart: number | null; quietHoursEnd: number | null }) => void;
 };
@@ -25,7 +24,7 @@ type Props = {
  * 방해금지 시간. 그 사이 온 키워드·핫딜·커뮤니티 알림은 끝나는 시각에 모아서 보낸다(공지 제외, 알림함엔 그대로 쌓임).
  * 시 선택은 네이티브 `<select>` — 공용 Select 는 비제어(defaultValue)라 서버 값과 어긋나고, 폰 웹에선 OS 휠이 더 편하다.
  */
-const QuietHoursRow = ({ start, end, nightAlerts, disabled, onChange }: Props) => {
+const QuietHoursRow = ({ start, end, disabled, onChange }: Props) => {
   const id = useId();
   const quiet = toQuietHours(start, end);
 
@@ -68,7 +67,7 @@ const QuietHoursRow = ({ start, end, nightAlerts, disabled, onChange }: Props) =
               onChange={(hour) => save({ ...quiet, end: hour })}
             />
           </div>
-          <p className="text-sm text-gray-600">{describeQuietHours(quiet, nightAlerts)}</p>
+          <p className="text-sm text-gray-600">{describeQuietHours(quiet)}</p>
         </div>
       ) : null}
     </li>

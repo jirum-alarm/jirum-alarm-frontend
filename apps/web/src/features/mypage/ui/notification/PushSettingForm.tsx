@@ -34,8 +34,10 @@ const ROWS: { key: PushSettingKey; title: string; description: string }[] = [
   },
   {
     key: 'nightAlerts',
-    title: '야간 알림 수신 동의 (21~08시)',
-    description: '끄면 밤사이 알림은 아침 8시에 모아서 보내드려요',
+    title: '야간 광고성 알림 수신 동의 (21~08시)',
+    // 2026-10-24~ 서버는 광고성(좋은 딜)만 야간 동의를 본다. 직접 건 키워드·관심사·커뮤니티 알림은 밤에도 바로 간다.
+    description:
+      '「지금 뜨는 좋은 딜」 같은 광고성 알림만 해당해요. 키워드·커뮤니티 알림은 밤에도 바로 오니, 쉬고 싶으면 방해금지 시간을 정하세요',
   },
 ];
 
@@ -101,7 +103,6 @@ const PushSettingForm = () => {
       <QuietHoursRow
         start={setting.quietHoursStart}
         end={setting.quietHoursEnd}
-        nightAlerts={setting.nightAlerts}
         disabled={isPending}
         onChange={update}
       />

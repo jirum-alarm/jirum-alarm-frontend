@@ -383,7 +383,7 @@ function AlarmConcept({ isApp }: { isApp: boolean }) {
           { k: `${MAX_EXCLUDE_KEYWORDS}개`, v: '키워드마다 제외 단어' },
           {
             k: `${NIGHT_HOURS.start}~${String(NIGHT_HOURS.end).padStart(2, '0')}시`,
-            v: `밤 알림은 동의 안 하면 아침 ${NIGHT_HOURS.end}시에 모아서`,
+            v: `광고성 알림은 동의 안 하면 아침 ${NIGHT_HOURS.end}시에 — 키워드 알림은 바로`,
           },
         ].map((s) => (
           <div

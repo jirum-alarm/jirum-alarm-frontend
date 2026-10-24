@@ -276,7 +276,7 @@ const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
       {
         id: 'night',
         q: '밤에도 알림이 오나요?',
-        a: `${NIGHT_HOURS_TEXT} 사이 알림은 야간 알림 수신에 동의하지 않으면 아침 ${NIGHT_HOURS.end}시에 모아서 보내드려요. 마이페이지 → 알림 설정에서 바꿀 수 있어요.`,
+        a: `직접 등록한 키워드·관심사 알림과 커뮤니티 알림은 밤에도 바로 보내드려요. 밤엔 쉬고 싶으면 마이페이지 → 알림 설정에서 방해금지 시간을 정하면 끝나는 시각에 모아서 보내드려요. 「지금 뜨는 좋은 딜」 같은 광고성 알림은 ${NIGHT_HOURS_TEXT} 사이엔 야간 수신에 동의한 경우에만 보내고, 아니면 아침 ${NIGHT_HOURS.end}시에 보내드려요.`,
       },
       {
         id: 'not-coming',

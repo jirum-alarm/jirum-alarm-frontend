@@ -1,7 +1,6 @@
 import { linkChip, text } from '@jirum/design-system/recipes';
 import { MAX_EXCLUDE_KEYWORDS } from '@jirum/domain/keyword-options';
 import { MAX_KEYWORD_COUNT } from '@jirum/domain/mypage';
-import { NIGHT_HOURS, NIGHT_HOURS_TEXT } from '@jirum/domain/quiet-hours';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -161,8 +160,8 @@ export default async function HotdealAlarmGuidePage() {
               않았는지 확인해요.
             </li>
             <li>
-              {NIGHT_HOURS_TEXT} 사이 알림은 야간 알림 수신에 동의하지 않으면 아침 {NIGHT_HOURS.end}
-              시에 모아서 보내드려요. {myPage} → 알림 설정에서 바꿀 수 있어요.
+              방해금지 시간을 정해 뒀다면 그 사이 알림은 끝나는 시각에 모아서 보내드려요. {myPage} →
+              알림 설정에서 바꿀 수 있어요.
             </li>
             <li>알림 조건(제외 단어·가격 범위)이 너무 좁지 않은지 확인해요.</li>
             {isJirumAlarmApp ? null : (

@@ -1,6 +1,5 @@
 import { MAX_EXCLUDE_KEYWORDS } from '@jirum/domain/keyword-options';
 import { MAX_KEYWORD_COUNT } from '@jirum/domain/mypage';
-import { NIGHT_HOURS_TEXT } from '@jirum/domain/quiet-hours';
 import {
   COMMUNITY_COUNT,
   DAILY_COMMUNITY_DEALS,
@@ -33,7 +32,7 @@ const FAQ = [
   },
   {
     q: '알림이 너무 많이 오지 않나요?',
-    a: `키워드는 ${MAX_KEYWORD_COUNT}개까지, 키워드마다 빼고 싶은 단어 ${MAX_EXCLUDE_KEYWORDS}개와 가격 범위를 정할 수 있어요. 「콜라」에서 「콜라겐」을 빼는 식이에요. 알림 설정에서 「핫딜이 되면만 받기」를 켜면 반응이 뜨거워지거나 확실히 싸다고 확인된 딜만 알려드려요. ${NIGHT_HOURS_TEXT} 사이 알림은 따로 동의하지 않으면 아침에 모아서 보내드려요.`,
+    a: `키워드는 ${MAX_KEYWORD_COUNT}개까지, 키워드마다 빼고 싶은 단어 ${MAX_EXCLUDE_KEYWORDS}개와 가격 범위를 정할 수 있어요. 「콜라」에서 「콜라겐」을 빼는 식이에요. 알림 설정에서 「핫딜이 되면만 받기」를 켜면 반응이 뜨거워지거나 확실히 싸다고 확인된 딜만 알려드려요. 밤에 쉬고 싶으면 방해금지 시간을 정해 두세요. 그 사이 알림은 끝나는 시각에 모아서 보내드려요.`,
   },
   {
     q: '이용료가 있나요?',

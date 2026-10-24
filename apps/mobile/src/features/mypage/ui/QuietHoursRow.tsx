@@ -29,12 +29,10 @@ type Edge = 'start' | 'end';
 export default function QuietHoursRow({
   start,
   end,
-  nightAlerts,
   onChange,
 }: {
   start: number | null;
   end: number | null;
-  nightAlerts: boolean;
   onChange: (next: {
     quietHoursStart: number | null;
     quietHoursEnd: number | null;
@@ -82,7 +80,7 @@ export default function QuietHoursRow({
             />
           </View>
           <Text className="mt-2 text-sm text-gray-600">
-            {describeQuietHours(quiet, nightAlerts)}
+            {describeQuietHours(quiet)}
           </Text>
         </View>
       ) : null}
