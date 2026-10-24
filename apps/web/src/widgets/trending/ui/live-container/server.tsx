@@ -1,3 +1,4 @@
+import { HOT_FEED_PAGE_SIZE } from '@jirum/domain/ranking';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
@@ -11,9 +12,10 @@ const LIVE_ITEMS_LIMIT = 20;
 
 type Props = {
   tab: number;
+  feed?: 'live' | 'hot';
 };
 
-const LiveContainerServer = async ({ tab }: Props) => {
+const LiveContainerServer = async ({ tab, feed = 'live' }: Props) => {
   const queryClient = new QueryClient();
 
   const { categories } = await getCategoriesForUser();
@@ -21,7 +23,17 @@ const LiveContainerServer = async ({ tab }: Props) => {
     categories,
   });
 
-  if (categories.find((c) => c.id === tab)) {
+  if (feed === 'hot') {
+    // 「전체」(0)도 미리 받는다 — 핫딜만은 대부분 전체로 들어온다.
+    if (tab === 0 || categories.find((c) => c.id === tab)) {
+      queryClient.prefetchInfiniteQuery(
+        ProductQueries.infiniteHotDealFeed({
+          limit: HOT_FEED_PAGE_SIZE,
+          categoryIds: tab === 0 ? null : [tab],
+        }),
+      );
+    }
+  } else if (categories.find((c) => c.id === tab)) {
     queryClient.prefetchInfiniteQuery(
       ProductQueries.infiniteProducts({
         limit: LIVE_ITEMS_LIMIT,
@@ -34,7 +46,7 @@ const LiveContainerServer = async ({ tab }: Props) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <LiveContainer initialTab={tab} />
+      <LiveContainer initialTab={tab} feed={feed} />
     </HydrationBoundary>
   );
 };

@@ -1,3 +1,4 @@
+import type {TrendingView} from '@jirum/domain/ranking';
 import {
   searchStackNavigations,
   tabNavigations,
@@ -63,6 +64,7 @@ export function isTabRootUrl(url: string): boolean {
     '/',
     '/trending/ranking',
     '/trending/live',
+    '/trending/hot',
     '/keywords',
     '/alarm',
     '/mypage',
@@ -203,8 +205,8 @@ export type NativeRoute = {
   tab: TabName;
   screen?: string;
   params?: Record<string, unknown>;
-  /** 발견 탭 전용 — 실시간·랭킹 중 어느 화면으로 열지. */
-  trendingView?: 'live' | 'ranking';
+  /** 발견 탭 전용 — 실시간·핫딜만·랭킹 중 어느 화면으로 열지. */
+  trendingView?: TrendingView;
   /** 발견 탭 전용 — 어느 카테고리로 열지(web `?tab=`). 0 = '전체'. */
   trendingCategoryId?: number;
   /**
@@ -274,7 +276,11 @@ export function resolveNativeRoute(
     const tab = Number(url.match(/[?&]tab=([^&#]*)/)?.[1]);
     return {
       tab: tabNavigations.DISCOVER,
-      trendingView: path.startsWith('/trending/ranking') ? 'ranking' : 'live',
+      trendingView: path.startsWith('/trending/ranking')
+        ? 'ranking'
+        : path.startsWith('/trending/hot')
+        ? 'hot'
+        : 'live',
       trendingCategoryId: Number.isInteger(tab) && tab > 0 ? tab : 0,
     };
   }

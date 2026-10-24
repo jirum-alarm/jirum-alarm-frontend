@@ -34,6 +34,7 @@ export const PAGES: ScreenPage[] = [
   },
   { name: 'trending-ranking', path: '/trending/ranking', states: true, desktop: true },
   { name: 'trending-live', path: '/trending/live', desktop: true },
+  { name: 'trending-hot', path: '/trending/hot', desktop: true },
   { name: 'deals', path: '/deals', states: true, desktop: true },
   // 모델 페이지 — 진행 딜 없음(허브 세제의 홈스타 줄)·진행 딜이 기록상 최저(허브 갤럭시의 버즈 줄) 두 상태의 답 카드·같은 줄 칩.
   { name: 'deal-model', path: `/deals/${encodeURIComponent(MODEL_SLUG)}`, desktop: true },

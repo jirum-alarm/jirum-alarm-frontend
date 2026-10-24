@@ -1,4 +1,5 @@
 import {pageHeader} from '@jirum/design-system/recipes';
+import {TRENDING_VIEW_TABS, type TrendingView} from '@jirum/domain/ranking';
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import Animated, {
@@ -14,23 +15,21 @@ import {cn} from '@/shared/lib/styling';
 import {useColors} from '@/shared/theme/useColors';
 
 /**
- * 발견 탭 상단 2분할(실시간 · 랭킹).
+ * 발견 탭 상단 탭(실시간 · 핫딜만 · 랭킹 — 순서·이름 정본은 @jirum/domain/ranking TRENDING_VIEW_TABS).
  * web: widgets/trending/ui/PageTabNavigation.tsx — 하단 밑줄로 활성 표시.
  *
- * ★ web 은 Link 두 개(라우트가 갈린다)지만 앱은 한 화면 안 상태 전환이다.
- * 라우트를 나누면 탭 스택에 두 화면이 쌓여 뒤로가기가 실시간↔랭킹을 왕복한다.
+ * ★ web 은 Link 들(라우트가 갈린다)이지만 앱은 한 화면 안 상태 전환이다.
+ * 라우트를 나누면 탭 스택에 화면이 쌓여 뒤로가기가 탭 사이를 왕복한다.
  *
  * ★ 밑줄은 web 처럼 활성 탭에만 그리는 게 아니라 **하나를 좌우로 움직인다**.
- * 탭이 정확히 2개이고 폭이 같아서 onLayout 측정 없이 0↔1 보간으로 끝난다
+ * 탭 폭이 같아서 onLayout 측정 없이 인덱스 보간으로 끝난다
  * (web 은 `transition-colors` 로 글자색만 바꾸고 밑줄은 순간이동한다 —
  * 네이티브에선 그게 뚝 끊겨 보여서 밑줄을 잇는다).
  */
-export type TrendingView = 'live' | 'ranking';
+export type {TrendingView};
 
-const TABS: {id: TrendingView; label: string}[] = [
-  {id: 'live', label: '실시간'},
-  {id: 'ranking', label: '랭킹'},
-];
+const TABS = TRENDING_VIEW_TABS;
+const TAB_WIDTH_PERCENT = 100 / TABS.length;
 
 /** web `transition-colors` 기본값(150ms)보다 살짝 길게 — 이동 거리가 있어서. */
 const DURATION_MS = 220;
@@ -43,8 +42,8 @@ export default function TrendingTopTabs({
   onSelect: (view: TrendingView) => void;
 }) {
   const c = useColors();
-  const activeIndex = TABS.findIndex(t => t.id === active);
-  // 0 = 실시간, 1 = 랭킹. 밑줄 위치와 글자색을 같은 값으로 움직인다.
+  const activeIndex = TABS.findIndex(t => t.view === active);
+  // 탭 인덱스(0 = 실시간 …). 밑줄 위치와 글자색을 같은 값으로 움직인다.
   const progress = useSharedValue(activeIndex);
 
   useEffect(() => {
@@ -56,8 +55,8 @@ export default function TrendingTopTabs({
   }, [activeIndex, progress]);
 
   const underlineStyle = useAnimatedStyle(() => ({
-    // 탭 폭이 50% 라 left 를 0%↔50% 로 움직인다(측정 불필요).
-    left: `${progress.value * 50}%`,
+    // 탭 폭이 같아 left 를 인덱스 × 탭 폭으로 움직인다(측정 불필요).
+    left: `${progress.value * TAB_WIDTH_PERCENT}%`,
   }));
 
   return (
@@ -73,19 +72,19 @@ export default function TrendingTopTabs({
       <View className="h-full w-full flex-row">
         {TABS.map((tab, index) => (
           <TabLabel
-            key={tab.id}
+            key={tab.view}
             label={tab.label}
             index={index}
             progress={progress}
-            isActive={tab.id === active}
-            onPress={() => onSelect(tab.id)}
+            isActive={tab.view === active}
+            onPress={() => onSelect(tab.view)}
           />
         ))}
       </View>
 
       {/*
         움직이는 밑줄 하나. 탭마다 그리면 전환이 순간이동이 된다.
-        ★부모가 아니라 이 줄 컨테이너 기준 absolute 라 w-1/2 가 탭 폭과 같다.
+        ★부모가 아니라 이 줄 컨테이너 기준 absolute 라 TAB_WIDTH_PERCENT 가 탭 폭과 같다.
       */}
       <Animated.View
         // ★className 을 쓰지 않는다 — NativeWind 4 는 기본 컴포넌트만 처리해서
@@ -96,7 +95,7 @@ export default function TrendingTopTabs({
             position: 'absolute',
             bottom: 0,
             height: 2, // h-0.5
-            width: '50%',
+            width: `${TAB_WIDTH_PERCENT}%`,
             backgroundColor: c.gray[900],
           },
           underlineStyle,
