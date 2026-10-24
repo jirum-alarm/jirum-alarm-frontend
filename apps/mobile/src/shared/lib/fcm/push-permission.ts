@@ -130,7 +130,7 @@ let settingsPrompted = false;
 function promptOpenSettingsOnce() {
   if (settingsPrompted) return;
   settingsPrompted = true;
-  // eslint-disable-next-line no-restricted-syntax -- 키워드 등록 시트가 아직 떠 있을 때 불린다 — iOS 는 Modal(ConfirmSheet) 둘을 겹쳐 못 띄우고 OS Alert 만 그 위에 뜬다
+
   Alert.alert(
     '알림이 꺼져 있어요',
     '설정에서 알림을 켜야 등록한 키워드의 새 핫딜을 알려드릴 수 있어요.',
