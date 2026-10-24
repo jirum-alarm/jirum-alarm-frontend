@@ -190,6 +190,46 @@ export const QueryHomeProducts = graphql(`
   }
 `);
 
+/** 발견 탭 「핫딜만」 — 커서가 [핫딜 된 시각, id] 두 칸이라 searchAfter 를 배열째 넘긴다. web 정본 product-list.service.ts. */
+export const QueryHotDealFeedProducts = graphql(`
+  query HotDealFeedProducts(
+    $limit: Int!
+    $searchAfter: [String!]
+    $categoryIds: [Int!]
+  ) {
+    hotDealFeedProducts(
+      limit: $limit
+      searchAfter: $searchAfter
+      categoryIds: $categoryIds
+    ) {
+      id
+      title
+      mallId
+      mallName
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      hotDealType
+      isYearLowest
+      priceSaving {
+        basis
+        percent
+      }
+      provider {
+        nameKr
+      }
+      searchAfter
+      postedCommunityCount
+      postedAt
+    }
+  }
+`);
+
 /** 유통기한 임박 특가 (DOUBLE_ROW). earliestExpiryDate 를 쓰는 유일한 쿼리. */
 export const QueryExpiringSoonHotDealProducts = graphql(`
   query ExpiringSoonHotDealProducts(

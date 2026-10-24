@@ -28,6 +28,7 @@ import {Analytics} from '@/shared/lib/analytics/ga4';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
+import HotFeedList from './HotFeedList';
 import type {TabStackParamList} from '@/shared/lib/navigation/param-list';
 import {
   ChipRowSkeleton,
@@ -36,9 +37,9 @@ import {
 } from '@/shared/components/Skeletons';
 
 /**
- * 발견 탭. web: app/(desktop-ready)/trending/{live,ranking}
+ * 발견 탭. web: app/(desktop-ready)/trending/{live,hot,ranking}
  *
- * ★ web 은 라우트 두 개(/trending/live · /trending/ranking)로 갈리고 카테고리는
+ * ★ web 은 라우트 셋(/trending/live · /trending/hot · /trending/ranking)으로 갈리고 카테고리는
  * `?tab=` 쿼리에 담는다. 앱은 **한 화면 안의 상태**다 — 라우트를 나누면 탭
  * 스택에 화면이 쌓여 뒤로가기가 실시간↔랭킹을 왕복하고, 탭을 다시 누를 때
  * 어느 화면으로 돌아갈지가 흐려진다.
@@ -123,6 +124,8 @@ export default function TrendingScreen() {
       for (const id of ids) {
         if (view === 'live') {
           queryClient.prefetchInfiniteQuery(TrendingQueries.live(id));
+        } else if (view === 'hot') {
+          queryClient.prefetchInfiniteQuery(TrendingQueries.hot(id));
         } else {
           queryClient.prefetchQuery(TrendingQueries.ranking(id));
           queryClient.prefetchQuery(TrendingQueries.rankingLive(id));
@@ -151,6 +154,13 @@ export default function TrendingScreen() {
       view === 'live' ? (
         <LiveList
           key={`live-${category.id}`}
+          categoryId={category.id}
+          onPressProduct={handlePressProduct}
+          bottomInset={reservedBottom}
+        />
+      ) : view === 'hot' ? (
+        <HotFeedList
+          key={`hot-${category.id}`}
           categoryId={category.id}
           onPressProduct={handlePressProduct}
           bottomInset={reservedBottom}

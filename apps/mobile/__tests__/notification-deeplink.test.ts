@@ -176,6 +176,13 @@ describe('푸시·딥링크 → 네이티브 화면', () => {
     );
   });
 
+  it('/trending/hot 은 「핫딜만」으로 연다', () => {
+    expect(navigateToNativeRoute(url('/trending/hot?tab=9'))).toBe(true);
+    expect(mockRequestTrendingView).toHaveBeenCalledWith('hot');
+    expect(mockRequestTrendingCategory).toHaveBeenCalledWith(9);
+    expectTabRoot('DiscoverTab');
+  });
+
   it('/trending 은 web 리다이렉트와 같이 실시간이 기본', () => {
     navigateToNativeRoute(url('/trending'));
     expect(mockRequestTrendingView).toHaveBeenCalledWith('live');

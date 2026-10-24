@@ -1,12 +1,12 @@
 import {infiniteQueryOptions, queryOptions} from '@tanstack/react-query';
-import {rankingWindowDays} from '@jirum/domain/ranking';
+import {HOT_FEED_PAGE_SIZE, rankingWindowDays} from '@jirum/domain/ranking';
 
 import {HomeService} from '@/shared/api/home/home.service';
 import type {ProductCardType} from '@/shared/types/product-card';
 
 /**
- * 발견 탭(실시간·랭킹) 데이터.
- * web 정본: widgets/trending/model/useLiveViewModel.ts · useTrendingViewModel.ts
+ * 발견 탭(실시간·핫딜만·랭킹) 데이터.
+ * web 정본: widgets/trending/model/useLiveViewModel.ts · useHotFeedViewModel.ts · useTrendingViewModel.ts
  *
  * ★ web 은 SSR prefetch + useSuspenseQuery 지만 RN 엔 서버가 없어 전부
  * 클라이언트 useQuery 로 내려온다(홈과 같은 처방).
@@ -61,6 +61,7 @@ export class TrendingQueries {
     all: ['trending'] as const,
     live: (categoryId: number) =>
       [...this.keys.all, 'live', categoryId] as const,
+    hot: (categoryId: number) => [...this.keys.all, 'hot', categoryId] as const,
     ranking: (categoryId: number, startDate: string) =>
       [...this.keys.all, 'ranking', categoryId, startDate] as const,
     rankingLive: (categoryId: number) =>
@@ -85,6 +86,29 @@ export class TrendingQueries {
       // 마지막 행의 커서를 다음 시작점으로. 배열째 넘긴다(스키마가 [String!]).
       getNextPageParam: (lastPage: ProductCardType[]) => {
         if (lastPage.length < LIVE_LIMIT) return undefined;
+        const cursor = (lastPage.at(-1) as {searchAfter?: string[]} | undefined)
+          ?.searchAfter;
+        return cursor && cursor.length > 0 ? cursor : undefined;
+      },
+      retry: RETRY,
+      staleTime: STALE_TIME,
+    });
+  }
+
+  /** 핫딜만 — 문턱 넘은 딜만 핫딜 된 시각순 무한스크롤. 커서는 [시각, id] 두 칸. */
+  static hot(categoryId: number) {
+    const serverCategoryId = toServerCategoryId(categoryId);
+    return infiniteQueryOptions({
+      queryKey: this.keys.hot(categoryId),
+      initialPageParam: null as string[] | null,
+      queryFn: ({pageParam}) =>
+        HomeService.getHotDealFeedProducts({
+          limit: HOT_FEED_PAGE_SIZE,
+          categoryIds: toCategoryIds(serverCategoryId),
+          searchAfter: pageParam,
+        }) as Promise<ProductCardType[]>,
+      getNextPageParam: (lastPage: ProductCardType[]) => {
+        if (lastPage.length < HOT_FEED_PAGE_SIZE) return undefined;
         const cursor = (lastPage.at(-1) as {searchAfter?: string[]} | undefined)
           ?.searchAfter;
         return cursor && cursor.length > 0 ? cursor : undefined;

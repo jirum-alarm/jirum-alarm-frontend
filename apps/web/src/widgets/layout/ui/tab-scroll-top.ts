@@ -3,6 +3,7 @@ export const SCROLL_TOP_TAB_PATHS = [
   '/',
   '/trending/ranking',
   '/trending/live',
+  '/trending/hot',
   '/community',
   '/alarm',
 ] as const;

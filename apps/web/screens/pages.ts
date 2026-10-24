@@ -32,6 +32,7 @@ export const PAGES: ScreenPage[] = [
   },
   { name: 'trending-ranking', path: '/trending/ranking', states: true, desktop: true },
   { name: 'trending-live', path: '/trending/live', desktop: true },
+  { name: 'trending-hot', path: '/trending/hot', desktop: true },
   { name: 'deals', path: '/deals', states: true, desktop: true },
   { name: 'community', path: '/community', states: true, desktop: true },
   { name: 'themes', path: '/themes', desktop: true },

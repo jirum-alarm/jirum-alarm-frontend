@@ -10,8 +10,8 @@ import TrackedProductGridCard from '@/entities/product-list/ui/grid/TrackedProdu
 interface Props {
   products: ProductCardType[];
   source: ProductCardSource;
-  // 이 그리드의 첫 카드가 전체 랭킹에서 갖는 1-based rank(뱃지 표시용).
-  rankFrom: number;
+  // 이 그리드의 첫 카드가 전체 랭킹에서 갖는 1-based rank(뱃지 표시용). 순위가 없는 목록(핫딜만)은 생략.
+  rankFrom?: number;
   // 이 그리드의 첫 카드가 전체 랭킹에서 갖는 0-based position(CTR 측정용).
   positionFrom: number;
   priorityCount?: number;
@@ -46,7 +46,7 @@ export default function TrackedProductGridList({
         <TrackedProductGridCard
           key={product.id}
           product={product}
-          rank={rankFrom + index}
+          rank={rankFrom === undefined ? undefined : rankFrom + index}
           position={positionFrom + index}
           priority={index < priorityCount}
           displayTime={displayTime}

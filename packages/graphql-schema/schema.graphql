@@ -2492,6 +2492,15 @@ type Query {
   homePage: HomePage!
   """어드민) 핫딜 제외 키워드 목록 조회"""
   hotDealExcludeKeywordsByAdmin(hotDealKeywordId: Int!, limit: Int!, orderBy: HotDealExcludeKeywordOrderType!, orderOption: OrderOptionType!, searchAfter: [String!]): [HotDealExcludeKeywordOutput!]!
+  """
+  핫딜만 — 반응 핫딜·대박·초대박 중 진행 중인 딜을 핫딜이 된 시각순으로(최근 3일, 같은 딜은 한 칸). 커서는 searchAfter
+  """
+  hotDealFeedProducts(
+    """카테고리 다중 선택 (OR). 0 은 전체"""
+    categoryIds: [Int!]
+    limit: Int!
+    searchAfter: [String!]
+  ): [ProductOutput!]!
   """어드민) 핫딜 키워드 조회"""
   hotDealKeywordByAdmin(id: Int!): HotDealKeywordOutput
   """어드민) 리액션 키워드 후보 목록 조회"""
