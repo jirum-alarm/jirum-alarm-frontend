@@ -13,7 +13,7 @@
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
     "prettier-fix": "prettier --write \"./**/*.{js,ts,tsx}\" --ignore-path .gitignore --ignore-path .prettierignore ",
-    "check-types": "tsc --noEmit && tsc -p screens",
+    "check-types": "next typegen && tsc --noEmit && tsc -p screens",
     "analyze": "ANALYZE=true next build --webpack",
     "knip": "knip",
     "screens": "playwright test -c screens/playwright.config.ts",
