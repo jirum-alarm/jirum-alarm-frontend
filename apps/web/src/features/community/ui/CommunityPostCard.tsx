@@ -1,6 +1,7 @@
 'use client';
 
 import { text } from '@jirum/design-system/recipes';
+import { isNewNotice } from '@jirum/domain/community';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -48,7 +49,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
             </>
           )}
           <span className={text.caption}>{displayTime(post.createdAt)}</span>
-          {post.isNotice && (
+          {post.isNotice && isNewNotice(post.createdAt) && (
             <Badge size="md" variant="solid" tone="secondary">
               NEW
             </Badge>

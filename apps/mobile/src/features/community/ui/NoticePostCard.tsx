@@ -20,7 +20,7 @@ import {cn} from '@/shared/lib/styling/className';
  * 공지 탭 전용 한 줄. web `features/community/ui/NoticePostCard` 대응 —
  * 썸네일이 없고 제목이 앞에 온다(제목이 없으면 본문을 제목 자리에 쓴다).
  *
- * ★"NEW" 는 목록의 **첫 줄에만** 붙는다(web `isNew={i === 0}`). 카드가 스스로
+ * ★"NEW" 는 목록의 **첫 줄에만**(그것도 7일 안의 공지일 때만 — `isNewNotice`) 붙는다(web `isNew={i === 0}`). 카드가 스스로
  * 판단하지 않고 목록이 알려준다 — 안 그러면 모든 공지가 NEW 가 된다.
  */
 export default function NoticePostCard({

@@ -1,6 +1,7 @@
 'use client';
 
 import { emptyText, text } from '@jirum/design-system/recipes';
+import { isNewNotice } from '@jirum/domain/community';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Fragment, useEffect } from 'react';
@@ -79,7 +80,12 @@ export default function CommunityList({ tab, insertAfterIndex, insertContent }: 
         {posts.map((post, i) => {
           const card =
             tab === 'notice' ? (
-              <NoticePostCard key={post.id} post={post} isNew={i === 0} tab={tab} />
+              <NoticePostCard
+                key={post.id}
+                post={post}
+                isNew={i === 0 && isNewNotice(post.createdAt)}
+                tab={tab}
+              />
             ) : (
               <CommunityPostCard key={post.id} post={post} tab={tab} />
             );
@@ -104,20 +110,22 @@ export default function CommunityList({ tab, insertAfterIndex, insertContent }: 
         </div>
       )}
 
-      {/* 글쓰기 FAB (모바일 전용) */}
-      {isUserLogin && (
-        <Link
-          href={PAGE.COMMUNITY_WRITE}
-          className="bg-primary-500 hover:bg-primary-600 active:bg-primary-700 text-fixed-900 fixed right-5 z-50 flex items-center gap-x-1.5 rounded-full px-4 py-3 text-sm font-semibold shadow-lg transition-transform active:scale-95 md:hidden"
-          style={{
-            bottom:
-              'calc(var(--bottom-fab-gap, 1rem) + var(--bottom-fab-padding, var(--bottom-nav-padding, 0px)))',
-          }}
-        >
-          <span className="text-lg leading-none">+</span>
-          <span>글쓰기</span>
-        </Link>
-      )}
+      {/* 글쓰기 FAB (모바일 전용) — 비로그인은 로그인 뒤 글쓰기로 */}
+      <Link
+        href={
+          isUserLogin
+            ? PAGE.COMMUNITY_WRITE
+            : `${PAGE.LOGIN}?rtnUrl=${encodeURIComponent(PAGE.COMMUNITY_WRITE)}`
+        }
+        className="bg-primary-500 hover:bg-primary-600 active:bg-primary-700 text-fixed-900 fixed right-5 z-50 flex items-center gap-x-1.5 rounded-full px-4 py-3 text-sm font-semibold shadow-lg transition-transform active:scale-95 md:hidden"
+        style={{
+          bottom:
+            'calc(var(--bottom-fab-gap, 1rem) + var(--bottom-fab-padding, var(--bottom-nav-padding, 0px)))',
+        }}
+      >
+        <span className="text-lg leading-none">+</span>
+        <span>글쓰기</span>
+      </Link>
     </div>
   );
 }

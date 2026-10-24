@@ -15,22 +15,28 @@ export const COMMUNITY_COPY = {
   commentDeleted: '댓글을 삭제했어요.',
 } as const;
 
-/** 커뮤니티 목록 탭 — 순서·라벨. */
-export type CommunityTab = 'all' | 'trending' | 'notice';
+/**
+ * 커뮤니티 목록 탭 — 순서·라벨. 「인기」(isTrending)는 뺐다(2026-10-24): 서버가 trendedAt 을 다는 곳이 없어
+ * 늘 「아직 게시글이 없어요」였다. 인기 판정이 생기면 그때 다시 단다.
+ */
+export type CommunityTab = 'all' | 'notice';
 export const COMMUNITY_TABS: readonly { label: string; value: CommunityTab }[] = [
   { label: '전체', value: 'all' },
-  { label: '인기', value: 'trending' },
   { label: '공지', value: 'notice' },
 ];
 
 /** 탭 → 목록 쿼리 필터. 「전체」는 필터를 아예 안 보낸다. */
-export function communityTabFilter(tab: CommunityTab): {
-  isNotice?: boolean;
-  isTrending?: boolean;
-} {
-  if (tab === 'notice') return { isNotice: true };
-  if (tab === 'trending') return { isTrending: true };
-  return {};
+export function communityTabFilter(tab: CommunityTab): { isNotice?: boolean } {
+  return tab === 'notice' ? { isNotice: true } : {};
+}
+
+/** 공지 「NEW」 배지를 다는 기간. 넘으면 끝난 공지에도 NEW 가 붙어 있었다(9/1 공지가 10월에도 NEW). */
+const NOTICE_NEW_DAYS = 7;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+export function isNewNotice(createdAt: string | Date, now: Date | number = Date.now()): boolean {
+  const age = Number(now) - new Date(createdAt).getTime();
+  return age >= 0 && age < NOTICE_NEW_DAYS * DAY_MS;
 }
 
 /** 목록 한 쪽 크기·정렬(서버 enum CommentOrder.ID·OrderOptionType.DESC 값). 어긋나면 같은 커뮤니티가 웹·앱에서 다른 순서. */
