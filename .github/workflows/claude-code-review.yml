@@ -17,7 +17,9 @@ jobs:
     #   github.event.pull_request.user.login == 'external-contributor' ||
     #   github.event.pull_request.user.login == 'new-developer' ||
     #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
-    
+    # Dependabot PR 엔 저장소 비밀(CLAUDE_CODE_OAUTH_TOKEN)이 안 넘어가 매번 실패한다.
+    if: github.actor != 'dependabot[bot]'
+
     runs-on: ubuntu-latest
     permissions:
       contents: read
