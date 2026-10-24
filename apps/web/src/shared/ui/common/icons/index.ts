@@ -40,6 +40,7 @@ export { default as Find } from './Find';
 export { default as FindFill } from './FindFill';
 export { default as Search } from './Search';
 export { default as Setting } from './Setting';
+export { default as ThemeMode } from './ThemeMode';
 export { default as Thumbsdown } from './Thumbsdown';
 export { default as Thumbsup } from './Thumbsup';
 export { default as ThumbsupFill } from './ThumbsupFill';

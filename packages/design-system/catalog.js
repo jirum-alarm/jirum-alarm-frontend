@@ -236,7 +236,7 @@ const catalog = [
     story: '레시피/면·상자',
     sites: [
       `${W}features/product-detail/ui/DealEvidenceBlock.tsx`,
-      `${W}app/(desktop-ready)/deals/[slug]/page.tsx`,
+      `${W}app/(desktop-ready)/deals/[slug]/DealsAnswerCard.tsx`,
       `${A}screens/detail/ui/DealEvidenceBlock.tsx`,
     ],
   },

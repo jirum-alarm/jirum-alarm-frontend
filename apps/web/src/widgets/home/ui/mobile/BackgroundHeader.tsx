@@ -1,11 +1,11 @@
 import { cn } from '@/shared/lib/cn';
-import ColorSchemeButton from '@/shared/ui/ColorSchemeButton';
 import LogoLink from '@/shared/ui/common/Logo/LogoLink';
 
 import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
 
 import AlarmLinkButton from '@/widgets/layout/ui/AlarmLinkButton';
 import CommunityLinkButton from '@/widgets/layout/ui/CommunityLinkButton';
+import HelpLinkButton from '@/widgets/layout/ui/HelpLinkButton';
 
 import BannerSwiper from './BannerSwiper';
 
@@ -29,7 +29,7 @@ const BackgroundHeader = async () => {
         <header className="flex h-14 w-full items-center justify-between px-5 py-3">
           <LogoLink inverted />
           <div className="flex items-center gap-x-5">
-            <ColorSchemeButton color="var(--color-fixed-white)" />
+            <HelpLinkButton color="var(--color-fixed-white)" />
             <SearchLinkButton color="var(--color-fixed-white)" />
             <CommunityLinkButton
               color="var(--color-fixed-white)"

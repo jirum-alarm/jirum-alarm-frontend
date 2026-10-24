@@ -1,15 +1,19 @@
 'use client';
 
-import { listRow } from '@jirum/design-system/recipes';
+import { listRow, text } from '@jirum/design-system/recipes';
 import { CUSTOMER_SERVICE_TITLE } from '@jirum/domain/mypage';
 import * as m from 'motion/react-m';
 
+import { setColorScheme } from '@/shared/config/color-scheme';
 import { cn } from '@/shared/lib/cn';
 import customerService from '@/shared/lib/customerservice/customer-service';
-import { ArrowRight, Headset } from '@/shared/ui/common/icons';
+import { ArrowRight, Headset, ThemeMode } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
 
 import { MYPAGE_GROUPS, MYPAGE_MENU } from '../model/menu';
+
+// 고르지 않은 쪽 모양이 기본 — 고른 쪽은 버튼마다 (dark:) 로 덮는다.
+const segClass = cn(text.muted, 'rounded-md px-3 py-1 transition-colors');
 
 const MenuList = () => {
   const handleShowChannelTalkClick = () => {
@@ -39,6 +43,38 @@ const MenuList = () => {
                     </Link>
                   </li>
                 ),
+              )}
+              {/* 화면 모드 — 모바일 홈 헤더의 해/달 버튼이 2026-10-24 사용법에 자리를 넘겨 여기로(앱 내정보 「화면 모드」와 같은 자리).
+                  고른 쪽 표시는 html.dark 를 CSS(`dark:`)로 가른다 — PC UserMenu 와 같은 방식(JS 상태 없음). */}
+              {group.key === 'custom' && (
+                <li className={cn('flex', listRow.row)}>
+                  <ThemeMode />
+                  <span className={cn('flex-1 text-left', listRow.title)}>화면 모드</span>
+                  <div className="flex rounded-lg bg-gray-100 p-0.5">
+                    <button
+                      type="button"
+                      aria-label="라이트 모드"
+                      onClick={() => setColorScheme(false)}
+                      className={cn(
+                        segClass,
+                        'bg-white font-semibold text-gray-900 shadow-xs dark:bg-transparent dark:font-normal dark:text-gray-500 dark:shadow-none',
+                      )}
+                    >
+                      라이트
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="다크 모드"
+                      onClick={() => setColorScheme(true)}
+                      className={cn(
+                        segClass,
+                        'dark:bg-white dark:font-semibold dark:text-gray-900 dark:shadow-xs',
+                      )}
+                    >
+                      다크
+                    </button>
+                  </div>
+                </li>
               )}
               {group.key === 'support' && (
                 <li>

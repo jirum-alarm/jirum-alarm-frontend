@@ -5,10 +5,10 @@ import * as m from 'motion/react-m';
 import { setColorScheme } from '@/shared/config/color-scheme';
 
 /**
- * 헤더 우측 화면 모드 버튼. 지금 모드를 보여 준다(라이트=해, 다크=달) — 누르면 반대로.
+ * 화면 모드 버튼(PC 푸터). 지금 모드를 보여 준다(라이트=해, 다크=달) — 누르면 반대로.
  * 어느 아이콘을 보일지는 html.dark 를 CSS(`dark:`)로 가른다. 서버가 쿠키로 class 를 심으므로
  * 상태를 JS 로 들고 있지 않아도 첫 화면부터 맞다(하이드레이션 불일치 없음).
- * 앱 HomeHeader 의 ThemeButton 과 같은 아이콘·동작.
+ * 모바일 홈 헤더의 같은 버튼은 2026-10-24 사용법 버튼에 자리를 넘겼다 — 모바일은 마이페이지 「화면 모드」 줄에서 바꾼다.
  */
 const ColorSchemeButton = ({ color }: { color: string }) => (
   <button
