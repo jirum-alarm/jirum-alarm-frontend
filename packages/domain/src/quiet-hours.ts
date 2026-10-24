@@ -24,21 +24,8 @@ export const formatHour = (hour: number) => {
 export const toQuietHours = (start: number | null, end: number | null): QuietHours | null =>
   typeof start !== 'number' || typeof end !== 'number' || start === end ? null : { start, end };
 
-/** [start, end) 에 드는 시 목록(자정 넘김 포함). */
-const hoursIn = ({ start, end }: QuietHours) => {
-  const hours: number[] = [];
-  for (let h = start; h !== end; h = (h + 1) % 24) hours.push(h);
-  return hours;
-};
-
-const isNightHour = (hour: number) => hour >= 21 || hour < 8;
-
-/** 설정 행 아래 한 줄 안내. 야간 미동의인데 밤 시간만 골랐으면 "원래 안 오는 시간" 이라고 알려 준다. */
-export const describeQuietHours = (quiet: QuietHours, nightAlerts: boolean) => {
-  if (!nightAlerts && hoursIn(quiet).every(isNightHour)) {
-    return '야간 알림에 동의하지 않아 이 시간엔 원래 알림이 오지 않아요(아침 8시에 모아서 보내요)';
-  }
-  return `${formatHour(quiet.start)}부터 ${formatHour(quiet.end)} 전까지 온 알림은 ${formatHour(
+/** 설정 행 아래 한 줄 안내. */
+export const describeQuietHours = (quiet: QuietHours) =>
+  `${formatHour(quiet.start)}부터 ${formatHour(quiet.end)} 전까지 온 알림은 ${formatHour(
     quiet.end,
   )}에 모아서 보내드려요`;
-};
