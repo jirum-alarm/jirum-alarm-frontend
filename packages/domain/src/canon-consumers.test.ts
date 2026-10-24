@@ -26,6 +26,7 @@ const SHARED_BY_BOTH: Record<string, string[]> = {
     'WISHLIST_PAGE_SIZE',
     'ACCOUNT_COPY',
     'THEME_COPY',
+    'themeSubscriberLabel',
     'POLICY_DOCS',
   ],
   'keyword-options': ['KEYWORD_ALERT_LABELS', 'KEYWORD_DEAL_CHOICES', 'summarizeKeywordAlert'],

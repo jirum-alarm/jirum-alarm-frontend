@@ -3,6 +3,7 @@
 import 'swiper/css';
 
 import { text } from '@jirum/design-system/recipes';
+import { themeSubscriberLabel } from '@jirum/domain/mypage';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -60,6 +61,9 @@ const ThemeSection = ({ isMobile }: { isMobile: boolean }) => {
                 최근 7일 알림{' '}
                 <b className="font-semibold text-gray-900">{theme.weeklyAlertCount}건</b>
               </span>
+              {themeSubscriberLabel(theme.subscriberCount) && (
+                <span className={text.caption}>{themeSubscriberLabel(theme.subscriberCount)}</span>
+              )}
             </Link>
           </SwiperSlide>
         ))}

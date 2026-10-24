@@ -4856,6 +4856,7 @@ export type QueryNotificationThemesQuery = {
     keywords: Array<string>;
     excludeKeywords: Array<string>;
     weeklyAlertCount: number;
+    subscriberCount: number;
   }>;
 };
 
@@ -6494,6 +6495,7 @@ export const QueryNotificationThemesDocument = new TypedDocumentString(`
     keywords
     excludeKeywords
     weeklyAlertCount
+    subscriberCount
   }
 }
     `) as unknown as TypedDocumentString<

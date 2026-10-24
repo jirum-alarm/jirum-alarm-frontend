@@ -2,6 +2,7 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 
 import {ThemeQueries} from '@/entities/theme';
 import {ThemeService} from '@/shared/api/theme';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 import {showToast} from '@/shared/lib/feedback';
 import {requestPushPermissionIfNeeded} from '@/shared/lib/fcm/push-permission';
 
@@ -46,7 +47,11 @@ export function useThemeSubscription() {
       rollback(context);
       showToast.error('관심사 알림을 켜지 못했어요.');
     },
-    onSuccess: () => requestPushPermissionIfNeeded(),
+    onSuccess: (_data, themeId) => {
+      // web useThemeSubscription 의 dataLayer theme_subscribe 와 같은 이름·값(GA4 에서 합쳐 본다).
+      Analytics.track('theme_subscribe', {theme_id: themeId});
+      requestPushPermissionIfNeeded();
+    },
     onSettled: () => queryClient.invalidateQueries({queryKey: key}),
   });
 

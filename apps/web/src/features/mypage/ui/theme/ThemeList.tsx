@@ -1,7 +1,7 @@
 'use client';
 
 import { text } from '@jirum/design-system/recipes';
-import { THEME_COPY } from '@jirum/domain/mypage';
+import { THEME_COPY, themeSubscriberLabel } from '@jirum/domain/mypage';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 
@@ -29,6 +29,7 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
       {themes.map((theme) => {
         const themeId = Number(theme.id);
         const isSubscribed = subscribed.has(themeId);
+        const subscriberLabel = themeSubscriberLabel(theme.subscriberCount);
         return (
           <li key={theme.id} className="h-full">
             {/* 홈 캐러셀 카드(widgets/home/ui/ThemeSection)와 같은 회색 카드 */}
@@ -51,6 +52,7 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
                   최근 7일 알림{' '}
                   <b className="font-semibold text-gray-900">{theme.weeklyAlertCount}건</b>
                 </p>
+                {subscriberLabel && <p className={cn(text.caption, 'mt-1')}>{subscriberLabel}</p>}
               </div>
               <Button
                 size="sm"
