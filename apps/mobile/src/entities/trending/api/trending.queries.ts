@@ -59,9 +59,8 @@ function toCategoryIds(categoryId: number | null): number[] | null {
 export class TrendingQueries {
   static readonly keys = {
     all: ['trending'] as const,
-    live: (categoryId: number) =>
-      [...this.keys.all, 'live', categoryId] as const,
-    hot: (categoryId: number) => [...this.keys.all, 'hot', categoryId] as const,
+    feed: (feed: 'live' | 'hot', categoryId: number) =>
+      [...this.keys.all, feed, categoryId] as const,
     ranking: (categoryId: number, startDate: string) =>
       [...this.keys.all, 'ranking', categoryId, startDate] as const,
     rankingLive: (categoryId: number) =>
@@ -69,46 +68,33 @@ export class TrendingQueries {
     recommended: () => [...this.keys.all, 'recommended'] as const,
   };
 
-  /** 실시간 — 최신순 무한스크롤. */
-  static live(categoryId: number) {
+  /**
+   * 발견 탭 「최신」 — 핫딜만(hot) = 문턱 넘은 딜만 핫딜 된 시각순(커서 [시각, id]), 전부(live) = 올라온 딜 최신순.
+   * 한 함수로 두는 이유: 화면(FeedList)이 칩으로 둘을 오가며 같은 훅에 넘긴다(키 모양이 같아야 타입이 맞는다).
+   */
+  static feed(feed: 'live' | 'hot', categoryId: number) {
     const serverCategoryId = toServerCategoryId(categoryId);
+    const limit = feed === 'hot' ? HOT_FEED_PAGE_SIZE : LIVE_LIMIT;
     return infiniteQueryOptions({
-      queryKey: this.keys.live(categoryId),
+      queryKey: this.keys.feed(feed, categoryId),
       initialPageParam: null as string[] | null,
       queryFn: ({pageParam}) =>
-        HomeService.getProducts({
-          limit: LIVE_LIMIT,
-          orderBy: 'POSTED_AT' as never,
-          orderOption: 'DESC' as never,
-          categoryIds: toCategoryIds(serverCategoryId),
-          searchAfter: pageParam,
-        }) as Promise<ProductCardType[]>,
+        (feed === 'hot'
+          ? HomeService.getHotDealFeedProducts({
+              limit,
+              categoryIds: toCategoryIds(serverCategoryId),
+              searchAfter: pageParam,
+            })
+          : HomeService.getProducts({
+              limit,
+              orderBy: 'POSTED_AT' as never,
+              orderOption: 'DESC' as never,
+              categoryIds: toCategoryIds(serverCategoryId),
+              searchAfter: pageParam,
+            })) as Promise<ProductCardType[]>,
       // 마지막 행의 커서를 다음 시작점으로. 배열째 넘긴다(스키마가 [String!]).
       getNextPageParam: (lastPage: ProductCardType[]) => {
-        if (lastPage.length < LIVE_LIMIT) return undefined;
-        const cursor = (lastPage.at(-1) as {searchAfter?: string[]} | undefined)
-          ?.searchAfter;
-        return cursor && cursor.length > 0 ? cursor : undefined;
-      },
-      retry: RETRY,
-      staleTime: STALE_TIME,
-    });
-  }
-
-  /** 핫딜만 — 문턱 넘은 딜만 핫딜 된 시각순 무한스크롤. 커서는 [시각, id] 두 칸. */
-  static hot(categoryId: number) {
-    const serverCategoryId = toServerCategoryId(categoryId);
-    return infiniteQueryOptions({
-      queryKey: this.keys.hot(categoryId),
-      initialPageParam: null as string[] | null,
-      queryFn: ({pageParam}) =>
-        HomeService.getHotDealFeedProducts({
-          limit: HOT_FEED_PAGE_SIZE,
-          categoryIds: toCategoryIds(serverCategoryId),
-          searchAfter: pageParam,
-        }) as Promise<ProductCardType[]>,
-      getNextPageParam: (lastPage: ProductCardType[]) => {
-        if (lastPage.length < HOT_FEED_PAGE_SIZE) return undefined;
+        if (lastPage.length < limit) return undefined;
         const cursor = (lastPage.at(-1) as {searchAfter?: string[]} | undefined)
           ?.searchAfter;
         return cursor && cursor.length > 0 ? cursor : undefined;

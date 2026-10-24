@@ -42,8 +42,8 @@ const BottomNavList = [
   {
     type: NAV_TYPE.TRENDING,
     getLink: (pathName: string) =>
-      nextTrendingView(pathName === PAGE.TRENDING_RANKING ? 'ranking' : null) === 'live'
-        ? PAGE.TRENDING_LIVE
+      nextTrendingView(pathName === PAGE.TRENDING_RANKING ? 'ranking' : null) === 'hot'
+        ? PAGE.TRENDING_HOT
         : PAGE.TRENDING_RANKING,
     text: '발견',
     icon: Find,

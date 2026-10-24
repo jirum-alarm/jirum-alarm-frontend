@@ -39,6 +39,7 @@ const SHARED_BY_BOTH: Record<string, string[]> = {
     'nextTrendingView',
     'RANKING_CARD_SOURCE',
     'TRENDING_VIEW_TABS',
+    'trendingTabView',
     'HOT_FEED_COPY',
     'HOT_FEED_PAGE_SIZE',
     'HOT_FEED_CARD_SOURCE',

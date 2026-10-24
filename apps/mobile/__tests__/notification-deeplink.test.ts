@@ -183,9 +183,11 @@ describe('푸시·딥링크 → 네이티브 화면', () => {
     expectTabRoot('DiscoverTab');
   });
 
-  it('/trending 은 web 리다이렉트와 같이 실시간이 기본', () => {
+  it('/trending 은 web 리다이렉트와 같이 「최신」(핫딜만)이 기본, /trending/live 는 핫딜만 끔', () => {
     navigateToNativeRoute(url('/trending'));
-    expect(mockRequestTrendingView).toHaveBeenCalledWith('live');
+    expect(mockRequestTrendingView).toHaveBeenLastCalledWith('hot');
+    navigateToNativeRoute(url('/trending/live'));
+    expect(mockRequestTrendingView).toHaveBeenLastCalledWith('live');
   });
 
   it('★?tab=N 은 그 카테고리로 연다 (커뮤니티 "\'컴퓨터\' 인기 상품 더보기")', () => {

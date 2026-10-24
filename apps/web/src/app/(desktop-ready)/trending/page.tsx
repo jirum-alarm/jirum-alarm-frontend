@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 const TrendingPage = () => {
-  redirect('/trending/live');
+  redirect('/trending/hot');
 };
 
 export default TrendingPage;

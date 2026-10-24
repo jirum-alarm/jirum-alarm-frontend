@@ -7,32 +7,45 @@ import {HOT_FEED_CARD_SOURCE, HOT_FEED_COPY} from '@jirum/domain/ranking';
 import type {ProductCardType} from '@/shared/types/product-card';
 import CurationGrid from '@/entities/home/ui/CurationGrid';
 import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
-import {Text} from '@/shared/components/ui/Text/AppText';
-import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';
-
 import {TrendingQueries} from '@/entities/trending/api/trending.queries';
 import {useRankingImpressionTracker} from '@/entities/trending/model/useRankingImpressionTracker';
+import Chip from '@/shared/components/ui/Chip';
+import {Text} from '@/shared/components/ui/Text/AppText';
+import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';
+import {cn} from '@/shared/lib/styling';
+import {requestTrendingView} from '@/shared/lib/navigation/trending-view-store';
 
 /**
- * 핫딜만 목록. web: widgets/trending/ui/HotFeedList.tsx + useHotFeedViewModel
- * 실시간(LiveList)과 같은 그리드·무한스크롤 — 다른 건 조회(문턱 넘은 딜만)와 위 기준 한 줄.
+ * 발견 탭 「최신」 목록. web: widgets/trending/ui/FeedList.tsx
+ * 「핫딜만」 칩을 켜면 문턱 넘은 딜만 핫딜 된 시각순(hot), 끄면 올라온 딜 전부 최신순(live) — 모양은 하나, 조회만 다르다.
  * 홈 카드 UI(GridCard·CurationGrid)를 그리므로 entities 끼리 import 를 피해 screens 층에 둔다.
+ *
+ * ★ web 은 useInView 센티넬로 다음 페이지를 당기고 swiper autoHeight 를 손으로
+ * 갱신해야 했다. FlatList 는 onEndReached 로 둘 다 필요 없다.
  */
+
+export type FeedKind = 'live' | 'hot';
+
+/** 「핫딜만」 끔(전부) 노출/클릭 출처 — web 과 같은 값. */
+const LIVE_SOURCE = 'live_tab';
 
 const keyOf = (item: ProductCardType) => String(item.id);
 
-export default function HotFeedList({
+export default function FeedList({
+  feed,
   categoryId,
   onPressProduct,
   bottomInset,
 }: {
+  feed: FeedKind;
   categoryId: number;
   onPressProduct: (id: number) => void;
   /** 탭바가 가리는 높이. 마지막 행이 탭바 밑으로 들어가지 않게 비운다. */
   bottomInset: number;
 }) {
+  const isHot = feed === 'hot';
   const queryClient = useQueryClient();
-  const hotQuery = TrendingQueries.hot(categoryId);
+  const feedQuery = TrendingQueries.feed(feed, categoryId);
   const {
     data,
     isPending,
@@ -40,11 +53,11 @@ export default function HotFeedList({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery(hotQuery);
-  const hotKey = hotQuery.queryKey;
+  } = useInfiniteQuery(feedQuery);
+  const feedKey = feedQuery.queryKey;
   const refresh = useCallback(
-    () => refetchFirstPage(queryClient, hotKey),
-    [queryClient, hotKey],
+    () => refetchFirstPage(queryClient, feedKey),
+    [queryClient, feedKey],
   );
 
   const products = useMemo(
@@ -52,8 +65,9 @@ export default function HotFeedList({
     [data?.pages],
   );
 
-  const {recordImpression, recordClick} =
-    useRankingImpressionTracker(HOT_FEED_CARD_SOURCE);
+  const {recordImpression, recordClick} = useRankingImpressionTracker(
+    isHot ? HOT_FEED_CARD_SOURCE : LIVE_SOURCE,
+  );
 
   const handleViewableIndexes = useCallback(
     (indexes: number[]) => {
@@ -65,7 +79,8 @@ export default function HotFeedList({
     [products, recordImpression],
   );
 
-  // LiveList 와 같은 이유로 카드 콜백을 고정한다(GridCard memo).
+  // ★카드 콜백을 고정한다 — 인라인이면 페이지가 붙을 때마다 보이는 카드가 전부 다시 그려져
+  // (GridCard memo 무력화) 스크롤 중 프레임이 떨어졌다. 순번은 클릭 순간 최신 목록에서 찾는다.
   const productsRef = useRef(products);
   productsRef.current = products;
   const handlePress = useCallback(
@@ -90,14 +105,22 @@ export default function HotFeedList({
       renderCard={renderCard}
       isPending={isPending}
       isError={isError}
-      label="핫딜"
+      label={isHot ? '핫딜' : '실시간 핫딜'}
       onRetry={refresh}
       onViewableIndexes={handleViewableIndexes}
       bottomInset={bottomInset}
       emptyText={HOT_FEED_COPY.empty}
       header={
-        <View className="px-5 pb-4">
-          <Text className={text.muted}>{HOT_FEED_COPY.lead}</Text>
+        <View className="flex-row items-center gap-2 px-5 pb-4">
+          <Chip
+            size="sm"
+            label={HOT_FEED_COPY.toggle}
+            selected={isHot}
+            onPress={() => requestTrendingView(isHot ? 'live' : 'hot')}
+          />
+          <Text className={cn(text.muted, 'flex-1')}>
+            {isHot ? HOT_FEED_COPY.lead : HOT_FEED_COPY.liveLead}
+          </Text>
         </View>
       }
       onEndReached={() => {
