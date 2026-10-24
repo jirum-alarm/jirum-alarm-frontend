@@ -28,6 +28,8 @@ export type SearchFilters = {
   period: SearchPeriod;
   /** 품절(종료) 포함. web `ended` — 켜면 isEnd: true 로 '종료 포함'을 요청한다. */
   ended: boolean;
+  /** 오타 교정 없이 입력 그대로. web `exact` — 교정 안내의 「그대로 검색」이 켜고, 새 검색(submit)의 resetFilters 가 끈다. */
+  exact: boolean;
 };
 
 export const DEFAULT_SEARCH_FILTERS: SearchFilters = {
@@ -36,4 +38,5 @@ export const DEFAULT_SEARCH_FILTERS: SearchFilters = {
   sort: 'recent',
   period: 'all',
   ended: false,
+  exact: false,
 };

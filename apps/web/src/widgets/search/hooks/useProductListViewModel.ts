@@ -64,6 +64,10 @@ export const useProductListViewModel = ({
   const estimatedTotal =
     (pages[0]?.products[0] as { estimatedTotal?: number | null } | undefined)?.estimatedTotal ??
     undefined;
+  // 오타 교정어(서버가 0건·일부 일치 검색어를 고쳐 찾았을 때). estimatedTotal 처럼 모든 행 동일 — 첫 행에서 읽는다.
+  const correctedKeyword =
+    (pages[0]?.products[0] as { correctedKeyword?: string | null } | undefined)?.correctedKeyword ??
+    undefined;
 
   // 센티넬이 보이는 동안 다음 페이지를 연쇄 로드.
   // onChange(inView 토글)에 의존하면 센티넬이 계속 보이는 상태(짧은 결과·빠른 로드)에서 재발동하지
@@ -85,5 +89,6 @@ export const useProductListViewModel = ({
     isLoading,
     isPlaceholderData,
     estimatedTotal,
+    correctedKeyword,
   };
 };

@@ -40,6 +40,8 @@ const SUGGESTION_GC_TIME = 300_000;
 export type SearchProductCard = ProductCardType & {
   searchAfter?: string[] | null;
   estimatedTotal?: number | null;
+  /** 오타 교정 — 서버가 이 말로 대신 찾았다(모든 행 동일, 2026-10-24). */
+  correctedKeyword?: string | null;
 };
 
 /**

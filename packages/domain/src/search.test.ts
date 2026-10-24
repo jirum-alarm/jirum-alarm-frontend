@@ -3,8 +3,15 @@ import { createRequire } from 'node:module';
 import { test } from 'node:test';
 
 const require = createRequire(import.meta.url);
-const { hasActiveSearchFilters, isPrefixValid, periodStartDate, PERIOD_LABELS, SEARCH_PERIODS } =
-  require('./search.ts') as typeof import('./search');
+const {
+  hasActiveSearchFilters,
+  isPrefixValid,
+  periodStartDate,
+  PERIOD_LABELS,
+  SEARCH_PERIODS,
+  searchFilterVariables,
+  SEARCH_CORRECTED_COPY,
+} = require('./search.ts') as typeof import('./search');
 
 test('기간은 지금부터 N시간 전(롤링) — 자정 절단이 아니다', () => {
   const now = Date.UTC(2026, 9, 20, 15, 30);
@@ -31,4 +38,12 @@ test('초기화 버튼 — 정렬만 바꾼 건 필터로 세지 않는다', () 
   assert.equal(hasActiveSearchFilters({ ...none, period: '7d' }), true);
   assert.equal(hasActiveSearchFilters({ ...none, ended: true }), true);
   assert.equal(hasActiveSearchFilters({ ...none, categoryIds: [1] }), true);
+});
+
+test('오타 교정 — exact 가 켜졌을 때만 exactKeyword 를 보내고, 안내 문구는 교정어·원래 말을 그대로 품는다', () => {
+  const base = { categoryIds: [], providerIds: [], ended: false, sort: 'recent' as const };
+  assert.equal(searchFilterVariables(base, undefined).exactKeyword, undefined);
+  assert.equal(searchFilterVariables({ ...base, exact: true }, undefined).exactKeyword, true);
+  assert.equal(SEARCH_CORRECTED_COPY.shown('낫또'), '‘낫또’ 검색 결과예요');
+  assert.equal(SEARCH_CORRECTED_COPY.searchOriginal('낫뗘'), '‘낫뗘’ 그대로 검색');
 });
