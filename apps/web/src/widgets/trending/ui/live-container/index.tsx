@@ -2,8 +2,9 @@
 
 // Swiper 레이아웃(가로 flex) CSS — 예전엔 carousel barrel 이 우연히 실어 줬다(10/15 518a0134 에서 빠져 탭이 빈 화면).
 import 'swiper/css';
-import { orderTrendingCategories } from '@jirum/domain/ranking';
+import { HOT_FEED_COPY, orderTrendingCategories } from '@jirum/domain/ranking';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import { Tabs } from 'radix-ui';
 import {
@@ -19,6 +20,7 @@ import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
 import { cn } from '@/shared/lib/cn';
+import Chip from '@/shared/ui/common/Chip';
 
 import { CategoryQueries } from '@/entities/category';
 import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
@@ -43,6 +45,7 @@ const DOCUMENT_TITLE = { live: '실시간 핫딜 | 지름알림', hot: '실시�
 
 export const LiveContainer = ({ initialTab, feed = 'live' }: Props) => {
   const swiperRef = useRef<SwiperClass>(null);
+  const router = useRouter();
 
   const {
     data: { categories },
@@ -134,6 +137,19 @@ export const LiveContainer = ({ initialTab, feed = 'live' }: Props) => {
           allCategories={allCategories}
           tabIndex={activeIndex}
           onTabClick={(id) => handleTabChange(id)}
+          trailing={
+            <Chip
+              size="sm"
+              selected={feed === 'hot'}
+              onClick={() =>
+                router.push(`/trending/${feed === 'hot' ? 'live' : 'hot'}?tab=${tabId}`, {
+                  scroll: false,
+                })
+              }
+            >
+              {HOT_FEED_COPY.toggle}
+            </Chip>
+          }
         />
 
         <div

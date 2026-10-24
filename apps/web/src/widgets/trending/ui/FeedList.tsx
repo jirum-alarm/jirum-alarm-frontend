@@ -1,12 +1,9 @@
 'use client';
 
-import { emptyText, text } from '@jirum/design-system/recipes';
+import { emptyText } from '@jirum/design-system/recipes';
 import { HOT_FEED_CARD_SOURCE, HOT_FEED_COPY } from '@jirum/domain/ranking';
-import { useRouter } from 'next/navigation';
 import { memo, useEffect } from 'react';
 import { useSwiper } from 'swiper/react';
-
-import Chip from '@/shared/ui/common/Chip';
 
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import { ProductGridListSkeleton } from '@/entities/product-list/ui/grid';
@@ -30,32 +27,30 @@ const LIVE_CARD_SOURCE = 'live_tab';
 /**
  * 발견 탭 「실시간」 목록 — 「핫딜만」 칩을 켜면 문턱 넘은 딜만 핫딜 된 시각순(/trending/hot), 끄면 올라온 딜 전부 최신순(/trending/live).
  * 두 주소는 그대로 둔다(검색 색인·딥링크). 데이터만 다르고 모양은 하나라 FeedGrid 를 같이 쓴다.
+ * 칩은 카테고리 줄 끝(LiveContainer → TabBarV2 trailing)에 있다 — 목록 위에 한 줄을 더 쌓지 않는다.
  */
 const FeedList = ({ feed, categoryId }: FeedListProps) =>
   feed === 'hot' ? <HotFeed categoryId={categoryId} /> : <LiveFeed categoryId={categoryId} />;
 
 const HotFeed = ({ categoryId }: { categoryId: number | null }) => (
-  <FeedGrid feed="hot" categoryId={categoryId} {...useHotFeedViewModel({ categoryId })} />
+  <FeedGrid feed="hot" {...useHotFeedViewModel({ categoryId })} />
 );
 
 const LiveFeed = ({ categoryId }: { categoryId: number | null }) => (
-  <FeedGrid feed="live" categoryId={categoryId} {...useLiveViewModel({ categoryId })} />
+  <FeedGrid feed="live" {...useLiveViewModel({ categoryId })} />
 );
 
 const FeedGrid = ({
   feed,
-  categoryId,
   products,
   loadingCallbackRef,
   isFetchingNextPage,
 }: {
   feed: FeedKind;
-  categoryId: number | null;
   products: ProductCardType[];
   loadingCallbackRef: (node?: Element | null) => void;
   isFetchingNextPage: boolean;
 }) => {
-  const router = useRouter();
   const swiper = useSwiper();
 
   // 무한스크롤로 상품이 늘어나면 activeSlide 높이가 커지는데, Swiper의 observer
@@ -67,18 +62,10 @@ const FeedGrid = ({
   }, [products.length, swiper]);
 
   const isHot = feed === 'hot';
-  const toggle = () =>
-    router.push(`/trending/${isHot ? 'live' : 'hot'}?tab=${categoryId ?? 0}`, { scroll: false });
 
   return (
     <div className="pc:space-y-10 space-y-8">
       <div className="space-y-4 px-5">
-        <div className="flex items-center gap-2">
-          <Chip size="sm" selected={isHot} onClick={toggle}>
-            {HOT_FEED_COPY.toggle}
-          </Chip>
-          <p className={text.muted}>{isHot ? HOT_FEED_COPY.lead : HOT_FEED_COPY.liveLead}</p>
-        </div>
         {products.length === 0 ? (
           <p className={emptyText}>{HOT_FEED_COPY.empty}</p>
         ) : (

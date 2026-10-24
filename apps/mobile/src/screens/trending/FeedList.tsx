@@ -1,7 +1,6 @@
 import React, {useCallback, useMemo, useRef} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useInfiniteQuery, useQueryClient} from '@tanstack/react-query';
-import {text} from '@jirum/design-system/recipes';
 import {HOT_FEED_CARD_SOURCE, HOT_FEED_COPY} from '@jirum/domain/ranking';
 
 import type {ProductCardType} from '@/shared/types/product-card';
@@ -9,15 +8,12 @@ import CurationGrid from '@/entities/home/ui/CurationGrid';
 import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
 import {TrendingQueries} from '@/entities/trending/api/trending.queries';
 import {useRankingImpressionTracker} from '@/entities/trending/model/useRankingImpressionTracker';
-import Chip from '@/shared/components/ui/Chip';
-import {Text} from '@/shared/components/ui/Text/AppText';
 import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';
-import {cn} from '@/shared/lib/styling';
-import {requestTrendingView} from '@/shared/lib/navigation/trending-view-store';
 
 /**
  * 발견 탭 「실시간」 목록. web: widgets/trending/ui/FeedList.tsx
  * 「핫딜만」 칩을 켜면 문턱 넘은 딜만 핫딜 된 시각순(hot), 끄면 올라온 딜 전부 최신순(live) — 모양은 하나, 조회만 다르다.
+ * 칩은 카테고리 줄 끝(TrendingScreen → CategoryTabBar trailing)에 있다 — 목록 위에 한 줄을 더 쌓지 않는다.
  * 홈 카드 UI(GridCard·CurationGrid)를 그리므로 entities 끼리 import 를 피해 screens 층에 둔다.
  *
  * ★ web 은 useInView 센티넬로 다음 페이지를 당기고 swiper autoHeight 를 손으로
@@ -110,19 +106,6 @@ export default function FeedList({
       onViewableIndexes={handleViewableIndexes}
       bottomInset={bottomInset}
       emptyText={HOT_FEED_COPY.empty}
-      header={
-        <View className="flex-row items-center gap-2 px-5 pb-4">
-          <Chip
-            size="sm"
-            label={HOT_FEED_COPY.toggle}
-            selected={isHot}
-            onPress={() => requestTrendingView(isHot ? 'live' : 'hot')}
-          />
-          <Text className={cn(text.muted, 'flex-1')}>
-            {isHot ? HOT_FEED_COPY.lead : HOT_FEED_COPY.liveLead}
-          </Text>
-        </View>
-      }
       onEndReached={() => {
         if (hasNextPage && !isFetchingNextPage) fetchNextPage();
       }}

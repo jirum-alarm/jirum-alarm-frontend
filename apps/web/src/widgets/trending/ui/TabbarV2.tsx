@@ -61,6 +61,8 @@ interface TabBarProps {
   settingsAriaLabel?: string;
   showSettings?: boolean;
   isHeaderVisible?: boolean;
+  /** 줄 오른쪽 끝에 고정되는 조작(「실시간」의 「핫딜만」 칩) — 칩 줄만 끌리고 끝은 안 움직인다. 앱 CategoryTabBar trailing 과 같은 모양. */
+  trailing?: React.ReactNode;
 }
 
 // 기본 위치 클래스 — trending 레이아웃(헤더 연동 fixed→sticky) 전용. 밖에서 쓸 땐 containerClassName로 교체.
@@ -112,6 +114,7 @@ const TabBarV2 = ({
   showSettings = false,
   disabledIds = [],
   containerClassName,
+  trailing,
 }: TabBarProps) => {
   const categoryIds = allCategories.map((c) => c.id);
   const disabledSet = new Set(disabledIds);
@@ -210,57 +213,78 @@ const TabBarV2 = ({
         'translate-y-0': isHeaderVisible,
       };
 
+  const list = (
+    <Tabs.List asChild>
+      <m.div
+        ref={tabDragRef}
+        style={{ x }}
+        drag="x"
+        dragConstraints={constraints}
+        dragElastic={mergedAnimationConfig.drag.elastic}
+        dragTransition={{
+          power: mergedAnimationConfig.drag.power,
+          timeConstant: mergedAnimationConfig.drag.timeConstant,
+          modifyTarget: (v) => Math.round(v),
+        }}
+        className={mergedStyles.tabList}
+      >
+        {allCategories.map((category) => {
+          const isDisabled = disabledSet.has(category.id);
+          return (
+            <Tabs.Trigger
+              key={category.id}
+              value={`${category.id}`}
+              disabled={isDisabled}
+              onPointerDown={
+                isDisabled ? undefined : (e) => handlePointerDown(e, category.id.toString())
+              }
+              onPointerUp={
+                isDisabled ? undefined : (e) => handlePointerUp(e, category.id.toString())
+              }
+              onKeyDown={isDisabled ? undefined : (e) => handleKeyDown(e, category.id.toString())}
+              className={cn(
+                mergedStyles.tabTrigger.base,
+                isDisabled
+                  ? 'cursor-not-allowed bg-gray-100 font-medium text-gray-300'
+                  : tabIndex === categoryIds.indexOf(category.id)
+                    ? mergedStyles.tabTrigger.active
+                    : mergedStyles.tabTrigger.inactive,
+              )}
+            >
+              <m.span
+                whileTap={isDisabled ? undefined : { scale: 0.95 }}
+                transition={{ duration: 0.1 }}
+                className="inline-block"
+              >
+                {category.name}
+              </m.span>
+            </Tabs.Trigger>
+          );
+        })}
+      </m.div>
+    </Tabs.List>
+  );
+
+  if (trailing) {
+    return (
+      <div
+        className={cn(
+          mergedStyles.container,
+          positionClass,
+          headerLinkedTranslate,
+          'flex items-center',
+        )}
+      >
+        <div className="min-w-0 flex-1 overflow-hidden">{list}</div>
+        <div className="h-5 w-px shrink-0 bg-gray-200" />
+        <div className="shrink-0 pl-3">{trailing}</div>
+      </div>
+    );
+  }
+
   return (
     <div className={cn(mergedStyles.container, positionClass, headerLinkedTranslate)}>
-      <Tabs.List asChild>
-        <m.div
-          ref={tabDragRef}
-          style={{ x }}
-          drag="x"
-          dragConstraints={constraints}
-          dragElastic={mergedAnimationConfig.drag.elastic}
-          dragTransition={{
-            power: mergedAnimationConfig.drag.power,
-            timeConstant: mergedAnimationConfig.drag.timeConstant,
-            modifyTarget: (v) => Math.round(v),
-          }}
-          className={mergedStyles.tabList}
-        >
-          {allCategories.map((category) => {
-            const isDisabled = disabledSet.has(category.id);
-            return (
-              <Tabs.Trigger
-                key={category.id}
-                value={`${category.id}`}
-                disabled={isDisabled}
-                onPointerDown={
-                  isDisabled ? undefined : (e) => handlePointerDown(e, category.id.toString())
-                }
-                onPointerUp={
-                  isDisabled ? undefined : (e) => handlePointerUp(e, category.id.toString())
-                }
-                onKeyDown={isDisabled ? undefined : (e) => handleKeyDown(e, category.id.toString())}
-                className={cn(
-                  mergedStyles.tabTrigger.base,
-                  isDisabled
-                    ? 'cursor-not-allowed bg-gray-100 font-medium text-gray-300'
-                    : tabIndex === categoryIds.indexOf(category.id)
-                      ? mergedStyles.tabTrigger.active
-                      : mergedStyles.tabTrigger.inactive,
-                )}
-              >
-                <m.span
-                  whileTap={isDisabled ? undefined : { scale: 0.95 }}
-                  transition={{ duration: 0.1 }}
-                  className="inline-block"
-                >
-                  {category.name}
-                </m.span>
-              </Tabs.Trigger>
-            );
-          })}
-        </m.div>
-      </Tabs.List>
+      {list}
       {showSettings && (
         <div className={mergedStyles.settingsContainer}>
           <div className={mergedStyles.settingsGradient} />
