@@ -1,0 +1,563 @@
+{
+  "variables": {
+    "limit": 20,
+    "categoryIds": null,
+    "searchAfter": [
+      "1792766253000",
+      "36462133"
+    ]
+  },
+  "response": {
+    "data": {
+      "hotDealFeedProducts": [
+        {
+          "id": "36462088",
+          "title": "나이키 단목 쿠션 에브리데이 크루삭스 3켤레세트 9,250원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742616",
+          "isHot": true,
+          "isEnd": false,
+          "price": "9,250원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742616.webp",
+          "mallName": "지마켓",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792762766000",
+            "36462088"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T12:02:00.000Z"
+        },
+        {
+          "id": "36438521",
+          "title": "통영 생굴 2kg 24,130원",
+          "mallId": 241,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742487",
+          "isHot": true,
+          "isEnd": false,
+          "price": "24,130원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742487.webp",
+          "mallName": "옥션",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792762402000",
+            "36438521"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T03:13:00.000Z"
+        },
+        {
+          "id": "36477904",
+          "title": "탱글 바질 토마토 파스타 큰컵 105g*16입 x 1박스 5,990원",
+          "mallId": null,
+          "url": "https://www.city.kr/ln/43213720",
+          "isHot": null,
+          "isEnd": false,
+          "price": "5,990원",
+          "providerId": 6,
+          "categoryId": 2,
+          "category": "음식",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/city/43213720.webp",
+          "mallName": "city",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 25
+          },
+          "provider": {
+            "nameKr": "시티"
+          },
+          "searchAfter": [
+            "1792760563000",
+            "36477904"
+          ],
+          "postedCommunityCount": 2,
+          "postedAt": "2026-10-23T13:02:43.000Z"
+        },
+        {
+          "id": "36459937",
+          "title": "맛동산 8팩 4봉 1216g (38g 32봉) 12,260원",
+          "mallId": 15,
+          "url": "https://arca.live/b/hotdeal/186815600",
+          "isHot": true,
+          "isEnd": false,
+          "price": "12,260원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186815600.webp",
+          "mallName": "지마켓",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792760449000",
+            "36459937"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T10:00:25.000Z"
+        },
+        {
+          "id": "36460800",
+          "title": "킨더 초콜릿 미니 20p 120g 1개",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186824517",
+          "isHot": true,
+          "isEnd": false,
+          "price": "3,980원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186824517.webp",
+          "mallName": "쿠팡",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792760179000",
+            "36460800"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T11:24:10.000Z"
+        },
+        {
+          "id": "36462218",
+          "title": "풀무원 샘물 생수 무라벨 500ml 40개 6,900원",
+          "mallId": 4800,
+          "url": "https://www.dogdrip.net/731198637",
+          "isHot": false,
+          "isEnd": false,
+          "price": "6,900원",
+          "providerId": 108,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/731198637.webp",
+          "mallName": "토스",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 18
+          },
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "searchAfter": [
+            "1792757353000",
+            "36462218"
+          ],
+          "postedCommunityCount": 3,
+          "postedAt": "2026-10-23T12:09:13.000Z"
+        },
+        {
+          "id": "36448416",
+          "title": "버즈릭슨 오리지널 치노팬츠 2컬러",
+          "mallId": 51061,
+          "url": "https://eomisae.co.kr/os/207470325",
+          "isHot": true,
+          "isEnd": false,
+          "price": null,
+          "providerId": 11,
+          "categoryId": 4,
+          "category": "패션국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207470325.webp",
+          "mallName": "사구일공",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792756406000",
+            "36448416"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T05:50:58.000Z"
+        },
+        {
+          "id": "36460799",
+          "title": "라이젠 9800X3D + RTX 5070 Ti + 32GB + 1TB 완본체",
+          "mallId": 35,
+          "url": "https://www.fmkorea.com/10476748886",
+          "isHot": true,
+          "isEnd": false,
+          "price": "3,499,200원",
+          "providerId": 7,
+          "categoryId": 1,
+          "category": "핫딜",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10476748886.webp",
+          "mallName": "11번가",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "에펨코리아"
+          },
+          "searchAfter": [
+            "1792754460000",
+            "36460799"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T11:21:00.000Z"
+        },
+        {
+          "id": "36460725",
+          "title": "고당도 달콤한 샤인머스켓 2kg (2수) 특품",
+          "mallId": 15,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9524971",
+          "isHot": false,
+          "isEnd": false,
+          "price": "7,800원",
+          "providerId": 107,
+          "categoryId": 2,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9524971.webp",
+          "mallName": "지마켓",
+          "hotDealType": "ULTRA_DEAL",
+          "isYearLowest": true,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 27
+          },
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792753860000",
+            "36460725"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T11:11:00.000Z"
+        },
+        {
+          "id": "36460675",
+          "title": "삼성 갤럭시 버즈4 프로 블랙/화이트 R640 노이즈캔슬링 블루투스 무선 이어폰",
+          "mallId": 8,
+          "url": "https://etoland.co.kr/b/hotdeal/article/9524951",
+          "isHot": false,
+          "isEnd": false,
+          "price": "188,956원",
+          "providerId": 107,
+          "categoryId": 9,
+          "category": "",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/etoland/9524951.webp",
+          "mallName": "롯데온",
+          "hotDealType": "ULTRA_DEAL",
+          "isYearLowest": true,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 10
+          },
+          "provider": {
+            "nameKr": "이토랜드"
+          },
+          "searchAfter": [
+            "1792752960000",
+            "36460675"
+          ],
+          "postedCommunityCount": 2,
+          "postedAt": "2026-10-23T10:56:00.000Z"
+        },
+        {
+          "id": "36460385",
+          "title": "그라스블루 차량용 디퓨저 100ml 1+1",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742600",
+          "isHot": false,
+          "isEnd": false,
+          "price": "12,740원",
+          "providerId": 1,
+          "categoryId": 6,
+          "category": "기타",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742600.webp",
+          "mallName": "지마켓",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": true,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 14
+          },
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792752360000",
+            "36460385"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T10:46:00.000Z"
+        },
+        {
+          "id": "36459406",
+          "title": "믈레코비타 3.5퍼센트 멸균우유 1L 12개",
+          "mallId": 48,
+          "url": "https://arca.live/b/hotdeal/186811836",
+          "isHot": true,
+          "isEnd": false,
+          "price": "18,630원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186811836.webp",
+          "mallName": "쿠팡",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792749982000",
+            "36459406"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T09:21:19.000Z"
+        },
+        {
+          "id": "36459962",
+          "title": "킨록 소가죽100% 스웨이드 레이서자켓 취스탁 7.9만",
+          "mallId": 1,
+          "url": "https://eomisae.co.kr/os/207496412",
+          "isHot": true,
+          "isEnd": false,
+          "price": null,
+          "providerId": 11,
+          "categoryId": 4,
+          "category": "패션국내",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/207496412.webp",
+          "mallName": "네이버",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "어미새"
+          },
+          "searchAfter": [
+            "1792749911000",
+            "36459962"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T09:01:36.000Z"
+        },
+        {
+          "id": "36459976",
+          "title": "돌체구스토 지니오S 베이직 + 스타벅스 캡슐 24개",
+          "mallId": 8,
+          "url": "https://arca.live/b/hotdeal/186816061",
+          "isHot": false,
+          "isEnd": false,
+          "price": "45,570원",
+          "providerId": 12,
+          "categoryId": 9,
+          "category": "전자제품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186816061.webp",
+          "mallName": "롯데온",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 17
+          },
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792749886000",
+            "36459976"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T10:04:46.000Z"
+        },
+        {
+          "id": "36459775",
+          "title": "돌체구스토 커피머신 지니오S 베이직 + 스타벅스 캡슐 2박스",
+          "mallId": 8,
+          "url": "https://cafe.naver.com/f-e/cafes/29434212/articles/14962158?menuid=2&referrerAllArticles=false",
+          "isHot": false,
+          "isEnd": false,
+          "price": "44,750원",
+          "providerId": 18,
+          "categoryId": 6,
+          "category": null,
+          "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14962158.webp",
+          "mallName": "롯데온",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": true,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 8
+          },
+          "provider": {
+            "nameKr": "맘이베베"
+          },
+          "searchAfter": [
+            "1792749372000",
+            "36459775"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T09:56:12.000Z"
+        },
+        {
+          "id": "36457741",
+          "title": "아디다스키즈 삼바OG 운동화 28,090원",
+          "mallId": 241,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742558",
+          "isHot": true,
+          "isEnd": false,
+          "price": "28,090원",
+          "providerId": 1,
+          "categoryId": 4,
+          "category": "의류/잡화",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742558.webp",
+          "mallName": "옥션",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792745451000",
+            "36457741"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T08:07:00.000Z"
+        },
+        {
+          "id": "36448258",
+          "title": "필라델피아 오레오 케익 210g 2개 16,920원",
+          "mallId": 8,
+          "url": "https://arca.live/b/hotdeal/186796658",
+          "isHot": true,
+          "isEnd": false,
+          "price": "16,920원",
+          "providerId": 12,
+          "categoryId": 2,
+          "category": "식품",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/arca/186796658.webp",
+          "mallName": "롯데온",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "아카"
+          },
+          "searchAfter": [
+            "1792745448000",
+            "36448258"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T06:40:12.000Z"
+        },
+        {
+          "id": "36439563",
+          "title": "홈런볼 4번들 x 4팩 (41g 16개) *2세트 삼성카드 24,560원",
+          "mallId": 15,
+          "url": "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&page=1&divpage=89&no=742498",
+          "isHot": true,
+          "isEnd": false,
+          "price": "24,560원",
+          "providerId": 1,
+          "categoryId": 2,
+          "category": "식품/건강",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/742498.webp",
+          "mallName": "지마켓",
+          "hotDealType": "HOT_DEAL",
+          "isYearLowest": false,
+          "priceSaving": null,
+          "provider": {
+            "nameKr": "뽐뿌"
+          },
+          "searchAfter": [
+            "1792745441000",
+            "36439563"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T04:34:00.000Z"
+        },
+        {
+          "id": "36458276",
+          "title": "다크플래쉬 DLX21 RGB MESH 강화유리 블랙 (팬 6개 장착 출고) 외 주말특가",
+          "mallId": null,
+          "url": "https://quasarzone.com/bbs/qb_saleinfo/views/1994873",
+          "isHot": false,
+          "isEnd": false,
+          "price": "￦ 76,000 (KRW)",
+          "providerId": 5,
+          "categoryId": 1,
+          "category": "PC/하드웨어",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/quasarzone/1994873.webp",
+          "mallName": "darkflash",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "DANAWA",
+            "percent": 19
+          },
+          "provider": {
+            "nameKr": "퀘이사존"
+          },
+          "searchAfter": [
+            "1792745327000",
+            "36458276"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T08:48:47.000Z"
+        },
+        {
+          "id": "36458217",
+          "title": "드리미 로봇청소기 L40s Pro Ultra 594,270원",
+          "mallId": 28,
+          "url": "https://www.dogdrip.net/731165478",
+          "isHot": false,
+          "isEnd": false,
+          "price": "594,270원",
+          "providerId": 108,
+          "categoryId": 6,
+          "category": "전자",
+          "thumbnail": "https://cdn.jirum-alarm.com/community/dogdrip/731165478.webp",
+          "mallName": "카카오",
+          "hotDealType": "SUPER_DEAL",
+          "isYearLowest": false,
+          "priceSaving": {
+            "basis": "USUAL",
+            "percent": 9
+          },
+          "provider": {
+            "nameKr": "개드립"
+          },
+          "searchAfter": [
+            "1792744389000",
+            "36458217"
+          ],
+          "postedCommunityCount": 1,
+          "postedAt": "2026-10-23T08:33:09.000Z"
+        }
+      ]
+    }
+  }
+}
