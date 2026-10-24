@@ -26,7 +26,6 @@ import SoftKakaoOpenChatPrompt from '@/features/product-detail/ui/SoftKakaoOpenC
 import ViewerCount from '@/features/product-detail/ui/ViewerCount';
 import WaitCard from '@/features/product-detail/ui/WaitCard';
 import {
-  CategoryLatestLinksSection,
   CategoryPopularByProductSection,
   TossInternalLinksSection,
 } from '@/features/product-list/ui';
@@ -177,13 +176,6 @@ export default async function DesktopProductDetailPage({
                 )}
                 <Suspense>
                   <CategoryPopularByProductSection productId={productId} />
-                </Suspense>
-                <Suspense>
-                  <CategoryLatestLinksSection
-                    productId={productId}
-                    categoryId={initialProduct?.categoryId ?? null}
-                    categoryName={initialProduct?.categoryName}
-                  />
                 </Suspense>
               </div>
             </div>
