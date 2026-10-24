@@ -53,6 +53,7 @@ const SHARED_BY_BOTH: Record<string, string[]> = {
     'REPORT_REASON_OPTIONS',
     'COMMUNITY_COPY',
     'COMMUNITY_TABS',
+    'isNewNotice',
     'communityTabFilter',
     'COMMUNITY_POSTS_PAGE_SIZE',
     'COMMUNITY_POSTS_ORDER',

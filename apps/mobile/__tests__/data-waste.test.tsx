@@ -214,7 +214,7 @@ describe('커뮤니티 댓글 — 그 글만 다시 받고 목록 숫자는 그 
     let vm: ReturnType<typeof useCommunityCommentsViewModel> | undefined;
     const Lists = () => {
       useInfiniteQuery(CommunityQueries.posts('all'));
-      useInfiniteQuery(CommunityQueries.posts('trending'));
+      useInfiniteQuery(CommunityQueries.posts('notice'));
       vm = useCommunityCommentsViewModel(POST_ID);
       return null;
     };
@@ -229,7 +229,7 @@ describe('커뮤니티 댓글 — 그 글만 다시 받고 목록 숫자는 그 
       );
       await flush();
     });
-    const replyCount = (tab: 'all' | 'trending') =>
+    const replyCount = (tab: 'all' | 'notice') =>
       (
         client.getQueryData(CommunityQueries.keys.posts(tab)) as {
           pages: {id: string; replyCount: number}[][];
@@ -251,7 +251,7 @@ describe('커뮤니티 댓글 — 그 글만 다시 받고 목록 숫자는 그 
     expect(mockGetPosts).toHaveBeenCalledTimes(2);
     expect(mockGetPostComments).toHaveBeenCalledTimes(2);
     expect(replyCount('all')).toBe(4);
-    expect(replyCount('trending')).toBe(4);
+    expect(replyCount('notice')).toBe(4);
   });
 
   it('삭제: -1', async () => {
